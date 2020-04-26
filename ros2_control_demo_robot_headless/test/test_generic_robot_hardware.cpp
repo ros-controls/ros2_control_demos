@@ -15,22 +15,22 @@
 #include <string>
 #include <vector>
 
-#include "gtest/gtest.h"
-
 #include "control_demos_robot_headless/generic_robot_hardware.hpp"
+#include "gtest/gtest.h"
 
 using namespace control_demos::robot_headless;
 
-class TestGenericRobotHardware: public ::testing::Test
-{
-protected:
-  void SetUp()
-  {
-  }
-
-  GenericRobotHardware a_generic_robot_hardware;
+class TestGenericRobotHardware : public ::testing::Test {
+ protected:
+  void SetUp() {}
 };
 
-TEST_F(TestGenericRobotHardware,initialize) {
-  
+TEST_F(TestGenericRobotHardware, initialize) {
+  int argc = 1;
+  char *argv[1];
+  argv[0] = new char[6];
+  strcpy(argv[0], "test");
+  rclcpp::init(argc, argv);
+  GenericRobotHardware a_generic_robot_hardware;
+  delete argv[0];
 }

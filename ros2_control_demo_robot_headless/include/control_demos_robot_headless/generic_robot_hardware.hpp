@@ -20,40 +20,49 @@
 #ifndef ROS2_CONTROL_DEMOS_GENERIC_ROBOT_HARDWARE_HPP_
 #define ROS2_CONTROL_DEMOS_GENERIC_ROBOT_HARDWARE_HPP_
 
-#include "hardware_interface/robot_hardware.hpp"
-
-#include "rclcpp/rclcpp.hpp"
-
-#include "control_demos_robot_headless/visibility_control.h"
-
 #include <urdf/model.h>
 
-namespace control_demos
-{
+#include "control_demos_robot_headless/visibility_control.h"
+#include "hardware_interface/robot_hardware.hpp"
+#include "rclcpp/rclcpp.hpp"
 
-namespace robot_headless
-{
+namespace control_demos {
 
-class GenericRobotHardware: public hardware_interface::RobotHardware,
-                            public rclcpp::Node
-{
+namespace robot_headless {
+
+class GenericRobotHardware : public hardware_interface::RobotHardware,
+                             public rclcpp::Node {
  public:
-  
   GenericRobotHardware();
   virtual ~GenericRobotHardware();
 
+  /*
+    \brief Creates a generic robot from the parameter urdf_description
+   */
   void loadURDF();
 
+  /* \brief Initialization phase
+   */
   hardware_interface::hardware_interface_ret_t init();
+  /* \brief Perception: Read sensors.
+   */
   hardware_interface::hardware_interface_ret_t read();
+  /* \brief Action: write the command to the low-level hardware
+   */
   hardware_interface::hardware_interface_ret_t write();
-  
+
  protected:
+  /* \brief The robot model in URDF format.
+     Should we keep the string if more informations are store in the URDF ?
+   */
   urdf::Model *urdf_model_;
+
+  /* \brief Configuration
+   */
+  std::vector<std::string> joint_names_;
+  std::size_t num_joints_;
 };
 
-} // namespace robot_headless
-} // namespace control_demos
+}  // namespace robot_headless
+}  // namespace control_demos
 #endif /* ROS2_CONTROL_DEMOS_GENERIC_ROBOT_HARDWARE_HPP_ */
-
-
