@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(test_generic_robot_hardware)
+project(ros2_control_demo_robot_headless)
 
 # Default to C++14
 if(NOT CMAKE_CXX_STANDARD)
@@ -45,7 +45,7 @@ if(BUILD_TESTING)
   ament_add_gtest(test_generic_robot_hardware
     test/test_generic_robot_hardware.cpp)
   if(TARGET test_generic_robot_hardware)
-    target_include_directories(test_robot_hardware PRIVATE include)
+    target_include_directories(test_generic_robot_hardware PRIVATE include)
     target_link_libraries(
       test_generic_robot_hardware
       generic_robot_hardware

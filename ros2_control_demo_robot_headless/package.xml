@@ -4,7 +4,8 @@
   <version>0.0.0</version>
   <description>ROS2 control demo robot headless</description>
 
-  <maintainer email=""></maintainer>
+  <maintainer email="denis.stogl@kit.de">Denis Stogl</maintainer>
+  <maintainer email="ostasse@laas.fr">Olivier Stasse</maintainer>
   <license>Apache License 2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>

@@ -23,7 +23,6 @@
 #include "hardware_interface/robot_hardware.hpp"
 
 #include "rclcpp/rclcpp.hpp"
-#include "rclcpp_components/register_node_macro.hpp"
 
 #include "control_demos_headless/visibility_control.h"
 
