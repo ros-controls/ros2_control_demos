@@ -24,27 +24,36 @@
 
 #include "rclcpp/rclcpp.hpp"
 
-#include "control_demos_headless/visibility_control.h"
+#include "control_demos_robot_headless/visibility_control.h"
 
 #include <urdf/model.h>
 
-namespace generic_robot_hardware
+namespace control_demos
 {
 
-class GenericRobotHardware: public RobotHardware, public rclcpp::Node
+namespace robot_headless
+{
+
+class GenericRobotHardware: public hardware_interface::RobotHardware,
+                            public rclcpp::Node
 {
  public:
   
   GenericRobotHardware();
-  virtual ~GenercRobotHardware();
+  virtual ~GenericRobotHardware();
 
   void loadURDF();
 
+  hardware_interface::hardware_interface_ret_t init();
+  hardware_interface::hardware_interface_ret_t read();
+  hardware_interface::hardware_interface_ret_t write();
+  
  protected:
   urdf::Model *urdf_model_;
 };
 
-} // namespace generic_hardware_interface
+} // namespace robot_headless
+} // namespace control_demos
 #endif /* ROS2_CONTROL_DEMOS_GENERIC_ROBOT_HARDWARE_HPP_ */
 
 

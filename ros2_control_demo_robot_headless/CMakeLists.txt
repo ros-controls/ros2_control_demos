@@ -13,6 +13,8 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(hardware_interface REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(urdf REQUIRED)
+find_package(urdfdom_headers REQUIRED)
 
 add_library(generic_robot_hardware SHARED
    src/generic_robot_hardware.cpp)
@@ -22,6 +24,7 @@ ament_target_dependencies(
    generic_robot_hardware
    hardware_interface
    rclcpp
+   urdf
  )
 
 # Causes the visibility macros to use dllexport rather than dllimport,

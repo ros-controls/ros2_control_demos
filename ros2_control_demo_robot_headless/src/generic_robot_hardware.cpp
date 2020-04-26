@@ -1,11 +1,26 @@
-#include "control_demos_headless/generic_robot_hardware.hpp"
+#include <chrono>
 
-GenericRobotHardware::GenericRobotHardware()
+#include "control_demos_robot_headless/generic_robot_hardware.hpp"
+
+using namespace std::chrono_literals;
+
+namespace control_demos
 {
-  loadUrdf();
+
+namespace robot_headless
+{
+
+GenericRobotHardware::GenericRobotHardware():
+    rclcpp::Node::Node("generic_robot_hardware")
+{
+  loadURDF();
 }
 
-void GenericRobotHardware:loadUrdf()
+GenericRobotHardware::~GenericRobotHardware()
+{
+}
+
+void GenericRobotHardware::loadURDF()
 {
   
   // Wait for rosparemeter service
@@ -20,9 +35,27 @@ void GenericRobotHardware:loadUrdf()
   }
 
   // Load parameter
-  std::string urdf_string= get_parameter("robot_description");
+  auto  urdf_string= get_parameter("robot_description");
+}
+
+hardware_interface::hardware_interface_ret_t
+GenericRobotHardware::init()
+{
+  return hardware_interface::HW_RET_OK;
+}
+
+hardware_interface::hardware_interface_ret_t
+GenericRobotHardware::read()
+{
+  return hardware_interface::HW_RET_OK;
+}
+
+hardware_interface::hardware_interface_ret_t
+GenericRobotHardware::write()
+{
+  return hardware_interface::HW_RET_OK;
 }
 
 
-
-      
+}
+}

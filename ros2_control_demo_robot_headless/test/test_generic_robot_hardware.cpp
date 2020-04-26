@@ -17,8 +17,19 @@
 
 #include "gtest/gtest.h"
 
-#include "control_demos_headless/generic_robot_hardware.hpp"
+#include "control_demos_robot_headless/generic_robot_hardware.hpp"
 
+using namespace control_demos::robot_headless;
+
+class TestGenericRobotHardware: public ::testing::Test
+{
+protected:
+  void SetUp()
+  {
+  }
+
+  GenericRobotHardware a_generic_robot_hardware;
+};
 
 TEST_F(TestGenericRobotHardware,initialize) {
   
