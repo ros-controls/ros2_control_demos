@@ -21,6 +21,7 @@
 #include <chrono>
 
 using namespace std::chrono_literals;
+using std::placeholders::_1;
 
 namespace control_demos {
 
@@ -28,13 +29,29 @@ namespace robot_headless {
 
 GenericRobotHardware::GenericRobotHardware()
     : rclcpp::Node::Node("generic_robot_hardware") {
-  loadURDF();
+
+  subscription_ = this->create_subscription<std_msgs::msg::String>(
+    "/robot_description",
+    1, std::bind(&GenericRobotHardware::loadURDFCallback,
+                 this, _1));
+  
+  getURDFParameter();
+  
 }
 
-GenericRobotHardware::~GenericRobotHardware() {}
+GenericRobotHardware::~GenericRobotHardware()
+{}
 
-void GenericRobotHardware::loadURDF() {
-  // Wait for rosparemeter service
+void GenericRobotHardware::loadURDFCallback
+(const std_msgs::msg::String::SharedPtr msg)
+{
+  std::string urdf_string = msg->data;
+  loadURDFString(urdf_string);
+}
+
+void GenericRobotHardware::getURDFParameter()
+{
+  // Synchronized access to robot_state_publisher node
   auto parameters_client = std::make_shared<rclcpp::SyncParametersClient>(
       this, "robot_state_publisher");
   while (!parameters_client->wait_for_service(1s)) {
@@ -45,13 +62,39 @@ void GenericRobotHardware::loadURDF() {
     }
     RCLCPP_INFO(this->get_logger(), "service not available, waiting again...");
   }
+  
+  // Load parameter robot_description
+  auto get_parameters_result = parameters_client->get_parameters
+               ({"robot_description"});
 
-  // Load parameter
-  rclcpp::Parameter urdf_string;
-  get_parameter_or("robot_description", urdf_string, rclcpp::Parameter(""));
+  // Test the resulting vector of parameters
+  if ((get_parameters_result.size() != 1) ||
+      (get_parameters_result[0].get_type()
+       == rclcpp::ParameterType::PARAMETER_NOT_SET))
+  {
+    RCLCPP_ERROR(get_logger(),
+                 "No /robot_state_publisher/robot_description parameter");
+    
+    return;
+  }
 
-  // Display the parameter:
-  std::cout << urdf_string << std::endl;
+  // Load the urdf model.
+  std::string urdf_value = get_parameters_result[0].value_to_string();
+  loadURDFString(urdf_value);
+  
+}
+
+void GenericRobotHardware::loadURDFString(std::string &urdf_value)
+{
+  if (!urdf_model_.initString(urdf_value)) {
+    RCLCPP_ERROR(get_logger(), "Unable to load URDF model");
+    return;
+  }
+  else  {
+    RCLCPP_DEBUG(get_logger(), "Received URDF from param server");
+  }
+
+  RCLCPP_INFO(get_logger(),urdf_value);
 }
 
 hardware_interface::hardware_interface_ret_t GenericRobotHardware::init() {

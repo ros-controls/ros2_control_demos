@@ -24,7 +24,9 @@
 
 #include "control_demos_robot_headless/visibility_control.h"
 #include "hardware_interface/robot_hardware.hpp"
+
 #include "rclcpp/rclcpp.hpp"
+#include "std_msgs/msg/string.hpp"
 
 namespace control_demos {
 
@@ -36,10 +38,6 @@ class GenericRobotHardware : public hardware_interface::RobotHardware,
   GenericRobotHardware();
   virtual ~GenericRobotHardware();
 
-  /*
-    \brief Creates a generic robot from the parameter urdf_description
-   */
-  void loadURDF();
 
   /* \brief Initialization phase
    */
@@ -55,12 +53,19 @@ class GenericRobotHardware : public hardware_interface::RobotHardware,
   /* \brief The robot model in URDF format.
      Should we keep the string if more informations are store in the URDF ?
    */
-  urdf::Model *urdf_model_;
+  urdf::Model urdf_model_;
 
   /* \brief Configuration
    */
   std::vector<std::string> joint_names_;
   std::size_t num_joints_;
+
+  rclcpp::Subscription<std_msgs::msg::String>::SharedPtr subscription_;
+
+  void loadURDFString(std::string &urdf_value);
+  void loadURDFCallback(const std_msgs::msg::String::SharedPtr msg);
+  void getURDFParameter();
+  
 };
 
 }  // namespace robot_headless

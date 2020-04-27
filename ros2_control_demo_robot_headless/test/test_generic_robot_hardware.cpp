@@ -31,6 +31,8 @@ TEST_F(TestGenericRobotHardware, initialize) {
   argv[0] = new char[6];
   strcpy(argv[0], "test");
   rclcpp::init(argc, argv);
-  GenericRobotHardware a_generic_robot_hardware;
+  rclcpp::spin(std::make_shared<GenericRobotHardware>());
+  rclcpp::shutdown();
+  
   delete argv[0];
 }

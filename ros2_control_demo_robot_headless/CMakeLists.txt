@@ -15,17 +15,26 @@ find_package(hardware_interface REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(urdf REQUIRED)
 find_package(urdfdom_headers REQUIRED)
+find_package(tinyxml_vendor REQUIRED)
+find_package(TinyXML REQUIRED)
+find_package(std_msgs REQUIRED)
 
 add_library(generic_robot_hardware SHARED
-   src/generic_robot_hardware.cpp)
+  src/generic_robot_hardware.cpp)
 
-target_include_directories(generic_robot_hardware PRIVATE include)
+target_include_directories(generic_robot_hardware
+   PRIVATE include
+   PUBLIC
+   $<INSTALL_INTERFACE:include>
+   ${TinyXML_INCLUDE_DIRS}
+   )
 ament_target_dependencies(
    generic_robot_hardware
    hardware_interface
    rclcpp
    urdf
- )
+   std_msgs
+)
 
 # Causes the visibility macros to use dllexport rather than dllimport,
 # which is appropriate when building the dll but not consuming it.
