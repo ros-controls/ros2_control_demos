@@ -5,11 +5,11 @@
   <version>0.0.0</version>
   <description>Demo package of ROS2 Control Hardware. This package provides example on how to define hardware of your own robot for ROS2 control. The package is used with `demo_robot` from package `ros2_control_demo_robot`.</description>
 
-  <author email="ostasse@laas.fr">Olivier Stasse</author>
-  <author email="denis@stogl.de">Denis Štogl</author>
-
   <maintainer email="ostasse@laas.fr">Olivier Stasse</maintainer>
   <maintainer email="denis@stogl.de">Denis Štogl</maintainer>
+
+  <author email="ostasse@laas.fr">Olivier Stasse</author>
+  <author email="denis@stogl.de">Denis Štogl</author>
 
   <license>Apache License 2.0</license>
 
