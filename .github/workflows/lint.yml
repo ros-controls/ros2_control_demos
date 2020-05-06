@@ -1,0 +1,41 @@
+name: Lint ros2_control_demos
+on:
+  pull_request:
+
+jobs:
+  ament_copyright:
+    name: ament_copyright
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v1
+    - uses: ros-tooling/setup-ros@0.0.13
+    - uses: ros-tooling/action-ros-lint@0.0.5
+      with:
+        linter: copyright
+        package-name: ros2_control_demo_communication_gazebo ros2_control_demo_communication_headless ros2_control_demo_hardware ros2_control_demo_robot
+
+  ament_xmllint:
+    name: ament_xmllint
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v1
+    - uses: ros-tooling/setup-ros@0.0.13
+    - uses: ros-tooling/action-ros-lint@0.0.5
+      with:
+        linter: xmllint
+        package-name: ros2_control_demo_communication_gazebo ros2_control_demo_communication_headless ros2_control_demo_hardware ros2_control_demo_robot
+
+  ament_lint_cpp:
+    name: ament_${{ matrix.linter }}
+    runs-on: ubuntu-18.04
+    strategy:
+      fail-fast: false
+      matrix:
+          linter: [cppcheck, cpplint, uncrustify]
+    steps:
+    - uses: actions/checkout@v1
+    - uses: ros-tooling/setup-ros@0.0.13
+    - uses: ros-tooling/action-ros-lint@0.0.5
+      with:
+        linter: ${{ matrix.linter }}
+        package-name: ros2_control_demo_communication_gazebo ros2_control_demo_communication_headless ros2_control_demo_hardware ros2_control_demo_robot
