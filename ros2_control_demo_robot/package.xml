@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>ros2_control_demo_robot</name>
+  <version>0.0.0</version>
+  <description>Demo package of ROS2 Control Robot. This package provides config files and description interface is used with `demo_robot` from package `ros2_control_demo_robot`.</description>
+
+  <author email="ostasse@laas.fr">Olivier Stasse</author>
+  <author email="denis@stogl.de">Denis Štogl</author>
+
+  <maintainer email="ostasse@laas.fr">Olivier Stasse</maintainer>
+  <maintainer email="denis@stogl.de">Denis Štogl</maintainer>
+
+  <license>Apache License 2.0</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
