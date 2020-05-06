@@ -19,8 +19,8 @@
  * library cannot have, but the consuming code must have inorder to link.
  */
 
-#ifndef ROS2_CONTROL_DEMO_HEADLESS__VISIBILITY_CONTROL_H_
-#define ROS2_CONTROL_DEMO_HEADLESS__VISIBILITY_CONTROL_H_
+#ifndef ROS2_CONTROL_DEMO_HARDWARE__VISIBILITY_CONTROL_H_
+#define ROS2_CONTROL_DEMO_HARDWARE__VISIBILITY_CONTROL_H_
 
 // This logic was borrowed (then namespaced) from the examples on the gcc wiki:
 //     https://gcc.gnu.org/wiki/Visibility
@@ -38,16 +38,13 @@
 #else
 #define ROS2_CONTROL_DEMO_HARDWARE_PUBLIC ROS2_CONTROL_DEMO_HARDWARE_IMPORT
 #endif
-#define ROS2_CONTROL_DEMO_HARDWARE_PUBLIC_TYPE \
-  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
+#define ROS2_CONTROL_DEMO_HARDWARE_PUBLIC_TYPE ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
 #define ROS2_CONTROL_DEMO_HARDWARE_LOCAL
 #else
-#define ROS2_CONTROL_DEMO_HARDWARE_EXPORT \
-  __attribute__((visibility("default")))
+#define ROS2_CONTROL_DEMO_HARDWARE_EXPORT __attribute__((visibility("default")))
 #define ROS2_CONTROL_DEMO_HARDWARE_IMPORT
 #if __GNUC__ >= 4
-#define ROS2_CONTROL_DEMO_HARDWARE_PUBLIC \
-  __attribute__((visibility("default")))
+#define ROS2_CONTROL_DEMO_HARDWARE_PUBLIC __attribute__((visibility("default")))
 #define ROS2_CONTROL_DEMO_HARDWARE_LOCAL __attribute__((visibility("hidden")))
 #else
 #define ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
