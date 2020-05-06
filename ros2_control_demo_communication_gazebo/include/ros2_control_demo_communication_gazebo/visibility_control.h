@@ -50,7 +50,7 @@
 #if __GNUC__ >= 4
 #define ROS2_CONTROL_DEMO_COMMUNICATION_GAZEBO_PUBLIC \
   __attribute__((visibility("default")))
-#define ROS2_CONTROL_DEMO_COMMUNICATION_GAZEBO_LOCAL  \
+#define ROS2_CONTROL_DEMO_COMMUNICATION_GAZEBO_LOCAL \
   __attribute__((visibility("hidden")))
 #else
 #define ROS2_CONTROL_DEMO_COMMUNICATION_GAZEBO_PUBLIC
