@@ -65,7 +65,7 @@ A large amount of classes is for the exemplary purpose, therefore __don't worry_
 
 Before starting the implementation of your robot, please check the following diagram:
 
-![ROS2 Control - Enabling a new Robot][ROS2 Control - Enabling a new Robot]
+![ROS2 Control - Enabling a new Robot][ros2_control_new_robot]
 
 
 
