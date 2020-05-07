@@ -14,7 +14,7 @@
 
 #include <gtest/gtest.h>
 
-class TestDummy: public ::testing::Test
+class TestDummy : public ::testing::Test
 {
 protected:
   static void SetUpTestCase()
