@@ -3,7 +3,7 @@
 <package format="3">
   <name>ros2_control_demo_communication_headless</name>
   <version>0.0.0</version>
-  <description>Demo package of ROS2 Control Demo communication interface. This interface is used as an example on how to define a communication interface for your robot. The package is used for `demo_robot` from package `ros2_control_demo_robot`.</description>
+  <description>Demo package of `ros2_control` Demo communication interface. This interface is used as an example on how to define a communication interface for your robot. The package is used for `demo_robot` from package `ros2_control_demo_robot`.</description>
 
   <maintainer email="ostasse@laas.fr">Olivier Stasse</maintainer>
   <maintainer email="denis@stogl.de">Denis Štogl</maintainer>
