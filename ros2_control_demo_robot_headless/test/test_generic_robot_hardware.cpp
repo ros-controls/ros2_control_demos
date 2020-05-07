@@ -22,7 +22,13 @@ using namespace control_demos::robot_headless;
 
 class TestGenericRobotHardware : public ::testing::Test {
  protected:
-  void SetUp() {}
+  void SetUp() {
+    int argc = 1;
+    char *argv[1];
+    argv[0] = new char[6];
+    strcpy(argv[0], "test");
+    rclcpp::init(argc, argv);
+  }
 };
 
 TEST_F(TestGenericRobotHardware, initialize) {
