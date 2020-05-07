@@ -1,11 +1,30 @@
+# ROS2 Control Demos
+
+.. image:: https://github.com/ros-controls/ros2_control_demos/workflows/CI/badge.svg?branch=master
+    :target: https://github.com/ros-controls/ros2_control_demos/actions
+    :alt: CI - GitHub Actions status
+.. image:: https://github.com/ros-controls/ros2_control_demos/workflows/Linters/badge.svg?branch=master
+    :target: https://github.com/ros-controls/ros2_control_demos/actions
+    :alt: Linters - GitHub Actions status
+.. image:: https://github.com/ros-controls/ros2_control_demos/workflows/Coverage/badge.svg?branch=master
+    :target: https://github.com/ros-controls/ros2_control_demos/actions
+    :alt: Code Coverage - GitHub Actions status
+
+This repository provides templates for the development of `ros2_control`-enabled robots and a simple simulation of a robot to demonstrate and prove `ros2_control` concepts.
+
+.. contents:: Table of Contents
+   :depth: 2
+
+## Goals
+
 The repository has two goals:
 
 1. It provides templates for faster start of implementing own hardware and controllers;
-2. The repository is a validation environment for `ros2_control` concepts, which can only be tested during run-time (e.g., execution of controllers by the controller manager,  communication between robot hardware and controllers). 
+2. The repository is a validation environment for `ros2_control` concepts, which can only be tested during run-time (e.g., execution of controllers by the controller manager,  communication between robot hardware and controllers).
 
-# ROS2 Control Demos
 
-This repository provides templates for the development of `ros2_control`-enabled robots and a simple simulation of a robot to demonstrate and prove `ros2_control` concepts.
+## Description
+
 The repository is inspired by [ros_control_boilerplate](https://github.com/PickNikRobotics/ros_control_boilerplate) repository from Dave Coleman.
 The simulation has three parts/packages:
 1. The first package, `ros2_control_demo_communication_headless`, uses scripts to simulate communication to and movements of virtual hardware.

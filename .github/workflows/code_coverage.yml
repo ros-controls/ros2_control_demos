@@ -1,4 +1,4 @@
-name: Test ros2_control_demos
+name: Coverage
 on:
   pull_request:
   push:
