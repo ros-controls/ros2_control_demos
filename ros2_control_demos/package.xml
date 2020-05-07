@@ -2,7 +2,7 @@
 <package format="3">
   <name>ros2_control_demos</name>
   <version>0.0.0</version>
-  <description>Metapackage for ROS2 control demos packages</description>
+  <description>Metapackage for ros2_control demos packages</description>
   <maintainer email="allabana@amazon.com">Anas Abou Allaban</maintainer>
   <maintainer email="bence.magyar.robotics@gmail.com">Bence Magyar</maintainer>
   <maintainer email="jordan.palacios@pal-robotics.com">Jordan Palacios</maintainer>
