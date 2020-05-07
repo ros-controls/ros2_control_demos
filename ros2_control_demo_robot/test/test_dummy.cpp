@@ -20,4 +20,4 @@ protected:
   static void SetUpTestCase()
   {
   }
-}
+};
