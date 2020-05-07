@@ -1,19 +1,11 @@
 # ROS2 Control Demos
 
-.. image:: https://github.com/ros-controls/ros2_control_demos/workflows/CI/badge.svg?branch=master
-    :target: https://github.com/ros-controls/ros2_control_demos/actions
-    :alt: CI - GitHub Actions status
-.. image:: https://github.com/ros-controls/ros2_control_demos/workflows/Linters/badge.svg?branch=master
-    :target: https://github.com/ros-controls/ros2_control_demos/actions
-    :alt: Linters - GitHub Actions status
-.. image:: https://github.com/ros-controls/ros2_control_demos/workflows/Coverage/badge.svg?branch=master
-    :target: https://github.com/ros-controls/ros2_control_demos/actions
-    :alt: Code Coverage - GitHub Actions status
+[![Build Status](https://github.com/ros-controls/ros2_control_demos/workflows/CI/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions)
+[![Linters Status](https://github.com/ros-controls/ros2_control_demos/workflows/Linters/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions)
+[![Coverage Status](https://github.com/ros-controls/ros2_control_demos/workflows/Coverage/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions)
+[![Licence](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 This repository provides templates for the development of `ros2_control`-enabled robots and a simple simulation of a robot to demonstrate and prove `ros2_control` concepts.
-
-.. contents:: Table of Contents
-   :depth: 2
 
 ## Goals
 
