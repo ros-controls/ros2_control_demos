@@ -60,7 +60,7 @@ class GenericRobotHardware : public hardware_interface::RobotHardware,
   std::vector<std::string> joint_names_;
   std::size_t num_joints_;
 
-  rclcpp::Subscription<std_msgs::msg::String>::SharedPtr subscription_;
+  rclcpp::Subscription<std_msgs::msg::String>::SharedPtr urdf_subscriber_;
 
   void loadURDFString(std::string &urdf_value);
   void loadURDFCallback(const std_msgs::msg::String::SharedPtr msg);
