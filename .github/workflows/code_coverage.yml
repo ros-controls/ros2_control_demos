@@ -1,0 +1,34 @@
+name: Coverage
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+  schedule:
+    # Run every morning to detect flakiness and broken dependencies
+    - cron: '17 8 * * *'
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-18.04
+    strategy:
+      fail-fast: false
+    steps:
+      - uses: ros-tooling/setup-ros@0.0.13
+      - uses: ros-tooling/action-ros-ci@0.0.13
+        with:
+          package-name: ros2_control_demo_communication_gazebo ros2_control_demo_communication_headless ros2_control_demo_hardware ros2_control_demo_robot
+          colcon-mixin-name: coverage-gcc
+          colcon-mixin-repository: https://raw.githubusercontent.com/colcon/colcon-mixin-repository/master/index.yaml
+      - uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ros_ws/lcov/total_coverage.info
+          flags: unittests
+          name: codecov-umbrella
+          yml: ./codecov.yml
+          fail_ci_if_error: true
+#      - uses: actions/upload-artifact@master
+#        with:
+#          name: colcon-logs-${{ matrix.os }}
+#          path: ros_ws/log

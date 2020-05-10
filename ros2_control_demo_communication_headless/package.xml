@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>ros2_control_demo_communication_headless</name>
+  <version>0.0.0</version>
+  <description>Demo package of `ros2_control` Demo communication interface. This interface is used as an example on how to define a communication interface for your robot. The package is used for `demo_robot` from package `ros2_control_demo_robot`.</description>
+
+  <maintainer email="ostasse@laas.fr">Olivier Stasse</maintainer>
+  <maintainer email="denis@stogl.de">Denis Štogl</maintainer>
+
+  <license>Apache License 2.0</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <test_depend>ament_cmake_gtest</test_depend>
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
