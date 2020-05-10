@@ -22,12 +22,15 @@ install(DIRECTORY config/ description/ launch/
   DESTINATION share)
 
 if(BUILD_TESTING)
-  find_package(ament_lint_auto REQUIRED)
-  ament_lint_auto_find_test_dependencies()
+  find_package(ament_cmake_gtest REQUIRED)
 
   ament_add_gtest(test_dummy test/test_dummy.cpp)
   target_include_directories(test_dummy PRIVATE include)
 #   ament_target_dependencies(test_dummy rcpputils)
+
+  # Uncomment this before creating a new PR to check code quality
+#   find_package(ament_lint_auto REQUIRED)
+#   ament_lint_auto_find_test_dependencies()
 endif()
 
 ament_package()
