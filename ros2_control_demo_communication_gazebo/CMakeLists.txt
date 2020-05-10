@@ -24,10 +24,6 @@ if(BUILD_TESTING)
   target_include_directories(test_dummy PRIVATE include)
 #   ament_target_dependencies(test_dummy rcpputils)
 
-
-  # Uncomment this before creating a new PR to check code quality
-#   find_package(ament_lint_auto REQUIRED)
-#   ament_lint_auto_find_test_dependencies()
 endif()
 
 ament_export_libraries(${PROJECT_NAME})
