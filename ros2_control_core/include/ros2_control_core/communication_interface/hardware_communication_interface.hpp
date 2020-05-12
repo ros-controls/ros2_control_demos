@@ -13,40 +13,30 @@
 // limitations under the License.
 
 
-#ifndef ROS2_CONTROL_CORE__COMPONENTS_COMPONENT_HPP_
-#define ROS2_CONTROL_CORE__COMPONENTS_COMPONENT_HPP_
-
-#include <string>
-#include <vector>
+#ifndef ROS2_CONTROL_CORE__COMMUNICATION_INTERFACE_HARDWARE_COMMUNICATION_INTERFACE_HPP_
+#define ROS2_CONTROL_CORE__COMMUNICATION_INTERFACE_HARDWARE_COMMUNICATION_INTERFACE_HPP_
 
 #include "ros2_control_core/visibility_control.h"
 
 #include "ros2_control_core/ros2_control_types.h"
 
-#include "ros2_control_core/components/base_component.hpp"
-
-
-namespace ros2_control_core_components
+namespace ros2_control_core_communication_interface
 {
 
-class Component
+class HardwareCommunicationInterface
 {
 public:
-  ROS2_CONTROL_CORE_PUBLIC Component() = default;
+  ROS2_CONTROL_CORE_PUBLIC HardwareCommunicationInterface() = default;
 
-  ROS2_CONTROL_CORE_PUBLIC virtual ~Component() = default;
+  ROS2_CONTROL_CORE_PUBLIC virtual ~HardwareCommunicationInterface() = default;
 
-  ROS2_CONTROL_CORE_PUBLIC bool init(ros2_control_types::ComponentDescription description);
-
-  ROS2_CONTROL_CORE_PUBLIC virtual bool recover() = 0;
-
+  ROS2_CONTROL_CORE_PUBLIC bool init(ros2_control_types::CommunicationInterfaceDescription description);
 
 protected:
-  // TODO: Does this make sense?
-  ros2_control_types::ComponentDescription description;
+  ros2_control_types::CommunicationInterfaceDescription description;
 
 };
 
-}  // namespace ros2_control_core_components
+}  // ros2_control_core_hardware
 
-#endif  // ROS2_CONTROL_CORE__COMPONENTS_COMPONENT_HPP_
+#endif  // ROS2_CONTROL_CORE__COMMUNICATION_INTERFACE_HARDWARE_COMMUNICATION_INTERFACE_HPP_

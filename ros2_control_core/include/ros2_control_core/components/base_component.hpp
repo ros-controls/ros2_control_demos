@@ -16,9 +16,15 @@
 #ifndef ROS2_CONTROL_CORE__COMPONENTS_BASE_COMPONENT_HPP_
 #define ROS2_CONTROL_CORE__COMPONENTS_BASE_COMPONENT_HPP_
 
+#include <string>
+
 #include "ros2_control_core/visibility_control.h"
 
-namespace ros2_control_core
+#include "ros2_control_core/ros2_control_types.h"
+
+#include "ros2_control_core/hardware/component_hardware.hpp"
+
+namespace ros2_control_core_components
 {
 
 class BaseComponent
@@ -28,8 +34,20 @@ public:
 
   ROS2_CONTROL_CORE_PUBLIC virtual ~BaseComponent() = default;
 
-}
+  ROS2_CONTROL_CORE_PUBLIC bool init(ros2_control_types::BaseComponentDescription description);
 
-}  // namespace ros2_control_core
+  // TODO: Remove is not used...
+  ROS2_CONTROL_CORE_PUBLIC bool init(std::string name, ros2_control_types::HardwareDescription hardware_description);
+
+  ROS2_CONTROL_CORE_PUBLIC virtual bool recover() = 0;
+
+
+protected:
+  std::string name;
+  ros2_control_core_hardware::ComponentHardware hardware;
+
+};
+
+}  // namespace ros2_control_core_components
 
 #endif  // ROS2_CONTROL_CORE__COMPONENTS_BASE_COMPONENT_HPP_
