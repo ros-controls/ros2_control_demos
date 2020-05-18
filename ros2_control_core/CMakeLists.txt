@@ -14,9 +14,27 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 
+find_package(control_msgs REQUIRED)
+
+
+## COMPILE
+add_library(ros2_control_components SHARED
+  src/ros2_control_core/components/robot.cpp
+)
+
+target_include_directories(ros2_control_components
+  PRIVATE include
+)
+
+ament_target_dependencies(ros2_control_components
+  control_msgs
+)
+
+## INSTALL
 install(DIRECTORY include/
   DESTINATION include)
 
+## TESTS
 if(BUILD_TESTING)
   find_package(ament_cmake_gtest REQUIRED)
 
@@ -30,6 +48,7 @@ if(BUILD_TESTING)
 #   ament_lint_auto_find_test_dependencies()
 endif()
 
+## EXPORTS
 ament_export_libraries(${PROJECT_NAME})
 ament_export_include_directories(include)
 ament_package()

@@ -13,40 +13,47 @@
 // limitations under the License.
 
 
-#ifndef ROS2_CONTROL_CORE__COMPONENTS_COMPONENT_HPP_
-#define ROS2_CONTROL_CORE__COMPONENTS_COMPONENT_HPP_
+#ifndef ROS2_CONTROL_CORE__COMPONENTS_BASE_COMPONENT_HPP_
+#define ROS2_CONTROL_CORE__COMPONENTS_BASE_COMPONENT_HPP_
 
 #include <string>
-#include <vector>
 
 #include "ros2_control_core/visibility_control.h"
 
 #include "ros2_control_core/ros2_control_types.h"
 
-#include "ros2_control_core/components/base_component.hpp"
-
+#include "ros2_control_core/hardware/component_hardware.hpp"
 
 namespace ros2_control_core_components
 {
 
+template < typename ComponentDescriptionType, typename ComponentHardwareType >
 class Component
 {
 public:
   ROS2_CONTROL_CORE_PUBLIC Component() = default;
 
+  ROS2_CONTROL_CORE_PUBLIC Component(std::string name){
+    this->name = name;
+  };
+
   ROS2_CONTROL_CORE_PUBLIC virtual ~Component() = default;
 
-  ROS2_CONTROL_CORE_PUBLIC bool init(ros2_control_types::ComponentDescription description);
+  ROS2_CONTROL_CORE_PUBLIC ros2_control_types::return_type init(ComponentDescriptionType description_in);
 
-  ROS2_CONTROL_CORE_PUBLIC virtual bool recover() = 0;
+  // TODO: Remove is not used...
+//   ROS2_CONTROL_CORE_PUBLIC virtual ros2_control_types::return_type init(std::string name, ros2_control_types::HardwareDescription hardware_description);
 
+  ROS2_CONTROL_CORE_PUBLIC virtual ros2_control_types::return_type recover() = 0;
+
+  ROS2_CONTROL_CORE_PUBLIC virtual ros2_control_types::return_type stop() = 0;
 
 protected:
-  // TODO: Does this make sense?
-  ros2_control_types::ComponentDescription description;
-
+  std::string name;
+  ComponentDescriptionType description;
+  ComponentHardwareType hardware;
 };
 
 }  // namespace ros2_control_core_components
 
-#endif  // ROS2_CONTROL_CORE__COMPONENTS_COMPONENT_HPP_
+#endif  // ROS2_CONTROL_CORE__COMPONENTS_BASE_COMPONENT_HPP_

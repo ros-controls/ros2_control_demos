@@ -13,41 +13,33 @@
 // limitations under the License.
 
 
-#ifndef ROS2_CONTROL_CORE__COMPONENTS_BASE_COMPONENT_HPP_
-#define ROS2_CONTROL_CORE__COMPONENTS_BASE_COMPONENT_HPP_
-
-#include <string>
+#ifndef ROS2_CONTROL_CORE__COMPONENTS_COMPONENT_HPP_
+#define ROS2_CONTROL_CORE__COMPONENTS_COMPONENT_HPP_
 
 #include "ros2_control_core/visibility_control.h"
 
 #include "ros2_control_core/ros2_control_types.h"
 
-#include "ros2_control_core/hardware/component_hardware.hpp"
+#include "ros2_control_core/components/component.hpp"
+
+#include "control_msgs/msg/interface_value.hpp"
+
 
 namespace ros2_control_core_components
 {
 
-class BaseComponent
+template < typename ComponentDescriptionType, typename ComponentHardwareType >
+class SimpleComponent : Component<ComponentDescriptionType, ComponentHardwareType>
 {
 public:
-  ROS2_CONTROL_CORE_PUBLIC BaseComponent() = default;
+  ROS2_CONTROL_CORE_PUBLIC SimpleComponent() = default;
 
-  ROS2_CONTROL_CORE_PUBLIC virtual ~BaseComponent() = default;
-
-  ROS2_CONTROL_CORE_PUBLIC bool init(ros2_control_types::BaseComponentDescription description);
-
-  // TODO: Remove is not used...
-  ROS2_CONTROL_CORE_PUBLIC bool init(std::string name, ros2_control_types::HardwareDescription hardware_description);
-
-  ROS2_CONTROL_CORE_PUBLIC virtual bool recover() = 0;
-
+  ROS2_CONTROL_CORE_PUBLIC virtual ~SimpleComponent() = default;
 
 protected:
-  std::string name;
-  ros2_control_core_hardware::ComponentHardware hardware;
-
+  control_msgs::msg::InterfaceValue values;
 };
 
 }  // namespace ros2_control_core_components
 
-#endif  // ROS2_CONTROL_CORE__COMPONENTS_BASE_COMPONENT_HPP_
+#endif  // ROS2_CONTROL_CORE__COMPONENTS_COMPONENT_HPP_

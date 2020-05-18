@@ -16,9 +16,6 @@
 #ifndef ROS2_CONTROL_CORE__HARDWARE_COMPONENT_HARDWARE_HPP_
 #define ROS2_CONTROL_CORE__HARDWARE_COMPONENT_HARDWARE_HPP_
 
-#include <string>
-
-
 #include "ros2_control_core/visibility_control.h"
 
 #include "ros2_control_core/ros2_control_types.h"
@@ -28,6 +25,7 @@
 namespace ros2_control_core_hardware
 {
 
+template < typename ComponentHardwareDescriptionType >
 class ComponentHardware
 {
 public:
@@ -35,13 +33,10 @@ public:
 
   ROS2_CONTROL_CORE_PUBLIC virtual ~ComponentHardware() = default;
 
-  ROS2_CONTROL_CORE_PUBLIC bool init(ros2_control_types::HardwareDescription description);
-
-  // TODO: Remove is not used...
-  ROS2_CONTROL_CORE_PUBLIC bool init(std::string name, ros2_control_types::CommunicationInterfaceDescription communication_description);
+  ROS2_CONTROL_CORE_PUBLIC ros2_control_types::return_type init(ComponentHardwareDescriptionType description);
 
 protected:
-  ros2_control_types::HardwareDescription description;
+  ComponentHardwareDescriptionType description;
   ros2_control_core_communication_interface::HardwareCommunicationInterface communication_interface;
 
 };

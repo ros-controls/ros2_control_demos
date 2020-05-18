@@ -30,7 +30,7 @@ public:
 
   ROS2_CONTROL_CORE_PUBLIC virtual ~HardwareCommunicationInterface() = default;
 
-  ROS2_CONTROL_CORE_PUBLIC bool init(ros2_control_types::CommunicationInterfaceDescription description);
+  ROS2_CONTROL_CORE_PUBLIC ros2_control_types::return_type init(ros2_control_types::CommunicationInterfaceDescription description);
 
 protected:
   ros2_control_types::CommunicationInterfaceDescription description;
