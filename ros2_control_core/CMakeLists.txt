@@ -15,24 +15,30 @@ endif()
 find_package(ament_cmake REQUIRED)
 
 find_package(control_msgs REQUIRED)
+find_package(rclcpp REQUIRED)
 
 
 ## COMPILE
-add_library(ros2_control_components SHARED
+add_library(${PROJECT_NAME} SHARED
   src/ros2_control_core/components/robot.cpp
 )
 
-target_include_directories(ros2_control_components
+target_include_directories(${PROJECT_NAME}
   PRIVATE include
 )
 
-ament_target_dependencies(ros2_control_components
+ament_target_dependencies(${PROJECT_NAME}
   control_msgs
 )
 
 ## INSTALL
+install(TARGETS ${PROJECT_NAME}
+  DESTINATION share/${PROJECT_NAME}/
+)
+
 install(DIRECTORY include/
-  DESTINATION include)
+  DESTINATION include
+)
 
 ## TESTS
 if(BUILD_TESTING)

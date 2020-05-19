@@ -42,9 +42,11 @@ class Robot : private Component< ros2_control_types::RobotDescription, ros2_cont
 public:
   ROS2_CONTROL_CORE_PUBLIC Robot() = default;
 
-  ROS2_CONTROL_CORE_PUBLIC Robot(std::string name, rclcpp::Node node, std::string param_path);
+  ROS2_CONTROL_CORE_PUBLIC Robot(std::string name, const rclcpp::Node::SharedPtr node, std::string param_base_path);
 
-  ROS2_CONTROL_CORE_PUBLIC virtual ~Robot() = default;
+  ROS2_CONTROL_CORE_PUBLIC Robot(const std::string name, const rclcpp::node_interfaces::NodeLoggingInterface::SharedPtr logging_interface,  const rclcpp::node_interfaces::NodeParametersInterface::SharedPtr param_interface, const rclcpp::node_interfaces::NodeServicesInterface::SharedPtr services_interface, const std::string param_base_path);
+
+  ROS2_CONTROL_CORE_PUBLIC ~Robot() = default;
 
   ROS2_CONTROL_CORE_PUBLIC ros2_control_types::return_type init(ros2_control_types::RobotDescription description);
 
@@ -54,12 +56,16 @@ public:
 
   ROS2_CONTROL_CORE_PUBLIC ros2_control_types::return_type write();
 
-protected:
-  control_msgs::msg::DynamicJointState joint_states;
+  ROS2_CONTROL_CORE_PUBLIC ros2_control_types::return_type stop();
 
-  std::vector<Actuator> actuators;
-  std::vector<Sensor> sensors;
-  std::vector<Robot> robots;
+protected:
+  control_msgs::msg::DynamicJointState joint_states_;
+
+  std::vector<Actuator> actuators_;
+  std::vector<Sensor> sensors_;
+  std::vector<Robot> robots_;
+
+  rclcpp::Logger logger_;
 };
 
 }  // namespace ros2_control_core_components
