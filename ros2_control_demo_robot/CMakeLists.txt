@@ -14,8 +14,33 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 
-install(DIRECTORY config/ description/ launch/
-  DESTINATION share)
+find_package(control_msgs REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(ros2_control_core REQUIRED)
+
+
+# Test node
+add_executable(ros2_control_demo_robot_manager src/ros2_control_demo_robot_manager.cpp)
+
+target_include_directories(ros2_control_demo_robot_manager
+  PRIVATE include
+)
+
+ament_target_dependencies(ros2_control_demo_robot_manager
+  control_msgs
+  rclcpp
+  ros2_control_core
+)
+
+## INSTALL
+install(TARGETS ros2_control_demo_robot_manager
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+install(
+  DIRECTORY config description launch
+  DESTINATION share/${PROJECT_NAME}/
+)
 
 if(BUILD_TESTING)
   find_package(ament_cmake_gtest REQUIRED)
