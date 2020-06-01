@@ -1,0 +1,7 @@
+<library path="ros2_control_demo_communication_headless">
+  <class name="ros2_control_communicaiton_interface/DemoRobotCommunicationHeadless" type="ros2_control_demo_communication_headless::DemoRobotHeadless" base_class_type="ros2_control_core_communication_interface::HardwareCommunicationInterface">
+    <description>
+      The ROS2 Control communication interface for headless demo robot.
+    </description>
+  </class>
+</library>

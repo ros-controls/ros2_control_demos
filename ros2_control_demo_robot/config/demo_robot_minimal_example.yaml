@@ -1,0 +1,23 @@
+ros2_control_demo_robot_manager:
+  ros__parameters:
+    DemoRobot:
+      name: "ROS2-C Demo Robot Minimal"
+      has_hardware: True
+      RobotHardware:
+        type: "ros2_control_demo_hardware/DemoRobotHardwareMinimal"
+
+      joints: [joint1, joint2]
+      actuators:
+        joint1:
+          name: "joint1_position_actuator"
+          type: "ros2_control_components/PositionActuator"
+          can_read: True
+          min_values: [-1]
+          max_values: [1]
+
+        joint2:
+          name: "joint2_position_actuator"
+          type: "ros2_control_components/PositionActuator"
+          can_read: True
+          min_values: [-1]
+          max_values: [1]
