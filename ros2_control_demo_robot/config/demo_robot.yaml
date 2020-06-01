@@ -2,9 +2,10 @@ ros2_control_demo_robot_manager:
   ros__parameters:
     DemoRobot:
       name: "ROS2-C Demo Robot"
-      has_robots: False
-      has_tools: True
       has_hardware: True
+      has_robots: False
+      has_sensors: True
+      has_tools: True
       RobotHardware:
         type: "ros2_control_demo_hardware/DemoRobotHardwareHeadless"
         has_communication_interface: True

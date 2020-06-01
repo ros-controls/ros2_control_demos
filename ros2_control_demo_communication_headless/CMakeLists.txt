@@ -13,6 +13,30 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(ros2_control_core REQUIRED)
+
+## COMPILE
+add_library(${PROJECT_NAME} SHARED
+  src/demo_robot_headless.cpp
+)
+
+target_include_directories(${PROJECT_NAME}
+  PRIVATE include
+)
+
+ament_target_dependencies(${PROJECT_NAME}
+  pluginlib
+  rclcpp
+  ros2_control_core
+)
+
+pluginlib_export_plugin_description_file(ros2_control_core ros2_control_demo_communication_headless.xml)
+
+# INSTALL
+install(TARGETS ${PROJECT_NAME}
+  DESTINATION lib
+)
 
 install(DIRECTORY include/
   DESTINATION include)
@@ -26,6 +50,14 @@ if(BUILD_TESTING)
 
 endif()
 
+## EXPORTS
+ament_export_dependencies(
+  pluginlib
+  rclcpp
+  ros2_control_core
+)
 ament_export_libraries(${PROJECT_NAME})
-ament_export_include_directories(include)
+ament_export_include_directories(
+  include
+)
 ament_package()
