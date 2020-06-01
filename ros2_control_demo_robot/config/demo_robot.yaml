@@ -2,16 +2,20 @@ ros2_control_demo_robot_manager:
   ros__parameters:
     DemoRobot:
       name: "ROS2-C Demo Robot"
+      has_robots: False
+      has_tools: True
+      has_hardware: True
       RobotHardware:
-        type: "ros2-control_demo_hardware/DemoRobotHardware_Headless"
+        type: "ros2_control_demo_hardware/DemoRobotHardwareHeadless"
+        has_communication_interface: True
         HardwareCommunicationInterface:
-          some_example_param: 1
+          type: "ros2_control_communicaiton_interface/DemoRobotCommunicationHeadless"
 
       joints: [jointX, jointY]
       actuators:
         jointX:
           name: "jointX_position_actuator"
-          type: "ros2_control_components/PositionActuator"
+          type: "ros2_control_components/VelocityActuator"
           can_read: True
           n_dof: 1
           min_values: [-1]
@@ -19,7 +23,7 @@ ros2_control_demo_robot_manager:
 
         jointY:
           name: "jointY_velocity_actuator"
-          type: "ros2_control_components/VelocityActuator"
+          type: "ros2_control_components/PositionActuator"
           n_dof: 1
           min_values: [-0.5]
           max_values: [1]
@@ -35,10 +39,11 @@ ros2_control_demo_robot_manager:
           type: "ros2_control_components/VelocitySensor"
           n_dof: 1
 
-      tools:
-        sensors:
-          touch_sensor:
-            name: "tcp_touch_sensor"
-            type: "ros2_control_components/TouchSensor"
-            frame_id: "tcp"
-            n_dof: 1
+      #tools:
+        #sensor_names: ["touch_sensor"]
+        #sensors:
+          #touch_sensor:
+            #name: "tcp_touch_sensor"
+            #type: "ros2_control_demo_components/TouchSensor"
+            #frame_id: "tcp"
+            #n_dof: 1
