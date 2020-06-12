@@ -12,6 +12,11 @@
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
+  <depend>control_msgs</depend>
+  <depend>hardware_interface</depend>
+  <depend>rclcpp</depend>
+  <depend>robot_control_components</depend>
+
   <test_depend>ament_cmake_gtest</test_depend>
 
   <export>

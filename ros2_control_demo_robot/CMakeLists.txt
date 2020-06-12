@@ -13,6 +13,31 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
+find_package(control_msgs REQUIRED)
+find_package(hardware_interface REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(robot_control_components REQUIRED)
+
+## COMPILE
+add_executable(${PROJECT_NAME}_minimal_node
+  src/${PROJECT_NAME}_minimal_node.cpp
+)
+
+target_include_directories(${PROJECT_NAME}_minimal_node
+  PRIVATE include
+)
+
+ament_target_dependencies(${PROJECT_NAME}_minimal_node
+  control_msgs
+  hardware_interface
+  rclcpp
+  robot_control_components
+)
+
+## INSTALL
+install(TARGETS ${PROJECT_NAME}_minimal_node
+  DESTINATION lib/${PROJECT_NAME}
+)
 
 install(DIRECTORY config/ description/ launch/
   DESTINATION share)
