@@ -20,6 +20,8 @@ from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch_ros.actions import Node
 
+import xacro
+
 def generate_launch_description():
 
     ld = LaunchDescription()
@@ -30,13 +32,30 @@ def generate_launch_description():
         'minimal_robot.yaml'
         )
 
+# TODO: This does not work... why?
+#    robot_description_file = os.path.join(
+#        get_package_share_directory('ros2_control_demo_robot'),
+#        'description',
+#        'minimal_robot.urdf.xacro'
+#        )
+#    descr = xacro.process_file(robot_description_file)
+
+    robot_description_file = os.path.join(
+        get_package_share_directory('ros2_control_demo_robot'),
+        'description',
+        'minimal_robot.urdf'
+        )
+    with open(robot_description_file, 'r') as infile:
+      descr = infile.read()
+
+    robot_description = {'robot_description': descr}
 
     return LaunchDescription([
       Node(
         package='ros2_control_demo_robot',
         node_name='ros2_control_demo_robot_minimal_node',
         node_executable='ros2_control_demo_robot_minimal_node',
-        parameters=[robot_minimal_config],
+        parameters=[robot_minimal_config, robot_description],
         output={
           'stdout': 'screen',
           'stderr': 'screen',

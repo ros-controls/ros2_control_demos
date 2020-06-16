@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="robot_2dof_transmission" params="prefix">
+
+    <transmission name="${prefix}tran1">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${prefix}joint1">
+        <hardwareInterface>PositionJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${prefix}motor1">
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+    <transmission name="${prefix}tran2">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${prefix}joint2">
+        <hardwareInterface>VelocityJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${prefix}motor2">
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+  </xacro:macro>
+
+</robot>
+

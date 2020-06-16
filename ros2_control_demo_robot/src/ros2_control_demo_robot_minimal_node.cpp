@@ -19,7 +19,10 @@
 #include "control_msgs/msg/interface_value.hpp"
 #include "hardware_interface/robot_hardware_interface.hpp"
 #include "rclcpp/rclcpp.hpp"
+#include "robot_control_components/ros2_control_types.h"
 #include "robot_control_components/ros2_control_utils.hpp"
+
+#include "ros2_control_demo_hardware/robot_minimal_hardware.hpp"
 
 
 // use virtual representation of Robot in the future and not RobotHardwareInterface directly
@@ -35,9 +38,17 @@ typedef ros2_control_utils::ROS2ControlLoaderPluginlib<hardware_interface::Robot
 public:
   ROS2ControlCoreTestClass(rclcpp::NodeOptions options) : Node("ros2_control_core_test_node", options)
   {
-    RobotHardwareInterfaceLoaderType robot_hardware_loader = RobotHardwareInterfaceLoaderType("hardware_interface", "hardware_interface/RobotMinimalHardware");
+    RobotHardwareInterfaceLoaderType robot_hardware_loader = RobotHardwareInterfaceLoaderType("hardware_interface", "hardware_interface::RobotHardwareInterface");
 
-    robot_ = robot_hardware_loader.create("ros2_control_demo_minimal_hardware/RobotMinimalHardware");
+    std::string robot_hardware_class_name = "ros2_control_demo_hardware/RobotMinimalHardware";
+    if (robot_hardware_loader.is_available(robot_hardware_class_name)) {
+      RCLCPP_DEBUG(this->get_logger(), "RobotHardwareInterface class %s found.", robot_hardware_class_name.c_str());
+      robot_ = robot_hardware_loader.create(robot_hardware_class_name);
+    }
+    else {
+      RCLCPP_FATAL(this->get_logger(), "RobotHardwareInterface class %s is not available! Exiting.", robot_hardware_class_name.c_str());
+      rclcpp::shutdown();
+    }
 
     parameters_client_ = std::make_shared<rclcpp::SyncParametersClient>(this);
     while (!parameters_client_->wait_for_service(1s)) {
@@ -49,6 +60,7 @@ public:
     }
 
     // Load robot_description parameter
+    this->declare_parameter("robot_description", "");
     auto get_parameters_result = parameters_client_->get_parameters
     ({"robot_description"});
 
@@ -57,11 +69,18 @@ public:
       (get_parameters_result[0].get_type()
       == rclcpp::ParameterType::PARAMETER_NOT_SET))
     {
-      RCLCPP_ERROR(get_logger(),
+      RCLCPP_FATAL(this->get_logger(),
                    "No robot_description parameter");
-
-      return;
+      rclcpp::shutdown();
     }
+
+    if (robot_->robot_.configure(get_parameters_result[0].value_to_string()) != robot_control_components::ROS2C_RETURN_OK)
+    {
+      RCLCPP_FATAL(this->get_logger(),
+                   "Configuring Robot failed");
+      rclcpp::shutdown();
+    }
+
 
     robot_->init();
 

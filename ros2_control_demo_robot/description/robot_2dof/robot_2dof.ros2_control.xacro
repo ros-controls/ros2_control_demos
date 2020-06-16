@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="robot_2dof_ros2_control" params="name prefix">
+
+     <ros2_control name="${name}">
+
+      <hardware>
+        <classType>ros2_control_demo_hardware/DemoRobotHardwareMinimal</classType>
+        <param name="write_for_sec">2</param>
+        <param name="read_for_sec">2</param>
+      </hardware>
+
+      <actuator name="${prefix}joint1_position_actuator">
+        <classType>ros2_control_components/PositionActuator</classType>
+        <joint name="${prefix}joint1">
+          <interfaceName>position</interfaceName>
+        </joint>
+        <param name="can_read">True</param>
+        <param name="min_values">-1</param>
+        <param name="max_values">1</param>
+      </actuator>
+
+      <actuator name="${prefix}joint2_position_actuator">
+        <classType>ros2_control_components/PositionActuator</classType>
+        <joint name="${prefix}joint2">
+          <interfaceName>position</interfaceName>
+        </joint>
+        <param name="can_read">True</param>
+        <param name="min_values">-1</param>
+        <param name="max_values">1</param>
+      </actuator>
+
+    </ros2_control>
+
+  </xacro:macro>
+
+</robot>
+

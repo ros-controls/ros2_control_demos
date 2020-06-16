@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:macro name="robot_2dof_gazebo" params="prefix">
+
+    <gazebo reference="${prefix}base_link">
+      <material>Gazebo/Gray</material>
+    </gazebo>
+    <gazebo reference="${prefix}link1">
+      <material>Gazebo/Gray</material>
+    </gazebo>
+    <gazebo reference="${prefix}link2">
+      <material>Gazebo/Gray</material>
+    </gazebo>
+    <gazebo>
+      <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      </plugin>
+    </gazebo>
+
+  </xacro:macro>
+
+</robot>

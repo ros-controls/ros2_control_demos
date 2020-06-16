@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="robot_2dof" params="parent prefix *origin">
+
+    <joint name="${prefix}base_joint" type="fixed">
+      <xacro:insert_block name="origin" />
+      <parent link="${parent}"/>
+      <child link="${prefix}base_link" />
+    </joint>
+
+    <link name="${prefix}base_link">
+      <inertial>
+        <mass value="0.01" />
+        <origin xyz="0 0 0" />
+        <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001" />
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <cylinder radius="0.1" length="0.2" />
+        </geometry>
+        <material name="DarkGrey">
+          <color rgba="0.4 0.4 0.4 1.0"/>
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <cylinder radius="0.1" length="1" />
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="${prefix}joint1" type="revolute">
+      <origin xyz="0 0 0.2" rpy="${-pi/2} 0 0" />
+      <parent link="${prefix}base_link"/>
+      <child link="${prefix}link1" />
+      <limit lower="${-pi}" upper="${pi}" effort="0.1" velocity="0.2" />
+    </joint>
+
+    <link name="${prefix}link1">
+      <inertial>
+        <mass value="0.01" />
+        <origin xyz="0 0 0" />
+        <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001" />
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <cylinder radius="0.1" length="1" />
+        </geometry>
+        <material name="DarkGrey">
+          <color rgba="0.4 0.4 0.4 1.0"/>
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <cylinder radius="0.1" length="1" />
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="${prefix}joint2" type="revolute">
+      <origin xyz="0 0 0.9" rpy="${pi/2} 0 0" />
+      <parent link="${prefix}link1"/>
+      <child link="${prefix}link2" />
+      <limit lower="${-pi}" upper="${pi}" effort="0.1" velocity="0.2" />
+    </joint>
+
+    <link name="${prefix}link2">
+      <inertial>
+        <mass value="0.01" />
+        <origin xyz="0 0 0" />
+        <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001" />
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <cylinder radius="0.1" length="1" />
+        </geometry>
+        <material name="DarkGrey">
+          <color rgba="0.4 0.4 0.4 1.0"/>
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <cylinder radius="0.1" length="1" />
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="${prefix}tool_joint" type="fixed">
+      <origin xyz="0 0 1" rpy="0 0 0" />
+      <parent link="${prefix}link2"/>
+      <child link="${prefix}tool_link" />
+    </joint>
+
+    <link name="${prefix}tool_link">
+    </link>
+
+  </xacro:macro>
+
+</robot>
+

@@ -1,5 +1,5 @@
 <library path="ros2_control_demo_hardware">
-  <class name="ros2_control_demo_hardware/RobotMinimalHardware" type="ros2_control_demo_hardware_minimal::RobotMinimalHardware" base_class_type="ros2_control_core_hardware::RobotHardware">
+  <class name="ros2_control_demo_hardware/RobotMinimalHardware" type="ros2_control_demo_minimal_hardware::RobotMinimalHardware" base_class_type="hardware_interface::RobotHardwareInterface">
     <description>
       The ROS2 Control minimal robot protocol. This is example for start porting the robot from ROS 1.
     </description>

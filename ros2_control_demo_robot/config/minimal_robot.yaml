@@ -1,7 +1,7 @@
 ## This is just an example file with the condensated structure
 ## This file should not be actively used and it will probably be deleted at some point
 
-ros2_control_demo_robot_manager:
+ros2_control_demo_robot_minimal_node:
   ros__parameters:
     DemoRobot:
       name: "ROS2-C Demo Robot Minimal"

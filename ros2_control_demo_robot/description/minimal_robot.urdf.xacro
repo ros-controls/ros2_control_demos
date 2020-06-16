@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="MinimalRobot">
+
+<!--  <xacro:include filename="$(find ros2_control_demo_robot)/description/demo_2dof/robot_2dof.urdf.xacro" />
+  <xacro:include filename="$(find ros2_control_demo_robot)/description/demo_2dof/robot_2dof.gazebo.xacro" />
+  <xacro:include filename="$(find ros2_control_demo_robot)/description/demo_2dof/robot_2dof.ros2_control.xacro" />-->
+
+  <xacro:include filename="robot_2dof/robot_2dof.urdf.xacro" />
+  <xacro:include filename="robot_2dof/robot_2dof.gazebo.xacro" />
+  <xacro:include filename="robot_2dof/robot_2dof.ros2_control.xacro" />
+  <xacro:include filename="robot_2dof/robot_2dof.transmission.xacro" />
+
+
+  <!-- Used for fixing robot -->
+  <link name="world"/>
+  <gazebo reference="world">
+    <static>true</static>
+  </gazebo>
+
+
+  <xacro:robot_2dof parent="world" prefix="">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </xacro:robot_2dof>
+
+  <xacro:robot_2dof_gazebo prefix="" />
+
+  <xacro:robot_2dof_ros2_control name="MinimalRobot" prefix="" />
+
+  <xacro:robot_2dof_transmission prefix="" />
+
+</robot>

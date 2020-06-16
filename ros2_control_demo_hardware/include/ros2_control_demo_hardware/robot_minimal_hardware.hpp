@@ -16,6 +16,7 @@
 #ifndef ROS2_CONTROL_DEMO_HARDWARE__ROBOT_MINIMAL_HARDWARE_HPP_
 #define ROS2_CONTROL_DEMO_HARDWARE__ROBOT_MINIMAL_HARDWARE_HPP_
 
+#include "rclcpp/macros.hpp"
 #include "rclcpp/rclcpp.hpp"
 
 #include "hardware_interface/robot_hardware.hpp"
@@ -28,6 +29,8 @@ namespace ros2_control_demo_minimal_hardware
 class RobotMinimalHardware : public hardware_interface::RobotHardware
 {
 public:
+  RCLCPP_SHARED_PTR_DEFINITIONS(RobotMinimalHardware);
+
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC RobotMinimalHardware() = default;
 
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC ~RobotMinimalHardware() = default;

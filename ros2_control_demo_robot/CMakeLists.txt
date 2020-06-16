@@ -18,6 +18,8 @@ find_package(hardware_interface REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(robot_control_components REQUIRED)
 
+find_package(ros2_control_demo_hardware REQUIRED)
+
 ## COMPILE
 add_executable(${PROJECT_NAME}_minimal_node
   src/${PROJECT_NAME}_minimal_node.cpp
@@ -32,6 +34,7 @@ ament_target_dependencies(${PROJECT_NAME}_minimal_node
   hardware_interface
   rclcpp
   robot_control_components
+  ros2_control_demo_hardware
 )
 
 ## INSTALL
@@ -40,7 +43,9 @@ install(TARGETS ${PROJECT_NAME}_minimal_node
 )
 
 install(DIRECTORY config/ description/ launch/
-  DESTINATION share)
+  DESTINATION share
+  DESTINATION share/${PROJECT_NAME}
+)
 
 if(BUILD_TESTING)
   find_package(ament_cmake_gtest REQUIRED)
@@ -51,4 +56,5 @@ if(BUILD_TESTING)
 
 endif()
 
+## EXPORTS
 ament_package()
