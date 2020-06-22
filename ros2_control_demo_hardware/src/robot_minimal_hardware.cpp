@@ -68,4 +68,4 @@ hardware_interface::hardware_interface_ret_t RobotMinimalHardware::write()
 #include "pluginlib/class_list_macros.hpp"
 
 PLUGINLIB_EXPORT_CLASS(
-  ros2_control_demo_minimal_hardware::RobotMinimalHardware, hardware_interface::RobotHardwareInterface)
+  ros2_control_demo_minimal_hardware::RobotMinimalHardware, hardware_interface::RobotHardware)

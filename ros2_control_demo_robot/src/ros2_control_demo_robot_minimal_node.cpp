@@ -19,13 +19,13 @@
 #include "control_msgs/msg/interface_value.hpp"
 #include "hardware_interface/robot_hardware_interface.hpp"
 #include "rclcpp/rclcpp.hpp"
-#include "robot_control_components/ros2_control_types.h"
-#include "robot_control_components/ros2_control_utils.hpp"
+#include "hardware_interface/types/hardware_interface_return_values.hpp"
+#include "hardware_interface/utils/ros2_control_utils.hpp"
 
 #include "ros2_control_demo_hardware/robot_minimal_hardware.hpp"
 
 
-// use virtual representation of Robot in the future and not RobotHardwareInterface directly
+// use virtual representation of Robot in the future and not RobotHardware directly
 // #include "ros2_control_components/robot.hpp"
 
 using namespace std::chrono_literals;
@@ -33,20 +33,20 @@ using namespace std::chrono_literals;
 
 class ROS2ControlCoreTestClass: public rclcpp::Node
 {
-typedef ros2_control_utils::ROS2ControlLoaderPluginlib<hardware_interface::RobotHardwareInterface> RobotHardwareInterfaceLoaderType;
+typedef ros2_control_utils::ROS2ControlLoaderPluginlib<hardware_interface::RobotHardware> RobotHardwareLoaderType;
 
 public:
   ROS2ControlCoreTestClass(rclcpp::NodeOptions options) : Node("ros2_control_core_test_node", options)
   {
-    RobotHardwareInterfaceLoaderType robot_hardware_loader = RobotHardwareInterfaceLoaderType("hardware_interface", "hardware_interface::RobotHardwareInterface");
+    RobotHardwareLoaderType robot_hardware_loader = RobotHardwareLoaderType("hardware_interface", "hardware_interface::RobotHardware");
 
     std::string robot_hardware_class_name = "ros2_control_demo_hardware/RobotMinimalHardware";
     if (robot_hardware_loader.is_available(robot_hardware_class_name)) {
-      RCLCPP_DEBUG(this->get_logger(), "RobotHardwareInterface class %s found.", robot_hardware_class_name.c_str());
+      RCLCPP_DEBUG(this->get_logger(), "RobotHardware class %s found.", robot_hardware_class_name.c_str());
       robot_ = robot_hardware_loader.create(robot_hardware_class_name);
     }
     else {
-      RCLCPP_FATAL(this->get_logger(), "RobotHardwareInterface class %s is not available! Exiting.", robot_hardware_class_name.c_str());
+      RCLCPP_FATAL(this->get_logger(), "RobotHardware class %s is not available! Exiting.", robot_hardware_class_name.c_str());
       rclcpp::shutdown();
     }
 
@@ -74,7 +74,7 @@ public:
       rclcpp::shutdown();
     }
 
-    if (robot_->robot_.configure(get_parameters_result[0].value_to_string()) != robot_control_components::ROS2C_RETURN_OK)
+    if (robot_->configure(get_parameters_result[0].value_to_string()) != hardware_interface::HW_RET_OK)
     {
       RCLCPP_FATAL(this->get_logger(),
                    "Configuring Robot failed");
@@ -98,7 +98,7 @@ public:
 
 private:
   rclcpp::TimerBase::SharedPtr timer_;
-  std::shared_ptr<hardware_interface::RobotHardwareInterface> robot_;
+  std::shared_ptr<hardware_interface::RobotHardware> robot_;
   std::shared_ptr<rclcpp::SyncParametersClient> parameters_client_;
   control_msgs::msg::InterfaceValue values_;
 
