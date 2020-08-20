@@ -15,7 +15,7 @@
   <depend>control_msgs</depend>
   <depend>hardware_interface</depend>
   <depend>rclcpp</depend>
-  <depend>robot_control_components</depend>
+  <depend>ros2_control_components</depend>
 
   <depend>ros2_control_demo_hardware</depend>
 

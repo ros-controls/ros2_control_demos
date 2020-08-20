@@ -17,39 +17,27 @@
 #include <string>
 
 #include "control_msgs/msg/interface_value.hpp"
+#include "hardware_interface/actuator_hardware_interface.hpp"
+#include "hardware_interface/actuator_hardware.hpp"
+#include "hardware_interface/component_parser.hpp"
+#include "hardware_interface/hardware_info.hpp"
 #include "hardware_interface/robot_hardware_interface.hpp"
-#include "rclcpp/rclcpp.hpp"
+#include "hardware_interface/sensor_hardware_interface.hpp"
+#include "hardware_interface/sensor_hardware.hpp"
+#include "hardware_interface/system_hardware_interface.hpp"
+#include "hardware_interface/system_hardware.hpp"
 #include "hardware_interface/types/hardware_interface_return_values.hpp"
-#include "hardware_interface/utils/ros2_control_utils.hpp"
-
-#include "ros2_control_demo_hardware/robot_minimal_hardware.hpp"
-
-
-// use virtual representation of Robot in the future and not RobotHardware directly
-// #include "ros2_control_components/robot.hpp"
+#include "pluginlib/class_loader.hpp"
+#include "rclcpp/rclcpp.hpp"
 
 using namespace std::chrono_literals;
 
-
-class ROS2ControlCoreTestClass: public rclcpp::Node
+class ROS2ControlDemoResourceManager: public rclcpp::Node
 {
-typedef ros2_control_utils::ROS2ControlLoaderPluginlib<hardware_interface::RobotHardware> RobotHardwareLoaderType;
 
 public:
-  ROS2ControlCoreTestClass(rclcpp::NodeOptions options) : Node("ros2_control_core_test_node", options)
+  ROS2ControlDemoResourceManager(rclcpp::NodeOptions options) : Node("ros2_control_core_test_node", options)
   {
-    RobotHardwareLoaderType robot_hardware_loader = RobotHardwareLoaderType("hardware_interface", "hardware_interface::RobotHardware");
-
-    std::string robot_hardware_class_name = "ros2_control_demo_hardware/RobotMinimalHardware";
-    if (robot_hardware_loader.is_available(robot_hardware_class_name)) {
-      RCLCPP_DEBUG(this->get_logger(), "RobotHardware class %s found.", robot_hardware_class_name.c_str());
-      robot_ = robot_hardware_loader.create(robot_hardware_class_name);
-    }
-    else {
-      RCLCPP_FATAL(this->get_logger(), "RobotHardware class %s is not available! Exiting.", robot_hardware_class_name.c_str());
-      rclcpp::shutdown();
-    }
-
     parameters_client_ = std::make_shared<rclcpp::SyncParametersClient>(this);
     while (!parameters_client_->wait_for_service(1s)) {
       if (!rclcpp::ok()) {
@@ -74,19 +62,36 @@ public:
       rclcpp::shutdown();
     }
 
-    if (robot_->configure(get_parameters_result[0].value_to_string()) != hardware_interface::HW_RET_OK)
-    {
-      RCLCPP_FATAL(this->get_logger(),
-                   "Configuring Robot failed");
+    std::vector<hardware_interface::HardwareInfo> hardware_info =
+      hardware_interface::parse_control_resources_from_urdf(
+      get_parameters_result[0].value_to_string());
+
+    std::vector<std::shard_ptr<hardware_interface::ActuatorHardware>> actuators;
+    std::vector<std::shard_ptr<hardware_interface::SensorHardware>> sensors;
+    std::vector<std::shard_ptr<hardware_interface::SystemHardware>> systems;
+
+    if (!hardware_info.type.compare("system")) {
+      pluginlib::ClassLoader<hardware_interface::SystemHardwareInterface> system_loader(
+        "ros2_control_demo_hardware", "hardware_interface::SystemHardwareInterface");
+      systems.push_back(
+        std::make_shared<SystemHardware>(
+          std::make_unique<SystemHardwareInterface>(
+            system_loader.createInstance(hardware_info.hardware_class_type))));
+    } else if (!hardware_info.type.compare("sensor")) {
+
+    } else if {(!hardware_info.type.compare("actuator")) {
+
+    } else {
+      RCLCPP_FATAL(this->get_logger(), "hardware type not recognized");
       rclcpp::shutdown();
     }
 
-
-    robot_->init();
+    // configure all hardware
 
     timer_ = this->create_wall_timer(1000ms, std::bind(&ROS2ControlCoreTestClass::loop, this));
   }
 
+  // do some dummy stuff in this loop
   void loop()
   {
 //     robot_->read();
@@ -101,11 +106,6 @@ private:
   std::shared_ptr<hardware_interface::RobotHardware> robot_;
   std::shared_ptr<rclcpp::SyncParametersClient> parameters_client_;
   control_msgs::msg::InterfaceValue values_;
-
-//   void update_values()
-//   {
-//
-//   }
 };
 
 int main(int argc, char** argv)
@@ -114,7 +114,7 @@ int main(int argc, char** argv)
   rclcpp::NodeOptions options;
 //   options.allow_undeclared_parameters(true);
 //   options.automatically_declare_parameters_from_overrides(true);
-  rclcpp::spin(std::make_shared<ROS2ControlCoreTestClass>(options));
+  rclcpp::spin(std::make_shared<ROS2ControlDemoResourceManager>(options));
   rclcpp::shutdown();
   return 0;
 }

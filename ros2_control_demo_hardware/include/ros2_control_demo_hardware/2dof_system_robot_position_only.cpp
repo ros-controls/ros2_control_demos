@@ -24,6 +24,8 @@
 
 #include "ros2_control_demo_hardware/visibility_control.h"
 
+using hardware_interface::hardware_interface_ret_t;
+
 namespace ros2_control_demo_minimal_hardware
 {
 class RobotMinimalHardware : public hardware_interface::RobotHardware
@@ -35,11 +37,11 @@ public:
 
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC ~RobotMinimalHardware() = default;
 
-  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC hardware_interface::hardware_interface_ret_t init();
+  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC hardware_interface_ret_t init();
 
-  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC hardware_interface::hardware_interface_ret_t read();
+  hardware_interface_ret_t read();
 
-  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC hardware_interface::hardware_interface_ret_t write();
+  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC hardware_interface_ret_t write();
 
 protected:
 };

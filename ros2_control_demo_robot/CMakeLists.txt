@@ -16,20 +16,19 @@ find_package(ament_cmake REQUIRED)
 find_package(control_msgs REQUIRED)
 find_package(hardware_interface REQUIRED)
 find_package(rclcpp REQUIRED)
-find_package(robot_control_components REQUIRED)
-
+find_package(ros2_control_components REQUIRED)
 find_package(ros2_control_demo_hardware REQUIRED)
 
 ## COMPILE
-add_executable(${PROJECT_NAME}_minimal_node
-  src/${PROJECT_NAME}_minimal_node.cpp
+add_executable(${PROJECT_NAME}_resource_manager
+  src/${PROJECT_NAME}_resource_manager.cpp
 )
 
-target_include_directories(${PROJECT_NAME}_minimal_node
+target_include_directories(${PROJECT_NAME}_resource_manager
   PRIVATE include
 )
 
-ament_target_dependencies(${PROJECT_NAME}_minimal_node
+ament_target_dependencies(${PROJECT_NAME}_resource_manager
   control_msgs
   hardware_interface
   rclcpp
@@ -38,7 +37,7 @@ ament_target_dependencies(${PROJECT_NAME}_minimal_node
 )
 
 ## INSTALL
-install(TARGETS ${PROJECT_NAME}_minimal_node
+install(TARGETS ${PROJECT_NAME}_resource_manager
   DESTINATION lib/${PROJECT_NAME}
 )
 
@@ -49,11 +48,6 @@ install(DIRECTORY config/ description/ launch/
 
 if(BUILD_TESTING)
   find_package(ament_cmake_gtest REQUIRED)
-
-  ament_add_gtest(test_dummy test/test_dummy.cpp)
-  target_include_directories(test_dummy PRIVATE include)
-#   ament_target_dependencies(test_dummy rcpputils)
-
 endif()
 
 ## EXPORTS

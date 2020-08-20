@@ -15,10 +15,12 @@
 
 #include "ros2_control_demo_hardware/robot_minimal_hardware.hpp"
 
+using hardware_interface::hardware_interface_ret_t;
+
 namespace ros2_control_demo_minimal_hardware
 {
 
-hardware_interface::hardware_interface_ret_t RobotMinimalHardware::init()
+hardware_interface_ret_t RobotMinimalHardware::init()
 {
   RCLCPP_INFO(rclcpp::get_logger("robot_hardware"), "Initalizing RobotMinimalHardware ...please wait...");
 
@@ -30,10 +32,10 @@ hardware_interface::hardware_interface_ret_t RobotMinimalHardware::init()
 
   RCLCPP_INFO(rclcpp::get_logger("robot_hardware"), "RobotMinimalHardware sucessfully initalized!");
 
-  return hardware_interface::HW_RET_OK;
+  return hardware_interface_ret_t::OK;
 }
 
-hardware_interface::hardware_interface_ret_t RobotMinimalHardware::read()
+hardware_interface_ret_t RobotMinimalHardware::read()
 {
 //   RCLCPP_INFO(rclcpp::get_logger(), "Initalizing RobotMinimalHardware ...please wait...");
 
@@ -45,10 +47,10 @@ hardware_interface::hardware_interface_ret_t RobotMinimalHardware::read()
 
   //   RCLCPP_INFO(logging_interface_->get_logger(), "RobotMinimalHardware sucessfully initalized!");
 
-  return hardware_interface::HW_RET_OK;
+  return hardware_interface_ret_t::OK;
 }
 
-hardware_interface::hardware_interface_ret_t RobotMinimalHardware::write()
+hardware_interface_ret_t RobotMinimalHardware::write()
 {
   //   RCLCPP_INFO(logging_interface_->get_logger(), "Initalizing RobotMinimalHardware ...please wait...");
 
@@ -60,7 +62,7 @@ hardware_interface::hardware_interface_ret_t RobotMinimalHardware::write()
 
   //   RCLCPP_INFO(logging_interface_->get_logger(), "RobotMinimalHardware sucessfully initalized!");
 
-  return hardware_interface::HW_RET_OK;
+  return hardware_interface_ret_t::OK;
 }
 
 } //  namespace ros2_control_demo_minimal_hardware

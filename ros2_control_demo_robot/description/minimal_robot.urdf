@@ -115,13 +115,13 @@
     <plugin filename="libgazebo_ros_control.so" name="gazebo_ros_control">
       </plugin>
   </gazebo>
-  <ros2_control name="MinimalRobot">
+  <ros2_control name="MinimalRobot" type="robot">
     <hardware>
       <classType>ros2_control_demo_hardware/DemoRobotHardwareMinimal</classType>
       <param name="write_for_sec">2</param>
       <param name="read_for_sec">2</param>
     </hardware>
-    <actuator name="joint1_position_actuator">
+    <joint name="joint1_position_actuator">
       <classType>ros2_control_components/PositionActuator</classType>
       <joint name="joint1">
         <interfaceName>position</interfaceName>
@@ -129,8 +129,8 @@
       <param name="can_read">True</param>
       <param name="min_values">-1</param>
       <param name="max_values">1</param>
-    </actuator>
-    <actuator name="joint2_position_actuator">
+    </joint>
+    <joint name="joint2_position_actuator">
       <classType>ros2_control_components/PositionActuator</classType>
       <joint name="joint2">
         <interfaceName>position</interfaceName>
@@ -138,7 +138,7 @@
       <param name="can_read">True</param>
       <param name="min_values">-1</param>
       <param name="max_values">1</param>
-    </actuator>
+    </joint>
   </ros2_control>
   <transmission name="tran1">
     <type>transmission_interface/SimpleTransmission</type>
