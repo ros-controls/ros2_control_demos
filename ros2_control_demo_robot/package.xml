@@ -5,7 +5,6 @@
   <version>0.0.0</version>
   <description>Demo package of `ros2_control` Robot. This package provides config files and description interface is used with `demo_robot` from package `ros2_control_demo_robot`.</description>
 
-  <maintainer email="ostasse@laas.fr">Olivier Stasse</maintainer>
   <maintainer email="denis@stogl.de">Denis Štogl</maintainer>
 
   <license>Apache License 2.0</license>
