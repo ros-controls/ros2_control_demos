@@ -17,6 +17,7 @@
 #define ROS2_CONTROL_DEMO_HARDWARE__RRBOT_SYSTEM_POSITION_ONLY_HPP_
 
 #include <memory>
+#include <string>
 #include <vector>
 
 #include "rclcpp/macros.hpp"
@@ -46,6 +47,11 @@ public:
     return return_type::OK;
   }
 
+  std::string get_name() const final
+  {
+    return info_.name;
+  }
+
   hardware_interface_status get_status() const final
   {
     return status_;
@@ -56,7 +62,7 @@ protected:
   hardware_interface_status status_;
 };
 
-}  //  namespace hardware_interface
+}  // namespace hardware_interface
 
 namespace ros2_control_demo_hardware
 {
@@ -86,6 +92,6 @@ private:
   std::vector<double> hw_values_;
 };
 
-}  //  namespace ros2_control_demo_hardware
+}  // namespace ros2_control_demo_hardware
 
 #endif  // ROS2_CONTROL_DEMO_HARDWARE__RRBOT_SYSTEM_POSITION_ONLY_HPP_

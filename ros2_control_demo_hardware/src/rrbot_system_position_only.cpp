@@ -61,6 +61,7 @@ return_type RRBotSystemPositionOnlyHardware::start()
     RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "%d seconds left...", 3 - i);
   }
 
+  // set some default values
   for (uint i = 0; i < hw_values_.size(); i++) {
     if (std::isnan(hw_values_[i])) {
       hw_values_[i] = 0;
@@ -109,14 +110,14 @@ return_type RRBotSystemPositionOnlyHardware::read_joints(
   for (int i = 0; i < hw_read_time_; i++) {
     rclcpp::sleep_for(std::chrono::seconds(1));
     RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"),
-      "%d seconds for reading left...", hw_read_time_ - i);
+      "%.1f seconds for reading left...", hw_read_time_ - i);
   }
 
   // TODO(all): Should we check here joint names for the proper order?
   std::vector<double> values;
   values.resize(1);
   for (uint i = 0; i < joints.size(); i++) {
-    values[0] = hw_values_[i] + 0.04;  //  Added number for "randomness" in the data
+    values[0] = hw_values_[i] + 0.04;  // Added number for "randomness" in the data
     ret = joints[i]->set_state(values);
     if (ret != return_type::OK) {
       break;
@@ -145,9 +146,10 @@ return_type RRBotSystemPositionOnlyHardware::write_joints(
   for (int i = 0; i < hw_write_time_; i++) {
     rclcpp::sleep_for(std::chrono::seconds(1));
     RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"),
-      "%d seconds for writing left...", hw_write_time_ - i);
+      "%.1f seconds for writing left...", hw_write_time_ - i);
   }
 
+  // TODO(anyone): here crashes the plugin, why...
   // TODO(all): Should we check here joint names for the proper order?
   std::vector<double> values;
   for (uint i = 0; i < joints.size(); i++) {
@@ -155,16 +157,15 @@ return_type RRBotSystemPositionOnlyHardware::write_joints(
     if (ret != return_type::OK) {
       break;
     }
-    hw_values_[i] = values[0] + 0.023;  //  Added number for "randomness" in the data
+    hw_values_[i] = values[0] + 0.023;  // Added number for "randomness" in the data
   }
 
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"),
     "Joints sucessfully written!");
-
   return ret;
 }
 
-}  //  namespace ros2_control_demo_hardware
+}  // namespace ros2_control_demo_hardware
 
 #include "pluginlib/class_list_macros.hpp"
 
