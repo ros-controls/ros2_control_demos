@@ -49,9 +49,9 @@ def generate_launch_description():
 
     return LaunchDescription([
       Node(
-        package='ros2_control_demo_robot',
-        node_name='ros2_control_manager_node',
-        node_executable='ros2_control_manager_node',
+        package='controller_manager',
+        node_name='ros2_control_node',
+        node_executable='ros2_control_node',
         parameters=[robot_description],
         output={
           'stdout': 'screen',
