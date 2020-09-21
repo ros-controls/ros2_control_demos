@@ -27,8 +27,6 @@ import xacro
 
 def generate_launch_description():
 
-    ld = LaunchDescription()
-
 # TODO(anyone): This does not work... why?
 #    robot_description_file = os.path.join(
 #        get_package_share_directory('ros2_control_demo_robot'),

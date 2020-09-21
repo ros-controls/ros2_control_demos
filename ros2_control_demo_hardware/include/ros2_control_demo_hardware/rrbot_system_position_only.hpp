@@ -47,7 +47,7 @@ public:
     return return_type::OK;
   }
 
-  std::string get_name() const final
+  std::string get_name() const
   {
     return info_.name;
   }
