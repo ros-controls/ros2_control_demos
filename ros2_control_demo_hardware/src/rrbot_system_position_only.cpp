@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include "ros2_control_demo_hardware/rrbot_system_position_only.hpp"
+
 #include <chrono>
 #include <cmath>
 #include <limits>
 #include <memory>
 #include <vector>
-
-#include "ros2_control_demo_hardware/rrbot_system_position_only.hpp"
 
 #include "hardware_interface/components/component_info.hpp"
 #include "hardware_interface/hardware_info.hpp"
@@ -33,11 +33,14 @@ return_type RRBotSystemPositionOnlyHardware::configure(const HardwareInfo & syst
     return return_type::ERROR;
   }
 
-  hw_read_time_ = stod(info_.hardware_parameters["example_param_read_for_sec"]);
-  hw_write_time_ = stod(info_.hardware_parameters["example_param_write_for_sec"]);
-  hw_values_.resize(info_.joints.size());
-  for (uint i = 0; i < hw_values_.size(); i++) {
-    hw_values_[i] = std::numeric_limits<double>::quiet_NaN();
+  hw_start_sec_ = stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
+  hw_stop_sec_ = stod(info_.hardware_parameters["example_param_hw_stop_duration_sec"]);
+  hw_slowdown_ = stod(info_.hardware_parameters["example_param_hw_slowdown"]);
+  hw_states_.resize(info_.joints.size());
+  hw_commands_.resize(info_.joints.size());
+  for (uint i = 0; i < info_.joints.size(); i++) {
+    hw_states_[i] = std::numeric_limits<double>::quiet_NaN();
+    hw_commands_[i] = std::numeric_limits<double>::quiet_NaN();
   }
   for (auto joint : info_.joints) {
     if (joint.class_type.compare("ros2_control_components/PositionJoint") != 0) {
@@ -56,15 +59,17 @@ return_type RRBotSystemPositionOnlyHardware::start()
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"),
     "Starting ...please wait...");
 
-  for (int i = 0; i < 3; i++) {
+  for (int i = 0; i <= hw_start_sec_; i++) {
     rclcpp::sleep_for(std::chrono::seconds(1));
-    RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "%d seconds left...", 3 - i);
+    RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"),
+                "%.1f seconds left...", hw_start_sec_ - i);
   }
 
   // set some default values
-  for (uint i = 0; i < hw_values_.size(); i++) {
-    if (std::isnan(hw_values_[i])) {
-      hw_values_[i] = 0;
+  for (uint i = 0; i < hw_states_.size(); i++) {
+    if (std::isnan(hw_states_[i])) {
+      hw_states_[i] = 0;
+      hw_commands_[i] = 0;
     }
   }
 
@@ -81,9 +86,10 @@ return_type RRBotSystemPositionOnlyHardware::stop()
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"),
     "Stopping ...please wait...");
 
-  for (int i = 0; i < 4; i++) {
+  for (int i = 0; i <= hw_stop_sec_; i++) {
     rclcpp::sleep_for(std::chrono::seconds(1));
-    RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "%d seconds left...", 3 - i);
+    RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"),
+                "%.1f seconds left...", hw_stop_sec_ - i);
   }
 
   status_ = hardware_interface_status::STOPPED;
@@ -97,27 +103,24 @@ return_type RRBotSystemPositionOnlyHardware::stop()
 return_type RRBotSystemPositionOnlyHardware::read_joints(
   std::vector<std::shared_ptr<Joint>> & joints) const
 {
-  if (joints.size() != hw_values_.size()) {
-    // TODO(all): return "wrong number of joints" error?
+  if (joints.size() != hw_states_.size()) {
+    // TODO(all): shoudl we return "wrong number of joints" error?
     return return_type::ERROR;
   }
 
   return_type ret = return_type::OK;
 
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"),
-    "Reading ...please wait...");
-
-  for (int i = 0; i < hw_read_time_; i++) {
-    rclcpp::sleep_for(std::chrono::seconds(1));
-    RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"),
-      "%.1f seconds for reading left...", hw_read_time_ - i);
-  }
+    "Reading...");
 
   // TODO(all): Should we check here joint names for the proper order?
   std::vector<double> values;
   values.resize(1);
   for (uint i = 0; i < joints.size(); i++) {
-    values[0] = hw_values_[i] + 0.04;  // Added number for "randomness" in the data
+    // "Simulate" movement in a simple way
+    values[0] = hw_commands_[i] + (hw_states_[i] - hw_commands_[i])/hw_slowdown_;
+    RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"),
+                "Got state %.5f for joint %d!", values[0], i);
     ret = joints[i]->set_state(values);
     if (ret != return_type::OK) {
       break;
@@ -126,14 +129,13 @@ return_type RRBotSystemPositionOnlyHardware::read_joints(
 
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"),
     "Joints sucessfully read!");
-
   return ret;
 }
 
 return_type RRBotSystemPositionOnlyHardware::write_joints(
   const std::vector<std::shared_ptr<Joint>> & joints)
 {
-  if (joints.size() != hw_values_.size()) {
+  if (joints.size() != hw_states_.size()) {
     // TODO(all): return wrong number of joints
     return return_type::ERROR;
   }
@@ -141,23 +143,18 @@ return_type RRBotSystemPositionOnlyHardware::write_joints(
   return_type ret = return_type::OK;
 
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"),
-    "Writing ...please wait...");
+    "Writing...");
 
-  for (int i = 0; i < hw_write_time_; i++) {
-    rclcpp::sleep_for(std::chrono::seconds(1));
-    RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"),
-      "%.1f seconds for writing left...", hw_write_time_ - i);
-  }
-
-  // TODO(anyone): here crashes the plugin, why...
-  // TODO(all): Should we check here joint names for the proper order?
+  // TODO(all): Should we check here the joint names for the proper order?
   std::vector<double> values;
   for (uint i = 0; i < joints.size(); i++) {
     ret = joints[i]->get_command(values);
     if (ret != return_type::OK) {
       break;
     }
-    hw_values_[i] = values[0] + 0.023;  // Added number for "randomness" in the data
+    RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"),
+                "Got command %.5f for joint %d!", values[0], i);
+    hw_commands_[i] = values[0];
   }
 
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"),

@@ -6,18 +6,19 @@
     <ros2_control name="${name}" type="system">
       <hardware>
         <classType>ros2_control_demo_hardware/RRBotSystemPositionOnlyHardware</classType>
-        <param name="example_param_read_for_sec">2.0</param>
-        <param name="example_param_write_for_sec">1.0</param>
+        <param name="example_param_hw_start_duration_sec">2.0</param>
+        <param name="example_param_hw_stop_duration_sec">3.0</param>
+        <param name="example_param_hw_slowdown">2.0</param>
       </hardware>
       <joint name="${prefix}joint1">
         <classType>ros2_control_components/PositionJoint</classType>
-        <param name="min_value">-1</param>
-        <param name="max_value">1</param>
+        <param name="min">-1</param>
+        <param name="max">1</param>
       </joint>
       <joint name="${prefix}joint2">
         <classType>ros2_control_components/PositionJoint</classType>
-        <param name="min_value">-1</param>
-        <param name="max_value">1</param>
+        <param name="min">-1</param>
+        <param name="max">1</param>
       </joint>
     </ros2_control>
 

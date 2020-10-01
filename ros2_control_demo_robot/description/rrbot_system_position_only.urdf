@@ -312,18 +312,19 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_desc
   <ros2_control name="RRBot_System_Position_Only" type="system">
     <hardware>
       <classType>ros2_control_demo_hardware/RRBotSystemPositionOnlyHardware</classType>
-      <param name="example_param_read_for_sec">2.0</param>
-      <param name="example_param_write_for_sec">1.0</param>
+      <param name="example_param_hw_start_duration_sec">2.0</param>
+      <param name="example_param_hw_stop_duration_sec">1.0</param>
+      <param name="example_param_hw_slowdown">2.0</param>
     </hardware>
     <joint name="joint1">
       <classType>ros2_control_components/PositionJoint</classType>
-      <param name="min_value">-1</param>
-      <param name="max_value">1</param>
+      <param name="min">-1</param>
+      <param name="max">1</param>
     </joint>
     <joint name="joint2">
       <classType>ros2_control_components/PositionJoint</classType>
-      <param name="min_value">-1</param>
-      <param name="max_value">1</param>
+      <param name="min">-1</param>
+      <param name="max">1</param>
     </joint>
   </ros2_control>
 </robot>

@@ -88,8 +88,8 @@ public:
   return_type write_joints(const std::vector<std::shared_ptr<Joint>> & joints) override;
 
 private:
-  double hw_write_time_, hw_read_time_;
-  std::vector<double> hw_values_;
+  double hw_start_sec_, hw_stop_sec_, hw_slowdown_;
+  std::vector<double> hw_states_, hw_commands_;
 };
 
 }  // namespace ros2_control_demo_hardware

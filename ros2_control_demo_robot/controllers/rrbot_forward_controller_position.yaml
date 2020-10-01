@@ -1,0 +1,11 @@
+ros2_control_node:
+  ros__parameters:
+    controllers:
+      - forward_command_controller_position
+
+    forward_command_controller_position:
+      type: forward_command_controller/ForwardCommandControllerNewComponents
+      joints:
+        - joint1
+        - joint2
+      interface_name: position

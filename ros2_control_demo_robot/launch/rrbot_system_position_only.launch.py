@@ -47,12 +47,18 @@ def generate_launch_description():
 
     robot_description = {'robot_description': descr}
 
+    rrbot_forward_controller = os.path.join(
+        get_package_share_directory('ros2_control_demo_robot'),
+        'controllers',
+        'rrbot_forward_controller_position.yaml'
+        )
+
     return LaunchDescription([
       Node(
         package='controller_manager',
         node_name='ros2_control_node',
         node_executable='ros2_control_node',
-        parameters=[robot_description],
+        parameters=[robot_description, rrbot_forward_controller],
         output={
           'stdout': 'screen',
           'stderr': 'screen',
