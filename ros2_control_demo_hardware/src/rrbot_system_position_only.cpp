@@ -42,7 +42,7 @@ return_type RRBotSystemPositionOnlyHardware::configure(const HardwareInfo & syst
     hw_states_[i] = std::numeric_limits<double>::quiet_NaN();
     hw_commands_[i] = std::numeric_limits<double>::quiet_NaN();
   }
-  for (auto joint : info_.joints) {
+  for (const hardware_interface::components::ComponentInfo & joint : info_.joints) {
     if (joint.class_type.compare("ros2_control_components/PositionJoint") != 0) {
       status_ = hardware_interface_status::UNKNOWN;
       // TODO(all): should we return specizalized error?
