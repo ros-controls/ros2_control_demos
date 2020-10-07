@@ -45,7 +45,7 @@ This repository demonstrates the following `ros2_control` concepts:
   roscd ros2_control
   git remote add destogl https://github.com/destogl/ros2_control.git
   git remote fetch destogl
-  git checkout add_ros2_managers_components
+  git checkout tests_with_demo_repos
   ```
 * Checkout ros-controls/ros2_control_demos#37 to get example hardware and robot launch files.
   ```
