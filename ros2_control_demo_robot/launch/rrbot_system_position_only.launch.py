@@ -53,17 +53,12 @@ def generate_launch_description():
     return LaunchDescription([
       Node(
         package='controller_manager',
-        #name='ros2_control_node', // TODO: if the name is set the LifecycleNode does not work!
         executable='ros2_control_node',
         parameters=[robot_description, rrbot_forward_controller],
         output={
           'stdout': 'screen',
           'stderr': 'screen',
           },
-        #log_level={
-          #'logger_name': '',
-          #'level': 'DEBUG'
-          #}
         )
 
     ])

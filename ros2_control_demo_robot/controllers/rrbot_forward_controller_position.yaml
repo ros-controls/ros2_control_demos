@@ -1,10 +1,11 @@
-control_manager:
+controller_manager:
   ros__parameters:
-    controllers:
-      - forward_command_controller_position
+    #controllers:
+      #- forward_command_controller_position
+    update_time_ms: 1000  # ms
 
     forward_command_controller_position:
-      type: forward_command_controller/ForwardCommandControllerNewComponents
+      type: forward_command_controller/ForwardCommandController
 
 forward_command_controller_position:
   ros__parameters:
