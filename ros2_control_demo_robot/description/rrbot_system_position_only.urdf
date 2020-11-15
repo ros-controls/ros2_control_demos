@@ -309,22 +309,26 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_desc
       </plugin>
     </sensor>
   </gazebo>
-  <ros2_control name="RRBot_System_Position_Only" type="system">
+  <ros2_control name="RRBotSystemPositionOnly" type="system">
     <hardware>
-      <classType>ros2_control_demo_hardware/RRBotSystemPositionOnlyHardware</classType>
+      <plugin>ros2_control_demo_hardware/RRBotSystemPositionOnlyHardware</plugin>
       <param name="example_param_hw_start_duration_sec">2.0</param>
-      <param name="example_param_hw_stop_duration_sec">1.0</param>
+      <param name="example_param_hw_stop_duration_sec">3.0</param>
       <param name="example_param_hw_slowdown">2.0</param>
     </hardware>
     <joint name="joint1">
-      <classType>ros2_control_components/PositionJoint</classType>
-      <param name="min">-1</param>
-      <param name="max">1</param>
+      <command_interface name="position">
+        <param name="min">-1</param>
+        <param name="max">1</param>
+      </command_interface>
+      <state_interface name="position"/>
     </joint>
     <joint name="joint2">
-      <classType>ros2_control_components/PositionJoint</classType>
-      <param name="min">-1</param>
-      <param name="max">1</param>
+      <command_interface name="position">
+        <param name="min">-1</param>
+        <param name="max">1</param>
+      </command_interface>
+      <state_interface name="position"/>
     </joint>
   </ros2_control>
 </robot>

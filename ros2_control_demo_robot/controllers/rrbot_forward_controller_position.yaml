@@ -2,10 +2,13 @@ controller_manager:
   ros__parameters:
     #controllers:
       #- forward_command_controller_position
-    update_time_ms: 1000  # ms
+    update_rate: 2  # Hz
 
     forward_command_controller_position:
       type: forward_command_controller/ForwardCommandController
+
+    joint_state_controller:
+      type: joint_state_controller/JointStateController
 
 forward_command_controller_position:
   ros__parameters:

@@ -22,70 +22,37 @@
 
 #include "rclcpp/macros.hpp"
 
-#include "hardware_interface/system_hardware_interface.hpp"
+#include "hardware_interface/components/system_interface.hpp"
+#include "hardware_interface/handle.hpp"
+#include "hardware_interface/hardware_info.hpp"
 #include "hardware_interface/types/hardware_interface_return_values.hpp"
 #include "hardware_interface/types/hardware_interface_status_values.hpp"
+#include "ros2_control_components/base_interface.hpp"
 #include "ros2_control_demo_hardware/visibility_control.h"
 
-using hardware_interface::components::Joint;
-using hardware_interface::components::Sensor;
-using hardware_interface::HardwareInfo;
-using hardware_interface::hardware_interface_status;
 using hardware_interface::return_type;
-
-namespace hardware_interface
-{
-
-// TODO(all): This could be templated for Joint, Sensor and System Interface
-class BaseSystemHardwareInterface : public SystemHardwareInterface
-{
-public:
-  return_type configure(const HardwareInfo & system_info) override
-  {
-    info_ = system_info;
-    status_ = hardware_interface_status::CONFIGURED;
-    return return_type::OK;
-  }
-
-  std::string get_name() const final
-  {
-    return info_.name;
-  }
-
-  hardware_interface_status get_status() const final
-  {
-    return status_;
-  }
-
-protected:
-  HardwareInfo info_;
-  hardware_interface_status status_;
-};
-
-}  // namespace hardware_interface
 
 namespace ros2_control_demo_hardware
 {
-class RRBotSystemPositionOnlyHardware : public hardware_interface::BaseSystemHardwareInterface
+class RRBotSystemPositionOnlyHardware : public
+  ros2_control_components::BaseInterface<hardware_interface::components::SystemInterface>
 {
 public:
   RCLCPP_SHARED_PTR_DEFINITIONS(RRBotSystemPositionOnlyHardware);
 
-  return_type configure(const HardwareInfo & system_info) override;
+  return_type configure(const hardware_interface::HardwareInfo & info) override;
+
+  std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
+
+  std::vector<hardware_interface::CommandInterface> export_command_interfaces() override;
 
   return_type start() override;
 
   return_type stop() override;
 
-  // TODO(all): Add a new "sensor not exitst" error?
-  return_type read_sensors(std::vector<std::shared_ptr<Sensor>> & /*sensors*/) const override
-  {
-    return return_type::ERROR;
-  }
+  return_type read() override;
 
-  return_type read_joints(std::vector<std::shared_ptr<Joint>> & joints) const override;
-
-  return_type write_joints(const std::vector<std::shared_ptr<Joint>> & joints) override;
+  return_type write() override;
 
 private:
   // Dummy parameters

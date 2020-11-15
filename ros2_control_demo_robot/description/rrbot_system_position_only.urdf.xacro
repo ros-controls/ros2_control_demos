@@ -34,6 +34,6 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_desc
 
   <xacro:rrbot_gazebo prefix="" />
 
-  <xacro:rrbot_system_position_only name="RRBot_System_Position_Only" prefix="" />
+  <xacro:rrbot_system_position_only name="RRBotSystemPositionOnly" prefix="" />
 
 </robot>
