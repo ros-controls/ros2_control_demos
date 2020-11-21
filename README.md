@@ -45,7 +45,7 @@ This repository demonstrates the following `ros2_control` concepts:
   roscd ros2_control
   git remote add destogl https://github.com/destogl/ros2_control.git
   git remote fetch destogl
-  git checkout tests_with_demo_repos
+  git checkout add_resource_starting
   ```
 * Checkout ros-controls/ros2_control_demos#37 to get example hardware and robot launch files.
   ```
@@ -77,13 +77,13 @@ Each of the described example cases from the roadmap has its own launch and URDF
 
 2. Open another terminal and check if `RRBotSystemPositionOnlyHardware` is loaded properly:
   ```
-  ros2 control list_interfaces
+  ros2 control list_hardware_interfaces
   ```
   You should get something like:
   ```
   command interfaces
-         joint1/position
-         joint2/position
+        joint1/position [unclaimed]
+        joint2/position [unclaimed]
   state interfaces
          joint1/position
          joint2/position
