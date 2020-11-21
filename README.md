@@ -40,28 +40,28 @@ This repository demonstrates the following `ros2_control` concepts:
 * TBD...
 
 # Test of the Scenario During Development Phase
-* Checkout [destogl/add_ros2_managers_components](https://github.com/destogl/ros2_control/tree/add_ros2_managers_components) branch where this PR and #140 are merged:
+* Checkout [destogl/tests_with_demo_repos](https://github.com/destogl/ros2_control/tree/tests_with_demo_repos) branch where all relevant PRs are merged:
   ```
   roscd ros2_control
   git remote add destogl https://github.com/destogl/ros2_control.git
   git remote fetch destogl
-  git checkout tests_with_demo_repos
+  git checkout add_resource_starting
   ```
 * Checkout ros-controls/ros2_control_demos#37 to get example hardware and robot launch files.
   ```
   roscd ros2_control_demos
   git checkout add_rrbot_system_position_joints
   ```
-* Checkout ros-controls/ros2_controllers#99 to get implementation of ForwardCommandController with components.
+* Checkout [destogl/test_demos](https://github.com/destogl/ros2_controllers/tree/test_demos) to get implementation of ForwardCommandController with components.
   ```
   roscd ros2_controllers
   git remote add destogl https://github.com/destogl/ros2_controllers.git
   git remote fetch destogl
-  git checkout forward_controller_components
+  git checkout test_demos
   ```
 * Build everything, e.g. with:
   ``` 
-  colcon build --symlink-install --packages-select hardware_interface ros2_control_components ros2_control controller_interface controller_manager forward_command_controller ros2_control_demo_hardware ros2_control_demo_robot
+  colcon build --symlink-install --packages-select ros2_control_components ros2_control_demo_hardware ros2_control_demo_robot hardware_interface controller_manager controller_interface controller_manager_msgs ros2controlcli joint_state_controller forward_command_controller
   ```
   
 # Getting Started with ROS2 Control
@@ -75,34 +75,52 @@ Each of the described example cases from the roadmap has its own launch and URDF
   ros2 launch ros2_control_demo_robot rrbot_system_position_only.launch.py
   ```
 
-2. Open another terminal and load controller:
+2. Open another terminal and check if `RRBotSystemPositionOnlyHardware` is loaded properly:
   ```
-  ros2 service call /controller_manager/load_controller controller_manager_msgs/srv/LoadController "name: forward_command_controller_position"
+  ros2 control list_hardware_interfaces
+  ```
+  You should get something like:
+  ```
+  command interfaces
+        joint1/position [unclaimed]
+        joint2/position [unclaimed]
+  state interfaces
+         joint1/position
+         joint2/position
+  ```
+
+3. Open another terminal and load controllers:
+  ```
+  ros2 control load joint_state_controller
+  ros2 control load forward_command_controller_position
   ```
   
   Check if controller is loaded properly:
   ```
-  ros2 service call /controller_manager/list_controllers controller_manager_msgs/srv/ListControllers
+  ros2 control list
   ```
-  You should see something like `name='forward_command_controller_position', state='inactive'` in the reponse.
+  You should get the response:
+  ```
+  joint_state_controller[joint_state_controller/JointStateController] inactive  
+  forward_command_controller_position[forward_command_controller/ForwardCommandController] inactive
+  ```
 
-3. Starting controller:
+4. Starting controller:
   ```
-  ros2 service call /controller_manager/switch_controller controller_manager_msgs/srv/SwitchController "start_controllers:  [forward_command_controller_position]                                        
-strictness: 0
-start_asap: false
-timeout:
-    sec: 0 
-    nanosec: 0"
+  ros2 control switch --start-controllers joint_state_controller forward_command_controller_position 
   ```
   
-  Check if controller is activated:
+  Check if controllers are activated:
   ```
-  ros2 service call /controller_manager/list_controllers controller_manager_msgs/srv/ListControllers
+  ros2 control list
   ```
-  You should see something like `name='forward_command_controller_position', state='active'` in the reponse.
-
-4. Open another terminal and send a message to the controller:
+  You should get `active` in the response:
+  ```
+  joint_state_controller[joint_state_controller/JointStateController] active    
+  forward_command_controller_position[forward_command_controller/ForwardCommandController] active
+  ```
+  
+5. Open another terminal and send a message to the controller:
   ```
   ros2 topic pub  /commands std_msgs/msg/Float64MultiArray "data: 
   - 0.5                                                               
@@ -113,6 +131,12 @@ timeout:
   ```
   [RRBotSystemPositionOnlyHardware]: Got state 0.0 for joint 0!
   [RRBotSystemPositionOnlyHardware]: Got state 0.0 for joint 1!
+  ```
+  
+  If you echo the `/joint_states` or `/dynamic_joint_states` topics you should also get similar values.
+  ```
+  ros2 topic echo /joint_states
+  ros2 topic echo /dynamic_joint_states
   ```
 
 The other launch-files have corresponding names to their coresponding example.
