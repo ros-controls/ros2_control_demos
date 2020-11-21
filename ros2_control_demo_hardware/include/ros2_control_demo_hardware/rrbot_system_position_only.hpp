@@ -22,12 +22,12 @@
 
 #include "rclcpp/macros.hpp"
 
+#include "hardware_interface/components/base_interface.hpp"
 #include "hardware_interface/components/system_interface.hpp"
 #include "hardware_interface/handle.hpp"
 #include "hardware_interface/hardware_info.hpp"
 #include "hardware_interface/types/hardware_interface_return_values.hpp"
 #include "hardware_interface/types/hardware_interface_status_values.hpp"
-#include "ros2_control_components/base_interface.hpp"
 #include "ros2_control_demo_hardware/visibility_control.h"
 
 using hardware_interface::return_type;
@@ -35,7 +35,7 @@ using hardware_interface::return_type;
 namespace ros2_control_demo_hardware
 {
 class RRBotSystemPositionOnlyHardware : public
-  ros2_control_components::BaseInterface<hardware_interface::components::SystemInterface>
+  hardware_interface::components::BaseInterface<hardware_interface::components::SystemInterface>
 {
 public:
   RCLCPP_SHARED_PTR_DEFINITIONS(RRBotSystemPositionOnlyHardware);
