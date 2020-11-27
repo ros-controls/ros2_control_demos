@@ -27,7 +27,8 @@ def generate_launch_description():
     ld = LaunchDescription()
 
     # Get URDF via xacro
-    robot_description_path = os.path.join(get_package_share_directory('ros2_control_demo_robot'), 'description', 'rrbot_system_position_only.urdf.xacro')
+    robot_description_path = os.path.join(get_package_share_directory('ros2_control_demo_robot'), 'description',
+                                          'rrbot_system_position_only.urdf.xacro')
     robot_description_config = xacro.process_file(robot_description_path).toxml()
     robot_description = {'robot_description': robot_description_config}
 
