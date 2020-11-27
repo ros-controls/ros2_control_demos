@@ -24,25 +24,13 @@ import xacro
 
 def generate_launch_description():
 
-    ld = LaunchDescription()
-
-# TODO(anyone): This does not work... why?
-#    robot_description_file = os.path.join(
-#        get_package_share_directory('ros2_control_demo_robot'),
-#        'description',
-#        'rrbot_system_position_only.urdf.xacro'
-#        )
-#    descr = xacro.process_file(robot_description_file)
-
-    robot_description_file = os.path.join(
+    # Get URDF via xacro
+    robot_description_path = os.path.join(
         get_package_share_directory('ros2_control_demo_robot'),
         'description',
-        'rrbot_system_position_only.urdf'
-        )
-    with open(robot_description_file, 'r') as infile:
-        descr = infile.read()
-
-    robot_description = {'robot_description': descr}
+        'rrbot_system_position_only.urdf.xacro')
+    robot_description_config = xacro.process_file(robot_description_path)
+    robot_description = {'robot_description': robot_description_config.toxml()}
 
     rrbot_forward_controller = os.path.join(
         get_package_share_directory('ros2_control_demo_robot'),
