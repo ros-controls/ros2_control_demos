@@ -40,30 +40,23 @@ This repository demonstrates the following `ros2_control` concepts:
 * Using joint limits and transmission concepts in `ros2_control`
 * TBD...
 
-# Test of the Scenario During Development Phase
-* Checkout [destogl/tests_with_demo_repos](https://github.com/destogl/ros2_control/tree/tests_with_demo_repos) branch where all relevant PRs are merged:
-  ```
-  roscd ros2_control
-  git remote add destogl https://github.com/destogl/ros2_control.git
-  git remote fetch destogl
-  git checkout add_resource_starting
-  ```
-* Checkout ros-controls/ros2_control_demos#37 to get example hardware and robot launch files.
-  ```
-  roscd ros2_control_demos
-  git checkout add_rrbot_system_position_joints
-  ```
-* Checkout [destogl/test_demos](https://github.com/destogl/ros2_controllers/tree/test_demos) to get implementation of ForwardCommandController with components.
-  ```
-  roscd ros2_controllers
-  git remote add destogl https://github.com/destogl/ros2_controllers.git
-  git remote fetch destogl
-  git checkout test_demos
-  ```
+# Test of the Scenario Before the First Release
+* Checkout [ros-controls/ros2_control](https://github.com/ros-controls/ros2_control) to get the core.
+* Checkout [ros-controls/ros2_controllers](https://github.com/ros-controls/ros2_controllers) to get all the controllers.
+* Checkout [ros-controls/ros2_control_demos](https://github.com/ros-controls/ros2_control_demos) to get example hardware and robot launch files.
+
+* Install dependencies (maybe you need `sudo`):
+```
+apt install ros-foxy-realtime-tools ros-foxy-xacro ros-foxy-angles
+```
+
 * Build everything, e.g. with:
   ``` 
-  colcon build --symlink-install --packages-select ros2_control_components ros2_control_demo_hardware ros2_control_demo_robot hardware_interface controller_manager controller_interface controller_manager_msgs ros2controlcli joint_state_controller forward_command_controller
+  colcon build --symlink-install
   ```
+  
+* Do not forget to source `setup.bash` from the `install` folder!
+  
   
 # Getting Started with ROS2 Control
 
@@ -123,7 +116,7 @@ Each of the described example cases from the roadmap has its own launch and URDF
   
 5. Open another terminal and send a message to the controller:
   ```
-  ros2 topic pub  /commands std_msgs/msg/Float64MultiArray "data: 
+  ros2 topic pub /forward_command_controller_position/commands std_msgs/msg/Float64MultiArray "data: 
   - 0.5                                                               
   - 0.5"
   ```
