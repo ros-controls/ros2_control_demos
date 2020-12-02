@@ -9,20 +9,6 @@ on:
     - cron: '28 6 * * *'
 
 jobs:
-  industrial_ci:
-    strategy:
-      matrix:
-        env:
-          - {ROS_DISTRO: foxy, ROS_REPO: testing}
-          - {ROS_DISTRO: foxy, ROS_REPO: main}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - uses: 'ros-industrial/industrial_ci@master'
-        env: ${{matrix.env}}
-
-
-jobs:
   ci_binary:
     name: Foxy binary job
     runs-on: ubuntu-latest
