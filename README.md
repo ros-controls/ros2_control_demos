@@ -7,10 +7,11 @@
 
 This repository provides templates for the development of `ros2_control`-enabled robots and a simple simulation of a robot to demonstrate and prove `ros2_control` concepts.
 
+**ATTENTION: `ros2_control` is currently under heavy development and the any APIs implementation in this repositry, can be broken without any announcement!**
+
 ## Goals
 
 The repository has three goals:
-
 1. Implements the example configuration described in the `ros-controls/roadmap` repository file [components_architecture_and_urdf_examples](https://github.com/ros-controls/roadmap/blob/master/design_drafts/components_architecture_and_urdf_examples.md).
 2. It provides templates for faster start of implementing own hardware and controllers;
 3. The repository is a validation environment for `ros2_control` concepts, which can only be tested during run-time (e.g., execution of controllers by the controller manager, communication between robot hardware and controllers).
