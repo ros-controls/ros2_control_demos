@@ -1,4 +1,4 @@
-name: CI ros2_control_demos
+name: CI
 on:
   pull_request:
   push:
