@@ -17,6 +17,8 @@ jobs:
         env:
           - {ROS_DISTRO: foxy, ROS_REPO: main}
           - {ROS_DISTRO: foxy, ROS_REPO: testing}
+    env:
+      UPSTREAM_WORKSPACE: ros2_control_demos/ros2_control_demos.repos
     steps:
       - run: sudo apt-get update -qq && sudo apt-get upgrade
       - uses: actions/checkout@v1
