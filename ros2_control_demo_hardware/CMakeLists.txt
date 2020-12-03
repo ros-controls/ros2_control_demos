@@ -15,7 +15,6 @@ find_package(ament_cmake REQUIRED)
 find_package(hardware_interface REQUIRED)
 find_package(pluginlib REQUIRED)
 find_package(rclcpp REQUIRED)
-find_package(ros2_control_components REQUIRED)
 
 ## COMPILE
 add_library(
@@ -33,7 +32,6 @@ ament_target_dependencies(
   hardware_interface
   pluginlib
   rclcpp
-  ros2_control_components
 )
 
 pluginlib_export_plugin_description_file(hardware_interface ros2_control_demo_hardware.xml)
@@ -63,6 +61,5 @@ ament_export_dependencies(
   hardware_interface
   pluginlib
   rclcpp
-  ros2_control_components
 )
 ament_package()
