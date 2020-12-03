@@ -1,4 +1,4 @@
-name: Lint ros2_control_demos
+name: Lint
 on:
   pull_request:
 
