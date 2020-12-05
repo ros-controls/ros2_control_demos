@@ -36,7 +36,7 @@ return_type RRBotSystemPositionOnlyHardware::configure(
   hw_start_sec_ = stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
   hw_stop_sec_ = stod(info_.hardware_parameters["example_param_hw_stop_duration_sec"]);
   hw_slowdown_ = stod(info_.hardware_parameters["example_param_hw_slowdown"]);
-  hw_states_.resize(info_.joints.size());
+  hw_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   hw_commands_.resize(info_.joints.size());
   for (uint i = 0; i < info_.joints.size(); i++) {
     hw_states_[i] = std::numeric_limits<double>::quiet_NaN();
