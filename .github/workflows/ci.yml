@@ -9,14 +9,49 @@ on:
     - cron: '28 6 * * *'
 
 jobs:
-  industrial_ci:
+  ci_binary:
+    name: Foxy binary job
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         env:
-          - {ROS_DISTRO: foxy, ROS_REPO: testing}
           - {ROS_DISTRO: foxy, ROS_REPO: main}
-    runs-on: ubuntu-latest
+          - {ROS_DISTRO: foxy, ROS_REPO: testing}
+    env:
+      UPSTREAM_WORKSPACE: ros2_control_demos/ros2_control_demos.repos
     steps:
+      - run: sudo apt-get update -qq && sudo apt-get upgrade
       - uses: actions/checkout@v1
       - uses: 'ros-industrial/industrial_ci@master'
         env: ${{matrix.env}}
+
+  ci_source:
+    name: Foxy source job
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+    steps:
+      - uses: ros-tooling/setup-ros@0.0.26
+        with:
+          required-ros-distributions: foxy
+      - uses: ros-tooling/action-ros-ci@0.1.0
+        with:
+          target-ros2-distro: foxy
+          # build all packages listed in the meta package
+          package-name:
+            ros2_control_demo_hardware 
+            ros2_control_demo_robot
+            ros2_control_demos
+          vcs-repo-file-url: |
+            https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/ros2_control_demos/ros2_control_demos.repos
+          colcon-mixin-name: coverage-gcc
+          colcon-mixin-repository: https://raw.githubusercontent.com/colcon/colcon-mixin-repository/master/index.yaml
+      - uses: codecov/codecov-action@v1.0.14
+        with:
+          file: ros_ws/lcov/total_coverage.info
+          flags: unittests
+          name: codecov-umbrella
+      - uses: actions/upload-artifact@v1
+        with:
+          name: colcon-logs-${{ matrix.os }}
+          path: ros_ws/log

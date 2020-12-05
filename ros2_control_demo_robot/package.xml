@@ -11,6 +11,12 @@
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
+  <depend>hardware_interface</depend>
+  <depend>pluginlib</depend>
+  <depend>rclcpp</depend>
+
+  <depend>ros2_control_demo_hardware</depend>
+
   <test_depend>ament_cmake_gtest</test_depend>
 
   <export>

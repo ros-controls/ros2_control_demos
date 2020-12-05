@@ -1,9 +1,6 @@
 name: Linters
 on:
   pull_request:
-  push:
-    branches:
-      - master
 
 jobs:
   ament_copyright:
@@ -11,22 +8,28 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
     - uses: actions/checkout@v1
-    - uses: ros-tooling/setup-ros@0.0.13
-    - uses: ros-tooling/action-ros-lint@0.0.5
+    - uses: ros-tooling/setup-ros@0.0.26
+    - uses: ros-tooling/action-ros-lint@0.0.6
       with:
         linter: copyright
-        package-name: ros2_control_demo_communication_gazebo ros2_control_demo_communication_headless ros2_control_demo_hardware ros2_control_demo_robot
+        package-name:
+          ros2_control_demo_hardware 
+          ros2_control_demo_robot
+          ros2_control_demos
 
   ament_xmllint:
     name: ament_xmllint
     runs-on: ubuntu-18.04
     steps:
     - uses: actions/checkout@v1
-    - uses: ros-tooling/setup-ros@0.0.13
-    - uses: ros-tooling/action-ros-lint@0.0.5
+    - uses: ros-tooling/setup-ros@0.0.26
+    - uses: ros-tooling/action-ros-lint@0.0.6
       with:
         linter: xmllint
-        package-name: ros2_control_demo_communication_gazebo ros2_control_demo_communication_headless ros2_control_demo_hardware ros2_control_demo_robot
+        package-name:
+          ros2_control_demo_hardware 
+          ros2_control_demo_robot
+          ros2_control_demos  
 
   ament_lint_cpp:
     name: ament_${{ matrix.linter }}
@@ -37,8 +40,11 @@ jobs:
           linter: [cppcheck, cpplint, uncrustify]
     steps:
     - uses: actions/checkout@v1
-    - uses: ros-tooling/setup-ros@0.0.13
-    - uses: ros-tooling/action-ros-lint@0.0.5
+    - uses: ros-tooling/setup-ros@0.0.26
+    - uses: ros-tooling/action-ros-lint@0.0.6
       with:
         linter: ${{ matrix.linter }}
-        package-name: ros2_control_demo_communication_gazebo ros2_control_demo_communication_headless ros2_control_demo_hardware ros2_control_demo_robot
+        package-name:
+          ros2_control_demo_hardware 
+          ros2_control_demo_robot
+          ros2_control_demos

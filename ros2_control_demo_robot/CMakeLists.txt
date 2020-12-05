@@ -13,8 +13,15 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 
+## INSTALL
+install(
+  DIRECTORY controllers description launch/
+  DESTINATION share/${PROJECT_NAME}
+)
+
 if(BUILD_TESTING)
   find_package(ament_cmake_gtest REQUIRED)
 endif()
 
+## EXPORTS
 ament_package()
