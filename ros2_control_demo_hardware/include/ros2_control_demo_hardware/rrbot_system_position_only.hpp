@@ -58,7 +58,8 @@ private:
   // Dummy parameters
   double hw_start_sec_, hw_stop_sec_, hw_slowdown_;
   // Store the command for the simulated robot
-  std::vector<double> hw_commands_, hw_states_;
+  std::vector<double> hw_commands_;
+  std::vector<double> hw_states_;
 };
 
 }  // namespace ros2_control_demo_hardware
