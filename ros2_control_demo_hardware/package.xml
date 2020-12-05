@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>ros2_control_demo_hardware</name>
-  <version>0.0.1</version>
+  <version>0.0.0</version>
   <description>Demo package of `ros2_control` Hardware. This package provides example on how to define hardware of your own robot for ROS2 control. The package is used with `demo_robot` from package `ros2_control_demo_robot`.</description>
 
   <maintainer email="denis@stogl.de">Denis Štogl</maintainer>

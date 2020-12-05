@@ -1,4 +1,4 @@
-// Copyright 2020 ROS2-Control Development Team
+// Copyright 2020 ros2_control Development Team
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,8 +22,8 @@
 
 #include "rclcpp/macros.hpp"
 
-#include "hardware_interface/components/base_interface.hpp"
-#include "hardware_interface/components/system_interface.hpp"
+#include "hardware_interface/base_interface.hpp"
+#include "hardware_interface/system_interface.hpp"
 #include "hardware_interface/handle.hpp"
 #include "hardware_interface/hardware_info.hpp"
 #include "hardware_interface/types/hardware_interface_return_values.hpp"
@@ -35,28 +35,38 @@ using hardware_interface::return_type;
 namespace ros2_control_demo_hardware
 {
 class RRBotSystemPositionOnlyHardware : public
-  hardware_interface::components::BaseInterface<hardware_interface::components::SystemInterface>
+  hardware_interface::BaseInterface<hardware_interface::SystemInterface>
 {
 public:
   RCLCPP_SHARED_PTR_DEFINITIONS(RRBotSystemPositionOnlyHardware);
 
+  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
   return_type configure(const hardware_interface::HardwareInfo & info) override;
 
+  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
   std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
 
+  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
   std::vector<hardware_interface::CommandInterface> export_command_interfaces() override;
 
+  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
   return_type start() override;
 
+  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
   return_type stop() override;
 
+  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
   return_type read() override;
 
+  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
   return_type write() override;
 
 private:
-  // Dummy parameters
-  double hw_start_sec_, hw_stop_sec_, hw_slowdown_;
+  // Parameters for the RRBot simulation
+  double hw_start_sec_;
+  double hw_stop_sec_;
+  double hw_slowdown_;
+
   // Store the command for the simulated robot
   std::vector<double> hw_commands_;
   std::vector<double> hw_states_;

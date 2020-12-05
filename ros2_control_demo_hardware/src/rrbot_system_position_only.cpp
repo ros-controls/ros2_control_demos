@@ -1,4 +1,4 @@
-// Copyright 2020 ROS2-Control Development Team
+// Copyright 2020 ros2_control Development Team
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -37,53 +37,44 @@ return_type RRBotSystemPositionOnlyHardware::configure(
   hw_stop_sec_ = stod(info_.hardware_parameters["example_param_hw_stop_duration_sec"]);
   hw_slowdown_ = stod(info_.hardware_parameters["example_param_hw_slowdown"]);
   hw_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
-  hw_commands_.resize(info_.joints.size());
-  for (uint i = 0; i < info_.joints.size(); i++) {
-    hw_states_[i] = std::numeric_limits<double>::quiet_NaN();
-    hw_commands_[i] = std::numeric_limits<double>::quiet_NaN();
-  }
+  hw_commands_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
 
-  // TODO(anyone): we should provide helpers for this checking somewhere
-  {
-    for (const hardware_interface::ComponentInfo & joint : info_.joints) {
-      // RRBotSystemPositionOnly has exactly one state and command interface on each joint
-      if (joint.command_interfaces.size() != 1) {
-        RCLCPP_FATAL(
-          rclcpp::get_logger("RRBotSystemPositionOnlyHardware"),
-          "Joint '%s' has %d command interfaces found. 1 expected.",
-          joint.name.c_str(), joint.command_interfaces.size());
-        return return_type::ERROR;
-      }
+  for (const hardware_interface::ComponentInfo & joint : info_.joints) {
+    // RRBotSystemPositionOnly has exactly one state and command interface on each joint
+    if (joint.command_interfaces.size() != 1) {
+      RCLCPP_FATAL(
+        rclcpp::get_logger("RRBotSystemPositionOnlyHardware"),
+        "Joint '%s' has %d command interfaces found. 1 expected.",
+        joint.name.c_str(), joint.command_interfaces.size());
+      return return_type::ERROR;
+    }
 
-      if (joint.command_interfaces[0].name != hardware_interface::HW_IF_POSITION) {
-        RCLCPP_FATAL(
-          rclcpp::get_logger("RRBotSystemPositionOnlyHardware"),
-          "Joint '%s' have %s command interfaces found. '%s' expected.",
-          joint.name.c_str(), joint.command_interfaces[0].name.c_str(),
-          hardware_interface::HW_IF_POSITION);
-        return return_type::ERROR;
-      }
+    if (joint.command_interfaces[0].name != hardware_interface::HW_IF_POSITION) {
+      RCLCPP_FATAL(
+        rclcpp::get_logger("RRBotSystemPositionOnlyHardware"),
+        "Joint '%s' have %s command interfaces found. '%s' expected.",
+        joint.name.c_str(), joint.command_interfaces[0].name.c_str(),
+        hardware_interface::HW_IF_POSITION);
+      return return_type::ERROR;
+    }
 
-      if (joint.state_interfaces.size() != 1) {
-        RCLCPP_FATAL(
-          rclcpp::get_logger("RRBotSystemPositionOnlyHardware"),
-          "Joint '%s' has %d state interface. 1 expected.",
-          joint.name.c_str(), joint.state_interfaces.size());
-        return return_type::ERROR;
-      }
+    if (joint.state_interfaces.size() != 1) {
+      RCLCPP_FATAL(
+        rclcpp::get_logger("RRBotSystemPositionOnlyHardware"),
+        "Joint '%s' has %d state interface. 1 expected.",
+        joint.name.c_str(), joint.state_interfaces.size());
+      return return_type::ERROR;
+    }
 
-      if (joint.state_interfaces[0].name != hardware_interface::HW_IF_POSITION) {
-        RCLCPP_FATAL(
-          rclcpp::get_logger("RRBotSystemPositionOnlyHardware"),
-          "Joint '%s' have %s state interface. '%s' expected.",
-          joint.name.c_str(), joint.state_interfaces[0].name.c_str(),
-          hardware_interface::HW_IF_POSITION);
-        return return_type::ERROR;
-      }
+    if (joint.state_interfaces[0].name != hardware_interface::HW_IF_POSITION) {
+      RCLCPP_FATAL(
+        rclcpp::get_logger("RRBotSystemPositionOnlyHardware"),
+        "Joint '%s' have %s state interface. '%s' expected.",
+        joint.name.c_str(), joint.state_interfaces[0].name.c_str(),
+        hardware_interface::HW_IF_POSITION);
+      return return_type::ERROR;
     }
   }
-
-  // TODO(all): ada support for different order of joints than "joint1", "joint2",...
 
   status_ = hardware_interface::status::CONFIGURED;
   return return_type::OK;
@@ -213,5 +204,5 @@ hardware_interface::return_type ros2_control_demo_hardware::RRBotSystemPositionO
 
 PLUGINLIB_EXPORT_CLASS(
   ros2_control_demo_hardware::RRBotSystemPositionOnlyHardware,
-  hardware_interface::components::SystemInterface
+  hardware_interface::SystemInterface
 )

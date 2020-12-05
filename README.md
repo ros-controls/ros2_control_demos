@@ -46,9 +46,9 @@ This repository demonstrates the following `ros2_control` concepts:
 * Checkout [ros-controls/ros2_control_demos](https://github.com/ros-controls/ros2_control_demos) to get example hardware and robot launch files.
 
 * Install dependencies (maybe you need `sudo`):
-```
-apt install ros-foxy-realtime-tools ros-foxy-xacro ros-foxy-angles
-```
+  ```
+  apt install ros-foxy-realtime-tools ros-foxy-xacro ros-foxy-angles
+  ```
 
 * Build everything, e.g. with:
   ``` 
