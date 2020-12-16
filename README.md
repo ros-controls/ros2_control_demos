@@ -83,10 +83,10 @@ Each of the described example cases from the roadmap has its own launch and URDF
          joint2/position
   ```
 
-3. Open another terminal and load controllers:
+3. Open another terminal and load, configure and start controllers:
   ```
-  ros2 control load joint_state_controller
-  ros2 control load forward_command_controller_position
+  ros2 control load_start joint_state_controller
+  ros2 control load_configure forward_command_controller_position
   ```
   
   Check if controller is loaded properly:
@@ -95,13 +95,13 @@ Each of the described example cases from the roadmap has its own launch and URDF
   ```
   You should get the response:
   ```
-  joint_state_controller[joint_state_controller/JointStateController] inactive  
+  joint_state_controller[joint_state_controller/JointStateController] active  
   forward_command_controller_position[forward_command_controller/ForwardCommandController] inactive
   ```
 
 4. Starting controller:
   ```
-  ros2 control switch --start-controllers joint_state_controller forward_command_controller_position 
+  ros2 control switch --start-controllers forward_command_controller_position 
   ```
   
   Check if controllers are activated:
