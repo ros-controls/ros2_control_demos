@@ -85,13 +85,13 @@ Each of the described example cases from the roadmap has its own launch and URDF
 
 3. Open another terminal and load, configure and start controllers:
   ```
-  ros2 control load_start joint_state_controller
-  ros2 control load_configure forward_command_controller_position
+  ros2 control load_start_controller joint_state_controller
+  ros2 control load_configure_controller forward_command_controller_position
   ```
   
   Check if controller is loaded properly:
   ```
-  ros2 control list
+  ros2 control list_controller
   ```
   You should get the response:
   ```
@@ -101,12 +101,12 @@ Each of the described example cases from the roadmap has its own launch and URDF
 
 4. Starting controller:
   ```
-  ros2 control switch --start-controllers forward_command_controller_position 
+  ros2 control switch_controllers --start-controllers forward_command_controller_position 
   ```
   
   Check if controllers are activated:
   ```
-  ros2 control list
+  ros2 control list_controller
   ```
   You should get `active` in the response:
   ```
