@@ -91,7 +91,7 @@ Each of the described example cases from the roadmap has its own launch and URDF
   
   Check if controller is loaded properly:
   ```
-  ros2 control list_controller
+  ros2 control list_controllers
   ```
   You should get the response:
   ```
@@ -106,7 +106,7 @@ Each of the described example cases from the roadmap has its own launch and URDF
   
   Check if controllers are activated:
   ```
-  ros2 control list_controller
+  ros2 control list_controllers
   ```
   You should get `active` in the response:
   ```
