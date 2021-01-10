@@ -1,7 +1,7 @@
 from setuptools import setup
 from glob import glob
 
-package_name = 'ros2_control_demo_nodes'
+package_name = 'ros2_control_test_nodes'
 
 setup(
     name=package_name,
@@ -34,8 +34,8 @@ Demo nodes for showing and testing functionalities of the ros2_control framework
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'publisher_forward_position_controller = ros2_control_demo_nodes.publisher_forward_position_controller:main',
-            'publisher_joint_trajectory_controller = ros2_control_demo_nodes.publisher_joint_trajectory_controller:main',
+            'publisher_forward_position_controller = ros2_control_test_nodes.publisher_forward_position_controller:main',
+            'publisher_joint_trajectory_controller = ros2_control_test_nodes.publisher_joint_trajectory_controller:main',
         ],
     },
 )

@@ -22,17 +22,17 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
 
-    rrbot_position_goals = os.path.join(
-        get_package_share_directory('ros2_control_demo_nodes'),
+    position_goals = os.path.join(
+        get_package_share_directory('ros2_control_test_nodes'),
         'configs',
-        'rrbot_position_goals.yaml'
+        'rrbot_joint_trajectory_publisher.yaml'
         )
 
     return LaunchDescription([
       Node(
-        package='ros2_control_demo_nodes',
-        executable='publisher_forward_position_controller',
-        parameters=[rrbot_position_goals],
+        package='ros2_control_test_nodes',
+        executable='publisher_joint_trajectory_controller',
+        parameters=[position_goals],
         output={
           'stdout': 'screen',
           'stderr': 'screen',

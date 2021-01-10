@@ -123,7 +123,7 @@ Each of the described example cases from the roadmap has its own launch and URDF
 
   Or you can start demo node which sends two goals every 5 seconds in a loop:
   ```
-  ros2 launch ros2_control_demo_nodes rrbot_test_forward_position_controller.launch.py
+  ros2 launch ros2_control_test_nodes rrbot_test_forward_position_controller.launch.py
   ```
 
   In both cases you should see how the example output changes. Look for the following lines
