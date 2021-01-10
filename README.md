@@ -114,19 +114,24 @@ Each of the described example cases from the roadmap has its own launch and URDF
   forward_command_controller_position[forward_command_controller/ForwardCommandController] active
   ```
   
-5. Open another terminal and send a message to the controller:
+5. Open another terminal and send goals to the controller. To do this manually use:
   ```
   ros2 topic pub /forward_command_controller_position/commands std_msgs/msg/Float64MultiArray "data: 
   - 0.5                                                               
   - 0.5"
   ```
-  
-  You should see how the example output changes. Look for the following lines
+
+  Or you can start demo node which sends two goals every 5 seconds in a loop:
+  ```
+  ros2 launch ros2_control_demo_nodes rrbot_test_forward_position_controller.launch.py
+  ```
+
+  In both cases you should see how the example output changes. Look for the following lines
   ```
   [RRBotSystemPositionOnlyHardware]: Got state 0.0 for joint 0!
   [RRBotSystemPositionOnlyHardware]: Got state 0.0 for joint 1!
   ```
-  
+
   If you echo the `/joint_states` or `/dynamic_joint_states` topics you should also get similar values.
   ```
   ros2 topic echo /joint_states
