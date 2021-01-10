@@ -1,0 +1,5 @@
+publisher_forward_position_controller:
+  ros__parameters:
+
+    pos1: [0.785, 0.785]
+    pos2: [0, 0]

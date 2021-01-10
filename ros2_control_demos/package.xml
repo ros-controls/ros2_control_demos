@@ -13,6 +13,7 @@
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <exec_depend>ros2_control_demo_hardware</exec_depend>
+  <exec_depend>ros2_control_demo_nodes</exec_depend>
   <exec_depend>ros2_control_demo_robot</exec_depend>
 
   <export>
