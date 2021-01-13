@@ -7,7 +7,7 @@
 
 This repository provides templates for the development of `ros2_control`-enabled robots and a simple simulation of a robot to demonstrate and prove `ros2_control` concepts.
 
-**ATTENTION: `ros2_control` is currently under heavy development and the any APIs implementation in this repositry, can be broken without any announcement!**
+**ATTENTION**: `ros2_control` is currently under heavy development and the any APIs implementation in this repositry, can be broken without any announcement!**
 
 ## Goals
 
