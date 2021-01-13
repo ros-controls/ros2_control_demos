@@ -172,6 +172,8 @@ Than jump to the Results section to read how to check if everything is fine.
 
 ### Using JointTrajectoryController
 
+**NOTE**: You have to use `JointTrajectoryController` changes from ros-control/ros2_controllers#140
+
 1. If you want to test hardware with `JointTrajectoryController` first load, configure and start it:
   ```
   ros2 control load_start_controller position_trajectory_controller
