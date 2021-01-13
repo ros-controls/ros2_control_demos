@@ -23,7 +23,7 @@ class PublisherForwardPosition(Node):
     def __init__(self):
         super().__init__('publisher_forward_position_controller')
         # Declare all parameters
-        self.declare_parameter('controller_name', "forward_command_controller_position")
+        self.declare_parameter('controller_name', "forward_position_controller")
         self.declare_parameter('wait_sec_between_publish', 5)
         self.declare_parameter('goal_names', ['pos1', 'pos2'])
 

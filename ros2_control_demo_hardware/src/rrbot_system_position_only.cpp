@@ -120,11 +120,13 @@ return_type RRBotSystemPositionOnlyHardware::start()
       "%.1f seconds left...", hw_start_sec_ - i);
   }
 
-  // set some default values
+  // set some default values when starting the first time
   for (uint i = 0; i < hw_states_.size(); i++) {
     if (std::isnan(hw_states_[i])) {
       hw_states_[i] = 0;
       hw_commands_[i] = 0;
+    } else {
+      hw_commands_[i] = hw_states_[i];
     }
   }
 
@@ -167,7 +169,7 @@ hardware_interface::return_type RRBotSystemPositionOnlyHardware::read()
 
   for (uint i = 0; i < hw_states_.size(); i++) {
     // Simulate RRBot's movement
-    hw_states_[i] = hw_commands_[i] + (hw_states_[i] - hw_commands_[i]) / hw_slowdown_;
+    hw_states_[i] = hw_states_[i] + (hw_commands_[i] - hw_states_[i]) / hw_slowdown_;
     RCLCPP_INFO(
       rclcpp::get_logger("RRBotSystemPositionOnlyHardware"),
       "Got state %.5f for joint %d!", hw_states_[i], i);

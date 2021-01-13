@@ -14,6 +14,7 @@
 
 import rclpy
 from rclpy.node import Node
+from builtin_interfaces.msg import Duration
 
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 
@@ -21,21 +22,21 @@ from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 class PublisherJointTrajectory(Node):
 
     def __init__(self):
-        super().__init__('publisher_joint_trajectory_controller')
+        super().__init__('publisher_position_trajectory_controller')
         # Declare all parameters
-        self.declare_parameter('controller_name', "forward_command_controller_position")
-        self.declare_parameter('wait_sec_between_publish', 5)
+        self.declare_parameter('controller_name', "position_trajectory_controller")
+        self.declare_parameter('wait_sec_between_publish', 6)
         self.declare_parameter('goal_names', ['pos1', 'pos2'])
-        self.declare_parameter('joint_names')
+        self.declare_parameter('joints')
 
         # Read parameters
         controller_name = self.get_parameter('controller_name').value
         wait_sec_between_publish = self.get_parameter('wait_sec_between_publish').value
         goal_names = self.get_parameter('goal_names').value
-        self.joint_names = self.get_parameter('joint_names').value
+        self.joints = self.get_parameter('joints').value
 
-        if self.joint_names is None or len(self.joint_names) == 0:
-            raise Exception('"joint_names" parameter is not set!')
+        if self.joints is None or len(self.joints) == 0:
+            raise Exception('"joints" parameter is not set!')
 
         # Read all positions from parameters
         self.goals = []
@@ -50,7 +51,7 @@ class PublisherJointTrajectory(Node):
                 float_goal.append(float(value))
             self.goals.append(float_goal)
 
-        publish_topic = "/" + controller_name + "/" + "commands"
+        publish_topic = "/" + controller_name + "/" + "joint_trajectory"
 
         self.get_logger().info(
             'Publishing {} goals on topic "{}" every {} s'.format(
@@ -63,10 +64,10 @@ class PublisherJointTrajectory(Node):
 
     def timer_callback(self):
         traj = JointTrajectory()
-        traj.joint_names = self.joint_names
+        traj.joint_names = self.joints
         point = JointTrajectoryPoint()
         point.positions = self.goals[self.i]
-        point.time_from_start = rclpy.Duration(4)
+        point.time_from_start = Duration(sec=4)
 
         traj.points.append(point)
         self.publisher_.publish(traj)
