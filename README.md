@@ -101,112 +101,110 @@ The *RRbbot*'s URDF files can be found in the `description` folder of `ros2_cont
   ```
 
 ## Controlles and moving hardware
-
-To move the robot, you should load and start controllers.
-To get the feedback about robot's state using `JointStateController`.
-To send commands using either `ForwardCommandController` or `JointStateController` as described in the sections below.
+To move the robot you should load and start contorllers.
+To get feedback about robot's state `JointStateController` is used.
+to send command to the robot `ForwardcommandController` (direct goals) or `JointTrajectoryController` (interpolates trajectory).
+The sections below describe their usage.
 Than jump to the Results section to read how to check if everything is fine.
 
 ### JointStateController
 
-1. Open another terminal and load, configure and start `joint_state_controller`:
-  ```
-  ros2 control load_start_controller joint_state_controller
-  ```
-  Check if controller is loaded properly:
-  ```
-  ros2 control list_controllers
-  ```
-  You should get the response:
-  ```
-  joint_state_controller[joint_state_controller/JointStateController] active
-  ```
+Open another terminal and load, configure and start `joint_state_controller`:
+```
+ros2 control load_start_controller joint_state_controller
+```
+Check if controller is loaded properly:
+```
+ros2 control list_controllers
+```
+You should get the response:
+```
+joint_state_controller[joint_state_controller/JointStateController] active
+```
 
-  Now you should also see the *RRbot* represented correctly in the `rviz2`.
+Now you should also see the *RRbot* represented correctly in the `rviz2`.
 
 
 ### Using ForwardCommandController
 
 1. If you want to test hardware with ForwardCommandController first load and configure it:
-  ```
-  ros2 control load_configure_controller forward_position_controller
-  ```
-  Check if controller is loaded properly:
-  ```
-  ros2 control list_controllers
-  ```
-  You should get the response:
-  ```
-  joint_state_controller[joint_state_controller/JointStateController] active  
-  forward_position_controller[forward_command_controller/ForwardCommandController] inactive
-  ```
+   ```
+   ros2 control load_configure_controller forward_position_controller
+   ```
+   Check if controller is loaded properly:
+   ```
+   ros2 control list_controllers
+   ```
+   You should get the response:
+   ```
+   joint_state_controller[joint_state_controller/JointStateController] active
+   forward_position_controller[forward_command_controller/ForwardCommandController] inactive
+   ```
 
 2. Now start the controller:
-  ```
-  ros2 control switch_controllers --start-controllers forward_position_controller
-  ```
+   ```
+   ros2 control switch_controllers --start-controllers forward_position_controller
+   ```
   
-  Check if controllers are activated:
-  ```
-  ros2 control list_controllers
-  ```
-  You should get `active` in the response:
-  ```
-  joint_state_controller[joint_state_controller/JointStateController] active    
-  forward_position_controller[forward_command_controller/ForwardCommandController] active
-  ```
+   Check if controllers are activated:
+   ```
+   ros2 control list_controllers
+   ```
+   You should get `active` in the response:
+   ```
+   joint_state_controller[joint_state_controller/JointStateController] active
+   forward_position_controller[forward_command_controller/ForwardCommandController] active
+   ```
+
 **NOTE**: You can do this in only one step by using `load_start_controller` verb instead of `load_configure_controller`.
 
 3. Send command to the controller, either:
 
-  a. Manually using ros2 cli interface:
-  ```
-  ros2 topic pub /forward_position_controller/commands std_msgs/msg/Float64MultiArray "data:
-  - 0.5                                                               
-  - 0.5"
-  ```
-  b. Or you can start demo node which sends two goals every 5 seconds in a loop:
-  ```
-  ros2 launch ros2_control_test_nodes rrbot_test_forward_position_controller.launch.py
-  ```
+   a. Manually using ros2 cli interface:
+   ```
+   ros2 topic pub /forward_position_controller/commands std_msgs/msg/Float64MultiArray "data:
+   - 0.5                                                               
+   - 0.5"
+   ```
+   b. Or you can start demo node which sends two goals every 5 seconds in a loop:
+   ```
+   ros2 launch ros2_control_test_nodes rrbot_test_forward_position_controller.launch.py
+   ```
 
 ### Using JointTrajectoryController
 
-**NOTE**: You have to use `JointTrajectoryController` changes from ros-control/ros2_controllers#140
-
 1. If you want to test hardware with `JointTrajectoryController` first load, configure and start it:
-  ```
-  ros2 control load_start_controller position_trajectory_controller
-  ```
-  Check if controllers are activated:
-  ```
-  ros2 control list_controllers
-  ```
-  You should get `active` in the response:
-  ```
-  joint_state_controller[joint_state_controller/JointStateController] active
-  position_trajectory_controller[joint_trajectory_controller/JointTrajectoryController] active
-  ```
+   ```
+   ros2 control load_start_controller position_trajectory_controller
+   ```
+   Check if controllers are activated:
+   ```
+   ros2 control list_controllers
+   ```
+   You should get `active` in the response:
+   ```
+   joint_state_controller[joint_state_controller/JointStateController] active
+   position_trajectory_controller[joint_trajectory_controller/JointTrajectoryController] active
+   ```
 
 2. Send command to the controller using test node:
-  ```
-  ros2 launch ros2_control_demo_robot test_joint_trajectory_controller.launch.py
-  ```
-
+   ```
+   ros2 launch ros2_control_demo_robot test_joint_trajectory_controller.launch.py
+   ```
 
 ## Result
 
 1. Independently from the controller you should see how the example's output changes.
   Look for the following lines
-  ```
-  [RRBotSystemPositionOnlyHardware]: Got state 0.0 for joint 0!
-  [RRBotSystemPositionOnlyHardware]: Got state 0.0 for joint 1!
-  ```
+   ```
+   [RRBotSystemPositionOnlyHardware]: Got state 0.0 for joint 0!
+   [RRBotSystemPositionOnlyHardware]: Got state 0.0 for joint 1!
+   ```
 
 2. If you echo the `/joint_states` or `/dynamic_joint_states` topics you should also get similar values.
-  ```
-  ros2 topic echo /joint_states
-  ros2 topic echo /dynamic_joint_states
-  ```
+   ```
+   ros2 topic echo /joint_states
+   ros2 topic echo /dynamic_joint_states
+   ```
 
 3. You should also see the *RRbot* moving in the `rviz2`.
