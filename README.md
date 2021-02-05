@@ -7,6 +7,8 @@
 
 This repository provides templates for the development of `ros2_control`-enabled robots and a simple simulation of a robot to demonstrate and prove `ros2_control` concepts.
 
+[`ros2_control_demo_robot/description/rrbot_system_position_only.urdf.xacro`](ros2_control_demo_robot/description/rrbot_system_position_only.urdf.xacro)
+
 **ATTENTION**: `ros2_control` is currently under heavy development and the any APIs implementation in this repositry, can be broken without any announcement!**
 
 ## Goals
@@ -127,7 +129,7 @@ Now you should also see the *RRbot* represented correctly in the `rviz2`.
 
 ### Using ForwardCommandController
 
-1. If you want to test hardware with ForwardCommandController first load and configure it:
+1. If you want to test hardware with `ForwardCommandController` first load and configure it:
    ```
    ros2 control load_configure_controller forward_position_controller
    ```
@@ -173,7 +175,21 @@ Now you should also see the *RRbot* represented correctly in the `rviz2`.
 
 ### Using JointTrajectoryController
 
-1. If you want to test hardware with `JointTrajectoryController` first load, configure and start it:
+1. If a `ForwardCommandController` is started you should stop it first by using:
+   ```
+   ros2 control switch_controllers --stop-controllers forward_position_controller
+   ```
+   Check if controllers are activated:
+   ```
+   ros2 control list_controllers
+   ```
+   You should get `active` in the response:
+   ```
+   joint_state_controller[joint_state_controller/JointStateController] active
+   forward_position_controller[forward_command_controller/ForwardCommandController] inactive
+   ```
+
+2. If you want to test hardware with `JointTrajectoryController` first load, configure and start it:
    ```
    ros2 control load_start_controller position_trajectory_controller
    ```
@@ -187,10 +203,15 @@ Now you should also see the *RRbot* represented correctly in the `rviz2`.
    position_trajectory_controller[joint_trajectory_controller/JointTrajectoryController] active
    ```
 
-2. Send command to the controller using test node:
+3. Send command to the controller using test node:
    ```
    ros2 launch ros2_control_demo_robot test_joint_trajectory_controller.launch.py
    ```
+   
+**NOTE**: You can swith contorllers (step 1 and 2) also with one command:
+```
+ros2 control switch_controllers --stop-controllers forward_<controller_type>_controller --start-controllers joint_trajectory_controller
+```
 
 ## Result
 
