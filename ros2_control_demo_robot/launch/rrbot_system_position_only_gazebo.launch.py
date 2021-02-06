@@ -32,15 +32,13 @@ def generate_launch_description():
                     get_package_share_directory('gazebo_ros'), 'launch'), '/gazebo.launch.py']),
              )
 
-    ros2_control_demos_path = os.path.join(
-        get_package_share_directory('ros2_control_demos'))
-
     robot_description_path = os.path.join(
         get_package_share_directory('ros2_control_demo_robot'),
         'description',
         'rrbot_system_position_only.urdf.xacro')
-    robot_description_config = xacro.process_file(robot_description_path,
-    mappings={'simu' : 'true'})
+    robot_description_config = xacro.process_file(
+        robot_description_path,
+        mappings={'simu': 'true'})
     robot_description = {'robot_description': robot_description_config.toxml()}
 
     node_robot_state_publisher = Node(
