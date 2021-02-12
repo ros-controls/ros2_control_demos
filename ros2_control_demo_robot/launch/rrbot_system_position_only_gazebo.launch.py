@@ -38,7 +38,7 @@ def generate_launch_description():
         'rrbot_system_position_only.urdf.xacro')
     robot_description_config = xacro.process_file(
         robot_description_path,
-        mappings={'simu': 'true'})
+        mappings={'use_sim': 'true'})
     robot_description = {'robot_description': robot_description_config.toxml()}
 
     node_robot_state_publisher = Node(
