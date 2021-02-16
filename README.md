@@ -89,28 +89,35 @@ Each of the described example cases from the roadmap has its own launch and URDF
          joint2/position
   ```
 
-3. Open another terminal and load, configure, and start controllers:
+3. Open another terminal and load, configure and start controllers:
+   - Using the provided launch file:
+     ```
+     ros2 launch ros2_control_demo_robot joint_state_controller.launch.py
+     ros2 launch ros2_control_demo_robot forward_command_controller_position.launch.py
   ```
-  ros2 control load_start_controller joint_state_controller
-  ros2 control load_configure_controller forward_command_controller_position
+   
+- Using `ros2 control` cli interface:
+     ```
+     ros2 control load_start_controller joint_state_controller
+     ros2 control load_configure_controller forward_command_controller_position
   ```
-  
-  Check if the controller is loaded properly:
+   
+     Check if the controller is loaded properly:
+     ```
+     ros2 control list_controllers
+     ```
+     You should get the response:
+     ```
+     joint_state_controller[joint_state_controller/JointStateController] active  
+     forward_command_controller_position[forward_command_controller/ForwardCommandController] inactive
   ```
-  ros2 control list_controllers
+   
+     Starting controller:
+     ```
+     ros2 control switch_controllers --start-controllers forward_command_controller_position 
   ```
-  You should get the response:
-  ```
-  joint_state_controller[joint_state_controller/JointStateController] active  
-  forward_command_controller_position[forward_command_controller/ForwardCommandController] inactive
-  ```
-
-4. Starting controller:
-  ```
-  ros2 control switch_controllers --start-controllers forward_command_controller_position 
-  ```
-  
-  Check if controllers are activated:
+   
+4. Check if controllers are activated:
   ```
   ros2 control list_controllers
   ```

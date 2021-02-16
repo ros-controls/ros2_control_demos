@@ -17,6 +17,8 @@
 
   <depend>ros2_control_demo_hardware</depend>
 
+  <exec_depend>controller_manager</exec_depend>
+
   <test_depend>ament_cmake_gtest</test_depend>
 
   <export>
