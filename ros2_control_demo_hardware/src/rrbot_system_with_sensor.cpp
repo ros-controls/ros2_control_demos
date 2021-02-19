@@ -37,8 +37,9 @@ return_type RRBotSystemWithSensorHardware::configure(
   hw_write_sec_ = stod(info_.hardware_parameters["example_param_write_for_sec"]);
   hw_joint_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   hw_joint_commands_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
-  hw_sensor_states_.resize(info_.sensors[0].state_interfaces.size(),
-                          std::numeric_limits<double>::quiet_NaN());
+  hw_sensor_states_.resize(
+    info_.sensors[0].state_interfaces.size(),
+    std::numeric_limits<double>::quiet_NaN());
 
   for (const hardware_interface::ComponentInfo & joint : info_.joints) {
     // RRBotSystemWithSensor has exactly one state and command interface on each joint
@@ -103,8 +104,8 @@ RRBotSystemWithSensorHardware::export_state_interfaces()
   // export sensor state interface
   for (uint i = 0; i < info_.sensors[0].state_interfaces.size(); i++) {
     state_interfaces.emplace_back(
-        hardware_interface::StateInterface(
-          info_.sensors[0].name, info_.sensors[0].state_interfaces[i].name, &hw_sensor_states_[i]));
+      hardware_interface::StateInterface(
+        info_.sensors[0].name, info_.sensors[0].state_interfaces[i].name, &hw_sensor_states_[i]));
   }
 
   return state_interfaces;
@@ -181,7 +182,7 @@ hardware_interface::return_type RRBotSystemWithSensorHardware::read()
   for (uint i = 0; i < hw_joint_states_.size(); i++) {
     // Simulate RRBot's movement
     hw_joint_states_[i] = hw_joint_commands_[i] +
-                          (hw_joint_states_[i] - hw_joint_commands_[i]) / 2.0;
+      (hw_joint_states_[i] - hw_joint_commands_[i]) / 2.0;
     RCLCPP_INFO(
       rclcpp::get_logger("RRBotSystemWithSensorHardware"),
       "Got state %.5f for joint %d!", hw_joint_states_[i], i);
@@ -193,8 +194,8 @@ hardware_interface::return_type RRBotSystemWithSensorHardware::read()
   // Simulate RRBot's sensor data
   hw_sensor_states_[0] = 1.1;
   RCLCPP_INFO(
-      rclcpp::get_logger("RRBotSystemWithSensorHardware"),
-      "Got state %.5f for sensor 0!", hw_sensor_states_[0]);
+    rclcpp::get_logger("RRBotSystemWithSensorHardware"),
+    "Got state %.5f for sensor 0!", hw_sensor_states_[0]);
   RCLCPP_INFO(
     rclcpp::get_logger("RRBotSystemWithSensorHardware"),
     "Sensors sucessfully read!");
