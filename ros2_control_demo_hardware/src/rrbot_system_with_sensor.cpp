@@ -37,7 +37,7 @@ return_type RRBotSystemWithSensorHardware::configure(
   hw_write_sec_ = stod(info_.hardware_parameters["example_param_write_for_sec"]);
   hw_joint_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   hw_joint_commands_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
-  hw_sensor_states_.resize(info_.sensors[0].state_interfaces.size(), 
+  hw_sensor_states_.resize(info_.sensors[0].state_interfaces.size(),
                           std::numeric_limits<double>::quiet_NaN());
 
   for (const hardware_interface::ComponentInfo & joint : info_.joints) {
