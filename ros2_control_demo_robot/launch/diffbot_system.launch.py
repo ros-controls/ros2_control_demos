@@ -51,7 +51,7 @@ def generate_launch_description():
         executable='joint_state_publisher',
         name='joint_state_publisher',
         output='screen'),
-        
+
       Node(
         package='controller_manager',
         executable='ros2_control_node',
