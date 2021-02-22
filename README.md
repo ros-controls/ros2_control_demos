@@ -95,7 +95,7 @@ The *RRbot* URDF files can be found in the `description` folder of `ros2_control
    ros2 launch ros2_control_demo_robot rrbot_system_position_only.launch.py
    ```
 
-2. Open another terminal and check that `RRBotSystemPositionOnlyHardware` loaded properly:
+2. Open another terminal and check that `RRBotSystemPositionOnlyHardware` is loaded properly:
    ```
    ros2 control list_hardware_interfaces
    ```
@@ -115,6 +115,7 @@ The `JointStateController` is used to publish the joint states to ROS topics.
 Direct joint commands are sent to this robot via the `ForwardCommandController`.
 The sections below describe their usage.
 Check the [Results](##result) section on how to ensure that things went well.
+
 
 ### JointStateController
 
@@ -173,6 +174,10 @@ Now you should also see the *RRbot* represented correctly in `rviz2`.
    ros2 topic pub /forward_position_controller/commands std_msgs/msg/Float64MultiArray "data:
    - 0.5
    - 0.5"
+   ```
+   b. Or you can start demo node which sends two goals every 5 seconds in a loop:
+   ```
+   ros2 launch ros2_control_test_nodes rrbot_test_forward_position_controller.launch.py
    ```
 
 ## Result
