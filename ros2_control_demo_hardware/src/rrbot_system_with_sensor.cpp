@@ -1,4 +1,4 @@
-// Copyright 2020 ros2_control Development Team
+// Copyright 2021 ros2_control Development Team
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -33,8 +33,8 @@ return_type RRBotSystemWithSensorHardware::configure(
     return return_type::ERROR;
   }
 
-  hw_read_sec_ = stod(info_.hardware_parameters["example_param_read_for_sec"]);
-  hw_write_sec_ = stod(info_.hardware_parameters["example_param_write_for_sec"]);
+  hw_start_sec_ = stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
+  hw_stop_sec_ = stod(info_.hardware_parameters["example_param_hw_stop_duration_sec"]);
   hw_joint_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   hw_joint_commands_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   hw_sensor_states_.resize(
@@ -79,10 +79,10 @@ return_type RRBotSystemWithSensorHardware::configure(
   }
 
   // RRBotSystemWithSensor has six state interfaces for one sensor
-  if (info_.sensors[0].state_interfaces.size() != 6) {
+  if (info_.sensors[0].state_interfaces.size() != 2) {
     RCLCPP_FATAL(
       rclcpp::get_logger("RRBotSystemWithSensorHardware"),
-      "Sensor '%s' has %d state interface. 6 expected.",
+      "Sensor '%s' has %d state interface. 2 expected.",
       info_.sensors[0].name.c_str(), info_.sensors[0].state_interfaces.size());
     return return_type::ERROR;
   }
@@ -130,6 +130,13 @@ return_type RRBotSystemWithSensorHardware::start()
     rclcpp::get_logger("RRBotSystemWithSensorHardware"),
     "Starting ...please wait...");
 
+  for (int i = 0; i <= hw_start_sec_; i++) {
+    rclcpp::sleep_for(std::chrono::seconds(1));
+    RCLCPP_INFO(
+      rclcpp::get_logger("RRBotSystemWithSensorHardware"),
+      "%.1f seconds left...", hw_start_sec_ - i);
+  }
+
   // set some default values for joints
   for (uint i = 0; i < hw_joint_states_.size(); i++) {
     if (std::isnan(hw_joint_states_[i])) {
@@ -158,6 +165,13 @@ return_type RRBotSystemWithSensorHardware::stop()
     rclcpp::get_logger("RRBotSystemWithSensorHardware"),
     "Stopping ...please wait...");
 
+  for (int i = 0; i <= hw_stop_sec_; i++) {
+    rclcpp::sleep_for(std::chrono::seconds(1));
+    RCLCPP_INFO(
+      rclcpp::get_logger("RRBotSystemWithSensorHardware"),
+      "%.1f seconds left...", hw_stop_sec_ - i);
+  }
+
   status_ = hardware_interface::status::STOPPED;
 
   RCLCPP_INFO(
@@ -172,12 +186,6 @@ hardware_interface::return_type RRBotSystemWithSensorHardware::read()
   RCLCPP_INFO(
     rclcpp::get_logger("RRBotSystemWithSensorHardware"),
     "Reading...please wait...");
-  for (int i = 0; i <= hw_read_sec_; i++) {
-    rclcpp::sleep_for(std::chrono::seconds(1));
-    RCLCPP_INFO(
-      rclcpp::get_logger("RRBotSystemWithSensorHardware"),
-      "%.1f seconds left...", hw_read_sec_ - i);
-  }
 
   for (uint i = 0; i < hw_joint_states_.size(); i++) {
     // Simulate RRBot's movement
@@ -208,13 +216,6 @@ hardware_interface::return_type ros2_control_demo_hardware::RRBotSystemWithSenso
   RCLCPP_INFO(
     rclcpp::get_logger("RRBotSystemWithSensorHardware"),
     "Writing...please wait...");
-
-  for (int i = 0; i <= hw_write_sec_; i++) {
-    rclcpp::sleep_for(std::chrono::seconds(1));
-    RCLCPP_INFO(
-      rclcpp::get_logger("RRBotSystemWithSensorHardware"),
-      "%.1f seconds left...", hw_write_sec_ - i);
-  }
 
   for (uint i = 0; i < hw_joint_commands_.size(); i++) {
     // Simulate sending commands to the hardware

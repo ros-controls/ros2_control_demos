@@ -1,4 +1,4 @@
-# Copyright 2020 ROS2-Control Development Team (2020)
+# Copyright 2021 ROS2-Control Development Team
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ def generate_launch_description():
     rrbot_forward_controller = os.path.join(
         get_package_share_directory('ros2_control_demo_robot'),
         'controllers',
-        'rrbot_forward_controller_position_sensor.yaml'
+        'rrbot_with_sensor_controllers.yaml'
         )
 
     return LaunchDescription([
