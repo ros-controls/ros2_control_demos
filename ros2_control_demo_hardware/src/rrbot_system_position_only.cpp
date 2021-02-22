@@ -181,7 +181,7 @@ hardware_interface::return_type RRBotSystemPositionOnlyHardware::read()
   return return_type::OK;
 }
 
-hardware_interface::return_type ros2_control_demo_hardware::RRBotSystemPositionOnlyHardware::write()
+hardware_interface::return_type RRBotSystemPositionOnlyHardware::write()
 {
   RCLCPP_INFO(
     rclcpp::get_logger("RRBotSystemPositionOnlyHardware"),
