@@ -46,13 +46,15 @@ These are some quick hints, especially for those coming from a ROS1 control back
 * <ros2_control> tags in the URDF must be compatible with the controller's configuration.
 * PLUGINLIB_EXPORT_CLASS macro is required when implementing an interface.
 
-# Testing from the sources
-* Checkout [ros-controls/ros2_control](https://github.com/ros-controls/ros2_control) to get the core.
-* Checkout [ros-controls/ros2_controllers](https://github.com/ros-controls/ros2_controllers) to get all the controllers.
-* Checkout [ros-controls/ros2_control_demos](https://github.com/ros-controls/ros2_control_demos) to get example hardware and robot launch files.
+# Build from source
+```
+git clone https://github.com/ros-controls/ros2_control
+git clone https://github.com/ros-controls/ros2_controllers
+git clone https://github.com/ros-controls/ros2_control_demos
+```
 
 **NOTE**: `ros2_control` and `ros2_controllers` packages are released for foxy and can be installed using package manager.
-  Still, it is recommended to use source version since there might be some not-yet-released changes.
+  For daily use it is recommended to use the released version but there may always be some not-yet-released changes that are required to build the demos.
 
 * Install dependencies (maybe you need `sudo`):
   ```
@@ -73,11 +75,9 @@ Each of the described example cases from the roadmap has its own launch and URDF
 
 ## Starting example robots
 
-First you need to start robot's hardware and load controllers configuration.
-This is done using one launch file.
+Each example is started with a single launch file which starts up the robot hardware, loads controller configurations and it also opens `rviz2`. 
 
-To visualize the robot's state `rviz2` is started automatically.
-If this is not the case than follow the next you can do it manually:
+The `rviz2` setup can be recreated following these steps:
 
 - The robot models can be visualized using `RobotModel` display using `/robot_description` topic.
 - Or you can simply open the configuration from `rviz` folder in `ros2_control_demo_robot` package manually or directly by executing:
@@ -85,7 +85,8 @@ If this is not the case than follow the next you can do it manually:
   rviz2 --display-config `ros2 pkg prefix ros2_control_demo_robot`/share/ros2_control_demo_robot/rviz/rrbot.rviz
   ```
 
-The *RRbbot*'s URDF files can be found in the `description` folder of `ros2_control_demo_robot` package.
+*RRBot*, or ''Revolute-Revolute Manipulator Robot'', is a simple 3-linkage, 2-joint arm that we will use to demonstrate various features. It essentially a double inverted pendulum and demonstrates some fun control concepts within a simulator and was originally introduced for Gazebo tutorials.
+The *RRbot* URDF files can be found in the `description` folder of `ros2_control_demo_robot` package.
 
 ### Example 1: "Industrial Robots with only one interface"
 
@@ -94,7 +95,7 @@ The *RRbbot*'s URDF files can be found in the `description` folder of `ros2_cont
    ros2 launch ros2_control_demo_robot rrbot_system_position_only.launch.py
    ```
 
-2. Open another terminal and check if `RRBotSystemPositionOnlyHardware` is loaded properly:
+2. Open another terminal and check that `RRBotSystemPositionOnlyHardware` loaded properly:
    ```
    ros2 control list_hardware_interfaces
    ```
@@ -109,11 +110,11 @@ The *RRbbot*'s URDF files can be found in the `description` folder of `ros2_cont
    ```
 
 ## Controlles and moving hardware
-To move the robot you should load and start contorllers.
-To get feedback about robot's state `JointStateController` is used.
-to send command to the robot `ForwardcommandController` (direct goals).
+To move the robot you should load and start controllers.
+The `JointStateController` is used to publish the joint states to ROS topics.
+Direct joint commands are sent to this robot via the `ForwardCommandController`.
 The sections below describe their usage.
-Than jump to the Results section to read how to check if everything is fine.
+Check the [Results](##result) section on how to ensure that things went well.
 
 ### JointStateController
 
@@ -130,7 +131,7 @@ You should get the response:
 joint_state_controller[joint_state_controller/JointStateController] active
 ```
 
-Now you should also see the *RRbot* represented correctly in the `rviz2`.
+Now you should also see the *RRbot* represented correctly in `rviz2`.
 
 
 ### Using ForwardCommandController
@@ -189,4 +190,4 @@ Now you should also see the *RRbot* represented correctly in the `rviz2`.
    ros2 topic echo /dynamic_joint_states
    ```
 
-3. You should also see the *RRbot* moving in the `rviz2`.
+3. You should also see the *RRbot* moving in `rviz2`.
