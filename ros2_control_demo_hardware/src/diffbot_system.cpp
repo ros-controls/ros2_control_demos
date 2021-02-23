@@ -177,12 +177,14 @@ hardware_interface::return_type DiffBotSystemHardware::read()
     rclcpp::get_logger("DiffBotSystemHardware"),
     "Reading...");
 
-  for (uint i = 0; i < hw_states_.size(); i++) {
+  for (uint i = 0; i < hw_commands_.size(); i++) {
     // Simulate DiffBot's movement
-    hw_states_[i] = hw_commands_[i] + (hw_states_[i] - hw_commands_[i]) / hw_slowdown_;
+    hw_states_[1] = hw_commands_[i] + (hw_states_[1] - hw_commands_[i]) / hw_slowdown_;
+    hw_states_[0] += hw_states_[1] / 2;
     RCLCPP_INFO(
       rclcpp::get_logger("DiffBotSystemHardware"),
-      "Got state %.5f for '%s'!", hw_states_[i], info_.joints[i].name.c_str());
+      "Got position state %.5f and velocity state %.5f for '%s'!",
+      hw_states_[0], hw_states_[1], info_.joints[i].name.c_str());
   }
   RCLCPP_INFO(
     rclcpp::get_logger("DiffBotSystemHardware"),
