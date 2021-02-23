@@ -95,7 +95,7 @@ The *RRbot* URDF files can be found in the `description` folder of `ros2_control
    ros2 launch ros2_control_demo_robot rrbot_system_position_only.launch.py
    ```
 
-2. Open another terminal and check that `RRBotSystemPositionOnlyHardware` is loaded properly:
+2. Open another terminal and check that `RRBotSystemPositionOnlyHardware` loaded properly:
    ```
    ros2 control list_hardware_interfaces
    ```
