@@ -1,4 +1,4 @@
-# Copyright 2021 Stogl Robotics Consulting
+# Copyright 2021 Stogl Denis Stogl (Stogl Robotics Consulting)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
