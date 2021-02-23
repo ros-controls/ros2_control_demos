@@ -2,6 +2,8 @@ controller_manager:
   ros__parameters:
     update_rate: 2  # Hz
 
+    joint_state_controller:
+      type: joint_state_controller/JointStateController
     diffbot_base_controller:
       type: diff_drive_controller/DiffDriveController
 

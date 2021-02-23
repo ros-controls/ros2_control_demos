@@ -11,43 +11,22 @@
         <param name="example_param_hw_slowdown">2.0</param>
       </hardware>
       <joint name="left_wheel_joint">
-        <state_interface name="position"/>
         <command_interface name="velocity">
           <param name="min">-1</param>
           <param name="max">1</param>
         </command_interface>
+        <state_interface name="position"/>
         <state_interface name="velocity"/>
       </joint>
       <joint name="right_wheel_joint">
-        <state_interface name="position"/>
         <command_interface name="velocity">
           <param name="min">-1</param>
           <param name="max">1</param>
         </command_interface>
+        <state_interface name="position"/>
         <state_interface name="velocity"/>
       </joint>
     </ros2_control>
-
-  <!-- <ros2_control name="TestActuatorHardwareLeft" type="actuator">
-    <hardware>
-      <plugin>test_actuator</plugin>
-    </hardware>
-    <joint name="left_wheel_joint">
-      <state_interface name="position"/>
-      <command_interface name="velocity"/>
-      <state_interface name="velocity"/>
-    </joint>
-  </ros2_control>
-  <ros2_control name="TestActuatorHardwareRight" type="actuator">
-    <hardware>
-      <plugin>test_actuator</plugin>
-    </hardware>
-    <joint name="right_wheel_joint">
-      <state_interface name="position"/>
-      <command_interface name="velocity"/>
-      <state_interface name="velocity"/>
-    </joint>
-  </ros2_control> -->
 
   </xacro:macro>
 
