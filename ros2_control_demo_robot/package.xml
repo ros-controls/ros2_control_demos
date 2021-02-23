@@ -13,7 +13,6 @@
 
   <exec_depend>joint_state_publisher_gui</exec_depend>
   <exec_depend>ros2_control_demo_hardware</exec_depend>
-  <exec_depend>ros2_control_test_nodes</exec_depend>
   <exec_depend>robot_state_publisher</exec_depend>
   <exec_depend>rviz2</exec_depend>
 

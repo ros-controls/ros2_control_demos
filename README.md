@@ -173,10 +173,6 @@ Now you should also see the *RRbot* represented correctly in the `rviz2`.
    - 0.5
    - 0.5"
    ```
-   b. Or you can start demo node which sends two goals every 5 seconds in a loop:
-   ```
-   ros2 launch ros2_control_test_nodes rrbot_test_forward_position_controller.launch.py
-   ```
 
 ## Result
 
