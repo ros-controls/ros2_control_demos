@@ -32,7 +32,7 @@
       <geometry>
         <box size="${width} ${width} ${height1}"/>
       </geometry>
-      <material name="brown"/>
+      <material name="orange"/>
     </visual>
 
     <inertial>
@@ -67,7 +67,7 @@
         <geometry>
           <box size="${width} ${width} ${height2}"/>
         </geometry>
-        <material name="blue"/>
+        <material name="yellow"/>
       </visual>
 
       <inertial>
