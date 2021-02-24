@@ -35,6 +35,8 @@ return_type RRBotSystemWithSensorHardware::configure(
 
   hw_start_sec_ = stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
   hw_stop_sec_ = stod(info_.hardware_parameters["example_param_hw_stop_duration_sec"]);
+  hw_slowdown_ = stod(info_.hardware_parameters["example_param_hw_slowdown"]);
+  hw_sensor_change_ = stod(info_.hardware_parameters["example_param_max_sensor_change"]);
   hw_joint_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   hw_joint_commands_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   hw_sensor_states_.resize(
@@ -190,7 +192,7 @@ hardware_interface::return_type RRBotSystemWithSensorHardware::read()
   for (uint i = 0; i < hw_joint_states_.size(); i++) {
     // Simulate RRBot's movement
     hw_joint_states_[i] = hw_joint_commands_[i] +
-      (hw_joint_states_[i] - hw_joint_commands_[i]) / 2.0;
+      (hw_joint_states_[i] - hw_joint_commands_[i]) / hw_slowdown_;
     RCLCPP_INFO(
       rclcpp::get_logger("RRBotSystemWithSensorHardware"),
       "Got state %.5f for joint %d!", hw_joint_states_[i], i);
@@ -199,11 +201,14 @@ hardware_interface::return_type RRBotSystemWithSensorHardware::read()
     rclcpp::get_logger("RRBotSystemWithSensorHardware"),
     "Joints sucessfully read!");
 
-  // Simulate RRBot's sensor data
-  hw_sensor_states_[0] = 1.1;
-  RCLCPP_INFO(
-    rclcpp::get_logger("RRBotSystemWithSensorHardware"),
-    "Got state %.5f for sensor 0!", hw_sensor_states_[0]);
+  for (uint i = 0; i < hw_sensor_states_.size(); i++) {
+    // Simulate RRBot's sensor data
+    hw_sensor_states_[i] = static_cast <float> (rand()) /
+      (static_cast <float> (RAND_MAX / hw_sensor_change_));
+    RCLCPP_INFO(
+      rclcpp::get_logger("RRBotSystemWithSensorHardware"),
+      "Got state %.5f for sensor %d!", hw_sensor_states_[i], i);
+  }
   RCLCPP_INFO(
     rclcpp::get_logger("RRBotSystemWithSensorHardware"),
     "Sensors sucessfully read!");
