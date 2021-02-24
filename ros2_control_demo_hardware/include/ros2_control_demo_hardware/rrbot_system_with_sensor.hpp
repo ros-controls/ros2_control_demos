@@ -38,7 +38,7 @@ class RRBotSystemWithSensorHardware : public
   hardware_interface::BaseInterface<hardware_interface::SystemInterface>
 {
 public:
-  RCLCPP_SHARED_PTR_DEFINITIONS(RRBotSystemWithSensorHardware);
+  RCLCPP_SHARED_PTR_DEFINITIONS(RRBotSystemWithSensorHardware)
 
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
   return_type configure(const hardware_interface::HardwareInfo & info) override;
@@ -65,6 +65,8 @@ private:
   // Parameters for the RRBot simulation
   double hw_start_sec_;
   double hw_stop_sec_;
+  double hw_slowdown_;
+  double hw_sensor_change_;
 
   // Store the command for the simulated robot
   std::vector<double> hw_joint_commands_;
