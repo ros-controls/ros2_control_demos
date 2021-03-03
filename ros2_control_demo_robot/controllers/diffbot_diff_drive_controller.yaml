@@ -4,6 +4,7 @@ controller_manager:
 
     joint_state_controller:
       type: joint_state_controller/JointStateController
+
     diffbot_base_controller:
       type: diff_drive_controller/DiffDriveController
 
@@ -11,7 +12,6 @@ diffbot_base_controller:
   ros__parameters:
     left_wheel_names: ["left_wheel_joint"]
     right_wheel_names: ["right_wheel_joint"]
-    #write_op_modes: ["motor_controller"]
 
     wheel_separation: 0.10
     #wheels_per_side: 1  # actually 2, but both are controlled by 1 signal
@@ -64,3 +64,4 @@ diffbot_base_controller:
     angular.z.min_acceleration: -1.0
     angular.z.max_jerk: 0.0
     angular.z.min_jerk: 0.0
+    

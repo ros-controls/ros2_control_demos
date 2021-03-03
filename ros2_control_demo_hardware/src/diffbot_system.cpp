@@ -1,4 +1,4 @@
-// Copyright 2020 ros2_control Development Team
+// Copyright 2021 ros2_control Development Team
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -118,7 +118,6 @@ DiffBotSystemHardware::export_command_interfaces()
   return command_interfaces;
 }
 
-
 return_type DiffBotSystemHardware::start()
 {
   RCLCPP_INFO(
@@ -215,7 +214,6 @@ hardware_interface::return_type ros2_control_demo_hardware::DiffBotSystemHardwar
 }  // namespace ros2_control_demo_hardware
 
 #include "pluginlib/class_list_macros.hpp"
-
 PLUGINLIB_EXPORT_CLASS(
   ros2_control_demo_hardware::DiffBotSystemHardware,
   hardware_interface::SystemInterface
