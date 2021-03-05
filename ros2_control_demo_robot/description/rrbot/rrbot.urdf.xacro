@@ -4,10 +4,9 @@
   <xacro:macro name="rrbot" params="parent prefix *origin">
 
   <!-- Constants for robot dimensions -->
-  <xacro:property name="PI" value="3.1415926535897931"/>
   <xacro:property name="mass" value="1" /> <!-- arbitrary value for mass -->
   <xacro:property name="width" value="0.1" /> <!-- Square dimensions (widthxwidth) of beams -->
-  <xacro:property name="height1" value="2" /> <!-- Link 1 -->
+  <xacro:property name="height1" value="0.2" /> <!-- Link 1 -->
   <xacro:property name="height2" value="1" /> <!-- Link 2 -->
   <xacro:property name="height3" value="1" /> <!-- Link 3 -->
   <xacro:property name="camera_link" value="0.05" /> <!-- Size of square 'camera' box -->
@@ -68,7 +67,7 @@
         <geometry>
           <box size="${width} ${width} ${height2}"/>
         </geometry>
-        <material name="black"/>
+        <material name="yellow"/>
       </visual>
 
       <inertial>
