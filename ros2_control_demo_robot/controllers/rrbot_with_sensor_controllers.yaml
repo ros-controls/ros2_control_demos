@@ -8,8 +8,8 @@ controller_manager:
     joint_state_controller:
       type: joint_state_controller/JointStateController
 
-    ur_controllers:
-      type: ur_controllers/ForceTorqueStateController
+    fts_controllers:
+      type: force_torque_sensor_controller/ForceTorqueSensorController
 
 forward_command_controller_position:
   ros__parameters:
@@ -18,12 +18,10 @@ forward_command_controller_position:
       - joint2
     interface_name: position
 
-ur_controllers:
+fts_controllers:
   ros__parameters:
     sensor_name: tcp_fts_sensor
-    state_interface_names:
+    interface_names:
       - fx
       - tz
     frame_id: rrbot_tcp
-    lower_limits: -100
-    upper_limits: 100
