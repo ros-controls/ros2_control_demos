@@ -26,6 +26,8 @@
 namespace ros2_control_demo_hardware
 {
 
+const char SENSOR_LOGGER[] = "RRBotSystemWithSensorHardware";
+
 return_type RRBotSystemWithSensorHardware::configure(
   const hardware_interface::HardwareInfo & info)
 {
@@ -47,7 +49,7 @@ return_type RRBotSystemWithSensorHardware::configure(
     // RRBotSystemWithSensor has exactly one state and command interface on each joint
     if (joint.command_interfaces.size() != 1) {
       RCLCPP_FATAL(
-        rclcpp::get_logger("RRBotSystemWithSensorHardware"),
+        rclcpp::get_logger(SENSOR_LOGGER),
         "Joint '%s' has %d command interfaces found. 1 expected.",
         joint.name.c_str(), joint.command_interfaces.size());
       return return_type::ERROR;
@@ -55,7 +57,7 @@ return_type RRBotSystemWithSensorHardware::configure(
 
     if (joint.command_interfaces[0].name != hardware_interface::HW_IF_POSITION) {
       RCLCPP_FATAL(
-        rclcpp::get_logger("RRBotSystemWithSensorHardware"),
+        rclcpp::get_logger(SENSOR_LOGGER),
         "Joint '%s' have %s command interfaces found. '%s' expected.",
         joint.name.c_str(), joint.command_interfaces[0].name.c_str(),
         hardware_interface::HW_IF_POSITION);
@@ -64,7 +66,7 @@ return_type RRBotSystemWithSensorHardware::configure(
 
     if (joint.state_interfaces.size() != 1) {
       RCLCPP_FATAL(
-        rclcpp::get_logger("RRBotSystemWithSensorHardware"),
+        rclcpp::get_logger(SENSOR_LOGGER),
         "Joint '%s' has %d state interface. 1 expected.",
         joint.name.c_str(), joint.state_interfaces.size());
       return return_type::ERROR;
@@ -72,7 +74,7 @@ return_type RRBotSystemWithSensorHardware::configure(
 
     if (joint.state_interfaces[0].name != hardware_interface::HW_IF_POSITION) {
       RCLCPP_FATAL(
-        rclcpp::get_logger("RRBotSystemWithSensorHardware"),
+        rclcpp::get_logger(SENSOR_LOGGER),
         "Joint '%s' have %s state interface. '%s' expected.",
         joint.name.c_str(), joint.state_interfaces[0].name.c_str(),
         hardware_interface::HW_IF_POSITION);
@@ -83,7 +85,7 @@ return_type RRBotSystemWithSensorHardware::configure(
   // RRBotSystemWithSensor has six state interfaces for one sensor
   if (info_.sensors[0].state_interfaces.size() != 2) {
     RCLCPP_FATAL(
-      rclcpp::get_logger("RRBotSystemWithSensorHardware"),
+      rclcpp::get_logger(SENSOR_LOGGER),
       "Sensor '%s' has %d state interface. 2 expected.",
       info_.sensors[0].name.c_str(), info_.sensors[0].state_interfaces.size());
     return return_type::ERROR;
@@ -129,13 +131,13 @@ RRBotSystemWithSensorHardware::export_command_interfaces()
 return_type RRBotSystemWithSensorHardware::start()
 {
   RCLCPP_INFO(
-    rclcpp::get_logger("RRBotSystemWithSensorHardware"),
+    rclcpp::get_logger(SENSOR_LOGGER),
     "Starting ...please wait...");
 
   for (int i = 0; i <= hw_start_sec_; i++) {
     rclcpp::sleep_for(std::chrono::seconds(1));
     RCLCPP_INFO(
-      rclcpp::get_logger("RRBotSystemWithSensorHardware"),
+      rclcpp::get_logger(SENSOR_LOGGER),
       "%.1f seconds left...", hw_start_sec_ - i);
   }
 
@@ -155,7 +157,7 @@ return_type RRBotSystemWithSensorHardware::start()
   status_ = hardware_interface::status::STARTED;
 
   RCLCPP_INFO(
-    rclcpp::get_logger("RRBotSystemWithSensorHardware"),
+    rclcpp::get_logger(SENSOR_LOGGER),
     "System Sucessfully started!");
 
   return return_type::OK;
@@ -164,20 +166,20 @@ return_type RRBotSystemWithSensorHardware::start()
 return_type RRBotSystemWithSensorHardware::stop()
 {
   RCLCPP_INFO(
-    rclcpp::get_logger("RRBotSystemWithSensorHardware"),
+    rclcpp::get_logger(SENSOR_LOGGER),
     "Stopping ...please wait...");
 
   for (int i = 0; i <= hw_stop_sec_; i++) {
     rclcpp::sleep_for(std::chrono::seconds(1));
     RCLCPP_INFO(
-      rclcpp::get_logger("RRBotSystemWithSensorHardware"),
+      rclcpp::get_logger(SENSOR_LOGGER),
       "%.1f seconds left...", hw_stop_sec_ - i);
   }
 
   status_ = hardware_interface::status::STOPPED;
 
   RCLCPP_INFO(
-    rclcpp::get_logger("RRBotSystemWithSensorHardware"),
+    rclcpp::get_logger(SENSOR_LOGGER),
     "System sucessfully stopped!");
 
   return return_type::OK;
@@ -186,7 +188,7 @@ return_type RRBotSystemWithSensorHardware::stop()
 hardware_interface::return_type RRBotSystemWithSensorHardware::read()
 {
   RCLCPP_INFO(
-    rclcpp::get_logger("RRBotSystemWithSensorHardware"),
+    rclcpp::get_logger(SENSOR_LOGGER),
     "Reading...please wait...");
 
   for (uint i = 0; i < hw_joint_states_.size(); i++) {
@@ -194,11 +196,11 @@ hardware_interface::return_type RRBotSystemWithSensorHardware::read()
     hw_joint_states_[i] = hw_joint_commands_[i] +
       (hw_joint_states_[i] - hw_joint_commands_[i]) / hw_slowdown_;
     RCLCPP_INFO(
-      rclcpp::get_logger("RRBotSystemWithSensorHardware"),
+      rclcpp::get_logger(SENSOR_LOGGER),
       "Got state %.5f for joint %d!", hw_joint_states_[i], i);
   }
   RCLCPP_INFO(
-    rclcpp::get_logger("RRBotSystemWithSensorHardware"),
+    rclcpp::get_logger(SENSOR_LOGGER),
     "Joints sucessfully read!");
 
   for (uint i = 0; i < hw_sensor_states_.size(); i++) {
@@ -206,11 +208,11 @@ hardware_interface::return_type RRBotSystemWithSensorHardware::read()
     hw_sensor_states_[i] = static_cast<float>(rand_r(nullptr)) /
       (static_cast<float>(RAND_MAX / hw_sensor_change_));
     RCLCPP_INFO(
-      rclcpp::get_logger("RRBotSystemWithSensorHardware"),
+      rclcpp::get_logger(SENSOR_LOGGER),
       "Got state %.5f for sensor %d!", hw_sensor_states_[i], i);
   }
   RCLCPP_INFO(
-    rclcpp::get_logger("RRBotSystemWithSensorHardware"),
+    rclcpp::get_logger(SENSOR_LOGGER),
     "Sensors sucessfully read!");
 
   return return_type::OK;
@@ -219,17 +221,17 @@ hardware_interface::return_type RRBotSystemWithSensorHardware::read()
 hardware_interface::return_type ros2_control_demo_hardware::RRBotSystemWithSensorHardware::write()
 {
   RCLCPP_INFO(
-    rclcpp::get_logger("RRBotSystemWithSensorHardware"),
+    rclcpp::get_logger(SENSOR_LOGGER),
     "Writing...please wait...");
 
   for (uint i = 0; i < hw_joint_commands_.size(); i++) {
     // Simulate sending commands to the hardware
     RCLCPP_INFO(
-      rclcpp::get_logger("RRBotSystemWithSensorHardware"),
+      rclcpp::get_logger(SENSOR_LOGGER),
       "Got command %.5f for joint %d!", hw_joint_commands_[i], i);
   }
   RCLCPP_INFO(
-    rclcpp::get_logger("RRBotSystemWithSensorHardware"),
+    rclcpp::get_logger(SENSOR_LOGGER),
     "Joints sucessfully written!");
 
   return return_type::OK;
