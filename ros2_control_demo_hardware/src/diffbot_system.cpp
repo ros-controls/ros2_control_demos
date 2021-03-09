@@ -35,7 +35,6 @@ hardware_interface::return_type DiffBotSystemHardware::configure(
 
   hw_start_sec_ = stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
   hw_stop_sec_ = stod(info_.hardware_parameters["example_param_hw_stop_duration_sec"]);
-  hw_slowdown_ = stod(info_.hardware_parameters["example_param_hw_slowdown"]);
   hw_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   hw_commands_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
 
@@ -177,11 +176,11 @@ hardware_interface::return_type DiffBotSystemHardware::read()
     "Reading...");
 
   double tau = 0.2;
-  double a = tau/(tau+1);
-  double b = 1/(tau+1);
+  double a = tau / (tau + 1);
+  double b = 1 / (tau + 1);
   for (uint i = 0; i < hw_commands_.size(); i++) {
     // Simulate DiffBot wheels's movement as a first-order system
-    hw_states_[1] = a*hw_states_[1] + b*hw_commands_[i];
+    hw_states_[1] = a * hw_states_[1] + b * hw_commands_[i];
     hw_states_[0] += hw_states_[1] / 2;
     RCLCPP_INFO(
       rclcpp::get_logger("DiffBotSystemHardware"),
