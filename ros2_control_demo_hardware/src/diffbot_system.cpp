@@ -176,9 +176,12 @@ hardware_interface::return_type DiffBotSystemHardware::read()
     rclcpp::get_logger("DiffBotSystemHardware"),
     "Reading...");
 
+  double tau = 0.2;
+  double a = tau/(tau+1);
+  double b = 1/(tau+1);
   for (uint i = 0; i < hw_commands_.size(); i++) {
-    // Simulate DiffBot's movement
-    hw_states_[1] = hw_commands_[i] + (hw_states_[1] - hw_commands_[i]) / hw_slowdown_;
+    // Simulate DiffBot wheels's movement as a first-order system
+    hw_states_[1] = a*hw_states_[1] + b*hw_commands_[i];
     hw_states_[0] += hw_states_[1] / 2;
     RCLCPP_INFO(
       rclcpp::get_logger("DiffBotSystemHardware"),
