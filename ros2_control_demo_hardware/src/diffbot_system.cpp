@@ -26,11 +26,11 @@
 namespace ros2_control_demo_hardware
 {
 
-return_type DiffBotSystemHardware::configure(
+hardware_interface::return_type DiffBotSystemHardware::configure(
   const hardware_interface::HardwareInfo & info)
 {
-  if (configure_default(info) != return_type::OK) {
-    return return_type::ERROR;
+  if (configure_default(info) != hardware_interface::return_type::OK) {
+    return hardware_interface::return_type::ERROR;
   }
 
   hw_start_sec_ = stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
@@ -46,7 +46,7 @@ return_type DiffBotSystemHardware::configure(
         rclcpp::get_logger("DiffBotSystemHardware"),
         "Joint '%s' has %d command interfaces found. 1 expected.",
         joint.name.c_str(), joint.command_interfaces.size());
-      return return_type::ERROR;
+      return hardware_interface::return_type::ERROR;
     }
 
     if (joint.command_interfaces[0].name != hardware_interface::HW_IF_VELOCITY) {
@@ -55,7 +55,7 @@ return_type DiffBotSystemHardware::configure(
         "Joint '%s' have %s command interfaces found. '%s' expected.",
         joint.name.c_str(), joint.command_interfaces[0].name.c_str(),
         hardware_interface::HW_IF_VELOCITY);
-      return return_type::ERROR;
+      return hardware_interface::return_type::ERROR;
     }
 
     if (joint.state_interfaces.size() != 2) {
@@ -63,7 +63,7 @@ return_type DiffBotSystemHardware::configure(
         rclcpp::get_logger("DiffBotSystemHardware"),
         "Joint '%s' has %d state interface. 2 expected.",
         joint.name.c_str(), joint.state_interfaces.size());
-      return return_type::ERROR;
+      return hardware_interface::return_type::ERROR;
     }
 
     if (joint.state_interfaces[0].name != hardware_interface::HW_IF_POSITION) {
@@ -72,7 +72,7 @@ return_type DiffBotSystemHardware::configure(
         "Joint '%s' have '%s' as first state interface. '%s' and '%s' expected.",
         joint.name.c_str(), joint.state_interfaces[0].name.c_str(),
         hardware_interface::HW_IF_POSITION);
-      return return_type::ERROR;
+      return hardware_interface::return_type::ERROR;
     }
 
     if (joint.state_interfaces[1].name != hardware_interface::HW_IF_VELOCITY) {
@@ -81,12 +81,12 @@ return_type DiffBotSystemHardware::configure(
         "Joint '%s' have '%s' as second state interface. '%s' expected.",
         joint.name.c_str(), joint.state_interfaces[1].name.c_str(),
         hardware_interface::HW_IF_VELOCITY);
-      return return_type::ERROR;
+      return hardware_interface::return_type::ERROR;
     }
   }
 
   status_ = hardware_interface::status::CONFIGURED;
-  return return_type::OK;
+  return hardware_interface::return_type::OK;
 }
 
 std::vector<hardware_interface::StateInterface>
@@ -118,7 +118,7 @@ DiffBotSystemHardware::export_command_interfaces()
   return command_interfaces;
 }
 
-return_type DiffBotSystemHardware::start()
+hardware_interface::return_type DiffBotSystemHardware::start()
 {
   RCLCPP_INFO(
     rclcpp::get_logger("DiffBotSystemHardware"),
@@ -145,10 +145,10 @@ return_type DiffBotSystemHardware::start()
     rclcpp::get_logger("DiffBotSystemHardware"),
     "System Sucessfully started!");
 
-  return return_type::OK;
+  return hardware_interface::return_type::OK;
 }
 
-return_type DiffBotSystemHardware::stop()
+hardware_interface::return_type DiffBotSystemHardware::stop()
 {
   RCLCPP_INFO(
     rclcpp::get_logger("DiffBotSystemHardware"),
@@ -167,7 +167,7 @@ return_type DiffBotSystemHardware::stop()
     rclcpp::get_logger("DiffBotSystemHardware"),
     "System sucessfully stopped!");
 
-  return return_type::OK;
+  return hardware_interface::return_type::OK;
 }
 
 hardware_interface::return_type DiffBotSystemHardware::read()
@@ -189,7 +189,7 @@ hardware_interface::return_type DiffBotSystemHardware::read()
     rclcpp::get_logger("DiffBotSystemHardware"),
     "Joints sucessfully read!");
 
-  return return_type::OK;
+  return hardware_interface::return_type::OK;
 }
 
 hardware_interface::return_type ros2_control_demo_hardware::DiffBotSystemHardware::write()
@@ -208,7 +208,7 @@ hardware_interface::return_type ros2_control_demo_hardware::DiffBotSystemHardwar
     rclcpp::get_logger("DiffBotSystemHardware"),
     "Joints sucessfully written!");
 
-  return return_type::OK;
+  return hardware_interface::return_type::OK;
 }
 
 }  // namespace ros2_control_demo_hardware
