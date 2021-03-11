@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <xacro:macro name="rrbot_system_with_sensor" params="name prefix">
+  <xacro:macro name="rrbot_system_with_sensor" params="name prefix slowdown:=2.0">
 
     <ros2_control name="${name}" type="system">
       <hardware>
         <plugin>ros2_control_demo_hardware/RRBotSystemWithSensorHardware</plugin>
         <param name="example_param_hw_start_duration_sec">2.0</param>
         <param name="example_param_hw_stop_duration_sec">3.0</param>
-        <param name="example_param_hw_slowdown">2.0</param>
+        <param name="example_param_hw_slowdown">${slowdown}</param>
         <param name="example_param_max_sensor_change">5.0</param>
       </hardware>
       <joint name="joint1">

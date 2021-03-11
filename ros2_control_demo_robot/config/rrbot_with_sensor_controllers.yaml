@@ -5,6 +5,9 @@ controller_manager:
     forward_command_controller_position:
       type: forward_command_controller/ForwardCommandController
 
+    fts_controllers:
+      type: force_torque_sensor_controller/ForceTorqueSensorController
+
     joint_state_controller:
       type: joint_state_controller/JointStateController
 
@@ -14,3 +17,11 @@ forward_command_controller_position:
       - joint1
       - joint2
     interface_name: position
+
+fts_controllers:
+  ros__parameters:
+    sensor_name: tcp_fts_sensor
+    interface_names:
+      - fx
+      - tz
+    frame_id: rrbot_tcp

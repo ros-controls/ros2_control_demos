@@ -1,4 +1,4 @@
-# Copyright 2021 ROS2-Control Development Team
+# Copyright 2021 Stogl Robotics Consulting UG (haftungsbeschränkt)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,25 +28,36 @@ def generate_launch_description():
     robot_description_path = os.path.join(
         get_package_share_directory('ros2_control_demo_robot'),
         'description',
-        'rrbot_system_with_sensor.urdf.xacro')
+        'rrbot_system_position_only.urdf.xacro')
     robot_description_config = xacro.process_file(robot_description_path)
     robot_description = {'robot_description': robot_description_config.toxml()}
 
-    rrbot_forward_controller = os.path.join(
+    rviz_config_file = os.path.join(
         get_package_share_directory('ros2_control_demo_robot'),
-        'config',
-        'rrbot_with_sensor_controllers.yaml'
+        'rviz',
+        'rrbot.rviz'
         )
+
+    joint_state_publisher_node = Node(
+      package='joint_state_publisher_gui',
+      executable='joint_state_publisher_gui',
+    )
+    robot_state_publisher_node = Node(
+        package='robot_state_publisher',
+        executable='robot_state_publisher',
+        output='both',
+        parameters=[robot_description]
+    )
+    rviz_node = Node(
+        package='rviz2',
+        executable='rviz2',
+        name='rviz2',
+        output='log',
+        arguments=['-d', rviz_config_file],
+    )
 
     return LaunchDescription([
-      Node(
-        package='controller_manager',
-        executable='ros2_control_node',
-        parameters=[robot_description, rrbot_forward_controller],
-        output={
-          'stdout': 'screen',
-          'stderr': 'screen',
-          },
-        )
-
+        joint_state_publisher_node,
+        robot_state_publisher_node,
+        rviz_node,
     ])

@@ -205,7 +205,8 @@ hardware_interface::return_type RRBotSystemWithSensorHardware::read()
 
   for (uint i = 0; i < hw_sensor_states_.size(); i++) {
     // Simulate RRBot's sensor data
-    hw_sensor_states_[i] = static_cast<float>(rand_r(nullptr)) /
+    unsigned int seed = time(NULL) + i;
+    hw_sensor_states_[i] = static_cast<float>(rand_r(&seed)) /
       (static_cast<float>(RAND_MAX / hw_sensor_change_));
     RCLCPP_INFO(
       rclcpp::get_logger(SENSOR_LOGGER),
