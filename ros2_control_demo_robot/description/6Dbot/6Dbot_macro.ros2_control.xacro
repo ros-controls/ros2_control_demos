@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+
+  <xacro:macro name="SixDbot_ros2_control" params="name prefix use_fake_hardware:=^|true fake_sensor_commands:=^|false">
+
+    <ros2_control name="${name}" type="system">
+      <hardware>
+        <xacro:if value="${use_fake_hardware}">
+          <plugin>fake_components/GenericSystem</plugin>
+          <param name="fake_sensor_commands">${fake_sensor_commands}</param>
+        </xacro:if>
+        <xacro:unless value="${use_fake_hardware}">
+          <plugin>robot_hardware_inteface/RobotHardwareInteface</plugin>
+        </xacro:unless>
+      </hardware>
+      <joint name="${prefix}joint1">
+        <command_interface name="position">
+          <param name="min">-1</param>
+          <param name="max">1</param>
+        </command_interface>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        <state_interface name="acceleration"/>
+        <param name="initial_position">0.0</param>
+      </joint>
+      <joint name="${prefix}joint2">
+        <command_interface name="position">
+          <param name="min">-1</param>
+          <param name="max">1</param>
+        </command_interface>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        <state_interface name="acceleration"/>
+        <param name="initial_position">0.0</param>
+      </joint>
+      <joint name="${prefix}joint3">
+        <command_interface name="position">
+          <param name="min">-1</param>
+          <param name="max">1</param>
+        </command_interface>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        <state_interface name="acceleration"/>
+        <param name="initial_position">0.0</param>
+      </joint>
+      <joint name="${prefix}joint4">
+        <command_interface name="position">
+          <param name="min">-1</param>
+          <param name="max">1</param>
+        </command_interface>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        <state_interface name="acceleration"/>
+        <param name="initial_position">0.0</param>
+      </joint>
+      <joint name="${prefix}joint5">
+        <command_interface name="position">
+          <param name="min">-1</param>
+          <param name="max">1</param>
+        </command_interface>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        <state_interface name="acceleration"/>
+        <param name="initial_position">0.0</param>
+      </joint>
+      <joint name="${prefix}joint6">
+        <command_interface name="position">
+          <param name="min">-1</param>
+          <param name="max">1</param>
+        </command_interface>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        <state_interface name="acceleration"/>
+        <param name="initial_position">0.0</param>
+      </joint>
+      <sensor name="tcp_fts_sensor">
+        <state_interface name="fx"/>
+        <state_interface name="fy"/>
+        <state_interface name="fz"/>
+        <state_interface name="tx"/>
+        <state_interface name="ty"/>
+        <state_interface name="tz"/>
+        <param name="frame_id">tool0</param>
+        <param name="min_fx">-100</param>
+        <param name="max_fx">100</param>
+        <param name="min_fy">-100</param>
+        <param name="max_fy">100</param>
+        <param name="min_fz">-200</param>
+        <param name="max_fz">200</param>
+        <param name="min_tx">-10</param>
+        <param name="max_tx">10</param>
+        <param name="min_ty">-10</param>
+        <param name="max_ty">10</param>
+        <param name="min_tz">-15</param>
+        <param name="max_tz">15</param>
+      </sensor>
+    </ros2_control>
+
+  </xacro:macro>
+</robot>
