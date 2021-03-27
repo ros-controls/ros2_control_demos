@@ -20,8 +20,6 @@ from launch.substitutions import Command, LaunchConfiguration, PathJoinSubstitut
 
 from launch_ros.actions import Node
 
-import xacro
-
 
 def generate_launch_description():
     # Declare arguments
@@ -43,8 +41,8 @@ def generate_launch_description():
         PathJoinSubstitution([get_package_prefix('xacro'), 'bin', 'xacro']),
         ' ',
         PathJoinSubstitution(
-            [get_package_share_directory(
-                'ros2_control_demo_robot'), 'description', '6Dbot_example.urdf.xacro']),
+            [get_package_share_directory('ros2_control_demo_robot'), 'description',
+             '6Dbot_example.urdf.xacro']),
         ' ',
         'use_fake_hardware:=', use_fake_hardware, ' ',
         'fake_sensor_commands:=', fake_sensor_commands
