@@ -12,13 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
-
 from ament_index_python.packages import get_package_prefix, get_package_share_directory
 
 from launch import LaunchDescription
-from launch.actions import ExecuteProcess
-from launch.actions import DeclareLaunchArgument
+from launch.actions import DeclareLaunchArgument, ExecuteProcess
 from launch.substitutions import Command, LaunchConfiguration, PathJoinSubstitution
 
 from launch_ros.actions import Node
@@ -55,16 +52,16 @@ def generate_launch_description():
 
     robot_description = {'robot_description': robot_description_content}
 
-    robot_controllers = os.path.join(
+    robot_controllers = PathJoinSubstitution([
         get_package_share_directory('ros2_control_demo_robot'),
         'config',
         '6Dbot_controllers.yaml'
-        )
-    rviz_config_file = os.path.join(
+        ])
+    rviz_config_file = PathJoinSubstitution([
         get_package_share_directory('ros2_control_demo_robot'),
         'rviz',
         'rrbot.rviz'
-        )
+        ])
 
     control_node = Node(
       package='controller_manager',
