@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- Revolute-Revolute Manipulator -->
+<!-- Basic differential drive mobile base -->
 <!--
 Copied and modified from ROS1 example:
 https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/diffbot_description/urdf/diffbot.xacro
