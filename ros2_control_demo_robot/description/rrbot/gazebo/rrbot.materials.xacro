@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-Copied from ROS1 example:
+Copied from ROS1 example -
 https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_description/urdf/materials.xacro
 -->
 <robot>

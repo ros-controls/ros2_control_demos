@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-Copied and modified from ROS1 example:
+Copied and modified from ROS1 example -
 https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_description/urdf/rrbot.gazebo
 -->
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
