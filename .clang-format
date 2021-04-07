@@ -1,8 +1,8 @@
 ---
 BasedOnStyle:  Google
-ColumnLimit:    120
+ColumnLimit:    100
 MaxEmptyLinesToKeep: 1
-SortIncludes: false
+SortIncludes: true
 
 Standard:        Auto
 IndentWidth:     2
@@ -38,7 +38,7 @@ BreakConstructorInitializersBeforeComma: true
 BinPackParameters: true
 ConstructorInitializerAllOnOneLineOrOnePerLine: true
 DerivePointerBinding: false
-PointerBindsToType: true
+PointerAlignment: Middle
 
 PenaltyExcessCharacter: 50
 PenaltyBreakBeforeFirstCallParameter: 30
@@ -63,13 +63,14 @@ BreakBeforeBraces: Custom
 BraceWrapping:
     AfterCaseLabel: true
     AfterClass: true
-    AfterControlStatement: true
+    AfterControlStatement: MultiLine
     AfterEnum: true
     AfterFunction: true
     AfterNamespace: true
     AfterStruct: true
     AfterUnion: true
-    BeforeCatch: true
-    BeforeElse: true
+    BeforeCatch: false
+    BeforeElse: false
     IndentBraces: false
+    SplitEmptyNamespace: false
 ...
