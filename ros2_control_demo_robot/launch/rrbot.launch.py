@@ -24,7 +24,7 @@ def generate_launch_description():
     # Declare arguments
     declared_arguments = []
     declared_arguments.append(DeclareLaunchArgument(
-        'controllers_package', default_value='ros2_control_demo_robot',
+        'runtime_config_package', default_value='ros2_control_demo_robot',
         description='Package with the controller\'s configuration in "config" folder. \
         Usually the argument is not set, it enables use of a custom setup.'))
     declared_arguments.append(DeclareLaunchArgument(
@@ -55,7 +55,7 @@ def generate_launch_description():
         description='Robot controller to start.'))
 
     # Initialize Arguments
-    controllers_package = LaunchConfiguration('controllers_package')
+    runtime_config_package = LaunchConfiguration('runtime_config_package')
     controllers_file = LaunchConfiguration('controllers_file')
     description_package = LaunchConfiguration('description_package')
     description_file = LaunchConfiguration('description_file')
@@ -81,7 +81,7 @@ def generate_launch_description():
     robot_description = {'robot_description': robot_description_content}
 
     robot_controllers = PathJoinSubstitution([
-        FindPackageShare(controllers_package),
+        FindPackageShare(runtime_config_package),
         'config',
         controllers_file,
         ])
