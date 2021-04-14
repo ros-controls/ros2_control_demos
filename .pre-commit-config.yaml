@@ -38,6 +38,20 @@ repos:
     -   id: pyupgrade
         args: [--py36-plus]
 
+  # Python hooks
+  # PEP 257
+  - repo: https://github.com/FalconSocial/pre-commit-mirrors-pep257
+    rev: v0.3.3
+    hooks:
+    - id: pep257
+      args: ["--ignore=D100,D101,D102,D103,D104,D105,D106,D107,D203,D212,D404"]
+
+  - repo: https://github.com/pycqa/flake8
+    rev: 3.9.0
+    hooks:
+    - id: flake8
+      args: ["--ignore=E501"]
+
   - repo: https://github.com/psf/black
     rev: 20.8b1
     hooks:
@@ -85,7 +99,7 @@ repos:
         entry: ament_cpplint
         language: system
         files: \.(h\+\+|h|hh|hxx|hpp|cuh|c|cc|cpp|cu|c\+\+|cxx|tpp|txx)$
-        args: ["--linelength=120"]
+        args: ["--linelength=100"]
 
   - repo: local
     hooks:
