@@ -30,7 +30,7 @@ This repository demonstrates the following `ros2_control` concepts:
 
 * Creating of `*HardwareInterface` for a System, Sensor, and Actuator.
 * Creating a robot description in the form of URDF files
-* Loading the configuration and starting a robot using launch files 
+* Loading the configuration and starting a robot using launch files
 * Control of two joints of *RRBot*
 * Using simulated robots and starting `ros_control` with Gazebo simulator
 * Implementing of controller switching strategy for a robot
@@ -62,20 +62,20 @@ git clone https://github.com/ros-controls/ros2_control_demos
   ```
 
 * Build everything, e.g. with:
-  ``` 
+  ```
   colcon build --symlink-install
   ```
-  
+
 * Do not forget to source `setup.bash` from the `install` folder!
-  
-  
+
+
 # Getting Started with ros2_control
 
 Each of the described example cases from the roadmap has its own launch and URDF file.
 
 ## Starting example robots
 
-Each example is started with a single launch file which starts up the robot hardware, loads controller configurations and it also opens `rviz2`. 
+Each example is started with a single launch file which starts up the robot hardware, loads controller configurations and it also opens `rviz2`.
 
 The `rviz2` setup can be recreated following these steps:
 
