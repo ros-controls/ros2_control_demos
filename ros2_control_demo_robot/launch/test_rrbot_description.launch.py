@@ -26,39 +26,38 @@ def generate_launch_description():
 
     # Get URDF via xacro
     robot_description_path = os.path.join(
-        get_package_share_directory("ros2_control_demo_robot"),
-        "description",
-        "rrbot_system_position_only.urdf.xacro",
-    )
+        get_package_share_directory('ros2_control_demo_robot'),
+        'description',
+        'rrbot_system_position_only.urdf.xacro')
     robot_description_config = xacro.process_file(robot_description_path)
-    robot_description = {"robot_description": robot_description_config.toxml()}
+    robot_description = {'robot_description': robot_description_config.toxml()}
 
     rviz_config_file = os.path.join(
-        get_package_share_directory("ros2_control_demo_robot"), "rviz", "rrbot.rviz"
-    )
+        get_package_share_directory('ros2_control_demo_robot'),
+        'rviz',
+        'rrbot.rviz'
+        )
 
     joint_state_publisher_node = Node(
-        package="joint_state_publisher_gui",
-        executable="joint_state_publisher_gui",
+      package='joint_state_publisher_gui',
+      executable='joint_state_publisher_gui',
     )
     robot_state_publisher_node = Node(
-        package="robot_state_publisher",
-        executable="robot_state_publisher",
-        output="both",
-        parameters=[robot_description],
+        package='robot_state_publisher',
+        executable='robot_state_publisher',
+        output='both',
+        parameters=[robot_description]
     )
     rviz_node = Node(
-        package="rviz2",
-        executable="rviz2",
-        name="rviz2",
-        output="log",
-        arguments=["-d", rviz_config_file],
+        package='rviz2',
+        executable='rviz2',
+        name='rviz2',
+        output='log',
+        arguments=['-d', rviz_config_file],
     )
 
-    return LaunchDescription(
-        [
-            joint_state_publisher_node,
-            robot_state_publisher_node,
-            rviz_node,
-        ]
-    )
+    return LaunchDescription([
+        joint_state_publisher_node,
+        robot_state_publisher_node,
+        rviz_node,
+    ])
