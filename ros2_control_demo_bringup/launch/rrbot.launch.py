@@ -1,19 +1,19 @@
 # Copyright 2021 Stogl Robotics Consulting UG (haftungsbeschränkt)
 #
-# Licensed under the Apache License, Version 2.0 (the 'License');
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an 'AS IS' BASIS,
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, ExecuteProcess
+from launch.actions import DeclareLaunchArgument
 from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
 
 from launch_ros.actions import Node
@@ -24,14 +24,14 @@ def generate_launch_description():
     # Declare arguments
     declared_arguments = []
     declared_arguments.append(DeclareLaunchArgument(
-        'runtime_config_package', default_value='ros2_control_demo_robot',
+        'runtime_config_package', default_value='ros2_control_demo_bringup',
         description='Package with the controller\'s configuration in "config" folder. \
         Usually the argument is not set, it enables use of a custom setup.'))
     declared_arguments.append(DeclareLaunchArgument(
         'controllers_file', default_value='rrbot_controllers.yaml',
         description='YAML file with the controllers configuration.'))
     declared_arguments.append(DeclareLaunchArgument(
-        'description_package', default_value='ros2_control_demo_robot',
+        'description_package', default_value='ros2_control_demo_description',
         description='Description package with robot URDF/xacro files. Usually the argument \
         is not set, it enables use of a custom description.'))
     declared_arguments.append(DeclareLaunchArgument(
@@ -77,7 +77,6 @@ def generate_launch_description():
         'fake_sensor_commands:=', fake_sensor_commands, ' ',
         'slowdown:=', slowdown,
         ])
-
     robot_description = {'robot_description': robot_description_content}
 
     robot_controllers = PathJoinSubstitution([
@@ -125,11 +124,11 @@ def generate_launch_description():
             arguments=[robot_controller, '-c', '/controller_manager'])
 
     return LaunchDescription(
-        declared_arguments +
-        [
+        declared_arguments.append([
             control_node,
             robot_state_pub_node,
             rviz_node,
             joint_state_controller_spawner,
             robot_controller_spawner,
         ])
+      )
