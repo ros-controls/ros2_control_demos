@@ -24,7 +24,7 @@ jobs:
           target-ros2-distro: foxy
           # build all packages listed in the meta package
           package-name:
-            ros2_control_demo_hardware 
+            ros2_control_demo_hardware
             ros2_control_demo_robot
             ros2_control_demos
           vcs-repo-file-url: |
