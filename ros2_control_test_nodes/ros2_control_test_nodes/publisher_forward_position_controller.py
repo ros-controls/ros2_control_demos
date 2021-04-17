@@ -1,4 +1,4 @@
-# Copyright 2021 Stogl Robotics Consulting UG (haftungsbeschränkt)
+# Copyright 2021 Stogl Robotics Consulting UG (haftungsbeschraenkt)
 #
 # Licensed under the Apache License, Version 2.0 (the 'License');
 # you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ from std_msgs.msg import Float64MultiArray
 
 
 class PublisherForwardPosition(Node):
+
     def __init__(self):
         super().__init__('publisher_forward_position_controller')
         # Declare all parameters
