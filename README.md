@@ -116,6 +116,7 @@ Direct joint commands are sent to this robot via the `ForwardCommandController`.
 The sections below describe their usage.
 Check the [Results](##result) section on how to ensure that things went well.
 
+
 ### JointStateController
 
 Open another terminal and load, configure and start `joint_state_controller`:
@@ -173,6 +174,10 @@ Now you should also see the *RRbot* represented correctly in `rviz2`.
    ros2 topic pub /forward_position_controller/commands std_msgs/msg/Float64MultiArray "data:
    - 0.5
    - 0.5"
+   ```
+   b. Or you can start demo node which sends two goals every 5 seconds in a loop:
+   ```
+   ros2 launch ros2_control_test_nodes rrbot_test_forward_position_controller.launch.py
    ```
 
 ## Result

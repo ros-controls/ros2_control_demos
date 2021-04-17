@@ -21,3 +21,4 @@ jobs:
           ros2_control_demo_hardware 
           ros2_control_demo_robot
           ros2_control_demos
+          ros2_control_test_nodes

@@ -41,6 +41,7 @@ jobs:
             ros2_control_demo_hardware 
             ros2_control_demo_robot
             ros2_control_demos
+            ros2_control_test_nodes
           vcs-repo-file-url: |
             https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/ros2_control_demos/ros2_control_demos.repos
           colcon-mixin-name: coverage-gcc
