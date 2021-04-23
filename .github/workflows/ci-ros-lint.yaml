@@ -9,7 +9,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-          linter: [copyright, cppcheck, cpplint, lint_cmake]
+          linter: [copyright, cppcheck, lint_cmake]
     steps:
     - uses: actions/checkout@v1
     - uses: ros-tooling/setup-ros@v0.1
@@ -21,3 +21,21 @@ jobs:
           ros2_control_demo_hardware
           ros2_control_demo_robot
           ros2_control_demos
+
+  ament_lint_cpplint:
+    name: ament_${{ matrix.linter }}
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+          linter: [cpplint]
+    steps:
+    - uses: actions/checkout@v1
+    - uses: ros-tooling/setup-ros@v0.1
+    - uses: ros-tooling/action-ros-lint@v0.1
+      with:
+        distribution: foxy
+        linter: cpplint
+        arguments: "--filter=-whitespace/newline"
+        package-name:
+          $NAME$
