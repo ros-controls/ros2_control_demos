@@ -4,7 +4,7 @@ on:
     branches:
       - master
   schedule:
-    # Run every morning to detect flakiness and broken dependencies
+    # Run every day to detect flakiness and broken dependencies
     - cron: '43 1 * * *'
 
 jobs:

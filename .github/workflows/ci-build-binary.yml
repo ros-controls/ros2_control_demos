@@ -5,8 +5,8 @@ on:
     branches:
       - master
   schedule:
-    # Run every morning to detect flakiness and broken dependencies
-    - cron: '43 8 * * *'
+    # Run every day to detect flakiness and broken dependencies
+    - cron: '23 1 * * *'
 
 jobs:
   binary:

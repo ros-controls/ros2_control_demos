@@ -38,4 +38,6 @@ jobs:
         linter: cpplint
         arguments: "--filter=-whitespace/newline"
         package-name:
-          $NAME$
+          ros2_control_demo_hardware
+          ros2_control_demo_robot
+          ros2_control_demos
