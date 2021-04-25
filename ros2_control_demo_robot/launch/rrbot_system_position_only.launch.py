@@ -26,49 +26,49 @@ def generate_launch_description():
 
     # Get URDF via xacro
     robot_description_path = os.path.join(
-        get_package_share_directory('ros2_control_demo_robot'),
-        'description',
-        'rrbot_system_position_only.urdf.xacro')
-    robot_description_config = xacro.process_file(robot_description_path,
-                                                  mappings={'slowdown': '3.0'})
-    robot_description = {'robot_description': robot_description_config.toxml()}
+        get_package_share_directory("ros2_control_demo_robot"),
+        "description",
+        "rrbot_system_position_only.urdf.xacro",
+    )
+    robot_description_config = xacro.process_file(
+        robot_description_path, mappings={"slowdown": "3.0"}
+    )
+    robot_description = {"robot_description": robot_description_config.toxml()}
 
     rrbot_forward_controller = os.path.join(
-        get_package_share_directory('ros2_control_demo_robot'),
-        'config',
-        'rrbot_controllers.yaml'
-        )
+        get_package_share_directory("ros2_control_demo_robot"), "config", "rrbot_controllers.yaml"
+    )
     rviz_config_file = os.path.join(
-        get_package_share_directory('ros2_control_demo_robot'),
-        'rviz',
-        'rrbot.rviz'
-        )
+        get_package_share_directory("ros2_control_demo_robot"), "rviz", "rrbot.rviz"
+    )
 
     control_node = Node(
-      package='controller_manager',
-      executable='ros2_control_node',
-      parameters=[robot_description, rrbot_forward_controller],
-      output={
-          'stdout': 'screen',
-          'stderr': 'screen',
+        package="controller_manager",
+        executable="ros2_control_node",
+        parameters=[robot_description, rrbot_forward_controller],
+        output={
+            "stdout": "screen",
+            "stderr": "screen",
         },
     )
     robot_state_publisher_node = Node(
-        package='robot_state_publisher',
-        executable='robot_state_publisher',
-        output='both',
-        parameters=[robot_description]
+        package="robot_state_publisher",
+        executable="robot_state_publisher",
+        output="both",
+        parameters=[robot_description],
     )
     rviz_node = Node(
-        package='rviz2',
-        executable='rviz2',
-        name='rviz2',
-        output='log',
-        arguments=['-d', rviz_config_file],
+        package="rviz2",
+        executable="rviz2",
+        name="rviz2",
+        output="log",
+        arguments=["-d", rviz_config_file],
     )
 
-    return LaunchDescription([
-        control_node,
-        robot_state_publisher_node,
-        rviz_node,
-    ])
+    return LaunchDescription(
+        [
+            control_node,
+            robot_state_publisher_node,
+            rviz_node,
+        ]
+    )

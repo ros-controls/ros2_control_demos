@@ -19,18 +19,17 @@ from std_msgs.msg import Float64MultiArray
 
 
 class PublisherForwardPosition(Node):
-
     def __init__(self):
-        super().__init__('publisher_forward_position_controller')
+        super().__init__("publisher_forward_position_controller")
         # Declare all parameters
-        self.declare_parameter('controller_name', 'forward_position_controller')
-        self.declare_parameter('wait_sec_between_publish', 5)
-        self.declare_parameter('goal_names', ['pos1', 'pos2'])
+        self.declare_parameter("controller_name", "forward_position_controller")
+        self.declare_parameter("wait_sec_between_publish", 5)
+        self.declare_parameter("goal_names", ["pos1", "pos2"])
 
         # Read parameters
-        controller_name = self.get_parameter('controller_name').value
-        wait_sec_between_publish = self.get_parameter('wait_sec_between_publish').value
-        goal_names = self.get_parameter('goal_names').value
+        controller_name = self.get_parameter("controller_name").value
+        wait_sec_between_publish = self.get_parameter("wait_sec_between_publish").value
+        goal_names = self.get_parameter("goal_names").value
 
         # Read all positions from parameters
         self.goals = []
@@ -45,7 +44,7 @@ class PublisherForwardPosition(Node):
                 float_goal.append(float(value))
             self.goals.append(float_goal)
 
-        publish_topic = '/' + controller_name + '/' + 'commands'
+        publish_topic = "/" + controller_name + "/" + "commands"
 
         self.get_logger().info(
             f'Publishing {len(goal_names)} goals on topic "{publish_topic}"\
@@ -75,5 +74,5 @@ def main(args=None):
     rclpy.shutdown()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

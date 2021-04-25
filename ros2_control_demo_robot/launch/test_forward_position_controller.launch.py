@@ -23,20 +23,21 @@ from launch_ros.actions import Node
 def generate_launch_description():
 
     position_goals = os.path.join(
-        get_package_share_directory('ros2_control_test_nodes'),
-        'configs',
-        'rrbot_forward_position_publisher.yaml'
-        )
+        get_package_share_directory("ros2_control_test_nodes"),
+        "configs",
+        "rrbot_forward_position_publisher.yaml",
+    )
 
-    return LaunchDescription([
-      Node(
-        package='ros2_control_test_nodes',
-        executable='publisher_forward_position_controller',
-        parameters=[position_goals],
-        output={
-          'stdout': 'screen',
-          'stderr': 'screen',
-          },
-        )
-
-    ])
+    return LaunchDescription(
+        [
+            Node(
+                package="ros2_control_test_nodes",
+                executable="publisher_forward_position_controller",
+                parameters=[position_goals],
+                output={
+                    "stdout": "screen",
+                    "stderr": "screen",
+                },
+            )
+        ]
+    )
