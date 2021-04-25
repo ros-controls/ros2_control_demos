@@ -29,7 +29,7 @@ repos:
       - id: end-of-file-fixer
       - id: mixed-line-ending
       - id: trailing-whitespace
-      - id: check-byte-order-marker  # Forbid UTF-8 byte-order markers
+      - id: fix-byte-order-marker
 
   # Python hooks
   - repo: https://github.com/asottile/pyupgrade
@@ -58,6 +58,15 @@ repos:
       args: ["--ignore=E501"]
 
   # CPP hooks
+  - repo: local
+    hooks:
+      - id: clang-format
+        name: clang-format
+        description: Format files with ClangFormat.
+        entry: clang-format-10
+        language: system
+        files: \.(c|cc|cxx|cpp|frag|glsl|h|hpp|hxx|ih|ispc|ipp|java|js|m|proto|vert)$
+        args: ['-fallback-style=none', '-i']
   # The same options as in ament_cppcheck are used, but its not working...
   #- repo: https://github.com/pocc/pre-commit-hooks
     #rev: v1.1.1
@@ -85,17 +94,7 @@ repos:
         entry: ament_cpplint
         language: system
         files: \.(h\+\+|h|hh|hxx|hpp|cuh|c|cc|cpp|cu|c\+\+|cxx|tpp|txx)$
-        args: ["--linelength=120"]
-
-  - repo: local
-    hooks:
-      - id: clang-format
-        name: clang-format
-        description: Format files with ClangFormat.
-        entry: clang-format-10
-        language: system
-        files: \.(c|cc|cxx|cpp|frag|glsl|h|hpp|hxx|ih|ispc|ipp|java|js|m|proto|vert)$
-        args: ['-fallback-style=none', '-i']
+        args: ["--linelength=100", "--filter=-whitespace/newline"]
 
   # Cmake hooks
   - repo: local
