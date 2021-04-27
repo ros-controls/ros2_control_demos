@@ -1,3 +1,17 @@
+// Copyright 2021 Department of Engineering Cybernetics, NTNU
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 #include "ros2_control_demo_hardware/rrbot_system_multi_interface.hpp"
 
 #include <chrono>
@@ -204,7 +218,7 @@ return_type RRBotSystemMultiInterfaceHardware::start()
 
   RCLCPP_INFO(
     rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"),
-    "System succesfully started! %u", control_lvl_[0]);
+    "System successfully started! %u", control_lvl_[0]);
   return return_type::OK;
 }
 
@@ -225,7 +239,7 @@ return_type RRBotSystemMultiInterfaceHardware::stop()
 
   RCLCPP_INFO(
     rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"),
-    "System succesfully stopped!");
+    "System successfully stopped!");
 
   return return_type::OK;
 }
@@ -234,10 +248,6 @@ return_type RRBotSystemMultiInterfaceHardware::stop()
 
 return_type RRBotSystemMultiInterfaceHardware::read()
 {
-  /*RCLCPP_INFO(
-    rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"),
-    "Reading...");
-  */
   for (uint  i = 0; i < hw_positions_.size(); i++) {
     switch(control_lvl_[i]) {
       case integration_lvl_t::UNDEFINED:
@@ -268,10 +278,6 @@ return_type RRBotSystemMultiInterfaceHardware::read()
       hw_positions_[i], hw_velocities_[i],
       hw_accelerations_[i], i);
   }
-  /*RCLCPP_INFO(
-    rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"),
-    "Joints succesfully read!");
-  */
   return return_type::OK;
 }
 
@@ -288,9 +294,6 @@ return_type RRBotSystemMultiInterfaceHardware::write()
       hw_commands_positions_[i], hw_commands_velocities_[i],
       hw_commands_accelerations_[i], i, control_lvl_[i]);
   }
-  /*RCLCPP_INFO(
-    rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"),
-    "Joint succesfully written!");*/
   return return_type::OK;
 }
 
