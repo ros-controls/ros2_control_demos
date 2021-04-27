@@ -17,8 +17,8 @@ controller_manager:
     forward_command_controller_illegal2:
       type: forward_command_controller/ForwardCommandController
 
-    joint_state_controller:
-      type: joint_state_controller/JointStateController
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
 
 forward_command_controller_position:
   ros__parameters:
