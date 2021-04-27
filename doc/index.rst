@@ -4,3 +4,89 @@ Demos
 -----
 
 This repository provides templates for the development of ros2_control-enabled robots and a simple simulations to demonstrate and prove ros2_control concepts.
+
+
+Mode switching demo
+^^^^^^^^^^^^^^^^^^^
+
+Start up the multi interface rrbot system:
+...
+    ros2 launch ros2_control_demo_robot rrbot_system_multi_interface.launch.py
+
+List the available interfaces
+
+...
+    $ ros2 control list_hardware_interfaces
+    command interfaces
+        joint1/acceleration [unclaimed]
+        joint1/position [unclaimed]
+        joint1/velocity [unclaimed]
+        joint2/acceleration [unclaimed]
+        joint2/position [unclaimed]
+        joint2/velocity [unclaimed]
+    state interfaces
+         joint1/acceleration
+         joint1/position
+         joint1/velocity
+         joint2/acceleration
+         joint2/position
+         joint2/velocity
+
+Load and configure all controllers
+
+...
+    ros2 control load_controller forward_command_controller_position --state configure
+    ros2 control load_controller forward_command_controller_velocity --state configure
+    ros2 control load_controller forward_command_controller_acceleration --state configure
+    ros2 control load_controller forward_command_controller_illegal1 --state configure
+    ros2 control load_controller forward_command_controller_illegal2 --state configure
+    ros2 control load_controller joint_state_controller --state configure
+
+
+Start the position controller
+
+...
+    ros2 control set_controller_state forward_command_controller_position start
+
+Check the hardware interfaces, position interfaces should be claimed now
+
+...
+    $ ros2 control list_hardware_interfaces
+    command interfaces
+        joint1/acceleration [unclaimed]
+        joint1/position [claimed]
+        joint1/velocity [unclaimed]
+        joint2/acceleration [unclaimed]
+        joint2/position [claimed]
+        joint2/velocity [unclaimed]
+    state interfaces
+         joint1/acceleration
+         joint1/position
+         joint1/velocity
+         joint2/acceleration
+         joint2/position
+         joint2/velocity
+
+Let's switch controllers now to velocity
+
+...
+    ros2 control switch_controllers --stop-controllers forward_command_controller_position --start-controllers forward_command_controller_velocity
+
+List hardware interfaces again to see that indeed position interfaces have been unclaimed while velocity is claimed now
+
+...
+    $ ros2 control list_hardware_interfaces
+    command interfaces
+        joint1/acceleration [unclaimed]
+        joint1/position [unclaimed]
+        joint1/velocity [claimed]
+        joint2/acceleration [unclaimed]
+        joint2/position [unclaimed]
+        joint2/velocity [claimed]
+    state interfaces
+         joint1/acceleration
+         joint1/position
+         joint1/velocity
+         joint2/acceleration
+         joint2/position
+         joint2/velocity
