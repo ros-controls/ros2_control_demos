@@ -19,6 +19,7 @@
 #include <limits>
 #include <memory>
 #include <vector>
+#include <string>
 
 #include "hardware_interface/types/hardware_interface_type_values.hpp"
 #include "rclcpp/rclcpp.hpp"
@@ -45,7 +46,8 @@ return_type RRBotSystemMultiInterfaceHardware::configure(
   control_lvl_.resize(info_.joints.size(), integration_lvl_t::POSITION);
 
   for (const hardware_interface::ComponentInfo & joint : info_.joints) {
-    // RRBotSystemMultiInterface has exactly 3 state interfaces and 3 command interfaces on each joint
+    // RRBotSystemMultiInterface has exactly 3 state interfaces
+    // and 3 command interfaces on each joint
     if (joint.command_interfaces.size() != 3) {
       RCLCPP_FATAL(
         rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"),
@@ -160,7 +162,7 @@ return_type RRBotSystemMultiInterfaceHardware::prepare_command_mode_switch(
 
   // Stop motion on all relevant joints that are stopping
   for (std::string key : stop_interfaces) {
-    for (uint i =0; i < info_.joints.size(); i++) {
+    for (uint i = 0; i < info_.joints.size(); i++) {
       if (key.find(info_.joints[i].name) != std::string::npos) {
         hw_commands_velocities_[i] = 0;
         hw_commands_accelerations_[i] = 0;
