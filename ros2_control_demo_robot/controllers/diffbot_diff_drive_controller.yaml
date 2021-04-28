@@ -34,7 +34,7 @@ diffbot_base_controller:
     #publish_limited_velocity: true
     use_stamped_vel: false
     #velocity_rolling_window_size: 10
-    
+
     # Preserve turning radius when limiting speed/acceleration/jerk
     preserve_turning_radius: true
 
@@ -64,4 +64,3 @@ diffbot_base_controller:
     angular.z.min_acceleration: -1.0
     angular.z.max_jerk: 0.0
     angular.z.min_jerk: 0.0
-    

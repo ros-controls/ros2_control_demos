@@ -25,11 +25,11 @@
 
 namespace ros2_control_demo_hardware
 {
-
 hardware_interface::return_type RRBotSystemPositionOnlyHardware::configure(
   const hardware_interface::HardwareInfo & info)
 {
-  if (configure_default(info) != hardware_interface::return_type::OK) {
+  if (configure_default(info) != hardware_interface::return_type::OK)
+  {
     return hardware_interface::return_type::ERROR;
   }
 
