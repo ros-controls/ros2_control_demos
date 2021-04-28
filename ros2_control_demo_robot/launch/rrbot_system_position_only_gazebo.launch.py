@@ -30,7 +30,7 @@ def generate_launch_description():
     gazebo = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([os.path.join(
                     get_package_share_directory('gazebo_ros'), 'launch'), '/gazebo.launch.py']),
-                launch_arguments={'verbose': 'true'}.items()
+                launch_arguments={'verbose': 'false'}.items()
              )
 
     robot_description_path = os.path.join(
