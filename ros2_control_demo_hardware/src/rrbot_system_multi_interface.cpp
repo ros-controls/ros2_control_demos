@@ -98,7 +98,7 @@ std::vector<hardware_interface::StateInterface>
 RRBotSystemMultiInterfaceHardware::export_state_interfaces()
 {
   std::vector<hardware_interface::StateInterface> state_interfaces;
-  for (uint i = 0; i < info_.joints.size(); i++)
+  for (std::size_t i = 0; i < info_.joints.size(); i++)
   {
     state_interfaces.emplace_back(hardware_interface::StateInterface(
       info_.joints[i].name, hardware_interface::HW_IF_POSITION, &hw_positions_[i]));
@@ -115,7 +115,7 @@ std::vector<hardware_interface::CommandInterface>
 RRBotSystemMultiInterfaceHardware::export_command_interfaces()
 {
   std::vector<hardware_interface::CommandInterface> command_interfaces;
-  for (uint i = 0; i < info_.joints.size(); i++)
+  for (std::size_t i = 0; i < info_.joints.size(); i++)
   {
     command_interfaces.emplace_back(hardware_interface::CommandInterface(
       info_.joints[i].name, hardware_interface::HW_IF_POSITION, &hw_commands_positions_[i]));
@@ -137,7 +137,7 @@ return_type RRBotSystemMultiInterfaceHardware::prepare_command_mode_switch(
   std::vector<integration_lvl_t> new_modes = {};
   for (std::string key : start_interfaces)
   {
-    for (uint i = 0; i < info_.joints.size(); i++)
+    for (std::size_t i = 0; i < info_.joints.size(); i++)
     {
       if (key == info_.joints[i].name + "/" + hardware_interface::HW_IF_POSITION)
       {
@@ -167,7 +167,7 @@ return_type RRBotSystemMultiInterfaceHardware::prepare_command_mode_switch(
   // Stop motion on all relevant joints that are stopping
   for (std::string key : stop_interfaces)
   {
-    for (uint i = 0; i < info_.joints.size(); i++)
+    for (std::size_t i = 0; i < info_.joints.size(); i++)
     {
       if (key.find(info_.joints[i].name) != std::string::npos)
       {
@@ -178,7 +178,7 @@ return_type RRBotSystemMultiInterfaceHardware::prepare_command_mode_switch(
     }
   }
   // Set the new command modes
-  for (uint i = 0; i < info_.joints.size(); i++)
+  for (std::size_t i = 0; i < info_.joints.size(); i++)
   {
     if (control_lvl_[i] != integration_lvl_t::UNDEFINED)
     {
@@ -204,7 +204,7 @@ return_type RRBotSystemMultiInterfaceHardware::start()
   }
 
   // Set some default values
-  for (uint i = 0; i < hw_positions_.size(); i++)
+  for (std::size_t i = 0; i < hw_positions_.size(); i++)
   {
     if (std::isnan(hw_positions_[i]))
     {
@@ -263,7 +263,7 @@ return_type RRBotSystemMultiInterfaceHardware::stop()
 
 return_type RRBotSystemMultiInterfaceHardware::read()
 {
-  for (uint i = 0; i < hw_positions_.size(); i++)
+  for (std::size_t i = 0; i < hw_positions_.size(); i++)
   {
     switch (control_lvl_[i])
     {
@@ -302,7 +302,7 @@ return_type RRBotSystemMultiInterfaceHardware::write()
   /*RCLCPP_INFO(
     rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"),
     "Writing...");*/
-  for (uint i = 0; i < hw_commands_positions_.size(); i++)
+  for (std::size_t i = 0; i < hw_commands_positions_.size(); i++)
   {
     // Simulate sending commands to the hardware
     RCLCPP_INFO(
