@@ -16,6 +16,7 @@ import os
 
 from ament_index_python.packages import get_package_share_directory
 
+from launch.actions import ExecuteProcess
 from launch import LaunchDescription
 from launch_ros.actions import Node
 
@@ -35,7 +36,7 @@ def generate_launch_description():
 
     diffbot_diff_drive_controller = os.path.join(
         get_package_share_directory("ros2_control_demo_robot"),
-        "controllers",
+        "config",
         "diffbot_diff_drive_controller.yaml",
     )
 
@@ -49,12 +50,6 @@ def generate_launch_description():
                 parameters=[robot_description],
             ),
             Node(
-                package="joint_state_publisher",
-                executable="joint_state_publisher",
-                name="joint_state_publisher",
-                output="screen",
-            ),
-            Node(
                 package="controller_manager",
                 executable="ros2_control_node",
                 parameters=[robot_description, diffbot_diff_drive_controller],
@@ -63,5 +58,10 @@ def generate_launch_description():
                     "stderr": "screen",
                 },
             ),
+            ExecuteProcess(
+            cmd=[
+                'ros2', 'control', 'load_controller', 'joint_state_controller', '--state', 'start',
+            ],
+            output='screen'),
         ]
     )
