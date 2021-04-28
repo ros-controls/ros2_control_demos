@@ -159,7 +159,9 @@ return_type RRBotSystemMultiInterfaceHardware::prepare_command_mode_switch(
     return return_type::ERROR;
   }
   // Example criteria: All joints must have the same command mode
-  if (!std::equal(new_modes.begin() + 1, new_modes.end(), new_modes.begin()))
+  if (!std::all_of(new_modes.begin() + 1, new_modes.end(), [&](integration_lvl_t mode) {
+        return mode == new_modes[0];
+      }))
   {
     return return_type::ERROR;
   }
