@@ -10,12 +10,15 @@ Mode switching demo
 ^^^^^^^^^^^^^^^^^^^
 
 Start up the multi interface rrbot system:
-...
+
+.. code-block:: bash
+
     ros2 launch ros2_control_demo_robot rrbot_system_multi_interface.launch.py
 
 List the available interfaces
 
-...
+.. code-block:: bash
+
     $ ros2 control list_hardware_interfaces
     command interfaces
         joint1/acceleration [unclaimed]
@@ -34,7 +37,8 @@ List the available interfaces
 
 Load and configure all controllers
 
-...
+.. code-block:: bash
+
     ros2 control load_controller forward_command_controller_position --state configure
     ros2 control load_controller forward_command_controller_velocity --state configure
     ros2 control load_controller forward_command_controller_acceleration --state configure
@@ -45,12 +49,14 @@ Load and configure all controllers
 
 Start the position controller
 
-...
+.. code-block:: bash
+
     ros2 control set_controller_state forward_command_controller_position start
 
 Check the hardware interfaces, position interfaces should be claimed now
 
-...
+.. code-block:: bash
+
     $ ros2 control list_hardware_interfaces
     command interfaces
         joint1/acceleration [unclaimed]
@@ -69,12 +75,14 @@ Check the hardware interfaces, position interfaces should be claimed now
 
 Let's switch controllers now to velocity
 
-...
+.. code-block:: bash
+
     ros2 control switch_controllers --stop-controllers forward_command_controller_position --start-controllers forward_command_controller_velocity
 
 List hardware interfaces again to see that indeed position interfaces have been unclaimed while velocity is claimed now
 
-...
+.. code-block:: bash
+
     $ ros2 control list_hardware_interfaces
     command interfaces
         joint1/acceleration [unclaimed]
