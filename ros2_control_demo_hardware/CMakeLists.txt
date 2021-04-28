@@ -20,7 +20,9 @@ find_package(rclcpp REQUIRED)
 add_library(
   ${PROJECT_NAME}
   SHARED
+  src/diffbot_system.cpp
   src/rrbot_system_position_only.cpp
+  src/rrbot_system_multi_interface.cpp
 )
 target_include_directories(
   ${PROJECT_NAME}
