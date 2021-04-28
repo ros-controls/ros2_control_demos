@@ -21,6 +21,7 @@ add_library(
   ${PROJECT_NAME}
   SHARED
   src/rrbot_system_position_only.cpp
+  src/rrbot_system_multi_interface.cpp
 )
 target_include_directories(
   ${PROJECT_NAME}
