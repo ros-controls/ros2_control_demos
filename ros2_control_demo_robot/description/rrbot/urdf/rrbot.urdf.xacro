@@ -144,7 +144,9 @@
           <visual>
             <origin xyz="0 0 0" rpy="0 0 0"/>
             <geometry>
-              <mesh filename="package://rrbot_description/meshes/hokuyo.dae"/>
+              <mesh filename="package://ros2_control_demo_robot/description/rrbot/meshes/hokuyo.dae"/>
+              <!-- use model:// when downloading from the gazebo model database -->
+              <!-- <mesh filename="model://hokuyo"/> -->
             </geometry>
           </visual>
 
