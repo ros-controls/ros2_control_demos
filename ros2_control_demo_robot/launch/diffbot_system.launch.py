@@ -58,10 +58,11 @@ def generate_launch_description():
                     "stderr": "screen",
                 },
             ),
-            ExecuteProcess(
-            cmd=[
-                'ros2', 'control', 'load_controller', 'joint_state_controller', '--state', 'start',
-            ],
-            output='screen'),
+            Node(
+                package="controller_manager",
+                executable="spawner.py",
+                parameter=["joint_state_controller"],
+                output="screen",
+            ),
         ]
     )
