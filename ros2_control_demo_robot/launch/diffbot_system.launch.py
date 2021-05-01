@@ -35,7 +35,7 @@ def generate_launch_description():
 
     diffbot_diff_drive_controller = os.path.join(
         get_package_share_directory("ros2_control_demo_robot"),
-        "controllers",
+        "config",
         "diffbot_diff_drive_controller.yaml",
     )
 
@@ -49,12 +49,6 @@ def generate_launch_description():
                 parameters=[robot_description],
             ),
             Node(
-                package="joint_state_publisher",
-                executable="joint_state_publisher",
-                name="joint_state_publisher",
-                output="screen",
-            ),
-            Node(
                 package="controller_manager",
                 executable="ros2_control_node",
                 parameters=[robot_description, diffbot_diff_drive_controller],
@@ -62,6 +56,12 @@ def generate_launch_description():
                     "stdout": "screen",
                     "stderr": "screen",
                 },
+            ),
+            Node(
+                package="controller_manager",
+                executable="spawner.py",
+                parameter=["joint_state_controller"],
+                output="screen",
             ),
         ]
     )

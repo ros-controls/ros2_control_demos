@@ -95,7 +95,7 @@ hardware_interface::return_type DiffBotSystemHardware::configure(
 std::vector<hardware_interface::StateInterface> DiffBotSystemHardware::export_state_interfaces()
 {
   std::vector<hardware_interface::StateInterface> state_interfaces;
-  for (uint i = 0; i < info_.joints.size(); i++)
+  for (auto i = 0u; i < info_.joints.size(); i++)
   {
     state_interfaces.emplace_back(hardware_interface::StateInterface(
       info_.joints[i].name, hardware_interface::HW_IF_POSITION, &hw_states_[i]));
@@ -109,7 +109,7 @@ std::vector<hardware_interface::StateInterface> DiffBotSystemHardware::export_st
 std::vector<hardware_interface::CommandInterface> DiffBotSystemHardware::export_command_interfaces()
 {
   std::vector<hardware_interface::CommandInterface> command_interfaces;
-  for (uint i = 0; i < info_.joints.size(); i++)
+  for (auto i = 0u; i < info_.joints.size(); i++)
   {
     command_interfaces.emplace_back(hardware_interface::CommandInterface(
       info_.joints[i].name, hardware_interface::HW_IF_VELOCITY, &hw_commands_[i]));
@@ -122,7 +122,7 @@ hardware_interface::return_type DiffBotSystemHardware::start()
 {
   RCLCPP_INFO(rclcpp::get_logger("DiffBotSystemHardware"), "Starting ...please wait...");
 
-  for (int i = 0; i <= hw_start_sec_; i++)
+  for (auto i = 0; i <= hw_start_sec_; i++)
   {
     rclcpp::sleep_for(std::chrono::seconds(1));
     RCLCPP_INFO(
@@ -130,7 +130,7 @@ hardware_interface::return_type DiffBotSystemHardware::start()
   }
 
   // set some default values
-  for (uint i = 0; i < hw_states_.size(); i++)
+  for (auto i = 0u; i < hw_states_.size(); i++)
   {
     if (std::isnan(hw_states_[i]))
     {
@@ -150,7 +150,7 @@ hardware_interface::return_type DiffBotSystemHardware::stop()
 {
   RCLCPP_INFO(rclcpp::get_logger("DiffBotSystemHardware"), "Stopping ...please wait...");
 
-  for (int i = 0; i <= hw_stop_sec_; i++)
+  for (auto i = 0; i <= hw_stop_sec_; i++)
   {
     rclcpp::sleep_for(std::chrono::seconds(1));
     RCLCPP_INFO(
@@ -190,7 +190,7 @@ hardware_interface::return_type ros2_control_demo_hardware::DiffBotSystemHardwar
 {
   RCLCPP_INFO(rclcpp::get_logger("DiffBotSystemHardware"), "Writing...");
 
-  for (uint i = 0; i < hw_commands_.size(); i++)
+  for (auto i = 0u; i < hw_commands_.size(); i++)
   {
     // Simulate sending commands to the hardware
     RCLCPP_INFO(

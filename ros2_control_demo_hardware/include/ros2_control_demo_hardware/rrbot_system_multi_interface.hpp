@@ -50,9 +50,9 @@ public:
   std::vector<hardware_interface::CommandInterface> export_command_interfaces() override;
 
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
-  virtual return_type prepare_command_mode_switch(
+  return_type prepare_command_mode_switch(
     const std::vector<std::string> & start_interfaces,
-    const std::vector<std::string> & stop_interfaces);
+    const std::vector<std::string> & stop_interfaces) override;
 
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
   return_type start() override;
