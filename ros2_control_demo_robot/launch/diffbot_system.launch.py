@@ -58,10 +58,10 @@ def generate_launch_description():
                 },
             ),
             Node(
-                package='controller_manager',
-                executable='spawner.py',
-                parameter=['joint_state_controller'],
-                output='screen',
+                package="controller_manager",
+                executable="spawner.py",
+                parameter=["joint_state_controller"],
+                output="screen",
             ),
         ]
     )
