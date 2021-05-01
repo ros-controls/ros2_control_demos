@@ -16,7 +16,6 @@ import os
 
 from ament_index_python.packages import get_package_share_directory
 
-from launch.actions import ExecuteProcess
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
@@ -28,38 +27,51 @@ import xacro
 
 def generate_launch_description():
     gazebo = IncludeLaunchDescription(
-                PythonLaunchDescriptionSource([os.path.join(
-                    get_package_share_directory('gazebo_ros'), 'launch'), '/gazebo.launch.py']),
-                launch_arguments={'verbose': 'false'}.items()
-             )
-
-    robot_description_path = os.path.join(
-        get_package_share_directory('ros2_control_demo_robot'),
-        'description', 'rrbot',
-        'rrbot_system_position_only.urdf.xacro')
-    robot_description_config = xacro.process_file(
-        robot_description_path,
-        mappings={'use_sim': 'true'})
-    robot_description = {'robot_description': robot_description_config.toxml()}
-
-    node_robot_state_publisher = Node(
-        package='robot_state_publisher',
-        executable='robot_state_publisher',
-        output='screen',
-        parameters=[robot_description]
+        PythonLaunchDescriptionSource(
+            [
+                os.path.join(get_package_share_directory("gazebo_ros"), "launch"),
+                "/gazebo.launch.py",
+            ]
+        ),
+        launch_arguments={"verbose": "false"}.items(),
     )
 
-    spawn_entity = Node(package='gazebo_ros', executable='spawn_entity.py',
-                        arguments=['-topic', 'robot_description',
-                                   '-entity', 'rrbot_system_position'],
-                        output='screen')
-    spawn_controller = Node(package='controller_manager', executable='spawner.py',
-                            arguments=['joint_state_broadcaster'],
-                            output='screen')
+    robot_description_path = os.path.join(
+        get_package_share_directory("ros2_control_demo_robot"),
+        "description",
+        "rrbot",
+        "rrbot_system_position_only.urdf.xacro",
+    )
+    robot_description_config = xacro.process_file(
+        robot_description_path, mappings={"use_sim": "true"}
+    )
+    robot_description = {"robot_description": robot_description_config.toxml()}
 
-    return LaunchDescription([
-        gazebo,
-        node_robot_state_publisher,
-        spawn_entity,
-        spawn_controller,
-    ])
+    node_robot_state_publisher = Node(
+        package="robot_state_publisher",
+        executable="robot_state_publisher",
+        output="screen",
+        parameters=[robot_description],
+    )
+
+    spawn_entity = Node(
+        package="gazebo_ros",
+        executable="spawn_entity.py",
+        arguments=["-topic", "robot_description", "-entity", "rrbot_system_position"],
+        output="screen",
+    )
+    spawn_controller = Node(
+        package="controller_manager",
+        executable="spawner.py",
+        arguments=["joint_state_broadcaster"],
+        output="screen",
+    )
+
+    return LaunchDescription(
+        [
+            gazebo,
+            node_robot_state_publisher,
+            spawn_entity,
+            spawn_controller,
+        ]
+    )

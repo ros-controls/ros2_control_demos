@@ -30,7 +30,6 @@
 
 namespace ros2_control_demo_hardware
 {
-
 class DiffBotSystemHardware
 : public hardware_interface::BaseInterface<hardware_interface::SystemInterface>
 {
