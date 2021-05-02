@@ -50,6 +50,8 @@ Demo nodes for showing and testing functionalities of the ros2_control framework
         "console_scripts": [
             "publisher_forward_position_controller = \
                 ros2_control_test_nodes.publisher_forward_position_controller:main",
+            "publisher_rrbot_jtc = \
+                ros2_control_test_nodes.publisher_rrbot_joint_trajectory_controller:main",
         ],
     },
 )
