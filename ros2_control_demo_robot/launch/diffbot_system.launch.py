@@ -39,29 +39,34 @@ def generate_launch_description():
         "diffbot_diff_drive_controller.yaml",
     )
 
+    node_robot_state_publisher = Node(
+        package="robot_state_publisher",
+        executable="robot_state_publisher",
+        output="screen",
+        parameters=[robot_description],
+    )
+
+    controller_manager_node = Node(
+        package="controller_manager",
+        executable="ros2_control_node",
+        parameters=[robot_description, diffbot_diff_drive_controller],
+        output={
+            "stdout": "screen",
+            "stderr": "screen",
+        },
+    )
+
+    spawn_controller = Node(
+        package="controller_manager",
+        executable="spawner.py",
+        arguments=["joint_state_broadcaster"],
+        output="screen",
+    )
+
     return LaunchDescription(
         [
-            Node(
-                package="robot_state_publisher",
-                executable="robot_state_publisher",
-                name="robot_state_publisher",
-                output="screen",
-                parameters=[robot_description],
-            ),
-            Node(
-                package="controller_manager",
-                executable="ros2_control_node",
-                parameters=[robot_description, diffbot_diff_drive_controller],
-                output={
-                    "stdout": "screen",
-                    "stderr": "screen",
-                },
-            ),
-            Node(
-                package="controller_manager",
-                executable="spawner.py",
-                parameter=["joint_state_controller"],
-                output="screen",
-            ),
+            node_robot_state_publisher,
+            controller_manager_node,
+            spawn_controller,
         ]
     )
