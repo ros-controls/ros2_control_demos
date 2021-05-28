@@ -22,7 +22,7 @@ Start up the multi interface rrbot system:
 
 .. code-block:: bash
 
-    ros2 launch ros2_control_demo_robot rrbot_system_multi_interface.launch.py
+    ros2 launch ros2_control_demo_bringup rrbot_system_multi_interface.launch.py
 
 List the available interfaces
 

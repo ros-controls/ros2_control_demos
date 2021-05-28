@@ -19,12 +19,11 @@ The repository has three goals:
 
 The repository is inspired by the [ros_control_boilerplate](https://github.com/PickNikRobotics/ros_control_boilerplate) repository from Dave Coleman.
 The simulation has three parts/packages:
-1. The first package, `ros2_control_demo_hardware`, implements the hardware interfaces described in the roadmap.
+1. The first package, `ros2_control_demo_bringup`, holds launch files and runtime configurations for demo robots.
+2. The second package, `ros2_control_demo_description`, stored URDF-description files, rviz configurations and meshes for the demo robots.
+3. The third package, `ros2_control_demo_hardware`, implements the hardware interfaces described in the roadmap.
 The examples simulate a simple *RRbot* internally to provide sufficient test and demonstration data and reduce external dependencies.
 This package does not have any dependencies except `ros2` core packages and can, therefore, be used on SoC-hardware of headless systems.
-2. The second package, `ros2_control_demo_hardware_gazebo`, uses a Gazebo simulator to simulate the *RRBot* and its physics.
-This package is useful to test the connection of `ros2_control` to the Gazebo simulator and to detect any missing plugins.
-3. The third package `ros2_control_demo_robot` holds examples for *RRbot* URDF-description, launch files and controllers.
 
 This repository demonstrates the following `ros2_control` concepts:
 
@@ -80,19 +79,19 @@ Each example is started with a single launch file which starts up the robot hard
 The `rviz2` setup can be recreated following these steps:
 
 - The robot models can be visualized using `RobotModel` display using `/robot_description` topic.
-- Or you can simply open the configuration from `rviz` folder in `ros2_control_demo_robot` package manually or directly by executing:
+- Or you can simply open the configuration from `rviz` folder in `ros2_control_demo_description` package manually or directly by executing:
   ```
-  rviz2 --display-config `ros2 pkg prefix ros2_control_demo_robot`/share/ros2_control_demo_robot/rviz/rrbot.rviz
+  rviz2 --display-config `ros2 pkg prefix ros2_control_demo_description`/share/ros2_control_demo_description/rviz/rrbot.rviz
   ```
 
 *RRBot*, or ''Revolute-Revolute Manipulator Robot'', is a simple 3-linkage, 2-joint arm that we will use to demonstrate various features. It essentially a double inverted pendulum and demonstrates some fun control concepts within a simulator and was originally introduced for Gazebo tutorials.
-The *RRbot* URDF files can be found in the `description` folder of `ros2_control_demo_robot` package.
+The *RRbot* URDF files can be found in the `urdf` folder of `ros2_control_demo_description` package.
 
 ### Example 1: "Industrial Robots with only one interface"
 
 1. Open another terminal and start the roslaunch file:
    ```
-   ros2 launch ros2_control_demo_robot rrbot_system_position_only.launch.py
+   ros2 launch ros2_control_demo_bringup rrbot_system_position_only.launch.py
    ```
 
 2. Open another terminal and check that `RRBotSystemPositionOnlyHardware` loaded properly:

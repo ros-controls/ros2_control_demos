@@ -6,16 +6,16 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/diffbot_de
 -->
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="2dof_robot">
 
-  <xacro:include filename="$(find ros2_control_demo_robot)/description/diffbot/diffbot.urdf.xacro" />
+  <xacro:include filename="$(find ros2_control_demo_description)/urdf/diffbot/diffbot.urdf.xacro" />
 
   <!-- Import all Gazebo-customization elements, including Gazebo colors -->
-  <xacro:include filename="$(find ros2_control_demo_robot)/description/diffbot/diffbot.gazebo.xacro" />
+  <xacro:include filename="$(find ros2_control_demo_description)/urdf/diffbot/diffbot.gazebo.xacro" />
 
   <!-- Import Rviz colors -->
-  <xacro:include filename="$(find ros2_control_demo_robot)/description/diffbot/diffbot.materials.xacro" />
+  <xacro:include filename="$(find ros2_control_demo_description)/urdf/diffbot/diffbot.materials.xacro" />
 
   <!-- Import diffbot ros2_control description -->
-  <xacro:include filename="$(find ros2_control_demo_robot)/description/diffbot/diffbot_system.ros2_control.xacro" />
+  <xacro:include filename="$(find ros2_control_demo_description)/urdf/diffbot/diffbot_system.ros2_control.xacro" />
 
   <xacro:diffbot prefix="" />
 

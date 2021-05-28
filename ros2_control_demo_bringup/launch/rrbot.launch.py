@@ -49,7 +49,6 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "description_file",
-            default_value="",
             description="URDF/XACRO description file with the robot.",
         )
     )
@@ -182,14 +181,12 @@ def generate_launch_description():
         arguments=[robot_controller, "-c", "/controller_manager"],
     )
 
-    return LaunchDescription(
-        declared_arguments.append(
-            [
-                control_node,
-                robot_state_pub_node,
-                rviz_node,
-                joint_state_broadcaster_spawner,
-                robot_controller_spawner,
-            ]
-        )
-    )
+    nodes = [
+        control_node,
+        robot_state_pub_node,
+        rviz_node,
+        joint_state_broadcaster_spawner,
+        robot_controller_spawner,
+    ]
+
+    return LaunchDescription(declared_arguments + nodes)
