@@ -23,8 +23,8 @@ from launch_ros.actions import Node
 def generate_launch_description():
 
     position_goals = os.path.join(
-        get_package_share_directory("ros2_control_test_nodes"),
-        "configs",
+        get_package_share_directory("ros2_control_demo_robot"),
+        "config",
         "rrbot_forward_position_publisher.yaml",
     )
 
