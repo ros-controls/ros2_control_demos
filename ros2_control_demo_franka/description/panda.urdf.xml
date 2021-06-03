@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot name="panda">
+  <link name="world"/>
+  <joint name="panda_joint_world" type="fixed">
+    <parent link="world"/>
+    <child link="panda_link0"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+  </joint>
+  <link name="panda_link0">
+    <inertial>
+      <mass value="2.92"/>
+      <origin rpy="0 0 0" xyz="-0.025566 -2.88e-05 0.057332"/>
+      <inertia ixx="0.00782229414331" ixy="-1.56191622996e-05" ixz="-0.00126005738123" iyy="0.0109027971813" iyz="1.08233858202e-05" izz="0.0102355503949"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="file://meshes/visual/link0.dae"/>
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="file://meshes/collision/link0.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="panda_link1">
+    <inertial>
+      <mass value="2.74"/>
+      <origin rpy="0 0 0" xyz="0 -0.0324958 -0.0675818"/>
+      <inertia ixx="0.0180416958283" ixy="0.0" ixz="0.0" iyy="0.0159136071891" iyz="0.0046758424612" izz="0.00620690827127"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="file://meshes/visual/link1.dae"/>
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="file://meshes/collision/link1.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="panda_joint1" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0 0.333"/>
+    <parent link="panda_link0"/>
+    <child link="panda_link1"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="87" lower="-2.8973" upper="2.8973" velocity="2.1750"/>
+  </joint>
+  <link name="panda_link2">
+    <inertial>
+      <mass value="2.74"/>
+      <origin rpy="0 0 0" xyz="0 -0.06861 0.0322285"/>
+      <inertia ixx="0.0182856182281" ixy="0.0" ixz="0.0" iyy="0.00621358421175" iyz="-0.00472844221905" izz="0.0161514346309"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="file://meshes/visual/link2.dae"/>
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="file://meshes/collision/link2.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="panda_joint2" type="revolute">
+    <origin rpy="-1.57079632679 0 0" xyz="0 0 0"/>
+    <parent link="panda_link1"/>
+    <child link="panda_link2"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="87" lower="-1.7628" upper="1.7628" velocity="2.1750"/>
+  </joint>
+  <link name="panda_link3">
+    <inertial>
+      <mass value="2.38"/>
+      <origin rpy="0 0 0" xyz="0.0469893 0.0316374 -0.031704"/>
+      <inertia ixx="0.00771376630908" ixy="-0.00248490625138" ixz="-0.00332147581033" iyy="0.00989108008727" iyz="-0.00217796151484" izz="0.00811723558464"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="file://meshes/visual/link3.dae"/>
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="file://meshes/collision/link3.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="panda_joint3" type="revolute">
+    <origin rpy="1.57079632679 0 0" xyz="0 -0.316 0"/>
+    <parent link="panda_link2"/>
+    <child link="panda_link3"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="87" lower="-2.8973" upper="2.8973" velocity="2.1750"/>
+  </joint>
+  <link name="panda_link4">
+    <inertial>
+      <mass value="2.38"/>
+      <origin rpy="0 0 0" xyz="-0.0360446 0.0336853 0.031882"/>
+      <inertia ixx="0.00799663881132" ixy="0.00347095570217" ixz="-0.00241222942995" iyy="0.00825390705278" iyz="0.00235774044121" izz="0.0102515004345"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="file://meshes/visual/link4.dae"/>
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="file://meshes/collision/link4.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="panda_joint4" type="revolute">
+    <origin rpy="1.57079632679 0 0" xyz="0.0825 0 0"/>
+    <parent link="panda_link3"/>
+    <child link="panda_link4"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="87" lower="-3.0718" upper="0.0698" velocity="2.1750"/>
+    <!-- upper should be -0.0698, but that brakes simulation when initial position for this joint is 0.0 -->
+  </joint>
+  <link name="panda_link5">
+    <inertial>
+      <mass value="2.74"/>
+      <origin rpy="0 0 0" xyz="0 0.0610427 -0.104176"/>
+      <inertia ixx="0.030371374513" ixy="6.50283587108e-07" ixz="-1.05129179916e-05" iyy="0.0288752887402" iyz="-0.00775653445787" izz="0.00444134056164"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="file://meshes/visual/link5.dae"/>
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="file://meshes/collision/link5.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="panda_joint5" type="revolute">
+    <origin rpy="-1.57079632679 0 0" xyz="-0.0825 0.384 0"/>
+    <parent link="panda_link4"/>
+    <child link="panda_link5"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="12" lower="-2.8973" upper="2.8973" velocity="2.6100"/>
+  </joint>
+  <link name="panda_link6">
+    <inertial>
+      <mass value="1.55"/>
+      <origin rpy="0 0 0" xyz="0.0510509 0.009108 0.0106343"/>
+      <inertia ixx="0.00303336450376" ixy="-0.000437276865508" ixz="0.000629257294877" iyy="0.00404479911567" iyz="0.000130472021025" izz="0.00558234286039"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="file://meshes/visual/link6.dae"/>
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="file://meshes/collision/link6.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="panda_joint6" type="revolute">
+    <origin rpy="1.57079632679 0 0" xyz="0 0 0"/>
+    <parent link="panda_link5"/>
+    <child link="panda_link6"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="12" lower="-0.0175" upper="3.7525" velocity="2.6100"/>
+  </joint>
+  <link name="panda_link7">
+    <inertial>
+      <mass value="0.54"/>
+      <origin rpy="0 0 0" xyz="0.0109695 0.0107965 0.0650411"/>
+      <inertia ixx="0.000888868887021" ixy="-0.00012239074652" ixz="3.98699829666e-05" iyy="0.000888001373233" iyz="-9.33825115206e-05" izz="0.0007176834609"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="file://meshes/visual/link7.dae"/>
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="file://meshes/collision/link7.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="panda_joint7" type="revolute">
+    <origin rpy="1.57079632679 0 0" xyz="0.088 0 0"/>
+    <parent link="panda_link6"/>
+    <child link="panda_link7"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="12" lower="-2.8973" upper="2.8973" velocity="2.6100"/>
+  </joint>
+  <link name="panda_link8"/>
+  <joint name="panda_joint8" type="fixed">
+    <origin rpy="0 0 0" xyz="0 0 0.107"/>
+    <parent link="panda_link7"/>
+    <child link="panda_link8"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <joint name="panda_hand_joint" type="fixed">
+    <parent link="panda_link8"/>
+    <child link="panda_hand"/>
+    <origin rpy="0 0 -0.785398163397" xyz="0 0 0"/>
+  </joint>
+  <link name="panda_hand">
+    <inertial>
+      <mass value="0.73"/>
+      <origin rpy="0 0 0" xyz="0 0.0015244 0.0275912"/>
+      <inertia ixx="0.00278560230025" ixy="0.0" ixz="0.0" iyy="0.000400033405336" iyz="0.0" izz="0.00256378041832"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="file://meshes/visual/hand.dae"/>
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="file://meshes/collision/hand.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="panda_leftfinger">
+    <inertial>
+      <mass value="0.1"/>
+      <origin rpy="0 0 0" xyz="0 0.0145644 0.0227941"/>
+      <inertia ixx="3.01220925051e-05" ixy="0.0" ixz="0.0" iyy="2.95873808038e-05" iyz="0.0" izz="6.95125211657e-06"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="file://meshes/visual/finger.dae"/>
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="file://meshes/collision/finger.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="panda_rightfinger">
+    <inertial>
+      <mass value="0.1"/>
+      <origin rpy="0 0 3.14159265359" xyz="0 0.0145644 0.0227941"/>
+      <inertia ixx="3.01220925051e-05" ixy="0.0" ixz="0.0" iyy="2.95873808038e-05" iyz="0.0" izz="6.95125211657e-06"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 3.14159265359" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="file://meshes/visual/finger.dae"/>
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 3.14159265359" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="file://meshes/collision/finger.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="panda_finger_joint1" type="prismatic">
+    <parent link="panda_hand"/>
+    <child link="panda_leftfinger"/>
+    <origin rpy="0 0 0" xyz="0 0 0.0584"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="20" lower="-0.001" upper="0.04" velocity="0.3"/>
+  </joint>
+  <joint name="panda_finger_joint2" type="prismatic">
+    <parent link="panda_hand"/>
+    <child link="panda_rightfinger"/>
+    <origin rpy="0 0 0" xyz="0 0 0.0584"/>
+    <axis xyz="0 -1 0"/>
+    <limit effort="20" lower="-0.001" upper="0.04" velocity="0.3"/>
+  </joint>
+  <link name="end_effector_frame">
+    <inertial>
+      <!-- Dummy inertial parameters to avoid link lumping-->
+      <mass value="0.01"/>
+      <inertia ixx="0.0001" ixy="0.0" ixz="0.0" iyy="0.0001" iyz="0.0" izz="0.0001"/>
+    </inertial>
+  </link>
+  <joint name="end_effector_frame_fixed_joint" type="fixed">
+    <origin rpy="3.14159 -1.57079 -0.785398163397" xyz="0 0 0.21"/>
+    <parent link="panda_link7"/>
+    <child link="end_effector_frame"/>
+  </joint>
+  <gazebo reference="end_effector_frame_fixed_joint">
+    <preserveFixedJoint>true</preserveFixedJoint>
+    <!-- For compatibility with SDFormat < 4.4 -->
+    <disableFixedJointLumping>true</disableFixedJointLumping>
+  </gazebo>
+</robot>
