@@ -83,7 +83,10 @@ void FrankaController::add_panda_controller_(float dT){
     // TODO: set maximum force of joint
 
     // Set joint targets (position, velocity, acceleration)
+    end_effector_target_.position[0];
+    end_effector_target_.position[1];
 
+    // set the joint positions based on the output of the IK controller
 
     return true; // controller successfully launched
 }
@@ -94,8 +97,8 @@ FrankaModel::FrankaModel(std::shared_ptr<rclcpp::Node> node) :
 {
 
     // Create the services for resetting the simulation: resetting the joint positions, pausing, and unpausing Gazebo
-    set_joint_position_srv_ = node_->create_service<gazebo_msgs::SetModelConfiguration>("/gazebo/set_model_configuration");
     pause_gazebo_srv_ = node_->create_service<std_srvs::Empty>("/gazebo/pause_physics");
+    set_joint_position_srv_ = node_->create_service<gazebo_msgs::SetModelConfiguration>("/gazebo/set_model_configuration");
     unpause_gazebo_srv_ = node_->create_service<std_srvs::Empty>("/gazebo/unpause_physics");
 
     // read the initial joint positions from the parameter server (loaded by the params yaml file)
