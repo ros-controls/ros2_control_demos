@@ -61,6 +61,21 @@ git clone https://github.com/ros-controls/ros2_control_demos
   apt install ros-foxy-realtime-tools ros-foxy-xacro ros-foxy-angles
   ```
 
+  The inverse kinematics-based controller for the Franka Panda arm demo requires that the `idyntree` library be installed. To do so, follow the instructions given here:
+
+  https://github.com/robotology/idyntree#build
+
+  NOTE: You also need to install it with the IPOPT option enabled, i.e.:
+
+  ```
+   git clone https://github.com/robotology/idyntree
+   cd idyntree
+   mkdir build && cd build
+   cmake -IDYNTREE_USES_IPOPT ..
+   make
+   [sudo] make install
+  ```
+
 * Build everything, e.g. with:
   ```
   colcon build --symlink-install

@@ -10,6 +10,7 @@
 // ROS headers
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/JointState.h>
+#include <std_msgs/Float64MultiArray.h>
 
 #include <geometry_msgs/Pose.h>
 #include <geometry_msgs/TransformStamped.h>
@@ -17,6 +18,15 @@
 #include <std_srvs/Empty.h>
 #include <tf2_ros/buffer.h>
 #include <tf2_ros/transform_listener.h>
+
+// iDynTree headers
+#include <iDynTree/KinDynComputations.h>
+#include <iDynTree/ModelIO/ModelLoader.h>
+#include <iDynTree/InverseKinematics.h>
+
+// C headers
+#include <cmath>
+#include <cstdlib>
 
 namespace ros2_control_demo{
 
@@ -37,13 +47,17 @@ class FrankaController
         void control_callback_();
         void set_controller_period_(float dT);
         bool add_panda_controller_(float dT);
-        void joint_states_callback_()
+        void joint_states_callback_();
+        void get_panda_ik_(std::vector<std::string> optimized_joints); // TODO: read joint names from the parameter server
+        void solve_ik_(std::vector<float> target_position, std::vector<float> target_orientation, ik_nlp); // TODO: fill in the correct function parameters for the IK solver
 
         std::shared_ptr<rclcpp::Node> node_;
         std::shared_ptr<FrankaModel> robot_;
         float control_period_;
-
-        rclcpp::Subscription<std_msgs::msg::String>::SharedPtr joint_states_subscriber_;
+        const std::string joint_control_topic_ = "joint_group_position_controller/command";
+        
+        rclcpp::Subscription<sensor_msgs::msg::JointState>::SharedPtr joint_states_subscriber_;
+        rclcpp::Publisher<std_msgs::msg::Float64MultiArray>::SharedPtr joint_commands_publisher_;
 
         tf2_ros::Buffer tf_buffer_;
         std::shared_ptr<tf2_ros::TransformListener> tf_listener_;
@@ -70,6 +84,8 @@ class FrankaModel
 
     private:
 
+        void load_model_(const std::string model_dir);
+
         std::shared_ptr<rclcpp::Node> node_;
         std::string model_name_;
         geometry_msgs::Pose initial_pose_;
@@ -77,6 +93,11 @@ class FrankaModel
         rclcpp::Service<std_srvs::Empty>::SharedPtr pause_gazebo_srv_;
         rclcpp::Service<std_srvs::Empty>::SharedPtr unpause_gazebo_srv_;
         std::vector<std::string> joint_names_;
+
+        // for kinematic model
+        iDynTree::ModelLoader mdlLoader_;
+        iDynTree::KinDynComputations forward_kinematics_;
+        iDynTree::InverseKinematics inverse_kinematics_;
 }
 
 class FrankaDemo : public rclcpp::Node

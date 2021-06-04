@@ -17,15 +17,22 @@ find_package(sensor_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(gazebo_msgs REQUIRED)
 find_package(tf REQUIRED)
+find_package(iDynTree REQUIRED)
+
+include_directories(
+  include
+)
 
 # create library for the controller
 add_library(franka_ik_controller src/fraka_controller.cpp)
 
 # create the node executable
 add_executable(ros2_control_demo_franka src/franka_controller_node.cpp)
+target_link_libraries(ros2_control_demo_franka franka_ik_controller ${iDynTree_LIBRARIES})
 
 ## INSTALL
 install(
+  TARGETS franka_ik_controller ros2_control_demo_franka
   DIRECTORY config description launch rviz
   DESTINATION share/${PROJECT_NAME}
 )
