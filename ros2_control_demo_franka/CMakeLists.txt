@@ -12,6 +12,17 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(gazebo_msgs REQUIRED)
+find_package(tf REQUIRED)
+
+# create library for the controller
+add_library(franka_ik_controller src/fraka_controller.cpp)
+
+# create the node executable
+add_executable(ros2_control_demo_franka src/franka_controller_node.cpp)
 
 ## INSTALL
 install(

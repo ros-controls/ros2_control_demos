@@ -18,7 +18,7 @@ def generate_launch_description():
                 "/gazebo.launch.py",
             ]
         ),
-        launch_arguments={"verbose": "false"}.items(),
+        launch_arguments={"verbose": "true"}.items(),
     )
 
     robot_description_path = os.path.join(
@@ -68,6 +68,7 @@ def generate_launch_description():
 
     return LaunchDescription(
         [
+            gazebo,
             spawn_entity,
             node_robot_state_publisher,
             controller_manager_node,

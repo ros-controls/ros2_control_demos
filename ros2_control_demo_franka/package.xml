@@ -16,6 +16,11 @@
   <depend>pluginlib</depend>
   <depend>rclcpp</depend>
   <depend>gazebo_ros2_control</depend>
+  <depend>std_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>gazebo_msgs</depend>
+  <depend>tf</depend>
 
   <exec_depend>joint_state_publisher_gui</exec_depend>
   <exec_depend>robot_state_publisher</exec_depend>
