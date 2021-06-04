@@ -108,6 +108,27 @@ The *RRbot* URDF files can be found in the `urdf` folder of `ros2_control_demo_d
           joint2/position
    ```
 
+### Example 2: "Robots with multiple interfaces"
+
+1. Open another terminal and start the roslaunch file:
+   ```
+   ros2 launch ros2_control_demo_bringup rrbot_system_multi_interface.launch.py
+   ```
+
+2. Open another terminal and check that `RRBotSystemPositionOnlyHardware` loaded properly:
+   ```
+   ros2 control list_hardware_interfaces
+   ```
+   You should get something like:
+   ```
+   command interfaces
+         joint1/position [unclaimed]
+         joint2/position [unclaimed]
+   state interfaces
+          joint1/position
+          joint2/position
+   ```
+
 ## Controlles and moving hardware
 To move the robot you should load and start controllers.
 The `JointStateController` is used to publish the joint states to ROS topics.
@@ -174,7 +195,7 @@ Now you should also see the *RRbot* represented correctly in `rviz2`.
    - 0.5
    - 0.5"
    ```
-   b. Or you can start demo node which sends two goals every 5 seconds in a loop:
+   B. Or you can start demo node which sends two goals every 5 seconds in a loop:
    ```
    ros2 launch ros2_control_test_nodes rrbot_test_forward_position_controller.launch.py
    ```
