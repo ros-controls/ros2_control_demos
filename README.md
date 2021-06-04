@@ -159,7 +159,7 @@ Now you should also see the *RRbot* represented correctly in `rviz2`.
 
 1. If you want to test hardware with `ForwardCommandController` first load and configure it:
    ```
-   ros2 control load_configure_controller forward_position_controller
+   ros2 control load_configure_controller forward_command_controller_position
    ```
    Check if the controller is loaded properly:
    ```
@@ -168,12 +168,12 @@ Now you should also see the *RRbot* represented correctly in `rviz2`.
    You should get the response:
    ```
    joint_state_controller[joint_state_controller/JointStateController] active
-   forward_position_controller[forward_command_controller/ForwardCommandController] inactive
+   forward_command_controller_position[forward_command_controller/ForwardCommandController] inactive
    ```
 
 2. Now start the controller:
    ```
-   ros2 control switch_controllers --start-controllers forward_position_controller
+   ros2 control switch_controllers --start-controllers forward_command_controller_position
    ```
    Check if controllers are activated:
    ```
@@ -182,7 +182,7 @@ Now you should also see the *RRbot* represented correctly in `rviz2`.
    You should get `active` in the response:
    ```
    joint_state_controller[joint_state_controller/JointStateController] active
-   forward_position_controller[forward_command_controller/ForwardCommandController] active
+   forward_command_controller_position[forward_command_controller/ForwardCommandController] active
    ```
 
 **NOTE**: You can do this in only one step by using `load_start_controller` verb instead of `load_configure_controller`.
@@ -191,7 +191,7 @@ Now you should also see the *RRbot* represented correctly in `rviz2`.
 
    a. Manually using ros2 cli interface:
    ```
-   ros2 topic pub /forward_position_controller/commands std_msgs/msg/Float64MultiArray "data:
+   ros2 topic pub /forward_command_controller_position/commands std_msgs/msg/Float64MultiArray "data:
    - 0.5
    - 0.5"
    ```
