@@ -25,7 +25,7 @@ jobs:
           package-name:
             ros2_control_demo_hardware
             ros2_control_demo_description
-	    ros2_control_demo_bringup
+            ros2_control_demo_bringup
             ros2_control_demos
           vcs-repo-file-url: |
             https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/ros2_control_demos.repos
