@@ -153,7 +153,7 @@ Now you should also see the *RRbot* represented correctly in `rviz2`.
 
 2. Now start the controller:
    ```
-   ros2 control switch_controllers --start-controllers forward_position_controller
+   ros2 control switch_controllers --start forward_position_controller
    ```
    Check if controllers are activated:
    ```
@@ -177,7 +177,7 @@ Now you should also see the *RRbot* represented correctly in `rviz2`.
    ```
    b. Or you can start demo node which sends two goals every 5 seconds in a loop:
    ```
-   ros2 launch ros2_control_test_nodes rrbot_test_forward_position_controller.launch.py
+   ros2 launch ros2_control_demo_robot test_forward_position_controller.launch.py
    ```
 
 ## Result

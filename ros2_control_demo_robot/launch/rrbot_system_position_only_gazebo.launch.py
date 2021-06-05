@@ -60,10 +60,15 @@ def generate_launch_description():
         arguments=["-topic", "robot_description", "-entity", "rrbot_system_position"],
         output="screen",
     )
+
+    rrbot_forward_controller = os.path.join(
+        get_package_share_directory("ros2_control_demo_robot"), "config", "rrbot_controllers.yaml"
+    )
+
     spawn_controller = Node(
         package="controller_manager",
         executable="spawner.py",
-        arguments=["joint_state_broadcaster"],
+        arguments=["forward_position_controller", "--param-file", rrbot_forward_controller, "-t", "forward_command_controller/ForwardCommandController"],
         output="screen",
     )
 
