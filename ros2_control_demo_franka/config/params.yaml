@@ -2,7 +2,9 @@ franka_demo:
   ros__parameters:
     model_name: "panda"
     model_file: "description/panda.urdf.xml"
-    joint_names: ["panda_joint1", "panda_joint2", "panda_joint3", "panda_joint4", "panda_joint5", "panda_joint6", "panda_joint7", "panda_finger_joint1", "panda_finger_joint2"] # mind the order of the joint names
+    joint_names: ["panda_joint1", "panda_joint2", "panda_joint3", "panda_joint4", "panda_joint5", "panda_joint6", "panda_joint7", "panda_finger_joint1", "panda_finger_joint2"] # mind the order of the joint names, NOTE: It may be possible to get these directly from iDynTree library
+    base_frame: "panda_link0"
+    end_effector_frame: "end_effector_frame"
     initial_joint_positions: [0., -0.785, 0., -2.356, 0., 1.571, 0.785, 0., 0.]
     control_dt: 0.001 # 1000 Hz
     joint_limits:

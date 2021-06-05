@@ -28,6 +28,18 @@
 #include <cmath>
 #include <cstdlib>
 
+inline void rosPose2iDynTreeTransform(geometry_msgs::msg::Pose pose, iDynTree::Transform& transform)
+{
+    iDynTree::Position p(pose.position.x, pose.position.y, pose.position.z);
+    T.setPosition(p);
+
+    iDynTree::Rotation R;
+    iDynTree::Vector4 quat([pose.orientation.x, pose.orientation.y, pose.orientation.z, pose.orientation.w], 4);
+    R.fromQuaternion(quat); // verify which quaternion parameterization is being used by iDynTree
+
+    T.setRotation(R);
+}
+
 namespace ros2_control_demo{
 
 class FrankaController
@@ -35,6 +47,7 @@ class FrankaController
     // controller. handles subscriptions, publications, control logic
     // hold the arm in place if no new trajectory points received
     // TODO: Double check that the controller PID gains are being set correctly
+    // TODO: Query the joint names and the frames directly from the model as opposed to from the parameter server
     public:
 
         FrankaController(std::shared_ptr<rclcpp::Node> node, std::shared_ptr<FrankaModel> model);
@@ -73,6 +86,9 @@ class FrankaController
 
 class FrankaModel
 {
+    typedef iDynTree::InverseKinematicsRotationParametrization RotParam;
+    typedef iDynTree::InverseKinematicsTreatTargetAsConstraint TarResMode;
+
     // contains the model for the Franka robot
     public:
 
@@ -84,7 +100,7 @@ class FrankaModel
 
     private:
 
-        void load_model_(const std::string model_dir);
+        InverseKinematicsNLP get_panda_ik_(std::string model_file, geometry_msgs::msg::Pose base_pose, sensor_msgs::msg::JointState joint_positions); // initialize the ik_ class member here
 
         std::shared_ptr<rclcpp::Node> node_;
         std::string model_name_;
@@ -95,10 +111,47 @@ class FrankaModel
         std::vector<std::string> joint_names_;
 
         // for kinematic model
-        iDynTree::ModelLoader mdlLoader_;
-        iDynTree::KinDynComputations forward_kinematics_;
-        iDynTree::InverseKinematics inverse_kinematics_;
-}
+        std::shared_ptr<InverseKinematicsNLP> ik_;
+        std::string base_frame_ = "panda_link0";
+        std::string end_effector_frame_ = "end_effector_frame";
+
+        geometry_msgs::msg::Pose base_pose_;
+        sensor_msgs::msg::JointState joint_positions_;
+};
+
+class InverseKinematicsNLP
+{ 
+
+    public:
+
+        InverseKinematicsNLP(std::string urdf_filename, std::vector<std::string> considered_joints, std::vector<std::string> joint_serialization);
+
+        void initialize(int verbosity, bool floating_base, double cost_tolerance, double constraints_tolerance, std::string base_frame, RotParam rot_parameterization, TarResMode tar_res_mode, int max_iter);
+
+        void set_current_robot_configuration(geometry_msgs::msg::Pose base_pose, sensor_msgs::msg::JointState joint_positions);
+
+        void add_target(std::string frame_name, TargetType target_type, bool as_constraint);
+
+    private:
+
+        enum TargetType {POSITION, ROTATION, POSE};
+        struct TargetData{
+            TargetType type;
+            float weight;
+            geometry_msgs::msg::Pose data;
+        }
+
+        bool floating_base_;
+        std::string base_frame_ = "panda_link0";
+        std::string urdf_filename_;
+        std::unordered_map<std::string, TargetData> targets_data_;
+        iDynTree::InverseKinematics ik_;
+        iDynTree::KinDynComputations fk_;
+        iDynTree::ModelLoader mdl_loader_;
+        iDynTree::Model model_;
+        std::vector<std::string> considered_joints_;
+        std::vector<std::string> joint_serialization_;
+};
 
 class FrankaDemo : public rclcpp::Node
 {

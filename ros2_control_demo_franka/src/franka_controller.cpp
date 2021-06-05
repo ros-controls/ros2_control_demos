@@ -123,33 +123,45 @@ FrankaModel::FrankaModel(std::shared_ptr<rclcpp::Node> node) :
 
     // create the inverse kinematics model
     const std::string model_dir = "/home/nicholas/workspace/ros2_control_franka/src/ros2_control_demos/description/panda.urdf.xml"; // TODO: get this from the parameter server
-    load_model_(model_dir);
+
+    ik_ = std::make_shared<InverseKinematicsNLP>(get_panda_ik_(model_dir, base_pose_, joint_positions_));
 }
 
-void load_model_(const std::string model_dir)
+InverseKinematicsNLP FrankaModel::get_panda_ik_(std::string model_file, geometry_msgs::msg::Pose base_pose, sensor_msgs::msg::JointState joint_positions)
 {
 
     // we only wish to optimize the positions of the arm joints, we deal with the fingers separately
     std::vector<std::string> considered_joint_names;
-    for(auto joint : joint_names){
+    for(auto joint : joint_names_){
         if(joint.find("finger") == std::string:npos){
             considered_joint_names.push_back(joint);
         }
     }
 
-    // load the model, only considering the joints included in the previous step
-    bool ok = mdlLoader_.loadReducedModelFromFile(model_dir, considered_joint_names);
+    InverseKinematicsNLP ik(model_file, considered_joint_names, joint_names_);
 
-    if(!ok) {
-        std::cerr << "[franka_controller.cpp] Failed to load kinematic model for Franka arm." << std::endl;
-    }
+    ik.initialize(
+        1,
+        false,
+        1e-8,
+        1e-8,
+        base_frame_,
+        RotParam::InverseKinematicsRotationParametrizationRollPitchYaw,
+        TarResMode::InverseKinematicsTreatTargetAsConstraintNone,
+        1000
+    );
 
-    // TODO: instantiatie the forward/inverse kinematics
+    ik.set_current_robot_configuration(
+        base_pose,
+        joint_positions
+    );
+
+    return ik;
 }
 
-geometry_msgs::Pose FrankaModel::get_initial_pose(){
+geometry_msgs::mag::Pose FrankaModel::get_initial_pose(){
 
-    geometry_msgs::Pose initial_pose;
+    geometry_msgs::msg::Pose initial_pose;
     initial_pose.orientation.w = 1.0;
 
     return initial_pose;
@@ -185,6 +197,79 @@ void FrankaModel::set_max_generalized_force(std::string joint_name, float max_fo
 std::vector<std::string> FrankaModel::get_joint_names()
 {
     return joint_names_;
+}
+
+InverseKinematicsNLP::InverseKinematicsNLP(std::string urdf_filename, std::vector<std::string> considered_joints, std::vector<std::string> joint_serialization)
+{
+    floating_base_ = false;
+    urdf_filename_ = urdf_filename;
+    considered_joints_ = considered_joints;
+    joint_serialization_ = joint_serialization_;
+}
+
+void InverseKinematicsNLP::initialize(int verbosity, bool floating_base, double cost_tolerance, double constraints_tolerance, std::string base_frame, RotParam rot_parameterization, TarResMode tar_res_mode, int max_iter)
+{   
+    // Load the URDF model and get the model loader object. Create the full model with all the joints specified in joint_serialization class member.
+    mdl_loader_ = iDynTree::ModelLoader();
+    bool ok = mdl_loader_.loadReducedModelFromFile(urdf_filename_, joint_serialization_);
+
+    if(!ok) {
+        std::cerr << "[franka_controller.cpp] Failed to load kinematic model for Franka arm." << std::endl;
+    }
+
+    model_ = mdl_loader_.model();
+
+    ok = fk_.loadRobotModel(model_);
+
+    // If all joints are enabled, get the list of joint names in order to know the serialization of the full IK solution
+    if(joint_serialization_.size() < 1)
+        for(size_t i = 0; i < model_.getNrOfJoints(); i++)
+            joint_serialization_.push_back(model_.getJointName(i));
+
+    // Configure the considered joints for the optimization. If not specified, use the serialization of the full solution
+    if(considered_joints_.size() < 1)
+        for(int i = 0; i < joint_serialization_.size(); i++)
+            considered_joints_.push_back(joint_serialization_[i]);
+
+    // Set the model in the IK object specifying the considered joints
+    if(!ik_.setModel(model_, considered_joints_))
+        std::cerr << "[franka_controller.cpp] Failed to set the model in the IK object." << std::endl;
+
+    // Configure the IK object
+    ik_.setVerbosity(verbosity);
+    ik_.setMaxIterations(max_iterations);
+    ik_.setCostTolerance(cost_tolerance);
+    ik_.setConstraintsTolerance(constraints_tolerance);
+    ik_.setDefaultTargetResolutionMode(tar_res_mode);
+    ik_.setRotationParameterization(rot_parameterization);
+
+    // Optionally change the base frame
+    if(!base_frame.empty()){
+        // Store the frame of the base link
+        base_frame_ = base_frame;
+
+        // Update the base frame in the IK object
+        if(!ik_.setFloatingBaseOnFrameNamed(base_frame))
+           std::cerr << "[franka_controller.cpp] Failed to change floating base frame." << std::endl; 
+    }else{
+        base_frame_ = model_.getLinkName(model_.getDefaultBaseLink());
+    }
+
+    floating_base_ = floating_base;
+
+    if(!floating_base_){
+        // TODO: Add a frame constraint for the base
+        std::cerr << "[franka_controller.cpp] This demo is for fixed-base robots only." << std::endl; 
+    }
+}
+
+void InverseKinematicsNLP::set_current_robot_configuration(geometry_msgs::msg::Pose base_pose, sensor_msgs::msg::JointState joint_positions)
+{
+
+    // NOTE: for the inverse kinematics, we only care about the joint positions in the joint serialization
+    iDynTree::Transform H;
+    rosPose2iDynTreeTransform(base_pose, H);
+
 }
 
 }
