@@ -19,7 +19,8 @@ jobs:
         linter: ${{ matrix.linter }}
         package-name:
           ros2_control_demo_hardware
-          ros2_control_demo_robot
+          ros2_control_demo_description
+          ros2_control_demo_bringup
           ros2_control_demos
 
   ament_lint_cpplint:
@@ -39,5 +40,6 @@ jobs:
         arguments: "--filter=-whitespace/newline"
         package-name:
           ros2_control_demo_hardware
-          ros2_control_demo_robot
+          ros2_control_demo_description
+	  ros2_control_demo_bringup
           ros2_control_demos

@@ -21,7 +21,8 @@ jobs:
           # build all packages listed in the meta package
           package-name:
             ros2_control_demo_hardware
-            ros2_control_demo_robot
+            ros2_control_demo_description
+            ros2_control_demo_bringup	    
             ros2_control_demos
           vcs-repo-file-url: |
             https://raw.githubusercontent.com/ros2/ros2/foxy/ros2.repos
