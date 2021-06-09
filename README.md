@@ -145,14 +145,14 @@ Available launch-file options:
     This is useful to test *ros2_control* integration and controllers without physical hardware.
 
 
-### Example 1: "Industrial Robots with only one interface" (Gazebo simulation)
+### Example 2: "Industrial Robots with only one interface" (Gazebo simulation)
 
 - **TBA**
 
 
-### Example 2: "Robots with multiple interfaces"
+### Example 3: "Robots with multiple interfaces"
 
-- Launch file: rrbot_system_position_only.launch.py
+- Launch file: rrbot_system_multi_interface.launch.py
 - Command interfaces:
   - joint1/position
   - joint2/position
@@ -181,7 +181,7 @@ Notes:
     The two illegal controllers demonstrate how hardware interface declines faulty claims to access joint command interfaces.
 
 
-### Example 10: "Differential drive mobile robot"
+### Example 4: "Differential drive mobile robot"
 
 - Launch file: diffbot_system.launch.py
 - Command interfaces:
