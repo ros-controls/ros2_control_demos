@@ -1,10 +1,16 @@
 <?xml version="1.0"?>
 <!-- Basic differential drive mobile base -->
 <!--
-Copied and modified from ROS1 example:
+Copied and modified from ROS1 example -
 https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/diffbot_description/urdf/diffbot.xacro
 -->
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="2dof_robot">
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="diffdrive_robot">
+  <xacro:arg name="use_sim" default="false" />
+
+  <!-- Enable setting arguments from the launch file -->
+  <xacro:arg name="use_fake_hardware" default="true" />
+  <xacro:arg name="fake_sensor_commands" default="false" />
+  <xacro:arg name="prefix" default="" />
 
   <xacro:include filename="$(find ros2_control_demo_description)/urdf/diffbot/diffbot.urdf.xacro" />
 
@@ -17,10 +23,13 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/diffbot_de
   <!-- Import diffbot ros2_control description -->
   <xacro:include filename="$(find ros2_control_demo_description)/urdf/diffbot/diffbot_system.ros2_control.xacro" />
 
-  <xacro:diffbot prefix="" />
+  <xacro:diffbot prefix="$(arg prefix)" />
 
-  <xacro:diffbot_gazebo prefix="" />
+  <xacro:diffbot_gazebo prefix="$(arg prefix)" />
 
-  <xacro:diffbot_system name="DiffBotSystem" prefix="" />
+  <xacro:diffbot_system
+    name="DiffBotSystem" prefix="$(arg prefix)"
+    use_fake_hardware="$(arg use_fake_hardware)"
+    fake_sensor_commands="$(arg fake_sensor_commands)"/>
 
 </robot>

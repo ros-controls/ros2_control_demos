@@ -30,7 +30,7 @@
       <geometry>
         <box size="${base_width} ${base_length} ${base_height}"/>
       </geometry>
-      <material name="blue"/>
+      <material name="orange"/>
     </visual>
 
     <inertial>

@@ -181,6 +181,38 @@ Notes:
     The two illegal controllers demonstrate how hardware interface declines faulty claims to access joint command interfaces.
 
 
+### Example 10: "Differential drive mobile robot"
+
+- Launch file: diffbot_system.launch.py
+- Command interfaces:
+  - left_wheel_joint/velocity
+  - right_wheel_joint/velocity
+- State interfaces:
+  - left_wheel_joint/position
+  - left_wheel_joint/velocity
+  - right_wheel_joint/position
+  - right_wheel_joint/velocity
+
+Available controllers:
+  - `joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]`
+  - `diffbot_base_controller[diff_drive_controller/DiffDriveController] active`
+
+Sending commands to diff drive controller:
+
+```
+ros2 topic pub --rate 30 /diffbot_base_controller/cmd_vel_unstamped geometry_msgs/msg/Twist "linear:
+ x: 0.7
+ y: 0.0
+ z: 0.0
+angular:
+ x: 0.0
+ y: 0.0
+ z: 1.0"
+```
+
+You should now see orange box circling in `rviz2`.
+
+
 ## Controlles and moving hardware
 To move the robot you should load and start controllers.
 The `JointStateController` is used to publish the joint states to ROS topics.
