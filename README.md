@@ -28,22 +28,26 @@ This package does not have any dependencies except `ros2` core packages and can,
 This repository demonstrates the following `ros2_control` concepts:
 
 * Creating of `*HardwareInterface` for a System, Sensor, and Actuator.
-* Creating a robot description in the form of URDF files
-* Loading the configuration and starting a robot using launch files
-* Control of two joints of *RRBot*
-* Using simulated robots and starting `ros_control` with Gazebo simulator
-* Implementing of controller switching strategy for a robot
-* Using joint limits and transmission concepts in `ros2_control`
+* Creating a robot description in the form of URDF files.
+* Loading the configuration and starting a robot using launch files.
+* Control of two joints of *RRBot*.
+* Using simulated robots and starting `ros2_control` with Gazebo simulator.
+* Implementing of controller switching strategy for a robot.
+* Using joint limits and transmission concepts in `ros2_control`.
 
 ## Quick Hints
 
 These are some quick hints, especially for those coming from a ROS1 control background:
 
-* There are now three categories of hardware interface: *Sensor*, *Actuator*, and *System*. Sensor is for individual sensors; Actuator is for individual actuators; System is for any combination of multiple sensors/actuators. You could think of a Sensor as read-only.
-* ros(1)_control only allowed three hardware interface types: position, velocity, and effort. ros2_control allows you to create any interface type by defining a custom string. For example, you might define a `position_in_degrees` or a `temperature` interface. The most common (position, velocity, acceleration, effort) are already defined as constants in hardware_interface/types/hardware_interface_type_values.hpp.
-* In ros2_control, all parameters for the driver are specified in the URDF. The ros2_control framework uses the <ros2_control> tag in the URDF.
-* <ros2_control> tags in the URDF must be compatible with the controller's configuration.
-* PLUGINLIB_EXPORT_CLASS macro is required when implementing an interface.
+* There are now three categories of hardware interface: *Sensor*, *Actuator*, and *System*.
+  *Sensor* is for individual sensors; *Actuator* is for individual actuators; *System* is for any combination of multiple sensors/actuators.
+  You could think of a Sensor as read-only.
+  All interfaces are used as plugins and therefore exported using `PLUGINLIB_EXPORT_CLASS` macro.
+* *ros(1)_control* only allowed three hardware interface types: position, velocity, and effort.
+  *ros2_control* allows you to create any interface type by defining a custom string. For example, you might define a `position_in_degrees` or a `temperature` interface. The most common (position, velocity, acceleration, effort) are already defined as constants in hardware_interface/types/hardware_interface_type_values.hpp.
+* In ros2_control, all parameters for the driver are specified in the URDF.
+  The ros2_control framework uses the **<ros2_control>** tag in the URDF.
+* Joint names in <ros2_control> tags in the URDF must be compatible with the controller's configuration.
 
 # Build from source
 ```
@@ -53,7 +57,7 @@ git clone https://github.com/ros-controls/ros2_control_demos
 ```
 
 **NOTE**: `ros2_control` and `ros2_controllers` packages are released for foxy and can be installed using package manager.
-  For daily use it is recommended to use the released version but there may always be some not-yet-released changes that are required to build the demos.
+  For daily use it is recommended to use the released version but there may always be some not-yet-released changes that are required to run the demos.
 
 * Install dependencies (maybe you need `sudo`):
   ```
@@ -70,7 +74,7 @@ git clone https://github.com/ros-controls/ros2_control_demos
 
 # Getting Started with ros2_control
 
-Each of the described example cases from the roadmap has its own launch and URDF file.
+Each of the described example cases from the [roadmap](https://github.com/ros-controls/roadmap/blob/master/design_drafts/components_architecture_and_urdf_examples.md) has its own launch and URDF file.
 
 ## Starting example robots
 
@@ -85,49 +89,97 @@ The `rviz2` setup can be recreated following these steps:
   ```
 
 *RRBot*, or ''Revolute-Revolute Manipulator Robot'', is a simple 3-linkage, 2-joint arm that we will use to demonstrate various features. It essentially a double inverted pendulum and demonstrates some fun control concepts within a simulator and was originally introduced for Gazebo tutorials.
-The *RRbot* URDF files can be found in the `urdf` folder of `ros2_control_demo_description` package.
+The *RRBot* URDF files can be found in the `urdf` folder of `ros2_control_demo_description` package.
+
+### General notes about examples
+
+1. To start an example open a terminal, source your ROS2-workspace and execute launch file with:
+   ```
+   ros2 launch ros2_control_demo_bringup <example_launch_file>
+   ```
+
+2. To check if the hardware are controller a loaded properly, open another terminal and execute:
+   ```
+   ros2 control list_hardware_interfaces
+   ```
+   You should get something like:
+   ```
+   command interfaces
+         joint1/position [unclaimed]
+         joint2/position [unclaimed]
+   state interfaces
+         joint1/position
+         joint2/position
+   ```
+
+3. Check which controller are running using:
+   ```
+   ros2 control list_controllers
+   ```
+   You should get something like:
+   ```
+   forward_position_controller[forward_command_controller/ForwardCommandController] unconfigured
+   joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+   ```
+
+4. Check [Controlles and moving hardware](#Controlles-and-moving-hardware) section to move *RRBot*.
+
 
 ### Example 1: "Industrial Robots with only one interface"
 
-1. Open another terminal and start the roslaunch file:
-   ```
-   ros2 launch ros2_control_demo_bringup rrbot_system_position_only.launch.py
-   ```
+- Launch file: rrbot_system_position_only.launch.py
+- Command interfaces:
+  - joint1/position
+  - joint2/position
+- State interfaces:
+  - joint1/position
+  - joint2/position
 
-2. Open another terminal and check that `RRBotSystemPositionOnlyHardware` loaded properly:
-   ```
-   ros2 control list_hardware_interfaces
-   ```
-   You should get something like:
-   ```
-   command interfaces
-         joint1/position [unclaimed]
-         joint2/position [unclaimed]
-   state interfaces
-          joint1/position
-          joint2/position
-   ```
+Available controllers:
+  - `joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]`
+  - `forward_position_controller[forward_command_controller/ForwardCommandController]` (position)
+
+Available launch-file options:
+  - `use_fake_hardware:=true` - start `FakeSystem` instead of hardware.
+    This is a simple simulation that mimics joint command to their states.
+    This is useful to test *ros2_control* integration and controllers without physical hardware.
+
+
+### Example 1: "Industrial Robots with only one interface" (Gazebo simulation)
+
+- **TBA**
+
 
 ### Example 2: "Robots with multiple interfaces"
 
-1. Open another terminal and start the roslaunch file:
-   ```
-   ros2 launch ros2_control_demo_bringup rrbot_system_multi_interface.launch.py
-   ```
+- Launch file: rrbot_system_position_only.launch.py
+- Command interfaces:
+  - joint1/position
+  - joint2/position
+  - joint1/velocity
+  - joint2/velocity
+  - joint1/acceleration
+  - joint2/acceleration
+- State interfaces:
+  - joint1/position
+  - joint2/position
+  - joint1/velocity
+  - joint2/velocity
+  - joint1/acceleration
+  - joint2/acceleration
 
-2. Open another terminal and check that `RRBotSystemPositionOnlyHardware` loaded properly:
-   ```
-   ros2 control list_hardware_interfaces
-   ```
-   You should get something like:
-   ```
-   command interfaces
-         joint1/position [unclaimed]
-         joint2/position [unclaimed]
-   state interfaces
-          joint1/position
-          joint2/position
-   ```
+Available controllers:
+  - `joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]`
+  - `forward_position_controller[position_controllers/JointGroupPositionController]`
+  - `forward_velocity_controller[velocity_controllers/JointGroupVelocityController]`
+  - `forward_acceleration_controller[forward_command_controller/ForwardCommandController]`
+  - `forward_illegal1_controller[forward_command_controller/ForwardCommandController]`
+  - `forward_illegal2_controller[forward_command_controller/ForwardCommandController]`
+
+Notes:
+  - The example shows how to implement multi-interface robot hardware taking care about interfaces used.
+    The two illegal controllers demonstrate how hardware interface declines faulty claims to access joint command interfaces.
+
 
 ## Controlles and moving hardware
 To move the robot you should load and start controllers.
@@ -141,7 +193,7 @@ Check the [Results](##result) section on how to ensure that things went well.
 
 Open another terminal and load, configure and start `joint_state_controller`:
 ```
-ros2 control load_start_controller joint_state_controller
+ros2 control set_controller_state joint_state_controller start
 ```
 Check if controller is loaded properly:
 ```
@@ -157,23 +209,31 @@ Now you should also see the *RRbot* represented correctly in `rviz2`.
 
 ### Using ForwardCommandController
 
-1. If you want to test hardware with `ForwardCommandController` first load and configure it:
+1. If you want to test hardware with `ForwardCommandController` first load a controller (not always needed):
    ```
-   ros2 control load_configure_controller forward_command_controller_position
+   ros2 control load_controller forward_position_controller
    ```
    Check if the controller is loaded properly:
    ```
    ros2 control list_controllers
    ```
-   You should get the response:
+
+2. Then configure it:
    ```
-   joint_state_controller[joint_state_controller/JointStateController] active
-   forward_command_controller_position[forward_command_controller/ForwardCommandController] inactive
+   ros2 control set_controller_state forward_position_controller configure
+   ```
+   Check if the controller is loaded properly:
+   ```
+   ros2 control list_controllers
+   ```
+   You should get in the response:
+   ```
+   forward_position_controller[forward_command_controller/ForwardCommandController] inactive
    ```
 
 2. Now start the controller:
    ```
-   ros2 control switch_controllers --start-controllers forward_command_controller_position
+   ros2 control switch_controllers --start forward_position_controller
    ```
    Check if controllers are activated:
    ```
@@ -182,22 +242,20 @@ Now you should also see the *RRbot* represented correctly in `rviz2`.
    You should get `active` in the response:
    ```
    joint_state_controller[joint_state_controller/JointStateController] active
-   forward_command_controller_position[forward_command_controller/ForwardCommandController] active
+   forward_position_controller[forward_command_controller/ForwardCommandController] active
    ```
-
-**NOTE**: You can do this in only one step by using `load_start_controller` verb instead of `load_configure_controller`.
 
 3. Send command to the controller, either:
 
    a. Manually using ros2 cli interface:
    ```
-   ros2 topic pub /forward_command_controller_position/commands std_msgs/msg/Float64MultiArray "data:
+   ros2 topic pub /forward_position_controller/commands std_msgs/msg/Float64MultiArray "data:
    - 0.5
    - 0.5"
    ```
    B. Or you can start demo node which sends two goals every 5 seconds in a loop:
    ```
-   ros2 launch ros2_control_test_nodes rrbot_test_forward_position_controller.launch.py
+   ros2 launch ros2_control_demo_bringup test_forward_position_controller.launch.py
    ```
 
 ## Result

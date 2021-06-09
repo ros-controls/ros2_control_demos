@@ -178,7 +178,7 @@ def generate_launch_description():
     robot_controller_spawner = Node(
         package="controller_manager",
         executable="spawner.py",
-        arguments=[robot_controller, "-c", "/controller_manager"],
+        arguments=[robot_controller, "-c", "/controller_manager", "--load-only"],
     )
 
     nodes = [
