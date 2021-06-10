@@ -152,7 +152,7 @@ Available launch-file options:
 
 ### Example 2: "Robots with multiple interfaces"
 
-- Launch file: rrbot_system_position_only.launch.py
+- Launch file: rrbot_system_multi_interface.launch.py
 - Command interfaces:
   - joint1/position
   - joint2/position
