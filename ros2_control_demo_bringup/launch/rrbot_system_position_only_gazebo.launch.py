@@ -22,6 +22,7 @@ from launch_ros.substitutions import FindPackageShare
 
 import os
 
+
 def generate_launch_description():
     # Declare arguments
     declared_arguments = []
@@ -92,7 +93,9 @@ def generate_launch_description():
     )
 
     base_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([os.path.dirname(os.path.realpath(__file__)), "/rrbot.launch.py"]),
+        PythonLaunchDescriptionSource(
+            [os.path.dirname(os.path.realpath(__file__)), "/rrbot.launch.py"]
+        ),
         launch_arguments={
             "description_file": "rrbot_system_position_only.urdf.xacro",
             "prefix": prefix,
