@@ -27,24 +27,25 @@ This package does not have any dependencies except `ros2` core packages and can,
 
 This repository demonstrates the following `ros2_control` concepts:
 
-* Creating of `*HardwareInterface` for a System, Sensor, and Actuator.
+* Creating a `*HardwareInterface` for a System, Sensor, and Actuator.
 * Creating a robot description in the form of URDF files.
 * Loading the configuration and starting a robot using launch files.
 * Control of two joints of *RRBot*.
 * Using simulated robots and starting `ros2_control` with Gazebo simulator.
-* Implementing of controller switching strategy for a robot.
+* Implementing a controller switching strategy for a robot.
 * Using joint limits and transmission concepts in `ros2_control`.
 
 ## Quick Hints
 
 These are some quick hints, especially for those coming from a ROS1 control background:
 
-* There are now three categories of hardware interface: *Sensor*, *Actuator*, and *System*.
+* There are now three categories of hardware components: *Sensor*, *Actuator*, and *System*.
   *Sensor* is for individual sensors; *Actuator* is for individual actuators; *System* is for any combination of multiple sensors/actuators.
   You could think of a Sensor as read-only.
-  All interfaces are used as plugins and therefore exported using `PLUGINLIB_EXPORT_CLASS` macro.
+  All components are used as plugins and therefore exported using `PLUGINLIB_EXPORT_CLASS` macro.
 * *ros(1)_control* only allowed three hardware interface types: position, velocity, and effort.
-  *ros2_control* allows you to create any interface type by defining a custom string. For example, you might define a `position_in_degrees` or a `temperature` interface. The most common (position, velocity, acceleration, effort) are already defined as constants in hardware_interface/types/hardware_interface_type_values.hpp.
+  *ros2_control* allows you to create any interface type by defining a custom string. For example, you might define a `position_in_degrees` or a `temperature` interface.
+  The most common (position, velocity, acceleration, effort) are already defined as constants in hardware_interface/types/hardware_interface_type_values.hpp.
 * In ros2_control, all parameters for the driver are specified in the URDF.
   The ros2_control framework uses the **<ros2_control>** tag in the URDF.
 * Joint names in <ros2_control> tags in the URDF must be compatible with the controller's configuration.
@@ -57,7 +58,8 @@ git clone https://github.com/ros-controls/ros2_control_demos
 ```
 
 **NOTE**: `ros2_control` and `ros2_controllers` packages are released for foxy and can be installed using package manager.
-  For daily use it is recommended to use the released version but there may always be some not-yet-released changes that are required to run the demos.
+We provide officially released and maintained debian packages, which can easily be installed via aptitude.
+However, there might be cases in which not-yet released demos or features are only available through a source build in your own workspace.
 
 * Install dependencies (maybe you need `sudo`):
   ```
@@ -88,17 +90,18 @@ The `rviz2` setup can be recreated following these steps:
   rviz2 --display-config `ros2 pkg prefix ros2_control_demo_description`/share/ros2_control_demo_description/rviz/rrbot.rviz
   ```
 
-*RRBot*, or ''Revolute-Revolute Manipulator Robot'', is a simple 3-linkage, 2-joint arm that we will use to demonstrate various features. It essentially a double inverted pendulum and demonstrates some fun control concepts within a simulator and was originally introduced for Gazebo tutorials.
+*RRBot*, or ''Revolute-Revolute Manipulator Robot'', is a simple 3-linkage, 2-joint arm that we will use to demonstrate various features.
+It is essentially a double inverted pendulum and demonstrates some fun control concepts within a simulator and was originally introduced for Gazebo tutorials.
 The *RRBot* URDF files can be found in the `urdf` folder of `ros2_control_demo_description` package.
 
 ### General notes about examples
 
-1. To start an example open a terminal, source your ROS2-workspace and execute launch file with:
+1. To start an example open a terminal, source your ROS2-workspace and execute a launch file with:
    ```
    ros2 launch ros2_control_demo_bringup <example_launch_file>
    ```
 
-2. To check if the hardware are controller a loaded properly, open another terminal and execute:
+2. To check if the hardware interface loaded properly, open another terminal and execute:
    ```
    ros2 control list_hardware_interfaces
    ```
@@ -112,7 +115,7 @@ The *RRBot* URDF files can be found in the `urdf` folder of `ros2_control_demo_d
          joint2/position
    ```
 
-3. Check which controller are running using:
+3. Check which controllers are running using:
    ```
    ros2 control list_controllers
    ```
@@ -122,7 +125,7 @@ The *RRBot* URDF files can be found in the `urdf` folder of `ros2_control_demo_d
    joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
    ```
 
-4. Check [Controlles and moving hardware](#Controlles-and-moving-hardware) section to move *RRBot*.
+4. Check [Controllers and moving hardware](#Controllers-and-moving-hardware) section to move *RRBot*.
 
 
 ### Example 1: "Industrial Robots with only one interface"
@@ -210,10 +213,10 @@ angular:
  z: 1.0"
 ```
 
-You should now see orange box circling in `rviz2`.
+You should now see an orange box circling in `rviz2`.
 
 
-## Controlles and moving hardware
+## Controllers and moving hardware
 To move the robot you should load and start controllers.
 The `JointStateController` is used to publish the joint states to ROS topics.
 Direct joint commands are sent to this robot via the `ForwardCommandController`.
@@ -258,7 +261,7 @@ Now you should also see the *RRbot* represented correctly in `rviz2`.
    ```
    ros2 control list_controllers
    ```
-   You should get in the response:
+   You should get the response:
    ```
    forward_position_controller[forward_command_controller/ForwardCommandController] inactive
    ```
@@ -277,7 +280,7 @@ Now you should also see the *RRbot* represented correctly in `rviz2`.
    forward_position_controller[forward_command_controller/ForwardCommandController] active
    ```
 
-3. Send command to the controller, either:
+3. Send a command to the controller, either:
 
    a. Manually using ros2 cli interface:
    ```
@@ -285,7 +288,7 @@ Now you should also see the *RRbot* represented correctly in `rviz2`.
    - 0.5
    - 0.5"
    ```
-   B. Or you can start demo node which sends two goals every 5 seconds in a loop:
+   B. Or you can start a demo node which sends two goals every 5 seconds in a loop:
    ```
    ros2 launch ros2_control_demo_bringup test_forward_position_controller.launch.py
    ```
