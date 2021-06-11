@@ -13,6 +13,7 @@ Repository organization
 The repository is organized in the following packages:
 
   - ``ros2_control_demo_hardware`` - implementation of example hardware interfaces,
+  - ``ros2_control_demo_bringup`` - nodes starting hardware interfaces, controllers and GUIs.
   - ``ros2_control_test_node`` - nodes for testing ros2_control-enabled robots and their integration in the framework.
 
 Mode switching demo

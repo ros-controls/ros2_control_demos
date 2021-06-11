@@ -46,6 +46,7 @@ These are some quick hints, especially for those coming from a ROS1 control back
 * *ros(1)_control* only allowed three hardware interface types: position, velocity, and effort.
   *ros2_control* allows you to create any interface type by defining a custom string. For example, you might define a `position_in_degrees` or a `temperature` interface.
   The most common (position, velocity, acceleration, effort) are already defined as constants in hardware_interface/types/hardware_interface_type_values.hpp.
+* Joint names in <ros2_control> tags in the URDF must be compatible with the controller's configuration.
 * In ros2_control, all parameters for the driver are specified in the URDF.
   The ros2_control framework uses the **<ros2_control>** tag in the URDF.
 * Joint names in <ros2_control> tags in the URDF must be compatible with the controller's configuration.
@@ -125,8 +126,8 @@ The *RRBot* URDF files can be found in the `urdf` folder of `ros2_control_demo_d
    joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
    ```
 
-4. Check [Controllers and moving hardware](#Controllers-and-moving-hardware) section to move *RRBot*.
 
+4. Check [Controllers and moving hardware](#Controlles-and-moving-hardware) section to move *RRBot*.
 
 ### Example 1: "Industrial Robots with only one interface"
 
@@ -148,12 +149,12 @@ Available launch-file options:
     This is useful to test *ros2_control* integration and controllers without physical hardware.
 
 
-### Example 1: "Industrial Robots with only one interface" (Gazebo simulation)
+### Example 2: "Industrial Robots with only one interface" (Gazebo simulation)
 
 - **TBA**
 
 
-### Example 2: "Robots with multiple interfaces"
+### Example 3: "Robots with multiple interfaces"
 
 - Launch file: rrbot_system_multi_interface.launch.py
 - Command interfaces:
@@ -184,7 +185,7 @@ Notes:
     The two illegal controllers demonstrate how hardware interface declines faulty claims to access joint command interfaces.
 
 
-### Example 10: "Differential drive mobile robot"
+### Example 4: "Differential drive mobile robot"
 
 - Launch file: diffbot_system.launch.py
 - Command interfaces:

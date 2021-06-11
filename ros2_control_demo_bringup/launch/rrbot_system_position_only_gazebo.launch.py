@@ -15,10 +15,12 @@
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, ThisLaunchFileDir
+from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
+
+import os
 
 
 def generate_launch_description():
@@ -75,7 +77,7 @@ def generate_launch_description():
                     [
                         FindPackageShare("gazebo_ros"),
                         "launch",
-                        "/gazebo.launch.py",
+                        "gazebo.launch.py",
                     ]
                 )
             ]
@@ -91,7 +93,9 @@ def generate_launch_description():
     )
 
     base_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([ThisLaunchFileDir(), "/rrbot.launch.py"]),
+        PythonLaunchDescriptionSource(
+            [os.path.dirname(os.path.realpath(__file__)), "/rrbot.launch.py"]
+        ),
         launch_arguments={
             "description_file": "rrbot_system_position_only.urdf.xacro",
             "prefix": prefix,
