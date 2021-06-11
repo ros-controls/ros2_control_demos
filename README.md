@@ -58,7 +58,7 @@ git clone https://github.com/ros-controls/ros2_controllers
 git clone https://github.com/ros-controls/ros2_control_demos
 ```
 
-**NOTE**: `ros2_control` and `ros2_controllers` packages are released for foxy and can be installed using package manager.
+**NOTE**: `ros2_control` and `ros2_controllers` packages are released for foxy and can be installed using a package manager.
 We provide officially released and maintained debian packages, which can easily be installed via aptitude.
 However, there might be cases in which not-yet released demos or features are only available through a source build in your own workspace.
 
