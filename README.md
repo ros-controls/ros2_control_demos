@@ -39,7 +39,7 @@ This repository demonstrates the following `ros2_control` concepts:
 
 These are some quick hints, especially for those coming from a ROS1 control background:
 
-* There are now three categories of hardware interface components: *Sensor*, *Actuator*, and *System*.
+* There are now three categories of hardware components: *Sensor*, *Actuator*, and *System*.
   *Sensor* is for individual sensors; *Actuator* is for individual actuators; *System* is for any combination of multiple sensors/actuators.
   You could think of a Sensor as read-only.
   All components are used as plugins and therefore exported using `PLUGINLIB_EXPORT_CLASS` macro.
@@ -58,9 +58,8 @@ git clone https://github.com/ros-controls/ros2_controllers
 git clone https://github.com/ros-controls/ros2_control_demos
 ```
 
-**NOTE**: `ros2_control` and `ros2_controllers` packages are released for foxy and can be installed using a package manager.
+**NOTE**: `ros2_control` and `ros2_controllers` packages are released for foxy and can be installed using package manager.
 We provide officially released and maintained debian packages, which can easily be installed via aptitude.
-
 However, there might be cases in which not-yet released demos or features are only available through a source build in your own workspace.
 
 * Install dependencies (maybe you need `sudo`):
@@ -92,17 +91,18 @@ The `rviz2` setup can be recreated following these steps:
   rviz2 --display-config `ros2 pkg prefix ros2_control_demo_description`/share/ros2_control_demo_description/rviz/rrbot.rviz
   ```
 
-*RRBot*, or ''Revolute-Revolute Manipulator Robot'', is a simple 3-linkage, 2-joint arm that we will use to demonstrate various features. It essentially a double inverted pendulum and demonstrates some fun control concepts within a simulator and was originally introduced for Gazebo tutorials.
+*RRBot*, or ''Revolute-Revolute Manipulator Robot'', is a simple 3-linkage, 2-joint arm that we will use to demonstrate various features.
+It is essentially a double inverted pendulum and demonstrates some fun control concepts within a simulator and was originally introduced for Gazebo tutorials.
 The *RRBot* URDF files can be found in the `urdf` folder of `ros2_control_demo_description` package.
 
 ### General notes about examples
 
-1. To start an example open a terminal, source your ROS2-workspace and execute launch file with:
+1. To start an example open a terminal, source your ROS2-workspace and execute a launch file with:
    ```
    ros2 launch ros2_control_demo_bringup <example_launch_file>
    ```
 
-2. To check if the hardware are controller a loaded properly, open another terminal and execute:
+2. To check if the hardware interface loaded properly, open another terminal and execute:
    ```
    ros2 control list_hardware_interfaces
    ```
@@ -116,7 +116,7 @@ The *RRBot* URDF files can be found in the `urdf` folder of `ros2_control_demo_d
          joint2/position
    ```
 
-3. Check which controller are running using:
+3. Check which controllers are running using:
    ```
    ros2 control list_controllers
    ```
@@ -126,8 +126,8 @@ The *RRBot* URDF files can be found in the `urdf` folder of `ros2_control_demo_d
    joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
    ```
 
-4. Check [Controllers and moving hardware](#Controlles-and-moving-hardware) section to move *RRBot*.
 
+4. Check [Controllers and moving hardware](#Controlles-and-moving-hardware) section to move *RRBot*.
 
 ### Example 1: "Industrial Robots with only one interface"
 
@@ -214,7 +214,7 @@ angular:
  z: 1.0"
 ```
 
-You should now see orange box circling in `rviz2`.
+You should now see an orange box circling in `rviz2`.
 
 
 ## Controllers and moving hardware

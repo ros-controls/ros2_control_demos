@@ -8,7 +8,7 @@ This repository provides templates for the development of ros2_control-enabled r
 Repository organization
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-**Note:** the following is a comprehensive list.
+**Note:** the following list is comprehensive.
 
 The repository is organized in the following packages:
 
