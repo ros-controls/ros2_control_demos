@@ -5,11 +5,11 @@ controller_manager:
     forward_position_controller:
       type: forward_command_controller/ForwardCommandController
 
-    fts_controllers:
+    fts_controller:
       type: force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster
 
-    joint_state_controller:
-      type: joint_state_controller/JointStateController
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
 
 forward_position_controller:
   ros__parameters:
@@ -18,10 +18,8 @@ forward_position_controller:
       - joint2
     interface_name: position
 
-fts_controllers:
+fts_controller:
   ros__parameters:
-    sensor_name: tcp_fts_sensor
-    interface_names:
-      - fx
-      - tz
+    interface_names.force.x: tcp_fts_sensor/mysensor_force.x
+    interface_names.torque.z: tcp_fts_sensor/mysensor_torque.z
     frame_id: rrbot_tcp
