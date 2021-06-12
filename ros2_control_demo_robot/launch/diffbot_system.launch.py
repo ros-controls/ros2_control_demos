@@ -1,4 +1,4 @@
-# Copyright 2021 Stogl Robotics Consulting UG (haftungsbeschränkt)
+# Copyright 2020 ros2_control Development Team
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,37 +28,45 @@ def generate_launch_description():
     robot_description_path = os.path.join(
         get_package_share_directory("ros2_control_demo_robot"),
         "description",
-        "rrbot_system_position_only.urdf.xacro",
+        "diffbot_system.urdf.xacro",
     )
     robot_description_config = xacro.process_file(robot_description_path)
     robot_description = {"robot_description": robot_description_config.toxml()}
 
-    rviz_config_file = os.path.join(
-        get_package_share_directory("ros2_control_demo_robot"), "rviz", "rrbot.rviz"
+    diffbot_diff_drive_controller = os.path.join(
+        get_package_share_directory("ros2_control_demo_robot"),
+        "config",
+        "diffbot_diff_drive_controller.yaml",
     )
 
-    joint_state_publisher_node = Node(
-        package="joint_state_publisher_gui",
-        executable="joint_state_publisher_gui",
-    )
-    robot_state_publisher_node = Node(
+    node_robot_state_publisher = Node(
         package="robot_state_publisher",
         executable="robot_state_publisher",
-        output="both",
+        output="screen",
         parameters=[robot_description],
     )
-    rviz_node = Node(
-        package="rviz2",
-        executable="rviz2",
-        name="rviz2",
-        output="log",
-        arguments=["-d", rviz_config_file],
+
+    controller_manager_node = Node(
+        package="controller_manager",
+        executable="ros2_control_node",
+        parameters=[robot_description, diffbot_diff_drive_controller],
+        output={
+            "stdout": "screen",
+            "stderr": "screen",
+        },
+    )
+
+    spawn_controller = Node(
+        package="controller_manager",
+        executable="spawner.py",
+        arguments=["joint_state_broadcaster"],
+        output="screen",
     )
 
     return LaunchDescription(
         [
-            joint_state_publisher_node,
-            robot_state_publisher_node,
-            rviz_node,
+            node_robot_state_publisher,
+            controller_manager_node,
+            spawn_controller,
         ]
     )

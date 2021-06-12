@@ -1,4 +1,4 @@
-# Copyright 2021 Stogl Robotics Consulting UG (haftungsbeschränkt)
+# Copyright 2021 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,14 +17,25 @@ import os
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
+from launch.actions import IncludeLaunchDescription
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+
 from launch_ros.actions import Node
 
 import xacro
 
 
 def generate_launch_description():
+    gazebo = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            [
+                os.path.join(get_package_share_directory("gazebo_ros"), "launch"),
+                "/gazebo.launch.py",
+            ]
+        ),
+        launch_arguments={"verbose": "false"}.items(),
+    )
 
-    # Get URDF via xacro
     robot_description_path = os.path.join(
         get_package_share_directory("ros2_control_demo_robot"),
         "description",
@@ -32,44 +43,35 @@ def generate_launch_description():
         "rrbot_system_position_only.urdf.xacro",
     )
     robot_description_config = xacro.process_file(
-        robot_description_path, mappings={"slowdown": "3.0"}
+        robot_description_path, mappings={"use_sim": "true"}
     )
     robot_description = {"robot_description": robot_description_config.toxml()}
 
-    rrbot_forward_controller = os.path.join(
-        get_package_share_directory("ros2_control_demo_robot"), "config", "rrbot_controllers.yaml"
-    )
-    rviz_config_file = os.path.join(
-        get_package_share_directory("ros2_control_demo_robot"), "rviz", "rrbot.rviz"
-    )
-
-    control_node = Node(
-        package="controller_manager",
-        executable="ros2_control_node",
-        parameters=[robot_description, rrbot_forward_controller],
-        output={
-            "stdout": "screen",
-            "stderr": "screen",
-        },
-    )
-    robot_state_publisher_node = Node(
+    node_robot_state_publisher = Node(
         package="robot_state_publisher",
         executable="robot_state_publisher",
-        output="both",
+        output="screen",
         parameters=[robot_description],
     )
-    rviz_node = Node(
-        package="rviz2",
-        executable="rviz2",
-        name="rviz2",
-        output="log",
-        arguments=["-d", rviz_config_file],
+
+    spawn_entity = Node(
+        package="gazebo_ros",
+        executable="spawn_entity.py",
+        arguments=["-topic", "robot_description", "-entity", "rrbot_system_position"],
+        output="screen",
+    )
+    spawn_controller = Node(
+        package="controller_manager",
+        executable="spawner.py",
+        arguments=["joint_state_broadcaster"],
+        output="screen",
     )
 
     return LaunchDescription(
         [
-            control_node,
-            robot_state_publisher_node,
-            rviz_node,
+            gazebo,
+            node_robot_state_publisher,
+            spawn_entity,
+            spawn_controller,
         ]
     )

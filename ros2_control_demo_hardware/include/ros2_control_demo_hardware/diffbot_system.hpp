@@ -1,4 +1,4 @@
-// Copyright 2020 ros2_control Development Team
+// Copyright 2021 ros2_control Development Team
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef ROS2_CONTROL_DEMO_HARDWARE__RRBOT_SYSTEM_POSITION_ONLY_HPP_
-#define ROS2_CONTROL_DEMO_HARDWARE__RRBOT_SYSTEM_POSITION_ONLY_HPP_
+#ifndef ROS2_CONTROL_DEMO_HARDWARE__DIFFBOT_SYSTEM_HPP_
+#define ROS2_CONTROL_DEMO_HARDWARE__DIFFBOT_SYSTEM_HPP_
 
 #include <memory>
 #include <string>
@@ -30,11 +30,11 @@
 
 namespace ros2_control_demo_hardware
 {
-class RRBotSystemPositionOnlyHardware
+class DiffBotSystemHardware
 : public hardware_interface::BaseInterface<hardware_interface::SystemInterface>
 {
 public:
-  RCLCPP_SHARED_PTR_DEFINITIONS(RRBotSystemPositionOnlyHardware);
+  RCLCPP_SHARED_PTR_DEFINITIONS(DiffBotSystemHardware);
 
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
   hardware_interface::return_type configure(const hardware_interface::HardwareInfo & info) override;
@@ -58,10 +58,9 @@ public:
   hardware_interface::return_type write() override;
 
 private:
-  // Parameters for the RRBot simulation
+  // Parameters for the DiffBot simulation
   double hw_start_sec_;
   double hw_stop_sec_;
-  double hw_slowdown_;
 
   // Store the command for the simulated robot
   std::vector<double> hw_commands_;
@@ -70,4 +69,4 @@ private:
 
 }  // namespace ros2_control_demo_hardware
 
-#endif  // ROS2_CONTROL_DEMO_HARDWARE__RRBOT_SYSTEM_POSITION_ONLY_HPP_
+#endif  // ROS2_CONTROL_DEMO_HARDWARE__DIFFBOT_SYSTEM_HPP_
