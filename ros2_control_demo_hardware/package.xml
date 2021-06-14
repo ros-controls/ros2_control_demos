@@ -3,11 +3,11 @@
 <package format="3">
   <name>ros2_control_demo_hardware</name>
   <version>0.0.0</version>
-  <description>Demo package of `ros2_control` Hardware. This package provides example on how to define hardware of your own robot for ROS2 control. The package is used with `demo_robot` from package `ros2_control_demo_robot`.</description>
+  <description>Demo package of `ros2_control` Hardware. This package provides example on how to define hardware of your own robot for ROS2 control. The package is used with `demo_robot` from package `ros2_control_demo_description`.</description>
 
   <maintainer email="denis@stogl.de">Denis Štogl</maintainer>
 
-  <license>Apache License 2.0</license>
+  <license>Apache-2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 

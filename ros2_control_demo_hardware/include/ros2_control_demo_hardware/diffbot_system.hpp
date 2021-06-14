@@ -64,7 +64,11 @@ private:
 
   // Store the command for the simulated robot
   std::vector<double> hw_commands_;
-  std::vector<double> hw_states_;
+  std::vector<double> hw_positions_;
+  std::vector<double> hw_velocities_;
+
+  // Store the wheeled robot position
+  double base_x_, base_y_, base_theta_;
 };
 
 }  // namespace ros2_control_demo_hardware

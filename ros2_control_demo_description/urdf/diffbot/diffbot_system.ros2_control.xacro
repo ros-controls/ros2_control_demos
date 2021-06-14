@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="diffbot_system" params="name prefix use_fake_hardware:=^|false fake_sensor_commands:=^|false slowdown:=2.0">
+
+    <ros2_control name="${name}" type="system">
+      <hardware>
+        <xacro:if value="${use_fake_hardware}">
+          <plugin>fake_components/GenericSystem</plugin>
+          <param name="fake_sensor_commands">${fake_sensor_commands}</param>
+          <param name="state_following_offset">0.0</param>
+        </xacro:if>
+        <xacro:unless value="${use_fake_hardware}">
+          <plugin>ros2_control_demo_hardware/DiffBotSystemHardware</plugin>
+          <param name="example_param_hw_start_duration_sec">2.0</param>
+          <param name="example_param_hw_stop_duration_sec">3.0</param>
+        </xacro:unless>
+      </hardware>
+      <joint name="left_wheel_joint">
+        <command_interface name="velocity">
+          <param name="min">-1</param>
+          <param name="max">1</param>
+        </command_interface>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
+      <joint name="right_wheel_joint">
+        <command_interface name="velocity">
+          <param name="min">-1</param>
+          <param name="max">1</param>
+        </command_interface>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
+    </ros2_control>
+
+  </xacro:macro>
+
+</robot>

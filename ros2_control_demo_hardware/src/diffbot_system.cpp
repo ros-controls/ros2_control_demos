@@ -28,6 +28,10 @@ namespace ros2_control_demo_hardware
 hardware_interface::return_type DiffBotSystemHardware::configure(
   const hardware_interface::HardwareInfo & info)
 {
+  base_x_ = 0.0;
+  base_y_ = 0.0;
+  base_theta_ = 0.0;
+
   if (configure_default(info) != hardware_interface::return_type::OK)
   {
     return hardware_interface::return_type::ERROR;
@@ -35,7 +39,8 @@ hardware_interface::return_type DiffBotSystemHardware::configure(
 
   hw_start_sec_ = stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
   hw_stop_sec_ = stod(info_.hardware_parameters["example_param_hw_stop_duration_sec"]);
-  hw_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
+  hw_positions_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
+  hw_velocities_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   hw_commands_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
 
   for (const hardware_interface::ComponentInfo & joint : info_.joints)
@@ -98,9 +103,9 @@ std::vector<hardware_interface::StateInterface> DiffBotSystemHardware::export_st
   for (auto i = 0u; i < info_.joints.size(); i++)
   {
     state_interfaces.emplace_back(hardware_interface::StateInterface(
-      info_.joints[i].name, hardware_interface::HW_IF_POSITION, &hw_states_[i]));
+      info_.joints[i].name, hardware_interface::HW_IF_POSITION, &hw_positions_[i]));
     state_interfaces.emplace_back(hardware_interface::StateInterface(
-      info_.joints[i].name, hardware_interface::HW_IF_VELOCITY, &hw_states_[i]));
+      info_.joints[i].name, hardware_interface::HW_IF_VELOCITY, &hw_velocities_[i]));
   }
 
   return state_interfaces;
@@ -130,11 +135,12 @@ hardware_interface::return_type DiffBotSystemHardware::start()
   }
 
   // set some default values
-  for (auto i = 0u; i < hw_states_.size(); i++)
+  for (auto i = 0u; i < hw_positions_.size(); i++)
   {
-    if (std::isnan(hw_states_[i]))
+    if (std::isnan(hw_positions_[i]))
     {
-      hw_states_[i] = 0;
+      hw_positions_[i] = 0;
+      hw_velocities_[i] = 0;
       hw_commands_[i] = 0;
     }
   }
@@ -168,20 +174,35 @@ hardware_interface::return_type DiffBotSystemHardware::read()
 {
   RCLCPP_INFO(rclcpp::get_logger("DiffBotSystemHardware"), "Reading...");
 
-  double tau = 0.2;
-  double a = tau / (tau + 1);
-  double b = 1 / (tau + 1);
+  double radius = 0.02;  // radius of the wheels
+  double dist_w = 0.1;   // distance between the wheels
+  double dt = 0.01;      // Control period
   for (uint i = 0; i < hw_commands_.size(); i++)
   {
     // Simulate DiffBot wheels's movement as a first-order system
-    hw_states_[1] = a * hw_states_[1] + b * hw_commands_[i];
-    hw_states_[0] += hw_states_[1] / 2;
+    // Update the joint status: this is a revolute joint without any limit.
+    // Simply integrates
+    hw_positions_[i] = hw_positions_[1] + dt * hw_commands_[i];
+    hw_velocities_[i] = hw_commands_[i];
+
     RCLCPP_INFO(
       rclcpp::get_logger("DiffBotSystemHardware"),
-      "Got position state %.5f and velocity state %.5f for '%s'!", hw_states_[0], hw_states_[1],
-      info_.joints[i].name.c_str());
+      "Got position state %.5f and velocity state %.5f for '%s'!", hw_positions_[i],
+      hw_velocities_[i], info_.joints[i].name.c_str());
   }
-  RCLCPP_INFO(rclcpp::get_logger("DiffBotSystemHardware"), "Joints successfully read!");
+
+  // Update the free-flyer, i.e. the base notation using the classical
+  // wheel differentiable kinematics
+  double base_dx = 0.5 * radius * (hw_commands_[0] + hw_commands_[1]) * cos(base_theta_);
+  double base_dy = 0.5 * radius * (hw_commands_[0] + hw_commands_[1]) * sin(base_theta_);
+  double base_dtheta = radius * (hw_commands_[0] - hw_commands_[1]) / dist_w;
+  base_x_ += base_dx * dt;
+  base_y_ += base_dy * dt;
+  base_theta_ += base_dtheta * dt;
+
+  RCLCPP_INFO(
+    rclcpp::get_logger("DiffBotSystemHardware"), "Joints successfully read! (%.5f,%.5f,%.5f)",
+    base_x_, base_y_, base_theta_);
 
   return hardware_interface::return_type::OK;
 }
