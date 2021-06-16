@@ -148,6 +148,15 @@ Available launch-file options:
     This is a simple simulation that mimics joint command to their states.
     This is useful to test *ros2_control* integration and controllers without physical hardware.
 
+For gazebo:
+   ```
+   ros2 launch ros2_control_demo_bringup rrbot_system_position_only_gazebo.launch.py
+   ```
+
+To start the forward position:
+   ```
+   ros2 launch ros2_control_demo_bringup test_forward_position_controller.launch.py
+   ```
 
 ### Example 2: "Industrial Robots with only one interface" (Gazebo simulation)
 
