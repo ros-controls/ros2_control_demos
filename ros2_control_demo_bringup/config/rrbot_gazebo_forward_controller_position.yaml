@@ -25,4 +25,3 @@ joint_trajectory_controller:
       - joint1
       - joint2
     interface_name: position
-
