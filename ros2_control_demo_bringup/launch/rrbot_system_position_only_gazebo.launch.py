@@ -38,13 +38,6 @@ def generate_launch_description():
     )
     declared_arguments.append(
         DeclareLaunchArgument(
-            "use_fake_hardware",
-            default_value="false",
-            description="Start robot with fake hardware mirroring command to its states.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
             "use_sim",
             default_value="true",
             description="Start robot with fake hardware mirroring command to its states.",
@@ -74,7 +67,6 @@ def generate_launch_description():
 
     # Initialize Arguments
     prefix = LaunchConfiguration("prefix")
-    use_fake_hardware = LaunchConfiguration("use_fake_hardware")
     use_sim = LaunchConfiguration("use_sim")
     fake_sensor_commands = LaunchConfiguration("fake_sensor_commands")
     slowdown = LaunchConfiguration("slowdown")
@@ -104,7 +96,6 @@ def generate_launch_description():
         launch_arguments={
             "description_file": "rrbot_system_position_only.urdf.xacro",
             "prefix": prefix,
-            "use_fake_hardware": use_fake_hardware,
             "use_sim": use_sim,
             "fake_sensor_commands": fake_sensor_commands,
             "slowdown": slowdown,
