@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from ament_index_python.packages import get_package_share_directory
+
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
@@ -38,10 +40,18 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "use_fake_hardware",
+            default_value="false",
+            description="Start robot with fake hardware mirroring command to its states.",
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "use_sim",
             default_value="true",
             description="Start robot with fake hardware mirroring command to its states.",
         )
     )
+
     declared_arguments.append(
         DeclareLaunchArgument(
             "fake_sensor_commands",
@@ -66,6 +76,7 @@ def generate_launch_description():
     # Initialize Arguments
     prefix = LaunchConfiguration("prefix")
     use_fake_hardware = LaunchConfiguration("use_fake_hardware")
+    use_sim = LaunchConfiguration("use_sim")
     fake_sensor_commands = LaunchConfiguration("fake_sensor_commands")
     slowdown = LaunchConfiguration("slowdown")
     robot_controller = LaunchConfiguration("robot_controller")
@@ -73,13 +84,9 @@ def generate_launch_description():
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             [
-                PathJoinSubstitution(
-                    [
-                        FindPackageShare("gazebo_ros"),
-                        "launch",
-                        "gazebo.launch.py",
-                    ]
-                )
+                os.path.join(
+                    get_package_share_directory('gazebo_ros'),
+                    'launch'), '/gazebo.launch.py'
             ]
         ),
         launch_arguments={"verbose": "false"}.items(),
@@ -100,6 +107,7 @@ def generate_launch_description():
             "description_file": "rrbot_system_position_only.urdf.xacro",
             "prefix": prefix,
             "use_fake_hardware": use_fake_hardware,
+            "use_sim": use_sim,
             "fake_sensor_commands": fake_sensor_commands,
             "slowdown": slowdown,
             "robot_controller": robot_controller,
