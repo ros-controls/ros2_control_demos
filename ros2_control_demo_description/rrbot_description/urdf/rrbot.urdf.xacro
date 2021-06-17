@@ -6,7 +6,7 @@
   <!-- Constants for robot dimensions -->
   <xacro:property name="mass" value="1" /> <!-- arbitrary value for mass -->
   <xacro:property name="width" value="0.1" /> <!-- Square dimensions (widthxwidth) of beams -->
-  <xacro:property name="height1" value="0.2" /> <!-- Link 1 -->
+  <xacro:property name="height1" value="2" /> <!-- Link 1 -->
   <xacro:property name="height2" value="1" /> <!-- Link 2 -->
   <xacro:property name="height3" value="1" /> <!-- Link 3 -->
   <xacro:property name="camera_link" value="0.05" /> <!-- Size of square 'camera' box -->
@@ -144,7 +144,7 @@
           <visual>
             <origin xyz="0 0 0" rpy="0 0 0"/>
             <geometry>
-              <mesh filename="package://ros2_control_demo_description/meshes/hokuyo.dae"/>
+              <mesh filename="package://rrbot_description/meshes/hokuyo.dae"/>
             </geometry>
           </visual>
 

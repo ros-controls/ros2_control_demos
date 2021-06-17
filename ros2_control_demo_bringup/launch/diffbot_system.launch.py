@@ -33,9 +33,6 @@ def generate_launch_description():
         default_value="false",
         description="start RViz automatically with the launch file")
 
-    if (LaunchConfiguration("start_rviz")):
-        print("showing rviz")
-
     # Get URDF via xacro
     robot_description_path = os.path.join(
         get_package_share_directory("diffbot_description"),
@@ -94,6 +91,7 @@ def generate_launch_description():
 
     return LaunchDescription(
         [
+            arg_show_rviz,
             node_robot_state_publisher,
             controller_manager_node,
             spawn_dd_controller,
