@@ -12,16 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from ament_index_python.packages import get_package_share_directory
-
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration
+from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 
 from launch_ros.actions import Node
-
-import os
+from launch_ros.substitutions import FindPackageShare
 
 
 def generate_launch_description():
@@ -40,16 +37,7 @@ def generate_launch_description():
         DeclareLaunchArgument(
             "use_sim",
             default_value="true",
-            description="Start robot with fake hardware mirroring command to its states.",
-        )
-    )
-
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "fake_sensor_commands",
-            default_value="false",
-            description="Enable fake command interfaces for sensors used for simple simulations. \
-            Used only if 'use_fake_hardware' parameter is true.",
+            description="Start robot with simulation from Gazebo.",
         )
     )
     declared_arguments.append(
@@ -68,15 +56,19 @@ def generate_launch_description():
     # Initialize Arguments
     prefix = LaunchConfiguration("prefix")
     use_sim = LaunchConfiguration("use_sim")
-    fake_sensor_commands = LaunchConfiguration("fake_sensor_commands")
     slowdown = LaunchConfiguration("slowdown")
     robot_controller = LaunchConfiguration("robot_controller")
 
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             [
-                os.path.join(get_package_share_directory("gazebo_ros"), "launch"),
-                "/gazebo.launch.py",
+                PathJoinSubstitution(
+                    [
+                        FindPackageShare("gazebo_ros"),
+                        "launch",
+                        "gazebo.launch.py",
+                    ]
+                )
             ]
         ),
         launch_arguments={"verbose": "false"}.items(),
@@ -91,13 +83,20 @@ def generate_launch_description():
 
     base_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            [os.path.dirname(os.path.realpath(__file__)), "/rrbot.launch.py"]
+            [
+                PathJoinSubstitution(
+                    [
+                        FindPackageShare("ros2_control_demo_bringup"),
+                        "launch",
+                        "rrbot.launch.py",
+                    ]
+                )
+            ]
         ),
         launch_arguments={
             "description_file": "rrbot_system_position_only.urdf.xacro",
             "prefix": prefix,
             "use_sim": use_sim,
-            "fake_sensor_commands": fake_sensor_commands,
             "slowdown": slowdown,
             "robot_controller": robot_controller,
         }.items(),
