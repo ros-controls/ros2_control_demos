@@ -24,8 +24,6 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
-import xacro
-
 
 def generate_launch_description():
     gazebo = IncludeLaunchDescription(
