@@ -24,7 +24,8 @@ jobs:
           # build all packages listed in the meta package
           package-name:
             ros2_control_demo_hardware
-            ros2_control_demo_description
+            diffbot_description
+            rrbot_description            
             ros2_control_demo_bringup
             ros2_control_demos
           vcs-repo-file-url: |
