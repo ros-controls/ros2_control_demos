@@ -31,10 +31,13 @@ import xacro
 def generate_launch_description():
 
     declared_arguments = []
-    declared_arguments.append(DeclareLaunchArgument(
-        "start_rviz",
-        default_value="false",
-        description="start RViz automatically with the launch file"))
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "start_rviz",
+            default_value="false",
+            description="start RViz automatically with the launch file",
+        )
+    )
 
     declared_arguments.append(
         DeclareLaunchArgument(
@@ -46,16 +49,22 @@ def generate_launch_description():
         )
     )
 
-    declared_arguments.append(DeclareLaunchArgument(
+    declared_arguments.append(
+        DeclareLaunchArgument(
             "use_fake_hardware",
             default_value="false",
-            description="Start robot with fake hardware mirroring command to its states."))
+            description="Start robot with fake hardware mirroring command to its states.",
+        )
+    )
 
-    declared_arguments.append(DeclareLaunchArgument(
+    declared_arguments.append(
+        DeclareLaunchArgument(
             "fake_sensor_commands",
             default_value="false",
             description="Enable fake command interfaces for sensors used for simple simulations. \
-            Used only if 'use_fake_hardware' parameter is true."))
+            Used only if 'use_fake_hardware' parameter is true.",
+        )
+    )
 
     declared_arguments.append(
         DeclareLaunchArgument(
@@ -69,7 +78,12 @@ def generate_launch_description():
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
             PathJoinSubstitution(
-                [FindPackageShare("rrbot_description"), "urdf", "rrbot_system_position_only.urdf.xacro"]),
+                [
+                    FindPackageShare("rrbot_description"),
+                    "urdf",
+                    "rrbot_system_position_only.urdf.xacro",
+                ]
+            ),
             " prefix:=",
             LaunchConfiguration("prefix"),
             " use_fake_hardware:=",
@@ -85,7 +99,7 @@ def generate_launch_description():
     rrbot_controllers = os.path.join(
         get_package_share_directory("ros2_control_demo_bringup"),
         "config",
-        "rrbot_controllers.yaml"
+        "rrbot_controllers.yaml",
     )
 
     node_robot_state_publisher = Node(
@@ -124,8 +138,8 @@ def generate_launch_description():
     )
 
     return LaunchDescription(
-        declared_arguments +
-        [
+        declared_arguments
+        + [
             controller_manager_node,
             node_robot_state_publisher,
             spawn_jsb_controller,

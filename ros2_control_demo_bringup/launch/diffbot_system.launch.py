@@ -31,7 +31,8 @@ def generate_launch_description():
     arg_show_rviz = DeclareLaunchArgument(
         "start_rviz",
         default_value="false",
-        description="start RViz automatically with the launch file")
+        description="start RViz automatically with the launch file",
+    )
 
     # Get URDF via xacro
     robot_description_content = Command(
@@ -39,7 +40,8 @@ def generate_launch_description():
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
             PathJoinSubstitution(
-                [FindPackageShare("diffbot_description"), "urdf", "diffbot_system.urdf.xacro"])
+                [FindPackageShare("diffbot_description"), "urdf", "diffbot_system.urdf.xacro"]
+            ),
         ]
     )
     robot_description = {"robot_description": robot_description_content}
@@ -105,6 +107,6 @@ def generate_launch_description():
             controller_manager_node,
             spawn_dd_controller,
             spawn_jsb_controller,
-            rviz_node
+            rviz_node,
         ]
     )
