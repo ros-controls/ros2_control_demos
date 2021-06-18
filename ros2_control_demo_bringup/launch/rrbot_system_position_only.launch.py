@@ -134,12 +134,10 @@ def generate_launch_description():
         condition=IfCondition(LaunchConfiguration("start_rviz")),
     )
 
-    return LaunchDescription(
-        declared_arguments
-        + [
-            controller_manager_node,
-            node_robot_state_publisher,
-            spawn_jsb_controller,
-            rviz_node,
-        ]
-    )
+    nodes = [
+        controller_manager_node,
+        node_robot_state_publisher,
+        spawn_jsb_controller,
+        rviz_node,
+    ]
+    return LaunchDescription(declared_arguments + nodes)
