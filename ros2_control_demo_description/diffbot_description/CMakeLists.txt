@@ -4,7 +4,7 @@ project(diffbot_description)
 find_package(ament_cmake REQUIRED)
 
 install(
-  DIRECTORY config gazebo ros2_control launch urdf
+  DIRECTORY config gazebo ros2_control urdf
   DESTINATION share/${PROJECT_NAME}
 )
 

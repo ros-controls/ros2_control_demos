@@ -18,9 +18,11 @@ from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription
+from launch.substitutions import Command, FindExecutable, PathJoinSubstitution
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 from launch_ros.actions import Node
+from launch_ros.substitutions import FindPackageShare
 
 import xacro
 
@@ -36,15 +38,17 @@ def generate_launch_description():
         launch_arguments={"verbose": "false"}.items(),
     )
 
-    robot_description_path = os.path.join(
-        get_package_share_directory("rrbot_description"),
-        "urdf",
-        "rrbot_system_position_only.urdf.xacro",
+    # Get URDF via xacro
+    robot_description_content = Command(
+        [
+            PathJoinSubstitution([FindExecutable(name="xacro")]),
+            " ",
+            PathJoinSubstitution(
+                [FindPackageShare("rrbot_description"), "urdf", "rrbot_system_position_only.urdf.xacro"]),
+            " use_sim:=true"
+        ]
     )
-    robot_description_config = xacro.process_file(
-        robot_description_path, mappings={"use_sim": "true"}
-    )
-    robot_description = {"robot_description": robot_description_config.toxml()}
+    robot_description = {"robot_description": robot_description_content}
 
     node_robot_state_publisher = Node(
         package="robot_state_publisher",
