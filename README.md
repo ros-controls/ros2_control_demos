@@ -20,7 +20,7 @@ The repository has three goals:
 The repository is inspired by the [ros_control_boilerplate](https://github.com/PickNikRobotics/ros_control_boilerplate) repository from Dave Coleman.
 The simulation has three parts/packages:
 1. The first package, `ros2_control_demo_bringup`, holds launch files and runtime configurations for demo robots.
-2. The second package, `ros2_control_demo_description`, stored URDF-description files, rviz configurations and meshes for the demo robots.
+2. The second package, `rrbot_description`, stored URDF-description files, rviz configurations and meshes for the demo robots.
 3. The third package, `ros2_control_demo_hardware`, implements the hardware interfaces described in the roadmap.
 The examples simulate a simple *RRbot* internally to provide sufficient test and demonstration data and reduce external dependencies.
 This package does not have any dependencies except `ros2` core packages and can, therefore, be used on SoC-hardware of headless systems.
@@ -86,14 +86,14 @@ Each example is started with a single launch file which starts up the robot hard
 The `rviz2` setup can be recreated following these steps:
 
 - The robot models can be visualized using `RobotModel` display using `/robot_description` topic.
-- Or you can simply open the configuration from `rviz` folder in `ros2_control_demo_description` package manually or directly by executing:
+- Or you can simply open the configuration from `rviz` folder in `rrbot_description` package manually or directly by executing:
   ```
-  rviz2 --display-config `ros2 pkg prefix ros2_control_demo_description`/share/ros2_control_demo_description/rviz/rrbot.rviz
+  rviz2 --display-config `ros2 pkg prefix rrbot_description`/share/rrbot_description/rviz/rrbot.rviz
   ```
 
 *RRBot*, or ''Revolute-Revolute Manipulator Robot'', is a simple 3-linkage, 2-joint arm that we will use to demonstrate various features.
 It is essentially a double inverted pendulum and demonstrates some fun control concepts within a simulator and was originally introduced for Gazebo tutorials.
-The *RRBot* URDF files can be found in the `urdf` folder of `ros2_control_demo_description` package.
+The *RRBot* URDF files can be found in the `urdf` folder of `rrbot_description` package.
 
 ### General notes about examples
 
