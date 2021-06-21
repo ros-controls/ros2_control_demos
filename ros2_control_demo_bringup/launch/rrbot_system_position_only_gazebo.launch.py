@@ -12,77 +12,52 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
+
+from ament_index_python.packages import get_package_share_directory
+
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
+from launch.actions import IncludeLaunchDescription
+from launch.substitutions import Command, FindExecutable, PathJoinSubstitution
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
-import os
-
 
 def generate_launch_description():
-    # Declare arguments
-    declared_arguments = []
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "prefix",
-            default_value='""',
-            description="Prefix of the joint names, useful for \
-        multi-robot setup. If changed than also joint names in the controllers' configuration \
-        have to be updated.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "use_fake_hardware",
-            default_value="true",
-            description="Start robot with fake hardware mirroring command to its states.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "fake_sensor_commands",
-            default_value="false",
-            description="Enable fake command interfaces for sensors used for simple simulations. \
-            Used only if 'use_fake_hardware' parameter is true.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "slowdown", default_value="3.0", description="Slowdown factor of the RRbot."
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "robot_controller",
-            default_value="forward_position_controller",
-            description="Robot controller to start.",
-        )
-    )
-
-    # Initialize Arguments
-    prefix = LaunchConfiguration("prefix")
-    use_fake_hardware = LaunchConfiguration("use_fake_hardware")
-    fake_sensor_commands = LaunchConfiguration("fake_sensor_commands")
-    slowdown = LaunchConfiguration("slowdown")
-    robot_controller = LaunchConfiguration("robot_controller")
-
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             [
-                PathJoinSubstitution(
-                    [
-                        FindPackageShare("gazebo_ros"),
-                        "launch",
-                        "gazebo.launch.py",
-                    ]
-                )
+                os.path.join(get_package_share_directory("gazebo_ros"), "launch"),
+                "/gazebo.launch.py",
             ]
         ),
         launch_arguments={"verbose": "false"}.items(),
+    )
+
+    # Get URDF via xacro
+    robot_description_content = Command(
+        [
+            PathJoinSubstitution([FindExecutable(name="xacro")]),
+            " ",
+            PathJoinSubstitution(
+                [
+                    FindPackageShare("rrbot_description"),
+                    "urdf",
+                    "rrbot_system_position_only.urdf.xacro",
+                ]
+            ),
+            " use_sim:=true",
+        ]
+    )
+    robot_description = {"robot_description": robot_description_content}
+
+    node_robot_state_publisher = Node(
+        package="robot_state_publisher",
+        executable="robot_state_publisher",
+        output="screen",
+        parameters=[robot_description],
     )
 
     spawn_entity = Node(
@@ -91,19 +66,18 @@ def generate_launch_description():
         arguments=["-topic", "robot_description", "-entity", "rrbot_system_position"],
         output="screen",
     )
-
-    base_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            [os.path.dirname(os.path.realpath(__file__)), "/rrbot.launch.py"]
-        ),
-        launch_arguments={
-            "description_file": "rrbot_system_position_only.urdf.xacro",
-            "prefix": prefix,
-            "use_fake_hardware": use_fake_hardware,
-            "fake_sensor_commands": fake_sensor_commands,
-            "slowdown": slowdown,
-            "robot_controller": robot_controller,
-        }.items(),
+    spawn_controller = Node(
+        package="controller_manager",
+        executable="spawner.py",
+        arguments=["joint_state_broadcaster"],
+        output="screen",
     )
 
-    return LaunchDescription(declared_arguments + [gazebo, base_launch, spawn_entity])
+    return LaunchDescription(
+        [
+            gazebo,
+            node_robot_state_publisher,
+            spawn_entity,
+            spawn_controller,
+        ]
+    )
