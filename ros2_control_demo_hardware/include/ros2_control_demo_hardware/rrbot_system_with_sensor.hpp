@@ -16,7 +16,6 @@
 // Authors: Subhas Das, Denis Stogl
 //
 
-
 #ifndef ROS2_CONTROL_DEMO_HARDWARE__RRBOT_SYSTEM_WITH_SENSOR_HPP_
 #define ROS2_CONTROL_DEMO_HARDWARE__RRBOT_SYSTEM_WITH_SENSOR_HPP_
 
@@ -24,11 +23,10 @@
 #include <string>
 #include <vector>
 
-
 #include "hardware_interface/base_interface.hpp"
-#include "hardware_interface/system_interface.hpp"
 #include "hardware_interface/handle.hpp"
 #include "hardware_interface/hardware_info.hpp"
+#include "hardware_interface/system_interface.hpp"
 #include "hardware_interface/types/hardware_interface_return_values.hpp"
 #include "hardware_interface/types/hardware_interface_status_values.hpp"
 #include "rclcpp/macros.hpp"
@@ -38,8 +36,8 @@ using hardware_interface::return_type;
 
 namespace ros2_control_demo_hardware
 {
-class RRBotSystemWithSensorHardware : public
-  hardware_interface::BaseInterface<hardware_interface::SystemInterface>
+class RRBotSystemWithSensorHardware
+: public hardware_interface::BaseInterface<hardware_interface::SystemInterface>
 {
 public:
   RCLCPP_SHARED_PTR_DEFINITIONS(RRBotSystemWithSensorHardware);

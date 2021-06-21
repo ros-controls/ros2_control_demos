@@ -11,10 +11,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+#
 #
 # Authors: Subhas Das, Denis Stogl
-#
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
@@ -43,13 +42,6 @@ def generate_launch_description():
     )
     declared_arguments.append(
         DeclareLaunchArgument(
-            "controllers_file",
-            default_value="rrbot_with_sensor_controllers.yaml",
-            description="YAML file with the controllers configuration.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
             "fake_sensor_commands",
             default_value="false",
             description="Enable fake command interfaces for sensors used for simple simulations. \
@@ -65,7 +57,6 @@ def generate_launch_description():
     )
 
     # Initialize Arguments
-    controllers_file = LaunchConfiguration("controllers_file")
     prefix = LaunchConfiguration("prefix")
     use_fake_hardware = LaunchConfiguration("use_fake_hardware")
     fake_sensor_commands = LaunchConfiguration("fake_sensor_commands")
