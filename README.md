@@ -88,7 +88,7 @@ The `rviz2` setup can be recreated following these steps:
 - The robot models can be visualized using `RobotModel` display using `/robot_description` topic.
 - Or you can simply open the configuration from `rviz` folder in `rrbot_description` package manually or directly by executing:
   ```
-  rviz2 --display-config `ros2 pkg prefix rrbot_description`/share/rrbot_description/rviz/rrbot.rviz
+  rviz2 --display-config `ros2 pkg prefix rrbot_description`/share/rrbot_description/config/rrbot.rviz
   ```
 
 *RRBot*, or ''Revolute-Revolute Manipulator Robot'', is a simple 3-linkage, 2-joint arm that we will use to demonstrate various features.
