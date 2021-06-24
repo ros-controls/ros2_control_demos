@@ -24,10 +24,7 @@ from launch_ros.substitutions import FindPackageShare
 def generate_launch_description():
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            [
-                PathJoinSubstitution(FindPackageShare("gazebo_ros"), "launch"),
-                "/gazebo.launch.py",
-            ]
+            [PathJoinSubstitution([FindPackageShare("gazebo_ros"), "launch", "gazebo.launch.py"])]
         ),
         launch_arguments={"verbose": "false"}.items(),
     )

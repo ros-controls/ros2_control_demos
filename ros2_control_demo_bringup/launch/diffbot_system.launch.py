@@ -19,8 +19,6 @@ from launch.substitutions import Command, FindExecutable, LaunchConfiguration, P
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
-import xacro
-
 
 def generate_launch_description():
 
@@ -41,18 +39,13 @@ def generate_launch_description():
         ]
     )
     robot_description = {"robot_description": robot_description_content}
-    robot_description_path = PathJoinSubstitution(
-        FindPackageShare("diffbot_description"),
-        "urdf",
-        "diffbot_system.urdf.xacro",
-    )
-    robot_description_config = xacro.process_file(robot_description_path)
-    robot_description = {"robot_description": robot_description_config.toxml()}
 
     diffbot_diff_drive_controller = PathJoinSubstitution(
-        FindPackageShare("ros2_control_demo_bringup"),
-        "config",
-        "diffbot_diff_drive_controller.yaml",
+        [
+            FindPackageShare("ros2_control_demo_bringup"),
+            "config",
+            "diffbot_diff_drive_controller.yaml",
+        ]
     )
 
     node_robot_state_publisher = Node(
