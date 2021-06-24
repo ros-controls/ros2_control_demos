@@ -12,10 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
-
-from ament_index_python.packages import get_package_share_directory
-
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.conditions import IfCondition
@@ -45,16 +41,16 @@ def generate_launch_description():
         ]
     )
     robot_description = {"robot_description": robot_description_content}
-    robot_description_path = os.path.join(
-        get_package_share_directory("diffbot_description"),
+    robot_description_path = PathJoinSubstitution(
+        FindPackageShare("diffbot_description"),
         "urdf",
         "diffbot_system.urdf.xacro",
     )
     robot_description_config = xacro.process_file(robot_description_path)
     robot_description = {"robot_description": robot_description_config.toxml()}
 
-    diffbot_diff_drive_controller = os.path.join(
-        get_package_share_directory("ros2_control_demo_bringup"),
+    diffbot_diff_drive_controller = PathJoinSubstitution(
+        FindPackageShare("ros2_control_demo_bringup"),
         "config",
         "diffbot_diff_drive_controller.yaml",
     )
