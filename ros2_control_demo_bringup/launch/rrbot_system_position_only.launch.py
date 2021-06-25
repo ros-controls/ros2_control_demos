@@ -12,9 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
-
-from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
@@ -93,10 +90,12 @@ def generate_launch_description():
     )
     robot_description = {"robot_description": robot_description_content}
 
-    rrbot_controllers = os.path.join(
-        get_package_share_directory("ros2_control_demo_bringup"),
-        "config",
-        "rrbot_controllers.yaml",
+    rrbot_controllers = PathJoinSubstitution(
+        [
+            FindPackageShare("ros2_control_demo_bringup"),
+            "config",
+            "rrbot_controllers.yaml",
+        ]
     )
 
     node_robot_state_publisher = Node(
