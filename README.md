@@ -18,12 +18,13 @@ The repository has three goals:
 ## Description
 
 The repository is inspired by the [ros_control_boilerplate](https://github.com/PickNikRobotics/ros_control_boilerplate) repository from Dave Coleman.
-The simulation has three parts/packages:
-1. The first package, `ros2_control_demo_bringup`, holds launch files and runtime configurations for demo robots.
-2. The second package, `rrbot_description`, stored URDF-description files, rviz configurations and meshes for the demo robots.
-3. The third package, `ros2_control_demo_hardware`, implements the hardware interfaces described in the roadmap.
-The examples simulate a simple *RRbot* internally to provide sufficient test and demonstration data and reduce external dependencies.
-This package does not have any dependencies except `ros2` core packages and can, therefore, be used on SoC-hardware of headless systems.
+The examples have three parts/packages according to usual structure of ROS packages for robots:
+1. The bringup package `ros2_control_demo_bringup`, holds launch files and runtime configurations for demo robots.
+2. Description packages `rrbot_description` and `diffbot_description` (inside `ros2_control_demo_description`), store URDF-description files, rviz configurations and meshes for the demo robots.
+3. Hardware interface package `ros2_control_demo_hardware`, implements the hardware interfaces described in the roadmap.
+
+The examples of *RRBot* and *DiffBot* are trivial simulations to demonstrate and test `ros2_control` concepts.
+This package does not have any dependencies except `ros2` core packages and can, therefore, be used on SoC-hardware or headless systems.
 
 This repository demonstrates the following `ros2_control` concepts:
 
@@ -86,23 +87,51 @@ Each example is started with a single launch file which starts up the robot hard
 The `rviz2` setup can be recreated following these steps:
 
 - The robot models can be visualized using `RobotModel` display using `/robot_description` topic.
-- Or you can simply open the configuration from `rviz` folder in `rrbot_description` package manually or directly by executing:
+- Or you can simply open the configuration from `rviz` folder in `rrbot_description` or `diffbot_description` package manually or directly by executing:
   ```
   rviz2 --display-config `ros2 pkg prefix rrbot_description`/share/rrbot_description/config/rrbot.rviz
+  ```
+  of
+  ```
+  rviz2 --display-config `ros2 pkg prefix diffbot_description`/share/rrbot_description/config/diffbot.rviz
   ```
 
 *RRBot*, or ''Revolute-Revolute Manipulator Robot'', is a simple 3-linkage, 2-joint arm that we will use to demonstrate various features.
 It is essentially a double inverted pendulum and demonstrates some fun control concepts within a simulator and was originally introduced for Gazebo tutorials.
 The *RRBot* URDF files can be found in the `urdf` folder of `rrbot_description` package.
 
+*DiffBot*, or ''Differential Mobile Robot'', is a simple mobile base with differential drive.
+The robot is basically a box moving according to differential drive kinematics.
+The *DiffBot* URDF files can be found in `urdf` folder of `diffbot_description` package.
+
 ### General notes about examples
+
+1. To check that robot descriptions are working properly use following launch commands:
+
+   *RRBot*
+   ```
+   ros2 launch rrbot_description view_robot.launch.py
+   ```
+   Optional arguments for specific example (the robot visualization will be the same for all examples):
+   ```
+   description_file:=rrbot_system_multi_interface.urdf.xacro
+   ```
+
+   *DiffBot*
+   ```
+   ros2 launch diffbot_description view_robot.launch.py
+   ```
+
+**NOTE**: Getting the following output in terminal is OK: `Warning: Invalid frame ID "odom" passed to canTransform argument target_frame - frame does not exist`.
 
 1. To start an example open a terminal, source your ROS2-workspace and execute a launch file with:
    ```
    ros2 launch ros2_control_demo_bringup <example_launch_file>
    ```
 
-2. To check if the hardware interface loaded properly, open another terminal and execute:
+1. To stop RViz2 from auto-start use `start_rviz:=false` launch file argument.
+
+1. To check if the hardware interface loaded properly, open another terminal and execute:
    ```
    ros2 control list_hardware_interfaces
    ```
@@ -116,7 +145,7 @@ The *RRBot* URDF files can be found in the `urdf` folder of `rrbot_description` 
          joint2/position
    ```
 
-3. Check which controllers are running using:
+1. Check which controllers are running using:
    ```
    ros2 control list_controllers
    ```
@@ -127,7 +156,8 @@ The *RRBot* URDF files can be found in the `urdf` folder of `rrbot_description` 
    ```
 
 
-4. Check [Controllers and moving hardware](#Controlles-and-moving-hardware) section to move *RRBot*.
+1. Check [Controllers and moving hardware](#Controlles-and-moving-hardware) section to move *RRBot*.
+
 
 ### Example 1: "Industrial Robots with only one interface"
 
@@ -148,6 +178,7 @@ Available launch-file options:
     This is a simple simulation that mimics joint command to their states.
     This is useful to test *ros2_control* integration and controllers without physical hardware.
 
+**NOTE:** This example also shows how launch files are usually reused when working with `ros2_control`. The `rrbot.launch.py` is used as a configurable base-file of a robot and `rrbot_system_position_only.launch.py` shows how this file can be used for a specific scenario.
 
 ### Example 2: "Industrial Robots with only one interface" (Gazebo simulation)
 
@@ -199,7 +230,7 @@ Notes:
 
 Available controllers:
   - `joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]`
-  - `diffbot_base_controller[diff_drive_controller/DiffDriveController] active`
+  - `diffbot_base_controller[diff_drive_controller/DiffDriveController]`
 
 Sending commands to diff drive controller:
 
