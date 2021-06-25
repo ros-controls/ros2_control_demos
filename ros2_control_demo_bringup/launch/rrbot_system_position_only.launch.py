@@ -1,4 +1,4 @@
-# Copyright 2021 Open Source Robotics Foundation, Inc.
+# Copyright 2021 Stogl Robotics Consulting UG (haftungsbeschränkt)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,27 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument
-from launch.conditions import IfCondition
-from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
-
-from launch_ros.actions import Node
-from launch_ros.substitutions import FindPackageShare
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.substitutions import LaunchConfiguration, ThisLaunchFileDir
 
 
 def generate_launch_description():
-
+    # Declare arguments
     declared_arguments = []
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "start_rviz",
-            default_value="false",
-            description="start RViz automatically with the launch file",
-        )
-    )
-
     declared_arguments.append(
         DeclareLaunchArgument(
             "prefix",
@@ -42,7 +30,6 @@ def generate_launch_description():
         have to be updated.",
         )
     )
-
     declared_arguments.append(
         DeclareLaunchArgument(
             "use_fake_hardware",
@@ -50,7 +37,6 @@ def generate_launch_description():
             description="Start robot with fake hardware mirroring command to its states.",
         )
     )
-
     declared_arguments.append(
         DeclareLaunchArgument(
             "fake_sensor_commands",
@@ -59,84 +45,45 @@ def generate_launch_description():
             Used only if 'use_fake_hardware' parameter is true.",
         )
     )
-
     declared_arguments.append(
         DeclareLaunchArgument(
             "slowdown", default_value="3.0", description="Slowdown factor of the RRbot."
         )
     )
-
-    # Get URDF via xacro
-    robot_description_content = Command(
-        [
-            PathJoinSubstitution([FindExecutable(name="xacro")]),
-            " ",
-            PathJoinSubstitution(
-                [
-                    FindPackageShare("rrbot_description"),
-                    "urdf",
-                    "rrbot_system_position_only.urdf.xacro",
-                ]
-            ),
-            " prefix:=",
-            LaunchConfiguration("prefix"),
-            " use_fake_hardware:=",
-            LaunchConfiguration("use_fake_hardware"),
-            " fake_sensor_commands:=",
-            LaunchConfiguration("fake_sensor_commands"),
-            " slowdown:=",
-            LaunchConfiguration("slowdown"),
-        ]
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "robot_controller",
+            default_value="forward_position_controller",
+            description="Robot controller to start.",
+        )
     )
-    robot_description = {"robot_description": robot_description_content}
-
-    rrbot_controllers = PathJoinSubstitution(
-        [
-            FindPackageShare("ros2_control_demo_bringup"),
-            "config",
-            "rrbot_controllers.yaml",
-        ]
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "start_rviz",
+            default_value="true",
+            description="Start RViz2 automatically with this launch file.",
+        )
     )
 
-    node_robot_state_publisher = Node(
-        package="robot_state_publisher",
-        executable="robot_state_publisher",
-        output="screen",
-        parameters=[robot_description],
+    # Initialize Arguments
+    prefix = LaunchConfiguration("prefix")
+    use_fake_hardware = LaunchConfiguration("use_fake_hardware")
+    fake_sensor_commands = LaunchConfiguration("fake_sensor_commands")
+    slowdown = LaunchConfiguration("slowdown")
+    robot_controller = LaunchConfiguration("robot_controller")
+    start_rviz = LaunchConfiguration("start_rviz")
+
+    base_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([ThisLaunchFileDir(), "/rrbot.launch.py"]),
+        launch_arguments={
+            "description_file": "rrbot_system_position_only.urdf.xacro",
+            "prefix": prefix,
+            "use_fake_hardware": use_fake_hardware,
+            "fake_sensor_commands": fake_sensor_commands,
+            "slowdown": slowdown,
+            "robot_controller": robot_controller,
+            "start_rviz": start_rviz,
+        }.items(),
     )
 
-    controller_manager_node = Node(
-        package="controller_manager",
-        executable="ros2_control_node",
-        parameters=[robot_description, rrbot_controllers],
-        output={
-            "stdout": "screen",
-            "stderr": "screen",
-        },
-    )
-
-    spawn_jsb_controller = Node(
-        package="controller_manager",
-        executable="spawner.py",
-        arguments=["joint_state_broadcaster"],
-        output="screen",
-    )
-
-    rviz_config_file = PathJoinSubstitution(
-        [FindPackageShare("rrbot_description"), "config", "rrbot.rviz"]
-    )
-    rviz_node = Node(
-        package="rviz2",
-        executable="rviz2",
-        name="rviz2",
-        arguments=["-d", rviz_config_file],
-        condition=IfCondition(LaunchConfiguration("start_rviz")),
-    )
-
-    nodes = [
-        controller_manager_node,
-        node_robot_state_publisher,
-        spawn_jsb_controller,
-        rviz_node,
-    ]
-    return LaunchDescription(declared_arguments + nodes)
+    return LaunchDescription(declared_arguments + [base_launch])
