@@ -16,17 +16,76 @@ from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.conditions import IfCondition
 from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
+
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
 
 def generate_launch_description():
-
-    arg_show_rviz = DeclareLaunchArgument(
-        "start_rviz",
-        default_value="false",
-        description="start RViz automatically with the launch file",
+    # Declare arguments
+    declared_arguments = []
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "runtime_config_package",
+            default_value="ros2_control_demo_bringup",
+            description='Package with the controller\'s configuration in "config" folder. \
+        Usually the argument is not set, it enables use of a custom setup.',
+        )
     )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "controllers_file",
+            default_value="diffbot_diff_drive_controller.yaml",
+            description="YAML file with the controllers configuration.",
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "description_package",
+            default_value="diffbot_description",
+            description="Description package with robot URDF/xacro files. Usually the argument \
+        is not set, it enables use of a custom description.",
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "description_file",
+            default_value="diffbot_system.urdf.xacro",
+            description="URDF/XACRO description file with the robot.",
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "prefix",
+            default_value='""',
+            description="Prefix of the joint names, useful for \
+        multi-robot setup. If changed than also joint names in the controllers' configuration \
+        have to be updated.",
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "robot_controller",
+            default_value="diffbot_base_controller",
+            description="Robot controller to start.",
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "start_rviz",
+            default_value="true",
+            description="Start RViz2 automatically with this launch file.",
+        )
+    )
+
+    # Initialize Arguments
+    runtime_config_package = LaunchConfiguration("runtime_config_package")
+    controllers_file = LaunchConfiguration("controllers_file")
+    description_package = LaunchConfiguration("description_package")
+    description_file = LaunchConfiguration("description_file")
+    prefix = LaunchConfiguration("prefix")
+    robot_controller = LaunchConfiguration("robot_controller")
+    start_rviz = LaunchConfiguration("start_rviz")
 
     # Get URDF via xacro
     robot_description_content = Command(
@@ -34,68 +93,69 @@ def generate_launch_description():
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
             PathJoinSubstitution(
-                [FindPackageShare("diffbot_description"), "urdf", "diffbot_system.urdf.xacro"]
+                [FindPackageShare(description_package), "urdf", description_file]
             ),
+            " ",
+            "prefix:=",
+            prefix,
+            " ",
         ]
     )
     robot_description = {"robot_description": robot_description_content}
 
-    diffbot_diff_drive_controller = PathJoinSubstitution(
+    robot_controllers = PathJoinSubstitution(
         [
-            FindPackageShare("ros2_control_demo_bringup"),
+            FindPackageShare(runtime_config_package),
             "config",
-            "diffbot_diff_drive_controller.yaml",
+            controllers_file,
         ]
     )
-
-    node_robot_state_publisher = Node(
-        package="robot_state_publisher",
-        executable="robot_state_publisher",
-        output="screen",
-        parameters=[robot_description],
+    rviz_config_file = PathJoinSubstitution(
+        [FindPackageShare(description_package), "config", "diffbot.rviz"]
     )
 
-    controller_manager_node = Node(
+    control_node = Node(
         package="controller_manager",
         executable="ros2_control_node",
-        parameters=[robot_description, diffbot_diff_drive_controller],
+        parameters=[robot_description, robot_controllers],
         output={
             "stdout": "screen",
             "stderr": "screen",
         },
     )
-
-    spawn_dd_controller = Node(
-        package="controller_manager",
-        executable="spawner.py",
-        arguments=["diffbot_base_controller"],
-        output="screen",
-    )
-    spawn_jsb_controller = Node(
-        package="controller_manager",
-        executable="spawner.py",
-        arguments=["joint_state_broadcaster"],
-        output="screen",
-    )
-
-    rviz_config_file = PathJoinSubstitution(
-        [FindPackageShare("diffbot_description"), "config", "diffbot.rviz"]
+    robot_state_pub_node = Node(
+        package="robot_state_publisher",
+        executable="robot_state_publisher",
+        output="both",
+        parameters=[robot_description],
     )
     rviz_node = Node(
         package="rviz2",
         executable="rviz2",
         name="rviz2",
+        output="log",
         arguments=["-d", rviz_config_file],
-        condition=IfCondition(LaunchConfiguration("start_rviz")),
+        condition=IfCondition(start_rviz),
     )
 
-    return LaunchDescription(
-        [
-            arg_show_rviz,
-            node_robot_state_publisher,
-            controller_manager_node,
-            spawn_dd_controller,
-            spawn_jsb_controller,
-            rviz_node,
-        ]
+    joint_state_broadcaster_spawner = Node(
+        package="controller_manager",
+        executable="spawner.py",
+        arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager"],
     )
+
+    robot_controller_spawner = Node(
+        package="controller_manager",
+        executable="spawner.py",
+        arguments=[robot_controller, "-c", "/controller_manager"],
+    )
+
+    nodes = [
+        control_node,
+        robot_state_pub_node,
+        rviz_node,
+        joint_state_broadcaster_spawner,
+        robot_controller_spawner,
+    ]
+
+    return LaunchDescription(declared_arguments + nodes)

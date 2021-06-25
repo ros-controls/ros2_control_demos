@@ -26,7 +26,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "description_package",
-            default_value="rrbot_description",
+            default_value="diffbot_description",
             description="Description package with robot URDF/xacro files. Usually the argument \
         is not set, it enables use of a custom description.",
         )
@@ -34,7 +34,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "description_file",
-            default_value="",
+            default_value="diffbot_system.urdf.xacro",
             description="URDF/XACRO description file with the robot.",
         )
     )
@@ -69,7 +69,7 @@ def generate_launch_description():
     robot_description = {"robot_description": robot_description_content}
 
     rviz_config_file = PathJoinSubstitution(
-        [FindPackageShare(description_package), "rviz", "rrbot.rviz"]
+        [FindPackageShare(description_package), "config", "diffbot.rviz"]
     )
 
     joint_state_publisher_node = Node(
@@ -90,12 +90,10 @@ def generate_launch_description():
         arguments=["-d", rviz_config_file],
     )
 
-    return LaunchDescription(
-        declared_arguments.append(
-            [
-                joint_state_publisher_node,
-                robot_state_publisher_node,
-                rviz_node,
-            ]
-        )
-    )
+    nodes = [
+        joint_state_publisher_node,
+        robot_state_publisher_node,
+        rviz_node,
+    ]
+
+    return LaunchDescription(declared_arguments + nodes)
