@@ -239,8 +239,8 @@ return_type RRBotSystemMultiInterfaceHardware::start()
   status_ = hardware_interface::status::STARTED;
 
   RCLCPP_INFO(
-    rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"), "System successfully started! %u",
-    static_cast<unsigned int>(control_lvl_[0]));
+    rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"), "System successfully started! %hhu",
+    static_cast<std::uint8_t>(control_lvl_[0]));
   return return_type::OK;
 }
 
@@ -311,9 +311,9 @@ return_type RRBotSystemMultiInterfaceHardware::write()
     // Simulate sending commands to the hardware
     RCLCPP_INFO(
       rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"),
-      "Got the commands pos: %.5f, vel: %.5f, acc: %.5f for joint %zu, control_lvl: %u",
+      "Got the commands pos: %.5f, vel: %.5f, acc: %.5f for joint %zu, control_lvl: %hhu",
       hw_commands_positions_[i], hw_commands_velocities_[i], hw_commands_accelerations_[i], i,
-      static_cast<unsigned int>(control_lvl_[i]));
+      static_cast<std::uint8_t>(control_lvl_[i]));
   }
   return return_type::OK;
 }
