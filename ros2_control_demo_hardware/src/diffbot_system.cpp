@@ -50,7 +50,7 @@ hardware_interface::return_type DiffBotSystemHardware::configure(
     {
       RCLCPP_FATAL(
         rclcpp::get_logger("DiffBotSystemHardware"),
-        "Joint '%s' has %d command interfaces found. 1 expected.", joint.name.c_str(),
+        "Joint '%s' has %zu command interfaces found. 1 expected.", joint.name.c_str(),
         joint.command_interfaces.size());
       return hardware_interface::return_type::ERROR;
     }
@@ -68,7 +68,7 @@ hardware_interface::return_type DiffBotSystemHardware::configure(
     {
       RCLCPP_FATAL(
         rclcpp::get_logger("DiffBotSystemHardware"),
-        "Joint '%s' has %d state interface. 2 expected.", joint.name.c_str(),
+        "Joint '%s' has %zu state interface. 2 expected.", joint.name.c_str(),
         joint.state_interfaces.size());
       return hardware_interface::return_type::ERROR;
     }
@@ -77,9 +77,8 @@ hardware_interface::return_type DiffBotSystemHardware::configure(
     {
       RCLCPP_FATAL(
         rclcpp::get_logger("DiffBotSystemHardware"),
-        "Joint '%s' have '%s' as first state interface. '%s' and '%s' expected.",
-        joint.name.c_str(), joint.state_interfaces[0].name.c_str(),
-        hardware_interface::HW_IF_POSITION);
+        "Joint '%s' have '%s' as first state interface. '%s' expected.", joint.name.c_str(),
+        joint.state_interfaces[0].name.c_str(), hardware_interface::HW_IF_POSITION);
       return hardware_interface::return_type::ERROR;
     }
 

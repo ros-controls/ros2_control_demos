@@ -46,7 +46,7 @@ hardware_interface::return_type RRBotSystemPositionOnlyHardware::configure(
     {
       RCLCPP_FATAL(
         rclcpp::get_logger("RRBotSystemPositionOnlyHardware"),
-        "Joint '%s' has %d command interfaces found. 1 expected.", joint.name.c_str(),
+        "Joint '%s' has %zu command interfaces found. 1 expected.", joint.name.c_str(),
         joint.command_interfaces.size());
       return hardware_interface::return_type::ERROR;
     }
@@ -64,7 +64,7 @@ hardware_interface::return_type RRBotSystemPositionOnlyHardware::configure(
     {
       RCLCPP_FATAL(
         rclcpp::get_logger("RRBotSystemPositionOnlyHardware"),
-        "Joint '%s' has %d state interface. 1 expected.", joint.name.c_str(),
+        "Joint '%s' has %zu state interface. 1 expected.", joint.name.c_str(),
         joint.state_interfaces.size());
       return hardware_interface::return_type::ERROR;
     }
