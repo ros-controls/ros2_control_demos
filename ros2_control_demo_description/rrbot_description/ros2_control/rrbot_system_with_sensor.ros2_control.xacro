@@ -42,13 +42,9 @@
         <state_interface name="position"/>
       </joint>
       <sensor name="tcp_fts_sensor">
-        <state_interface name="mysensor_force.x"/>
-        <state_interface name="force.y"/>
-        <state_interface name="force.z"/>
-        <state_interface name="torque.x"/>
-        <state_interface name="torque.y"/>
-        <state_interface name="mysensor_torque.z"/>
-        <param name="frame_id">rrbot_tcp</param>
+        <state_interface name="force.x"/>
+        <state_interface name="torque.z"/>
+        <param name="frame_id">tool_link</param>
         <param name="fx_range">100</param>
         <param name="tz_range">15</param>
       </sensor>

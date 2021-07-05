@@ -149,6 +149,7 @@ Available launch-file options:
     This is useful to test *ros2_control* integration and controllers without physical hardware.
 
 
+
 ### Example 2: "Industrial Robots with only one interface" (Gazebo simulation)
 
 - **TBA**
@@ -215,6 +216,34 @@ angular:
 ```
 
 You should now see an orange box circling in `rviz2`.
+
+
+### Example 5: "Industrial robot with integrated sensor"
+
+- Launch file: rrbot_system_with_sensor.launch.py
+- URDF: rrbot_system_with_sensor.urdf.xacro
+- ros2_control URDF: rrbot_system_with_sensor.ros2_control.xacro
+
+- Command interfaces:
+  - joint1/position
+  - joint2/position
+- State interfaces:
+  - joint1/position
+  - joint2/position
+  - tcp_fts_sensor/force.x
+  - tcp_fts_sensor/torque.z
+
+Available controllers:
+- `forward_position_controller[forward_command_controller/ForwardCommandController]`
+- `fts_broadcaster[force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster]`
+- `joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]`
+
+Commanding the robot: see the commands below.
+
+Accessing Wrench data from 2D FTS:
+```
+ros2 topic echo /fts_broadcaster/wrench
+```
 
 
 ## Controllers and moving hardware
