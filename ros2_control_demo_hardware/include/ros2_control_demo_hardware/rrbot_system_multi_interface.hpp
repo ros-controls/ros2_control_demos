@@ -38,7 +38,7 @@ class RRBotSystemMultiInterfaceHardware
 : public hardware_interface::BaseInterface<hardware_interface::SystemInterface>
 {
 public:
-  RCLCPP_SHARED_PTR_DEFINITIONS(RRBotSystemMultiInterfaceHardware);
+  RCLCPP_SHARED_PTR_DEFINITIONS(RRBotSystemMultiInterfaceHardware)
 
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
   return_type configure(const hardware_interface::HardwareInfo & info) override;
