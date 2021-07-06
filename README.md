@@ -218,11 +218,17 @@ You should now see an orange box circling in `rviz2`.
 
 
 ## Controllers and moving hardware
+
 To move the robot you should load and start controllers.
 The `JointStateController` is used to publish the joint states to ROS topics.
-Direct joint commands are sent to this robot via the `ForwardCommandController`.
+Direct joint commands are sent to this robot via the `ForwardCommandController` and `JointTrajectoryController`.
 The sections below describe their usage.
 Check the [Results](##result) section on how to ensure that things went well.
+
+**NOTE**: Before doing any action with controllers check their state using command:
+```
+ros2 control list_controllers
+```
 
 
 ### JointStateController
@@ -267,7 +273,7 @@ Now you should also see the *RRbot* represented correctly in `rviz2`.
    forward_position_controller[forward_command_controller/ForwardCommandController] inactive
    ```
 
-2. Now start the controller:
+3. Now start the controller:
    ```
    ros2 control switch_controllers --start forward_position_controller
    ```
@@ -281,7 +287,7 @@ Now you should also see the *RRbot* represented correctly in `rviz2`.
    forward_position_controller[forward_command_controller/ForwardCommandController] active
    ```
 
-3. Send a command to the controller, either:
+4. Send a command to the controller, either:
 
    a. Manually using ros2 cli interface:
    ```
@@ -293,6 +299,42 @@ Now you should also see the *RRbot* represented correctly in `rviz2`.
    ```
    ros2 launch ros2_control_demo_bringup test_forward_position_controller.launch.py
    ```
+   You can adjust the goals in [rrbot_forward_position_publisher.yaml](ros2_control_demo_bringup/config/rrbot_forward_position_publisher.yaml).
+
+### Using JointTrajectoryController
+
+1. If you want to test hardware with `JointTrajectoryController` first load and configure a controller (not always needed):
+   ```
+   ros2 control load_controller position_trajectory_controller --set-state configure
+   ```
+   Check if the controller is loaded and configured properly:
+   ```
+   ros2 control list_controllers
+   ```
+   You should get the response:
+   ```
+   position_trajectory_controller[joint_trajectory_controller/JointTrajectoryController] inactive
+   ```
+
+2. Now start the controller (and stop other running contorller):
+   ```
+   ros2 control switch_controllers --stop forward_position_controller --start position_trajectory_controller
+   ```
+   Check if controllers are activated:
+   ```
+   ros2 control list_controllers
+   ```
+   You should get `active` in the response:
+   ```
+   joint_state_controller[joint_state_controller/JointStateController] active
+   position_trajectory_controller[joint_trajectory_controller/JointTrajectoryController] active
+   ```
+
+3. Send a command to the controller using demo node which sends two goals every 5 seconds in a loop:
+   ```
+   ros2 launch ros2_control_demo_bringup test_forward_position_controller.launch.py
+   ```
+   You can adjust the goals in [rrbot_joint_trajectory_publisher.yaml](ros2_control_demo_bringup/config/rrbot_joint_trajectory_publisher.yaml).
 
 ## Result
 
