@@ -161,13 +161,18 @@ The *DiffBot* URDF files can be found in `urdf` folder of `diffbot_description` 
 
 ### Example 1: "Industrial Robots with only one interface"
 
-- Launch file: rrbot_system_position_only.launch.py
-- Command interfaces:
-  - joint1/position
-  - joint2/position
-- State interfaces:
-  - joint1/position
-  - joint2/position
+Files:
+  - Launch file: [rrbot_minimal.launch.py](ros2_control_demo_bringup/launch/rrbot_minimal.launch.py)
+  - Controllers yaml: [rrbot_controllers.yaml](ros2_control_demo_bringup/config/rrbot_controllers.yaml)
+  - `ros2_control` URDF tag: [rrbot_system_position_only.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/rrbot_system_position_only.ros2_control.xacro)
+
+Interfaces:
+  - Command interfaces:
+    - joint1/position
+    - joint2/position
+  - State interfaces:
+    - joint1/position
+    - joint2/position
 
 Available controllers:
   - `joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]`
@@ -178,7 +183,7 @@ Available launch-file options:
     This is a simple simulation that mimics joint command to their states.
     This is useful to test *ros2_control* integration and controllers without physical hardware.
 
-**NOTE:** This example also shows how launch files are usually reused when working with `ros2_control`. The `rrbot.launch.py` is used as a configurable base-file of a robot and `rrbot_system_position_only.launch.py` shows how this file can be used for a specific scenario.
+**NOTE:** This example also shows how launch files are usually reused when working with `ros2_control`. The [`rrbot.launch.py`](ros2_control_demo_bringup/launch/rrbot.launch.py) is used as a configurable base-file of a robot and [`rrbot_system_position_only.launch.py`](ros2_control_demo_bringup/launch/rrbot_system_position_only.launch.py) shows how this file can be used for a specific scenario.
 
 ### Example 2: "Industrial Robots with only one interface" (Gazebo simulation)
 
@@ -187,21 +192,26 @@ Available launch-file options:
 
 ### Example 3: "Robots with multiple interfaces"
 
-- Launch file: rrbot_system_multi_interface.launch.py
-- Command interfaces:
-  - joint1/position
-  - joint2/position
-  - joint1/velocity
-  - joint2/velocity
-  - joint1/acceleration
-  - joint2/acceleration
-- State interfaces:
-  - joint1/position
-  - joint2/position
-  - joint1/velocity
-  - joint2/velocity
-  - joint1/acceleration
-  - joint2/acceleration
+Files:
+  - Launch file: [rrbot_system_multi_interface.launch.py](ros2_control_demo_bringup/launch/rrbot_system_multi_interface.launch.py)
+  - Controllers yaml: [rrbot_multi_interface_forward_controllers.yaml](ros2_control_demo_bringup/config/rrbot_multi_interface_forward_controllers.yaml)
+  - `ros2_control` URDF tag: [rrbot_system_multi_interface.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/rrbot_system_multi_interface.ros2_control.xacro)
+
+Interfaces:
+  - Command interfaces:
+    - joint1/position
+    - joint2/position
+    - joint1/velocity
+    - joint2/velocity
+    - joint1/acceleration
+    - joint2/acceleration
+  - State interfaces:
+    - joint1/position
+    - joint2/position
+    - joint1/velocity
+    - joint2/velocity
+    - joint1/acceleration
+    - joint2/acceleration
 
 Available controllers:
   - `joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]`
@@ -218,15 +228,20 @@ Notes:
 
 ### Example 4: "Differential drive mobile robot"
 
-- Launch file: diffbot_system.launch.py
-- Command interfaces:
-  - left_wheel_joint/velocity
-  - right_wheel_joint/velocity
-- State interfaces:
-  - left_wheel_joint/position
-  - left_wheel_joint/velocity
-  - right_wheel_joint/position
-  - right_wheel_joint/velocity
+Files:
+  - Launch file: [diffbot_system.launch.py](ros2_control_demo_bringup/launch/diffbot_system.launch.py)
+  - Controllers yaml: [diffbot_diff_drive_controller.yaml](ros2_control_demo_bringup/config/diffbot_diff_drive_controller.yaml)
+  - `ros2_control` URDF tag: [diffbot_system.ros2_control.xacro](ros2_control_demo_description/diffbot_description/ros2_control/diffbot_system.ros2_control.xacro)
+
+Interfaces:
+  - Command interfaces:
+    - left_wheel_joint/velocity
+    - right_wheel_joint/velocity
+  - State interfaces:
+    - left_wheel_joint/position
+    - left_wheel_joint/velocity
+    - right_wheel_joint/position
+    - right_wheel_joint/velocity
 
 Available controllers:
   - `joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]`
