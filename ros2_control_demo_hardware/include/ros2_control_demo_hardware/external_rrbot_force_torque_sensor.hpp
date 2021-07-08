@@ -23,35 +23,39 @@
 #include <string>
 #include <vector>
 
+#include "hardware_interface/base_interface.hpp"
 #include "hardware_interface/handle.hpp"
 #include "hardware_interface/hardware_info.hpp"
 #include "hardware_interface/sensor_interface.hpp"
 #include "hardware_interface/types/hardware_interface_return_values.hpp"
+#include "hardware_interface/types/hardware_interface_status_values.hpp"
 #include "rclcpp/macros.hpp"
-#include "rclcpp_lifecycle/state.hpp"
 #include "ros2_control_demo_hardware/visibility_control.h"
+
+using hardware_interface::return_type;
 
 namespace ros2_control_demo_hardware
 {
-class ExternalRRBotForceTorqueSensorHardware : public hardware_interface::SensorInterface
+class ExternalRRBotForceTorqueSensorHardware
+: public hardware_interface::BaseInterface<hardware_interface::SensorInterface>
 {
 public:
   RCLCPP_SHARED_PTR_DEFINITIONS(ExternalRRBotForceTorqueSensorHardware);
 
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
-  CallbackReturn on_init(const hardware_interface::HardwareInfo & info) override;
+  return_type configure(const hardware_interface::HardwareInfo & info) override;
 
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
   std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
 
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
-  CallbackReturn on_activate(const rclcpp_lifecycle::State & previous_state) override;
+  return_type start() override;
 
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
-  CallbackReturn on_deactivate(const rclcpp_lifecycle::State & previous_state) override;
+  return_type stop() override;
 
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
-  hardware_interface::return_type read() override;
+  return_type read() override;
 
 private:
   // Parameters for the RRBot simulation

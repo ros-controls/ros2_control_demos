@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- Revolute-Revolute Manipulator with a 6D Force-Torque sensor -->
+<!-- Revolute-Revolute Manipulator with a 2D Force-Torque sensor -->
 <!--
 Copied and modified from ROS1 example -
 https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_description/urdf/rrbot.xacro
@@ -11,19 +11,19 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_desc
   <xacro:arg name="use_fake_hardware" default="true" />
   <xacro:arg name="fake_sensor_commands" default="false" />
   <xacro:arg name="prefix" default="" />
-  <xacro:arg name="slowdown" default="50.0" />
+  <xacro:arg name="slowdown" default="2.0" />
 
   <!-- Import RRBot macro -->
-  <xacro:include filename="$(find rrbot_description)/urdf/rrbot_description.urdf.xacro" />
+  <xacro:include filename="$(find rrbot_description)/urdf/rrbot.urdf.xacro" />
+
+  <!-- Import all Gazebo-customization elements, including Gazebo colors -->
+  <xacro:include filename="$(find rrbot_description)/gazebo/rrbot.gazebo.xacro" />
 
   <!-- Import Rviz colors -->
-  <xacro:include filename="$(find rrbot_description)/gazebo/rrbot.materials.xacro" />
+  <!-- <xacro:include filename="$(find ros2_control_demo_description)/urdf/rrbot/gazebo/rrbot.materials.xacro" /> -->
 
   <!-- Import RRBot ros2_control description -->
-  <xacro:include filename="$(find rrbot_description)/ros2_control/rrbot_system_position_only.ros2_control.xacro" />
-
-  <!-- Import RRBot external Force Torque Sensor description -->
-  <xacro:include filename="$(find rrbot_description)/ros2_control/external_rrbot_force_torque_sensor.ros2_control.xacro" />
+  <xacro:include filename="$(find rrbot_description)/ros2_control/rrbot_system.ros2_control.xacro" />
 
   <!-- Used for fixing robot -->
   <link name="world"/>
@@ -35,14 +35,17 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_desc
     <origin xyz="0 0 0" rpy="0 0 0" />
   </xacro:rrbot>
 
-  <xacro:rrbot_system_position_only
+  <xacro:rrbot_gazebo prefix="$(arg prefix)" />
+
+  <xacro:rrbot_system_with_external_sensor
     name="RRBotSystemPositionOnly" prefix="$(arg prefix)"
     use_fake_hardware="$(arg use_fake_hardware)"
     fake_sensor_commands="$(arg fake_sensor_commands)"
     slowdown="$(arg slowdown)" />
 
-  <xacro:external_rrbot_force_torque_sensor
-    name="ExternalRRBotFTSensor" prefix="$(arg prefix)"
+  <xacro:rrbot_system_with_external_sensor
+    name="RRBotSystemWithSensor" prefix="$(arg prefix)"
     use_fake_hardware="$(arg use_fake_hardware)"
-    fake_sensor_commands="$(arg fake_sensor_commands)" />
+    fake_sensor_commands="$(arg fake_sensor_commands)"
+    slowdown="$(arg slowdown)" />
 </robot>
