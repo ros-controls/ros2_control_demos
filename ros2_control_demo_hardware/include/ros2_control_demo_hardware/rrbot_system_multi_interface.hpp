@@ -82,7 +82,7 @@ private:
 
   // Enum defining at which control level we are
   // Dumb way of maintaining the command_interface type per joint.
-  enum class integration_lvl_t : std::uint8_t
+  enum class integration_level_t : std::uint8_t
   {
     UNDEFINED = 0,
     POSITION = 1,
@@ -90,7 +90,8 @@ private:
     ACCELERATION = 3
   };
 
-  std::vector<integration_lvl_t> control_lvl_;
+  // Active control mode for each actuator
+  std::vector<integration_level_t> control_level_;
 };
 
 }  // namespace ros2_control_demo_hardware
