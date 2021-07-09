@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- Revolute-Revolute Manipulator with a 2D Force-Torque sensor -->
+<!-- Revolute-Revolute Manipulator with a 6D Force-Torque sensor -->
 <!--
 Copied and modified from ROS1 example -
 https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_description/urdf/rrbot.xacro
