@@ -80,11 +80,82 @@ However, there might be cases in which not-yet released demos or features are on
 
 This repository provides two simple example robots: a 2 degrees of freedom manipulator - *RRBot* - and a mobile differential drive base - *DiffBot*.
 
+The first two examples demonstrate the minimal setup for those two robots to run.
+Later examples show more details about `ros2_control`-concepts and some more advanced use-cases.
+
 ## *RRBot*
 
 *RRBot*, or ''Revolute-Revolute Manipulator Robot'', is a simple 3-linkage, 2-joint arm that we will use to demonstrate various features.
 It is essentially a double inverted pendulum and demonstrates some fun control concepts within a simulator and was originally introduced for Gazebo tutorials.
 The *RRBot* URDF files can be found in the `urdf` folder of `rrbot_description` package.
+
+1. To start *RRBot* example open open a terminal, source your ROS2-workspace and execute its launch file with:
+   ```
+   ros2 launch ros2_control_demo_bringup rrbot.launch.py
+   ```
+   The launch file loads and starts the robot hardware, controllers and opens `RViz`.
+   In starting terminal you will see a lot of output from the hardware implementation showing its internal states.
+   This is only of exemplary purpuses and should be avoided as much as possible in a hardware interface implementation.
+
+   If you can see two orange and one yellow rectangle in in `RViz` everything has started properly.
+   Still, to be sure, let's introspect the control system before moving *RRBot*.
+
+1. Check if the hardware interface loaded properly, by opening another terminal and executing:
+   ```
+   ros2 control list_hardware_interfaces
+   ```
+   You should get:
+   ```
+   command interfaces
+        joint1/position [claimed]
+        joint2/position [claimed]
+   state interfaces
+         joint1/position
+         joint2/position
+
+   ```
+   Marker `[claimed]` by command interfaces means that a controller has access to command *RRBot*.
+
+1. Check is controllers are running:
+   ```
+   ros2 control list_controllers
+   ```
+   You should get:
+   ```
+   joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+   forward_position_controller[forward_command_controller/ForwardCommandController] active
+   ```
+
+1. If you get output from above you can send commands to *Forward Command Controller*, either:
+
+   a. Manually using ros2 cli interface:
+   ```
+   ros2 topic pub /forward_position_controller/commands std_msgs/msg/Float64MultiArray "data:
+   - 0.5
+   - 0.5"
+   ```
+   B. Or you can start a demo node which sends two goals every 5 seconds in a loop:
+   ```
+   ros2 launch ros2_control_demo_bringup test_forward_position_controller.launch.py
+   ```
+   You should now see an orange box circling in `RViz`.
+   Also, you should see changing states in the termnal where launch file is started.
+
+
+Files used for this demos:
+  - Launch file: [rrbot.launch.py](ros2_control_demo_bringup/launch/rrbot.launch.py)
+  - Controllers yaml: [rrbot_controllers.yaml](ros2_control_demo_bringup/config/rrbot_controllers.yaml)
+  - URDF file: [rrbot.urdf.xacro](ros2_control_demo_description/rrbot_description/urdf/rrbot.urdf.xacro)
+    - Description: [rrbot_description.urdf.xacro](ros2_control_demo_description/diffbot_description/urdf/rrbot_description.urdf.xacro)
+    - `ros2_control` tag: [rrbot.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/rrbot.ros2_control.xacro)
+  - RViz configuration: [rrbot.rviz](ros2_control_demo_description/rrbot_description/config/rrbot.rviz)
+
+  - Hardware interface plugin: [rrbot_system.cpp](ros2_control_demo_hardware/src/rrbot_system.cpp)
+
+
+Controllers from this demo:
+  - `Joint State Broadcaster` ([`ros2_controllers` repository](https://github.com/ros-controls/ros2_controllers)): [doc](https://ros-controls.github.io/control.ros.org/ros2_controllers/joint_state_broadcaster/doc/userdoc.html)
+  - `Forward Command Controller` ([`ros2_controllers` repository](https://github.com/ros-controls/ros2_controllers)): [doc](https://ros-controls.github.io/control.ros.org/ros2_controllers/forward_command_controller/doc/userdoc.html)
 
 
 
@@ -102,8 +173,10 @@ The *DiffBot* URDF files can be found in `urdf` folder of `diffbot_description` 
    In starting terminal you will see a lot of output from the hardware implementation showing its internal states.
    This is only of exemplary purpuses and should be avoided as much as possible in a hardware interface implementation.
 
-1. If you can see an orange box in `RViz` everything has started properly. Still, to be sure, let's introspect the control system:
-   Check if the hardware interface loaded properly, by opening another terminal and executing:
+   If you can see an orange box in `RViz` everything has started properly.
+   Still, to be sure, let's introspect the control system before moving *DiffBot*.
+
+1. Check if the hardware interface loaded properly, by opening another terminal and executing:
    ```
    ros2 control list_hardware_interfaces
    ```
@@ -118,6 +191,7 @@ The *DiffBot* URDF files can be found in `urdf` folder of `diffbot_description` 
          right_wheel_joint/position
          right_wheel_joint/velocity
    ```
+   Marker `[claimed]` by command interfaces means that a controller has access to command *DiffBot*.
 
 1. Check is controllers are running:
    ```
@@ -129,7 +203,7 @@ The *DiffBot* URDF files can be found in `urdf` folder of `diffbot_description` 
    joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
    ```
 
-1. If you get output from about you can send some command to *Diff Drive Controller*:
+1. If you get output from above you can send a command to *Diff Drive Controller* using ros2 cli interface:
    ```
    ros2 topic pub --rate 30 /diffbot_base_controller/cmd_vel_unstamped geometry_msgs/msg/Twist "linear:
     x: 0.7
@@ -140,12 +214,13 @@ The *DiffBot* URDF files can be found in `urdf` folder of `diffbot_description` 
     y: 0.0
     z: 1.0"
     ```
-   You should now see an orange box circling in `rviz`. Also, you should see
+   You should now see an orange box circling in `RViz`.
+   Also, you should see changing states in the termnal where launch file is started.
 
 
 Files used for this demos:
   - Launch file: [diffbot.launch.py](ros2_control_demo_bringup/launch/diffbot.launch.py)
-  - Controllers yaml: [diffbot_diff_drive_controller.yaml](ros2_control_demo_bringup/config/diffbot_diff_drive_controller.yaml)
+  - Controllers yaml: [diffbot_controllers.yaml](ros2_control_demo_bringup/config/diffbot_controller.yaml)
   - URDF file: [diffbot.urdf.xacro](ros2_control_demo_description/diffbot_description/urdf/diffbot.urdf.xacro)
     - Description: [diffbot_description.urdf.xacro](ros2_control_demo_description/diffbot_description/urdf/diffbot_description.urdf.xacro)
     - `ros2_control` tag: [diffbot.ros2_control.xacro](ros2_control_demo_description/diffbot_description/ros2_control/diffbot.ros2_control.xacro)

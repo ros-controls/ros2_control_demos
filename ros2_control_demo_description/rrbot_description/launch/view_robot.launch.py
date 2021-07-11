@@ -34,7 +34,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "description_file",
-            default_value="rrbot_system_position_only.urdf.xacro",
+            default_value="rrbot.urdf.xacro",
             description="URDF/XACRO description file with the robot.",
         )
     )
