@@ -76,7 +76,90 @@ However, there might be cases in which not-yet released demos or features are on
 * Do not forget to source `setup.bash` from the `install` folder!
 
 
-# Getting Started with ros2_control
+# Getting Started with demos
+
+This repository provides two simple example robots: a 2 degrees of freedom manipulator - *RRBot* - and a mobile differential drive base - *DiffBot*.
+
+## *RRBot*
+
+*RRBot*, or ''Revolute-Revolute Manipulator Robot'', is a simple 3-linkage, 2-joint arm that we will use to demonstrate various features.
+It is essentially a double inverted pendulum and demonstrates some fun control concepts within a simulator and was originally introduced for Gazebo tutorials.
+The *RRBot* URDF files can be found in the `urdf` folder of `rrbot_description` package.
+
+
+
+## *DiffBot*
+
+*DiffBot*, or ''Differential Mobile Robot'', is a simple mobile base with differential drive.
+The robot is basically a box moving according to differential drive kinematics.
+The *DiffBot* URDF files can be found in `urdf` folder of `diffbot_description` package.
+
+1. To start *DiffBot* example open open a terminal, source your ROS2-workspace and execute its launch file with:
+   ```
+   ros2 launch ros2_control_demo_bringup diffbot.launch.py
+   ```
+   The launch file loads and starts the robot hardware, controllers and opens `RViz`.
+   In starting terminal you will see a lot of output from the hardware implementation showing its internal states.
+   This is only of exemplary purpuses and should be avoided as much as possible in a hardware interface implementation.
+
+1. If you can see an orange box in `RViz` everything has started properly. Still, to be sure, let's introspect the control system:
+   Check if the hardware interface loaded properly, by opening another terminal and executing:
+   ```
+   ros2 control list_hardware_interfaces
+   ```
+   You should get:
+   ```
+   command interfaces
+        left_wheel_joint/velocity [claimed]
+        right_wheel_joint/velocity [claimed]
+   state interfaces
+         left_wheel_joint/position
+         left_wheel_joint/velocity
+         right_wheel_joint/position
+         right_wheel_joint/velocity
+   ```
+
+1. Check is controllers are running:
+   ```
+   ros2 control list_controllers
+   ```
+   You should get:
+   ```
+   diffbot_base_controller[diff_drive_controller/DiffDriveController] active
+   joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+   ```
+
+1. If you get output from about you can send some command to *Diff Drive Controller*:
+   ```
+   ros2 topic pub --rate 30 /diffbot_base_controller/cmd_vel_unstamped geometry_msgs/msg/Twist "linear:
+    x: 0.7
+    y: 0.0
+    z: 0.0
+   angular:
+    x: 0.0
+    y: 0.0
+    z: 1.0"
+    ```
+   You should now see an orange box circling in `rviz`. Also, you should see
+
+
+Files used for this demos:
+  - Launch file: [diffbot.launch.py](ros2_control_demo_bringup/launch/diffbot.launch.py)
+  - Controllers yaml: [diffbot_diff_drive_controller.yaml](ros2_control_demo_bringup/config/diffbot_diff_drive_controller.yaml)
+  - URDF file: [diffbot.urdf.xacro](ros2_control_demo_description/diffbot_description/urdf/diffbot.urdf.xacro)
+    - Description: [diffbot_description.urdf.xacro](ros2_control_demo_description/diffbot_description/urdf/diffbot_description.urdf.xacro)
+    - `ros2_control` tag: [diffbot.ros2_control.xacro](ros2_control_demo_description/diffbot_description/ros2_control/diffbot.ros2_control.xacro)
+  - RViz configuration: [diffbot.rviz](ros2_control_demo_description/diffbot_description/config/diffbot.rviz)
+
+  - Hardware interface plugin: [diffbot_system.cpp](ros2_control_demo_hardware/src/diffbot_system.cpp)
+
+
+Controllers from this demo:
+  - `Joint State Broadcaster` ([`ros2_controllers` repository](https://github.com/ros-controls/ros2_controllers)): [doc](https://ros-controls.github.io/control.ros.org/ros2_controllers/joint_state_broadcaster/doc/userdoc.html)
+  - `Diff Drive Controller` ([`ros2_controllers` repository](https://github.com/ros-controls/ros2_controllers)): [doc](https://ros-controls.github.io/control.ros.org/ros2_controllers/diff_drive_controller/doc/userdoc.html)
+
+
+# Examples of ros2_control concepts
 
 Each of the described example cases from the [roadmap](https://github.com/ros-controls/roadmap/blob/master/design_drafts/components_architecture_and_urdf_examples.md) has its own launch and URDF file.
 
@@ -96,13 +179,6 @@ The `rviz2` setup can be recreated following these steps:
   rviz2 --display-config `ros2 pkg prefix diffbot_description`/share/rrbot_description/config/diffbot.rviz
   ```
 
-*RRBot*, or ''Revolute-Revolute Manipulator Robot'', is a simple 3-linkage, 2-joint arm that we will use to demonstrate various features.
-It is essentially a double inverted pendulum and demonstrates some fun control concepts within a simulator and was originally introduced for Gazebo tutorials.
-The *RRBot* URDF files can be found in the `urdf` folder of `rrbot_description` package.
-
-*DiffBot*, or ''Differential Mobile Robot'', is a simple mobile base with differential drive.
-The robot is basically a box moving according to differential drive kinematics.
-The *DiffBot* URDF files can be found in `urdf` folder of `diffbot_description` package.
 
 ### General notes about examples
 

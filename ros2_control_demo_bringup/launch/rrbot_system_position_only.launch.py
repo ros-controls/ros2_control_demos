@@ -74,7 +74,7 @@ def generate_launch_description():
     start_rviz = LaunchConfiguration("start_rviz")
 
     base_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([ThisLaunchFileDir(), "/rrbot.launch.py"]),
+        PythonLaunchDescriptionSource([ThisLaunchFileDir(), "/rrbot_base.launch.py"]),
         launch_arguments={
             "description_file": "rrbot_system_position_only.urdf.xacro",
             "prefix": prefix,

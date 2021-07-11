@@ -1,4 +1,4 @@
-# Copyright 2021 Stogl Robotics Consulting UG (haftungsbeschränkt)
+# Copyright 2020 ros2_control Development Team
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,41 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument
-from launch.conditions import IfCondition
-from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
+from launch.substitutions import Command, FindExecutable, PathJoinSubstitution
 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
 
 def generate_launch_description():
-    # Declare arguments
-    declared_arguments = []
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "start_rviz",
-            default_value="true",
-            description="Start RViz2 automatically with this launch file.",
-        )
-    )
-
-    # Initialize Arguments
-    start_rviz = LaunchConfiguration("start_rviz")
-
     # Get URDF via xacro
     robot_description_content = Command(
         [
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
             PathJoinSubstitution(
-                [
-                    FindPackageShare("rrbot_description"),
-                    "urdf",
-                    "rrbot_system_position_only.urdf.xacro",
-                ]
+                [FindPackageShare("diffbot_description"), "urdf", "diffbot.urdf.xacro"]
             ),
         ]
     )
@@ -56,11 +36,11 @@ def generate_launch_description():
         [
             FindPackageShare("ros2_control_demo_bringup"),
             "config",
-            "rrbot_controllers.yaml",
+            "diffbot_controllers.yaml",
         ]
     )
     rviz_config_file = PathJoinSubstitution(
-        [FindPackageShare("rrbot_description"), "config", "rrbot.rviz"]
+        [FindPackageShare("diffbot_description"), "config", "diffbot.rviz"]
     )
 
     control_node = Node(
@@ -84,7 +64,6 @@ def generate_launch_description():
         name="rviz2",
         output="log",
         arguments=["-d", rviz_config_file],
-        condition=IfCondition(start_rviz),
     )
 
     joint_state_broadcaster_spawner = Node(
@@ -96,7 +75,7 @@ def generate_launch_description():
     robot_controller_spawner = Node(
         package="controller_manager",
         executable="spawner.py",
-        arguments=["forward_position_controller", "-c", "/controller_manager"],
+        arguments=["diffbot_base_controller", "-c", "/controller_manager"],
     )
 
     nodes = [
@@ -107,4 +86,4 @@ def generate_launch_description():
         robot_controller_spawner,
     ]
 
-    return LaunchDescription(declared_arguments + nodes)
+    return LaunchDescription(nodes)
