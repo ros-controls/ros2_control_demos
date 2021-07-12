@@ -80,7 +80,6 @@ However, there might be cases in which not-yet released demos or features are on
 # Getting Started with demos
 
 This repository provides the following simple example robots: a 2 degrees of freedom manipulator - *RRBot* - and a mobile differential drive base - *DiffBot*.
-
 The first two examples demonstrate the minimal setup for those two robots to run.
 Later examples show more details about `ros2_control`-concepts and some more advanced use-cases.
 
