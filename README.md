@@ -89,6 +89,15 @@ Later examples show more details about `ros2_control`-concepts and some more adv
 It is essentially a double inverted pendulum and demonstrates some fun control concepts within a simulator and was originally introduced for Gazebo tutorials.
 The *RRBot* URDF files can be found in the `urdf` folder of `rrbot_description` package.
 
+1. To check that *RRBot* descriptions are working properly use following launch commands:
+
+   *RRBot*
+   ```
+   ros2 launch rrbot_description view_robot.launch.py
+   ```
+   **NOTE**: Getting the following output in terminal is OK: `Warning: Invalid frame ID "odom" passed to canTransform argument target_frame - frame does not exist`.
+             This happens because `joint_state_publisher_gui` node need some time to start.
+
 1. To start *RRBot* example open open a terminal, source your ROS2-workspace and execute its launch file with:
    ```
    ros2 launch ros2_control_demo_bringup rrbot.launch.py
@@ -158,12 +167,18 @@ Controllers from this demo:
   - `Forward Command Controller` ([`ros2_controllers` repository](https://github.com/ros-controls/ros2_controllers)): [doc](https://ros-controls.github.io/control.ros.org/ros2_controllers/forward_command_controller/doc/userdoc.html)
 
 
-
 ## *DiffBot*
 
 *DiffBot*, or ''Differential Mobile Robot'', is a simple mobile base with differential drive.
 The robot is basically a box moving according to differential drive kinematics.
 The *DiffBot* URDF files can be found in `urdf` folder of `diffbot_description` package.
+
+1. To check that *DiffBot* description is working properly use following launch commands:
+   ```
+   ros2 launch diffbot_description view_robot.launch.py
+   ```
+   **NOTE**: Getting the following output in terminal is OK: `Warning: Invalid frame ID "odom" passed to canTransform argument target_frame - frame does not exist`.
+             This happens because `joint_state_publisher_gui` node need some time to start.
 
 1. To start *DiffBot* example open open a terminal, source your ROS2-workspace and execute its launch file with:
    ```
@@ -238,28 +253,20 @@ Controllers from this demo:
 
 Each of the described example cases from the [roadmap](https://github.com/ros-controls/roadmap/blob/master/design_drafts/components_architecture_and_urdf_examples.md) has its own launch and URDF file.
 
-## Starting example robots
-
-Each example is started with a single launch file which starts up the robot hardware, loads controller configurations and it also opens `rviz2`.
-
-The `rviz2` setup can be recreated following these steps:
-
-- The robot models can be visualized using `RobotModel` display using `/robot_description` topic.
-- Or you can simply open the configuration from `rviz` folder in `rrbot_description` or `diffbot_description` package manually or directly by executing:
-  ```
-  rviz2 --display-config `ros2 pkg prefix rrbot_description`/share/rrbot_description/config/rrbot.rviz
-  ```
-  of
-  ```
-  rviz2 --display-config `ros2 pkg prefix diffbot_description`/share/rrbot_description/config/diffbot.rviz
-  ```
-
 
 ### General notes about examples
 
-1. To check that robot descriptions are working properly use following launch commands:
+1. Each example is started with a single launch file which starts up the robot hardware, loads controller configurations and it also opens `RViz`.
 
-   *RRBot*
+   The `RViz` setup can be recreated following these steps:
+
+   - The robot models can be visualized using `RobotModel` display using `/robot_description` topic.
+   - Or you can simply open the configuration from `rviz` folder in `rrbot_description` or `diffbot_description` package manually or directly by executing:
+   ```
+   rviz2 --display-config `ros2 pkg prefix rrbot_description`/share/rrbot_description/config/rrbot.rviz
+   ```
+
+1. To check that robot descriptions are working properly use following launch commands:
    ```
    ros2 launch rrbot_description view_robot.launch.py
    ```
@@ -268,12 +275,8 @@ The `rviz2` setup can be recreated following these steps:
    description_file:=rrbot_system_multi_interface.urdf.xacro
    ```
 
-   *DiffBot*
-   ```
-   ros2 launch diffbot_description view_robot.launch.py
-   ```
-
 **NOTE**: Getting the following output in terminal is OK: `Warning: Invalid frame ID "odom" passed to canTransform argument target_frame - frame does not exist`.
+          This happens because `joint_state_publisher_gui` node need some time to start.
 
 1. To start an example open a terminal, source your ROS2-workspace and execute a launch file with:
    ```
@@ -411,7 +414,7 @@ angular:
  z: 1.0"
 ```
 
-You should now see an orange box circling in `rviz2`.
+You should now see an orange box circling in `RViz`.
 
 
 ## Controllers and moving hardware
@@ -437,7 +440,7 @@ You should get the response:
 joint_state_controller[joint_state_controller/JointStateController] active
 ```
 
-Now you should also see the *RRbot* represented correctly in `rviz2`.
+Now you should also see the *RRbot* represented correctly in `RViz`.
 
 
 ### Using ForwardCommandController
@@ -506,4 +509,4 @@ Now you should also see the *RRbot* represented correctly in `rviz2`.
    ros2 topic echo /dynamic_joint_states
    ```
 
-3. You should also see the *RRbot* moving in `rviz2`.
+3. You should also see the *RRbot* moving in `RViz`.
