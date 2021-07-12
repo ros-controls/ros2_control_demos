@@ -37,9 +37,9 @@ CallbackReturn RRBotSystemMultiInterfaceHardware::on_init(
   hw_start_sec_ = stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
   hw_stop_sec_ = stod(info_.hardware_parameters["example_param_hw_stop_duration_sec"]);
   hw_slowdown_ = stod(info_.hardware_parameters["example_param_hw_slowdown"]);
-  hw_positions_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
-  hw_velocities_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
-  hw_accelerations_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
+  hw_states_positions_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
+  hw_states_velocities_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
+  hw_states_accelerations_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   hw_commands_positions_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   hw_commands_velocities_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   hw_commands_accelerations_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
@@ -102,11 +102,11 @@ RRBotSystemMultiInterfaceHardware::export_state_interfaces()
   for (std::size_t i = 0; i < info_.joints.size(); i++)
   {
     state_interfaces.emplace_back(hardware_interface::StateInterface(
-      info_.joints[i].name, hardware_interface::HW_IF_POSITION, &hw_positions_[i]));
+      info_.joints[i].name, hardware_interface::HW_IF_POSITION, &hw_states_positions_[i]));
     state_interfaces.emplace_back(hardware_interface::StateInterface(
-      info_.joints[i].name, hardware_interface::HW_IF_VELOCITY, &hw_velocities_[i]));
+      info_.joints[i].name, hardware_interface::HW_IF_VELOCITY, &hw_states_velocities_[i]));
     state_interfaces.emplace_back(hardware_interface::StateInterface(
-      info_.joints[i].name, hardware_interface::HW_IF_ACCELERATION, &hw_accelerations_[i]));
+      info_.joints[i].name, hardware_interface::HW_IF_ACCELERATION, &hw_states_accelerations_[i]));
   }
 
   return state_interfaces;
@@ -199,7 +199,7 @@ CallbackReturn RRBotSystemMultiInterfaceHardware::on_activate(
   RCLCPP_INFO(
     rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"), "Starting... please wait...");
 
-  for (int i = 0; i <= hw_start_sec_; i++)
+  for (int i = 0; i < hw_start_sec_; i++)
   {
     rclcpp::sleep_for(std::chrono::seconds(1));
     RCLCPP_INFO(
@@ -208,19 +208,19 @@ CallbackReturn RRBotSystemMultiInterfaceHardware::on_activate(
   }
 
   // Set some default values
-  for (std::size_t i = 0; i < hw_positions_.size(); i++)
+  for (std::size_t i = 0; i < hw_states_positions_.size(); i++)
   {
-    if (std::isnan(hw_positions_[i]))
+    if (std::isnan(hw_states_positions_[i]))
     {
-      hw_positions_[i] = 0;
+      hw_states_positions_[i] = 0;
     }
-    if (std::isnan(hw_velocities_[i]))
+    if (std::isnan(hw_states_velocities_[i]))
     {
-      hw_velocities_[i] = 0;
+      hw_states_velocities_[i] = 0;
     }
-    if (std::isnan(hw_accelerations_[i]))
+    if (std::isnan(hw_states_accelerations_[i]))
     {
-      hw_accelerations_[i] = 0;
+      hw_states_accelerations_[i] = 0;
     }
     if (std::isnan(hw_commands_positions_[i]))
     {
@@ -237,6 +237,8 @@ CallbackReturn RRBotSystemMultiInterfaceHardware::on_activate(
     control_level_[i] = integration_level_t::UNDEFINED;
   }
 
+  last_timestamp_ = std::chrono::system_clock::now();
+
   RCLCPP_INFO(
     rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"), "System successfully started! %u",
     control_level_[0]);
@@ -249,7 +251,7 @@ CallbackReturn RRBotSystemMultiInterfaceHardware::on_deactivate(
   RCLCPP_INFO(
     rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"), "Stopping... please wait...");
 
-  for (int i = 0; i <= hw_stop_sec_; i++)
+  for (int i = 0; i < hw_stop_sec_; i++)
   {
     rclcpp::sleep_for(std::chrono::seconds(1));
     RCLCPP_INFO(
@@ -265,7 +267,9 @@ CallbackReturn RRBotSystemMultiInterfaceHardware::on_deactivate(
 
 hardware_interface::return_type RRBotSystemMultiInterfaceHardware::read()
 {
-  for (std::size_t i = 0; i < hw_positions_.size(); i++)
+  duration = std::chrono::system_clock::now() - last_timestamp_;
+
+  for (std::size_t i = 0; i < hw_states_positions_.size(); i++)
   {
     switch (control_level_[i])
     {
@@ -275,35 +279,33 @@ hardware_interface::return_type RRBotSystemMultiInterfaceHardware::read()
           "Nothing is using the hardware interface!");
         return hardware_interface::return_type::OK;
         break;
-      case integration_level_t::POSITION:
-        hw_accelerations_[i] = 0;
-        hw_velocities_[i] = 0;
-        hw_positions_[i] = hw_commands_positions_[i];
+      case integration_lvl_t::POSITION:
+        hw_states_accelerations_[i] = 0;
+        hw_states_velocities_[i] = 0;
+        hw_states_positions_[i] +=
+          (hw_commands_positions_[i] - hw_states_positions_[i]) / hw_slowdown_;
         break;
-      case integration_level_t::VELOCITY:
-        hw_accelerations_[i] = 0;
-        hw_velocities_[i] = hw_commands_velocities_[i];
+      case integration_lvl_t::VELOCITY:
+        hw_states_accelerations_[i] = 0;
+        hw_states_velocities_[i] = hw_commands_velocities_[i];
+        hw_states_positions_[i] += (hw_states_velocities_[i] * duration.count()) / hw_slowdown_;
         break;
-      case integration_level_t::ACCELERATION:
-        hw_accelerations_[i] = hw_commands_accelerations_[i];
+      case integration_lvl_t::ACCELERATION:
+        hw_states_accelerations_[i] = hw_commands_accelerations_[i];
+        hw_states_velocities_[i] += (hw_states_accelerations_[i] * duration.count()) / hw_slowdown_;
+        hw_states_positions_[i] += (hw_states_velocities_[i] * duration.count()) / hw_slowdown_;
         break;
     }
-    // Using the hw_slowdown_ parameter as a timestep
-    hw_velocities_[i] += hw_slowdown_ * hw_accelerations_[i];
-    hw_positions_[i] += hw_slowdown_ * hw_velocities_[i];
     RCLCPP_INFO(
       rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"),
-      "Got pos: %.5f, vel: %.5f, acc: %.5f for joint %lu!", hw_positions_[i], hw_velocities_[i],
-      hw_accelerations_[i], i);
+      "Got pos: %.5f, vel: %.5f, acc: %.5f for joint %lu!", hw_states_positions_[i],
+      hw_states_velocities_[i], hw_states_accelerations_[i], i);
   }
   return hardware_interface::return_type::OK;
 }
 
 hardware_interface::return_type RRBotSystemMultiInterfaceHardware::write()
 {
-  /*RCLCPP_INFO(
-    rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"),
-    "Writing...");*/
   for (std::size_t i = 0; i < hw_commands_positions_.size(); i++)
   {
     // Simulate sending commands to the hardware

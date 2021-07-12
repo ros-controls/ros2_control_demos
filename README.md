@@ -280,6 +280,7 @@ Each of the described example cases from the [roadmap](https://github.com/ros-co
 **NOTE**: Getting the following output in terminal is OK: `Warning: Invalid frame ID "odom" passed to canTransform argument target_frame - frame does not exist`.
           This happens because `joint_state_publisher_gui` node need some time to start.
 
+
 1. To start an example open a terminal, source your ROS2-workspace and execute a launch file with:
    ```
    ros2 launch ros2_control_demo_bringup <example_launch_file>
@@ -314,19 +315,31 @@ Each of the described example cases from the [roadmap](https://github.com/ros-co
 1. Check [Controllers and moving hardware](#controllers-and-moving-hardware) section to move *RRBot*.
 
 
+*NOTE:* The examples reuse the same, configurable base-launch file [`rrbot_base.launch.py`](ros2_control_demo_bringup/launch/rrbot_base.launch.py).
+This also demonstrates how launch files are usually reused for different scenarios when working with `ros2_control`.
+
+
 ### Example 1: "Industrial Robots with only one interface"
 
-- Launch file: rrbot_system_position_only.launch.py
-- Command interfaces:
-  - joint1/position
-  - joint2/position
-- State interfaces:
-  - joint1/position
-  - joint2/position
+Files:
+  - Launch file: [rrbot_system_position_only.launch.py](ros2_control_demo_bringup/launch/rrbot_system_position_only.launch.py)
+  - Controllers yaml: [rrbot_controllers.yaml](ros2_control_demo_bringup/config/rrbot_controllers.yaml)
+  - `ros2_control` URDF tag: [rrbot_system_position_only.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/rrbot_system_position_only.ros2_control.xacro)
+
+Interfaces:
+  - Command interfaces:
+    - joint1/position
+    - joint2/position
+  - State interfaces:
+    - joint1/position
+    - joint2/position
 
 Available controllers:
   - `joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]`
   - `forward_position_controller[forward_command_controller/ForwardCommandController]` (position)
+
+Moving the robot:
+  - see below description of `forward_position_controller`
 
 Available launch-file options:
   - `use_fake_hardware:=true` - start `FakeSystem` instead of hardware.
@@ -341,21 +354,26 @@ Available launch-file options:
 
 ### Example 2: "Robots with multiple interfaces"
 
-- Launch file: rrbot_system_multi_interface.launch.py
-- Command interfaces:
-  - joint1/position
-  - joint2/position
-  - joint1/velocity
-  - joint2/velocity
-  - joint1/acceleration
-  - joint2/acceleration
-- State interfaces:
-  - joint1/position
-  - joint2/position
-  - joint1/velocity
-  - joint2/velocity
-  - joint1/acceleration
-  - joint2/acceleration
+Files:
+  - Launch file: [rrbot_system_multi_interface.launch.py](ros2_control_demo_bringup/launch/rrbot_system_multi_interface.launch.py)
+  - Controllers yaml: [rrbot_multi_interface_forward_controllers.yaml](ros2_control_demo_bringup/config/rrbot_multi_interface_forward_controllers.yaml)
+  - `ros2_control` URDF tag: [rrbot_system_multi_interface.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/rrbot_system_multi_interface.ros2_control.xacro)
+
+Interfaces:
+  - Command interfaces:
+    - joint1/position
+    - joint2/position
+    - joint1/velocity
+    - joint2/velocity
+    - joint1/acceleration
+    - joint2/acceleration
+  - State interfaces:
+    - joint1/position
+    - joint2/position
+    - joint1/velocity
+    - joint2/velocity
+    - joint1/acceleration
+    - joint2/acceleration
 
 Available controllers:
   - `joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]`
@@ -368,6 +386,25 @@ Available controllers:
 Notes:
   - The example shows how to implement multi-interface robot hardware taking care about interfaces used.
     The two illegal controllers demonstrate how hardware interface declines faulty claims to access joint command interfaces.
+
+Moving the robot:
+  - when using velocity controller:
+    ```
+    ros2 topic pub /forward_velocity_controller/commands std_msgs/msg/Float64MultiArray "data:
+    - 0.5
+    - 0.5"
+    ```
+
+  - when using acceleration controller
+    ```
+    ros2 topic pub /forward_acceleration_controller/commands std_msgs/msg/Float64MultiArray "data:
+    - 0.01
+    - 0.01"
+    ```
+
+Useful launch-file options:
+  - `robot_controller:=forward_position_controller` - start demo and spawnes position controller. Robot can be then controlled using `forward_position_controller` as described below.
+  - `robot_controller:=forward_acceleration_controller` - start demo and spawnes acceleration controller. Robot can be then controlled using `forward_position_controller` as described below.
 
 
 ### Example 3: "Industrial robot with integrated sensor"

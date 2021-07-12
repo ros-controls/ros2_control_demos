@@ -15,6 +15,7 @@
 #ifndef ROS2_CONTROL_DEMO_HARDWARE__RRBOT_SYSTEM_MULTI_INTERFACE_HPP_
 #define ROS2_CONTROL_DEMO_HARDWARE__RRBOT_SYSTEM_MULTI_INTERFACE_HPP_
 
+#include <chrono>
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -74,9 +75,13 @@ private:
   std::vector<double> hw_commands_positions_;
   std::vector<double> hw_commands_velocities_;
   std::vector<double> hw_commands_accelerations_;
-  std::vector<double> hw_positions_;
-  std::vector<double> hw_velocities_;
-  std::vector<double> hw_accelerations_;
+  std::vector<double> hw_states_positions_;
+  std::vector<double> hw_states_velocities_;
+  std::vector<double> hw_states_accelerations_;
+
+  // Store time between update loops
+  std::chrono::time_point<std::chrono::system_clock> last_timestamp_;
+  std::chrono::duration<double> duration;  // Avoid initialization on each read
 
   // Enum defining at which control level we are
   // Dumb way of maintaining the command_interface type per joint.
