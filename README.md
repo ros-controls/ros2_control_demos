@@ -154,11 +154,11 @@ Files used for this demos:
   - Launch file: [rrbot.launch.py](ros2_control_demo_bringup/launch/rrbot.launch.py)
   - Controllers yaml: [rrbot_controllers.yaml](ros2_control_demo_bringup/config/rrbot_controllers.yaml)
   - URDF file: [rrbot.urdf.xacro](ros2_control_demo_description/rrbot_description/urdf/rrbot.urdf.xacro)
-    - Description: [rrbot_description.urdf.xacro](ros2_control_demo_description/diffbot_description/urdf/rrbot_description.urdf.xacro)
+    - Description: [rrbot_description.urdf.xacro](ros2_control_demo_description/rrbot_description/urdf/rrbot_description.urdf.xacro)
     - `ros2_control` tag: [rrbot.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/rrbot.ros2_control.xacro)
   - RViz configuration: [rrbot.rviz](ros2_control_demo_description/rrbot_description/config/rrbot.rviz)
 
-  - Hardware interface plugin: [rrbot_system.cpp](ros2_control_demo_hardware/src/rrbot_system.cpp)
+  - Hardware interface plugin: [rrbot_system_position_only.cpp](ros2_control_demo_hardware/src/rrbot_system_position_only.cpp)
 
 
 Controllers from this demo:
