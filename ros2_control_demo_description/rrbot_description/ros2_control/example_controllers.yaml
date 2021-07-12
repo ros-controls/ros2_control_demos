@@ -1,0 +1,45 @@
+
+    controller_manager:
+      update_rate: 500  # Hz
+
+      joint_state_broadcaster:
+        type: joint_state_broadcaster/JointStateBroadcaster
+
+      force_torque_sensor_broadcaster:
+        type: force_torque_sensor_broadcaster/ForceTorqueStateBroadcaster
+
+      joint_trajectory_controller:
+        type: joint_trajectory_controller/JointTrajectoryController
+
+      forward_position_controller:
+        type: position_controllers/JointGroupPositionController
+
+
+    force_torque_sensor_broadcaster:
+      sensor_name: tcp_fts_sensor
+      frame_id: tool0
+      topic_name: ft_data
+
+
+    joint_trajectory_controller:
+      joints:
+        - shoulder_pan_joint
+        - ...
+        - wrist_3_joint
+      command_interfaces:
+        - position
+      state_interfaces:
+        - position
+        - velocity
+
+
+    forward_position_controller:
+      joints:
+        - shoulder_pan_joint
+        - ...
+        - wrist_3_joint
+
+
+
+
+

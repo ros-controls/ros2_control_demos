@@ -14,6 +14,8 @@
   <exec_depend>diffbot_description</exec_depend>
   <exec_depend>force_torque_sensor_broadcaster</exec_depend>
   <exec_depend>forward_command_controller</exec_depend>
+  <exec_depend>gazebo_ros</exec_depend>
+  <exec_depend>gazebo_ros2_control</exec_depend>
   <exec_depend>joint_state_broadcaster</exec_depend>
   <exec_depend>joint_trajectory_controller</exec_depend>
   <exec_depend>joint_state_publisher_gui</exec_depend>

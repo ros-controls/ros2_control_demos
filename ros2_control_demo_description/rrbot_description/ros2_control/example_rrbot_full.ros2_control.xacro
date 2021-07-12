@@ -1,0 +1,98 @@
+
+  <ros2_control name="robot" type="system">
+
+    <hardware>
+        <plugin>robot_package/Robot</plugin>
+        <param name="hardware_parameter">some_value</param>
+    </hardware>
+
+    <joint name="joint_first">
+      <command_interface name="position"/>
+      <state_interface name="acceleration"/>
+    </joint>
+    . . .
+    <joint name="joint_last">
+      <command_interface name="velocity">
+        <param name="min">-1</param>
+        <param name="max">1</param>
+      </command_interface>
+      <state_interface name="temperature"/>
+    </joint>
+
+    <sensor name="tcp_sensor">
+      <state_interface name="sensing_inteface"/>
+      <param name="sensor_parameter">another_value</param>
+    </sensor>
+
+    <gpio name="flange_IOs">
+      <command_interface name="digital_output" data_type="bool" size="8" />
+      <state_interface name="digital_output" data_type="bool" size="8" />
+      <command_interface name="analog_output" data_type="double" size="2" />
+      <state_interface name="analog_output" data_type="double" size="2" />
+
+      <state_interface name="digital_input" data_type="bool" size="4" />
+      <state_interface name="analog_input" data_type="double" size="4" />
+    </gpio>
+
+    <gpio name="rrbot_status">
+      <state_interface name="mode" data_type="int"/>
+      <state_interface name="bit" data_type="bool" size="4"/>
+    </gpio>
+
+    <joint name="tool">
+      <command_interface name="command"/>
+    </joint>
+
+  </ros2_control>
+
+
+
+
+
+
+
+
+
+  <ros2_control name="robot" type="system">
+
+    <hardware>
+      <plugin>robot_package/Robot</plugin>
+      <param name="hardware_parameter">some_value</param>
+    </hardware>
+
+    <joint name="joint_first">
+      <command_interface name="position"/>
+      <state_interface name="acceleration"/>
+    </joint>
+
+    . . .
+
+    <gpio name="rrbot_status">
+      <state_interface name="mode" data_type="int"/>
+      <state_interface name="bit" data_type="bool" size="4"/>
+    </gpio>
+
+  </ros2_control>
+
+
+  <ros2_control name="tool" type="actuator">
+
+    <hardware>
+      <plugin>tool_package/Tool</plugin>
+      <param name="hardware_parameter">some_value</param>
+    </hardware>
+
+    <joint name="tool">
+      <command_interface name="command"/>
+    </joint>
+
+  </ros2_control>
+
+
+
+
+
+
+
+
+
