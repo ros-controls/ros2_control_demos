@@ -18,18 +18,20 @@ The repository has three goals:
 ## Description
 
 The repository is inspired by the [ros_control_boilerplate](https://github.com/PickNikRobotics/ros_control_boilerplate) repository from Dave Coleman.
-The simulation has three parts/packages:
-1. The first package, `ros2_control_demo_bringup`, holds launch files and runtime configurations for demo robots.
-2. The second package, `rrbot_description`, stored URDF-description files, rviz configurations and meshes for the demo robots.
-3. The third package, `ros2_control_demo_hardware`, implements the hardware interfaces described in the roadmap.
-The examples simulate a simple *RRbot* internally to provide sufficient test and demonstration data and reduce external dependencies.
-This package does not have any dependencies except `ros2` core packages and can, therefore, be used on SoC-hardware of headless systems.
+The examples have three parts/packages according to usual structure of ROS packages for robots:
+1. The bringup package `ros2_control_demo_bringup`, holds launch files and runtime configurations for demo robots.
+2. Description packages `rrbot_description` and `diffbot_description` (inside `ros2_control_demo_description`), store URDF-description files, rviz configurations and meshes for the demo robots.
+3. Hardware interface package `ros2_control_demo_hardware`, implements the hardware interfaces described in the roadmap.
+
+The examples of *RRBot* and *DiffBot* are trivial simulations to demonstrate and test `ros2_control` concepts.
+This package does not have any dependencies except `ros2` core packages and can, therefore, be used on SoC-hardware or headless systems.
 
 This repository demonstrates the following `ros2_control` concepts:
 
 * Creating a `*HardwareInterface` for a System, Sensor, and Actuator.
 * Creating a robot description in the form of URDF files.
 * Loading the configuration and starting a robot using launch files.
+* Control of a differential mobile base *DiffBot*.
 * Control of two joints of *RRBot*.
 * Using simulated robots and starting `ros2_control` with Gazebo simulator.
 * Implementing a controller switching strategy for a robot.
