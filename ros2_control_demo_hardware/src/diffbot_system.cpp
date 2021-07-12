@@ -127,7 +127,7 @@ hardware_interface::return_type DiffBotSystemHardware::start()
 {
   RCLCPP_INFO(rclcpp::get_logger("DiffBotSystemHardware"), "Starting ...please wait...");
 
-  for (auto i = 0; i <= hw_start_sec_; i++)
+  for (auto i = 0; i < hw_start_sec_; i++)
   {
     rclcpp::sleep_for(std::chrono::seconds(1));
     RCLCPP_INFO(
@@ -156,7 +156,7 @@ hardware_interface::return_type DiffBotSystemHardware::stop()
 {
   RCLCPP_INFO(rclcpp::get_logger("DiffBotSystemHardware"), "Stopping ...please wait...");
 
-  for (auto i = 0; i <= hw_stop_sec_; i++)
+  for (auto i = 0; i < hw_stop_sec_; i++)
   {
     rclcpp::sleep_for(std::chrono::seconds(1));
     RCLCPP_INFO(
