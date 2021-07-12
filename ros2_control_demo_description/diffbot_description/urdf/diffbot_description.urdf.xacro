@@ -26,7 +26,7 @@
     </collision>
 
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <origin xyz="0 0 ${base_height/2}" rpy="0 0 0"/>
       <geometry>
         <box size="${base_width} ${base_length} ${base_height}"/>
       </geometry>
