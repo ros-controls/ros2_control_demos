@@ -97,6 +97,30 @@ The *RRBot* URDF files can be found in the `urdf` folder of `rrbot_description` 
 
 ### General notes about examples
 
+1. Each example is started with a single launch file which starts up the robot hardware, loads controller configurations and it also opens `RViz`.
+
+   The `RViz` setup can be recreated following these steps:
+
+   - The robot models can be visualized using `RobotModel` display using `/robot_description` topic.
+   - Or you can simply open the configuration from `rviz` folder in `rrbot_description` or `diffbot_description` package manually or directly by executing:
+   ```
+   rviz2 --display-config `ros2 pkg prefix rrbot_description`/share/rrbot_description/config/rrbot.rviz
+   ```
+
+1. To check that robot descriptions are working properly use following launch commands:
+   ```
+   ros2 launch rrbot_description view_robot.launch.py
+   ```
+   Optional arguments for specific example (the robot visualization will be the same for all examples):
+   ```
+   description_file:=rrbot_system_multi_interface.urdf.xacro
+   ```
+
+**NOTE**: Getting the following output in terminal is OK: `Warning: Invalid frame ID "odom" passed to canTransform argument target_frame - frame does not exist`.
+          This happens because `joint_state_publisher_gui` node need some time to start.
+
+1. The following examples reuse the same, configurable base-launch file [`rrbot_base.launch.py`](ros2_control_demo_bringup/launch/rrbot_base.launch.py). This also demonstrated how launch files are usually reused for different scenarios when working with `ros2_control`.
+
 1. To start an example open a terminal, source your ROS2-workspace and execute a launch file with:
    ```
    ros2 launch ros2_control_demo_bringup <example_launch_file>
@@ -131,17 +155,25 @@ The *RRBot* URDF files can be found in the `urdf` folder of `rrbot_description` 
 
 ### Example 1: "Industrial Robots with only one interface"
 
-- Launch file: rrbot_system_position_only.launch.py
-- Command interfaces:
-  - joint1/position
-  - joint2/position
-- State interfaces:
-  - joint1/position
-  - joint2/position
+Files:
+  - Launch file: [rrbot_system_position_only.launch.py](ros2_control_demo_bringup/launch/rrbot_system_position_only.launch.py)
+  - Controllers yaml: [rrbot_controllers.yaml](ros2_control_demo_bringup/config/rrbot_controllers.yaml)
+  - `ros2_control` URDF tag: [rrbot_system_position_only.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/rrbot_system_position_only.ros2_control.xacro)
+
+Interfaces:
+  - Command interfaces:
+    - joint1/position
+    - joint2/position
+  - State interfaces:
+    - joint1/position
+    - joint2/position
 
 Available controllers:
   - `joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]`
   - `forward_position_controller[forward_command_controller/ForwardCommandController]` (position)
+
+Moving the robot:
+  - see below description of `forward_position_controller`
 
 Available launch-file options:
   - `use_fake_hardware:=true` - start `FakeSystem` instead of hardware.
@@ -156,21 +188,26 @@ Available launch-file options:
 
 ### Example 3: "Robots with multiple interfaces"
 
-- Launch file: rrbot_system_multi_interface.launch.py
-- Command interfaces:
-  - joint1/position
-  - joint2/position
-  - joint1/velocity
-  - joint2/velocity
-  - joint1/acceleration
-  - joint2/acceleration
-- State interfaces:
-  - joint1/position
-  - joint2/position
-  - joint1/velocity
-  - joint2/velocity
-  - joint1/acceleration
-  - joint2/acceleration
+Files:
+  - Launch file: [rrbot_system_multi_interface.launch.py](ros2_control_demo_bringup/launch/rrbot_system_multi_interface.launch.py)
+  - Controllers yaml: [rrbot_multi_interface_forward_controllers.yaml](ros2_control_demo_bringup/config/rrbot_multi_interface_forward_controllers.yaml)
+  - `ros2_control` URDF tag: [rrbot_system_multi_interface.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/rrbot_system_multi_interface.ros2_control.xacro)
+
+Interfaces:
+  - Command interfaces:
+    - joint1/position
+    - joint2/position
+    - joint1/velocity
+    - joint2/velocity
+    - joint1/acceleration
+    - joint2/acceleration
+  - State interfaces:
+    - joint1/position
+    - joint2/position
+    - joint1/velocity
+    - joint2/velocity
+    - joint1/acceleration
+    - joint2/acceleration
 
 Available controllers:
   - `joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]`
@@ -183,6 +220,25 @@ Available controllers:
 Notes:
   - The example shows how to implement multi-interface robot hardware taking care about interfaces used.
     The two illegal controllers demonstrate how hardware interface declines faulty claims to access joint command interfaces.
+
+Moving the robot:
+  - when using velocity controller:
+    ```
+    ros2 topic pub /forward_velocity_controller/commands std_msgs/msg/Float64MultiArray "data:
+    - 0.5
+    - 0.5"
+    ```
+
+  - when using acceleration controller
+    ```
+    ros2 topic pub /forward_acceleration_controller/commands std_msgs/msg/Float64MultiArray "data:
+    - 0.01
+    - 0.01"
+    ```
+
+Useful launch-file options:
+  - `robot_controller:=forward_position_controller` - start demo and spawnes position controller. Robot can be then controlled using `forward_position_controller` as described below.
+  - `robot_controller:=forward_acceleration_controller` - start demo and spawnes acceleration controller. Robot can be then controlled using `forward_position_controller` as described below.
 
 
 ### Example 4: "Differential drive mobile robot"
