@@ -25,6 +25,9 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_desc
   <!-- Import RRBot ros2_control description -->
   <xacro:include filename="$(find rrbot_description)/ros2_control/rrbot_system.ros2_control.xacro" />
 
+  <!-- Import RRBot external Force Torque Sensor description -->
+  <xacro:include filename="$(find rrbot_description)/ros2_control/external_rrbot_force_torque_sensor.ros2_control.xacro" />
+
   <!-- Used for fixing robot -->
   <link name="world"/>
   <gazebo reference="world">

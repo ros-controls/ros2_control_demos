@@ -37,7 +37,7 @@ using hardware_interface::return_type;
 namespace ros2_control_demo_hardware
 {
 class ExternalRRBotForceTorqueSensorHardware
-: public hardware_interface::BaseInterface<hardware_interface::SensorInterface>
+  : public hardware_interface::BaseInterface<hardware_interface::SensorInterface>
 {
 public:
   RCLCPP_SHARED_PTR_DEFINITIONS(ExternalRRBotForceTorqueSensorHardware);

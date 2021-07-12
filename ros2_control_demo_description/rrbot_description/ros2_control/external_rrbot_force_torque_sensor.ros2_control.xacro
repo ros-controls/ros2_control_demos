@@ -20,7 +20,6 @@
             <plugin>ros2_control_demo_hardware/ExternalRRBotForceTorqueSensorHardware</plugin>
             <param name="example_param_hw_start_duration_sec">2.0</param>
             <param name="example_param_hw_stop_duration_sec">3.0</param>
-            <param name="example_param_hw_slowdown">${slowdown}</param>
             <param name="example_param_max_sensor_change">5.0</param>
           </xacro:unless>
         </hardware>
@@ -34,8 +33,8 @@
         <state_interface name="torque.y"/>
         <state_interface name="torque.z"/>
         <param name="frame_id">tool_link</param>
-        <param name="lower_limits">100</param>
-        <param name="upper_limits">15</param>
+        <param name="fx_range">100</param>
+        <param name="tz_range">15</param>
       </sensor>
     </ros2_control>
   </xacro:macro>
