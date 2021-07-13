@@ -50,7 +50,7 @@ hardware_interface::return_type ExternalRRBotForceTorqueSensorHardware::start()
     rclcpp::get_logger("ExternalRRBotForceTorqueSensorHardware"),
     "Starting ...please wait...");
 
-  for (int i = 0; i <= hw_start_sec_; i++) {
+  for (int i = 0; i < hw_start_sec_; i++) {
     rclcpp::sleep_for(std::chrono::seconds(1));
     RCLCPP_INFO(
       rclcpp::get_logger("ExternalRRBotForceTorqueSensorHardware"), "%.1f seconds left...",
