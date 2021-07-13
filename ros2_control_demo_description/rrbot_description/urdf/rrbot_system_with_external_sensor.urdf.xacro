@@ -16,9 +16,6 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_desc
   <!-- Import RRBot macro -->
   <xacro:include filename="$(find rrbot_description)/urdf/rrbot.urdf.xacro" />
 
-  <!-- Import all Gazebo-customization elements, including Gazebo colors -->
-  <xacro:include filename="$(find rrbot_description)/gazebo/rrbot.gazebo.xacro" />
-
   <!-- Import Rviz colors -->
   <xacro:include filename="$(find rrbot_description)/gazebo/rrbot.materials.xacro" />
 
@@ -37,8 +34,6 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_desc
   <xacro:rrbot parent="world" prefix="$(arg prefix)">
     <origin xyz="0 0 0" rpy="0 0 0" />
   </xacro:rrbot>
-
-  <xacro:rrbot_gazebo prefix="$(arg prefix)" />
 
   <xacro:rrbot_system_with_external_sensor
     name="RRBotSystemPositionOnly" prefix="$(arg prefix)"
