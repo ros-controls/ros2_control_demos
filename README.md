@@ -127,7 +127,7 @@ The *RRBot* URDF files can be found in the `urdf` folder of `rrbot_description` 
    ```
 
 
-4. Check [Controllers and moving hardware](#Controlles-and-moving-hardware) section to move *RRBot*.
+4. Check [Controllers and moving hardware](#controllers-and-moving-hardware) section to move *RRBot*.
 
 ### Example 1: "Industrial Robots with only one interface"
 
