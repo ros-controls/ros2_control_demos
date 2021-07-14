@@ -66,7 +66,7 @@ def generate_launch_description():
     robot_controller = LaunchConfiguration("robot_controller")
 
     base_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([ThisLaunchFileDir(), "/rrbot.launch.py"]),
+        PythonLaunchDescriptionSource([ThisLaunchFileDir(), "/rrbot_base.launch.py"]),
         launch_arguments={
             "controllers_file": "rrbot_multi_interface_forward_controllers.yaml",
             "description_file": "rrbot_system_multi_interface.urdf.xacro",
