@@ -38,10 +38,9 @@ def generate_launch_description():
                 [
                     FindPackageShare("rrbot_description"),
                     "urdf",
-                    "rrbot_system_position_only.urdf.xacro",
+                    "rrbot_gazebo.urdf.xacro",
                 ]
             ),
-            " use_sim:=true",
         ]
     )
     robot_description = {"robot_description": robot_description_content}
