@@ -27,14 +27,4 @@
       The ros2_control RRBot example using external Force Torque Sensor where it is separate from the RRBot.
     </description>
   </class>
-<<<<<<< HEAD
-  <class name="ros2_control_demo_hardware/RRBotSystemWithSensorHardware"
-         type="ros2_control_demo_hardware::RRBotSystemWithSensorHardware"
-         base_class_type="hardware_interface::SystemInterface">
-    <description>
-      The ros2_control RRBot example using a system hardware interface-type and only one command and state interface. This example is the starting point to implement a hardware interface for robots with sensors providing one communication path.
-    </description>
-  </class>
-=======
->>>>>>> e87ddc4 (Corrections.)
 </library>

@@ -87,19 +87,4 @@ def generate_launch_description():
         fts_broadcaster_spawner,
     ]
 
-<<<<<<< HEAD
-=======
-    base_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([ThisLaunchFileDir(), "/rrbot.launch.py"]),
-        launch_arguments={
-            "controllers_file": "rrbot_with_external_sensor_controllers.yaml",
-            "description_file": "rrbot_system_with_external_sensor.urdf.xacro",
-            "prefix": prefix,
-            "use_fake_hardware": use_fake_hardware,
-            "fake_sensor_commands": fake_sensor_commands,
-            "slowdown": slowdown,
-        }.items(),
-    )
-
->>>>>>> e87ddc4 (Corrections.)
     return LaunchDescription(declared_arguments + [base_launch] + nodes)
