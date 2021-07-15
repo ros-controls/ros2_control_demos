@@ -47,7 +47,7 @@ class PublisherJointTrajectory(Node):
             # declare nested params
             for name in self.joints:
                 param_name_tmp = 'starting_point_limits' + '.' + name
-                self.declare_parameter(param_name_tmp)
+                self.declare_parameter(param_name_tmp, [-2*3.14159, 2*3.14159])
                 self.starting_point[name] = self.get_parameter(param_name_tmp).value
 
             for name in self.joints:
