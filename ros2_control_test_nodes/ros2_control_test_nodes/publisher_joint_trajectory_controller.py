@@ -28,15 +28,15 @@ class PublisherJointTrajectory(Node):
         self.declare_parameter("wait_sec_between_publish", 6)
         self.declare_parameter("goal_names", ["pos1", "pos2"])
         self.declare_parameter("joints")
-        self.declare_parameter('check_starting_point', False)
-        self.declare_parameter('starting_point_limits')
+        self.declare_parameter("check_starting_point", False)
+        self.declare_parameter("starting_point_limits")
 
         # Read parameters
         controller_name = self.get_parameter("controller_name").value
         wait_sec_between_publish = self.get_parameter("wait_sec_between_publish").value
         goal_names = self.get_parameter("goal_names").value
         self.joints = self.get_parameter("joints").value
-        self.check_starting_point = self.get_parameter('check_starting_point').value
+        self.check_starting_point = self.get_parameter("check_starting_point").value
         self.starting_point = {}
 
         if self.joints is None or len(self.joints) == 0:
@@ -46,18 +46,16 @@ class PublisherJointTrajectory(Node):
         if self.check_starting_point:
             # declare nested params
             for name in self.joints:
-                param_name_tmp = 'starting_point_limits' + '.' + name
-                self.declare_parameter(param_name_tmp, [-2*3.14159, 2*3.14159])
+                param_name_tmp = "starting_point_limits" + "." + name
+                self.declare_parameter(param_name_tmp, [-2 * 3.14159, 2 * 3.14159])
                 self.starting_point[name] = self.get_parameter(param_name_tmp).value
 
             for name in self.joints:
                 if len(self.starting_point[name]) != 2:
                     raise Exception('"starting_point" parameter is not set correctly!')
             self.joint_state_sub = self.create_subscription(
-                JointState,
-                'joint_states',
-                self.joint_state_callback,
-                10)
+                JointState, "joint_states", self.joint_state_callback, 10
+            )
         self.starting_point_ok = not self.check_starting_point
         self.joint_state_msg_received = False
 
@@ -103,20 +101,23 @@ class PublisherJointTrajectory(Node):
             self.i %= len(self.goals)
 
         elif self.check_starting_point and not self.joint_state_msg_received:
-            self.get_logger().warn('Start configuration could not be checked! Check "joint_state" topic!')
+            self.get_logger().warn(
+                'Start configuration could not be checked! Check "joint_state" topic!'
+            )
         else:
-            self.get_logger().warn('Start configuration is not within configured limits!')
+            self.get_logger().warn("Start configuration is not within configured limits!")
 
     def joint_state_callback(self, msg):
 
         if not self.joint_state_msg_received:
 
             # check start state
-            limit_exceeded = [False]*len(msg.name)
+            limit_exceeded = [False] * len(msg.name)
             for idx, enum in enumerate(msg.name):
-                if (msg.position[idx] < self.starting_point[enum][0]) or\
-                        (msg.position[idx] > self.starting_point[enum][1]):
-                    self.get_logger().warn('Starting point limits exceeded for joint {} !'.format(enum))
+                if (msg.position[idx] < self.starting_point[enum][0]) or (
+                    msg.position[idx] > self.starting_point[enum][1]
+                ):
+                    self.get_logger().warn(f"Starting point limits exceeded for joint {enum} !")
                     limit_exceeded[idx] = True
 
             if any(limit_exceeded):
