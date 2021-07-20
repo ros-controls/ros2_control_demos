@@ -88,16 +88,6 @@ hardware_interface::return_type RRBotSystemWithSensorHardware::configure(
     }
   }
 
-  // RRBotSystemWithSensor has two state interfaces for one sensor
-  if (info_.sensors[0].state_interfaces.size() != 2)
-  {
-    RCLCPP_FATAL(
-      rclcpp::get_logger("RRBotSystemWithSensorHardware"),
-      "Sensor '%s' has %zu state interface. 2 expected.", info_.sensors[0].name.c_str(),
-      info_.sensors[0].state_interfaces.size());
-    return hardware_interface::return_type::ERROR;
-  }
-
   status_ = hardware_interface::status::CONFIGURED;
   return hardware_interface::return_type::OK;
 }
@@ -211,8 +201,8 @@ hardware_interface::return_type RRBotSystemWithSensorHardware::read()
     hw_sensor_states_[i] =
       static_cast<float>(rand_r(&seed)) / (static_cast<float>(RAND_MAX / hw_sensor_change_));
     RCLCPP_INFO(
-      rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Got state %e for sensor %zu!",
-      hw_sensor_states_[i], i);
+      rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Got state %e for interface %s!",
+      hw_sensor_states_[i], info_.sensors[0].state_interfaces[i].name.c_str());
   }
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Sensors successfully read!");
 
