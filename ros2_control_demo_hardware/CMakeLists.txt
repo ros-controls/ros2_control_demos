@@ -23,6 +23,7 @@ add_library(
   src/diffbot_system.cpp
   src/rrbot_system_position_only.cpp
   src/rrbot_system_multi_interface.cpp
+  src/rrbot_system_with_sensor.cpp
 )
 target_include_directories(
   ${PROJECT_NAME}
