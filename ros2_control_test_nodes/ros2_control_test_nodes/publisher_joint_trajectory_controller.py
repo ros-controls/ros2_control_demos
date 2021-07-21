@@ -56,7 +56,12 @@ class PublisherJointTrajectory(Node):
             self.joint_state_sub = self.create_subscription(
                 JointState, "joint_states", self.joint_state_callback, 10
             )
-        self.starting_point_ok = not self.check_starting_point
+        # initialize starting point status
+        if not self.check_starting_point:
+            self.starting_point_ok = True
+        else:
+            self.starting_point_ok = False
+
         self.joint_state_msg_received = False
 
         # Read all positions from parameters
