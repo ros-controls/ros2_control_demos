@@ -62,18 +62,6 @@ def generate_launch_description():
     fake_sensor_commands = LaunchConfiguration("fake_sensor_commands")
     slowdown = LaunchConfiguration("slowdown")
 
-    # add the spawner node for the fts_broadcaster
-    fts_broadcaster_spawner = Node(
-        package="controller_manager",
-        executable="spawner.py",
-        arguments=["fts_broadcaster", "--controller-manager", "/controller_manager"],
-    )
-
-    # collect all the nodes here
-    nodes = [
-        fts_broadcaster_spawner,
-    ]
-
     base_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([ThisLaunchFileDir(), "/rrbot.launch.py"]),
         launch_arguments={
@@ -85,5 +73,17 @@ def generate_launch_description():
             "slowdown": slowdown,
         }.items(),
     )
+
+    # add the spawner node for the fts_broadcaster
+    fts_broadcaster_spawner = Node(
+        package="controller_manager",
+        executable="spawner.py",
+        arguments=["fts_broadcaster", "--controller-manager", "/controller_manager"],
+    )
+
+    # collect all the nodes here
+    nodes = [
+        fts_broadcaster_spawner,
+    ]
 
     return LaunchDescription(declared_arguments + [base_launch] + nodes)
