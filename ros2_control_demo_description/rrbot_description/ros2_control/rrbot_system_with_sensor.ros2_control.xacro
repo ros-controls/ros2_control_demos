@@ -19,7 +19,6 @@
             <param name="example_param_max_sensor_change">5.0</param>
           </xacro:unless>
         </hardware>
-      </xacro:unless>
 
       <joint name="joint1">
         <command_interface name="position">
