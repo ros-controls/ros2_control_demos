@@ -151,7 +151,6 @@ Available launch-file options:
     This is useful to test *ros2_control* integration and controllers without physical hardware.
 
 
-
 ### Example 2: "Industrial Robots with only one interface" (Gazebo simulation)
 
 - **TBA**
