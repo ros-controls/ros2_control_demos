@@ -51,7 +51,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "slowdown",
-            default_value="3.0",
+            default_value="50.0",
             description="Slowdown factor of the RRbot.",
         )
     )
