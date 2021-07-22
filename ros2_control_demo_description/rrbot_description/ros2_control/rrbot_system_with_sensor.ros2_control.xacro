@@ -5,12 +5,6 @@
 
     <ros2_control name="${name}" type="system">
 
-      <xacro:if value="$(arg use_sim)">
-        <hardware>
-          <plugin>gazebo_ros2_control/GazeboSystem</plugin>
-        </hardware>
-      </xacro:if>
-      <xacro:unless value="$(arg use_sim)">
         <hardware>
           <xacro:if value="${use_fake_hardware}">
             <plugin>fake_components/GenericSystem</plugin>
