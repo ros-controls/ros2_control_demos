@@ -77,7 +77,7 @@ However, there might be cases in which not-yet released demos or features are on
 
 # Getting Started with demos
 
-This repository provides two simple example robots: a 2 degrees of freedom manipulator - *RRBot* - and a mobile differential drive base - *DiffBot*.
+This repository provides the following simple example robots: a 2 degrees of freedom manipulator - *RRBot* - and a mobile differential drive base - *DiffBot*.
 
 The first two examples demonstrate the minimal setup for those two robots to run.
 Later examples show more details about `ros2_control`-concepts and some more advanced use-cases.
@@ -96,6 +96,8 @@ The *RRBot* URDF files can be found in the `urdf` folder of `rrbot_description` 
    ```
    **NOTE**: Getting the following output in terminal is OK: `Warning: Invalid frame ID "odom" passed to canTransform argument target_frame - frame does not exist`.
              This happens because `joint_state_publisher_gui` node need some time to start.
+
+The `joint_state_publisher_gui` provides a GUI to generate  a random configuration for rrbot. It is immediately displayed in `Rviz`.
 
 1. To start *RRBot* example open open a terminal, source your ROS2-workspace and execute its launch file with:
    ```
@@ -146,7 +148,7 @@ The *RRBot* URDF files can be found in the `urdf` folder of `rrbot_description` 
    ```
    ros2 launch ros2_control_demo_bringup test_forward_position_controller.launch.py
    ```
-   You should now see an orange box circling in `RViz`.
+   You should now see orange and yellow blocks moving in `RViz`.
    Also, you should see changing states in the termnal where launch file is started.
 
 
