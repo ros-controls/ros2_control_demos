@@ -183,13 +183,13 @@ The *DiffBot* URDF files can be found in `urdf` folder of `diffbot_description` 
    **NOTE**: Getting the following output in terminal is OK: `Warning: Invalid frame ID "odom" passed to canTransform argument target_frame - frame does not exist`.
              This happens because `joint_state_publisher_gui` node need some time to start.
 
-1. To start *DiffBot* example open open a terminal, source your ROS2-workspace and execute its launch file with:
+1. To start *DiffBot* example open a terminal, source your ROS2-workspace and execute its launch file with:
    ```
    ros2 launch ros2_control_demo_bringup diffbot.launch.py
    ```
    The launch file loads and starts the robot hardware, controllers and opens `RViz`.
-   In starting terminal you will see a lot of output from the hardware implementation showing its internal states.
-   This is only of exemplary purpuses and should be avoided as much as possible in a hardware interface implementation.
+   In the starting terminal you will see a lot of output from the hardware implementation showing its internal states.
+   This excessive printing is only added for demonstration. In general, printing to the terminal should be avoided as much as possible in a hardware interface implementation.
 
    If you can see an orange box in `RViz` everything has started properly.
    Still, to be sure, let's introspect the control system before moving *DiffBot*.
@@ -209,9 +209,9 @@ The *DiffBot* URDF files can be found in `urdf` folder of `diffbot_description` 
          right_wheel_joint/position
          right_wheel_joint/velocity
    ```
-   Marker `[claimed]` by command interfaces means that a controller has access to command *DiffBot*.
+   The `[claimed]` marker on command interfaces means that a controller has access to command *DiffBot*.
 
-1. Check is controllers are running:
+1. Check if controllers are running:
    ```
    ros2 control list_controllers
    ```
@@ -221,7 +221,7 @@ The *DiffBot* URDF files can be found in `urdf` folder of `diffbot_description` 
    joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
    ```
 
-1. If you get output from above you can send a command to *Diff Drive Controller* using ros2 cli interface:
+1. If everything is fine, now you can send a command to *Diff Drive Controller* using ros2 cli interface:
    ```
    ros2 topic pub --rate 30 /diffbot_base_controller/cmd_vel_unstamped geometry_msgs/msg/Twist "linear:
     x: 0.7
