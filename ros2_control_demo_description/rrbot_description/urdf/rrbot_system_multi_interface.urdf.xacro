@@ -8,22 +8,22 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_desc
   <xacro:arg name="use_sim" default="false" />
 
   <!-- Enable setting arguments from the launch file -->
-  <xacro:arg name="use_fake_hardware" default="true" />
+  <xacro:arg name="use_fake_hardware" default="false" />
   <xacro:arg name="fake_sensor_commands" default="false" />
   <xacro:arg name="prefix" default="" />
   <xacro:arg name="slowdown" default="2.0" />
 
   <!-- Import RRBot macro -->
-  <xacro:include filename="$(find rrbot_description)/urdf/rrbot/rrbot.urdf.xacro" />
+  <xacro:include filename="$(find rrbot_description)/urdf/rrbot_description.urdf.xacro" />
 
   <!-- Import all Gazebo-customization elements, including Gazebo colors -->
-  <xacro:include filename="$(find rrbot_description)/urdf/rrbot/gazebo/rrbot.gazebo.xacro" />
+  <xacro:include filename="$(find rrbot_description)/gazebo/rrbot.gazebo.xacro" />
 
   <!-- Import Rviz colors -->
-  <xacro:include filename="$(find rrbot_description)/urdf/rrbot/gazebo/rrbot.materials.xacro" />
+  <xacro:include filename="$(find rrbot_description)/gazebo/rrbot.materials.xacro" />
 
   <!-- Import RRBot ros2_control description -->
-  <xacro:include filename="$(find rrbot_description)/urdf/rrbot/ros2_control/rrbot_system_multi_interface.ros2_control.xacro" />
+  <xacro:include filename="$(find rrbot_description)/ros2_control/rrbot_system_multi_interface.ros2_control.xacro" />
 
   <!-- Used for fixing robot -->
   <link name="world"/>
