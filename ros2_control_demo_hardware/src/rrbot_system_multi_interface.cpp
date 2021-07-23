@@ -43,7 +43,7 @@ return_type RRBotSystemMultiInterfaceHardware::configure(
   hw_commands_positions_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   hw_commands_velocities_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   hw_commands_accelerations_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
-  control_lvl_.resize(info_.joints.size(), integration_lvl_t::POSITION);
+  control_level_.resize(info_.joints.size(), integration_level_t::POSITION);
 
   for (const hardware_interface::ComponentInfo & joint : info_.joints)
   {
@@ -134,22 +134,22 @@ return_type RRBotSystemMultiInterfaceHardware::prepare_command_mode_switch(
   const std::vector<std::string> & stop_interfaces)
 {
   // Prepare for new command modes
-  std::vector<integration_lvl_t> new_modes = {};
+  std::vector<integration_level_t> new_modes = {};
   for (std::string key : start_interfaces)
   {
     for (std::size_t i = 0; i < info_.joints.size(); i++)
     {
       if (key == info_.joints[i].name + "/" + hardware_interface::HW_IF_POSITION)
       {
-        new_modes.push_back(integration_lvl_t::POSITION);
+        new_modes.push_back(integration_level_t::POSITION);
       }
       if (key == info_.joints[i].name + "/" + hardware_interface::HW_IF_VELOCITY)
       {
-        new_modes.push_back(integration_lvl_t::VELOCITY);
+        new_modes.push_back(integration_level_t::VELOCITY);
       }
       if (key == info_.joints[i].name + "/" + hardware_interface::HW_IF_ACCELERATION)
       {
-        new_modes.push_back(integration_lvl_t::ACCELERATION);
+        new_modes.push_back(integration_level_t::ACCELERATION);
       }
     }
   }
@@ -159,7 +159,7 @@ return_type RRBotSystemMultiInterfaceHardware::prepare_command_mode_switch(
     return return_type::ERROR;
   }
   // Example criteria: All joints must have the same command mode
-  if (!std::all_of(new_modes.begin() + 1, new_modes.end(), [&](integration_lvl_t mode) {
+  if (!std::all_of(new_modes.begin() + 1, new_modes.end(), [&](integration_level_t mode) {
         return mode == new_modes[0];
       }))
   {
@@ -175,19 +175,19 @@ return_type RRBotSystemMultiInterfaceHardware::prepare_command_mode_switch(
       {
         hw_commands_velocities_[i] = 0;
         hw_commands_accelerations_[i] = 0;
-        control_lvl_[i] = integration_lvl_t::UNDEFINED;  // Revert to undefined
+        control_level_[i] = integration_level_t::UNDEFINED;  // Revert to undefined
       }
     }
   }
   // Set the new command modes
   for (std::size_t i = 0; i < info_.joints.size(); i++)
   {
-    if (control_lvl_[i] != integration_lvl_t::UNDEFINED)
+    if (control_level_[i] != integration_level_t::UNDEFINED)
     {
       // Something else is using the joint! Abort!
       return return_type::ERROR;
     }
-    control_lvl_[i] = new_modes[i];
+    control_level_[i] = new_modes[i];
   }
   return return_type::OK;
 }
@@ -232,13 +232,13 @@ return_type RRBotSystemMultiInterfaceHardware::start()
     {
       hw_commands_accelerations_[i] = 0;
     }
-    control_lvl_[i] = integration_lvl_t::UNDEFINED;
+    control_level_[i] = integration_level_t::UNDEFINED;
   }
   status_ = hardware_interface::status::STARTED;
 
   RCLCPP_INFO(
     rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"), "System successfully started! %u",
-    control_lvl_[0]);
+    control_level_[0]);
   return return_type::OK;
 }
 
@@ -267,24 +267,24 @@ return_type RRBotSystemMultiInterfaceHardware::read()
 {
   for (std::size_t i = 0; i < hw_positions_.size(); i++)
   {
-    switch (control_lvl_[i])
+    switch (control_level_[i])
     {
-      case integration_lvl_t::UNDEFINED:
+      case integration_level_t::UNDEFINED:
         RCLCPP_INFO(
           rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"),
           "Nothing is using the hardware interface!");
         return return_type::OK;
         break;
-      case integration_lvl_t::POSITION:
+      case integration_level_t::POSITION:
         hw_accelerations_[i] = 0;
         hw_velocities_[i] = 0;
         hw_positions_[i] = hw_commands_positions_[i];
         break;
-      case integration_lvl_t::VELOCITY:
+      case integration_level_t::VELOCITY:
         hw_accelerations_[i] = 0;
         hw_velocities_[i] = hw_commands_velocities_[i];
         break;
-      case integration_lvl_t::ACCELERATION:
+      case integration_level_t::ACCELERATION:
         hw_accelerations_[i] = hw_commands_accelerations_[i];
         break;
     }
@@ -311,7 +311,7 @@ return_type RRBotSystemMultiInterfaceHardware::write()
       rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"),
       "Got the commands pos: %.5f, vel: %.5f, acc: %.5f for joint %d, control_lvl: %d",
       hw_commands_positions_[i], hw_commands_velocities_[i], hw_commands_accelerations_[i], i,
-      control_lvl_[i]);
+      control_level_[i]);
   }
   return return_type::OK;
 }
