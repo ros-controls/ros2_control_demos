@@ -63,7 +63,7 @@ def generate_launch_description():
     slowdown = LaunchConfiguration("slowdown")
 
     base_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([ThisLaunchFileDir(), "/rrbot.launch.py"]),
+        PythonLaunchDescriptionSource([ThisLaunchFileDir(), "/rrbot_base.launch.py"]),
         launch_arguments={
             "controllers_file": "rrbot_with_sensor_controllers.yaml",
             "description_file": "rrbot_system_with_sensor.urdf.xacro",
