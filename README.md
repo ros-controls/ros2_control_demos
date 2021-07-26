@@ -77,34 +77,145 @@ However, there might be cases in which not-yet released demos or features are on
 * Do not forget to source `setup.bash` from the `install` folder!
 
 
-# Getting Started with ros2_control
+# Getting Started with demos
 
-Each of the described example cases from the [roadmap](https://github.com/ros-controls/roadmap/blob/master/design_drafts/components_architecture_and_urdf_examples.md) has its own launch and URDF file.
+This repository provides the following simple example robots: a 2 degrees of freedom manipulator - *RRBot* - and a mobile differential drive base - *DiffBot*.
 
-## Starting example robots
+The first two examples demonstrate the minimal setup for those two robots to run.
+Later examples show more details about `ros2_control`-concepts and some more advanced use-cases.
 
-Each example is started with a single launch file which starts up the robot hardware, loads controller configurations and it also opens `rviz2`.
-
-The `rviz2` setup can be recreated following these steps:
-
-- The robot models can be visualized using `RobotModel` display using `/robot_description` topic.
-- Or you can simply open the configuration from `rviz` folder in `rrbot_description` package manually or directly by executing:
-  ```
-  rviz2 --display-config `ros2 pkg prefix rrbot_description`/share/rrbot_description/config/rrbot.rviz
-  ```
+## *RRBot*
 
 *RRBot*, or ''Revolute-Revolute Manipulator Robot'', is a simple 3-linkage, 2-joint arm that we will use to demonstrate various features.
 It is essentially a double inverted pendulum and demonstrates some fun control concepts within a simulator and was originally introduced for Gazebo tutorials.
 The *RRBot* URDF files can be found in the `urdf` folder of `rrbot_description` package.
 
+1. To check that *RRBot* descriptions are working properly use following launch commands:
+
+   *RRBot*
+   ```
+   ros2 launch rrbot_description view_robot.launch.py
+   ```
+   **NOTE**: Getting the following output in terminal is OK: `Warning: Invalid frame ID "odom" passed to canTransform argument target_frame - frame does not exist`.
+             This happens because `joint_state_publisher_gui` node need some time to start.
+
+The `joint_state_publisher_gui` provides a GUI to generate  a random configuration for rrbot. It is immediately displayed in `Rviz`.
+
+1. To start *RRBot* example open open a terminal, source your ROS2-workspace and execute its launch file with:
+   ```
+   ros2 launch ros2_control_demo_bringup rrbot.launch.py
+   ```
+   The launch file loads and starts the robot hardware, controllers and opens `RViz`.
+   In starting terminal you will see a lot of output from the hardware implementation showing its internal states.
+   This is only of exemplary purpuses and should be avoided as much as possible in a hardware interface implementation.
+
+   If you can see two orange and one yellow rectangle in in `RViz` everything has started properly.
+   Still, to be sure, let's introspect the control system before moving *RRBot*.
+
+1. Check if the hardware interface loaded properly, by opening another terminal and executing:
+   ```
+   ros2 control list_hardware_interfaces
+   ```
+   You should get:
+   ```
+   command interfaces
+        joint1/position [claimed]
+        joint2/position [claimed]
+   state interfaces
+         joint1/position
+         joint2/position
+
+   ```
+   Marker `[claimed]` by command interfaces means that a controller has access to command *RRBot*.
+
+1. Check is controllers are running:
+   ```
+   ros2 control list_controllers
+   ```
+   You should get:
+   ```
+   joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+   forward_position_controller[forward_command_controller/ForwardCommandController] active
+   ```
+
+1. If you get output from above you can send commands to *Forward Command Controller*, either:
+
+   a. Manually using ros2 cli interface:
+   ```
+   ros2 topic pub /forward_position_controller/commands std_msgs/msg/Float64MultiArray "data:
+   - 0.5
+   - 0.5"
+   ```
+   B. Or you can start a demo node which sends two goals every 5 seconds in a loop:
+   ```
+   ros2 launch ros2_control_demo_bringup test_forward_position_controller.launch.py
+   ```
+   You should now see orange and yellow blocks moving in `RViz`.
+   Also, you should see changing states in the termnal where launch file is started.
+
+
+Files used for this demos:
+  - Launch file: [rrbot.launch.py](ros2_control_demo_bringup/launch/rrbot.launch.py)
+  - Controllers yaml: [rrbot_controllers.yaml](ros2_control_demo_bringup/config/rrbot_controllers.yaml)
+  - URDF file: [rrbot.urdf.xacro](ros2_control_demo_description/rrbot_description/urdf/rrbot.urdf.xacro)
+    - Description: [rrbot_description.urdf.xacro](ros2_control_demo_description/rrbot_description/urdf/rrbot_description.urdf.xacro)
+    - `ros2_control` tag: [rrbot.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/rrbot.ros2_control.xacro)
+  - RViz configuration: [rrbot.rviz](ros2_control_demo_description/rrbot_description/config/rrbot.rviz)
+
+  - Hardware interface plugin: [rrbot_system_position_only.cpp](ros2_control_demo_hardware/src/rrbot_system_position_only.cpp)
+
+
+Controllers from this demo:
+  - `Joint State Broadcaster` ([`ros2_controllers` repository](https://github.com/ros-controls/ros2_controllers)): [doc](https://ros-controls.github.io/control.ros.org/ros2_controllers/joint_state_broadcaster/doc/userdoc.html)
+  - `Forward Command Controller` ([`ros2_controllers` repository](https://github.com/ros-controls/ros2_controllers)): [doc](https://ros-controls.github.io/control.ros.org/ros2_controllers/forward_command_controller/doc/userdoc.html)
+
+
+## *DiffBot*
+
+*DiffBot*, or ''Differential Mobile Robot'', is a simple mobile base with differential drive.
+The robot is basically a box moving according to differential drive kinematics.
+The *DiffBot* URDF files can be found in `urdf` folder of `diffbot_description` package.
+
+..TBD... (in the next PR!)
+
+
+# Examples of ros2_control concepts
+
+Each of the described example cases from the [roadmap](https://github.com/ros-controls/roadmap/blob/master/design_drafts/components_architecture_and_urdf_examples.md) has its own launch and URDF file.
+
+
 ### General notes about examples
+
+1. Each example is started with a single launch file which starts up the robot hardware, loads controller configurations and it also opens `RViz`.
+
+   The `RViz` setup can be recreated following these steps:
+
+   - The robot models can be visualized using `RobotModel` display using `/robot_description` topic.
+   - Or you can simply open the configuration from `rviz` folder in `rrbot_description` or `diffbot_description` package manually or directly by executing:
+   ```
+   rviz2 --display-config `ros2 pkg prefix rrbot_description`/share/rrbot_description/config/rrbot.rviz
+   ```
+
+1. To check that robot descriptions are working properly use following launch commands:
+   ```
+   ros2 launch rrbot_description view_robot.launch.py
+   ```
+   Optional arguments for specific example (the robot visualization will be the same for all examples):
+   ```
+   description_file:=rrbot_system_multi_interface.urdf.xacro
+   ```
+
+**NOTE**: Getting the following output in terminal is OK: `Warning: Invalid frame ID "odom" passed to canTransform argument target_frame - frame does not exist`.
+          This happens because `joint_state_publisher_gui` node need some time to start.
 
 1. To start an example open a terminal, source your ROS2-workspace and execute a launch file with:
    ```
    ros2 launch ros2_control_demo_bringup <example_launch_file>
    ```
 
-2. To check if the hardware interface loaded properly, open another terminal and execute:
+1. To stop RViz2 from auto-start use `start_rviz:=false` launch file argument.
+
+1. To check if the hardware interface loaded properly, open another terminal and execute:
    ```
    ros2 control list_hardware_interfaces
    ```
@@ -118,7 +229,7 @@ The *RRBot* URDF files can be found in the `urdf` folder of `rrbot_description` 
          joint2/position
    ```
 
-3. Check which controllers are running using:
+1. Check which controllers are running using:
    ```
    ros2 control list_controllers
    ```
@@ -128,8 +239,8 @@ The *RRBot* URDF files can be found in the `urdf` folder of `rrbot_description` 
    joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
    ```
 
+1. Check [Controllers and moving hardware](#controllers-and-moving-hardware) section to move *RRBot*.
 
-4. Check [Controllers and moving hardware](#controllers-and-moving-hardware) section to move *RRBot*.
 
 ### Example 1: "Industrial Robots with only one interface"
 
@@ -216,7 +327,7 @@ angular:
  z: 1.0"
 ```
 
-You should now see an orange box circling in `rviz2`.
+You should now see an orange box circling in `RViz`.
 
 
 ### Example 5: "Industrial robot with integrated sensor"
@@ -276,7 +387,7 @@ You should get the response:
 joint_state_controller[joint_state_controller/JointStateController] active
 ```
 
-Now you should also see the *RRbot* represented correctly in `rviz2`.
+Now you should also see the *RRbot* represented correctly in `RViz`.
 
 
 ### Using ForwardCommandController
@@ -381,4 +492,4 @@ Now you should also see the *RRbot* represented correctly in `rviz2`.
    ros2 topic echo /dynamic_joint_states
    ```
 
-3. You should also see the *RRbot* moving in `rviz2`.
+3. You should also see the *RRbot* moving in `RViz`.

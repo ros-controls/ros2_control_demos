@@ -17,6 +17,7 @@ from rclpy.node import Node
 from builtin_interfaces.msg import Duration
 
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
+from sensor_msgs.msg import JointState
 
 
 class PublisherJointTrajectory(Node):
@@ -27,15 +28,41 @@ class PublisherJointTrajectory(Node):
         self.declare_parameter("wait_sec_between_publish", 6)
         self.declare_parameter("goal_names", ["pos1", "pos2"])
         self.declare_parameter("joints")
+        self.declare_parameter("check_starting_point", False)
+        self.declare_parameter("starting_point_limits")
 
         # Read parameters
         controller_name = self.get_parameter("controller_name").value
         wait_sec_between_publish = self.get_parameter("wait_sec_between_publish").value
         goal_names = self.get_parameter("goal_names").value
         self.joints = self.get_parameter("joints").value
+        self.check_starting_point = self.get_parameter("check_starting_point").value
+        self.starting_point = {}
 
         if self.joints is None or len(self.joints) == 0:
             raise Exception('"joints" parameter is not set!')
+
+        # starting point stuff
+        if self.check_starting_point:
+            # declare nested params
+            for name in self.joints:
+                param_name_tmp = "starting_point_limits" + "." + name
+                self.declare_parameter(param_name_tmp, [-2 * 3.14159, 2 * 3.14159])
+                self.starting_point[name] = self.get_parameter(param_name_tmp).value
+
+            for name in self.joints:
+                if len(self.starting_point[name]) != 2:
+                    raise Exception('"starting_point" parameter is not set correctly!')
+            self.joint_state_sub = self.create_subscription(
+                JointState, "joint_states", self.joint_state_callback, 10
+            )
+        # initialize starting point status
+        if not self.check_starting_point:
+            self.starting_point_ok = True
+        else:
+            self.starting_point_ok = False
+
+        self.joint_state_msg_received = False
 
         # Read all positions from parameters
         self.goals = []
@@ -63,17 +90,49 @@ class PublisherJointTrajectory(Node):
         self.i = 0
 
     def timer_callback(self):
-        traj = JointTrajectory()
-        traj.joint_names = self.joints
-        point = JointTrajectoryPoint()
-        point.positions = self.goals[self.i]
-        point.time_from_start = Duration(sec=4)
 
-        traj.points.append(point)
-        self.publisher_.publish(traj)
+        if self.starting_point_ok:
 
-        self.i += 1
-        self.i %= len(self.goals)
+            traj = JointTrajectory()
+            traj.joint_names = self.joints
+            point = JointTrajectoryPoint()
+            point.positions = self.goals[self.i]
+            point.time_from_start = Duration(sec=4)
+
+            traj.points.append(point)
+            self.publisher_.publish(traj)
+
+            self.i += 1
+            self.i %= len(self.goals)
+
+        elif self.check_starting_point and not self.joint_state_msg_received:
+            self.get_logger().warn(
+                'Start configuration could not be checked! Check "joint_state" topic!'
+            )
+        else:
+            self.get_logger().warn("Start configuration is not within configured limits!")
+
+    def joint_state_callback(self, msg):
+
+        if not self.joint_state_msg_received:
+
+            # check start state
+            limit_exceeded = [False] * len(msg.name)
+            for idx, enum in enumerate(msg.name):
+                if (msg.position[idx] < self.starting_point[enum][0]) or (
+                    msg.position[idx] > self.starting_point[enum][1]
+                ):
+                    self.get_logger().warn(f"Starting point limits exceeded for joint {enum} !")
+                    limit_exceeded[idx] = True
+
+            if any(limit_exceeded):
+                self.starting_point_ok = False
+            else:
+                self.starting_point_ok = True
+
+            self.joint_state_msg_received = True
+        else:
+            return
 
 
 def main(args=None):
