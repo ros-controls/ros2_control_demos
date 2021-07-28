@@ -113,7 +113,7 @@ hardware_interface::return_type RRBotSystemPositionOnlyHardware::start()
 {
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "Starting ...please wait...");
 
-  for (int i = 0; i <= hw_start_sec_; i++)
+  for (int i = 0; i < hw_start_sec_; i++)
   {
     rclcpp::sleep_for(std::chrono::seconds(1));
     RCLCPP_INFO(
@@ -147,7 +147,7 @@ hardware_interface::return_type RRBotSystemPositionOnlyHardware::stop()
 {
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "Stopping ...please wait...");
 
-  for (int i = 0; i <= hw_stop_sec_; i++)
+  for (int i = 0; i < hw_stop_sec_; i++)
   {
     rclcpp::sleep_for(std::chrono::seconds(1));
     RCLCPP_INFO(
