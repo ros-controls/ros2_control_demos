@@ -11,7 +11,7 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_desc
   <xacro:arg name="use_fake_hardware" default="true" />
   <xacro:arg name="fake_sensor_commands" default="false" />
   <xacro:arg name="prefix" default="" />
-  <xacro:arg name="slowdown" default="2.0" />
+  <xacro:arg name="slowdown" default="50.0" />
 
   <!-- Import RRBot macro -->
   <xacro:include filename="$(find rrbot_description)/urdf/rrbot.urdf.xacro" />
