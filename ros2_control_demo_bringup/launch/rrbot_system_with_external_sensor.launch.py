@@ -52,7 +52,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "slowdown",
-            default_value="3.0",
+            default_value="50.0",
             description="Slowdown factor of the RRbot.",
         )
     )
@@ -62,6 +62,18 @@ def generate_launch_description():
     use_fake_hardware = LaunchConfiguration("use_fake_hardware")
     fake_sensor_commands = LaunchConfiguration("fake_sensor_commands")
     slowdown = LaunchConfiguration("slowdown")
+
+    base_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([ThisLaunchFileDir(), "/rrbot_base.launch.py"]),
+        launch_arguments={
+            "controllers_file": "rrbot_with_external_sensor_controllers.yaml",
+            "description_file": "rrbot_system_with_external_sensor.urdf.xacro",
+            "prefix": prefix,
+            "use_fake_hardware": use_fake_hardware,
+            "fake_sensor_commands": fake_sensor_commands,
+            "slowdown": slowdown,
+        }.items(),
+    )
 
     # add the spawner node for the fts_broadcaster
     fts_broadcaster_spawner = Node(
@@ -74,17 +86,5 @@ def generate_launch_description():
     nodes = [
         fts_broadcaster_spawner,
     ]
-
-    base_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([ThisLaunchFileDir(), "/rrbot.launch.py"]),
-        launch_arguments={
-            "controllers_file": "rrbot_with_external_sensor_controllers.yaml",
-            "description_file": "rrbot_system_with_external_sensor.urdf.xacro",
-            "prefix": prefix,
-            "use_fake_hardware": use_fake_hardware,
-            "fake_sensor_commands": fake_sensor_commands,
-            "slowdown": slowdown,
-        }.items(),
-    )
 
     return LaunchDescription(declared_arguments + [base_launch] + nodes)
