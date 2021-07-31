@@ -14,7 +14,7 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_desc
   <xacro:arg name="slowdown" default="50.0" />
 
   <!-- Import RRBot macro -->
-  <xacro:include filename="$(find rrbot_description)/urdf/rrbot.urdf.xacro" />
+  <xacro:include filename="$(find rrbot_description)/urdf/rrbot_description.urdf.xacro" />
 
   <!-- Import Rviz colors -->
   <!-- <xacro:include filename="$(find ros2_control_demo_description)/urdf/rrbot/gazebo/rrbot.materials.xacro" /> -->
