@@ -332,9 +332,9 @@ You should now see an orange box circling in `RViz`.
 
 ### Example 5: "Industrial robot with integrated sensor"
 
-- Launch file: rrbot_system_with_sensor.launch.py
-- URDF: rrbot_system_with_sensor.urdf.xacro
-- ros2_control URDF: rrbot_system_with_sensor.ros2_control.xacro
+- Launch file: [rrbot_system_with_sensor.launch.py](ros2_control_demo_bringup/launch/rrbot_system_with_sensor.launch.py)
+- URDF: [rrbot_system_with_sensor.urdf.xacro](ros2_control_demo_bringup/config/rrbot_with_sensor_controllers.yaml)
+- ros2_control URDF: [rrbot_system_with_sensor.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/rrbot_system_with_sensor.ros2_control.xacro)
 
 - Command interfaces:
   - joint1/position
@@ -349,6 +349,9 @@ Available controllers:
 - `forward_position_controller[forward_command_controller/ForwardCommandController]`
 - `fts_broadcaster[force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster]`
 - `joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]`
+
+Notes:
+  - Wrench messages are not displayed properly in Rviz as NaN values are not handled in Rviz and FTS Broadcaster may send NaN values.
 
 Commanding the robot: see the commands below.
 
