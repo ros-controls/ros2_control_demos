@@ -384,6 +384,7 @@ Available controllers:
   - `forward_illegal2_controller[forward_command_controller/ForwardCommandController]`
 
 Notes:
+  - Wrench messages are not displayed properly in Rviz as NaN values are not handled in Rviz and FTS Broadcaster may send NaN values.
   - The example shows how to implement multi-interface robot hardware taking care about interfaces used.
     The two illegal controllers demonstrate how hardware interface declines faulty claims to access joint command interfaces.
 
