@@ -32,7 +32,8 @@ namespace ros2_control_demo_hardware
 hardware_interface::return_type ExternalRRBotForceTorqueSensorHardware::configure(
   const hardware_interface::HardwareInfo & info)
 {
-  if (configure_default(info) != hardware_interface::return_type::OK) {
+  if (configure_default(info) != hardware_interface::return_type::OK)
+  {
     return hardware_interface::return_type::ERROR;
   }
 
@@ -62,10 +63,10 @@ ExternalRRBotForceTorqueSensorHardware::export_state_interfaces()
 hardware_interface::return_type ExternalRRBotForceTorqueSensorHardware::start()
 {
   RCLCPP_INFO(
-    rclcpp::get_logger("ExternalRRBotForceTorqueSensorHardware"),
-    "Starting ...please wait...");
+    rclcpp::get_logger("ExternalRRBotForceTorqueSensorHardware"), "Starting ...please wait...");
 
-  for (int i = 0; i < hw_start_sec_; i++) {
+  for (int i = 0; i < hw_start_sec_; i++)
+  {
     rclcpp::sleep_for(std::chrono::seconds(1));
     RCLCPP_INFO(
       rclcpp::get_logger("ExternalRRBotForceTorqueSensorHardware"), "%.1f seconds left...",
@@ -83,10 +84,10 @@ hardware_interface::return_type ExternalRRBotForceTorqueSensorHardware::start()
 hardware_interface::return_type ExternalRRBotForceTorqueSensorHardware::stop()
 {
   RCLCPP_INFO(
-    rclcpp::get_logger("ExternalRRBotForceTorqueSensorHardware"),
-    "Stopping ...please wait...");
+    rclcpp::get_logger("ExternalRRBotForceTorqueSensorHardware"), "Stopping ...please wait...");
 
-  for (int i = 0; i < hw_stop_sec_; i++) {
+  for (int i = 0; i < hw_stop_sec_; i++)
+  {
     rclcpp::sleep_for(std::chrono::seconds(1));
     RCLCPP_INFO(
       rclcpp::get_logger("ExternalRRBotForceTorqueSensorHardware"), "%.1f seconds left...",
@@ -105,7 +106,8 @@ hardware_interface::return_type ExternalRRBotForceTorqueSensorHardware::read()
 {
   RCLCPP_INFO(rclcpp::get_logger("ExternalRRBotForceTorqueSensorHardware"), "Reading...");
 
-  for (uint i = 0; i < hw_sensor_states_.size(); i++) {
+  for (uint i = 0; i < hw_sensor_states_.size(); i++)
+  {
     // Simulate RRBot's sensor data
     unsigned int seed = time(NULL) + i;
     hw_sensor_states_[i] =
@@ -115,8 +117,7 @@ hardware_interface::return_type ExternalRRBotForceTorqueSensorHardware::read()
       hw_sensor_states_[i], i);
   }
   RCLCPP_INFO(
-    rclcpp::get_logger("ExternalRRBotForceTorqueSensorHardware"),
-    "Joints successfully read!");
+    rclcpp::get_logger("ExternalRRBotForceTorqueSensorHardware"), "Joints successfully read!");
 
   return hardware_interface::return_type::OK;
 }
