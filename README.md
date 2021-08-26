@@ -452,7 +452,7 @@ Now you should also see the *RRbot* represented correctly in `RViz`.
 ## Result
 
 1. Independently from the controller you should see how the example's output changes.
-    Look for the following lines
+   Look for the following lines
    ```
    [RRBotSystemPositionOnlyHardware]: Got state 0.0 for joint 0!
    [RRBotSystemPositionOnlyHardware]: Got state 0.0 for joint 1!
