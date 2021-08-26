@@ -27,4 +27,11 @@
       The ros2_control RRBot example using a system hardware interface-type and only one command and state interface. This example is the starting point to implement a hardware interface for robots with sensors providing one communication path.
     </description>
   </class>
+  <class name="ros2_control_demo_hardware/RRBotModularJoint"
+         type="ros2_control_demo_hardware::RRBotModularJoint"
+         base_class_type="hardware_interface::ActuatorInterface">
+    <description>
+      The ROS2 Control robot with 2 separate actuators which can be controlled by 2 different endpoints.
+    </description>
+  </class>
 </library>

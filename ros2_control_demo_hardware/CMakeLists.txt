@@ -26,6 +26,7 @@ add_library(
   src/rrbot_system_position_only.cpp
   src/rrbot_system_multi_interface.cpp
   src/rrbot_system_with_sensor.cpp
+  src/rrbot_system_separate_actuators.cpp
 )
 target_include_directories(
   ${PROJECT_NAME}
