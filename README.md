@@ -401,6 +401,33 @@ angular:
 
 You should now see an orange box circling in `RViz`.
 
+### Example 6: "Industrial Robots with externally connected sensor"
+
+- Launch file: [rrbot_system_with_external_sensor.launch.py](ros2_control_demo_bringup/launch/rrbot_system_with_external_sensor.launch.py)
+- URDF: [rrbot_with_external_sensor_controllers.urdf.xacro](ros2_control_demo_bringup/config/rrbot_with_external_sensor_controllers.yaml)
+- ros2_control URDF: [external_rrbot_force_torque_sensor.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/external_rrbot_force_torque_sensor.ros2_control.xacro)
+
+- Command interfaces:
+  - joint1/position
+  - joint2/position
+- State interfaces:
+  - joint1/position
+  - joint2/position
+  - tcp_fts_sensor/force.x
+  - tcp_fts_sensor/torque.z
+
+Available controllers:
+- `forward_position_controller[forward_command_controller/ForwardCommandController]`
+- `fts_broadcaster[force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster]`
+- `joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]`
+
+Commanding the robot: see the commands below.
+
+Accessing Wrench data from 2D FTS:
+```
+ros2 topic echo /fts_broadcaster/wrench
+```
+
 
 ### Example 5: "Industrial robot with integrated sensor"
 
