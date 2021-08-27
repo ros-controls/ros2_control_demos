@@ -64,9 +64,9 @@ git clone https://github.com/ros-controls/ros2_control_demos
 We provide officially released and maintained debian packages, which can easily be installed via aptitude.
 However, there might be cases in which not-yet released demos or features are only available through a source build in your own workspace.
 
-* Install dependencies (maybe you need `sudo`):
+* Install dependencies:
   ```
-  apt install ros-foxy-realtime-tools ros-foxy-xacro ros-foxy-angles
+  rosdep install --from-paths src --ignore-src -r -y
   ```
 
 * Build everything, e.g. with:
@@ -479,7 +479,7 @@ Now you should also see the *RRbot* represented correctly in `RViz`.
 ## Result
 
 1. Independently from the controller you should see how the example's output changes.
-  Look for the following lines
+   Look for the following lines
    ```
    [RRBotSystemPositionOnlyHardware]: Got state 0.0 for joint 0!
    [RRBotSystemPositionOnlyHardware]: Got state 0.0 for joint 1!
