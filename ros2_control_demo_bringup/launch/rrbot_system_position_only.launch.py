@@ -66,6 +66,13 @@ def generate_launch_description():
         )
     )
 
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "disable_commands", default_value="false",
+            description="Enables disconnected driver simulation."
+        )
+    )
+
     # Get URDF via xacro
     robot_description_content = Command(
         [
@@ -86,6 +93,8 @@ def generate_launch_description():
             LaunchConfiguration("fake_sensor_commands"),
             " slowdown:=",
             LaunchConfiguration("slowdown"),
+            " disable_commands:=",
+            LaunchConfiguration("disable_commands"),
         ]
     )
     robot_description = {"robot_description": robot_description_content}
