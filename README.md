@@ -89,7 +89,6 @@ Later examples show more details about `ros2_control`-concepts and some more adv
 It is essentially a double inverted pendulum and demonstrates some fun control concepts within a simulator and was originally introduced for Gazebo tutorials.
 The *RRBot* URDF files can be found in the `urdf` folder of `rrbot_description` package.
 
-
 1. To check that *RRBot* descriptions are working properly use following launch commands:
 
    *RRBot*
@@ -233,7 +232,7 @@ The *DiffBot* URDF files can be found in `urdf` folder of `diffbot_description` 
     z: 1.0"
     ```
    You should now see an orange box circling in `RViz`.
-   Also, you should see changing states in the termnal where launch file is started.
+   Also, you should see changing states in the terminal where launch file is started.
 
 
 Files used for this demos:
