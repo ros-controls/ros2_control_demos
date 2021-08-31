@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!-- Revolute-Revolute Manipulator with a 2D Force-Torque sensor -->
+<!--
+Copied and modified from ROS1 example -
+https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_description/urdf/rrbot.xacro
+-->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="2dof_robot">
+  <xacro:arg name="use_sim" default="false" />
+
+  <!-- Enable setting arguments from the launch file -->
+  <xacro:arg name="use_fake_hardware" default="false" />
+  <xacro:arg name="fake_sensor_commands" default="false" />
+  <xacro:arg name="prefix" default="" />
+  <xacro:arg name="slowdown" default="50.0" />
+
+  <!-- Import RRBot macro -->
+  <xacro:include filename="$(find rrbot_description)/urdf/rrbot_description.urdf.xacro" />
+
+  <!-- Import Rviz colors -->
+  <xacro:include filename="$(find rrbot_description)/gazebo/rrbot.materials.xacro" />
+
+  <!-- Import RRBot ros2_control description -->
+  <xacro:include filename="$(find rrbot_description)/ros2_control/rrbot_system_with_sensor.ros2_control.xacro" />
+
+  <!-- Used for fixing robot -->
+  <link name="world"/>
+  <gazebo reference="world">
+    <static>true</static>
+  </gazebo>
+
+  <xacro:rrbot parent="world" prefix="$(arg prefix)">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </xacro:rrbot>
+
+  <xacro:rrbot_system_with_sensor
+    name="RRBotSystemWithSensor" prefix="$(arg prefix)"
+    use_fake_hardware="$(arg use_fake_hardware)"
+    fake_sensor_commands="$(arg fake_sensor_commands)"
+    slowdown="$(arg slowdown)" />
+
+</robot>

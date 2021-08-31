@@ -1,0 +1,25 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 100  # Hz
+
+    forward_position_controller:
+      type: forward_command_controller/ForwardCommandController
+
+    fts_broadcaster:
+      type: force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+forward_position_controller:
+  ros__parameters:
+    joints:
+      - joint1
+      - joint2
+    interface_name: position
+
+fts_broadcaster:
+  ros__parameters:
+    interface_names.force.x: tcp_fts_sensor/force.x
+    interface_names.torque.z: tcp_fts_sensor/torque.z
+    frame_id: tool_link
