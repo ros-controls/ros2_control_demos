@@ -62,14 +62,15 @@ def generate_launch_description():
 
     declared_arguments.append(
         DeclareLaunchArgument(
-            "slowdown", default_value="3.0", description="Slowdown factor of the RRbot."
+            "disable_commands",
+            default_value="false",
+            description="Enables disconnected driver simulation."
         )
     )
 
     declared_arguments.append(
         DeclareLaunchArgument(
-            "disable_commands", default_value="false",
-            description="Enables disconnected driver simulation."
+            "slowdown", default_value="3.0", description="Slowdown factor of the RRbot."
         )
     )
 
@@ -91,10 +92,10 @@ def generate_launch_description():
             LaunchConfiguration("use_fake_hardware"),
             " fake_sensor_commands:=",
             LaunchConfiguration("fake_sensor_commands"),
-            " slowdown:=",
-            LaunchConfiguration("slowdown"),
             " disable_commands:=",
             LaunchConfiguration("disable_commands"),
+            " slowdown:=",
+            LaunchConfiguration("slowdown"),
         ]
     )
     robot_description = {"robot_description": robot_description_content}

@@ -52,6 +52,8 @@ Demo nodes for showing and testing functionalities of the ros2_control framework
                 ros2_control_test_nodes.publisher_forward_position_controller:main",
             "publisher_joint_trajectory_controller = \
                 ros2_control_test_nodes.publisher_joint_trajectory_controller:main",
+            "action_client_joint_trajectory_controller = \
+                ros2_control_test_nodes.action_client_joint_trajectory_controller:main",
         ],
     },
 )
