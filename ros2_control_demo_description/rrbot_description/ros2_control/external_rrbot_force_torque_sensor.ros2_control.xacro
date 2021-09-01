@@ -18,7 +18,7 @@
         </xacro:unless>
       </hardware>
 
-      <sensor name="tcp_fts_sensor">
+      <sensor name="${prefix}tcp_fts_sensor">
         <state_interface name="force.x"/>
         <state_interface name="force.y"/>
         <state_interface name="force.z"/>
