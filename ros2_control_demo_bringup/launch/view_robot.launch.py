@@ -90,12 +90,10 @@ def generate_launch_description():
         arguments=["-d", rviz_config_file],
     )
 
-    return LaunchDescription(
-        declared_arguments.append(
-            [
-                joint_state_publisher_node,
-                robot_state_publisher_node,
-                rviz_node,
-            ]
-        )
-    )
+    nodes = declared_arguments + [
+        joint_state_publisher_node,
+        robot_state_publisher_node,
+        rviz_node,
+    ]
+
+    return LaunchDescription(nodes)
