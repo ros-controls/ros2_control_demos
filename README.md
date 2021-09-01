@@ -387,6 +387,268 @@ Accessing Wrench data from 2D FTS:
 ros2 topic echo /fts_broadcaster/wrench
 ```
 
+### Example XX: "Multi-robot system with tools"
+
+- Launch file: [three_robots.launch.py](ros2_control_demo_bringup/launch/three_robots.launch.py)
+- Controllers: [three_robots_controllers.yaml](ros2_control_demo_bringup/config/three_robots_controllers.yaml)
+- URDF: [three_robots.urdf.xacro](ros2_control_demo_bringup/config/three_robots.urdf.xacro)
+- ros2_control URDF: [three_robots.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/three_robots.ros2_control.xacro)
+
+
+**Hardware and interfaces**:
+- RRBotSystemPositionOnly (auto-start)
+  - Command interfaces:
+    - rrbot_joint1/position
+    - rrbot_joint2/position
+  - State interfaces:
+    - rrbot_joint1/position
+    - rrbot_joint2/position
+
+- ExternalRRBotFTSensor (auto-start)
+  - State interfaces:
+    - rrbot_tcp_fts_sensor/force.x
+    - rrbot_tcp_fts_sensor/force.y
+    - rrbot_tcp_fts_sensor/force.z
+    - rrbot_tcp_fts_sensor/torque.x
+    - rrbot_tcp_fts_sensor/torque.y
+    - rrbot_tcp_fts_sensor/torque.z
+
+- RRBotSystemWithSensor (auto-configure)
+  - Command interfaces:
+    - rrbot_with_sensor_joint1/position
+    - rrbot_with_sensor_joint2/position
+  - State interfaces:
+    - rrbot_with_sensor_joint1/position
+    - rrbot_with_sensor_joint2/position
+    - rrbot_with_sensor_tcp_fts_sensor/force.x
+    - rrbot_with_sensor_tcp_fts_sensor/torque.z
+
+- ThreeDofBot
+  - Command interfaces
+    - threedofbot_joint1/position
+    - threedofbot_joint1/pid_gain
+    - threedofbot_joint2/position
+    - threedofbot_joint2/pid_gain
+    - threedofbot_joint3/position
+    - threedofbot_joint3/pid_gain
+  - State interfaces:
+    - threedofbot_joint1/position
+    - threedofbot_joint1/pid_gain
+    - threedofbot_joint2/position
+    - threedofbot_joint2/pid_gain
+    - threedofbot_joint3/position
+    - threedofbot_joint3/pid_gain
+
+**Available controllers**:
+- `joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]`
+
+- RRBotSystemPositionOnly
+  - `rrbot_joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]`
+  - `rrbot_position_controller[forward_command_controller/ForwardCommandController]`
+
+- ExternalRRBotFTSensor
+  - `external_fts_broadcaster[force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster]`
+
+- RRBotSystemPositionOnly
+  - `rrbot_with_sensor_joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]`
+  - `rrbot_with_sensor_position_controller[forward_command_controller/ForwardCommandController]`
+  - `rrbot_with_sensor_fts_broadcaster[force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster]`
+
+- FakeThreeDofBot
+  - `threedofbot_joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]`
+  - `threedofbot_position_controller[forward_command_controller/ForwardCommandController]`
+  - `threedofbot_pid_gain_controller[forward_command_controller/ForwardCommandController]`
+
+
+Caveats on hardware lifecycling:
+- There is currently no synchronization between available interface and controllers using them.
+  This means that you should stop controller before making interfaces they are using unavailable.
+  If you don't do this and deactivate/cleanup your interface first your computer will catch fire!
+- Global Joint State Broadcaster will not broadcast interfaces that become available after it is started.
+  To solve this restart it manually, for now. During restart TF-transforms are not available.
+- There is a possibility that hardware lifecycling (state changes) interfere with the `update`-loop if you are trying to start/stop a controller at the same time.
+
+
+Notes:
+  1. After starting the example there should be the following scene:
+     - right robot is moving (RRBotSystemPositionOnly - using auto-start)
+       - All interfaces are available and position controller is started and receives commands
+       - all controllers running
+     - left robot is standing upright (RRBotWithSensor - using auto-configure)
+       - only state interfaces are available therefore it can visualized, but not moved
+       - only position command controller is not running
+     - middle robot is "broken" (FakeThreeDofBot - it is only initialized)
+       - no interfaces are available
+       - all controllers inactive
+
+     Hardware status:
+     Controllers status: (`ros2 control list_controllers`)
+      ```
+      joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+      rrbot_external_fts_broadcaster[force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster] active
+      rrbot_joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+      rrbot_position_controller[forward_command_controller/ForwardCommandController] active
+      rrbot_with_sensor_fts_broadcaster[force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster] active
+      rrbot_with_sensor_joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+      rrbot_with_sensor_position_controller[forward_command_controller/ForwardCommandController] inactive
+      threedofbot_joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] inactive
+      threedofbot_pid_gain_controller[forward_command_controller/ForwardCommandController] inactive
+      threedofbot_position_controller[forward_command_controller/ForwardCommandController] inactive
+      ```
+
+  1. Activate `RRBotWithSensor` and its position controller. Call
+     ```
+     ros2 service call /controller_manager/manage_hardware_activity controller_manager_msgs/srv/ManageHardwareActivity "{activate: [RRBotSystemWithSensor], deactivate: []}"
+     ros2 control switch_controllers --start rrbot_with_sensor_position_controller
+     ```
+
+     Scenario state:
+     - right robot is moving
+     - left robot is moving
+     - middle robot is "broken"
+
+     Hardware status:
+     Controllers status: (`ros2 control list_controllers`)
+      ```
+      joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+      rrbot_external_fts_broadcaster[force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster] active
+      rrbot_joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+      rrbot_position_controller[forward_command_controller/ForwardCommandController] active
+      rrbot_with_sensor_fts_broadcaster[force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster] active
+      rrbot_with_sensor_joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+      rrbot_with_sensor_position_controller[forward_command_controller/ForwardCommandController] active
+      threedofbot_joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] inactive
+      threedofbot_pid_gain_controller[forward_command_controller/ForwardCommandController] inactive
+      threedofbot_position_controller[forward_command_controller/ForwardCommandController] inactive
+      ```
+
+  1. Configure `FakeThreeDofBot` and its joint state broadcaster and non-movement command interfaces. Call
+     ```
+     ros2 service call /controller_manager/configure_hardware_component controller_manager_msgs/srv/ConfigureHardwareComponent "{name: FakeThreeDofBot}"
+     ros2 control switch_controllers --start threedofbot_joint_state_broadcaster threedofbot_pid_gain_controller
+     ```
+
+     Scenario state:
+     - right robot is moving
+     - left robot is moving
+     - middle robot is still "broken"
+
+
+     Hardware status:
+     Controllers status: (`ros2 control list_controllers`)
+      ```
+      joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+      rrbot_external_fts_broadcaster[force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster] active
+      rrbot_joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+      rrbot_position_controller[forward_command_controller/ForwardCommandController] active
+      rrbot_with_sensor_fts_broadcaster[force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster] active
+      rrbot_with_sensor_joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+      rrbot_with_sensor_position_controller[forward_command_controller/ForwardCommandController] active
+      threedofbot_joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+      threedofbot_pid_gain_controller[forward_command_controller/ForwardCommandController] active
+      threedofbot_position_controller[forward_command_controller/ForwardCommandController] inactive
+      ```
+
+  1. Restart global joint state broadcaster to broadcast all available states from the framework.
+     First check output to have comparison:
+     ```
+     ros2 topic echo /joint_states
+     ```
+     Restart:
+     ```
+     ros2 control switch_controllers --stop joint_state_broadcaster
+     ros2 control switch_controllers --start joint_state_broadcaster
+     ```
+     Check output to for comparison
+     ```
+     ros2 topic echo /joint_states
+     ```
+
+     Scenario state (everything is broken during `joint_state_broadcaster` restart):
+     - right robot is moving
+     - left robot is moving
+     - middle robot is still "standing"
+
+  1. Activate `FakeThreeDofBot` and its joint state broadcaster and non-movement command interfaces. Call
+     ```
+     ros2 service call /controller_manager/manage_hardware_activity controller_manager_msgs/srv/ManageHardwareActivity "{activate: [FakeThreeDofBot], deactivate: []}"
+     ros2 control switch_controllers --start threedofbot_position_controller
+     ```
+
+     Scenario state:
+     - right robot is moving
+     - left robot is moving
+     - middle robot is moving
+
+     Hardware status:
+     Controllers status: (`ros2 control list_controllers`)
+      ```
+      joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+      rrbot_external_fts_broadcaster[force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster] active
+      rrbot_joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+      rrbot_position_controller[forward_command_controller/ForwardCommandController] active
+      rrbot_with_sensor_fts_broadcaster[force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster] active
+      rrbot_with_sensor_joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+      rrbot_with_sensor_position_controller[forward_command_controller/ForwardCommandController] active
+      threedofbot_joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+      threedofbot_pid_gain_controller[forward_command_controller/ForwardCommandController] active
+      threedofbot_position_controller[forward_command_controller/ForwardCommandController] active
+      ```
+
+  1. Deactivate `RRBotSystemPositionOnly` and its position controller (first). Call
+     ```
+     ros2 control switch_controllers --stop rrbot_position_controller
+     ros2 service call /controller_manager/manage_hardware_activity controller_manager_msgs/srv/ManageHardwareActivity "{activate: [], deactivate: [RRBotSystemPositionOnly]}"
+     ```
+
+     Scenario state:
+     - right robot is "standing"
+     - left robot is moving
+     - middle robot is moving
+
+     Hardware status:
+     Controllers status: (`ros2 control list_controllers`)
+      ```
+      joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+      rrbot_external_fts_broadcaster[force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster] active
+      rrbot_joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+      rrbot_position_controller[forward_command_controller/ForwardCommandController] inactive
+      rrbot_with_sensor_fts_broadcaster[force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster] active
+      rrbot_with_sensor_joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+      rrbot_with_sensor_position_controller[forward_command_controller/ForwardCommandController] active
+      threedofbot_joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+      threedofbot_pid_gain_controller[forward_command_controller/ForwardCommandController] active
+      threedofbot_position_controller[forward_command_controller/ForwardCommandController] active
+      ```
+
+  1. Cleanup `RRBotSystemPositionOnly` and its joint state broadcaster.
+     Also restart global joint state broadcaster. Call
+     ```
+     ros2 control switch_controllers --stop rrbot_position_controller joint_state_broadcaster
+     ros2 service call /controller_manager/cleanup_hardware_component controller_manager_msgs/srv/CleanupHardwareComponent "{name: RRBotSystemPositionOnly}"
+     ros2 control switch_controllers --start joint_state_broadcaster
+     ```
+
+     Scenario state (everything is broken during `joint_state_broadcaster` restart):
+     - right robot is "broken"
+     - left robot is moving
+     - middle robot is moving
+
+     Hardware status:
+     Controllers status: (`ros2 control list_controllers`)
+      ```
+      joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+      rrbot_external_fts_broadcaster[force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster] active
+      rrbot_joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] inactive
+      rrbot_position_controller[forward_command_controller/ForwardCommandController] inactive
+      rrbot_with_sensor_fts_broadcaster[force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster] active
+      rrbot_with_sensor_joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+      rrbot_with_sensor_position_controller[forward_command_controller/ForwardCommandController] active
+      threedofbot_joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+      threedofbot_pid_gain_controller[forward_command_controller/ForwardCommandController] active
+      threedofbot_position_controller[forward_command_controller/ForwardCommandController] active
+      ```
+
 
 ## Controllers and moving hardware
 
