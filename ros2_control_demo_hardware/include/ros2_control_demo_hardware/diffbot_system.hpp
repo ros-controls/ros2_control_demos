@@ -37,7 +37,7 @@ public:
   RCLCPP_SHARED_PTR_DEFINITIONS(DiffBotSystemHardware);
 
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
-  hardware_interface::return_type configure(const hardware_interface::HardwareInfo & info) override;
+  CallbackReturn on_init(const hardware_interface::HardwareInfo & info) override;
 
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
   std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
@@ -46,10 +46,10 @@ public:
   std::vector<hardware_interface::CommandInterface> export_command_interfaces() override;
 
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
-  hardware_interface::return_type start() override;
+  CallbackReturn on_activate() override;
 
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
-  hardware_interface::return_type stop() override;
+  CallbackReturn on_deactivate() override;
 
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
   hardware_interface::return_type read() override;

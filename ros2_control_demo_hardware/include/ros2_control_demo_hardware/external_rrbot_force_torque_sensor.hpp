@@ -32,8 +32,6 @@
 #include "rclcpp/macros.hpp"
 #include "ros2_control_demo_hardware/visibility_control.h"
 
-using hardware_interface::return_type;
-
 namespace ros2_control_demo_hardware
 {
 class ExternalRRBotForceTorqueSensorHardware
@@ -43,19 +41,19 @@ public:
   RCLCPP_SHARED_PTR_DEFINITIONS(ExternalRRBotForceTorqueSensorHardware);
 
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
-  return_type configure(const hardware_interface::HardwareInfo & info) override;
+  CallbackReturn on_init(const hardware_interface::HardwareInfo & info) override;
 
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
   std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
 
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
-  return_type start() override;
+  CallbackReturn on_activate() override;
 
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
-  return_type stop() override;
+  CallbackReturn on_deactivate() override;
 
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
-  return_type read() override;
+  hardware_interface::return_type read() override;
 
 private:
   // Parameters for the RRBot simulation

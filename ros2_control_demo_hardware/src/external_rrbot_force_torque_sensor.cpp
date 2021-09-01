@@ -29,20 +29,22 @@
 
 namespace ros2_control_demo_hardware
 {
-hardware_interface::return_type ExternalRRBotForceTorqueSensorHardware::configure(
+CallbackReturn ExternalRRBotForceTorqueSensorHardware::on_init(
   const hardware_interface::HardwareInfo & info)
 {
-  if (configure_default(info) != hardware_interface::return_type::OK)
+  if (on_init_default(info) != CallbackReturn::SUCCESS)
   {
-    return hardware_interface::return_type::ERROR;
+    return CallbackReturn::ERROR;
   }
 
   hw_start_sec_ = stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
   hw_stop_sec_ = stod(info_.hardware_parameters["example_param_hw_stop_duration_sec"]);
   hw_sensor_change_ = stod(info_.hardware_parameters["example_param_max_sensor_change"]);
 
-  status_ = hardware_interface::status::CONFIGURED;
-  return hardware_interface::return_type::OK;
+  hw_sensor_states_.resize(
+    info_.sensors[0].state_interfaces.size(), std::numeric_limits<double>::quiet_NaN());
+
+  return CallbackReturn::SUCCESS;
 }
 
 std::vector<hardware_interface::StateInterface>
@@ -60,7 +62,7 @@ ExternalRRBotForceTorqueSensorHardware::export_state_interfaces()
   return state_interfaces;
 }
 
-hardware_interface::return_type ExternalRRBotForceTorqueSensorHardware::start()
+CallbackReturn ExternalRRBotForceTorqueSensorHardware::on_activate()
 {
   RCLCPP_INFO(
     rclcpp::get_logger("ExternalRRBotForceTorqueSensorHardware"), "Starting ...please wait...");
@@ -73,15 +75,13 @@ hardware_interface::return_type ExternalRRBotForceTorqueSensorHardware::start()
       hw_start_sec_ - i);
   }
 
-  status_ = hardware_interface::status::STARTED;
-
   RCLCPP_INFO(
     rclcpp::get_logger("ExternalRRBotForceTorqueSensorHardware"), "System Successfully started!");
 
-  return hardware_interface::return_type::OK;
+  return CallbackReturn::SUCCESS;
 }
 
-hardware_interface::return_type ExternalRRBotForceTorqueSensorHardware::stop()
+CallbackReturn ExternalRRBotForceTorqueSensorHardware::on_deactivate()
 {
   RCLCPP_INFO(
     rclcpp::get_logger("ExternalRRBotForceTorqueSensorHardware"), "Stopping ...please wait...");
@@ -94,12 +94,10 @@ hardware_interface::return_type ExternalRRBotForceTorqueSensorHardware::stop()
       hw_stop_sec_ - i);
   }
 
-  status_ = hardware_interface::status::STOPPED;
-
   RCLCPP_INFO(
     rclcpp::get_logger("ExternalRRBotForceTorqueSensorHardware"), "System successfully stopped!");
 
-  return hardware_interface::return_type::OK;
+  return CallbackReturn::SUCCESS;
 }
 
 hardware_interface::return_type ExternalRRBotForceTorqueSensorHardware::read()
