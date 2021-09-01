@@ -27,6 +27,11 @@ namespace ros2_control_demo_hardware
 {
 CallbackReturn DiffBotSystemHardware::on_init(const hardware_interface::HardwareInfo & info)
 {
+  if (on_init_default(info) != CallbackReturn::SUCCESS)
+  {
+    return CallbackReturn::ERROR;
+  }
+
   base_x_ = 0.0;
   base_y_ = 0.0;
   base_theta_ = 0.0;

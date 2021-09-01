@@ -203,7 +203,7 @@ CallbackReturn RRBotSystemMultiInterfaceHardware::on_activate(
 {
   // START: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(
-    rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"), "Starting... please wait...");
+    rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"), "Activating... please wait...");
 
   for (int i = 0; i < hw_start_sec_; i++)
   {
@@ -247,7 +247,7 @@ CallbackReturn RRBotSystemMultiInterfaceHardware::on_activate(
   last_timestamp_ = clock_.now();
 
   RCLCPP_INFO(
-    rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"), "System successfully started! %u",
+    rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"), "System successfully activated! %u",
     control_level_[0]);
   return CallbackReturn::SUCCESS;
 }
