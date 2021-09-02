@@ -41,6 +41,9 @@ hardware_interface::return_type ExternalRRBotForceTorqueSensorHardware::configur
   hw_stop_sec_ = stod(info_.hardware_parameters["example_param_hw_stop_duration_sec"]);
   hw_sensor_change_ = stod(info_.hardware_parameters["example_param_max_sensor_change"]);
 
+  hw_sensor_states_.resize(
+    info_.sensors[0].state_interfaces.size(), std::numeric_limits<double>::quiet_NaN());
+
   status_ = hardware_interface::status::CONFIGURED;
   return hardware_interface::return_type::OK;
 }
