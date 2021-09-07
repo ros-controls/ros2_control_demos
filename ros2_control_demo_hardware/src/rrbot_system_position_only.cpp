@@ -28,7 +28,7 @@ namespace ros2_control_demo_hardware
 CallbackReturn RRBotSystemPositionOnlyHardware::on_init(
   const hardware_interface::HardwareInfo & info)
 {
-  if (on_init_default(info) != CallbackReturn::SUCCESS)
+  if (hardware_interface::SystemInterface::on_init(info) != CallbackReturn::SUCCESS)
   {
     return CallbackReturn::ERROR;
   }
@@ -82,7 +82,8 @@ CallbackReturn RRBotSystemPositionOnlyHardware::on_init(
   return CallbackReturn::SUCCESS;
 }
 
-CallbackReturn RRBotSystemPositionOnlyHardware::on_configure()
+CallbackReturn RRBotSystemPositionOnlyHardware::on_configure(
+  const rclcpp_lifecycle::State & /*previous_state*/)
 {
   RCLCPP_INFO(
     rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "Configuring ...please wait...");
@@ -134,7 +135,8 @@ RRBotSystemPositionOnlyHardware::export_command_interfaces()
   return command_interfaces;
 }
 
-CallbackReturn RRBotSystemPositionOnlyHardware::on_activate()
+CallbackReturn RRBotSystemPositionOnlyHardware::on_activate(
+  const rclcpp_lifecycle::State & /*previous_state*/)
 {
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "Starting ...please wait...");
 
@@ -158,7 +160,8 @@ CallbackReturn RRBotSystemPositionOnlyHardware::on_activate()
   return CallbackReturn::SUCCESS;
 }
 
-CallbackReturn RRBotSystemPositionOnlyHardware::on_deactivate()
+CallbackReturn RRBotSystemPositionOnlyHardware::on_deactivate(
+  const rclcpp_lifecycle::State & /*previous_state*/)
 {
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "Stopping ...please wait...");
 

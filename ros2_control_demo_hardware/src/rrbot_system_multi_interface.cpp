@@ -29,7 +29,7 @@ namespace ros2_control_demo_hardware
 CallbackReturn RRBotSystemMultiInterfaceHardware::on_init(
   const hardware_interface::HardwareInfo & info)
 {
-  if (on_init_default(info) != CallbackReturn::SUCCESS)
+  if (hardware_interface::SystemInterface::on_init(info) != CallbackReturn::SUCCESS)
   {
     return CallbackReturn::ERROR;
   }
@@ -191,7 +191,8 @@ hardware_interface::return_type RRBotSystemMultiInterfaceHardware::prepare_comma
   return hardware_interface::return_type::OK;
 }
 
-CallbackReturn RRBotSystemMultiInterfaceHardware::on_activate()
+CallbackReturn RRBotSystemMultiInterfaceHardware::on_activate(
+  const rclcpp_lifecycle::State & /*previous_state*/)
 {
   RCLCPP_INFO(
     rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"), "Starting... please wait...");
@@ -240,7 +241,8 @@ CallbackReturn RRBotSystemMultiInterfaceHardware::on_activate()
   return CallbackReturn::SUCCESS;
 }
 
-CallbackReturn RRBotSystemMultiInterfaceHardware::on_deactivate()
+CallbackReturn RRBotSystemMultiInterfaceHardware::on_deactivate(
+  const rclcpp_lifecycle::State & /*previous_state*/)
 {
   RCLCPP_INFO(
     rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"), "Stopping... please wait...");

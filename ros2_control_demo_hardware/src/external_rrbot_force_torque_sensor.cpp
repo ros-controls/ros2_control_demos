@@ -32,7 +32,7 @@ namespace ros2_control_demo_hardware
 CallbackReturn ExternalRRBotForceTorqueSensorHardware::on_init(
   const hardware_interface::HardwareInfo & info)
 {
-  if (on_init_default(info) != CallbackReturn::SUCCESS)
+  if (hardware_interface::SensorInterface::on_init(info) != CallbackReturn::SUCCESS)
   {
     return CallbackReturn::ERROR;
   }
@@ -62,7 +62,8 @@ ExternalRRBotForceTorqueSensorHardware::export_state_interfaces()
   return state_interfaces;
 }
 
-CallbackReturn ExternalRRBotForceTorqueSensorHardware::on_activate()
+CallbackReturn ExternalRRBotForceTorqueSensorHardware::on_activate(
+  const rclcpp_lifecycle::State & /*previous_state*/)
 {
   RCLCPP_INFO(
     rclcpp::get_logger("ExternalRRBotForceTorqueSensorHardware"), "Starting ...please wait...");
@@ -81,7 +82,8 @@ CallbackReturn ExternalRRBotForceTorqueSensorHardware::on_activate()
   return CallbackReturn::SUCCESS;
 }
 
-CallbackReturn ExternalRRBotForceTorqueSensorHardware::on_deactivate()
+CallbackReturn ExternalRRBotForceTorqueSensorHardware::on_deactivate(
+  const rclcpp_lifecycle::State & /*previous_state*/)
 {
   RCLCPP_INFO(
     rclcpp::get_logger("ExternalRRBotForceTorqueSensorHardware"), "Stopping ...please wait...");

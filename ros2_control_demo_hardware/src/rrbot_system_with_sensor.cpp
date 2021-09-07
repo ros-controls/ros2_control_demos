@@ -31,7 +31,7 @@ namespace ros2_control_demo_hardware
 {
 CallbackReturn RRBotSystemWithSensorHardware::on_init(const hardware_interface::HardwareInfo & info)
 {
-  if (on_init_default(info) != CallbackReturn::SUCCESS)
+  if (hardware_interface::SystemInterface::on_init(info) != CallbackReturn::SUCCESS)
   {
     return CallbackReturn::ERROR;
   }
@@ -89,7 +89,8 @@ CallbackReturn RRBotSystemWithSensorHardware::on_init(const hardware_interface::
   return CallbackReturn::SUCCESS;
 }
 
-CallbackReturn RRBotSystemWithSensorHardware::on_configure()
+CallbackReturn RRBotSystemWithSensorHardware::on_configure(
+  const rclcpp_lifecycle::State & /*previous_state*/)
 {
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Configuring ...please wait...");
 
@@ -147,7 +148,8 @@ RRBotSystemWithSensorHardware::export_command_interfaces()
   return command_interfaces;
 }
 
-CallbackReturn RRBotSystemWithSensorHardware::on_activate()
+CallbackReturn RRBotSystemWithSensorHardware::on_activate(
+  const rclcpp_lifecycle::State & /*previous_state*/)
 {
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Starting ...please wait...");
 
@@ -180,7 +182,8 @@ CallbackReturn RRBotSystemWithSensorHardware::on_activate()
   return CallbackReturn::SUCCESS;
 }
 
-CallbackReturn RRBotSystemWithSensorHardware::on_deactivate()
+CallbackReturn RRBotSystemWithSensorHardware::on_deactivate(
+  const rclcpp_lifecycle::State & /*previous_state*/)
 {
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Stopping ...please wait...");
 

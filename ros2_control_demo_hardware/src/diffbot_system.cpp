@@ -27,7 +27,7 @@ namespace ros2_control_demo_hardware
 {
 CallbackReturn DiffBotSystemHardware::on_init(const hardware_interface::HardwareInfo & info)
 {
-  if (on_init_default(info) != CallbackReturn::SUCCESS)
+  if (hardware_interface::SystemInterface::on_init(info) != CallbackReturn::SUCCESS)
   {
     return CallbackReturn::ERROR;
   }
@@ -121,7 +121,8 @@ std::vector<hardware_interface::CommandInterface> DiffBotSystemHardware::export_
   return command_interfaces;
 }
 
-CallbackReturn DiffBotSystemHardware::on_activate()
+CallbackReturn DiffBotSystemHardware::on_activate(
+  const rclcpp_lifecycle::State & /*previous_state*/)
 {
   RCLCPP_INFO(rclcpp::get_logger("DiffBotSystemHardware"), "Starting ...please wait...");
 
@@ -148,7 +149,8 @@ CallbackReturn DiffBotSystemHardware::on_activate()
   return CallbackReturn::SUCCESS;
 }
 
-CallbackReturn DiffBotSystemHardware::on_deactivate()
+CallbackReturn DiffBotSystemHardware::on_deactivate(
+  const rclcpp_lifecycle::State & /*previous_state*/)
 {
   RCLCPP_INFO(rclcpp::get_logger("DiffBotSystemHardware"), "Stopping ...please wait...");
 
