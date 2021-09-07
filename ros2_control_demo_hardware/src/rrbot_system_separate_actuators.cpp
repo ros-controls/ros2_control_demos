@@ -69,9 +69,8 @@ hardware_interface::return_type RRBotModularJoint::configure(
     if (joint.state_interfaces.size() != 1)
     {
       RCLCPP_FATAL(
-        rclcpp::get_logger("RRBotModularJoint"),
-        "Joint '%s' has %zu state interface. 1 expected.", joint.name.c_str(),
-        joint.state_interfaces.size());
+        rclcpp::get_logger("RRBotModularJoint"), "Joint '%s' has %zu state interface. 1 expected.",
+        joint.name.c_str(), joint.state_interfaces.size());
       return hardware_interface::return_type::ERROR;
     }
 
@@ -89,8 +88,7 @@ hardware_interface::return_type RRBotModularJoint::configure(
   return hardware_interface::return_type::OK;
 }
 
-std::vector<hardware_interface::StateInterface>
-RRBotModularJoint::export_state_interfaces()
+std::vector<hardware_interface::StateInterface> RRBotModularJoint::export_state_interfaces()
 {
   std::vector<hardware_interface::StateInterface> state_interfaces;
   for (uint i = 0; i < info_.joints.size(); i++)
@@ -102,8 +100,7 @@ RRBotModularJoint::export_state_interfaces()
   return state_interfaces;
 }
 
-std::vector<hardware_interface::CommandInterface>
-RRBotModularJoint::export_command_interfaces()
+std::vector<hardware_interface::CommandInterface> RRBotModularJoint::export_command_interfaces()
 {
   std::vector<hardware_interface::CommandInterface> command_interfaces;
   for (uint i = 0; i < info_.joints.size(); i++)
@@ -122,9 +119,7 @@ hardware_interface::return_type RRBotModularJoint::start()
   for (int i = 0; i < hw_start_sec_; i++)
   {
     rclcpp::sleep_for(std::chrono::seconds(1));
-    RCLCPP_INFO(
-      rclcpp::get_logger("RRBotModularJoint"), "%.1f seconds left...",
-      hw_start_sec_ - i);
+    RCLCPP_INFO(rclcpp::get_logger("RRBotModularJoint"), "%.1f seconds left...", hw_start_sec_ - i);
   }
 
   // set some default values for joints
@@ -151,9 +146,7 @@ hardware_interface::return_type RRBotModularJoint::stop()
   for (int i = 0; i < hw_stop_sec_; i++)
   {
     rclcpp::sleep_for(std::chrono::seconds(1));
-    RCLCPP_INFO(
-      rclcpp::get_logger("RRBotModularJoint"), "%.1f seconds left...",
-      hw_stop_sec_ - i);
+    RCLCPP_INFO(rclcpp::get_logger("RRBotModularJoint"), "%.1f seconds left...", hw_stop_sec_ - i);
   }
 
   status_ = hardware_interface::status::STOPPED;
@@ -173,8 +166,8 @@ hardware_interface::return_type RRBotModularJoint::read()
     hw_joint_states_[i] =
       hw_joint_commands_[i] + (hw_joint_states_[i] - hw_joint_commands_[i]) / hw_slowdown_;
     RCLCPP_INFO(
-      rclcpp::get_logger("RRBotModularJoint"), "Got state %.5f for joint %zu!",
-      hw_joint_states_[i], i);
+      rclcpp::get_logger("RRBotModularJoint"), "Got state %.5f for joint %zu!", hw_joint_states_[i],
+      i);
   }
   RCLCPP_INFO(rclcpp::get_logger("RRBotModularJoint"), "Joints successfully read!");
 
