@@ -15,6 +15,7 @@
 import rclpy
 from rclpy.node import Node
 from rclpy.action import ActionClient
+from rcl_interfaces.msg import ParameterDescriptor
 from builtin_interfaces.msg import Duration
 
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
@@ -32,7 +33,9 @@ class ActionClientJointTrajectory(Node):
         self.declare_parameter("goal_names", ["pos1", "pos2"])
         self.declare_parameter("joints")
         self.declare_parameter("check_starting_point", False)
-        self.declare_parameter("starting_point_limits")
+        self.declare_parameter(
+            "starting_point_limits", None, ParameterDescriptor(dynamic_typing=True)
+        )
 
         # Read parameters
         controller_name = self.get_parameter("controller_name").value
@@ -105,15 +108,9 @@ class ActionClientJointTrajectory(Node):
 
             traj.points.append(point)
             goal_msg = FollowJointTrajectory.Goal(trajectory=traj)
-            #result = self.action_client.send_goal(goal)
 
             self._send_goal_future = self._action_client.send_goal_async(goal_msg)
             self._send_goal_future.add_done_callback(self.goal_response_callback)
-
-            #self.get_logger().info(
-            #    'Result error code is {}, result error string is {}'.format(
-            #        result.error_code, result.error_string)
-            #)
 
             self.i += 1
             self.i %= len(self.goals)
@@ -150,17 +147,17 @@ class ActionClientJointTrajectory(Node):
     def goal_response_callback(self, future):
         goal_handle = future.result()
         if not goal_handle.accepted:
-            self.get_logger().info('Goal rejected :(')
+            self.get_logger().info("Goal rejected :(")
             return
 
-        self.get_logger().info('Goal accepted :)')
+        self.get_logger().info("Goal accepted :)")
 
         self._get_result_future = goal_handle.get_result_async()
         self._get_result_future.add_done_callback(self.get_result_callback)
 
     def get_result_callback(self, future):
         result = future.result().result
-        self.get_logger().info('Result: {0}'.format(result.sequence))
+        self.get_logger().info(f"Result: {result}")
 
 
 def main(args=None):

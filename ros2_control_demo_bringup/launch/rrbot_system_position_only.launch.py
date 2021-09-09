@@ -64,7 +64,7 @@ def generate_launch_description():
         DeclareLaunchArgument(
             "disable_commands",
             default_value="false",
-            description="Enables disconnected driver simulation."
+            description="Enables disconnected driver simulation.",
         )
     )
 

@@ -2,13 +2,13 @@ action_client_joint_trajectory_controller:
   ros__parameters:
 
     controller_name: "position_trajectory_controller"
-    wait_sec_between_publish: 15
+    wait_sec_between_publish: 10
 
     goal_names: ["pos1", "pos2", "pos3", "pos4"]
     pos1: [0.785, 0.785]
-    pos2: [0, 0]
+    pos2: [0.0, 0.0]
     pos3: [-0.785, -0.785]
-    pos4: [0, 0]
+    pos4: [0.0, 0.0]
 
     joints:
       - joint1

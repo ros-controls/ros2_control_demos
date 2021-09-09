@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <xacro:macro name="rrbot_system_multi_interface" params="name prefix use_sim:=^|false use_fake_hardware:=^|true fake_sensor_commands:=^|false slowdown:=2.0">
+  <xacro:macro name="rrbot_system_multi_interface" params="name prefix use_sim:=^|false use_fake_hardware:=^|true fake_sensor_commands:=^|false slowdown:=2.0 disable_commands:=^|false">
 
     <ros2_control name="${name}" type="system">
 
@@ -16,6 +16,7 @@
             <plugin>fake_components/GenericSystem</plugin>
             <param name="fake_sensor_commands">${fake_sensor_commands}</param>
             <param name="state_following_offset">0.0</param>
+            <param name="disable_commands">${disable_commands}</param>
           </xacro:if>
           <xacro:unless value="${use_fake_hardware}">
             <plugin>ros2_control_demo_hardware/RRBotSystemMultiInterfaceHardware</plugin>

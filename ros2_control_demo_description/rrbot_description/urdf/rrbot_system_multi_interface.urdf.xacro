@@ -41,6 +41,7 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_desc
     name="RRBotSystemMultiInterface" prefix="$(arg prefix)"
     use_fake_hardware="$(arg use_fake_hardware)"
     fake_sensor_commands="$(arg fake_sensor_commands)"
-    slowdown="$(arg slowdown)" />
+    slowdown="$(arg slowdown)"
+    disable_commands="$(arg disable_commands)" />
 
 </robot>
