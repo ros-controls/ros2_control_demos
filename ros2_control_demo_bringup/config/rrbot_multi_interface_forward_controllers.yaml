@@ -1,6 +1,6 @@
 controller_manager:
   ros__parameters:
-    update_rate: 2  # Hz
+    update_rate: 50  # Hz
 
     forward_position_controller:
       type: position_controllers/JointGroupPositionController
@@ -34,6 +34,7 @@ forward_velocity_controller:
     joints:
       - joint1
       - joint2
+    interface_name: velocity
 
 forward_acceleration_controller:
   ros__parameters:
