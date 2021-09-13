@@ -34,7 +34,6 @@ forward_velocity_controller:
     joints:
       - joint1
       - joint2
-    interface_name: velocity
 
 forward_acceleration_controller:
   ros__parameters:
