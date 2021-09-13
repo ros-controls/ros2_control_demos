@@ -103,6 +103,13 @@ def generate_launch_description():
             description="Start RViz2 automatically with this launch file.",
         )
     )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "disable_commands",
+            default_value="false",
+            description="Enables disconnected driver simulation.",
+        )
+    )
 
     # Initialize Arguments
     runtime_config_package = LaunchConfiguration("runtime_config_package")
@@ -116,6 +123,7 @@ def generate_launch_description():
     slowdown = LaunchConfiguration("slowdown")
     robot_controller = LaunchConfiguration("robot_controller")
     start_rviz = LaunchConfiguration("start_rviz")
+    disable_commands = LaunchConfiguration("disable_commands")
 
     # Get URDF via xacro
     robot_description_content = Command(
@@ -140,6 +148,9 @@ def generate_launch_description():
             " ",
             "slowdown:=",
             slowdown,
+            " ",
+            "disable_commands:=",
+            disable_commands,
         ]
     )
     robot_description = {"robot_description": robot_description_content}

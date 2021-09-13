@@ -57,6 +57,13 @@ def generate_launch_description():
             description="Robot controller to start.",
         )
     )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "disable_commands",
+            default_value="false",
+            description="Enables disconnected driver simulation.",
+        )
+    )
 
     # Initialize Arguments
     prefix = LaunchConfiguration("prefix")
@@ -64,6 +71,7 @@ def generate_launch_description():
     fake_sensor_commands = LaunchConfiguration("fake_sensor_commands")
     slowdown = LaunchConfiguration("slowdown")
     robot_controller = LaunchConfiguration("robot_controller")
+    disable_commands = LaunchConfiguration("disable_commands")
 
     base_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([ThisLaunchFileDir(), "/rrbot_base.launch.py"]),
@@ -75,6 +83,7 @@ def generate_launch_description():
             "fake_sensor_commands": fake_sensor_commands,
             "slowdown": slowdown,
             "robot_controller": robot_controller,
+            "disable_commands": disable_commands,
         }.items(),
     )
 

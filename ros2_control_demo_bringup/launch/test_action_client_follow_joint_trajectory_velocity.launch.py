@@ -20,11 +20,11 @@ from launch_ros.substitutions import FindPackageShare
 
 def generate_launch_description():
 
-    position_goals = PathJoinSubstitution(
+    velocity_goals = PathJoinSubstitution(
         [
             FindPackageShare("ros2_control_demo_bringup"),
             "config",
-            "rrbot_joint_trajectory_action_client.yaml",
+            "rrbot_joint_trajectory_action_client_velocity.yaml",
         ]
     )
 
@@ -33,8 +33,8 @@ def generate_launch_description():
             Node(
                 package="ros2_control_test_nodes",
                 executable="action_client_joint_trajectory_controller",
-                name="action_client_joint_trajectory_controller",
-                parameters=[position_goals],
+                name="action_client_joint_trajectory_controller_velocity",
+                parameters=[velocity_goals],
                 output={
                     "stdout": "screen",
                     "stderr": "screen",

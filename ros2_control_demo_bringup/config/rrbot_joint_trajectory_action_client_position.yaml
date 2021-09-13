@@ -1,4 +1,4 @@
-action_client_joint_trajectory_controller:
+action_client_joint_trajectory_controller_position:
   ros__parameters:
 
     controller_name: "position_trajectory_controller"

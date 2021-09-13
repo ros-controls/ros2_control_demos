@@ -104,6 +104,7 @@ class ActionClientJointTrajectory(Node):
             traj.joint_names = self.joints
             point = JointTrajectoryPoint()
             point.positions = self.goals[self.i]
+            point.velocities = [0.1, 0.1]
             point.time_from_start = Duration(sec=4)
 
             traj.points.append(point)
@@ -142,7 +143,7 @@ class ActionClientJointTrajectory(Node):
 
             self.joint_state_msg_received = True
         else:
-            return
+            self.current_state = msg.position
 
     def goal_response_callback(self, future):
         goal_handle = future.result()

@@ -1,0 +1,22 @@
+action_client_joint_trajectory_controller_velocity:
+  ros__parameters:
+
+    controller_name: "velocity_trajectory_controller"
+    wait_sec_between_publish: 15
+
+    goal_names: ["pos1", "pos2", "pos3", "pos4"]
+    pos1: [-0.5, 0.5]
+    pos2: [0.5, -0.5]
+    pos3: [0.0, 0.0]
+    pos4: [0.5, -0.5]
+    pos5: [-0.5, 0.5]
+    pos6: [0.0, 0.0]
+
+    joints:
+      - joint1
+      - joint2
+
+    check_starting_point: false
+    starting_point_limits:
+      joint1: [-0.1,0.1]
+      joint2: [-0.1,0.1]
