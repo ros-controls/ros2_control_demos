@@ -414,6 +414,10 @@ You should now see an orange box circling in `RViz`.
   - joint1/position
   - joint2/position
   - tcp_fts_sensor/force.x
+  - tcp_fts_sensor/force.y
+  - tcp_fts_sensor/force.z
+  - tcp_fts_sensor/torque.x
+  - tcp_fts_sensor/torque.y
   - tcp_fts_sensor/torque.z
 
 Available controllers:
