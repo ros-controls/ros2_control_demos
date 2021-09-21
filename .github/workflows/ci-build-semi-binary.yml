@@ -1,4 +1,4 @@
-name: Foxy Binary Build
+name: Foxy Semi-Binary Build
 on:
   pull_request:
   push:
@@ -9,7 +9,7 @@ on:
     - cron: '23 1 * * *'
 
 jobs:
-  binary_foxy:
+  semi_binary_foxy:
     name: binary build
     runs-on: ubuntu-latest
     strategy:
@@ -17,6 +17,8 @@ jobs:
         env:
           - {ROS_DISTRO: foxy, ROS_REPO: main}
           - {ROS_DISTRO: foxy, ROS_REPO: testing}
+    env:
+      UPSTREAM_WORKSPACE: ros2_control_demos.repos
     steps:
       - uses: actions/checkout@v1
       - uses: 'ros-industrial/industrial_ci@master'

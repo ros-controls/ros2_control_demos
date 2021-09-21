@@ -1,4 +1,4 @@
-name: Source Build
+name: Foxy Source Build
 on:
   push:
     branches:
@@ -8,7 +8,7 @@ on:
     - cron: '43 1 * * *'
 
 jobs:
-  source:
+  source_foxy:
     name: source build
     runs-on: ubuntu-20.04
     strategy:
