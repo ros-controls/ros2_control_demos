@@ -4,7 +4,7 @@ action_client_joint_trajectory_controller_velocity:
     controller_name: "velocity_trajectory_controller"
     wait_sec_between_publish: 15
 
-    goal_names: ["pos1", "pos2", "pos3", "pos4"]
+    goal_names: ["pos1", "pos2", "pos3", "pos4", "pos5", "pos6"]
     pos1: [-0.5, 0.5]
     pos2: [0.5, -0.5]
     pos3: [0.0, 0.0]

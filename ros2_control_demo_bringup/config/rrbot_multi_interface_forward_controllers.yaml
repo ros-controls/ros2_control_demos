@@ -78,6 +78,12 @@ position_trajectory_controller:
     constraints:
       stopped_velocity_tolerance: 0.01 # Defaults to 0.01
       goal_time: 0.0 # Defaults to 0.0 (start immediately)
+      joint1:
+        goal: 0.05
+        trajectory: 0.05
+      joint2:
+        goal: 0.05
+        trajectory: 0.05
 
 velocity_trajectory_controller:
   ros__parameters:
@@ -108,8 +114,8 @@ velocity_trajectory_controller:
         goal: 0.05
         trajectory: 0.05
     gains:
-      joint1: {p: 10.0, d: 0.0, i: 0.001, i_clamp: 0.5}
-      joint2: {p: 10.0, d: 0.0, i: 0.001, i_clamp: 0.5}
-    velocity_ff:
-      joint1: 0.05
-      joint2: 0.05
+      joint1: {p: 50.0, d: 0.0, i: 0.1, i_clamp: 0.5}
+      joint2: {p: 50.0, d: 0.0, i: 0.1, i_clamp: 0.5}
+    ff_velocity_scale:
+      joint1: 0.1
+      joint2: 0.1
