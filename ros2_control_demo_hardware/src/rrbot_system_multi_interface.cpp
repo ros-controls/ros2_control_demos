@@ -53,7 +53,8 @@ return_type RRBotSystemMultiInterfaceHardware::configure(
     {
       RCLCPP_FATAL(
         rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"),
-        "Joint '%s' has %d command interfaces. 3 expected.", joint.name.c_str());
+        "Joint '%s' has %zu command interfaces. 3 expected.", joint.name.c_str(),
+        joint.command_interfaces.size());
       return return_type::ERROR;
     }
 
@@ -73,7 +74,8 @@ return_type RRBotSystemMultiInterfaceHardware::configure(
     {
       RCLCPP_FATAL(
         rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"),
-        "Joint '%s'has %d state interfaces. 3 expected.", joint.name.c_str());
+        "Joint '%s'has %zu state interfaces. 3 expected.", joint.name.c_str(),
+        joint.command_interfaces.size());
       return return_type::ERROR;
     }
 
@@ -237,7 +239,7 @@ return_type RRBotSystemMultiInterfaceHardware::start()
   status_ = hardware_interface::status::STARTED;
 
   RCLCPP_INFO(
-    rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"), "System successfully started! %u",
+    rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"), "System successfully started! %hhu",
     control_level_[0]);
   return return_type::OK;
 }
@@ -293,7 +295,7 @@ return_type RRBotSystemMultiInterfaceHardware::read()
     hw_positions_[i] += hw_slowdown_ * hw_velocities_[i];
     RCLCPP_INFO(
       rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"),
-      "Got pos: %.5f, vel: %.5f, acc: %.5f for joint %d!", hw_positions_[i], hw_velocities_[i],
+      "Got pos: %.5f, vel: %.5f, acc: %.5f for joint %lu!", hw_positions_[i], hw_velocities_[i],
       hw_accelerations_[i], i);
   }
   return return_type::OK;
@@ -309,7 +311,7 @@ return_type RRBotSystemMultiInterfaceHardware::write()
     // Simulate sending commands to the hardware
     RCLCPP_INFO(
       rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"),
-      "Got the commands pos: %.5f, vel: %.5f, acc: %.5f for joint %d, control_lvl: %d",
+      "Got the commands pos: %.5f, vel: %.5f, acc: %.5f for joint %lu, control_lvl:%hhu",
       hw_commands_positions_[i], hw_commands_velocities_[i], hw_commands_accelerations_[i], i,
       control_level_[i]);
   }
