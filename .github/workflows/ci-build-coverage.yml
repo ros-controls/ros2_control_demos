@@ -1,4 +1,4 @@
-name: Coverage Build
+name: Rolling Coverage Build
 on:
   pull_request:
   push:
@@ -9,7 +9,7 @@ on:
     - cron: '54 1 * * *'
 
 jobs:
-  coverage:
+  coverage_rolling:
     name: coverage build
     runs-on: ubuntu-20.04
     strategy:
@@ -17,10 +17,10 @@ jobs:
     steps:
       - uses: ros-tooling/setup-ros@v0.2
         with:
-          required-ros-distributions: foxy
+          required-ros-distributions: rolling
       - uses: ros-tooling/action-ros-ci@v0.2
         with:
-          target-ros2-distro: foxy
+          target-ros2-distro: rolling
           # build all packages listed in the meta package
           package-name:
             ros2_control_demo_hardware

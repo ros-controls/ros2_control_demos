@@ -1,4 +1,4 @@
-name: Rolling Binary Build
+name: Rolling Semi-Binary Build
 on:
   pull_request:
   push:
@@ -9,8 +9,8 @@ on:
     - cron: '23 1 * * *'
 
 jobs:
-  binary_rolling:
-    name: binary build
+  semi_binary_rolling:
+    name: semi binary build
     runs-on: ubuntu-latest
     strategy:
       matrix:
