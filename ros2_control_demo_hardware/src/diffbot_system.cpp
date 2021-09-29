@@ -49,7 +49,7 @@ CallbackReturn DiffBotSystemHardware::on_init(const hardware_interface::Hardware
     {
       RCLCPP_FATAL(
         rclcpp::get_logger("DiffBotSystemHardware"),
-        "Joint '%s' has %d command interfaces found. 1 expected.", joint.name.c_str(),
+        "Joint '%s' has %zu command interfaces found. 1 expected.", joint.name.c_str(),
         joint.command_interfaces.size());
       return CallbackReturn::ERROR;
     }
@@ -67,7 +67,7 @@ CallbackReturn DiffBotSystemHardware::on_init(const hardware_interface::Hardware
     {
       RCLCPP_FATAL(
         rclcpp::get_logger("DiffBotSystemHardware"),
-        "Joint '%s' has %d state interface. 2 expected.", joint.name.c_str(),
+        "Joint '%s' has %zu state interface. 2 expected.", joint.name.c_str(),
         joint.state_interfaces.size());
       return CallbackReturn::ERROR;
     }
@@ -76,10 +76,9 @@ CallbackReturn DiffBotSystemHardware::on_init(const hardware_interface::Hardware
     {
       RCLCPP_FATAL(
         rclcpp::get_logger("DiffBotSystemHardware"),
-        "Joint '%s' have '%s' as first state interface. '%s' and '%s' expected.",
-        joint.name.c_str(), joint.state_interfaces[0].name.c_str(),
-        hardware_interface::HW_IF_POSITION);
-      return CallbackReturn::ERROR;
+        "Joint '%s' have '%s' as first state interface. '%s' expected.", joint.name.c_str(),
+        joint.state_interfaces[0].name.c_str(), hardware_interface::HW_IF_POSITION);
+      return hardware_interface::return_type::ERROR;
     }
 
     if (joint.state_interfaces[1].name != hardware_interface::HW_IF_VELOCITY)
@@ -126,7 +125,7 @@ CallbackReturn DiffBotSystemHardware::on_activate(
 {
   RCLCPP_INFO(rclcpp::get_logger("DiffBotSystemHardware"), "Starting ...please wait...");
 
-  for (auto i = 0; i <= hw_start_sec_; i++)
+  for (auto i = 0; i < hw_start_sec_; i++)
   {
     rclcpp::sleep_for(std::chrono::seconds(1));
     RCLCPP_INFO(
@@ -154,7 +153,7 @@ CallbackReturn DiffBotSystemHardware::on_deactivate(
 {
   RCLCPP_INFO(rclcpp::get_logger("DiffBotSystemHardware"), "Stopping ...please wait...");
 
-  for (auto i = 0; i <= hw_stop_sec_; i++)
+  for (auto i = 0; i < hw_stop_sec_; i++)
   {
     rclcpp::sleep_for(std::chrono::seconds(1));
     RCLCPP_INFO(
