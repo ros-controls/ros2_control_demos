@@ -29,12 +29,12 @@
 
 namespace ros2_control_demo_hardware
 {
-hardware_interface::return_type RRBotSystemWithSensorHardware::configure(
+CallbackReturn RRBotSystemWithSensorHardware::on_init(
   const hardware_interface::HardwareInfo & info)
 {
-  if (configure_default(info) != hardware_interface::return_type::OK)
+  if (hardware_interface::SystemInterface::on_init(info) != CallbackReturn::SUCCESS)
   {
-    return hardware_interface::return_type::ERROR;
+    return CallbackReturn::ERROR;
   }
 
   hw_start_sec_ = stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
@@ -56,7 +56,7 @@ hardware_interface::return_type RRBotSystemWithSensorHardware::configure(
         rclcpp::get_logger("RRBotSystemWithSensorHardware"),
         "Joint '%s' has %zu command interfaces found. 1 expected.", joint.name.c_str(),
         joint.command_interfaces.size());
-      return hardware_interface::return_type::ERROR;
+      return CallbackReturn::ERROR;
     }
 
     if (joint.command_interfaces[0].name != hardware_interface::HW_IF_POSITION)
@@ -65,7 +65,7 @@ hardware_interface::return_type RRBotSystemWithSensorHardware::configure(
         rclcpp::get_logger("RRBotSystemWithSensorHardware"),
         "Joint '%s' have %s command interfaces found. '%s' expected.", joint.name.c_str(),
         joint.command_interfaces[0].name.c_str(), hardware_interface::HW_IF_POSITION);
-      return hardware_interface::return_type::ERROR;
+      return CallbackReturn::ERROR;
     }
 
     if (joint.state_interfaces.size() != 1)
@@ -74,7 +74,7 @@ hardware_interface::return_type RRBotSystemWithSensorHardware::configure(
         rclcpp::get_logger("RRBotSystemWithSensorHardware"),
         "Joint '%s' has %zu state interface. 1 expected.", joint.name.c_str(),
         joint.state_interfaces.size());
-      return hardware_interface::return_type::ERROR;
+      return CallbackReturn::ERROR;
     }
 
     if (joint.state_interfaces[0].name != hardware_interface::HW_IF_POSITION)
@@ -83,12 +83,11 @@ hardware_interface::return_type RRBotSystemWithSensorHardware::configure(
         rclcpp::get_logger("RRBotSystemWithSensorHardware"),
         "Joint '%s' have %s state interface. '%s' expected.", joint.name.c_str(),
         joint.state_interfaces[0].name.c_str(), hardware_interface::HW_IF_POSITION);
-      return hardware_interface::return_type::ERROR;
+      return CallbackReturn::ERROR;
     }
   }
 
-  status_ = hardware_interface::status::CONFIGURED;
-  return hardware_interface::return_type::OK;
+  return CallbackReturn::SUCCESS;
 }
 
 std::vector<hardware_interface::StateInterface>
@@ -124,7 +123,7 @@ RRBotSystemWithSensorHardware::export_command_interfaces()
   return command_interfaces;
 }
 
-hardware_interface::return_type RRBotSystemWithSensorHardware::start()
+CallbackReturn RRBotSystemWithSensorHardware::on_activate(const rclcpp_lifecycle::State & previous_state)
 {
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Starting ...please wait...");
 
@@ -152,14 +151,12 @@ hardware_interface::return_type RRBotSystemWithSensorHardware::start()
     hw_sensor_states_[0] = 0;
   }
 
-  status_ = hardware_interface::status::STARTED;
-
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithSensorHardware"), "System Successfully started!");
 
-  return hardware_interface::return_type::OK;
+  return CallbackReturn::SUCCESS;
 }
 
-hardware_interface::return_type RRBotSystemWithSensorHardware::stop()
+CallbackReturn RRBotSystemWithSensorHardware::on_deactivate(const rclcpp_lifecycle::State & previous_state)
 {
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Stopping ...please wait...");
 
@@ -171,11 +168,9 @@ hardware_interface::return_type RRBotSystemWithSensorHardware::stop()
       hw_stop_sec_ - i);
   }
 
-  status_ = hardware_interface::status::STOPPED;
-
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithSensorHardware"), "System successfully stopped!");
 
-  return hardware_interface::return_type::OK;
+  return CallbackReturn::SUCCESS;
 }
 
 hardware_interface::return_type RRBotSystemWithSensorHardware::read()
