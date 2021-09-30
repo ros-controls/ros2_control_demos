@@ -121,7 +121,7 @@ std::vector<hardware_interface::CommandInterface> DiffBotSystemHardware::export_
   return command_interfaces;
 }
 
-CallbackReturn DiffBotSystemHardware::on_activate(const rclcpp_lifecycle::State & previous_state)
+CallbackReturn DiffBotSystemHardware::on_activate(const rclcpp_lifecycle::State & /*previous_state*/)
 {
   RCLCPP_INFO(rclcpp::get_logger("DiffBotSystemHardware"), "Starting ...please wait...");
 
@@ -148,7 +148,7 @@ CallbackReturn DiffBotSystemHardware::on_activate(const rclcpp_lifecycle::State 
   return CallbackReturn::SUCCESS;
 }
 
-CallbackReturn DiffBotSystemHardware::on_deactivate(const rclcpp_lifecycle::State & previous_state)
+CallbackReturn DiffBotSystemHardware::on_deactivate(const rclcpp_lifecycle::State & /*previous_state*/)
 {
   RCLCPP_INFO(rclcpp::get_logger("DiffBotSystemHardware"), "Stopping ...please wait...");
 

@@ -20,13 +20,13 @@
 #include <string>
 #include <vector>
 
-#include "rclcpp/macros.hpp"
 
 #include "hardware_interface/handle.hpp"
 #include "hardware_interface/hardware_info.hpp"
 #include "hardware_interface/system_interface.hpp"
 #include "hardware_interface/types/hardware_interface_return_values.hpp"
-#include "hardware_interface/types/lifecycle_state_names.hpp"
+#include "rclcpp/macros.hpp"
+#include "rclcpp_lifecycle/state.hpp"
 #include "ros2_control_demo_hardware/visibility_control.h"
 
 using hardware_interface::return_type;

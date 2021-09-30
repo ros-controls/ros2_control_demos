@@ -123,7 +123,7 @@ RRBotSystemWithSensorHardware::export_command_interfaces()
   return command_interfaces;
 }
 
-CallbackReturn RRBotSystemWithSensorHardware::on_activate(const rclcpp_lifecycle::State & previous_state)
+CallbackReturn RRBotSystemWithSensorHardware::on_activate(const rclcpp_lifecycle::State & /*previous_state*/)
 {
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Starting ...please wait...");
 
@@ -156,7 +156,7 @@ CallbackReturn RRBotSystemWithSensorHardware::on_activate(const rclcpp_lifecycle
   return CallbackReturn::SUCCESS;
 }
 
-CallbackReturn RRBotSystemWithSensorHardware::on_deactivate(const rclcpp_lifecycle::State & previous_state)
+CallbackReturn RRBotSystemWithSensorHardware::on_deactivate(const rclcpp_lifecycle::State & /*previous_state*/)
 {
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Stopping ...please wait...");
 

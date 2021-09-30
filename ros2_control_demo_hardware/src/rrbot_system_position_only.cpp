@@ -108,7 +108,7 @@ RRBotSystemPositionOnlyHardware::export_command_interfaces()
   return command_interfaces;
 }
 
-CallbackReturn RRBotSystemPositionOnlyHardware::on_activate(const rclcpp_lifecycle::State & previous_state)
+CallbackReturn RRBotSystemPositionOnlyHardware::on_activate(const rclcpp_lifecycle::State & /*previous_state*/)
 {
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "Starting ...please wait...");
 
@@ -140,7 +140,7 @@ CallbackReturn RRBotSystemPositionOnlyHardware::on_activate(const rclcpp_lifecyc
   return CallbackReturn::SUCCESS;
 }
 
-CallbackReturn RRBotSystemPositionOnlyHardware::on_deactivate(const rclcpp_lifecycle::State & previous_state)
+CallbackReturn RRBotSystemPositionOnlyHardware::on_deactivate(const rclcpp_lifecycle::State & /*previous_state*/)
 {
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "Stopping ...please wait...");
 

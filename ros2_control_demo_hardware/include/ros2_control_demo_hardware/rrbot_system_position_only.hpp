@@ -23,8 +23,8 @@
 #include "hardware_interface/hardware_info.hpp"
 #include "hardware_interface/system_interface.hpp"
 #include "hardware_interface/types/hardware_interface_return_values.hpp"
-#include "hardware_interface/types/lifecycle_state_names.hpp"
 #include "rclcpp/macros.hpp"
+#include "rclcpp_lifecycle/state.hpp"
 #include "ros2_control_demo_hardware/visibility_control.h"
 
 namespace ros2_control_demo_hardware
@@ -37,6 +37,9 @@ public:
 
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
   CallbackReturn on_init(const hardware_interface::HardwareInfo & info) override;
+  
+  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
+  CallbackReturn on_configure(const rclcpp_lifecycle::State & previous_state) override;
 
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
   std::vector<hardware_interface::StateInterface> export_state_interfaces() override;

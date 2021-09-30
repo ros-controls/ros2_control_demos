@@ -190,7 +190,7 @@ return_type RRBotSystemMultiInterfaceHardware::prepare_command_mode_switch(
     }
     control_level_[i] = new_modes[i];
   }
-  return return_type::OK;
+  return hardware_interface::return_type::OK;
 }
 
 CallbackReturn RRBotSystemMultiInterfaceHardware::on_activate(const rclcpp_lifecycle::State & previous_state)
