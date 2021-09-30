@@ -29,8 +29,6 @@
 #include "rclcpp_lifecycle/state.hpp"
 #include "ros2_control_demo_hardware/visibility_control.h"
 
-using hardware_interface::return_type;
-
 namespace ros2_control_demo_hardware
 {
 class RRBotSystemMultiInterfaceHardware
