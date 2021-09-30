@@ -29,8 +29,7 @@
 
 namespace ros2_control_demo_hardware
 {
-class DiffBotSystemHardware
-: public hardware_interface::SystemInterface
+class DiffBotSystemHardware : public hardware_interface::SystemInterface
 {
 public:
   RCLCPP_SHARED_PTR_DEFINITIONS(DiffBotSystemHardware);
