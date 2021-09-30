@@ -130,7 +130,7 @@ RRBotSystemMultiInterfaceHardware::export_command_interfaces()
   return command_interfaces;
 }
 
-return_type RRBotSystemMultiInterfaceHardware::prepare_command_mode_switch(
+hardware_interface::return_type RRBotSystemMultiInterfaceHardware::prepare_command_mode_switch(
   const std::vector<std::string> & start_interfaces,
   const std::vector<std::string> & stop_interfaces)
 {
@@ -157,14 +157,14 @@ return_type RRBotSystemMultiInterfaceHardware::prepare_command_mode_switch(
   // Example criteria: All joints must be given new command mode at the same time
   if (new_modes.size() != info_.joints.size())
   {
-    return return_type::ERROR;
+    return hardware_interface::return_type::ERROR;
   }
   // Example criteria: All joints must have the same command mode
   if (!std::all_of(new_modes.begin() + 1, new_modes.end(), [&](integration_level_t mode) {
         return mode == new_modes[0];
       }))
   {
-    return return_type::ERROR;
+    return hardware_interface::return_type::ERROR;
   }
 
   // Stop motion on all relevant joints that are stopping
@@ -186,14 +186,15 @@ return_type RRBotSystemMultiInterfaceHardware::prepare_command_mode_switch(
     if (control_level_[i] != integration_level_t::UNDEFINED)
     {
       // Something else is using the joint! Abort!
-      return return_type::ERROR;
+      return hardware_interface::return_type::ERROR;
     }
     control_level_[i] = new_modes[i];
   }
   return hardware_interface::return_type::OK;
 }
 
-CallbackReturn RRBotSystemMultiInterfaceHardware::on_activate(const rclcpp_lifecycle::State & previous_state)
+CallbackReturn RRBotSystemMultiInterfaceHardware::on_activate(
+  const rclcpp_lifecycle::State & /*previous_state*/)
 {
   RCLCPP_INFO(
     rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"), "Starting... please wait...");
@@ -242,7 +243,8 @@ CallbackReturn RRBotSystemMultiInterfaceHardware::on_activate(const rclcpp_lifec
   return CallbackReturn::SUCCESS;
 }
 
-CallbackReturn RRBotSystemMultiInterfaceHardware::on_deactivate(const rclcpp_lifecycle::State & previous_state)
+CallbackReturn RRBotSystemMultiInterfaceHardware::on_deactivate(
+  const rclcpp_lifecycle::State & /*previous_state*/)
 {
   RCLCPP_INFO(
     rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"), "Stopping... please wait...");
@@ -271,7 +273,7 @@ hardware_interface::return_type RRBotSystemMultiInterfaceHardware::read()
         RCLCPP_INFO(
           rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"),
           "Nothing is using the hardware interface!");
-        return return_type::OK;
+        return hardware_interface::return_type::OK;
         break;
       case integration_level_t::POSITION:
         hw_accelerations_[i] = 0;

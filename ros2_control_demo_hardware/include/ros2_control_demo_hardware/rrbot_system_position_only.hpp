@@ -29,15 +29,14 @@
 
 namespace ros2_control_demo_hardware
 {
-class RRBotSystemPositionOnlyHardware
-: public hardware_interface::SystemInterface
+class RRBotSystemPositionOnlyHardware : public hardware_interface::SystemInterface
 {
 public:
   RCLCPP_SHARED_PTR_DEFINITIONS(RRBotSystemPositionOnlyHardware);
 
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
   CallbackReturn on_init(const hardware_interface::HardwareInfo & info) override;
-  
+
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
   CallbackReturn on_configure(const rclcpp_lifecycle::State & previous_state) override;
 

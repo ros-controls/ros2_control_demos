@@ -33,15 +33,14 @@
 
 namespace ros2_control_demo_hardware
 {
-class RRBotSystemWithSensorHardware
-: public hardware_interface::SystemInterface
+class RRBotSystemWithSensorHardware : public hardware_interface::SystemInterface
 {
 public:
   RCLCPP_SHARED_PTR_DEFINITIONS(RRBotSystemWithSensorHardware);
 
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
   CallbackReturn on_init(const hardware_interface::HardwareInfo & info) override;
-  
+
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
   CallbackReturn on_configure(const rclcpp_lifecycle::State & previous_state) override;
 

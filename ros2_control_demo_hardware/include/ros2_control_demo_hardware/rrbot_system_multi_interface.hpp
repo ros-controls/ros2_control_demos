@@ -20,7 +20,6 @@
 #include <string>
 #include <vector>
 
-
 #include "hardware_interface/handle.hpp"
 #include "hardware_interface/hardware_info.hpp"
 #include "hardware_interface/system_interface.hpp"
@@ -31,8 +30,7 @@
 
 namespace ros2_control_demo_hardware
 {
-class RRBotSystemMultiInterfaceHardware
-: public hardware_interface::SystemInterface
+class RRBotSystemMultiInterfaceHardware : public hardware_interface::SystemInterface
 {
 public:
   RCLCPP_SHARED_PTR_DEFINITIONS(RRBotSystemMultiInterfaceHardware);
@@ -47,7 +45,7 @@ public:
   std::vector<hardware_interface::CommandInterface> export_command_interfaces() override;
 
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
-  return_type prepare_command_mode_switch(
+  hardware_interface::return_type prepare_command_mode_switch(
     const std::vector<std::string> & start_interfaces,
     const std::vector<std::string> & stop_interfaces) override;
 

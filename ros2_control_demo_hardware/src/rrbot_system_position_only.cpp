@@ -82,6 +82,33 @@ CallbackReturn RRBotSystemPositionOnlyHardware::on_init(
   return CallbackReturn::SUCCESS;
 }
 
+CallbackReturn RRBotSystemPositionOnlyHardware::on_configure(
+  const rclcpp_lifecycle::State & /*previous_state*/)
+{
+  RCLCPP_INFO(
+    rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "Configuring ...please wait...");
+
+  for (int i = 0; i < hw_start_sec_; i++)
+  {
+    rclcpp::sleep_for(std::chrono::seconds(1));
+    RCLCPP_INFO(
+      rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "%.1f seconds left...",
+      hw_start_sec_ - i);
+  }
+
+  // reset values always when configuring hardware
+  for (uint i = 0; i < hw_states_.size(); i++)
+  {
+    hw_states_[i] = 0;
+    hw_commands_[i] = 0;
+  }
+
+  RCLCPP_INFO(
+    rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "System Successfully configured!");
+
+  return CallbackReturn::SUCCESS;
+}
+
 std::vector<hardware_interface::StateInterface>
 RRBotSystemPositionOnlyHardware::export_state_interfaces()
 {
@@ -108,7 +135,8 @@ RRBotSystemPositionOnlyHardware::export_command_interfaces()
   return command_interfaces;
 }
 
-CallbackReturn RRBotSystemPositionOnlyHardware::on_activate(const rclcpp_lifecycle::State & /*previous_state*/)
+CallbackReturn RRBotSystemPositionOnlyHardware::on_activate(
+  const rclcpp_lifecycle::State & /*previous_state*/)
 {
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "Starting ...please wait...");
 
@@ -120,18 +148,10 @@ CallbackReturn RRBotSystemPositionOnlyHardware::on_activate(const rclcpp_lifecyc
       hw_start_sec_ - i);
   }
 
-  // set some default values when starting the first time
+  // command and state should be equal when starting
   for (uint i = 0; i < hw_states_.size(); i++)
   {
-    if (std::isnan(hw_states_[i]))
-    {
-      hw_states_[i] = 0;
-      hw_commands_[i] = 0;
-    }
-    else
-    {
-      hw_commands_[i] = hw_states_[i];
-    }
+    hw_commands_[i] = hw_states_[i];
   }
 
   RCLCPP_INFO(
@@ -140,7 +160,8 @@ CallbackReturn RRBotSystemPositionOnlyHardware::on_activate(const rclcpp_lifecyc
   return CallbackReturn::SUCCESS;
 }
 
-CallbackReturn RRBotSystemPositionOnlyHardware::on_deactivate(const rclcpp_lifecycle::State & /*previous_state*/)
+CallbackReturn RRBotSystemPositionOnlyHardware::on_deactivate(
+  const rclcpp_lifecycle::State & /*previous_state*/)
 {
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "Stopping ...please wait...");
 

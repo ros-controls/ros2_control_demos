@@ -29,8 +29,7 @@
 
 namespace ros2_control_demo_hardware
 {
-CallbackReturn RRBotSystemWithSensorHardware::on_init(
-  const hardware_interface::HardwareInfo & info)
+CallbackReturn RRBotSystemWithSensorHardware::on_init(const hardware_interface::HardwareInfo & info)
 {
   if (hardware_interface::SystemInterface::on_init(info) != CallbackReturn::SUCCESS)
   {
@@ -90,6 +89,32 @@ CallbackReturn RRBotSystemWithSensorHardware::on_init(
   return CallbackReturn::SUCCESS;
 }
 
+CallbackReturn RRBotSystemWithSensorHardware::on_configure(
+  const rclcpp_lifecycle::State & /*previous_state*/)
+{
+  RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Configuring ...please wait...");
+
+  for (int i = 0; i < hw_start_sec_; i++)
+  {
+    rclcpp::sleep_for(std::chrono::seconds(1));
+    RCLCPP_INFO(
+      rclcpp::get_logger("RRBotSystemWithSensorHardware"), "%.1f seconds left...",
+      hw_start_sec_ - i);
+  }
+
+  // reset values always when configuring hardware
+  for (uint i = 0; i < hw_joint_states_.size(); i++)
+  {
+    hw_joint_states_[i] = 0;
+    hw_joint_commands_[i] = 0;
+  }
+
+  RCLCPP_INFO(
+    rclcpp::get_logger("RRBotSystemWithSensorHardware"), "System Successfully configured!");
+
+  return CallbackReturn::SUCCESS;
+}
+
 std::vector<hardware_interface::StateInterface>
 RRBotSystemWithSensorHardware::export_state_interfaces()
 {
@@ -123,7 +148,8 @@ RRBotSystemWithSensorHardware::export_command_interfaces()
   return command_interfaces;
 }
 
-CallbackReturn RRBotSystemWithSensorHardware::on_activate(const rclcpp_lifecycle::State & /*previous_state*/)
+CallbackReturn RRBotSystemWithSensorHardware::on_activate(
+  const rclcpp_lifecycle::State & /*previous_state*/)
 {
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Starting ...please wait...");
 
@@ -135,14 +161,10 @@ CallbackReturn RRBotSystemWithSensorHardware::on_activate(const rclcpp_lifecycle
       hw_start_sec_ - i);
   }
 
-  // set some default values for joints
+  // command and state should be equal when starting
   for (uint i = 0; i < hw_joint_states_.size(); i++)
   {
-    if (std::isnan(hw_joint_states_[i]))
-    {
-      hw_joint_states_[i] = 0;
-      hw_joint_commands_[i] = 0;
-    }
+    hw_joint_states_[i] = hw_joint_states_[i];
   }
 
   // set default value for sensor
@@ -156,7 +178,8 @@ CallbackReturn RRBotSystemWithSensorHardware::on_activate(const rclcpp_lifecycle
   return CallbackReturn::SUCCESS;
 }
 
-CallbackReturn RRBotSystemWithSensorHardware::on_deactivate(const rclcpp_lifecycle::State & /*previous_state*/)
+CallbackReturn RRBotSystemWithSensorHardware::on_deactivate(
+  const rclcpp_lifecycle::State & /*previous_state*/)
 {
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Stopping ...please wait...");
 
