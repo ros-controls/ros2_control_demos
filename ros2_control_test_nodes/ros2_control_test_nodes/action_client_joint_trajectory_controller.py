@@ -104,7 +104,7 @@ class ActionClientJointTrajectory(Node):
             traj.joint_names = self.joints
             point = JointTrajectoryPoint()
             point.positions = self.goals[self.i]
-            point.velocities = [0.1, 0.1]
+            point.velocities = [0.1]*len(self.goals[self.i])
             point.time_from_start = Duration(sec=4)
 
             traj.points.append(point)
