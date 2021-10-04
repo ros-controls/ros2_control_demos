@@ -17,6 +17,8 @@ jobs:
         env:
           - {ROS_DISTRO: rolling, ROS_REPO: main}
           - {ROS_DISTRO: rolling, ROS_REPO: testing}
+    env:
+      UPSTREAM_WORKSPACE: ros2_control_demos.repos
     steps:
       - uses: actions/checkout@v1
       - uses: 'ros-industrial/industrial_ci@master'
