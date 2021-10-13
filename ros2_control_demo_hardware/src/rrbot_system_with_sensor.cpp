@@ -206,7 +206,7 @@ hardware_interface::return_type RRBotSystemWithSensorHardware::read()
     hw_joint_states_[i] =
       hw_joint_commands_[i] + (hw_joint_states_[i] - hw_joint_commands_[i]) / hw_slowdown_;
     RCLCPP_INFO(
-      rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Got state %.5f for joint %zu!",
+      rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Got state %.5f for joint %u!",
       hw_joint_states_[i], i);
   }
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Joints successfully read!");
@@ -234,7 +234,7 @@ hardware_interface::return_type ros2_control_demo_hardware::RRBotSystemWithSenso
   {
     // Simulate sending commands to the hardware
     RCLCPP_INFO(
-      rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Got command %.5f for joint %zu!",
+      rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Got command %.5f for joint %u!",
       hw_joint_commands_[i], i);
   }
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Joints successfully written!");

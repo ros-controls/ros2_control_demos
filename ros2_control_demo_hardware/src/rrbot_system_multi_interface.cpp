@@ -238,7 +238,7 @@ CallbackReturn RRBotSystemMultiInterfaceHardware::on_activate(
   }
 
   RCLCPP_INFO(
-    rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"), "System successfully started! %hhu",
+    rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"), "System successfully started! %u",
     control_level_[0]);
   return CallbackReturn::SUCCESS;
 }
@@ -309,7 +309,7 @@ hardware_interface::return_type RRBotSystemMultiInterfaceHardware::write()
     // Simulate sending commands to the hardware
     RCLCPP_INFO(
       rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"),
-      "Got the commands pos: %.5f, vel: %.5f, acc: %.5f for joint %lu, control_lvl:%hhu",
+      "Got the commands pos: %.5f, vel: %.5f, acc: %.5f for joint %lu, control_lvl:%u",
       hw_commands_positions_[i], hw_commands_velocities_[i], hw_commands_accelerations_[i], i,
       control_level_[i]);
   }
