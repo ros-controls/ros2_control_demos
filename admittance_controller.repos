@@ -1,0 +1,45 @@
+repositories:
+  control_msgs: # Branch: rolling/add-addmittance-controller-state
+    type: git
+    url: https://github.com/nbbrooks/control_msgs.git
+    version: 81419078f8544e9e320f3405a4fa5d3a7ba3dc1e  # Add calculation values of the admittance rule
+
+  geometry2: # Branch: twist_wrench_transform_foxy
+    type: git
+    url: https://github.com/JafarAbdi/geometry2.git
+    version: 2888c23b97cb76674129314cc648b5b355bda3f4  # Add tomsg conversion for geometry_msgs/Transform
+
+  iirob_filters:  # Branch: ros2
+    type: git
+    url: https://github.com/nbbrooks/iirob_filters.git
+    version: d0c9a21672264ae9506686de9ff928e6ada96f15  # Changes for Galactic/Rolling
+
+  ros2_control:
+    type: git
+    url: https://github.com/destogl/ros2_control.git
+    version: admittance-controller-development
+
+  ros2_controllers:
+    type: git
+    url: https://github.com/destogl/ros2_controllers.git
+    version: add-admittance-controller
+
+  teleop_twist_keyboard: # Branch: wrench
+    type: git
+    url: https://github.com/nbbrooks/teleop_twist_keyboard.git
+    version: 63de1c17c4c5d0724018f3b5fd8139c472cd15ab  # Add Float64MultiArray publisher
+
+  Universal_Robots_Client_Library:  # Branch: master
+    type: git
+    url: https://github.com/UniversalRobots/Universal_Robots_Client_Library.git
+    version: 90338a76d65d86240710c8f976fd40296a49cd84  # Merge pull request #85 from jornb/feat/target_frequency
+
+  Universal_Robots_ROS2_Driver:  # Branch: main
+    type: git
+    url: https://github.com/UniversalRobots/Universal_Robots_ROS2_Driver.git
+    version: 07690bfa3167a58df6e8ba94623f92153d158043  # Driver to headless. (#217)
+
+  ur_msgs: Branch: ros2
+    type: git
+    url: https://github.com/destogl/ur_msgs.git
+    version: d72e82719b72deef6a59ea50e5295817d0b4f9f6  # Corrected/updated dependecies
