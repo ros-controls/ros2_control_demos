@@ -1,4 +1,5 @@
 repositories:
+
   control_msgs: # Branch: rolling/add-addmittance-controller-state
     type: git
     url: https://github.com/nbbrooks/control_msgs.git
@@ -13,6 +14,11 @@ repositories:
     type: git
     url: https://github.com/nbbrooks/iirob_filters.git
     version: d0c9a21672264ae9506686de9ff928e6ada96f15  # Changes for Galactic/Rolling
+
+  rosparam_shortcuts:  # ros2
+    type: git
+    url: https://github.com/PickNikRobotics/rosparam_shortcuts.git
+    version: b3ffe9061cf01d0acff07967d10b80c10447a618  # Create CI job for ros2 branch (#24)
 
   ros2_control:
     type: git
@@ -39,7 +45,7 @@ repositories:
     url: https://github.com/UniversalRobots/Universal_Robots_ROS2_Driver.git
     version: 07690bfa3167a58df6e8ba94623f92153d158043  # Driver to headless. (#217)
 
-  ur_msgs: Branch: ros2
+  ur_msgs:  # Branch: ros2
     type: git
     url: https://github.com/destogl/ur_msgs.git
     version: d72e82719b72deef6a59ea50e5295817d0b4f9f6  # Corrected/updated dependecies
