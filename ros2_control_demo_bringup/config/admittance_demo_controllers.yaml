@@ -27,7 +27,7 @@ controller_manager:
       type: admittance_controller/AdmittanceController
 
     faked_forces_controller:
-      type: forward_command_controller/MultiInterfaceForwardController
+      type: forward_command_controller/MultiInterfaceForwardCommandController
 
 
 speed_scaling_state_broadcaster:
@@ -129,14 +129,14 @@ admittance_controller:
 
     command_interfaces:
       - position
-      - velocity
 
     state_interfaces:
       - position
+      - velocity
 
-    ft_sensor_name: gemini_6dof
+    ft_sensor_name: tcp_fts_sensor
     use_joint_commands_as_input: true
-    joint_limiter_type: "joint_limits/SimpleJointLimiter"
+    #joint_limiter_type: "joint_limits/SimpleJointLimiter"
 
     state_publish_rate: 200.0 # Defaults to 50
     action_monitor_rate: 20.0 # Defaults to 20
@@ -151,12 +151,12 @@ admittance_controller:
     IK:
       base: base_link # Assumed to be stationary
       tip: tool0
-      group_name: gemini
+      group_name: ur5e_manipulator
 
     endeffector_frame: tool0
-    control_frame: end_effector # Admittance calcs (displacement etc) are done in this frame. Usually the tool or end-effector
-    fixed_world_frame: world  # Gravity points down (neg. Z) in this frame
-    sensor_frame: force_sensor  # Wrench measurements are in this frame
+    control_frame: base_link # Admittance calcs (displacement etc) are done in this frame. Usually the tool or end-effector
+    fixed_world_frame: base_link  # Gravity points down (neg. Z) in this frame (Usually: world or base_link)
+    sensor_frame: tool0  # Wrench measurements are in this frame
 
     admittance:
       selected_axes:
@@ -170,12 +170,12 @@ admittance_controller:
       # Having ".0" at the end is MUST, otherwise there is a loading error
       # F = M*a + D*v + S*(x - x_d)
       mass:
-        x: 100.0
-        y: 100.0
-        z: 100.0
-        rx: 100.0
-        ry: 100.0
-        rz: 100.0
+        x: 10.0
+        y: 10.0
+        z: 10.0
+        rx: 10.0
+        ry: 10.0
+        rz: 10.0
 
       damping_ratio:    # damping can be used instead: zeta = D / (2 * sqrt( M * S ))
         x: 2.828427
@@ -186,12 +186,12 @@ admittance_controller:
         rz: 2.23607
 
       stiffness:
-        x: 5000.0
-        y: 5000.0
-        z: 5000.0
-        rx: 500.0
-        ry: 500.0
-        rz: 500.0
+        x: 50.0
+        y: 50.0
+        z: 50.0
+        rx: 50.0
+        ry: 50.0
+        rz: 50.0
 
     input_wrench_filter_chain:
       filter1:
@@ -200,11 +200,11 @@ admittance_controller:
         params:
           CoG_x: 0.0
           CoG_y: 0.0
-          CoG_z: 0.112
-          force: 232.26        # mass * 9.81
-          force_frame: force_sensor
-          sensor_frame: force_sensor
-          world_frame: world
+          CoG_z: 0.0
+          force: 0.0        # mass * 9.81
+          force_frame: wrist_3_link
+          sensor_frame: tool0
+          world_frame: base_link
 
       filter2:
         type: iirob_filters/GravityCompensatorWrench
@@ -212,11 +212,11 @@ admittance_controller:
         params:
           CoG_x: 0.0
           CoG_y: 0.0
-          CoG_z: 0.2
+          CoG_z: 0.0
           force: 0.0        # mass * 9.81
-          force_frame: tool0
-          sensor_frame: force_sensor
-          world_frame: world
+          force_frame: wrist_3_link
+          sensor_frame: tool0
+          world_frame: base_link
 
 
 faked_forces_controller:

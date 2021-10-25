@@ -1,4 +1,3 @@
-
 # Copyright (c) 2021 PickNik, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +16,7 @@
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
-from launch.conditions import IfCondition, UnlessCondition
+from launch.conditions import IfCondition
 from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
@@ -40,7 +39,7 @@ def generate_launch_description():
         DeclareLaunchArgument(
             "robot_ip",
             description="IP address by which the robot can be reached.",
-            default_value: "xxx.xxx.xxx.xxx",
+            default_value="xxx.xxx.xxx.xxx",
         )
     )
     declared_arguments.append(
@@ -68,7 +67,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "runtime_config_package",
-            default_value="ur_bringup",
+            default_value="ros2_control_demo_bringup",
             description='Package with the controller\'s configuration in "config" folder. \
         Usually the argument is not set, it enables use of a custom setup.',
         )
@@ -76,7 +75,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "controllers_file",
-            default_value="ur_controllers.yaml",
+            default_value="admittance_demo_controllers.yaml",
             description="YAML file with the controllers configuration.",
         )
     )
@@ -102,6 +101,14 @@ def generate_launch_description():
             description="Prefix of the joint names, useful for \
         multi-robot setup. If changed than also joint names in the controllers' configuration \
         have to be updated.",
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "moveit_config_package",
+            default_value="ur_moveit_config",
+            description="Description package with robot moveit config files. Usually the argument \
+        is not set, it enables use of a custom description.",
         )
     )
     declared_arguments.append(
@@ -160,11 +167,12 @@ def generate_launch_description():
     controllers_file = LaunchConfiguration("controllers_file")
     description_package = LaunchConfiguration("description_package")
     description_file = LaunchConfiguration("description_file")
+    moveit_config_package = LaunchConfiguration("moveit_config_package")
     prefix = LaunchConfiguration("prefix")
     use_fake_hardware = LaunchConfiguration("use_fake_hardware")
     fake_sensor_commands = LaunchConfiguration("fake_sensor_commands")
-    start_joint_controller = LaunchConfiguration("start_joint_controller")
-    initial_joint_controller = LaunchConfiguration("initial_joint_controller")
+    # start_joint_controller = LaunchConfiguration("start_joint_controller")
+    # initial_joint_controller = LaunchConfiguration("initial_joint_controller")
     launch_rviz = LaunchConfiguration("launch_rviz")
     headless_mode = LaunchConfiguration("headless_mode")
     launch_dashboard_client = LaunchConfiguration("launch_dashboard_client")
@@ -195,7 +203,9 @@ def generate_launch_description():
         [
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
-            PathJoinSubstitution([FindPackageShare(description_package), "urdf", description_file]),
+            PathJoinSubstitution(
+                [FindPackageShare(description_package), "urdf", description_file]
+            ),
             " ",
             "robot_ip:=",
             robot_ip,
@@ -245,26 +255,61 @@ def generate_launch_description():
             "headless_mode:=",
             headless_mode,
             " ",
+            "initial_positions_file:=",
+            PathJoinSubstitution(
+                [
+                    FindPackageShare("rrbot_description"),
+                    "admittance_demo",
+                    "initial_positions.yaml",
+                ]
+            ),
+            " ",
         ]
     )
     robot_description = {"robot_description": robot_description_content}
+
+    robot_description_semantic_content = Command(
+        [
+            PathJoinSubstitution([FindExecutable(name="xacro")]),
+            " ",
+            PathJoinSubstitution(
+                [FindPackageShare(moveit_config_package), "srdf", "ur.srdf.xacro"]
+            ),
+            " ",
+            "name:=",
+            # Also ur_type parameter could be used but then the planning group names in yaml
+            # configs has to be updated!
+            "ur5e",
+            " ",
+            "prefix:=",
+            prefix,
+            " ",
+        ]
+    )
+
+    robot_description_semantic = {"robot_description_semantic": robot_description_semantic_content}
 
     initial_joint_controllers = PathJoinSubstitution(
         [FindPackageShare(runtime_config_package), "config", controllers_file]
     )
 
     rviz_config_file = PathJoinSubstitution(
-        [FindPackageShare(description_package), "rviz", "view_robot.rviz"]
+        [FindPackageShare("rrbot_description"), "admittance_demo", "admittance_demo.rviz"]
     )
 
     joint_limits_admittance = PathJoinSubstitution(
-        [FindPackageShare("diffbot_description"), "admittance_demo", "joint_limits_admittance.yaml"]
+        [FindPackageShare("rrbot_description"), "admittance_demo", "joint_limits_admittance.yaml"]
     )
 
     control_node = Node(
         package="controller_manager",
         executable="ros2_control_node",
-        parameters=[robot_description, initial_joint_controllers, joint_limits_admittance],
+        parameters=[
+            robot_description,
+            initial_joint_controllers,
+            robot_description_semantic,
+            joint_limits_admittance,
+        ],
         output={
             "stdout": "screen",
             "stderr": "screen",
@@ -299,19 +344,19 @@ def generate_launch_description():
 
     joint_state_broadcaster_spawner = Node(
         package="controller_manager",
-        executable="spawner.py",
+        executable="spawner",
         arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager"],
     )
 
     io_and_status_controller_spawner = Node(
         package="controller_manager",
-        executable="spawner.py",
+        executable="spawner",
         arguments=["io_and_status_controller", "-c", "/controller_manager"],
     )
 
     speed_scaling_state_broadcaster_spawner = Node(
         package="controller_manager",
-        executable="spawner.py",
+        executable="spawner",
         arguments=[
             "speed_scaling_state_broadcaster",
             "--controller-manager",
@@ -321,7 +366,7 @@ def generate_launch_description():
 
     force_torque_sensor_broadcaster_spawner = Node(
         package="controller_manager",
-        executable="spawner.py",
+        executable="spawner",
         arguments=[
             "force_torque_sensor_broadcaster",
             "--controller-manager",
@@ -342,20 +387,6 @@ def generate_launch_description():
         arguments=["faked_forces_controller", "-c", "/controller_manager"],
     )
 
-    # There may be other controllers of the joints, but this is the initially-started one
-    initial_joint_controller_spawner_started = Node(
-        package="controller_manager",
-        executable="spawner.py",
-        arguments=[initial_joint_controller, "-c", "/controller_manager"],
-        condition=IfCondition(start_joint_controller),
-    )
-    initial_joint_controller_spawner_stopped = Node(
-        package="controller_manager",
-        executable="spawner.py",
-        arguments=[initial_joint_controller, "-c", "/controller_manager", "--stopped"],
-        condition=UnlessCondition(start_joint_controller),
-    )
-
     nodes_to_start = [
         control_node,
         dashboard_client_node,
@@ -367,8 +398,6 @@ def generate_launch_description():
         force_torque_sensor_broadcaster_spawner,
         admittance_controller_spawner,
         faked_forces_controller_spawner,
-        initial_joint_controller_spawner_stopped,
-        initial_joint_controller_spawner_started,
     ]
 
     return LaunchDescription(declared_arguments + nodes_to_start)

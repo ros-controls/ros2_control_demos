@@ -15,20 +15,25 @@ repositories:
     url: https://github.com/nbbrooks/iirob_filters.git
     version: d0c9a21672264ae9506686de9ff928e6ada96f15  # Changes for Galactic/Rolling
 
-  rosparam_shortcuts:  # ros2
-    type: git
-    url: https://github.com/PickNikRobotics/rosparam_shortcuts.git
-    version: b3ffe9061cf01d0acff07967d10b80c10447a618  # Create CI job for ros2 branch (#24)
-
   ros2_control:
     type: git
     url: https://github.com/destogl/ros2_control.git
     version: admittance-controller-development
 
+  ros2_control_demos:
+    type: git
+    url: https://github.com/destogl/ros2_control_demos.git
+    version: admittance-controller-setup
+
   ros2_controllers:
     type: git
     url: https://github.com/destogl/ros2_controllers.git
-    version: add-admittance-controller
+    version: admittance-controller-demo
+
+  rosparam_shortcuts:  # ros2
+    type: git
+    url: https://github.com/PickNikRobotics/rosparam_shortcuts.git
+    version: b3ffe9061cf01d0acff07967d10b80c10447a618  # Create CI job for ros2 branch (#24)
 
   teleop_twist_keyboard: # Branch: wrench
     type: git
@@ -43,9 +48,9 @@ repositories:
   Universal_Robots_ROS2_Driver:  # Branch: main
     type: git
     url: https://github.com/UniversalRobots/Universal_Robots_ROS2_Driver.git
-    version: 07690bfa3167a58df6e8ba94623f92153d158043  # Driver to headless. (#217)
+    version: ebe29b1a270544a44765a3750d3747576ec6d598  # Add missing command and state interfaces to get everything working with the fake hardware and add some comment into xacro file to be clearer.
 
   ur_msgs:  # Branch: ros2
     type: git
     url: https://github.com/destogl/ur_msgs.git
-    version: d72e82719b72deef6a59ea50e5295817d0b4f9f6  # Corrected/updated dependecies
+    version: d72e82719b72deef6a59ea50e5295817d0b4f9f6  # Corrected/updated dependencies

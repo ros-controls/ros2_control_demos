@@ -21,5 +21,25 @@ This manual targets ROS2 rolling.
 
 1. Start the demo using:
    ```
-   TBD
+   ros2 launch ros2_control_demo_bringup admittance_controller_demo.launch.py
+   ```
+
+1. Listing controller with `ros2 control list_controllers` you should see admittance controller in the state `inactive`.
+
+1. Activate the admittance controller:
+   ```
+   ros2 control switch_controllers --start admittance_controller
+   ```
+
+1. Start custom version of `teleop_twist_keyboard` to publish fake forces:
+   ```
+   ros2 run teleop_twist_keyboard teleop_twist_keyboard
+   ```
+
+1. Use keyboard keys to impose fake forces on the robot.
+   TIP: set maximal "speed" values (using "q" key) around `10` to get visible force/torque influence. To influence the robot with separate forces and torques use "holonomic"-mode (hold key or turn on Caps Lock). For further adjustment follow the notes in terminal.
+
+   To see the faked forces use:
+   ```
+   ros2 topic echo /faked_forces_controller/commands
    ```

@@ -4,7 +4,7 @@ project(rrbot_description)
 find_package(ament_cmake REQUIRED)
 
 install(
-  DIRECTORY config gazebo meshes launch ros2_control urdf
+  DIRECTORY admittance_demo config gazebo meshes launch ros2_control urdf
   DESTINATION share/${PROJECT_NAME}
 )
 

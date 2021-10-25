@@ -5,50 +5,50 @@
   ros__parameters:
     joint_limits:
       shoulder_pan_joint:
-        has_position_limits: true
+        has_position_limits: false
         min_position: -1.0471975511965976
         max_position: 1.0471975511965976
-        has_velocity_limits: true
+        has_velocity_limits: false
         max_velocity: 0.35
-        has_acceleration_limits: true
+        has_acceleration_limits: false
         max_acceleration: 1.0
       shoulder_lift_joint:
-        has_position_limits: true
+        has_position_limits: false
         min_position: -0.5916666164260777
         max_position: 1.7819811662862104
-        has_velocity_limits: true
+        has_velocity_limits: false
         max_velocity: 0.35
-        has_acceleration_limits: true
+        has_acceleration_limits: false
         max_acceleration: 1.0
       elbow_joint:
-        has_position_limits: true
+        has_position_limits: false
         min_position: -2.3125612588924866
         max_position: 0.0
-        has_velocity_limits: true
+        has_velocity_limits: false
         max_velocity: 0.35
-        has_acceleration_limits: true
+        has_acceleration_limits: false
         max_acceleration: 4.0
       wrist_1_joint:
-        has_position_limits: true
+        has_position_limits: false
         min_position: -1.0471975511965976
         max_position: 1.0471975511965976
-        has_velocity_limits: true
+        has_velocity_limits: false
         max_velocity: 1.0
-        has_acceleration_limits: true
+        has_acceleration_limits: false
         max_acceleration: 4.0
       wrist_2_joint:
-        has_position_limits: true
+        has_position_limits: false
         min_position: -0.5235987755982988
         max_position: 1.5707963267948966
-        has_velocity_limits: true
+        has_velocity_limits: false
         max_velocity: 1.0
-        has_acceleration_limits: true
+        has_acceleration_limits: false
         max_acceleration: 4.0
       wrist_3_joint:
         has_position_limits: false
         min_position: -6.283185307179586
         max_position: 6.283185307179586
-        has_velocity_limits: true
+        has_velocity_limits: false
         max_velocity: 8.0
-        has_acceleration_limits: true
+        has_acceleration_limits: false
         max_acceleration: 8.0
