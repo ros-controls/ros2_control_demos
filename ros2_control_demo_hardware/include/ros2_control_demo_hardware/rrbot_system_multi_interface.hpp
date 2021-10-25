@@ -80,7 +80,7 @@ private:
 
   // Enum defining at which control level we are
   // Dumb way of maintaining the command_interface type per joint.
-  enum class integration_level_t : std::uint8_t
+  enum integration_level_t : std::uint8_t
   {
     UNDEFINED = 0,
     POSITION = 1,
