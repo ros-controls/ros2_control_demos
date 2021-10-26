@@ -43,3 +43,20 @@ This manual targets ROS2 rolling.
    ```
    ros2 topic echo /faked_forces_controller/commands
    ```
+
+
+## Test with URSim (not finished!)
+
+1. Build and run URSim as described [here](https://github.com/UniversalRobots/Universal_Robots_ROS2_Driver#usage-with-official-ur-simulator)
+   NOTE: First time docker container has to be build and everything has to be compiled, so take a cup of coffee or your favorite tea and start reading your emails :D
+
+1. Stop `ursim_driver_driver_*` docker with `docker stop ...`
+
+1. Start demo setup with the following command:
+   ```
+   ros2 launch ros2_control_demo_bringup admittance_controller_demo.launch.py use_fake_hardware:=false fake_sensor_commands:=false headless_mode:=true robot_ip:=192.168.56.101
+   ```
+
+1. Now everything should start normally
+
+1. Simulate forces on FTS... TBD... (maybe not possible)
