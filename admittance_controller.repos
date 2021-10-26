@@ -48,7 +48,7 @@ repositories:
   Universal_Robots_ROS2_Driver:  # Branch: main
     type: git
     url: https://github.com/UniversalRobots/Universal_Robots_ROS2_Driver.git
-    version: ebe29b1a270544a44765a3750d3747576ec6d598  # Add missing command and state interfaces to get everything working with the fake hardware and add some comment into xacro file to be clearer.
+    version: f0fc36c04065f609cec5b99c3cc88c363d25fd41  # Correct format
 
   ur_msgs:  # Branch: ros2
     type: git
