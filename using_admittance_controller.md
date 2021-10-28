@@ -44,6 +44,45 @@ This manual targets ROS2 rolling.
    ros2 topic echo /faked_forces_controller/commands
    ```
 
+## Features
+
+### Dynamic parameters
+
+Admittance controller provides a possibility to set and change its parameters during run-time.
+This is useful for tuning its parameters or using different set of parameters for different scenarios.
+It is recommended to reactivate (deactivate then activate) the controller each time when parameters are adjusted.
+Otherwise, the controller could become unstable when updating multiple parameters.
+Nevertheless, you can configure updating parameters without reactivation using `enable_parameter_update_without_reactivation`.
+
+1. To test dynamic parameters set first check how the robot behaves in 'X'-direction using "<Shift>+I" and "<Shift>+K" keys in the `teleop_twist_keyboard` node.
+
+1. Change a parameter of admittance controller, e.g., damping ratio:
+   ```
+   ros2 param set /admittance_controller admittance.damping_ratio.y 20
+   ```
+
+1. Then restart controller:
+   ```
+   ros2 control switch_controllers --stop admittance_controller --start admittance_controller
+   ```
+
+1. Then you should see how the controllers dynamic has changed when executing the same movements.
+
+### Using Filters
+
+Admittance controller uses filter chain to filter input force data.
+The usual example is to compensate the gravitational influence of a tool.
+In the example files there are already two filters for Gravity compensation.
+
+The GravityCompensator filter compensate the gravitational influence to force measurements. (TBD: add link to the filter's documentation).
+
+To test the filter, start the admittance controller and then set filter's force parameter:
+  ```
+  ros2 param set /admittance_controller input_wrench_filter_chain.filter1.params.force 5.0
+
+  ```
+NOTE: if using fake hardware you should first publish some force using `teleop_twist_keyboard` and then will this work (this will reset values from NaN).
+
 
 ## Test with URSim (not finished!)
 
@@ -54,7 +93,7 @@ This manual targets ROS2 rolling.
 
 1. Start demo setup with the following command:
    ```
-   ros2 launch ros2_control_demo_bringup admittance_controller_demo.launch.py use_fake_hardware:=false fake_sensor_commands:=false headless_mode:=true robot_ip:=192.168.56.101
+   ros2 launch ros2_control_demo_bringup admittance_controller_demo.launch.py use_fake_hardware:=false fake_sensor_commands:=false headless_mode:=true robot_ip:=192.168.56.101 launch_dashboard_client:=true
    ```
 
 1. Now everything should start normally

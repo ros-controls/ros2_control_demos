@@ -1,5 +1,10 @@
 repositories:
 
+  control_toolbox:
+    type: git
+    url: https://github.com/ros-controls/control_toolbox.git
+    verstion: demo-admittance-controller-delete-when-paramhandler-gravity-comp-merged
+
   control_msgs: # Branch: rolling/add-addmittance-controller-state
     type: git
     url: https://github.com/nbbrooks/control_msgs.git
@@ -9,11 +14,6 @@ repositories:
     type: git
     url: https://github.com/JafarAbdi/geometry2.git
     version: 2888c23b97cb76674129314cc648b5b355bda3f4  # Add tomsg conversion for geometry_msgs/Transform
-
-  iirob_filters:  # Branch: ros2
-    type: git
-    url: https://github.com/nbbrooks/iirob_filters.git
-    version: d0c9a21672264ae9506686de9ff928e6ada96f15  # Changes for Galactic/Rolling
 
   ros2_control:
     type: git
@@ -30,11 +30,6 @@ repositories:
     url: https://github.com/destogl/ros2_controllers.git
     version: admittance-controller-demo
 
-  rosparam_shortcuts:  # ros2
-    type: git
-    url: https://github.com/PickNikRobotics/rosparam_shortcuts.git
-    version: b3ffe9061cf01d0acff07967d10b80c10447a618  # Create CI job for ros2 branch (#24)
-
   teleop_twist_keyboard: # Branch: wrench
     type: git
     url: https://github.com/nbbrooks/teleop_twist_keyboard.git
@@ -48,7 +43,7 @@ repositories:
   Universal_Robots_ROS2_Driver:  # Branch: main
     type: git
     url: https://github.com/UniversalRobots/Universal_Robots_ROS2_Driver.git
-    version: f0fc36c04065f609cec5b99c3cc88c363d25fd41  # Correct format
+    version: 10f16b8869bb47aa82daf7bc05e0b62406ae8c5d  # Add ft_sensor frame.
 
   ur_msgs:  # Branch: ros2
     type: git
