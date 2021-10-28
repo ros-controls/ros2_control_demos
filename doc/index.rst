@@ -49,12 +49,12 @@ Load and configure all controllers
 
 .. code-block:: bash
 
-    ros2 control load_controller forward_command_controller_position --state configure
-    ros2 control load_controller forward_command_controller_velocity --state configure
-    ros2 control load_controller forward_command_controller_acceleration --state configure
-    ros2 control load_controller forward_command_controller_illegal1 --state configure
-    ros2 control load_controller forward_command_controller_illegal2 --state configure
-    ros2 control load_controller joint_state_controller --state configure
+    ros2 control load_controller forward_command_controller_position --set-state configure
+    ros2 control load_controller forward_command_controller_velocity --set-state configure
+    ros2 control load_controller forward_command_controller_acceleration --set-state configure
+    ros2 control load_controller forward_command_controller_illegal1 --set-state configure
+    ros2 control load_controller forward_command_controller_illegal2 --set-state configure
+    ros2 control load_controller joint_state_controller --set-state configure
 
 
 Start the position controller
@@ -87,7 +87,7 @@ Let's switch controllers now to velocity
 
 .. code-block:: bash
 
-    ros2 control switch_controllers --stop-controllers forward_command_controller_position --start-controllers forward_command_controller_velocity
+    ros2 control switch_controllers --stop forward_command_controller_position --start forward_command_controller_velocity
 
 List hardware interfaces again to see that indeed position interfaces have been unclaimed while velocity is claimed now
 
