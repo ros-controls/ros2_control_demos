@@ -58,7 +58,7 @@ def generate_launch_description():
         output="both",
         parameters=[robot_description],
         remappings=[
-            ("/diff_drive_controller/cmd_vel_unstamped", '/cmd_vel"),
+            ("/diff_drive_controller/cmd_vel_unstamped", "/cmd_vel"),
         ],
     )
     rviz_node = Node(
