@@ -52,6 +52,12 @@ def generate_launch_description():
         package="controller_manager",
         executable="ros2_control_node",
         parameters=[robot_description, robot_controllers],
+        remappings=[
+            (
+                "/forward_position_controller/commands",
+                "/position_commands",
+            ),
+        ],
         output={
             "stdout": "screen",
             "stderr": "screen",
