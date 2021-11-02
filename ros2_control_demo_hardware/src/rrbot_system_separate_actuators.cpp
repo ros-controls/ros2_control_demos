@@ -30,8 +30,7 @@
 
 namespace ros2_control_demo_hardware
 {
-CallbackReturn RRBotModularJoint::on_init(
-  const hardware_interface::HardwareInfo & info)
+CallbackReturn RRBotModularJoint::on_init(const hardware_interface::HardwareInfo & info)
 {
   if (hardware_interface::ActuatorInterface::on_init(info) != CallbackReturn::SUCCESS)
   {
@@ -111,8 +110,7 @@ std::vector<hardware_interface::CommandInterface> RRBotModularJoint::export_comm
   return command_interfaces;
 }
 
-CallbackReturn RRBotModularJoint::on_activate(
-  const rclcpp_lifecycle::State & /*previous_state*/)
+CallbackReturn RRBotModularJoint::on_activate(const rclcpp_lifecycle::State & /*previous_state*/)
 {
   RCLCPP_INFO(rclcpp::get_logger("RRBotModularJoint"), "Starting ...please wait...");
 
@@ -137,8 +135,7 @@ CallbackReturn RRBotModularJoint::on_activate(
   return CallbackReturn::SUCCESS;
 }
 
-CallbackReturn RRBotModularJoint::on_deactivate(
-  const rclcpp_lifecycle::State & /*previous_state*/)
+CallbackReturn RRBotModularJoint::on_deactivate(const rclcpp_lifecycle::State & /*previous_state*/)
 {
   RCLCPP_INFO(rclcpp::get_logger("RRBotModularJoint"), "Stopping ...please wait...");
 
