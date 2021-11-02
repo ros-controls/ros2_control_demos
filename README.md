@@ -334,12 +334,12 @@ Available launch-file options:
     This is useful to test *ros2_control* integration and controllers without physical hardware.
 
 
-### Example 2: "Industrial Robots with only one interface" (Gazebo simulation)
+### Example 1-Sim: "Industrial Robots with only one interface" (Gazebo simulation)
 
 - **TBA**
 
 
-### Example 3: "Robots with multiple interfaces"
+### Example 2: "Robots with multiple interfaces"
 
 - Launch file: rrbot_system_multi_interface.launch.py
 - Command interfaces:
@@ -370,38 +370,38 @@ Notes:
     The two illegal controllers demonstrate how hardware interface declines faulty claims to access joint command interfaces.
 
 
-### Example 4: "Differential drive mobile robot"
+### Example 3: "Industrial robot with integrated sensor"
 
-- Launch file: diffbot_system.launch.py
+- Launch file: [rrbot_system_with_sensor.launch.py](ros2_control_demo_bringup/launch/rrbot_system_with_sensor.launch.py)
+- URDF: [rrbot_system_with_sensor.urdf.xacro](ros2_control_demo_bringup/config/rrbot_with_sensor_controllers.yaml)
+- ros2_control URDF: [rrbot_system_with_sensor.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/rrbot_system_with_sensor.ros2_control.xacro)
+
 - Command interfaces:
-  - left_wheel_joint/velocity
-  - right_wheel_joint/velocity
+  - joint1/position
+  - joint2/position
 - State interfaces:
-  - left_wheel_joint/position
-  - left_wheel_joint/velocity
-  - right_wheel_joint/position
-  - right_wheel_joint/velocity
+  - joint1/position
+  - joint2/position
+  - tcp_fts_sensor/force.x
+  - tcp_fts_sensor/torque.z
 
 Available controllers:
-  - `joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]`
-  - `diffbot_base_controller[diff_drive_controller/DiffDriveController] active`
+- `forward_position_controller[forward_command_controller/ForwardCommandController]`
+- `fts_broadcaster[force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster]`
+- `joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]`
 
-Sending commands to diff drive controller:
+Notes:
+  - Wrench messages are not displayed properly in Rviz as NaN values are not handled in Rviz and FTS Broadcaster may send NaN values.
 
+Commanding the robot: see the commands below.
+
+Accessing Wrench data from 2D FTS:
 ```
-ros2 topic pub --rate 30 /diffbot_base_controller/cmd_vel_unstamped geometry_msgs/msg/Twist "linear:
- x: 0.7
- y: 0.0
- z: 0.0
-angular:
- x: 0.0
- y: 0.0
- z: 1.0"
+ros2 topic echo /fts_broadcaster/wrench
 ```
 
-You should now see an orange box circling in `RViz`.
 
-### Example 6: "Industrial Robots with externally connected sensor"
+### Example 4: "Industrial Robots with externally connected sensor"
 
 - Launch file: [rrbot_system_with_external_sensor.launch.py](ros2_control_demo_bringup/launch/rrbot_system_with_external_sensor.launch.py)
 - URDF: [rrbot_with_external_sensor_controllers.urdf.xacro](ros2_control_demo_bringup/config/rrbot_with_external_sensor_controllers.yaml)
@@ -424,37 +424,6 @@ Available controllers:
 - `forward_position_controller[forward_command_controller/ForwardCommandController]`
 - `fts_broadcaster[force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster]`
 - `joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]`
-
-Commanding the robot: see the commands below.
-
-Accessing Wrench data from 2D FTS:
-```
-ros2 topic echo /fts_broadcaster/wrench
-```
-
-
-### Example 5: "Industrial robot with integrated sensor"
-
-- Launch file: [rrbot_system_with_sensor.launch.py](ros2_control_demo_bringup/launch/rrbot_system_with_sensor.launch.py)
-- URDF: [rrbot_system_with_sensor.urdf.xacro](ros2_control_demo_bringup/config/rrbot_with_sensor_controllers.yaml)
-- ros2_control URDF: [rrbot_system_with_sensor.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/rrbot_system_with_sensor.ros2_control.xacro)
-
-- Command interfaces:
-  - joint1/position
-  - joint2/position
-- State interfaces:
-  - joint1/position
-  - joint2/position
-  - tcp_fts_sensor/force.x
-  - tcp_fts_sensor/torque.z
-
-Available controllers:
-- `forward_position_controller[forward_command_controller/ForwardCommandController]`
-- `fts_broadcaster[force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster]`
-- `joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]`
-
-Notes:
-  - Wrench messages are not displayed properly in Rviz as NaN values are not handled in Rviz and FTS Broadcaster may send NaN values.
 
 Commanding the robot: see the commands below.
 
