@@ -14,6 +14,9 @@ controller_manager:
     force_torque_sensor_broadcaster:
       type: ur_controllers/ForceTorqueStateBroadcaster
 
+    force_sensor_broadcaster:
+      type: force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster
+
     joint_trajectory_controller:
       type: joint_trajectory_controller/JointTrajectoryController
 
@@ -47,6 +50,36 @@ force_torque_sensor_broadcaster:
       - torque.z
     frame_id: tool0
     topic_name: ft_data
+
+
+force_sensor_broadcaster:
+  ros__parameters:
+    sensor_name: tcp_fts_sensor
+    frame_id: tool0
+    additional_frames_to_publish: [base_link]
+
+    sensor_filter_chain:
+      filter1:
+        type: control_filters/LowPassFilterWrench
+        name: low_pass_filter
+        params:
+          sampling_frequency: 200.0
+          damping_frequency: 50.0
+          damping_intensity: 1.0
+          divider: 1
+
+      filter2:
+        type: control_filters/GravityCompensationWrench
+        name: tool_gravity_compensation
+        params:
+          CoG:
+            x: 0.0
+            y: 0.0
+            z: 0.1
+          force: 0.0        # mass * 9.81
+          force_frame: wrist_3_link
+          sensor_frame: ft_frame
+          world_frame: base_link
 
 
 joint_trajectory_controller:
@@ -197,6 +230,15 @@ admittance_controller:
 
     input_wrench_filter_chain:
       filter1:
+        type: control_filters/LowPassFilterWrench
+        name: low_pass_filter
+        params:
+          sampling_frequency: 200.0
+          damping_frequency: 50.0
+          damping_intensity: 1.0
+          divider: 1
+
+      filter2:
         type: control_filters/GravityCompensationWrench
         name: wrist_gravity_compensation
         params:
@@ -209,7 +251,7 @@ admittance_controller:
           sensor_frame: ft_frame
           world_frame: base_link
 
-      filter2:
+      filter3:
         type: control_filters/GravityCompensationWrench
         name: tool_gravity_compensation
         params:
