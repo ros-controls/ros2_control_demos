@@ -141,7 +141,7 @@ The *RRBot* URDF files can be found in the `urdf` folder of `rrbot_description` 
 
    a. Manually using ros2 cli interface:
    ```
-   ros2 topic pub /forward_position_controller/commands std_msgs/msg/Float64MultiArray "data:
+   ros2 topic pub /position_commands std_msgs/msg/Float64MultiArray "data:
    - 0.5
    - 0.5"
    ```
@@ -222,7 +222,7 @@ The *DiffBot* URDF files can be found in `urdf` folder of `diffbot_description` 
 
 1. If everything is fine, now you can send a command to *Diff Drive Controller* using ros2 cli interface:
    ```
-   ros2 topic pub --rate 30 /diffbot_base_controller/cmd_vel_unstamped geometry_msgs/msg/Twist "linear:
+   ros2 topic pub --rate 30 /cmd_vel geometry_msgs/msg/Twist "linear:
     x: 0.7
     y: 0.0
     z: 0.0
