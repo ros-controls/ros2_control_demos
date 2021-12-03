@@ -390,6 +390,8 @@ Available controllers:
 - `fts_broadcaster[force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster]`
 - `joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]`
 
+Notes:
+  - Wrench messages are maybe not displayed properly in Rviz as NaN values are not handled in Rviz and FTS Broadcaster may send NaN values.
 
 Commanding the robot: see the commands below.
 
