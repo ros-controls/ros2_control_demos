@@ -16,8 +16,8 @@
 // Authors: Subhas Das, Denis Stogl
 //
 
-#ifndef ROS2_CONTROL_DEMO_HARDWARE__RRBOT_SYSTEM_SEPARATE_ACTUATORS_HPP_
-#define ROS2_CONTROL_DEMO_HARDWARE__RRBOT_SYSTEM_SEPARATE_ACTUATORS_HPP_
+#ifndef ROS2_CONTROL_DEMO_HARDWARE__RRBOT_ACTUATOR_HPP_
+#define ROS2_CONTROL_DEMO_HARDWARE__RRBOT_ACTUATOR_HPP_
 
 #include <memory>
 #include <string>
@@ -66,10 +66,10 @@ private:
   double hw_slowdown_;
 
   // Store the command for the simulated robot
-  std::vector<double> hw_joint_commands_;
-  std::vector<double> hw_joint_states_;
+  double hw_joint_command_;
+  double hw_joint_state_;
 };
 
 }  // namespace ros2_control_demo_hardware
 
-#endif  // ROS2_CONTROL_DEMO_HARDWARE__RRBOT_SYSTEM_SEPARATE_ACTUATORS_HPP_
+#endif  // ROS2_CONTROL_DEMO_HARDWARE__RRBOT_ACTUATOR_HPP_

@@ -32,21 +32,6 @@ def generate_launch_description():
     )
     declared_arguments.append(
         DeclareLaunchArgument(
-            "use_fake_hardware",
-            default_value="true",
-            description="Start robot with fake hardware mirroring command to its states.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "fake_sensor_commands",
-            default_value="false",
-            description="Enable fake command interfaces for sensors used for simple simulations. \
-            Used only if 'use_fake_hardware' parameter is true.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
             "slowdown", default_value="3.0", description="Slowdown factor of the RRbot."
         )
     )
@@ -60,17 +45,16 @@ def generate_launch_description():
 
     # Initialize Arguments
     prefix = LaunchConfiguration("prefix")
-    use_fake_hardware = LaunchConfiguration("use_fake_hardware")
     slowdown = LaunchConfiguration("slowdown")
     robot_controller = LaunchConfiguration("robot_controller")
 
     base_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([ThisLaunchFileDir(), "/rrbot_base.launch.py"]),
         launch_arguments={
-            "controllers_file": "rrbot_separate_actuators.yaml",
-            "description_file": "rrbot_system_separate_actuators.urdf.xacro",
+            "controllers_file": "rrbot_modular_actuators.yaml",
+            "description_file": "rrbot_modular_actuators.urdf.xacro",
             "prefix": prefix,
-            "use_fake_hardware": use_fake_hardware,
+            "use_fake_hardware": "false",
             "slowdown": slowdown,
             "robot_controller": robot_controller,
         }.items(),

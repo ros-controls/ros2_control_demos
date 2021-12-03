@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <xacro:macro name="rrbot_system_separate_actuators" params="name prefix use_sim:=^|false use_fake_hardware:=^|true fake_sensor_commands:=^|false slowdown:=2.0">
+  <xacro:macro name="rrbot_modular_actuators" params="name prefix use_sim:=^|false slowdown:=2.0">
 
     <ros2_control name="RRBotModularJoint1" type="actuator">
       <hardware>
@@ -12,8 +12,8 @@
       </hardware>
       <joint name="joint1">
         <command_interface name="position">
-          <param name="min">-1</param>
-          <param name="max">1</param>
+          <param name="min">-100</param>
+          <param name="max">100</param>
         </command_interface>
         <state_interface name="position"/>
       </joint>
@@ -27,8 +27,8 @@
       </hardware>
       <joint name="joint2">
         <command_interface name="position">
-          <param name="min">-1</param>
-          <param name="max">1</param>
+          <param name="min">-100</param>
+          <param name="max">100</param>
         </command_interface>
         <state_interface name="position"/>
       </joint>
