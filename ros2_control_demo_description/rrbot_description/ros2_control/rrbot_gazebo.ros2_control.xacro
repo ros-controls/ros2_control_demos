@@ -7,7 +7,6 @@
       <hardware>
         <plugin>gazebo_ros2_control/GazeboSystem</plugin>
       </hardware>
-
       <joint name="${prefix}joint1">
         <command_interface name="position">
           <param name="min">-1</param>
