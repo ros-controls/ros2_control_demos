@@ -37,9 +37,11 @@ CallbackReturn ExternalRRBotForceTorqueSensorHardware::on_init(
     return CallbackReturn::ERROR;
   }
 
+  // START: This part here is for exemplary purposes - Please do not copy to your production code
   hw_start_sec_ = stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
   hw_stop_sec_ = stod(info_.hardware_parameters["example_param_hw_stop_duration_sec"]);
   hw_sensor_change_ = stod(info_.hardware_parameters["example_param_max_sensor_change"]);
+  // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   hw_sensor_states_.resize(
     info_.sensors[0].state_interfaces.size(), std::numeric_limits<double>::quiet_NaN());
@@ -65,8 +67,9 @@ ExternalRRBotForceTorqueSensorHardware::export_state_interfaces()
 CallbackReturn ExternalRRBotForceTorqueSensorHardware::on_activate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
+  // START: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(
-    rclcpp::get_logger("ExternalRRBotForceTorqueSensorHardware"), "Starting ...please wait...");
+    rclcpp::get_logger("ExternalRRBotForceTorqueSensorHardware"), "Activating ...please wait...");
 
   for (int i = 0; i < hw_start_sec_; i++)
   {
@@ -77,7 +80,8 @@ CallbackReturn ExternalRRBotForceTorqueSensorHardware::on_activate(
   }
 
   RCLCPP_INFO(
-    rclcpp::get_logger("ExternalRRBotForceTorqueSensorHardware"), "System Successfully started!");
+    rclcpp::get_logger("ExternalRRBotForceTorqueSensorHardware"), "Successfully activated!");
+  // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   return CallbackReturn::SUCCESS;
 }
@@ -85,8 +89,9 @@ CallbackReturn ExternalRRBotForceTorqueSensorHardware::on_activate(
 CallbackReturn ExternalRRBotForceTorqueSensorHardware::on_deactivate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
+  // START: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(
-    rclcpp::get_logger("ExternalRRBotForceTorqueSensorHardware"), "Stopping ...please wait...");
+    rclcpp::get_logger("ExternalRRBotForceTorqueSensorHardware"), "Deactivating ...please wait...");
 
   for (int i = 0; i < hw_stop_sec_; i++)
   {
@@ -97,13 +102,15 @@ CallbackReturn ExternalRRBotForceTorqueSensorHardware::on_deactivate(
   }
 
   RCLCPP_INFO(
-    rclcpp::get_logger("ExternalRRBotForceTorqueSensorHardware"), "System successfully stopped!");
+    rclcpp::get_logger("ExternalRRBotForceTorqueSensorHardware"), "Successfully deactivated!");
+  // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   return CallbackReturn::SUCCESS;
 }
 
 hardware_interface::return_type ExternalRRBotForceTorqueSensorHardware::read()
 {
+  // START: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(rclcpp::get_logger("ExternalRRBotForceTorqueSensorHardware"), "Reading...");
 
   for (uint i = 0; i < hw_sensor_states_.size(); i++)
@@ -118,6 +125,7 @@ hardware_interface::return_type ExternalRRBotForceTorqueSensorHardware::read()
   }
   RCLCPP_INFO(
     rclcpp::get_logger("ExternalRRBotForceTorqueSensorHardware"), "Joints successfully read!");
+  // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   return hardware_interface::return_type::OK;
 }

@@ -61,7 +61,7 @@ def generate_launch_description():
     )
     spawn_controller = Node(
         package="controller_manager",
-        executable="spawner.py",
+        executable="spawner",
         arguments=["joint_state_broadcaster"],
         output="screen",
     )

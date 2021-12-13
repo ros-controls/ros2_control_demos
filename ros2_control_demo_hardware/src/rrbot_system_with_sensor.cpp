@@ -36,10 +36,12 @@ CallbackReturn RRBotSystemWithSensorHardware::on_init(const hardware_interface::
     return CallbackReturn::ERROR;
   }
 
+  // START: This part here is for exemplary purposes - Please do not copy to your production code
   hw_start_sec_ = stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
   hw_stop_sec_ = stod(info_.hardware_parameters["example_param_hw_stop_duration_sec"]);
   hw_slowdown_ = stod(info_.hardware_parameters["example_param_hw_slowdown"]);
   hw_sensor_change_ = stod(info_.hardware_parameters["example_param_max_sensor_change"]);
+  // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   hw_joint_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   hw_joint_commands_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
@@ -92,6 +94,7 @@ CallbackReturn RRBotSystemWithSensorHardware::on_init(const hardware_interface::
 CallbackReturn RRBotSystemWithSensorHardware::on_configure(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
+  // START: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Configuring ...please wait...");
 
   for (int i = 0; i < hw_start_sec_; i++)
@@ -101,6 +104,7 @@ CallbackReturn RRBotSystemWithSensorHardware::on_configure(
       rclcpp::get_logger("RRBotSystemWithSensorHardware"), "%.1f seconds left...",
       hw_start_sec_ - i);
   }
+  // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   // reset values always when configuring hardware
   for (uint i = 0; i < hw_joint_states_.size(); i++)
@@ -109,8 +113,7 @@ CallbackReturn RRBotSystemWithSensorHardware::on_configure(
     hw_joint_commands_[i] = 0;
   }
 
-  RCLCPP_INFO(
-    rclcpp::get_logger("RRBotSystemWithSensorHardware"), "System Successfully configured!");
+  RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Successfully configured!");
 
   return CallbackReturn::SUCCESS;
 }
@@ -151,7 +154,8 @@ RRBotSystemWithSensorHardware::export_command_interfaces()
 CallbackReturn RRBotSystemWithSensorHardware::on_activate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
-  RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Starting ...please wait...");
+  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Activating ...please wait...");
 
   for (int i = 0; i < hw_start_sec_; i++)
   {
@@ -160,6 +164,7 @@ CallbackReturn RRBotSystemWithSensorHardware::on_activate(
       rclcpp::get_logger("RRBotSystemWithSensorHardware"), "%.1f seconds left...",
       hw_start_sec_ - i);
   }
+  // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   // command and state should be equal when starting
   for (uint i = 0; i < hw_joint_states_.size(); i++)
@@ -173,7 +178,7 @@ CallbackReturn RRBotSystemWithSensorHardware::on_activate(
     hw_sensor_states_[0] = 0;
   }
 
-  RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithSensorHardware"), "System Successfully started!");
+  RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Successfully activated!");
 
   return CallbackReturn::SUCCESS;
 }
@@ -181,7 +186,9 @@ CallbackReturn RRBotSystemWithSensorHardware::on_activate(
 CallbackReturn RRBotSystemWithSensorHardware::on_deactivate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
-  RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Stopping ...please wait...");
+  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  RCLCPP_INFO(
+    rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Deactivating ...please wait...");
 
   for (int i = 0; i < hw_stop_sec_; i++)
   {
@@ -191,13 +198,15 @@ CallbackReturn RRBotSystemWithSensorHardware::on_deactivate(
       hw_stop_sec_ - i);
   }
 
-  RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithSensorHardware"), "System successfully stopped!");
+  RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Successfully deactivated!");
+  // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   return CallbackReturn::SUCCESS;
 }
 
 hardware_interface::return_type RRBotSystemWithSensorHardware::read()
 {
+  // START: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Reading...please wait...");
 
   for (uint i = 0; i < hw_joint_states_.size(); i++)
@@ -222,12 +231,14 @@ hardware_interface::return_type RRBotSystemWithSensorHardware::read()
       hw_sensor_states_[i], info_.sensors[0].state_interfaces[i].name.c_str());
   }
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Sensors successfully read!");
+  // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   return hardware_interface::return_type::OK;
 }
 
 hardware_interface::return_type ros2_control_demo_hardware::RRBotSystemWithSensorHardware::write()
 {
+  // START: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Writing...please wait...");
 
   for (uint i = 0; i < hw_joint_commands_.size(); i++)
@@ -238,6 +249,7 @@ hardware_interface::return_type ros2_control_demo_hardware::RRBotSystemWithSenso
       hw_joint_commands_[i], i);
   }
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Joints successfully written!");
+  // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   return hardware_interface::return_type::OK;
 }
