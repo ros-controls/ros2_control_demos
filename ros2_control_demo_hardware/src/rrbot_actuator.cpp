@@ -36,10 +36,11 @@ CallbackReturn RRBotModularJoint::on_init(const hardware_interface::HardwareInfo
   {
     return CallbackReturn::ERROR;
   }
-
+  // START: This part here is for exemplary purposes - Please do not copy to your production code
   hw_start_sec_ = stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
   hw_stop_sec_ = stod(info_.hardware_parameters["example_param_hw_stop_duration_sec"]);
   hw_slowdown_ = stod(info_.hardware_parameters["example_param_hw_slowdown"]);
+  // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   hw_joint_state_ = std::numeric_limits<double>::quiet_NaN();
   hw_joint_command_ = std::numeric_limits<double>::quiet_NaN();
@@ -106,13 +107,15 @@ std::vector<hardware_interface::CommandInterface> RRBotModularJoint::export_comm
 
 CallbackReturn RRBotModularJoint::on_activate(const rclcpp_lifecycle::State & /*previous_state*/)
 {
-  RCLCPP_INFO(rclcpp::get_logger("RRBotModularJoint"), "Starting ...please wait...");
+  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  RCLCPP_INFO(rclcpp::get_logger("RRBotModularJoint"), "Activating ...please wait...");
 
   for (int i = 0; i < hw_start_sec_; i++)
   {
     rclcpp::sleep_for(std::chrono::seconds(1));
     RCLCPP_INFO(rclcpp::get_logger("RRBotModularJoint"), "%.1f seconds left...", hw_start_sec_ - i);
   }
+  // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   // set some default values for joints
   if (std::isnan(hw_joint_state_))
@@ -121,14 +124,15 @@ CallbackReturn RRBotModularJoint::on_activate(const rclcpp_lifecycle::State & /*
     hw_joint_command_ = 0;
   }
 
-  RCLCPP_INFO(rclcpp::get_logger("RRBotModularJoint"), "System Successfully started!");
+  RCLCPP_INFO(rclcpp::get_logger("RRBotModularJoint"), "Successfully activated!");
 
   return CallbackReturn::SUCCESS;
 }
 
 CallbackReturn RRBotModularJoint::on_deactivate(const rclcpp_lifecycle::State & /*previous_state*/)
 {
-  RCLCPP_INFO(rclcpp::get_logger("RRBotModularJoint"), "Stopping ...please wait...");
+  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  RCLCPP_INFO(rclcpp::get_logger("RRBotModularJoint"), "Deactivating ...please wait...");
 
   for (int i = 0; i < hw_stop_sec_; i++)
   {
@@ -136,13 +140,15 @@ CallbackReturn RRBotModularJoint::on_deactivate(const rclcpp_lifecycle::State & 
     RCLCPP_INFO(rclcpp::get_logger("RRBotModularJoint"), "%.1f seconds left...", hw_stop_sec_ - i);
   }
 
-  RCLCPP_INFO(rclcpp::get_logger("RRBotModularJoint"), "System successfully stopped!");
+  RCLCPP_INFO(rclcpp::get_logger("RRBotModularJoint"), "Successfully deactivated!");
+  // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   return CallbackReturn::SUCCESS;
 }
 
 hardware_interface::return_type RRBotModularJoint::read()
 {
+  // START: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(rclcpp::get_logger("RRBotModularJoint"), "Reading...");
 
   // Simulate RRBot's movement
@@ -152,12 +158,14 @@ hardware_interface::return_type RRBotModularJoint::read()
     info_.joints[0].name.c_str());
 
   RCLCPP_INFO(rclcpp::get_logger("RRBotModularJoint"), "Joints successfully read!");
+  // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   return hardware_interface::return_type::OK;
 }
 
 hardware_interface::return_type ros2_control_demo_hardware::RRBotModularJoint::write()
 {
+  // START: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(rclcpp::get_logger("RRBotModularJoint"), "Writing...please wait...");
 
   // Simulate sending commands to the hardware
@@ -166,6 +174,7 @@ hardware_interface::return_type ros2_control_demo_hardware::RRBotModularJoint::w
     info_.joints[0].name.c_str());
 
   RCLCPP_INFO(rclcpp::get_logger("RRBotModularJoint"), "Joints successfully written!");
+  // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   return hardware_interface::return_type::OK;
 }

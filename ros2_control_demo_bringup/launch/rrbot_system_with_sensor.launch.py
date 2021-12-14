@@ -77,7 +77,7 @@ def generate_launch_description():
     # add the spawner node for the fts_broadcaster
     fts_broadcaster_spawner = Node(
         package="controller_manager",
-        executable="spawner.py",
+        executable="spawner",
         arguments=["fts_broadcaster", "--controller-manager", "/controller_manager"],
     )
 

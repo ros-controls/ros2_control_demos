@@ -15,6 +15,7 @@
 #ifndef ROS2_CONTROL_DEMO_HARDWARE__RRBOT_SYSTEM_MULTI_INTERFACE_HPP_
 #define ROS2_CONTROL_DEMO_HARDWARE__RRBOT_SYSTEM_MULTI_INTERFACE_HPP_
 
+#include <chrono>
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -24,7 +25,10 @@
 #include "hardware_interface/hardware_info.hpp"
 #include "hardware_interface/system_interface.hpp"
 #include "hardware_interface/types/hardware_interface_return_values.hpp"
+#include "rclcpp/clock.hpp"
+#include "rclcpp/duration.hpp"
 #include "rclcpp/macros.hpp"
+#include "rclcpp/time.hpp"
 #include "rclcpp_lifecycle/node_interfaces/lifecycle_node_interface.hpp"
 #include "rclcpp_lifecycle/state.hpp"
 #include "ros2_control_demo_hardware/visibility_control.h"
@@ -74,9 +78,14 @@ private:
   std::vector<double> hw_commands_positions_;
   std::vector<double> hw_commands_velocities_;
   std::vector<double> hw_commands_accelerations_;
-  std::vector<double> hw_positions_;
-  std::vector<double> hw_velocities_;
-  std::vector<double> hw_accelerations_;
+  std::vector<double> hw_states_positions_;
+  std::vector<double> hw_states_velocities_;
+  std::vector<double> hw_states_accelerations_;
+
+  // Store time between update loops
+  rclcpp::Clock clock_;
+  rclcpp::Time last_timestamp_;
+  rclcpp::Time current_timestamp;  // Avoid initialization on each read
 
   // Enum defining at which control level we are
   // Dumb way of maintaining the command_interface type per joint.
