@@ -25,7 +25,10 @@
 #include "hardware_interface/hardware_info.hpp"
 #include "hardware_interface/system_interface.hpp"
 #include "hardware_interface/types/hardware_interface_return_values.hpp"
+#include "rclcpp/clock.hpp"
+#include "rclcpp/duration.hpp"
 #include "rclcpp/macros.hpp"
+#include "rclcpp/time.hpp"
 #include "rclcpp_lifecycle/node_interfaces/lifecycle_node_interface.hpp"
 #include "rclcpp_lifecycle/state.hpp"
 #include "ros2_control_demo_hardware/visibility_control.h"
@@ -80,8 +83,9 @@ private:
   std::vector<double> hw_states_accelerations_;
 
   // Store time between update loops
-  std::chrono::time_point<std::chrono::system_clock> last_timestamp_;
-  std::chrono::duration<double> duration;  // Avoid initialization on each read
+  rclcpp::Clock clock_;
+  rclcpp::Time last_timestamp_;
+  rclcpp::Time current_timestamp;  // Avoid initialization on each read
 
   // Enum defining at which control level we are
   // Dumb way of maintaining the command_interface type per joint.

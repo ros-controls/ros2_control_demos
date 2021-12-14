@@ -341,7 +341,7 @@ Available controllers:
 Moving the robot:
   - see below description of `forward_position_controller`
 
-Available launch-file options:
+Available launch file options:
   - `use_fake_hardware:=true` - start `FakeSystem` instead of hardware.
     This is a simple simulation that mimics joint command to their states.
     This is useful to test *ros2_control* integration and controllers without physical hardware.
@@ -391,20 +391,22 @@ Moving the robot:
   - when using velocity controller:
     ```
     ros2 topic pub /forward_velocity_controller/commands std_msgs/msg/Float64MultiArray "data:
-    - 0.5
-    - 0.5"
+    - 5
+    - 5"
     ```
 
   - when using acceleration controller
     ```
     ros2 topic pub /forward_acceleration_controller/commands std_msgs/msg/Float64MultiArray "data:
-    - 0.01
-    - 0.01"
+    - 10
+    - 10"
     ```
 
 Useful launch-file options:
-  - `robot_controller:=forward_position_controller` - start demo and spawnes position controller. Robot can be then controlled using `forward_position_controller` as described below.
-  - `robot_controller:=forward_acceleration_controller` - start demo and spawnes acceleration controller. Robot can be then controlled using `forward_position_controller` as described below.
+  - `robot_controller:=forward_position_controller` - starts demo and spawns position controller.
+    Robot can be then controlled using `forward_position_controller` as described below.
+  - `robot_controller:=forward_acceleration_controller` - starts demo and spawns acceleration controller.
+    Robot can be then controlled using `forward_acceleration_controller` as described below.
 
 
 ### Example 3: "Industrial robot with integrated sensor"

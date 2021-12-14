@@ -22,6 +22,7 @@
 #include <vector>
 
 #include "hardware_interface/types/hardware_interface_type_values.hpp"
+#include "rclcpp/clock.hpp"
 #include "rclcpp/rclcpp.hpp"
 
 namespace ros2_control_demo_hardware
@@ -93,6 +94,8 @@ CallbackReturn RRBotSystemMultiInterfaceHardware::on_init(
       return CallbackReturn::ERROR;
     }
   }
+
+  clock_ = rclcpp::Clock();
 
   return CallbackReturn::SUCCESS;
 }
@@ -241,7 +244,7 @@ CallbackReturn RRBotSystemMultiInterfaceHardware::on_activate(
     control_level_[i] = integration_level_t::UNDEFINED;
   }
 
-  last_timestamp_ = std::chrono::system_clock::now();
+  last_timestamp_ = clock_.now();
 
   RCLCPP_INFO(
     rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"), "System successfully started! %u",
@@ -272,7 +275,9 @@ CallbackReturn RRBotSystemMultiInterfaceHardware::on_deactivate(
 
 hardware_interface::return_type RRBotSystemMultiInterfaceHardware::read()
 {
-  duration = std::chrono::system_clock::now() - last_timestamp_;
+  current_timestamp = clock_.now();
+  rclcpp::Duration duration = current_timestamp - last_timestamp_;
+  last_timestamp_ = current_timestamp;
 
   for (std::size_t i = 0; i < hw_states_positions_.size(); i++)
   {
@@ -293,12 +298,13 @@ hardware_interface::return_type RRBotSystemMultiInterfaceHardware::read()
       case integration_level_t::VELOCITY:
         hw_states_accelerations_[i] = 0;
         hw_states_velocities_[i] = hw_commands_velocities_[i];
-        hw_states_positions_[i] += (hw_states_velocities_[i] * duration.count()) / hw_slowdown_;
+        hw_states_positions_[i] += (hw_states_velocities_[i] * duration.seconds()) / hw_slowdown_;
         break;
       case integration_level_t::ACCELERATION:
         hw_states_accelerations_[i] = hw_commands_accelerations_[i];
-        hw_states_velocities_[i] += (hw_states_accelerations_[i] * duration.count()) / hw_slowdown_;
-        hw_states_positions_[i] += (hw_states_velocities_[i] * duration.count()) / hw_slowdown_;
+        hw_states_velocities_[i] +=
+          (hw_states_accelerations_[i] * duration.seconds()) / hw_slowdown_;
+        hw_states_positions_[i] += (hw_states_velocities_[i] * duration.seconds()) / hw_slowdown_;
         break;
     }
     // START: This part here is for exemplary purposes - Please do not copy to your production code
