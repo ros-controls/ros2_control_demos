@@ -412,8 +412,8 @@ Useful launch-file options:
 ### Example 3: "Industrial robot with integrated sensor"
 
 - Launch file: [rrbot_system_with_sensor.launch.py](ros2_control_demo_bringup/launch/rrbot_system_with_sensor.launch.py)
-- URDF: [rrbot_system_with_sensor.urdf.xacro](ros2_control_demo_bringup/config/rrbot_with_sensor_controllers.yaml)
-- ros2_control URDF: [rrbot_system_with_sensor.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/rrbot_system_with_sensor.ros2_control.xacro)
+- Controllers yaml: [rrbot_system_with_sensor.yaml](ros2_control_demo_bringup/config/rrbot_with_sensor_controllers.yaml)
+- `ros2_control` URDF tag: [rrbot_system_with_sensor.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/rrbot_system_with_sensor.ros2_control.xacro)
 
 - Command interfaces:
   - joint1/position
@@ -443,8 +443,8 @@ ros2 topic echo /fts_broadcaster/wrench
 ### Example 4: "Industrial Robots with externally connected sensor"
 
 - Launch file: [rrbot_system_with_external_sensor.launch.py](ros2_control_demo_bringup/launch/rrbot_system_with_external_sensor.launch.py)
-- URDF: [rrbot_with_external_sensor_controllers.urdf.xacro](ros2_control_demo_bringup/config/rrbot_with_external_sensor_controllers.yaml)
-- ros2_control URDF: [external_rrbot_force_torque_sensor.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/external_rrbot_force_torque_sensor.ros2_control.xacro)
+- Controllers yaml: [rrbot_with_external_sensor_controllers.yaml](ros2_control_demo_bringup/config/rrbot_with_external_sensor_controllers.yaml)
+- `ros2_control` URDF tag: [external_rrbot_force_torque_sensor.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/external_rrbot_force_torque_sensor.ros2_control.xacro)
 
 - Command interfaces:
   - joint1/position
@@ -475,8 +475,8 @@ ros2 topic echo /fts_broadcaster/wrench
 ### Example 5: "Modular Robots with separate communication to each actuator"
 
 - Launch file: [rrbot_modular_actuators.launch.py](ros2_control_demo_bringup/launch/rrbot_modular_actuators.launch.py)
-- URDF: [rrbot_modular_actuators.urdf.xacro](ros2_control_demo_bringup/config/rrbot_modular_actuators.yaml)
-- ros2_control URDF: [rrbot_modular_actuators.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/rrbot_modular_actuators.ros2_control.xacro)
+- Controllers yaml: [rrbot_modular_actuators.yaml](ros2_control_demo_bringup/config/rrbot_modular_actuators.yaml)
+- `ros2_control` URDF tag: [rrbot_modular_actuators.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/rrbot_modular_actuators.ros2_control.xacro)
 
 - Command interfaces:
   - joint1/position
@@ -491,6 +491,30 @@ Available controllers:
 
 Commanding the robot: see the commands below.
 
+
+### Example 6: "Modular Robots with actuators not providing states and with additional sensors"
+
+- Launch file: [rrbot_modular_actuators_without_feedback_sensors_for_position_feedback.launch.py](ros2_control_demo_bringup/launch/rrbot_modular_actuators_without_feedback_sensors_for_position_feedback.launch.py)
+- Controllers yaml: [rrbot_modular_actuators_without_feedback_sensors_for_position_feedback.yaml](ros2_control_demo_bringup/config/rrbot_modular_actuators_without_feedback_sensors_for_position_feedback.yaml)
+- `ros2_control` URDF tag: [rrbot_modular_actuators_without_feedback_sensors_for_position_feedback.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/rrbot_modular_actuators_without_feedback_sensors_for_position_feedback.ros2_control.xacro)
+
+- Command interfaces:
+  - joint1/velocity
+  - joint2/velocity
+- State interfaces:
+  - joint1/position
+  - joint2/position
+
+Available controllers:
+- `joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]`
+- `forward_velocity_controller[forward_command_controller/ForwardCommandController]`
+
+Moving the robot:
+  ```
+  ros2 topic pub /forward_velocity_controller/commands std_msgs/msg/Float64MultiArray "data:
+  - 5
+  - 5"
+  ```
 
 ## Controllers and moving hardware
 
