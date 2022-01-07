@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!-- Revolute-Revolute Manipulator -->
+<!--
+Copied and modified from ROS1 example -
+https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_description/urdf/rrbot.xacro
+-->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="2dof_robot">
+  <xacro:arg name="prefix" default="" />
+
+  <!-- Import RRBot macro -->
+  <xacro:include filename="$(find rrbot_description)/urdf/rrbot_description.urdf.xacro" />
+
+  <!-- Import all Gazebo-customization elements, including Gazebo colors -->
+  <xacro:include filename="$(find rrbot_description)/gazebo/rrbot.gazebo.xacro" />
+
+  <!-- Import Rviz colors -->
+  <xacro:include filename="$(find rrbot_description)/gazebo/rrbot.materials.xacro" />
+
+  <!-- Import RRBot ros2_control description -->
+  <xacro:include filename="$(find rrbot_description)/ros2_control/rrbot_ignition.ros2_control.xacro" />
+
+  <!-- Used for fixing robot -->
+  <link name="world"/>
+  <gazebo reference="world">
+    <static>true</static>
+  </gazebo>
+
+  <xacro:rrbot parent="world" prefix="$(arg prefix)">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </xacro:rrbot>
+
+  <xacro:rrbot_gazebo prefix="$(arg prefix)" />
+
+  <xacro:rrbot_ignition_ros2_control
+    name="RRBot" prefix="$(arg prefix)" />
+
+  <!-- ros2_control plugin -->
+  <gazebo>
+    <plugin filename="libignition_ros2_control-system.so" name="libignition_ros2_control::IgnitionROS2ControlPlugin">
+      <parameters>$(find ros2_control_demo_bringup)/config/rrbot_controllers.yaml</parameters>
+    </plugin>
+  </gazebo>
+
+</robot>

@@ -171,7 +171,7 @@ Controllers from this demo:
 
 ### *RRBot* Gazebo Classic simulation
 
-**NOTE**: For5 this example to work, you have to add the folloowing repository to your workspace:
+**NOTE**: For this example to work, you have to add the following repository to your workspace:
 
  - gazebo_ros2_control: `git clone git@github.com:ros-simulation/gazebo_ros2_control.git --branch master`
 
@@ -179,7 +179,7 @@ Controllers from this demo:
    ```
    ros2 launch ros2_control_demo_bringup rrbot_gazebo.launch.py
    ```
-   The launch file loads robot description, starts gazebo and loads `Joint State Broadcaster`.
+   The launch file loads robot description, starts gazebo, `Joint State Broadcaster` and `Joint Trajectory Controller`.
 
    If you can see two orange and one black "box" in `Gazebo` everything has started properly.
 
@@ -224,6 +224,71 @@ Files used for this demos:
     - `ros2_control` tag: [rrbot_gazebo.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/rrbot_gazebo.ros2_control.xacro)
 
   - Hardware interface plugin: [gazebo_ros2_control/GazeboSystem](https://github.com/ros-simulation/gazebo_ros2_control/blob/master/gazebo_ros2_control/src/gazebo_system.cpp)
+
+Controllers from this demo:
+  - `Joint State Broadcaster` ([`ros2_controllers` repository](https://github.com/ros-controls/ros2_controllers)): [doc](https://ros-controls.github.io/control.ros.org/ros2_controllers/joint_state_broadcaster/doc/userdoc.html)
+  - `Joint Trajectory Controller` ([`ros2_controllers` repository](https://github.com/ros-controls/ros2_controllers)): [doc](https://ros-controls.github.io/control.ros.org/ros2_controllers/joint_trajectory_controller/doc/userdoc.html)
+
+
+### *RRBot* Ignition Gazebo simulation
+
+**NOTE**: For this example to work, you have to add the following repository to your workspace.
+          For me the current HEAD of `main` branch is not working, this is why I am recommending to use state on the commit: `cd8c9c0569bfc68a0102cb9b0bb34da00e92b5fb`
+
+**ATTENTION**: The simulation brakes after first movement. This has to be debugged, feel free to help or simply use setup for your robot.
+
+ - ign_ros2_control: `git clone git@github.com:StoglRobotics-forks/ign_ros2_control.git --branch destogl/working_version`
+
+
+1. To start *RRBot* gazebo simulation open a terminal, source your ROS2-workspace and execute its launch file with:
+   ```
+   ros2 launch ros2_control_demo_bringup rrbot_ignition.launch.py
+   ```
+   The launch file loads robot description, starts gazebo, `Joint State Broadcaster` and `Joint Trajectory Controller`.
+
+   If you can see two orange and one black "box" in `Ignition` everything has started properly.
+
+
+1. Check if the hardware interface loaded properly, by opening another terminal and executing:
+   ```
+   ros2 control list_hardware_interfaces
+   ```
+   You should get:
+   ```
+   command interfaces
+        joint1/position [claimed]
+        joint2/position [claimed]
+   state interfaces
+         joint1/position
+         joint2/position
+
+   ```
+
+1. Check is controllers are running:
+   ```
+   ros2 control list_controllers
+   ```
+   You should get:
+   ```
+   joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+   position_trajectory_controller[joint_trajectory_controller/JointTrajectoryController] active
+   ```
+
+1. If you get output from above you can send commands to *Joint Trajectory Controller*, using script:
+
+   ```
+   ros2 launch ros2_control_demo_bringup test_joint_trajectory_controller.launch.py
+   ```
+
+Files used for this demos:
+  - Launch file: [rrbot_ignition.launch.py](ros2_control_demo_bringup/launch/rrbot_ignition.launch.py)
+  - Controllers yaml: [rrbot_controllers.yaml](ros2_control_demo_bringup/config/rrbot_controllers.yaml)
+  - URDF file: [rrbot_ignition.urdf.xacro](ros2_control_demo_description/rrbot_description/urdf/rrbot_ignition.urdf.xacro)
+    - Description: [rrbot_description.urdf.xacro](ros2_control_demo_description/rrbot_description/urdf/rrbot_description.urdf.xacro)
+    - Gazebo elements: [rrbot.gazebo.xacro](ros2_control_demo_description/rrbot_description/gazebo/rrbot.gazebo.xacro)
+    - `ros2_control` tag: [rrbot_ignition.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/rrbot_ignition.ros2_control.xacro)
+
+  - Hardware interface plugin: [ign_ros2_control::IgnitionSystem](https://github.com/ignitionrobotics/ign_ros2_control/blob/main/ign_ros2_control/src/ign_system.cpp)
 
 Controllers from this demo:
   - `Joint State Broadcaster` ([`ros2_controllers` repository](https://github.com/ros-controls/ros2_controllers)): [doc](https://ros-controls.github.io/control.ros.org/ros2_controllers/joint_state_broadcaster/doc/userdoc.html)

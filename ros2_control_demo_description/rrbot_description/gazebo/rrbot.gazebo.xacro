@@ -7,13 +7,6 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_desc
 
   <xacro:macro name="rrbot_gazebo" params="prefix">
 
-    <!-- ros_control plugin -->
-    <gazebo>
-      <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
-        <parameters>$(find ros2_control_demo_bringup)/config/rrbot_controllers.yaml</parameters>
-      </plugin>
-    </gazebo>
-
     <!-- Link1 -->
     <gazebo reference="${prefix}base_link">
       <material>Gazebo/Orange</material>
@@ -78,7 +71,7 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_desc
     </gazebo>-->
 
     <!-- camera -->
-    <gazebo reference="${prefix}camera_link">
+ <!--   <gazebo reference="${prefix}camera_link">
       <sensor type="camera" name="camera1">
         <update_rate>30.0</update_rate>
         <camera name="head">
@@ -93,11 +86,11 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_desc
             <far>300</far>
           </clip>
           <noise>
-            <type>gaussian</type>
+            <type>gaussian</type>-->
             <!-- Noise is sampled independently per pixel on each frame.
             That pixel's noise value is added to each of its color
             channels, which at that point lie in the range [0,1]. -->
-            <mean>0.0</mean>
+<!--            <mean>0.0</mean>
             <stddev>0.007</stddev>
           </noise>
         </camera>
@@ -107,11 +100,11 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_desc
           <cameraName>rrbot/camera1</cameraName>
           <imageTopicName>image_raw</imageTopicName>
           <cameraInfoTopicName>camera_info</cameraInfoTopicName>
-          <frameName>camera_link_optical</frameName>
+          <frameName>camera_link_optical</frameName>-->
           <!-- setting hackBaseline to anything but 0.0 will cause a misalignment
           between the gazebo sensor image and the frame it is supposed to
           be attached to -->
-          <hackBaseline>0.0</hackBaseline>
+<!--          <hackBaseline>0.0</hackBaseline>
           <distortionK1>0.0</distortionK1>
           <distortionK2>0.0</distortionK2>
           <distortionK3>0.0</distortionK3>
@@ -123,7 +116,7 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_desc
           <focalLength>0.0</focalLength>
         </plugin>
       </sensor>
-    </gazebo>
+    </gazebo>-->
 
   </xacro:macro>
 
