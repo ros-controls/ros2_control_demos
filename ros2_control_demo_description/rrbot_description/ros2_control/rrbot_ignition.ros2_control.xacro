@@ -5,7 +5,7 @@
 
     <ros2_control name="${name}" type="system">
       <hardware>
-        <plugin>ignition_ros2_control/IgnitionSystem</plugin>
+        <plugin>ign_ros2_control/IgnitionSystem</plugin>
       </hardware>
       <joint name="${prefix}joint1">
         <command_interface name="position">

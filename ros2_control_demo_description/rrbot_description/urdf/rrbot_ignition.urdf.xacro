@@ -36,7 +36,7 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_desc
 
   <!-- ros2_control plugin -->
   <gazebo>
-    <plugin filename="libignition_ros2_control-system.so" name="libignition_ros2_control::IgnitionROS2ControlPlugin">
+    <plugin filename="libign_ros2_control-system.so" name="ign_ros2_control::IgnitionROS2ControlPlugin">
       <parameters>$(find ros2_control_demo_bringup)/config/rrbot_controllers.yaml</parameters>
     </plugin>
   </gazebo>
