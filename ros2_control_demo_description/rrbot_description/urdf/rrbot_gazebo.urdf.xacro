@@ -34,4 +34,11 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_desc
   <xacro:rrbot_gazebo_ros2_control
     name="RRBot" prefix="$(arg prefix)" />
 
+  <!-- ros2_control plugin -->
+  <gazebo>
+    <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
+      <parameters>$(find ros2_control_demo_bringup)/config/rrbot_controllers.yaml</parameters>
+    </plugin>
+  </gazebo>
+
 </robot>
