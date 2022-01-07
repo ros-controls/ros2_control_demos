@@ -10,7 +10,7 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_desc
     <!-- ros_control plugin -->
     <gazebo>
       <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
-        <parameters>$(find ros2_control_demo_bringup)/config/rrbot_gazebo_forward_controller_position.yaml</parameters>
+        <parameters>$(find ros2_control_demo_bringup)/config/rrbot_controllers.yaml</parameters>
       </plugin>
     </gazebo>
 
@@ -41,7 +41,7 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_desc
     </gazebo>
 
     <!-- hokuyo -->
-    <gazebo reference="${prefix}hokuyo_link">
+<!--    <gazebo reference="${prefix}hokuyo_link">
       <sensor type="gpu_ray" name="head_hokuyo_sensor">
         <pose>0 0 0 0 0 0</pose>
         <visualize>false</visualize>
@@ -61,12 +61,12 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_desc
             <resolution>0.01</resolution>
           </range>
           <noise>
-            <type>gaussian</type>
+            <type>gaussian</type>-->
             <!-- Noise parameters based on published spec for Hokuyo laser
             achieving "+-30mm" accuracy at range < 10m.  A mean of 0.0m and
             stddev of 0.01m will put 99.7% of samples within 0.03m of the true
             reading. -->
-            <mean>0.0</mean>
+<!--            <mean>0.0</mean>
             <stddev>0.01</stddev>
           </noise>
         </ray>
@@ -75,7 +75,7 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_desc
           <frameName>hokuyo_link</frameName>
         </plugin>
       </sensor>
-    </gazebo>
+    </gazebo>-->
 
     <!-- camera -->
     <gazebo reference="${prefix}camera_link">

@@ -14,9 +14,8 @@
 
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription
-from launch.substitutions import Command, FindExecutable, PathJoinSubstitution
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-
+from launch.substitutions import Command, FindExecutable, PathJoinSubstitution
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
@@ -58,11 +57,16 @@ def generate_launch_description():
         arguments=["-topic", "robot_description", "-entity", "rrbot_system_position"],
         output="screen",
     )
-    spawn_controller = Node(
+    joint_state_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
         arguments=["joint_state_broadcaster"],
-        output="screen",
+    )
+
+    robot_controller_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["position_trajectory_controller"],
     )
 
     return LaunchDescription(
@@ -70,6 +74,7 @@ def generate_launch_description():
             gazebo,
             node_robot_state_publisher,
             spawn_entity,
-            spawn_controller,
+            joint_state_broadcaster_spawner,
+            robot_controller_spawner,
         ]
     )

@@ -145,7 +145,7 @@ The *RRBot* URDF files can be found in the `urdf` folder of `rrbot_description` 
    - 0.5
    - 0.5"
    ```
-   B. Or you can start a demo node which sends two goals every 5 seconds in a loop:
+   b. Or you can start a demo node which sends two goals every 5 seconds in a loop:
    ```
    ros2 launch ros2_control_demo_bringup test_forward_position_controller.launch.py
    ```
@@ -169,7 +169,7 @@ Controllers from this demo:
   - `Forward Command Controller` ([`ros2_controllers` repository](https://github.com/ros-controls/ros2_controllers)): [doc](https://ros-controls.github.io/control.ros.org/ros2_controllers/forward_command_controller/doc/userdoc.html)
 
 
-### *RRBot* gazebo simulation
+### *RRBot* Gazebo Classic simulation
 
 **NOTE**: For5 this example to work, you have to add the folloowing repository to your workspace:
 
@@ -190,7 +190,12 @@ Controllers from this demo:
    ```
    You should get:
    ```
-   ...TBA...
+   command interfaces
+        joint1/position [claimed]
+        joint2/position [claimed]
+   state interfaces
+         joint1/position
+         joint2/position
 
    ```
 
@@ -201,37 +206,28 @@ Controllers from this demo:
    You should get:
    ```
    joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
-   ...TBD...
+   position_trajectory_controller[joint_trajectory_controller/JointTrajectoryController] active
    ```
 
-1. If you get output from above you can send commands to *Forward Command Controller*, either:
+1. If you get output from above you can send commands to *Joint Trajectory Controller*, using script:
 
-   a. Manually using ros2 cli interface:
    ```
-   ros2 topic pub /forward_position_controller/commands std_msgs/msg/Float64MultiArray "data:
-   - 0.5
-   - 0.5"
+   ros2 launch ros2_control_demo_bringup test_joint_trajectory_controller.launch.py
    ```
-   B. Or you can start a demo node which sends two goals every 5 seconds in a loop:
-   ```
-   ros2 launch ros2_control_demo_bringup test_forward_position_controller.launch.py
-   ```
-   You should now see an orange box circling in `RViz`.
-   Also, you should see changing states in the termnal where launch file is started.
 
 Files used for this demos:
   - Launch file: [rrbot_gazebo.launch.py](ros2_control_demo_bringup/launch/rrbot_gazebo.launch.py)
   - Controllers yaml: [rrbot_controllers.yaml](ros2_control_demo_bringup/config/rrbot_controllers.yaml)
   - URDF file: [rrbot_gazebo.urdf.xacro](ros2_control_demo_description/rrbot_description/urdf/rrbot_gazebo.urdf.xacro)
     - Description: [rrbot_description.urdf.xacro](ros2_control_demo_description/rrbot_description/urdf/rrbot_description.urdf.xacro)
-    - `ros2_control` tag: [rrbot.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/rrbot.ros2_control.xacro)
-  - RViz configuration: [rrbot.rviz](ros2_control_demo_description/rrbot_description/config/rrbot.rviz)
+    - Gazebo elements: [rrbot.gazebo.xacro](ros2_control_demo_description/rrbot_description/gazebo/rrbot.gazebo.xacro)
+    - `ros2_control` tag: [rrbot_gazebo.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/rrbot_gazebo.ros2_control.xacro)
 
-  - Hardware interface plugin: [rrbot_system_position_only.cpp](ros2_control_demo_hardware/src/rrbot_system_position_only.cpp)
+  - Hardware interface plugin: [gazebo_ros2_control/GazeboSystem](https://github.com/ros-simulation/gazebo_ros2_control/blob/master/gazebo_ros2_control/src/gazebo_system.cpp)
 
 Controllers from this demo:
   - `Joint State Broadcaster` ([`ros2_controllers` repository](https://github.com/ros-controls/ros2_controllers)): [doc](https://ros-controls.github.io/control.ros.org/ros2_controllers/joint_state_broadcaster/doc/userdoc.html)
-  - `Forward Command Controller` ([`ros2_controllers` repository](https://github.com/ros-controls/ros2_controllers)): [doc](https://ros-controls.github.io/control.ros.org/ros2_controllers/forward_command_controller/doc/userdoc.html)
+  - `Joint Trajectory Controller` ([`ros2_controllers` repository](https://github.com/ros-controls/ros2_controllers)): [doc](https://ros-controls.github.io/control.ros.org/ros2_controllers/joint_trajectory_controller/doc/userdoc.html)
 
 
 ## *DiffBot*
