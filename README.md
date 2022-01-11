@@ -232,12 +232,21 @@ Controllers from this demo:
 
 ### *RRBot* Ignition Gazebo simulation
 
-**NOTE**: For this example to work, you have to add the following repository to your workspace.
-          For me the current HEAD of `main` branch is not working, this is why I am recommending to use state on the commit: `cd8c9c0569bfc68a0102cb9b0bb34da00e92b5fb`
+**NOTE**: For this example to work, you will probably have to use Ignition Gazebo version `edifice` by setting up the environemnt variable with:
+          ```
+          export IGNITION_VERSION=edifice
+          ```
+          and calling `rosdep install --from-paths . -i -y`
+          Also take care to delete all other version of Gazebo on your computer using:
+          ```
+          sudo apt purge libignition-gazebo3 && sudo apt autoremove
+          ```
+          There are some issues with the current gazebo version "fortress" v6.3.0.
 
 **ATTENTION**: The simulation brakes after first movement. This has to be debugged, feel free to help or simply use setup for your robot.
 
- - ign_ros2_control: `git clone git@github.com:StoglRobotics-forks/ign_ros2_control.git --branch destogl/working_version`
+ - ign_ros2_control: `git clone https://github.com/ignitionrobotics/ign_ros2_control.git --branch main`
+ - ros_ign: `git clone https://github.com/ignitionrobotics/ros_ign.git --branch ros2`
 
 
 1. To start *RRBot* gazebo simulation open a terminal, source your ROS2-workspace and execute its launch file with:
