@@ -232,7 +232,7 @@ Controllers from this demo:
 
 ### *RRBot* Ignition Gazebo simulation
 
-**NOTE**: For this example to work, you will probably have to use Ignition Gazebo version `edifice` by setting up the environemnt variable with:
+**NOTE**: For this example to work, you will probably have to use Ignition Gazebo version `edifice` by setting up the environment variable with:
           ```
           export IGNITION_VERSION=edifice
           ```
