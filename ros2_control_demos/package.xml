@@ -16,7 +16,7 @@
   <exec_depend>diffbot_description</exec_depend>
   <exec_depend>rrbot_description</exec_depend>
   <exec_depend>ros2_control_demo_hardware</exec_depend>
-  <exec_depend>ros2_control_test_nodes</exec_depend>
+  <exec_depend>ros2_controllers_test_nodes</exec_depend>
 
   <export>
     <build_type>ament_cmake</build_type>
