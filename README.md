@@ -199,7 +199,7 @@ Controllers from this demo:
 
    ```
 
-1. Check is controllers are running:
+1. Check if controllers are running:
    ```
    ros2 control list_controllers
    ```
@@ -209,7 +209,7 @@ Controllers from this demo:
    position_trajectory_controller[joint_trajectory_controller/JointTrajectoryController] active
    ```
 
-1. If you get output from above you can send commands to *Joint Trajectory Controller*, using script:
+1. If you get the output above you can send commands to *Joint Trajectory Controller*, using script:
 
    ```
    ros2 launch ros2_control_demo_bringup test_joint_trajectory_controller.launch.py
