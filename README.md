@@ -412,7 +412,7 @@ Useful launch-file options:
 ### Example 3: "Industrial robot with integrated sensor"
 
 - Launch file: [rrbot_system_with_sensor.launch.py](ros2_control_demo_bringup/launch/rrbot_system_with_sensor.launch.py)
-- Controllers yaml: [rrbot_system_with_sensor.yaml](ros2_control_demo_bringup/config/rrbot_with_sensor_controllers.yaml)
+- Controllers yaml: [rrbot_with_sensor_controllers.yaml](ros2_control_demo_bringup/config/rrbot_with_sensor_controllers.yaml)
 - `ros2_control` URDF tag: [rrbot_system_with_sensor.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/rrbot_system_with_sensor.ros2_control.xacro)
 
 - Command interfaces:
