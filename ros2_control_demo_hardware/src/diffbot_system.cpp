@@ -41,7 +41,7 @@ CallbackReturn DiffBotSystemHardware::on_init(const hardware_interface::Hardware
     return CallbackReturn::ERROR;
   }
 
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   hw_start_sec_ = stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
   hw_stop_sec_ = stod(info_.hardware_parameters["example_param_hw_stop_duration_sec"]);
   // END: This part here is for exemplary purposes - Please do not copy to your production code
@@ -130,7 +130,7 @@ std::vector<hardware_interface::CommandInterface> DiffBotSystemHardware::export_
 CallbackReturn DiffBotSystemHardware::on_activate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(rclcpp::get_logger("DiffBotSystemHardware"), "Activating ...please wait...");
 
   for (auto i = 0; i < hw_start_sec_; i++)
@@ -160,7 +160,7 @@ CallbackReturn DiffBotSystemHardware::on_activate(
 CallbackReturn DiffBotSystemHardware::on_deactivate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(rclcpp::get_logger("DiffBotSystemHardware"), "Deactivating ...please wait...");
 
   for (auto i = 0; i < hw_stop_sec_; i++)
@@ -191,7 +191,7 @@ hardware_interface::return_type DiffBotSystemHardware::read()
     hw_positions_[i] = hw_positions_[1] + dt * hw_commands_[i];
     hw_velocities_[i] = hw_commands_[i];
 
-    // START: This part here is for exemplary purposes - Please do not copy to your production code
+    // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
     RCLCPP_INFO(
       rclcpp::get_logger("DiffBotSystemHardware"),
       "Got position state %.5f and velocity state %.5f for '%s'!", hw_positions_[i],
@@ -208,7 +208,7 @@ hardware_interface::return_type DiffBotSystemHardware::read()
   base_y_ += base_dy * dt;
   base_theta_ += base_dtheta * dt;
 
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(
     rclcpp::get_logger("DiffBotSystemHardware"), "Joints successfully read! (%.5f,%.5f,%.5f)",
     base_x_, base_y_, base_theta_);
@@ -219,7 +219,7 @@ hardware_interface::return_type DiffBotSystemHardware::read()
 
 hardware_interface::return_type ros2_control_demo_hardware::DiffBotSystemHardware::write()
 {
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(rclcpp::get_logger("DiffBotSystemHardware"), "Writing...");
 
   for (auto i = 0u; i < hw_commands_.size(); i++)

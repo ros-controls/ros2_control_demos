@@ -33,7 +33,7 @@ CallbackReturn RRBotSystemPositionOnlyHardware::on_init(
     return CallbackReturn::ERROR;
   }
 
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   hw_start_sec_ = stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
   hw_stop_sec_ = stod(info_.hardware_parameters["example_param_hw_stop_duration_sec"]);
   hw_slowdown_ = stod(info_.hardware_parameters["example_param_hw_slowdown"]);
@@ -87,7 +87,7 @@ CallbackReturn RRBotSystemPositionOnlyHardware::on_init(
 CallbackReturn RRBotSystemPositionOnlyHardware::on_configure(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(
     rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "Configuring ...please wait...");
 
@@ -141,7 +141,7 @@ RRBotSystemPositionOnlyHardware::export_command_interfaces()
 CallbackReturn RRBotSystemPositionOnlyHardware::on_activate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(
     rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "Activating ...please wait...");
 
@@ -168,7 +168,7 @@ CallbackReturn RRBotSystemPositionOnlyHardware::on_activate(
 CallbackReturn RRBotSystemPositionOnlyHardware::on_deactivate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(
     rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "Deactivating ...please wait...");
 
@@ -188,7 +188,7 @@ CallbackReturn RRBotSystemPositionOnlyHardware::on_deactivate(
 
 hardware_interface::return_type RRBotSystemPositionOnlyHardware::read()
 {
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "Reading...");
 
   for (uint i = 0; i < hw_states_.size(); i++)
@@ -207,7 +207,7 @@ hardware_interface::return_type RRBotSystemPositionOnlyHardware::read()
 
 hardware_interface::return_type RRBotSystemPositionOnlyHardware::write()
 {
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "Writing...");
 
   for (uint i = 0; i < hw_commands_.size(); i++)
