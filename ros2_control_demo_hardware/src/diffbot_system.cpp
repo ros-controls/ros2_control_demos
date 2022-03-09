@@ -21,13 +21,14 @@
 #include <vector>
 
 #include "hardware_interface/types/hardware_interface_type_values.hpp"
+#include "rclcpp/clock.hpp"
 #include "rclcpp/rclcpp.hpp"
 
 namespace ros2_control_demo_hardware
 {
 CallbackReturn DiffBotSystemHardware::on_init(const hardware_interface::HardwareInfo & info)
 {
-  if (on_init_default(info) != CallbackReturn::SUCCESS)
+  if (hardware_interface::SystemInterface::on_init(info) != CallbackReturn::SUCCESS)
   {
     return CallbackReturn::ERROR;
   }
@@ -35,11 +36,6 @@ CallbackReturn DiffBotSystemHardware::on_init(const hardware_interface::Hardware
   base_x_ = 0.0;
   base_y_ = 0.0;
   base_theta_ = 0.0;
-
-  if (hardware_interface::SystemInterface::on_init(info) != CallbackReturn::SUCCESS)
-  {
-    return CallbackReturn::ERROR;
-  }
 
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   hw_start_sec_ = stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
@@ -98,6 +94,8 @@ CallbackReturn DiffBotSystemHardware::on_init(const hardware_interface::Hardware
     }
   }
 
+  clock_ = rclcpp::Clock();
+
   return CallbackReturn::SUCCESS;
 }
 
@@ -152,6 +150,8 @@ CallbackReturn DiffBotSystemHardware::on_activate(
     }
   }
 
+  last_timestamp_ = clock_.now();
+
   RCLCPP_INFO(rclcpp::get_logger("DiffBotSystemHardware"), "Successfully activated!");
 
   return CallbackReturn::SUCCESS;
@@ -178,17 +178,18 @@ CallbackReturn DiffBotSystemHardware::on_deactivate(
 
 hardware_interface::return_type DiffBotSystemHardware::read()
 {
-  RCLCPP_INFO(rclcpp::get_logger("DiffBotSystemHardware"), "Reading...");
+  current_timestamp = clock_.now();
+  rclcpp::Duration dt = current_timestamp - last_timestamp_;  // Control period
+  last_timestamp_ = current_timestamp;
 
   double radius = 0.02;  // radius of the wheels
   double dist_w = 0.1;   // distance between the wheels
-  double dt = 0.01;      // Control period
   for (uint i = 0; i < hw_commands_.size(); i++)
   {
     // Simulate DiffBot wheels's movement as a first-order system
     // Update the joint status: this is a revolute joint without any limit.
     // Simply integrates
-    hw_positions_[i] = hw_positions_[1] + dt * hw_commands_[i];
+    hw_positions_[i] = hw_positions_[1] + dt.seconds() * hw_commands_[i];
     hw_velocities_[i] = hw_commands_[i];
 
     // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
@@ -204,9 +205,9 @@ hardware_interface::return_type DiffBotSystemHardware::read()
   double base_dx = 0.5 * radius * (hw_commands_[0] + hw_commands_[1]) * cos(base_theta_);
   double base_dy = 0.5 * radius * (hw_commands_[0] + hw_commands_[1]) * sin(base_theta_);
   double base_dtheta = radius * (hw_commands_[0] - hw_commands_[1]) / dist_w;
-  base_x_ += base_dx * dt;
-  base_y_ += base_dy * dt;
-  base_theta_ += base_dtheta * dt;
+  base_x_ += base_dx * dt.seconds();
+  base_y_ += base_dy * dt.seconds();
+  base_theta_ += base_dtheta * dt.seconds();
 
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(

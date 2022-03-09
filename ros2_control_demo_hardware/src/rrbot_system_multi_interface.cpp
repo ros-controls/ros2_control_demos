@@ -276,7 +276,7 @@ CallbackReturn RRBotSystemMultiInterfaceHardware::on_deactivate(
 hardware_interface::return_type RRBotSystemMultiInterfaceHardware::read()
 {
   current_timestamp = clock_.now();
-  rclcpp::Duration duration = current_timestamp - last_timestamp_;
+  rclcpp::Duration dt = current_timestamp - last_timestamp_;
   last_timestamp_ = current_timestamp;
 
   for (std::size_t i = 0; i < hw_states_positions_.size(); i++)
@@ -298,13 +298,12 @@ hardware_interface::return_type RRBotSystemMultiInterfaceHardware::read()
       case integration_level_t::VELOCITY:
         hw_states_accelerations_[i] = 0;
         hw_states_velocities_[i] = hw_commands_velocities_[i];
-        hw_states_positions_[i] += (hw_states_velocities_[i] * duration.seconds()) / hw_slowdown_;
+        hw_states_positions_[i] += (hw_states_velocities_[i] * dt.seconds()) / hw_slowdown_;
         break;
       case integration_level_t::ACCELERATION:
         hw_states_accelerations_[i] = hw_commands_accelerations_[i];
-        hw_states_velocities_[i] +=
-          (hw_states_accelerations_[i] * duration.seconds()) / hw_slowdown_;
-        hw_states_positions_[i] += (hw_states_velocities_[i] * duration.seconds()) / hw_slowdown_;
+        hw_states_velocities_[i] += (hw_states_accelerations_[i] * dt.seconds()) / hw_slowdown_;
+        hw_states_positions_[i] += (hw_states_velocities_[i] * dt.seconds()) / hw_slowdown_;
         break;
     }
     // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
