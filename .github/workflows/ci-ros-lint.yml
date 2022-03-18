@@ -11,20 +11,21 @@ jobs:
       matrix:
           linter: [copyright, cppcheck, lint_cmake]
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v3
     - uses: ros-tooling/setup-ros@v0.2
     - uses: ros-tooling/action-ros-lint@v0.1
       with:
-        distribution: foxy
+        distribution: rolling
         linter: ${{ matrix.linter }}
         package-name:
-          ros2_control_demo_hardware
           diffbot_description
-          rrbot_description
           ros2_control_demo_bringup
-          ros2_control_demos
+          ros2_control_demo_description
+          ros2_control_demo_hardware
+          rrbot_description
 
-  ament_lint_cpplint:
+
+  ament_lint_100:
     name: ament_${{ matrix.linter }}
     runs-on: ubuntu-20.04
     strategy:
@@ -32,16 +33,17 @@ jobs:
       matrix:
           linter: [cpplint]
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v3
     - uses: ros-tooling/setup-ros@v0.2
     - uses: ros-tooling/action-ros-lint@v0.1
       with:
-        distribution: foxy
+        distribution: rolling
         linter: cpplint
-        arguments: "--filter=-whitespace/newline"
+        arguments: "--linelength=100 --filter=-whitespace/newline"
         package-name:
-          ros2_control_demo_hardware
           diffbot_description
-          rrbot_description
           ros2_control_demo_bringup
+          ros2_control_demo_description
+          ros2_control_demo_hardware
+          rrbot_description
           ros2_control_demos
