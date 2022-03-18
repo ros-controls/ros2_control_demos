@@ -1,20 +1,40 @@
-
-
 # ros2_control Demos
 
-[![Build Status](https://github.com/ros-controls/ros2_control_demos/workflows/CI/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions?query=workflow%3ACI)
-[![Linters Status](https://github.com/ros-controls/ros2_control_demos/workflows/Linters/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions?query=workflow%3ALinters)
-[![Coverage Status](https://github.com/ros-controls/ros2_control_demos/workflows/Coverage/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions?query=workflow%3ACoverage)
 [![Licence](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 This repository provides templates for the development of `ros2_control`-enabled robots and a simple simulations to demonstrate and prove `ros2_control` concepts.
 
-## Goals
+### Goals
 
 The repository has three goals:
 1. Implements the example configuration described in the `ros-controls/roadmap` repository file [components_architecture_and_urdf_examples](https://github.com/ros-controls/roadmap/blob/master/design_drafts/components_architecture_and_urdf_examples.md).
 2. It provides templates for faster implementation of custom hardware and controllers;
 3. The repository is a validation environment for `ros2_control` concepts, which can only be tested during run-time (e.g., execution of controllers by the controller manager, communication between robot hardware and controllers).
+
+
+## Build status
+
+ROS2 Distro | Branch | Build status | Documentation | Released packages
+:---------: | :----: | :----------: | :-----------: | :---------------:
+**Rolling** | [`rolling`](https://github.com/ros-controls/ros2_control_demos/tree/rolling) | [![Rolling Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-binary-build.yml/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-binary-build.yml?branch=master) <br /> [![Rolling Semi-Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-semi-binary-build.yml/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-semi-binary-build.yml?branch=master) <br /> [![Rolling Source Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-source-build.yml/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-source-build.yml?branch=master) | [Documentation](https://control.ros.org) <br /> [API Reference](https://control.ros.org/rolling/api/) | [ros2_control_demos](https://index.ros.org/p/ros2_control_demos/#rolling)
+**Rolling - last Focal** | [`rolling`](https://github.com/ros-controls/ros2_control_demos/tree/rolling) | [![Rolling Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-binary-build-last-focal.yml/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-binary-build-last-focal.yml?branch=master) <br /> [![Rolling Semi-Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-semi-binary-build-last-focal.yml/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-semi-binary-build-last-focal.yml?branch=master) | [Documentation](https://control.ros.org) <br /> [API Reference](https://control.ros.org/rolling/api/) | [ros2_control_demos](https://index.ros.org/p/ros2_control_demos/#rolling)
+**Galactic** | [`galactic`](https://github.com/ros-controls/ros2_control_demos/tree/galactic) | [![Galactic Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/galactic-binary-build.yml/badge.svg?branch=galactic)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/galactic-binary-build.yml?branch=galactic) <br /> [![Galactic Semi-Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/galactic-semi-binary-build.yml/badge.svg?branch=galactic)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/galactic-semi-binary-build.yml?branch=galactic) <br /> [![Galactic Source Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/galactic-source-build.yml/badge.svg?branch=galactic)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/galactic-source-build.yml?branch=galactic) | [Documentation](https://control.ros.org) <br /> [API Reference](https://control.ros.org/rolling/api/) | [ros2_control_demos](https://index.ros.org/p/ros2_control_demos/#galactic)
+**Foxy** | [`foxy`](https://github.com/ros-controls/ros2_control_demos/tree/foxy) | [![Foxy Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/foxy-binary-build.yml/badge.svg?branch=foxy)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/foxy-binary-build.yml?branch=foxy) <br /> [![Foxy Semi-Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/foxy-semi-binary-build.yml/badge.svg?branch=foxy)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/foxy-semi-binary-build.yml?branch=foxy) <br /> [![Foxy Source Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/foxy-source-build.yml/badge.svg?branch=foxy)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/foxy-source-build.yml?branch=foxy) | [Documentation](https://control.ros.org) <br /> [API Reference](https://control.ros.org/rolling/api/) | [ros2_control_demos](https://index.ros.org/p/ros2_control_demos/#foxy)
+
+### Explanation of different build types
+
+**NOTE**: There are three build stages checking current and future compatibility of the package.
+
+1. Binary builds - against released packages (main and testing) in ROS distributions. Shows that direct local build is possible.
+
+   Uses repos file: `src/$NAME$/$NAME$-not-released.<ros-distro>.repos`
+
+1. Semi-binary builds - against released core ROS packages (main and testing), but the immediate dependencies are pulled from source.
+   Shows that local build with dependencies is possible and if fails there we can expect that after the next package sync we will not be able to build.
+
+   Uses repos file: `src/$NAME$/$NAME$.repos`
+
+1. Source build - also core ROS packages are build from source. It shows potential issues in the mid future.
 
 
 ## Description
@@ -629,37 +649,3 @@ Now you should also see the *RRbot* represented correctly in `RViz`.
    ```
 
 3. You should also see the *RRbot* moving in `RViz`.
-
-## Build status
-
-
-
-
-ROS2 Distro | Branch | Build status | Documentation | Released packages
-:---------: | :----: | :----------: | :-----------: | :---------------:
-**Rolling** | [`rolling`](https://github.com/ros-controls/ros2_control_demos/tree/rolling) | [![Rolling Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-binary-build.yml/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-binary-build.yml?branch=master) <br /> [![Rolling Semi-Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-semi-binary-build.yml/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-semi-binary-build.yml?branch=master) <br /> [![Rolling Source Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-source-build.yml/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-source-build.yml?branch=master) | [![Doxygen Doc Deployment](https://github.com/ros-controls/ros2_control_demos/actions/workflows/doxygen-deploy.yml/badge.svg)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/doxygen-deploy.yml) <br /> [Generated Doc](https://ros-controls.github.io/ros2_control_demos_Documentation/rolling/html/index.html) | [ros2_control_demos](https://index.ros.org/p/ros2_control_demos/#rolling)
-
-
-ROS2 Distro | Branch | Build status | Documentation | Released packages
-:---------: | :----: | :----------: | :-----------: | :---------------:
-**Galactic** | [`galactic`](https://github.com/ros-controls/ros2_control_demos/tree/galactic) | [![Galactic Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/galactic-binary-build.yml/badge.svg?branch=galactic)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/galactic-binary-build.yml?branch=galactic) <br /> [![Galactic Semi-Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/galactic-semi-binary-build.yml/badge.svg?branch=galactic)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/galactic-semi-binary-build.yml?branch=galactic) <br /> [![Galactic Source Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/galactic-source-build.yml/badge.svg?branch=galactic)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/galactic-source-build.yml?branch=galactic) | [![Doxygen Doc Deployment](https://github.com/ros-controls/ros2_control_demos/actions/workflows/doxygen-deploy.yml/badge.svg)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/doxygen-deploy.yml) <br /> [Generated Doc](https://ros-controls.github.io/ros2_control_demos_Documentation/galactic/html/index.html) | [ros2_control_demos](https://index.ros.org/p/ros2_control_demos/#galactic)
-
-
-ROS2 Distro | Branch | Build status | Documentation | Released packages
-:---------: | :----: | :----------: | :-----------: | :---------------:
-**Foxy** | [`foxy`](https://github.com/ros-controls/ros2_control_demos/tree/foxy) | [![Foxy Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/foxy-binary-build.yml/badge.svg?branch=foxy)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/foxy-binary-build.yml?branch=foxy) <br /> [![Foxy Semi-Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/foxy-semi-binary-build.yml/badge.svg?branch=foxy)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/foxy-semi-binary-build.yml?branch=foxy) <br /> [![Foxy Source Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/foxy-source-build.yml/badge.svg?branch=foxy)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/foxy-source-build.yml?branch=foxy) | [![Doxygen Doc Deployment](https://github.com/ros-controls/ros2_control_demos/actions/workflows/doxygen-deploy.yml/badge.svg)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/doxygen-deploy.yml) <br /> [Generated Doc](https://ros-controls.github.io/ros2_control_demos_Documentation/foxy/html/index.html) | [ros2_control_demos](https://index.ros.org/p/ros2_control_demos/#foxy)
-
-### Explanation of different build types
-
-**NOTE**: There are three build stages checking current and future compatibility of the package.
-
-1. Binary builds - against released packages (main and testing) in ROS distributions. Shows that direct local build is possible.
-
-   Uses repos file: `src/$NAME$/$NAME$-not-released.<ros-distro>.repos`
-
-1. Semi-binary builds - against released core ROS packages (main and testing), but the immediate dependencies are pulled from source.
-   Shows that local build with dependencies is possible and if fails there we can expect that after the next package sync we will not be able to build.
-
-   Uses repos file: `src/$NAME$/$NAME$.repos`
-
-1. Source build - also core ROS packages are build from source. It shows potential issues in the mid future.
