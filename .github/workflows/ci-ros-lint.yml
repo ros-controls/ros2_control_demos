@@ -20,7 +20,6 @@ jobs:
         package-name:
           diffbot_description
           ros2_control_demo_bringup
-          ros2_control_demo_description
           ros2_control_demo_hardware
           rrbot_description
 
@@ -43,7 +42,5 @@ jobs:
         package-name:
           diffbot_description
           ros2_control_demo_bringup
-          ros2_control_demo_description
           ros2_control_demo_hardware
           rrbot_description
-          ros2_control_demos
