@@ -52,7 +52,7 @@ Load and configure all controllers
     ros2 control load_controller forward_position_controller --set-state configure
     ros2 control load_controller forward_velocity_controller --set-state configure
     ros2 control load_controller forward_acceleration_controller --set-state configure
-    ros2 control load_controller forward_illegal1_controller--set-state configure
+    ros2 control load_controller forward_illegal1_controller --set-state configure
     ros2 control load_controller forward_illegal2_controller --set-state configure
     ros2 control load_controller joint_state_broadcaster --set-state configure
 
