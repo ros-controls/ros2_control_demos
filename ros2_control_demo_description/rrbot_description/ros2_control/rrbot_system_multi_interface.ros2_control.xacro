@@ -26,7 +26,7 @@
         </hardware>
       </xacro:unless>
 
-      <joint name="joint1">
+      <joint name="${prefix}joint1">
         <command_interface name="position">
           <param name="min">-1</param>
           <param name="max">1</param>
@@ -43,7 +43,7 @@
         <state_interface name="velocity"/>
         <state_interface name="acceleration"/>
       </joint>
-      <joint name="joint2">
+      <joint name="${prefix}joint2">
         <command_interface name="position">
           <param name="min">-1</param>
           <param name="max">1</param>
