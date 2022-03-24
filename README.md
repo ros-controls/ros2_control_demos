@@ -656,3 +656,141 @@ Now you should also see the *RRbot* represented correctly in `RViz`.
    ```
 
 3. You should also see the *RRbot* moving in `RViz`.
+
+
+# Complex Scenarios Demos
+
+Before testing examples from this section be sure that you checked simple examples for `RRBot` and `DiffBot`.
+
+## Chained controllers
+
+Start demo:
+```
+ros2 launch ros2_control_demo_bringup rrbot_system_with_external_sensor.launch.py
+```
+
+Load controllers:
+```
+ros2 control load_controller position_trajectory_controller
+ros2 control load_controller position_controller
+ros2 control load_controller joint1_position_controller
+ros2 control load_controller joint2_position_controller
+```
+
+Check states using:
+```
+ros2 control list_controllers
+```
+The output should be something like:
+  ```
+  joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+  joint1_position_controller[forward_command_controller/ChainableForwardCommandController] unconfigured
+  joint2_position_controller[forward_command_controller/ChainableForwardCommandController] unconfigured
+  position_controller[forward_command_controller/ChainableForwardCommandController] unconfigured
+  position_trajectory_controller[joint_trajectory_controller/JointTrajectoryController] unconfigured
+  ```
+
+Configure all controllers:
+```
+ros2 control set_controller_state position_trajectory_controller configure
+ros2 control set_controller_state position_controller configure
+ros2 control set_controller_state joint1_position_controller configure
+ros2 control set_controller_state joint2_position_controller configure
+```
+
+Check states using:
+```
+ros2 control list_controllers
+```
+The output should be something like:
+  ```
+  joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+  joint1_position_controller[forward_command_controller/ChainableForwardCommandController] inactive
+  joint2_position_controller[forward_command_controller/ChainableForwardCommandController] inactive
+  position_controller[forward_command_controller/ChainableForwardCommandController] inactive
+  position_trajectory_controller[joint_trajectory_controller/JointTrajectoryController] inactive
+  ```
+
+At this stage the reference interfaces of controller are listed under `command_interfaces` when `ros2 control list_hardware_interfaces` command is executed. The output should be something like this:
+  ```
+  command interfaces
+        position_controller/joint1_position_controller/joint1/position [unclaimed]
+        position_controller/joint2_position_controller/joint2/position [unclaimed]
+        joint1/position [unclaimed]
+        joint1_position_controller/joint1/position [unclaimed]
+        joint2/position [unclaimed]
+        joint2_position_controller/joint2/position [unclaimed]
+  state interfaces
+        joint1/position
+        joint2/position
+  ```
+
+Also check required interfaces of all controllers using command `ros2 control list_controllers -v` where you can see based on interface names how controllers are chained.
+
+Now, execute the following scenario to understand how chained controllers are working.
+
+
+
+
+1. Activate `joint1_position_controller` and send command for it:
+   ```
+   ros2 control switch_controllers --start joint1_position_controller
+   ros2 topic pub /joint1_position_controller/commands std_msgs/msg/Float64MultiArray "data:
+   - 0.5"
+   ```
+   The joint1 should then move to the position.
+
+1. Activate `joint2_position_controller` and send command for it:
+   ```
+   ros2 control switch_controllers --start joint2_position_controller
+   ros2 topic pub /joint2_position_controller/commands std_msgs/msg/Float64MultiArray "data:
+   - -0.5"
+   ```
+   The `joint2` should then move to the position.
+
+Note: You can keep publishers running in a terminal so you can see the effects of controllers chaining directly.
+
+1. Activate `position_controller` and send commands to it:
+   ```
+   ros2 control switch_controllers --start position_controller
+   ```
+
+   Now, the `ros2 control list_hardware_interfaces` and `ros2 control list_controller -v` will show that `joint1_position_controller/joint1/position` and `joint2_position_controller/joint2/position` are claimed by `position_controller` controller.
+
+   Send a command to `position_controller` and check that `joint1` and `joint2` are moving to new position.
+   ```
+   ros2 topic pub /position_controller/commands std_msgs/msg/Float64MultiArray "data:
+   - 1
+   - -1"
+   ```
+
+1. Activate `position_trajectory_controller` and send commands to it:
+   ```
+   ros2 control switch_controllers --start position_trajectory_controller
+   ```
+
+   List again the interfaces to see their status changes.
+   All command interfaces are claimed now, and `position_trajectory_controller` is connecting to reference interfaces of `position_controller`.
+
+   Send some trajectories to the robot:
+   ```
+   ros2 launch ros2_control_demo_bringup test_joint_trajectory_controller.launch.py
+   ```
+
+1. Deactivate `position_trajectory_controller` and robot should either stop movement or if
+   publishers are still active robot will end up in `[1, -1]` joint states.
+   ```
+   ros2 control switch_controllers --stop position_trajectory_controller
+   ```
+
+1. Deactivate `position_controller` and robot will move to position `[0.5, -0.5]` (if publishers are still running):
+   ```
+   ros2 control switch_controllers --stop position_controller
+   ```
+
+1. Finally stop the other two controllers and check state of hardware interface and controllers.
+   Now all interfaces are "unclaimed".
+   ```
+   ros2 control switch_controllers --stop joint1_position_controller
+   ros2 control switch_controllers --stop joint2_position_controller
+   ```
