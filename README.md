@@ -666,7 +666,7 @@ Before testing examples from this section be sure that you checked simple exampl
 
 Start demo:
 ```
-ros2 launch ros2_control_demo_bringup rrbot_system_with_external_sensor.launch.py
+ros2 launch ros2_control_demo_bringup rrbot_chained_controllers.launch.py
 ```
 
 Load controllers:
