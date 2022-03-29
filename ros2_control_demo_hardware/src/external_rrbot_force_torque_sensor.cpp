@@ -37,7 +37,7 @@ CallbackReturn ExternalRRBotForceTorqueSensorHardware::on_init(
     return CallbackReturn::ERROR;
   }
 
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   hw_start_sec_ = stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
   hw_stop_sec_ = stod(info_.hardware_parameters["example_param_hw_stop_duration_sec"]);
   hw_sensor_change_ = stod(info_.hardware_parameters["example_param_max_sensor_change"]);
@@ -67,7 +67,7 @@ ExternalRRBotForceTorqueSensorHardware::export_state_interfaces()
 CallbackReturn ExternalRRBotForceTorqueSensorHardware::on_activate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(
     rclcpp::get_logger("ExternalRRBotForceTorqueSensorHardware"), "Activating ...please wait...");
 
@@ -89,7 +89,7 @@ CallbackReturn ExternalRRBotForceTorqueSensorHardware::on_activate(
 CallbackReturn ExternalRRBotForceTorqueSensorHardware::on_deactivate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(
     rclcpp::get_logger("ExternalRRBotForceTorqueSensorHardware"), "Deactivating ...please wait...");
 
@@ -110,7 +110,7 @@ CallbackReturn ExternalRRBotForceTorqueSensorHardware::on_deactivate(
 
 hardware_interface::return_type ExternalRRBotForceTorqueSensorHardware::read()
 {
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(rclcpp::get_logger("ExternalRRBotForceTorqueSensorHardware"), "Reading...");
 
   for (uint i = 0; i < hw_sensor_states_.size(); i++)

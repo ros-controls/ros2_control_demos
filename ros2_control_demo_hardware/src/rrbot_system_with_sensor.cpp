@@ -36,7 +36,7 @@ CallbackReturn RRBotSystemWithSensorHardware::on_init(const hardware_interface::
     return CallbackReturn::ERROR;
   }
 
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   hw_start_sec_ = stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
   hw_stop_sec_ = stod(info_.hardware_parameters["example_param_hw_stop_duration_sec"]);
   hw_slowdown_ = stod(info_.hardware_parameters["example_param_hw_slowdown"]);
@@ -94,7 +94,7 @@ CallbackReturn RRBotSystemWithSensorHardware::on_init(const hardware_interface::
 CallbackReturn RRBotSystemWithSensorHardware::on_configure(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Configuring ...please wait...");
 
   for (int i = 0; i < hw_start_sec_; i++)
@@ -154,7 +154,7 @@ RRBotSystemWithSensorHardware::export_command_interfaces()
 CallbackReturn RRBotSystemWithSensorHardware::on_activate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Activating ...please wait...");
 
   for (int i = 0; i < hw_start_sec_; i++)
@@ -186,7 +186,7 @@ CallbackReturn RRBotSystemWithSensorHardware::on_activate(
 CallbackReturn RRBotSystemWithSensorHardware::on_deactivate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(
     rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Deactivating ...please wait...");
 
@@ -206,7 +206,7 @@ CallbackReturn RRBotSystemWithSensorHardware::on_deactivate(
 
 hardware_interface::return_type RRBotSystemWithSensorHardware::read()
 {
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Reading...please wait...");
 
   for (uint i = 0; i < hw_joint_states_.size(); i++)
@@ -238,7 +238,7 @@ hardware_interface::return_type RRBotSystemWithSensorHardware::read()
 
 hardware_interface::return_type ros2_control_demo_hardware::RRBotSystemWithSensorHardware::write()
 {
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Writing...please wait...");
 
   for (uint i = 0; i < hw_joint_commands_.size(); i++)

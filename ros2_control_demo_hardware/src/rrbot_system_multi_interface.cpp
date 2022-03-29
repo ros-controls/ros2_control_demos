@@ -35,7 +35,7 @@ CallbackReturn RRBotSystemMultiInterfaceHardware::on_init(
     return CallbackReturn::ERROR;
   }
 
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   hw_start_sec_ = stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
   hw_stop_sec_ = stod(info_.hardware_parameters["example_param_hw_stop_duration_sec"]);
   hw_slowdown_ = stod(info_.hardware_parameters["example_param_hw_slowdown"]);
@@ -201,9 +201,9 @@ hardware_interface::return_type RRBotSystemMultiInterfaceHardware::prepare_comma
 CallbackReturn RRBotSystemMultiInterfaceHardware::on_activate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(
-    rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"), "Starting... please wait...");
+    rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"), "Activating... please wait...");
 
   for (int i = 0; i < hw_start_sec_; i++)
   {
@@ -247,7 +247,7 @@ CallbackReturn RRBotSystemMultiInterfaceHardware::on_activate(
   last_timestamp_ = clock_.now();
 
   RCLCPP_INFO(
-    rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"), "System successfully started! %u",
+    rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"), "System successfully activated! %u",
     control_level_[0]);
   return CallbackReturn::SUCCESS;
 }
@@ -255,9 +255,9 @@ CallbackReturn RRBotSystemMultiInterfaceHardware::on_activate(
 CallbackReturn RRBotSystemMultiInterfaceHardware::on_deactivate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(
-    rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"), "Stopping... please wait...");
+    rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"), "Deactivating... please wait...");
 
   for (int i = 0; i < hw_stop_sec_; i++)
   {
@@ -276,7 +276,7 @@ CallbackReturn RRBotSystemMultiInterfaceHardware::on_deactivate(
 hardware_interface::return_type RRBotSystemMultiInterfaceHardware::read()
 {
   current_timestamp = clock_.now();
-  rclcpp::Duration duration = current_timestamp - last_timestamp_;
+  rclcpp::Duration dt = current_timestamp - last_timestamp_;
   last_timestamp_ = current_timestamp;
 
   for (std::size_t i = 0; i < hw_states_positions_.size(); i++)
@@ -298,16 +298,15 @@ hardware_interface::return_type RRBotSystemMultiInterfaceHardware::read()
       case integration_level_t::VELOCITY:
         hw_states_accelerations_[i] = 0;
         hw_states_velocities_[i] = hw_commands_velocities_[i];
-        hw_states_positions_[i] += (hw_states_velocities_[i] * duration.seconds()) / hw_slowdown_;
+        hw_states_positions_[i] += (hw_states_velocities_[i] * dt.seconds()) / hw_slowdown_;
         break;
       case integration_level_t::ACCELERATION:
         hw_states_accelerations_[i] = hw_commands_accelerations_[i];
-        hw_states_velocities_[i] +=
-          (hw_states_accelerations_[i] * duration.seconds()) / hw_slowdown_;
-        hw_states_positions_[i] += (hw_states_velocities_[i] * duration.seconds()) / hw_slowdown_;
+        hw_states_velocities_[i] += (hw_states_accelerations_[i] * dt.seconds()) / hw_slowdown_;
+        hw_states_positions_[i] += (hw_states_velocities_[i] * dt.seconds()) / hw_slowdown_;
         break;
     }
-    // START: This part here is for exemplary purposes - Please do not copy to your production code
+    // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
     RCLCPP_INFO(
       rclcpp::get_logger("RRBotSystemMultiInterfaceHardware"),
       "Got pos: %.5f, vel: %.5f, acc: %.5f for joint %lu!", hw_states_positions_[i],
@@ -319,7 +318,7 @@ hardware_interface::return_type RRBotSystemMultiInterfaceHardware::read()
 
 hardware_interface::return_type RRBotSystemMultiInterfaceHardware::write()
 {
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   for (std::size_t i = 0; i < hw_commands_positions_.size(); i++)
   {
     // Simulate sending commands to the hardware
