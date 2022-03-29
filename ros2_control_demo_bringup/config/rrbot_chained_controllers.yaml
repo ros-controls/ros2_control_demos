@@ -17,15 +17,6 @@ controller_manager:
     position_trajectory_controller:
       type: joint_trajectory_controller/JointTrajectoryController
 
-    chained_controllers:
-      parallel_group_1:
-        - position_trajectory_controller
-      parallel_group_2:
-        - position_controller
-      parallel_group_3:
-        - joint1_position_controller
-        - joint2_position_controller
-
 
 # First-level controllers
 joint1_position_controller:
