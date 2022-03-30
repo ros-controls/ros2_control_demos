@@ -12,6 +12,8 @@ jobs:
       fail-fast: false
     env:
       ROS_DISTRO: rolling
+    container:
+      image: ubuntu:jammy
     steps:
       - uses: ros-tooling/setup-ros@v0.2
         with:
