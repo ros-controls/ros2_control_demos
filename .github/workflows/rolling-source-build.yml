@@ -12,7 +12,7 @@ jobs:
   source:
     uses: ./.github/workflows/reusable-ros-tooling-source-build.yml
     with:
-      github_runner_virt_env: ubuntu-22.04
+      github_runner_virt_env: ubuntu-latest
       ros_distro: rolling
       ros2_distro_branch: master
       ref: master
