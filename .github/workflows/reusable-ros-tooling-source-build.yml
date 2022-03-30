@@ -6,7 +6,7 @@ on:
   workflow_call:
     inputs:
       github_runner_virt_env:
-        description: 'Name of the virtual environemnt for github hosted runners ("runs-on" value)'
+        description: 'Name of the virtual environment for github hosted runners ("runs-on" value)'
         required: false
         type: string
         default: "ubuntu-20.04"
