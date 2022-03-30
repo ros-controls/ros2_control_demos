@@ -1,5 +1,6 @@
 name: Rolling Source Build
 on:
+  pull_request:  ## just for testsing - delete before merge!
   push:
     branches:
       - master
@@ -11,5 +12,7 @@ jobs:
   source:
     uses: ./.github/workflows/reusable-ros-tooling-source-build.yml
     with:
+      github_runner_virt_env: ubuntu-22.04
       ros_distro: rolling
+      ros2_distro_branch: master
       ref: master
