@@ -36,7 +36,7 @@ CallbackReturn RRBotModularJoint::on_init(const hardware_interface::HardwareInfo
   {
     return CallbackReturn::ERROR;
   }
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   hw_start_sec_ = stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
   hw_stop_sec_ = stod(info_.hardware_parameters["example_param_hw_stop_duration_sec"]);
   hw_slowdown_ = stod(info_.hardware_parameters["example_param_hw_slowdown"]);
@@ -107,7 +107,7 @@ std::vector<hardware_interface::CommandInterface> RRBotModularJoint::export_comm
 
 CallbackReturn RRBotModularJoint::on_activate(const rclcpp_lifecycle::State & /*previous_state*/)
 {
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(rclcpp::get_logger("RRBotModularJoint"), "Activating ...please wait...");
 
   for (int i = 0; i < hw_start_sec_; i++)
@@ -131,7 +131,7 @@ CallbackReturn RRBotModularJoint::on_activate(const rclcpp_lifecycle::State & /*
 
 CallbackReturn RRBotModularJoint::on_deactivate(const rclcpp_lifecycle::State & /*previous_state*/)
 {
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(rclcpp::get_logger("RRBotModularJoint"), "Deactivating ...please wait...");
 
   for (int i = 0; i < hw_stop_sec_; i++)
@@ -148,7 +148,7 @@ CallbackReturn RRBotModularJoint::on_deactivate(const rclcpp_lifecycle::State & 
 
 hardware_interface::return_type RRBotModularJoint::read()
 {
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(rclcpp::get_logger("RRBotModularJoint"), "Reading...");
 
   // Simulate RRBot's movement
@@ -165,7 +165,7 @@ hardware_interface::return_type RRBotModularJoint::read()
 
 hardware_interface::return_type ros2_control_demo_hardware::RRBotModularJoint::write()
 {
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(rclcpp::get_logger("RRBotModularJoint"), "Writing...please wait...");
 
   // Simulate sending commands to the hardware

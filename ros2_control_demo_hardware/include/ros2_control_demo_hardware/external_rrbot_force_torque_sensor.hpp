@@ -30,10 +30,10 @@
 #include "rclcpp/macros.hpp"
 #include "ros2_control_demo_hardware/visibility_control.h"
 
-using hardware_interface::return_type;
-
 namespace ros2_control_demo_hardware
 {
+using CallbackReturn = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
+
 class ExternalRRBotForceTorqueSensorHardware : public hardware_interface::SensorInterface
 {
 public:
@@ -52,7 +52,7 @@ public:
   CallbackReturn on_deactivate(const rclcpp_lifecycle::State & previous_state) override;
 
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
-  return_type read() override;
+  hardware_interface::return_type read() override;
 
 private:
   // Parameters for the RRBot simulation
