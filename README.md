@@ -517,7 +517,7 @@ Commanding the robot: see the commands below.
 ## Controllers and moving hardware
 
 To move the robot you should load and start controllers.
-The `JointStateController` is used to publish the joint states to ROS topics.
+The `JointStateBroadcaster` is used to publish the joint states to ROS topics.
 Direct joint commands are sent to this robot via the `ForwardCommandController` and `JointTrajectoryController`.
 The sections below describe their usage.
 Check the [Results](##result) section on how to ensure that things went well.
@@ -528,11 +528,11 @@ ros2 control list_controllers
 ```
 
 
-### JointStateController
+### JointStateBroadcaster
 
-Open another terminal and load, configure and start `joint_state_controller`:
+Open another terminal and load, configure and start `joint_state_broadcaster`:
 ```
-ros2 control set_controller_state joint_state_controller start
+ros2 control set_controller_state joint_state_broadcaster start
 ```
 Check if controller is loaded properly:
 ```
@@ -540,7 +540,7 @@ ros2 control list_controllers
 ```
 You should get the response:
 ```
-joint_state_controller[joint_state_controller/JointStateController] active
+joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
 ```
 
 Now you should also see the *RRbot* represented correctly in `RViz`.
@@ -580,7 +580,7 @@ Now you should also see the *RRbot* represented correctly in `RViz`.
    ```
    You should get `active` in the response:
    ```
-   joint_state_controller[joint_state_controller/JointStateController] active
+   joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
    forward_position_controller[forward_command_controller/ForwardCommandController] active
    ```
 
@@ -623,13 +623,13 @@ Now you should also see the *RRbot* represented correctly in `RViz`.
    ```
    You should get `active` in the response:
    ```
-   joint_state_controller[joint_state_controller/JointStateController] active
+   joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
    position_trajectory_controller[joint_trajectory_controller/JointTrajectoryController] active
    ```
 
-3. Send a command to the controller using demo node which sends two goals every 5 seconds in a loop:
+3. Send a command to the controller using demo node which sends four goals every 6 seconds in a loop:
    ```
-   ros2 launch ros2_control_demo_bringup test_forward_position_controller.launch.py
+   ros2 launch ros2_control_demo_bringup test_joint_trajectory_controller.launch.py
    ```
    You can adjust the goals in [rrbot_joint_trajectory_publisher.yaml](ros2_control_demo_bringup/config/rrbot_joint_trajectory_publisher.yaml).
 
