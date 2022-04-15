@@ -43,17 +43,17 @@ def generate_launch_description():
         [
             FindPackageShare("ros2_control_demo_bringup"),
             "config",
-            "rrbot_1_controllers.yaml",
+            "rrbot_namespace_controllers.yaml",
         ]
     )
     rviz_config_file = PathJoinSubstitution(
-        [FindPackageShare("rrbot_description"), "config", "rrbot.rviz"]
+        [FindPackageShare("rrbot_description"), "config", "rrbot_namespace.rviz"]
     )
 
     control_node = Node(
         package="controller_manager",
         executable="ros2_control_node",
-        namespace="/rrbot_1",
+        namespace="/rrbot",
         parameters=[robot_description, robot_controllers],
         remappings=[
             (
@@ -69,7 +69,7 @@ def generate_launch_description():
     robot_state_pub_node = Node(
         package="robot_state_publisher",
         executable="robot_state_publisher",
-        namespace="/rrbot_1",
+        namespace="/rrbot",
         output="both",
         parameters=[robot_description],
     )
@@ -84,13 +84,24 @@ def generate_launch_description():
     joint_state_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["joint_state_broadcaster", "-c", "/rrbot_1/controller_manager"],
+        arguments=["joint_state_broadcaster", "-c", "/rrbot/controller_manager"],
     )
 
-    robot_controller_spawner = Node(
+    robot_forward_position_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["forward_position_controller", "-c", "/rrbot_1/controller_manager"],
+        arguments=["forward_position_controller", "-c", "/rrbot/controller_manager"],
+    )
+
+    robot_position_trajectory_controller_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=[
+            "position_trajectory_controller",
+            "-c",
+            "/rrbot/controller_manager",
+            "--stopped",
+        ],
     )
 
     # Delay rviz start after `joint_state_broadcaster`
@@ -102,10 +113,22 @@ def generate_launch_description():
     )
 
     # Delay start of robot_controller after `joint_state_broadcaster`
-    delay_robot_controller_spawner_after_joint_state_broadcaster_spawner = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=joint_state_broadcaster_spawner,
-            on_exit=[robot_controller_spawner],
+    delay_robot_forward_position_controller_spawner_after_joint_state_broadcaster_spawner = (
+        RegisterEventHandler(
+            event_handler=OnProcessExit(
+                target_action=joint_state_broadcaster_spawner,
+                on_exit=[robot_forward_position_controller_spawner],
+            )
+        )
+    )
+
+    # Delay start of robot_controller after `joint_state_broadcaster`
+    delay_robot_position_trajectory_controller_spawner_after_joint_state_broadcaster_spawner = (
+        RegisterEventHandler(
+            event_handler=OnProcessExit(
+                target_action=joint_state_broadcaster_spawner,
+                on_exit=[robot_position_trajectory_controller_spawner],
+            )
         )
     )
 
@@ -114,7 +137,8 @@ def generate_launch_description():
         robot_state_pub_node,
         joint_state_broadcaster_spawner,
         delay_rviz_after_joint_state_broadcaster_spawner,
-        delay_robot_controller_spawner_after_joint_state_broadcaster_spawner,
+        delay_robot_forward_position_controller_spawner_after_joint_state_broadcaster_spawner,
+        delay_robot_position_trajectory_controller_spawner_after_joint_state_broadcaster_spawner,
     ]
 
     return LaunchDescription(nodes)

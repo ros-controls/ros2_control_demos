@@ -649,3 +649,79 @@ Now you should also see the *RRbot* represented correctly in `RViz`.
    ```
 
 3. You should also see the *RRbot* moving in `RViz`.
+
+
+### Scenario showcase: Using ros2_control within a local namespace
+
+- Launch file: [rrbot_namespace.launch.py](ros2_control_demo_bringup/launch/rrbot_namespace.launch.py)
+- URDF: [rrbot.urdf.xacro](ros2_control_demo_bringup/config/rrbot.yaml)
+- ros2_control URDF: [rrbot.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/rrbot.ros2_control.xacro)
+- Controllers config: [rrbot_namespace_controllers.yaml](ros2_control_demo_bringup/config/rrbot_namespace_controllers.yaml)
+
+- Command interfaces:
+  - joint1/position
+  - joint2/position
+- State interfaces:
+  - joint1/position
+  - joint2/position
+
+Available controllers: (nodes under namespace "/rrbot")
+- `forward_position_controller[forward_command_controller/ForwardCommandController]`
+- `joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]`
+
+Listing and switching controllers:
+```
+ros2 control list_controllers -c /rrbot/controller_manager
+ros2 control switch_controllers -c /rrbot/controller_manager --stop forward_position_controller --start position_trajectory_controller
+```
+
+Commanding the robot:
+- /rrbot/forward_position_controller:
+  ```
+  ros2 launch ros2_control_demo_bringup test_forward_position_controller.launch.py publisher_config:=rrbot_namespace_forward_position_publisher.yaml
+  ```
+
+- /rrbot/position_trajectory_controller
+  ```
+  ros2 launch ros2_control_demo_bringup test_joint_trajectory_controller.launch.py publisher_config:=rrbot_namespace_joint_trajectory_publisher.yaml
+  ```
+
+### Scenario showcase: Using multiple controller managers on the same machine
+
+- Launch file: [multi_controller_manager_example_two_rrbots.launch.py](ros2_control_demo_bringup/launch/multi_controller_manager_example_two_rrbots.launch.py)
+- URDF: [rrbot.urdf.xacro](ros2_control_demo_bringup/config/rrbot.yaml)
+- ros2_control URDF: [rrbot.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/rrbot.ros2_control.xacro)
+- Controllers config 1: [multi_controller_manager_rrbot_1_controllers.yaml](ros2_control_demo_bringup/config/multi_controller_manager_rrbot_1_controllers.yaml)
+- Controllers config 2: [multi_controller_manager_rrbot_2_controllers.yaml](ros2_control_demo_bringup/config/multi_controller_manager_rrbot_2_controllers.yaml)
+
+- Command interfaces:
+  - rrbot_1_joint1/position
+  - rrbot_1_joint2/position
+  - rrbot_2_joint1/position
+  - rrbot_2_joint2/position
+- State interfaces:
+  - rrbot_1_joint1/position
+  - rrbot_1_joint2/position
+  - rrbot_2_joint1/position
+  - rrbot_2_joint2/position
+
+Available controllers: (nodes under namespace "/rrbot_1" and "/rrbot_2")
+- `forward_position_controller[forward_command_controller/ForwardCommandController]`
+- `joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]`
+
+Listing and switching controllers:
+```
+ros2 control list_controllers -c /rrbot_1/controller_manager
+ros2 control list_controllers -c /rrbot_2/controller_manager
+```
+
+Commanding the robot:
+- forward_position_controller:
+  ```
+  ros2 launch ros2_control_demo_bringup test_multi_controller_manager_forward_position_controller.launch.py
+  ```
+
+- position_trajectory_controller (need to start main launch file with argument `robot_controller:=position_trajectory_controller`)
+  ```
+  ros2 launch ros2_control_demo_bringup test_multi_controller_manager_joint_trajectory_controller.launch.py
+  ```

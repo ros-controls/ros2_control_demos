@@ -15,21 +15,15 @@
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration, ThisLaunchFileDir
+from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, ThisLaunchFileDir
+
+from launch_ros.actions import Node
+from launch_ros.substitutions import FindPackageShare
 
 
 def generate_launch_description():
     # Declare arguments
     declared_arguments = []
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "prefix",
-            default_value='""',
-            description="Prefix of the joint names, useful for \
-        multi-robot setup. If changed than also joint names in the controllers' configuration \
-        have to be updated.",
-        )
-    )
     declared_arguments.append(
         DeclareLaunchArgument(
             "use_fake_hardware",
@@ -57,36 +51,55 @@ def generate_launch_description():
             description="Robot controller to start.",
         )
     )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "start_rviz",
-            default_value="true",
-            description="Start RViz2 automatically with this launch file.",
-        )
-    )
 
     # Initialize Arguments
-    prefix = LaunchConfiguration("prefix")
     use_fake_hardware = LaunchConfiguration("use_fake_hardware")
     fake_sensor_commands = LaunchConfiguration("fake_sensor_commands")
     slowdown = LaunchConfiguration("slowdown")
     robot_controller = LaunchConfiguration("robot_controller")
-    start_rviz = LaunchConfiguration("start_rviz")
 
-    base_launch = IncludeLaunchDescription(
+    rrbot_1_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([ThisLaunchFileDir(), "/rrbot_base.launch.py"]),
         launch_arguments={
             "namespace": "rrbot_1",
-            "controllers_file": "rrbot_1_controllers.yaml",
-            "description_file": "rrbot_system_position_only.urdf.xacro",
-            "prefix": prefix,
+            "controllers_file": "multi_controller_manager_rrbot_1_controllers.yaml",
+            "description_file": "rrbot.urdf.xacro",
+            "prefix": "rrbot_1_",
             "use_fake_hardware": use_fake_hardware,
             "fake_sensor_commands": fake_sensor_commands,
             "slowdown": slowdown,
             "controller_manager_name": "/rrbot_1/controller_manager",
             "robot_controller": robot_controller,
-            "start_rviz": start_rviz,
+            "start_rviz": "false",
         }.items(),
     )
 
-    return LaunchDescription(declared_arguments + [base_launch])
+    rrbot_2_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([ThisLaunchFileDir(), "/rrbot_base.launch.py"]),
+        launch_arguments={
+            "namespace": "rrbot_2",
+            "controllers_file": "multi_controller_manager_rrbot_2_controllers.yaml",
+            "description_file": "rrbot_system_position_only.urdf.xacro",
+            "prefix": "rrbot_2_",
+            "use_fake_hardware": use_fake_hardware,
+            "fake_sensor_commands": fake_sensor_commands,
+            "slowdown": slowdown,
+            "controller_manager_name": "/rrbot_2/controller_manager",
+            "robot_controller": robot_controller,
+            "start_rviz": "false",
+        }.items(),
+    )
+
+    rviz_config_file = PathJoinSubstitution(
+        [FindPackageShare("rrbot_description"), "config", "multi_controller_manager.rviz"]
+    )
+
+    rviz_node = Node(
+        package="rviz2",
+        executable="rviz2",
+        name="rviz2",
+        output="log",
+        arguments=["-d", rviz_config_file],
+    )
+
+    return LaunchDescription(declared_arguments + [rrbot_1_launch, rrbot_2_launch, rviz_node])
