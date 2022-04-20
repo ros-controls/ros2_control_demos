@@ -32,7 +32,6 @@
 
 namespace ros2_control_demo_hardware
 {
-
 class ExternalRRBotForceTorqueSensorHardware : public hardware_interface::SensorInterface
 {
 public:

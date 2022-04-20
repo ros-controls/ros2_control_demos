@@ -35,7 +35,6 @@
 
 namespace ros2_control_demo_hardware
 {
-
 class RRBotSystemMultiInterfaceHardware : public hardware_interface::SystemInterface
 {
 public:

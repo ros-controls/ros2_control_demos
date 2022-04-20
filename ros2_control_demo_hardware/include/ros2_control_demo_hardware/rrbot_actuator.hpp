@@ -33,7 +33,6 @@
 
 namespace ros2_control_demo_hardware
 {
-
 class RRBotModularJoint : public hardware_interface::ActuatorInterface
 {
 public:
