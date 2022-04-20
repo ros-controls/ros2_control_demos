@@ -30,9 +30,12 @@
 
 namespace ros2_control_demo_hardware
 {
-hardware_interface::CallbackReturn RRBotModularJoint::on_init(const hardware_interface::HardwareInfo & info)
+hardware_interface::CallbackReturn RRBotModularJoint::on_init(
+  const hardware_interface::HardwareInfo & info)
 {
-  if (hardware_interface::ActuatorInterface::on_init(info) != hardware_interface::CallbackReturn::SUCCESS)
+  if (
+    hardware_interface::ActuatorInterface::on_init(info) !=
+    hardware_interface::CallbackReturn::SUCCESS)
   {
     return hardware_interface::CallbackReturn::ERROR;
   }
@@ -105,7 +108,8 @@ std::vector<hardware_interface::CommandInterface> RRBotModularJoint::export_comm
   return command_interfaces;
 }
 
-hardware_interface::CallbackReturn RRBotModularJoint::on_activate(const rclcpp_lifecycle::State & /*previous_state*/)
+hardware_interface::CallbackReturn RRBotModularJoint::on_activate(
+  const rclcpp_lifecycle::State & /*previous_state*/)
 {
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(rclcpp::get_logger("RRBotModularJoint"), "Activating ...please wait...");
@@ -129,7 +133,8 @@ hardware_interface::CallbackReturn RRBotModularJoint::on_activate(const rclcpp_l
   return hardware_interface::CallbackReturn::SUCCESS;
 }
 
-hardware_interface::CallbackReturn RRBotModularJoint::on_deactivate(const rclcpp_lifecycle::State & /*previous_state*/)
+hardware_interface::CallbackReturn RRBotModularJoint::on_deactivate(
+  const rclcpp_lifecycle::State & /*previous_state*/)
 {
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(rclcpp::get_logger("RRBotModularJoint"), "Deactivating ...please wait...");

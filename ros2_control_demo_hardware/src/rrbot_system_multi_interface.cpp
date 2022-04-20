@@ -30,7 +30,9 @@ namespace ros2_control_demo_hardware
 hardware_interface::CallbackReturn RRBotSystemMultiInterfaceHardware::on_init(
   const hardware_interface::HardwareInfo & info)
 {
-  if (hardware_interface::SystemInterface::on_init(info) != hardware_interface::CallbackReturn::SUCCESS)
+  if (
+    hardware_interface::SystemInterface::on_init(info) !=
+    hardware_interface::CallbackReturn::SUCCESS)
   {
     return hardware_interface::CallbackReturn::ERROR;
   }
@@ -165,9 +167,9 @@ hardware_interface::return_type RRBotSystemMultiInterfaceHardware::prepare_comma
     return hardware_interface::return_type::ERROR;
   }
   // Example criteria: All joints must have the same command mode
-  if (!std::all_of(new_modes.begin() + 1, new_modes.end(), [&](integration_level_t mode) {
-        return mode == new_modes[0];
-      }))
+  if (!std::all_of(
+        new_modes.begin() + 1, new_modes.end(),
+        [&](integration_level_t mode) { return mode == new_modes[0]; }))
   {
     return hardware_interface::return_type::ERROR;
   }
