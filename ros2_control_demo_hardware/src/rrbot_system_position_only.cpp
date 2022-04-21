@@ -25,12 +25,14 @@
 
 namespace ros2_control_demo_hardware
 {
-CallbackReturn RRBotSystemPositionOnlyHardware::on_init(
+hardware_interface::CallbackReturn RRBotSystemPositionOnlyHardware::on_init(
   const hardware_interface::HardwareInfo & info)
 {
-  if (hardware_interface::SystemInterface::on_init(info) != CallbackReturn::SUCCESS)
+  if (
+    hardware_interface::SystemInterface::on_init(info) !=
+    hardware_interface::CallbackReturn::SUCCESS)
   {
-    return CallbackReturn::ERROR;
+    return hardware_interface::CallbackReturn::ERROR;
   }
 
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
@@ -50,7 +52,7 @@ CallbackReturn RRBotSystemPositionOnlyHardware::on_init(
         rclcpp::get_logger("RRBotSystemPositionOnlyHardware"),
         "Joint '%s' has %zu command interfaces found. 1 expected.", joint.name.c_str(),
         joint.command_interfaces.size());
-      return CallbackReturn::ERROR;
+      return hardware_interface::CallbackReturn::ERROR;
     }
 
     if (joint.command_interfaces[0].name != hardware_interface::HW_IF_POSITION)
@@ -59,7 +61,7 @@ CallbackReturn RRBotSystemPositionOnlyHardware::on_init(
         rclcpp::get_logger("RRBotSystemPositionOnlyHardware"),
         "Joint '%s' have %s command interfaces found. '%s' expected.", joint.name.c_str(),
         joint.command_interfaces[0].name.c_str(), hardware_interface::HW_IF_POSITION);
-      return CallbackReturn::ERROR;
+      return hardware_interface::CallbackReturn::ERROR;
     }
 
     if (joint.state_interfaces.size() != 1)
@@ -68,7 +70,7 @@ CallbackReturn RRBotSystemPositionOnlyHardware::on_init(
         rclcpp::get_logger("RRBotSystemPositionOnlyHardware"),
         "Joint '%s' has %zu state interface. 1 expected.", joint.name.c_str(),
         joint.state_interfaces.size());
-      return CallbackReturn::ERROR;
+      return hardware_interface::CallbackReturn::ERROR;
     }
 
     if (joint.state_interfaces[0].name != hardware_interface::HW_IF_POSITION)
@@ -77,14 +79,14 @@ CallbackReturn RRBotSystemPositionOnlyHardware::on_init(
         rclcpp::get_logger("RRBotSystemPositionOnlyHardware"),
         "Joint '%s' have %s state interface. '%s' expected.", joint.name.c_str(),
         joint.state_interfaces[0].name.c_str(), hardware_interface::HW_IF_POSITION);
-      return CallbackReturn::ERROR;
+      return hardware_interface::CallbackReturn::ERROR;
     }
   }
 
-  return CallbackReturn::SUCCESS;
+  return hardware_interface::CallbackReturn::SUCCESS;
 }
 
-CallbackReturn RRBotSystemPositionOnlyHardware::on_configure(
+hardware_interface::CallbackReturn RRBotSystemPositionOnlyHardware::on_configure(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
@@ -109,7 +111,7 @@ CallbackReturn RRBotSystemPositionOnlyHardware::on_configure(
 
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "Successfully configured!");
 
-  return CallbackReturn::SUCCESS;
+  return hardware_interface::CallbackReturn::SUCCESS;
 }
 
 std::vector<hardware_interface::StateInterface>
@@ -138,7 +140,7 @@ RRBotSystemPositionOnlyHardware::export_command_interfaces()
   return command_interfaces;
 }
 
-CallbackReturn RRBotSystemPositionOnlyHardware::on_activate(
+hardware_interface::CallbackReturn RRBotSystemPositionOnlyHardware::on_activate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
@@ -162,10 +164,10 @@ CallbackReturn RRBotSystemPositionOnlyHardware::on_activate(
 
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "Successfully activated!");
 
-  return CallbackReturn::SUCCESS;
+  return hardware_interface::CallbackReturn::SUCCESS;
 }
 
-CallbackReturn RRBotSystemPositionOnlyHardware::on_deactivate(
+hardware_interface::CallbackReturn RRBotSystemPositionOnlyHardware::on_deactivate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
@@ -183,7 +185,7 @@ CallbackReturn RRBotSystemPositionOnlyHardware::on_deactivate(
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "Successfully deactivated!");
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
-  return CallbackReturn::SUCCESS;
+  return hardware_interface::CallbackReturn::SUCCESS;
 }
 
 hardware_interface::return_type RRBotSystemPositionOnlyHardware::read()
