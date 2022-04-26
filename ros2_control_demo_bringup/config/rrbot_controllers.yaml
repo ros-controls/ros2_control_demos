@@ -1,18 +1,18 @@
-/rrbot_1/controller_manager:
-    ros__parameters:
-      update_rate: 10  # Hz
+controller_manager:
+  ros__parameters:
+    update_rate: 10  # Hz
 
-      joint_state_broadcaster:
-        type: joint_state_broadcaster/JointStateBroadcaster
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
 
-      forward_position_controller:
-        type: forward_command_controller/ForwardCommandController
+    forward_position_controller:
+      type: forward_command_controller/ForwardCommandController
 
-      position_trajectory_controller:
-        type: joint_trajectory_controller/JointTrajectoryController
+    position_trajectory_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
 
 
-/rrbot_1/forward_position_controller:
+forward_position_controller:
   ros__parameters:
     joints:
       - joint1
@@ -20,7 +20,7 @@
     interface_name: position
 
 
-/rrbot_1/position_trajectory_controller:
+position_trajectory_controller:
   ros__parameters:
     joints:
       - joint1
