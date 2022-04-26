@@ -658,6 +658,8 @@ Now you should also see the *RRbot* represented correctly in `RViz`.
 - ros2_control URDF: [rrbot.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/rrbot.ros2_control.xacro)
 - Controllers config: [rrbot_namespace_controllers.yaml](ros2_control_demo_bringup/config/rrbot_namespace_controllers.yaml)
 
+**NOTE:**when running `ros2 control` CLI commands you have to use additional parameter with exact controller manager node name, i.e., `-c /rrbot/controller_manager`.
+
 - Command interfaces:
   - joint1/position
   - joint2/position
@@ -698,14 +700,21 @@ Commanding the robot:
 - Controllers config 1: [multi_controller_manager_rrbot_1_controllers.yaml](ros2_control_demo_bringup/config/multi_controller_manager_rrbot_1_controllers.yaml)
 - Controllers config 2: [multi_controller_manager_rrbot_2_controllers.yaml](ros2_control_demo_bringup/config/multi_controller_manager_rrbot_2_controllers.yaml)
 
+**NOTE:**when running `ros2 control` CLI commands you have to use additional parameter with exact controller manager node name, e.g., `-c /rrbot_1/controller_manager` or `-c /rrbot_2/controller_manager`.
+
+`rrbot_1` namespace:
 - Command interfaces:
   - rrbot_1_joint1/position
   - rrbot_1_joint2/position
-  - rrbot_2_joint1/position
-  - rrbot_2_joint2/position
 - State interfaces:
   - rrbot_1_joint1/position
   - rrbot_1_joint2/position
+
+`rrbot_2` namespace:
+- Command interfaces:
+  - rrbot_2_joint1/position
+  - rrbot_2_joint2/position
+- State interfaces:
   - rrbot_2_joint1/position
   - rrbot_2_joint2/position
 
