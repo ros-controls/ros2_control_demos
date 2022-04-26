@@ -669,9 +669,13 @@ Available controllers: (nodes under namespace "/rrbot")
 - `forward_position_controller[forward_command_controller/ForwardCommandController]`
 - `joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]`
 
-Listing and switching controllers:
+List controllers:
 ```
 ros2 control list_controllers -c /rrbot/controller_manager
+```
+
+Switch controller to use `position_trajectory_controller` (`JointTrajectoryController`):
+```
 ros2 control switch_controllers -c /rrbot/controller_manager --stop forward_position_controller --start position_trajectory_controller
 ```
 
@@ -709,10 +713,16 @@ Available controllers: (nodes under namespace "/rrbot_1" and "/rrbot_2")
 - `forward_position_controller[forward_command_controller/ForwardCommandController]`
 - `joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]`
 
-Listing and switching controllers:
+List controllers:
 ```
 ros2 control list_controllers -c /rrbot_1/controller_manager
 ros2 control list_controllers -c /rrbot_2/controller_manager
+```
+
+Switch controller to use `position_trajectory_controller`s (`JointTrajectoryController`):
+```
+ros2 control switch_controllers -c /rrbot_1/controller_manager --stop forward_position_controller --start position_trajectory_controller
+ros2 control switch_controllers -c /rrbot_2/controller_manager --stop forward_position_controller --start position_trajectory_controller
 ```
 
 Commanding the robot:

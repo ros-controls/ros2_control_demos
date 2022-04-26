@@ -74,6 +74,17 @@ def generate_launch_description():
         }.items(),
     )
 
+    rrbot_1_position_trajectory_controller_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=[
+            "position_trajectory_controller",
+            "-c",
+            "/rrbot_1/controller_manager",
+            "--stopped",
+        ],
+    )
+
     rrbot_2_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([ThisLaunchFileDir(), "/rrbot_base.launch.py"]),
         launch_arguments={
@@ -90,6 +101,17 @@ def generate_launch_description():
         }.items(),
     )
 
+    rrbot_2_position_trajectory_controller_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=[
+            "position_trajectory_controller",
+            "-c",
+            "/rrbot_2/controller_manager",
+            "--stopped",
+        ],
+    )
+
     rviz_config_file = PathJoinSubstitution(
         [FindPackageShare("rrbot_description"), "config", "multi_controller_manager.rviz"]
     )
@@ -102,4 +124,15 @@ def generate_launch_description():
         arguments=["-d", rviz_config_file],
     )
 
-    return LaunchDescription(declared_arguments + [rrbot_1_launch, rrbot_2_launch, rviz_node])
+    included_launch_files = [
+        rrbot_1_launch,
+        rrbot_2_launch,
+    ]
+
+    nodes_to_start = [
+        rrbot_1_position_trajectory_controller_spawner,
+        rrbot_2_position_trajectory_controller_spawner,
+        rviz_node,
+    ]
+
+    return LaunchDescription(declared_arguments + included_launch_files + nodes_to_start)
