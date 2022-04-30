@@ -677,9 +677,19 @@ ros2 control list_controllers -c /rrbot/controller_manager
 ```
 
 Commanding the robot using `ForwardCommandController` (name: `/rrbot/forward_position_controller`)
-  ```
-  ros2 launch ros2_control_demo_bringup test_joint_trajectory_controller.launch.py publisher_config:=rrbot_namespace_joint_trajectory_publisher.yaml
-  ```
+```
+ros2 launch ros2_control_demo_bringup test_forward_position_controller.launch.py publisher_config:=rrbot_namespace_forward_position_publisher.yaml
+```
+
+Switch controller to use `position_trajectory_controller` (`JointTrajectoryController`):
+```
+ros2 control switch_controllers -c /rrbot/controller_manager --stop forward_position_controller --start position_trajectory_controller
+```
+
+Commanding the robot using `JointTrajectoryController` (name: `/rrbot/position_trajectory_controller`)
+```
+ros2 launch ros2_control_demo_bringup test_joint_trajectory_controller.launch.py publisher_config:=rrbot_namespace_joint_trajectory_publisher.yaml
+```
 
 ### Scenario showcase: Using multiple controller managers on the same machine
 
@@ -718,6 +728,17 @@ ros2 control list_controllers -c /rrbot_2/controller_manager
 ```
 
 Commanding the robot using `ForwardCommandController`s (`forward_position_controller`)
-  ```
-  ros2 launch ros2_control_demo_bringup test_multi_controller_manager_joint_trajectory_controller.launch.py
-  ```
+```
+ros2 launch ros2_control_demo_bringup test_multi_controller_manager_forward_position_controller.launch.py
+```
+
+Switch controller to use `position_trajectory_controller`s (`JointTrajectoryController`) - alternatively start main launch file with argument `robot_controller:=position_trajectory_controller`:
+```
+ros2 control switch_controllers -c /rrbot_1/controller_manager --stop forward_position_controller --start position_trajectory_controller
+ros2 control switch_controllers -c /rrbot_2/controller_manager --stop forward_position_controller --start position_trajectory_controller
+```
+
+Commanding the robot using `JointTrajectoryController` (`position_trajectory_controller`):
+```
+ros2 launch ros2_control_demo_bringup test_multi_controller_manager_joint_trajectory_controller.launch.py
+```
