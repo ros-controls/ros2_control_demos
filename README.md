@@ -676,18 +676,7 @@ List controllers:
 ros2 control list_controllers -c /rrbot/controller_manager
 ```
 
-Switch controller to use `position_trajectory_controller` (`JointTrajectoryController`):
-```
-ros2 control switch_controllers -c /rrbot/controller_manager --stop forward_position_controller --start position_trajectory_controller
-```
-
-Commanding the robot:
-- /rrbot/forward_position_controller:
-  ```
-  ros2 launch ros2_control_demo_bringup test_forward_position_controller.launch.py publisher_config:=rrbot_namespace_forward_position_publisher.yaml
-  ```
-
-- /rrbot/position_trajectory_controller
+Commanding the robot using `ForwardCommandController` (name: `/rrbot/forward_position_controller`)
   ```
   ros2 launch ros2_control_demo_bringup test_joint_trajectory_controller.launch.py publisher_config:=rrbot_namespace_joint_trajectory_publisher.yaml
   ```
@@ -728,19 +717,7 @@ ros2 control list_controllers -c /rrbot_1/controller_manager
 ros2 control list_controllers -c /rrbot_2/controller_manager
 ```
 
-Switch controller to use `position_trajectory_controller`s (`JointTrajectoryController`):
-```
-ros2 control switch_controllers -c /rrbot_1/controller_manager --stop forward_position_controller --start position_trajectory_controller
-ros2 control switch_controllers -c /rrbot_2/controller_manager --stop forward_position_controller --start position_trajectory_controller
-```
-
-Commanding the robot:
-- forward_position_controller:
-  ```
-  ros2 launch ros2_control_demo_bringup test_multi_controller_manager_forward_position_controller.launch.py
-  ```
-
-- position_trajectory_controller (need to start main launch file with argument `robot_controller:=position_trajectory_controller`)
+Commanding the robot using `ForwardCommandController`s (`forward_position_controller`)
   ```
   ros2 launch ros2_control_demo_bringup test_multi_controller_manager_joint_trajectory_controller.launch.py
   ```
