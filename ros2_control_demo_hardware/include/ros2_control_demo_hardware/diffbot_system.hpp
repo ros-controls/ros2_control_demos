@@ -74,11 +74,6 @@ private:
   std::vector<double> hw_positions_;
   std::vector<double> hw_velocities_;
 
-  // Store time between update loops
-  rclcpp::Clock clock_;
-  rclcpp::Time last_timestamp_;
-  rclcpp::Time current_timestamp;  // Avoid initialization on each read
-
   // Store the wheeled robot position
   double base_x_, base_y_, base_theta_;
 };

@@ -85,11 +85,6 @@ private:
   std::vector<double> hw_states_velocities_;
   std::vector<double> hw_states_accelerations_;
 
-  // Store time between update loops
-  rclcpp::Clock clock_;
-  rclcpp::Time last_timestamp_;
-  rclcpp::Time current_timestamp;  // Avoid initialization on each read
-
   // Enum defining at which control level we are
   // Dumb way of maintaining the command_interface type per joint.
   enum integration_level_t : std::uint8_t
