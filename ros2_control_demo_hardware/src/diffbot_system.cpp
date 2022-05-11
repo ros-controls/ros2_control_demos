@@ -179,10 +179,11 @@ hardware_interface::CallbackReturn DiffBotSystemHardware::on_deactivate(
   return hardware_interface::CallbackReturn::SUCCESS;
 }
 
-hardware_interface::return_type DiffBotSystemHardware::read()
+hardware_interface::return_type DiffBotSystemHardware::read(
+  const rclcpp::Time & time, const rclcpp::Duration & period)
 {
-  current_timestamp = clock_.now();
-  rclcpp::Duration dt = current_timestamp - last_timestamp_;  // Control period
+  current_timestamp = time;
+  rclcpp::Duration dt = period;
   last_timestamp_ = current_timestamp;
 
   double radius = 0.02;  // radius of the wheels
@@ -221,7 +222,8 @@ hardware_interface::return_type DiffBotSystemHardware::read()
   return hardware_interface::return_type::OK;
 }
 
-hardware_interface::return_type ros2_control_demo_hardware::DiffBotSystemHardware::write()
+hardware_interface::return_type ros2_control_demo_hardware::DiffBotSystemHardware::write(
+  const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(rclcpp::get_logger("DiffBotSystemHardware"), "Writing...");

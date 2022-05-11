@@ -151,7 +151,8 @@ hardware_interface::CallbackReturn RRBotModularJoint::on_deactivate(
   return hardware_interface::CallbackReturn::SUCCESS;
 }
 
-hardware_interface::return_type RRBotModularJoint::read()
+hardware_interface::return_type RRBotModularJoint::read(
+  const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(rclcpp::get_logger("RRBotModularJoint"), "Reading...");
@@ -168,7 +169,8 @@ hardware_interface::return_type RRBotModularJoint::read()
   return hardware_interface::return_type::OK;
 }
 
-hardware_interface::return_type ros2_control_demo_hardware::RRBotModularJoint::write()
+hardware_interface::return_type ros2_control_demo_hardware::RRBotModularJoint::write(
+  const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(rclcpp::get_logger("RRBotModularJoint"), "Writing...please wait...");

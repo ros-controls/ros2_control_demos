@@ -207,7 +207,8 @@ hardware_interface::CallbackReturn RRBotSystemWithSensorHardware::on_deactivate(
   return hardware_interface::CallbackReturn::SUCCESS;
 }
 
-hardware_interface::return_type RRBotSystemWithSensorHardware::read()
+hardware_interface::return_type RRBotSystemWithSensorHardware::read(
+  const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Reading...please wait...");
@@ -239,7 +240,8 @@ hardware_interface::return_type RRBotSystemWithSensorHardware::read()
   return hardware_interface::return_type::OK;
 }
 
-hardware_interface::return_type ros2_control_demo_hardware::RRBotSystemWithSensorHardware::write()
+hardware_interface::return_type ros2_control_demo_hardware::RRBotSystemWithSensorHardware::write(
+  const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Writing...please wait...");

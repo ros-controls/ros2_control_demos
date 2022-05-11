@@ -110,7 +110,8 @@ hardware_interface::CallbackReturn ExternalRRBotForceTorqueSensorHardware::on_de
   return hardware_interface::CallbackReturn::SUCCESS;
 }
 
-hardware_interface::return_type ExternalRRBotForceTorqueSensorHardware::read()
+hardware_interface::return_type ExternalRRBotForceTorqueSensorHardware::read(
+  const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(rclcpp::get_logger("ExternalRRBotForceTorqueSensorHardware"), "Reading...");

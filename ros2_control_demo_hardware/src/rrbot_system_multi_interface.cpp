@@ -275,10 +275,11 @@ hardware_interface::CallbackReturn RRBotSystemMultiInterfaceHardware::on_deactiv
   return hardware_interface::CallbackReturn::SUCCESS;
 }
 
-hardware_interface::return_type RRBotSystemMultiInterfaceHardware::read()
+hardware_interface::return_type RRBotSystemMultiInterfaceHardware::read(
+  const rclcpp::Time & time, const rclcpp::Duration & period)
 {
-  current_timestamp = clock_.now();
-  rclcpp::Duration dt = current_timestamp - last_timestamp_;
+  current_timestamp = time;
+  rclcpp::Duration dt = period;
   last_timestamp_ = current_timestamp;
 
   for (std::size_t i = 0; i < hw_states_positions_.size(); i++)
@@ -318,7 +319,8 @@ hardware_interface::return_type RRBotSystemMultiInterfaceHardware::read()
   return hardware_interface::return_type::OK;
 }
 
-hardware_interface::return_type RRBotSystemMultiInterfaceHardware::write()
+hardware_interface::return_type RRBotSystemMultiInterfaceHardware::write(
+  const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   for (std::size_t i = 0; i < hw_commands_positions_.size(); i++)
