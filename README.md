@@ -346,6 +346,7 @@ This also demonstrates how launch files are usually reused for different scenari
 Files:
   - Launch file: [rrbot_system_position_only.launch.py](ros2_control_demo_bringup/launch/rrbot_system_position_only.launch.py)
   - Controllers yaml: [rrbot_controllers.yaml](ros2_control_demo_bringup/config/rrbot_controllers.yaml)
+  - URDF:  [rrbot_system_position_only.urdf.xacro](ros2_control_demos/ros2_control_demo_description/rrbot_description/urdf/rrbot_system_position_only.urdf.xacro)
   - `ros2_control` URDF tag: [rrbot_system_position_only.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/rrbot_system_position_only.ros2_control.xacro)
 
 Interfaces:
@@ -379,6 +380,7 @@ Available launch file options:
 Files:
   - Launch file: [rrbot_system_multi_interface.launch.py](ros2_control_demo_bringup/launch/rrbot_system_multi_interface.launch.py)
   - Controllers yaml: [rrbot_multi_interface_forward_controllers.yaml](ros2_control_demo_bringup/config/rrbot_multi_interface_forward_controllers.yaml)
+  - URDF: [rrbot_system_multi_interface.urdf.xacro](ros2_control_demo_description/rrbot_description/urdf/rrbot_system_multi_interface.urdf.xacro)
   - `ros2_control` URDF tag: [rrbot_system_multi_interface.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/rrbot_system_multi_interface.ros2_control.xacro)
 
 Interfaces:
@@ -434,7 +436,8 @@ Useful launch-file options:
 ### Example 3: "Industrial robot with integrated sensor"
 
 - Launch file: [rrbot_system_with_sensor.launch.py](ros2_control_demo_bringup/launch/rrbot_system_with_sensor.launch.py)
-- URDF: [rrbot_system_with_sensor.urdf.xacro](ros2_control_demo_bringup/config/rrbot_with_sensor_controllers.yaml)
+- Controllers: [rrbot_with_sensor_controllers.yaml](ros2_control_demo_bringup/config/rrbot_with_sensor_controllers.yaml)
+- URDF: [rrbot_system_with_sensor.urdf.xacro](ros2_control_demo_description/rrbot_description/urdf/rrbot_system_with_sensor.urdf.xacro)
 - ros2_control URDF: [rrbot_system_with_sensor.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/rrbot_system_with_sensor.ros2_control.xacro)
 
 - Command interfaces:
@@ -465,8 +468,11 @@ ros2 topic echo /fts_broadcaster/wrench
 ### Example 4: "Industrial Robots with externally connected sensor"
 
 - Launch file: [rrbot_system_with_external_sensor.launch.py](ros2_control_demo_bringup/launch/rrbot_system_with_external_sensor.launch.py)
-- URDF: [rrbot_with_external_sensor_controllers.urdf.xacro](ros2_control_demo_bringup/config/rrbot_with_external_sensor_controllers.yaml)
-- ros2_control URDF: [external_rrbot_force_torque_sensor.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/external_rrbot_force_torque_sensor.ros2_control.xacro)
+- Controllers: [rrbot_with_external_sensor_controllers.yaml](ros2_control_demo_bringup/config/rrbot_with_external_sensor_controllers.yaml)
+- URDF: [rrbot_with_external_sensor_controllers.urdf.xacro](ros2_control_demo_description/rrbot_description/urdf/rrbot_with_external_sensor_controllers.urdf.xacro)
+- ros2_control URDF: 
+  - robot: [rrbot_system_position_only.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/rrbot_system_position_only.ros2_control.xacro)
+  - sensor: [external_rrbot_force_torque_sensor.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/external_rrbot_force_torque_sensor.ros2_control.xacro)
 
 - Command interfaces:
   - joint1/position
@@ -497,7 +503,8 @@ ros2 topic echo /fts_broadcaster/wrench
 ### Example 5: "Modular Robots with separate communication to each actuator"
 
 - Launch file: [rrbot_modular_actuators.launch.py](ros2_control_demo_bringup/launch/rrbot_modular_actuators.launch.py)
-- URDF: [rrbot_modular_actuators.urdf.xacro](ros2_control_demo_bringup/config/rrbot_modular_actuators.yaml)
+- Controllers: [rrbot_modular_actuators.yaml](ros2_control_demo_bringup/config/rrbot_modular_actuators.yaml)
+- URDF: [rrbot_modular_actuators.urdf.xacro](ros2_control_demo_description/rrbot_description/urdf/rrbot_modular_actuators.urdf.xacro)
 - ros2_control URDF: [rrbot_modular_actuators.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/rrbot_modular_actuators.ros2_control.xacro)
 
 - Command interfaces:
