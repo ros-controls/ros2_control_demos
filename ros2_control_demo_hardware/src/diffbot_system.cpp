@@ -21,7 +21,6 @@
 #include <vector>
 
 #include "hardware_interface/types/hardware_interface_type_values.hpp"
-#include "rclcpp/clock.hpp"
 #include "rclcpp/rclcpp.hpp"
 
 namespace ros2_control_demo_hardware
@@ -97,8 +96,6 @@ hardware_interface::CallbackReturn DiffBotSystemHardware::on_init(
     }
   }
 
-  clock_ = rclcpp::Clock();
-
   return hardware_interface::CallbackReturn::SUCCESS;
 }
 
@@ -153,8 +150,6 @@ hardware_interface::CallbackReturn DiffBotSystemHardware::on_activate(
     }
   }
 
-  last_timestamp_ = clock_.now();
-
   RCLCPP_INFO(rclcpp::get_logger("DiffBotSystemHardware"), "Successfully activated!");
 
   return hardware_interface::CallbackReturn::SUCCESS;
@@ -179,12 +174,9 @@ hardware_interface::CallbackReturn DiffBotSystemHardware::on_deactivate(
   return hardware_interface::CallbackReturn::SUCCESS;
 }
 
-hardware_interface::return_type DiffBotSystemHardware::read()
+hardware_interface::return_type DiffBotSystemHardware::read(
+  const rclcpp::Time & /*time*/, const rclcpp::Duration & period)
 {
-  current_timestamp = clock_.now();
-  rclcpp::Duration dt = current_timestamp - last_timestamp_;  // Control period
-  last_timestamp_ = current_timestamp;
-
   double radius = 0.02;  // radius of the wheels
   double dist_w = 0.1;   // distance between the wheels
   for (uint i = 0; i < hw_commands_.size(); i++)
@@ -192,7 +184,7 @@ hardware_interface::return_type DiffBotSystemHardware::read()
     // Simulate DiffBot wheels's movement as a first-order system
     // Update the joint status: this is a revolute joint without any limit.
     // Simply integrates
-    hw_positions_[i] = hw_positions_[1] + dt.seconds() * hw_commands_[i];
+    hw_positions_[i] = hw_positions_[1] + period.seconds() * hw_commands_[i];
     hw_velocities_[i] = hw_commands_[i];
 
     // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
@@ -208,9 +200,9 @@ hardware_interface::return_type DiffBotSystemHardware::read()
   double base_dx = 0.5 * radius * (hw_commands_[0] + hw_commands_[1]) * cos(base_theta_);
   double base_dy = 0.5 * radius * (hw_commands_[0] + hw_commands_[1]) * sin(base_theta_);
   double base_dtheta = radius * (hw_commands_[0] - hw_commands_[1]) / dist_w;
-  base_x_ += base_dx * dt.seconds();
-  base_y_ += base_dy * dt.seconds();
-  base_theta_ += base_dtheta * dt.seconds();
+  base_x_ += base_dx * period.seconds();
+  base_y_ += base_dy * period.seconds();
+  base_theta_ += base_dtheta * period.seconds();
 
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(
@@ -221,7 +213,8 @@ hardware_interface::return_type DiffBotSystemHardware::read()
   return hardware_interface::return_type::OK;
 }
 
-hardware_interface::return_type ros2_control_demo_hardware::DiffBotSystemHardware::write()
+hardware_interface::return_type ros2_control_demo_hardware::DiffBotSystemHardware::write(
+  const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(rclcpp::get_logger("DiffBotSystemHardware"), "Writing...");

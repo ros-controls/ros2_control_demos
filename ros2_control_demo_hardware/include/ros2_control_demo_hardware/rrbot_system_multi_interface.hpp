@@ -64,10 +64,12 @@ public:
     const rclcpp_lifecycle::State & previous_state) override;
 
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
-  hardware_interface::return_type read() override;
+  hardware_interface::return_type read(
+    const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
-  hardware_interface::return_type write() override;
+  hardware_interface::return_type write(
+    const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
 private:
   // Parameters for the RRBot simulation
@@ -82,11 +84,6 @@ private:
   std::vector<double> hw_states_positions_;
   std::vector<double> hw_states_velocities_;
   std::vector<double> hw_states_accelerations_;
-
-  // Store time between update loops
-  rclcpp::Clock clock_;
-  rclcpp::Time last_timestamp_;
-  rclcpp::Time current_timestamp;  // Avoid initialization on each read
 
   // Enum defining at which control level we are
   // Dumb way of maintaining the command_interface type per joint.
