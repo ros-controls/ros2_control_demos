@@ -4,6 +4,15 @@
 
 This repository provides templates for the development of `ros2_control`-enabled robots and a simple simulations to demonstrate and prove `ros2_control` concepts.
 
+### First-Time Users
+
+If you're just starting out, we suggest to look at the minimal example: `ros2_control_demo_bringup/launch/rrbot_system_position_only.launch.py`.
+
+Also pay attention to these files:
+
+- `ros2_control_demo_description/rrbot_description/ros2_control/rrbot_system_position_only.ros2_control.xacro` -- this file defines the ros2_control interfaces for each joint, e.g. position or velocity. The simulation can be launched wtih Gazebo or simulated with RViz only.
+- `rrbot_controllers.yaml` -- list the controllers that will be launched.
+
 ### Goals
 
 The repository has three goals:
