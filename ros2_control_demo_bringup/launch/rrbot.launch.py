@@ -60,10 +60,7 @@ def generate_launch_description():
                 "/position_commands",
             ),
         ],
-        output={
-            "stdout": "screen",
-            "stderr": "screen",
-        },
+        output="both",
     )
     robot_state_pub_node = Node(
         package="robot_state_publisher",
