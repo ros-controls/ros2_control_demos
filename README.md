@@ -10,7 +10,7 @@ If you're just starting out, we suggest to look at the minimal example: `ros2_co
 
 Also pay attention to these files:
 
-- `ros2_control_demo_description/rrbot_description/ros2_control/rrbot_system_position_only.ros2_control.xacro` -- this file defines the ros2_control interfaces for each joint, e.g. position or velocity. The simulation can be launched wtih Gazebo or simulated with RViz only.
+- `ros2_control_demo_description/rrbot_description/ros2_control/rrbot_system_position_only.ros2_control.xacro` -- this file defines the ros2_control interfaces for each joint, e.g. position or velocity. The simulation can be launched with Gazebo or simulated with RViz only.
 - `rrbot_controllers.yaml` -- list the controllers that will be launched.
 
 ### Goals
