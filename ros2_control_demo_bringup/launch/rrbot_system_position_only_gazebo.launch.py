@@ -41,7 +41,7 @@ def generate_launch_description():
                     "rrbot_system_position_only.urdf.xacro",
                 ]
             ),
-            " use_sim:=true",
+            " use_gazebo:=true",
         ]
     )
     robot_description = {"robot_description": robot_description_content}

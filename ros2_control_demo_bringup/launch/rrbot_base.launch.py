@@ -65,7 +65,7 @@ def generate_launch_description():
     )
     declared_arguments.append(
         DeclareLaunchArgument(
-            "use_sim",
+            "use_gazebo",
             default_value="false",
             description="Start robot in Gazebo simulation.",
         )
@@ -111,7 +111,7 @@ def generate_launch_description():
     description_package = LaunchConfiguration("description_package")
     description_file = LaunchConfiguration("description_file")
     prefix = LaunchConfiguration("prefix")
-    use_sim = LaunchConfiguration("use_sim")
+    use_gazebo = LaunchConfiguration("use_gazebo")
     use_fake_hardware = LaunchConfiguration("use_fake_hardware")
     fake_sensor_commands = LaunchConfiguration("fake_sensor_commands")
     slowdown = LaunchConfiguration("slowdown")
@@ -130,8 +130,8 @@ def generate_launch_description():
             "prefix:=",
             prefix,
             " ",
-            "use_sim:=",
-            use_sim,
+            "use_gazebo:=",
+            use_gazebo,
             " ",
             "use_fake_hardware:=",
             use_fake_hardware,
