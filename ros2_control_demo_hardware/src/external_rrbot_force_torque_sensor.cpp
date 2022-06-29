@@ -44,6 +44,21 @@ hardware_interface::return_type ExternalRRBotForceTorqueSensorHardware::configur
   return hardware_interface::return_type::OK;
 }
 
+std::vector<hardware_interface::StateInterface>
+ExternalRRBotForceTorqueSensorHardware::export_state_interfaces()
+{
+  std::vector<hardware_interface::StateInterface> state_interfaces;
+
+  // export sensor state interface
+  for (uint i = 0; i < info_.sensors[0].state_interfaces.size(); i++)
+  {
+    state_interfaces.emplace_back(hardware_interface::StateInterface(
+      info_.sensors[0].name, info_.sensors[0].state_interfaces[i].name, &hw_sensor_states_[i]));
+  }
+
+  return state_interfaces;
+}
+
 hardware_interface::return_type ExternalRRBotForceTorqueSensorHardware::start()
 {
   RCLCPP_INFO(

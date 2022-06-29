@@ -20,7 +20,7 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_desc
   <!-- <xacro:include filename="$(find ros2_control_demo_description)/urdf/rrbot/gazebo/rrbot.materials.xacro" /> -->
 
   <!-- Import RRBot ros2_control description -->
-  <xacro:include filename="$(find rrbot_description)/ros2_control/rrbot_system.ros2_control.xacro" />
+  <xacro:include filename="$(find rrbot_description)/ros2_control/rrbot_system_position_only.ros2_control.xacro" />
 
   <!-- Import RRBot external Force Torque Sensor description -->
   <xacro:include filename="$(find rrbot_description)/ros2_control/external_rrbot_force_torque_sensor.ros2_control.xacro" />
@@ -35,7 +35,7 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_desc
     <origin xyz="0 0 0" rpy="0 0 0" />
   </xacro:rrbot>
 
-  <xacro:rrbot_system_with_external_sensor
+  <xacro:rrbot_system_position_only
     name="RRBotSystemPositionOnly" prefix="$(arg prefix)"
     use_fake_hardware="$(arg use_fake_hardware)"
     fake_sensor_commands="$(arg fake_sensor_commands)"
