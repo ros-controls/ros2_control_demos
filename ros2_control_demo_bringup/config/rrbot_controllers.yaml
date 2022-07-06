@@ -8,7 +8,7 @@ controller_manager:
     forward_position_controller:
       type: forward_command_controller/ForwardCommandController
 
-    position_trajectory_controller:
+    joint_trajectory_controller:
       type: joint_trajectory_controller/JointTrajectoryController
 
 
@@ -20,7 +20,7 @@ forward_position_controller:
     interface_name: position
 
 
-position_trajectory_controller:
+joint_trajectory_controller:
   ros__parameters:
     joints:
       - joint1
