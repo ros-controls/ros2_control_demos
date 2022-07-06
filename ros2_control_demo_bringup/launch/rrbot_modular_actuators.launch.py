@@ -1,4 +1,4 @@
-# Copyright 2021 Department of Engineering Cybernetics, NTNU.
+# Copyright (c) 2021, Stogl Robotics Consulting UG (haftungsbeschränkt)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,19 +26,19 @@ def generate_launch_description():
             "prefix",
             default_value='""',
             description="Prefix of the joint names, useful for \
-        multi-robot setup. If changed than also joint names in the controllers' configuration \
-        have to be updated.",
+        multi-robot setup. If changed, joint names in the controllers' configuration \
+        also have to be updated.",
         )
     )
     declared_arguments.append(
         DeclareLaunchArgument(
-            "slowdown", default_value="50.0", description="Slowdown factor of the RRbot."
+            "slowdown", default_value="3.0", description="Slowdown factor of the RRbot."
         )
     )
     declared_arguments.append(
         DeclareLaunchArgument(
             "robot_controller",
-            default_value="forward_velocity_controller",
+            default_value="forward_position_controller",
             description="Robot controller to start.",
         )
     )
@@ -51,11 +51,10 @@ def generate_launch_description():
     base_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([ThisLaunchFileDir(), "/rrbot_base.launch.py"]),
         launch_arguments={
-            "controllers_file": "rrbot_multi_interface_forward_controllers.yaml",
-            "description_file": "rrbot_system_multi_interface.urdf.xacro",
+            "controllers_file": "rrbot_modular_actuators.yaml",
+            "description_file": "rrbot_modular_actuators.urdf.xacro",
             "prefix": prefix,
             "use_fake_hardware": "false",
-            "fake_sensor_commands": "false",
             "slowdown": slowdown,
             "robot_controller": robot_controller,
         }.items(),

@@ -1,4 +1,4 @@
-// Copyright 2021 Department of Engineering Cybernetics, NTNU
+// Copyright (c) 2021, Stogl Robotics Consulting UG (haftungsbeschränkt)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,33 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef ROS2_CONTROL_DEMO_HARDWARE__RRBOT_SYSTEM_MULTI_INTERFACE_HPP_
-#define ROS2_CONTROL_DEMO_HARDWARE__RRBOT_SYSTEM_MULTI_INTERFACE_HPP_
+//
+// Authors: Subhas Das, Denis Stogl
+//
 
-#include <chrono>
-#include <cstdint>
+#ifndef ROS2_CONTROL_DEMO_HARDWARE__RRBOT_ACTUATOR_HPP_
+#define ROS2_CONTROL_DEMO_HARDWARE__RRBOT_ACTUATOR_HPP_
+
 #include <memory>
 #include <string>
 #include <vector>
 
+#include "hardware_interface/actuator_interface.hpp"
 #include "hardware_interface/handle.hpp"
 #include "hardware_interface/hardware_info.hpp"
 #include "hardware_interface/system_interface.hpp"
 #include "hardware_interface/types/hardware_interface_return_values.hpp"
-#include "rclcpp/clock.hpp"
-#include "rclcpp/duration.hpp"
 #include "rclcpp/macros.hpp"
-#include "rclcpp/time.hpp"
-#include "rclcpp_lifecycle/node_interfaces/lifecycle_node_interface.hpp"
-#include "rclcpp_lifecycle/state.hpp"
 #include "ros2_control_demo_hardware/visibility_control.h"
 
 namespace ros2_control_demo_hardware
 {
-class RRBotSystemMultiInterfaceHardware : public hardware_interface::SystemInterface
+class RRBotModularJoint : public hardware_interface::ActuatorInterface
 {
 public:
-  RCLCPP_SHARED_PTR_DEFINITIONS(RRBotSystemMultiInterfaceHardware);
+  RCLCPP_SHARED_PTR_DEFINITIONS(RRBotModularJoint);
 
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
   hardware_interface::CallbackReturn on_init(
@@ -49,11 +47,6 @@ public:
 
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
   std::vector<hardware_interface::CommandInterface> export_command_interfaces() override;
-
-  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
-  hardware_interface::return_type prepare_command_mode_switch(
-    const std::vector<std::string> & start_interfaces,
-    const std::vector<std::string> & stop_interfaces) override;
 
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
   hardware_interface::CallbackReturn on_activate(
@@ -77,27 +70,11 @@ private:
   double hw_stop_sec_;
   double hw_slowdown_;
 
-  // Store the commands for the simulated robot
-  std::vector<double> hw_commands_positions_;
-  std::vector<double> hw_commands_velocities_;
-  std::vector<double> hw_commands_accelerations_;
-  std::vector<double> hw_states_positions_;
-  std::vector<double> hw_states_velocities_;
-  std::vector<double> hw_states_accelerations_;
-
-  // Enum defining at which control level we are
-  // Dumb way of maintaining the command_interface type per joint.
-  enum integration_level_t : std::uint8_t
-  {
-    UNDEFINED = 0,
-    POSITION = 1,
-    VELOCITY = 2,
-    ACCELERATION = 3
-  };
-
-  // Active control mode for each actuator
-  std::vector<integration_level_t> control_level_;
+  // Store the command for the simulated robot
+  double hw_joint_command_;
+  double hw_joint_state_;
 };
 
 }  // namespace ros2_control_demo_hardware
-#endif  // ROS2_CONTROL_DEMO_HARDWARE__RRBOT_SYSTEM_MULTI_INTERFACE_HPP_
+
+#endif  // ROS2_CONTROL_DEMO_HARDWARE__RRBOT_ACTUATOR_HPP_
