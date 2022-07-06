@@ -64,9 +64,9 @@ git clone https://github.com/ros-controls/ros2_control_demos
 We provide officially released and maintained debian packages, which can easily be installed via aptitude.
 However, there might be cases in which not-yet released demos or features are only available through a source build in your own workspace.
 
-* Install dependencies:
+* Install dependencies (maybe you need `sudo`):
   ```
-  rosdep install --from-paths src --ignore-src -r -y
+  apt install ros-foxy-realtime-tools ros-foxy-xacro ros-foxy-angles
   ```
 
 * Build everything, e.g. with:
@@ -80,6 +80,7 @@ However, there might be cases in which not-yet released demos or features are on
 # Getting Started with demos
 
 This repository provides the following simple example robots: a 2 degrees of freedom manipulator - *RRBot* - and a mobile differential drive base - *DiffBot*.
+
 The first two examples demonstrate the minimal setup for those two robots to run.
 Later examples show more details about `ros2_control`-concepts and some more advanced use-cases.
 
@@ -96,9 +97,9 @@ The *RRBot* URDF files can be found in the `urdf` folder of `rrbot_description` 
    ros2 launch rrbot_description view_robot.launch.py
    ```
    **NOTE**: Getting the following output in terminal is OK: `Warning: Invalid frame ID "odom" passed to canTransform argument target_frame - frame does not exist`.
-   This happens because `joint_state_publisher_gui` node need some time to start.
-   The `joint_state_publisher_gui` provides a GUI to generate  a random configuration for rrbot. It is immediately displayed in `Rviz`.
+             This happens because `joint_state_publisher_gui` node need some time to start.
 
+The `joint_state_publisher_gui` provides a GUI to generate  a random configuration for rrbot. It is immediately displayed in `Rviz`.
 
 1. To start *RRBot* example open open a terminal, source your ROS2-workspace and execute its launch file with:
    ```
@@ -721,7 +722,6 @@ Notes:
       threedofbot_position_controller[forward_command_controller/ForwardCommandController] active
       ```
 
-
 ## Controllers and moving hardware
 
 To move the robot you should load and start controllers.
@@ -844,7 +844,7 @@ Now you should also see the *RRbot* represented correctly in `RViz`.
 ## Result
 
 1. Independently from the controller you should see how the example's output changes.
-   Look for the following lines
+  Look for the following lines
    ```
    [RRBotSystemPositionOnlyHardware]: Got state 0.0 for joint 0!
    [RRBotSystemPositionOnlyHardware]: Got state 0.0 for joint 1!
