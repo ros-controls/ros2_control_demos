@@ -45,7 +45,6 @@ public:
   std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
 
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
-
   hardware_interface::CallbackReturn on_activate(
     const rclcpp_lifecycle::State & previous_state) override;
 

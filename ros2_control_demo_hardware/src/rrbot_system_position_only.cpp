@@ -100,7 +100,6 @@ hardware_interface::CallbackReturn RRBotSystemPositionOnlyHardware::on_configure
       rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "%.1f seconds left...",
       hw_start_sec_ - i);
   }
-
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   // reset values always when configuring hardware
