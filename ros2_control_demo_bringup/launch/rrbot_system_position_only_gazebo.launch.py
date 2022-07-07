@@ -59,18 +59,27 @@ def generate_launch_description():
         arguments=["-topic", "robot_description", "-entity", "rrbot_system_position"],
         output="screen",
     )
-    spawn_controller = Node(
+    spawn_joint_state_broadcaster = Node(
         package="controller_manager",
         executable="spawner.py",
         arguments=["joint_state_broadcaster"],
         output="screen",
     )
+    
+    spawn_joint_trajectory_controller = Node(
+        package="controller_manager",
+        executable="spawner.py",
+        arguments=["joint_trajectory_controller"],
+        output="screen",
+    )
+
 
     return LaunchDescription(
         [
             gazebo,
             node_robot_state_publisher,
             spawn_entity,
-            spawn_controller,
+            spawn_joint_state_broadcaster,
+            spawn_joint_trajectory_controller,
         ]
     )

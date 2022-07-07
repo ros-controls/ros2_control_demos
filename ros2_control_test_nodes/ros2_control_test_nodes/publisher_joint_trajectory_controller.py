@@ -24,7 +24,7 @@ class PublisherJointTrajectory(Node):
     def __init__(self):
         super().__init__("publisher_position_trajectory_controller")
         # Declare all parameters
-        self.declare_parameter("controller_name", "position_trajectory_controller")
+        self.declare_parameter("controller_name", "joint_trajectory_controller")
         self.declare_parameter("wait_sec_between_publish", 6)
         self.declare_parameter("goal_names", ["pos1", "pos2"])
         self.declare_parameter("joints")
