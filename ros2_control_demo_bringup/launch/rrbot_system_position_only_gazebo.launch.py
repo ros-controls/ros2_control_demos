@@ -66,10 +66,10 @@ def generate_launch_description():
         output="screen",
     )
     
-    spawn_joint_trajectory_controller = Node(
+    spawn_joint_trajectory_position_controller = Node(
         package="controller_manager",
         executable="spawner.py",
-        arguments=["joint_trajectory_controller"],
+        arguments=["joint_trajectory_position_controller"],
         output="screen",
     )
 
@@ -80,6 +80,6 @@ def generate_launch_description():
             node_robot_state_publisher,
             spawn_entity,
             spawn_joint_state_broadcaster,
-            spawn_joint_trajectory_controller,
+            spawn_joint_trajectory_position_controller,
         ]
     )
