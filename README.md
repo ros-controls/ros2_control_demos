@@ -286,7 +286,18 @@ Available launch-file options:
 
 ### Example 2: "Industrial Robots with only one interface" (Gazebo simulation)
 
-- **TBA**
+- Launch file: ros2_control_demo_bringup rrbot_system_position_only_gazebo.launch.py
+ 
+- Command interfaces:
+  - joint1/position
+  - joint2/position
+- State interfaces:
+  - joint1/position
+  - joint2/position
+
+Available controllers:
+  - `joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active`
+  - `joint_trajectory_controller[joint_trajectory_controller/JointTrajectoryController] active`
 
 
 ### Example 3: "Robots with multiple interfaces"
