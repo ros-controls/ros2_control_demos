@@ -647,8 +647,12 @@ Notes:
 
   1. Activate `RRBotWithSensor` and its position controller. Call
      ```
-     ros2 service call /controller_manager/manage_hardware_activity controller_manager_msgs/srv/ManageHardwareActivity "{activate: [RRBotSystemWithSensor], deactivate: []}"
-     ros2 control switch_controllers --start rrbot_with_sensor_position_controller
+     ros2 service call /controller_manager/set_hardware_component_state controller_manager_msgs/srv/SetHardwareComponentState "
+     name: RRBotSystemWithSensor
+     target_state:
+       id: 0
+       label: active"
+     ros2 control switch_controllers --activate rrbot_with_sensor_position_controller
      ```
 
      Scenario state:
@@ -673,8 +677,12 @@ Notes:
 
   1. Configure `FakeThreeDofBot` and its joint state broadcaster and non-movement command interfaces. Call
      ```
-     ros2 service call /controller_manager/configure_hardware_component controller_manager_msgs/srv/ConfigureHardwareComponent "{name: FakeThreeDofBot}"
-     ros2 control switch_controllers --start threedofbot_joint_state_broadcaster threedofbot_pid_gain_controller
+     ros2 service call /controller_manager/set_hardware_component_state controller_manager_msgs/srv/SetHardwareComponentState "
+     name: FakeThreeDofBot
+     target_state:
+       id: 0
+       label: inactive"
+     ros2 control switch_controllers --activate threedofbot_joint_state_broadcaster threedofbot_pid_gain_controller
      ```
 
      Scenario state:
@@ -705,8 +713,8 @@ Notes:
      ```
      Restart:
      ```
-     ros2 control switch_controllers --stop joint_state_broadcaster
-     ros2 control switch_controllers --start joint_state_broadcaster
+     ros2 control switch_controllers --deactivate joint_state_broadcaster
+     ros2 control switch_controllers --activate joint_state_broadcaster
      ```
      Check output to for comparison
      ```
@@ -720,8 +728,12 @@ Notes:
 
   1. Activate `FakeThreeDofBot` and its joint state broadcaster and non-movement command interfaces. Call
      ```
-     ros2 service call /controller_manager/manage_hardware_activity controller_manager_msgs/srv/ManageHardwareActivity "{activate: [FakeThreeDofBot], deactivate: []}"
-     ros2 control switch_controllers --start threedofbot_position_controller
+     ros2 service call /controller_manager/set_hardware_component_state controller_manager_msgs/srv/SetHardwareComponentState "
+     name: FakeThreeDofBot
+     target_state:
+       id: 0
+       label: active"
+     ros2 control switch_controllers --activate threedofbot_position_controller
      ```
 
      Scenario state:
@@ -746,8 +758,12 @@ Notes:
 
   1. Deactivate `RRBotSystemPositionOnly` and its position controller (first). Call
      ```
-     ros2 control switch_controllers --stop rrbot_position_controller
-     ros2 service call /controller_manager/manage_hardware_activity controller_manager_msgs/srv/ManageHardwareActivity "{activate: [], deactivate: [RRBotSystemPositionOnly]}"
+     ros2 control switch_controllers --deactivate rrbot_position_controller
+     ros2 service call /controller_manager/set_hardware_component_state controller_manager_msgs/srv/SetHardwareComponentState "
+     name: RRBotSystemPositionOnly
+     target_state:
+       id: 0
+       label: inactive"
      ```
 
      Scenario state:
@@ -773,7 +789,13 @@ Notes:
   1. Cleanup `RRBotSystemPositionOnly` and its joint state broadcaster.
      Also restart global joint state broadcaster. Call
      ```
-     ros2 control switch_controllers --stop rrbot_position_controller joint_state_broadcaster
+     ros2 control switch_controllers --deactivate rrbot_position_controller joint_state_broadcaster
+     ros2 service call /controller_manager/set_hardware_component_state controller_manager_msgs/srv/SetHardwareComponentState "
+     name: RRBotSystemPositionOnly
+     target_state:
+       id: 0
+       label: unconfigured"
+
      ros2 service call /controller_manager/cleanup_hardware_component controller_manager_msgs/srv/CleanupHardwareComponent "{name: RRBotSystemPositionOnly}"
      ros2 control switch_controllers --start joint_state_broadcaster
      ```

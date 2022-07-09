@@ -105,37 +105,37 @@ def generate_launch_description():
     # Global joint state broadcaster
     joint_state_broadcaster_spawner = Node(
         package="controller_manager",
-        executable="spawner.py",
+        executable="spawner",
         arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager"],
     )
 
     # RRBot controllers
     rrbot_joint_state_broadcaster_spawner = Node(
         package="controller_manager",
-        executable="spawner.py",
+        executable="spawner",
         arguments=["rrbot_joint_state_broadcaster", "-c", "/controller_manager"],
     )
     rrbot_position_controller_spawner = Node(
         package="controller_manager",
-        executable="spawner.py",
+        executable="spawner",
         arguments=["rrbot_position_controller", "-c", "/controller_manager"],
     )
     # External FTS broadcaster
     rrbot_external_fts_broadcaster_spawner = Node(
         package="controller_manager",
-        executable="spawner.py",
+        executable="spawner",
         arguments=["rrbot_external_fts_broadcaster", "-c", "/controller_manager"],
     )
 
     # RRBot controllers
     rrbot_with_sensor_joint_state_broadcaster_spawner = Node(
         package="controller_manager",
-        executable="spawner.py",
+        executable="spawner",
         arguments=["rrbot_with_sensor_joint_state_broadcaster", "-c", "/controller_manager"],
     )
     rrbot_with_sensor_position_controller_spawner = Node(
         package="controller_manager",
-        executable="spawner.py",
+        executable="spawner",
         arguments=[
             "rrbot_with_sensor_position_controller",
             "-c",
@@ -145,14 +145,14 @@ def generate_launch_description():
     )
     rrbot_with_sensor_fts_broadcaster_spawner = Node(
         package="controller_manager",
-        executable="spawner.py",
+        executable="spawner",
         arguments=["rrbot_with_sensor_fts_broadcaster", "-c", "/controller_manager"],
     )
 
     # ThreeDofBot controllers
     threedofbot_joint_state_broadcaster_spawner = Node(
         package="controller_manager",
-        executable="spawner.py",
+        executable="spawner",
         arguments=[
             "threedofbot_joint_state_broadcaster",
             "-c",
@@ -162,12 +162,12 @@ def generate_launch_description():
     )
     threedofbot_position_controller_spawner = Node(
         package="controller_manager",
-        executable="spawner.py",
+        executable="spawner",
         arguments=["threedofbot_position_controller", "-c", "/controller_manager", "--stopped"],
     )
     threedofbot_pid_gain_controller_spawner = Node(
         package="controller_manager",
-        executable="spawner.py",
+        executable="spawner",
         arguments=["threedofbot_pid_gain_controller", "-c", "/controller_manager", "--stopped"],
     )
 
