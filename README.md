@@ -297,7 +297,7 @@ Available launch-file options:
 
 Available controllers:
   - `joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active`
-  - `joint_trajectory_controller[joint_trajectory_controller/JointTrajectoryController] active`
+  - `joint_trajectory_position_controller[joint_trajectory_controller/JointTrajectoryController] active`
 
 
 ### Example 3: "Robots with multiple interfaces"
