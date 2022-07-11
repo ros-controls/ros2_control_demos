@@ -496,9 +496,9 @@ Now you should also see the *RRbot* represented correctly in `RViz`.
    joint_trajectory_position_controller[joint_trajectory_controller/JointTrajectoryController] active
    ```
 
-3. Send a command to the controller using demo node which sends two goals every 5 seconds in a loop:
+3. Send a command to the controller using demo node which sends two goals every 6 seconds in a loop:
    ```
-   ros2 launch ros2_control_demo_bringup test_forward_position_controller.launch.py
+   ros2 launch ros2_control_demo_bringup test_joint_trajectory_position_controller.launch.py
    ```
    You can adjust the goals in [rrbot_joint_trajectory_publisher.yaml](ros2_control_demo_bringup/config/rrbot_joint_trajectory_publisher.yaml).
 
