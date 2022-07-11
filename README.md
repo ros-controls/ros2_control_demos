@@ -286,7 +286,7 @@ Available launch-file options:
 
 ### Example 2: "Industrial Robots with only one interface" (Gazebo simulation)
 
-- Launch file: ros2_control_demo_bringup rrbot_system_position_only_gazebo.launch.py
+- Launch file: rrbot_system_position_only_gazebo.launch.py
  
 - Command interfaces:
   - joint1/position
