@@ -172,7 +172,7 @@ hardware_interface::CallbackReturn RRBotSystemWithSensorHardware::on_activate(
   // command and state should be equal when starting
   for (uint i = 0; i < hw_joint_states_.size(); i++)
   {
-    hw_joint_states_[i] = hw_joint_states_[i];
+    hw_joint_commands_[i] = hw_joint_states_[i];
   }
 
   // set default value for sensor
