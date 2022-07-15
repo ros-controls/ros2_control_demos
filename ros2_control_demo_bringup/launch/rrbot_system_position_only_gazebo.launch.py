@@ -41,7 +41,7 @@ def generate_launch_description():
                     "rrbot_system_position_only.urdf.xacro",
                 ]
             ),
-            " use_sim:=true",
+            " use_gazebo:=true",
         ]
     )
     robot_description = {"robot_description": robot_description_content}
@@ -61,7 +61,7 @@ def generate_launch_description():
     )
     spawn_joint_state_broadcaster = Node(
         package="controller_manager",
-        executable="spawner.py",
+        executable="spawner",
         arguments=["joint_state_broadcaster"],
         output="screen",
     )

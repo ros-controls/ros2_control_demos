@@ -15,33 +15,34 @@
 #ifndef ROS2_CONTROL_DEMO_HARDWARE__RRBOT_SYSTEM_MULTI_INTERFACE_HPP_
 #define ROS2_CONTROL_DEMO_HARDWARE__RRBOT_SYSTEM_MULTI_INTERFACE_HPP_
 
+#include <chrono>
 #include <cstdint>
 #include <memory>
 #include <string>
 #include <vector>
 
-#include "rclcpp/macros.hpp"
-
-#include "hardware_interface/base_interface.hpp"
 #include "hardware_interface/handle.hpp"
 #include "hardware_interface/hardware_info.hpp"
 #include "hardware_interface/system_interface.hpp"
 #include "hardware_interface/types/hardware_interface_return_values.hpp"
-#include "hardware_interface/types/hardware_interface_status_values.hpp"
+#include "rclcpp/clock.hpp"
+#include "rclcpp/duration.hpp"
+#include "rclcpp/macros.hpp"
+#include "rclcpp/time.hpp"
+#include "rclcpp_lifecycle/node_interfaces/lifecycle_node_interface.hpp"
+#include "rclcpp_lifecycle/state.hpp"
 #include "ros2_control_demo_hardware/visibility_control.h"
-
-using hardware_interface::return_type;
 
 namespace ros2_control_demo_hardware
 {
-class RRBotSystemMultiInterfaceHardware
-: public hardware_interface::BaseInterface<hardware_interface::SystemInterface>
+class RRBotSystemMultiInterfaceHardware : public hardware_interface::SystemInterface
 {
 public:
   RCLCPP_SHARED_PTR_DEFINITIONS(RRBotSystemMultiInterfaceHardware);
 
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
-  return_type configure(const hardware_interface::HardwareInfo & info) override;
+  hardware_interface::CallbackReturn on_init(
+    const hardware_interface::HardwareInfo & info) override;
 
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
   std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
@@ -50,21 +51,25 @@ public:
   std::vector<hardware_interface::CommandInterface> export_command_interfaces() override;
 
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
-  return_type prepare_command_mode_switch(
+  hardware_interface::return_type prepare_command_mode_switch(
     const std::vector<std::string> & start_interfaces,
     const std::vector<std::string> & stop_interfaces) override;
 
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
-  return_type start() override;
+  hardware_interface::CallbackReturn on_activate(
+    const rclcpp_lifecycle::State & previous_state) override;
 
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
-  return_type stop() override;
+  hardware_interface::CallbackReturn on_deactivate(
+    const rclcpp_lifecycle::State & previous_state) override;
 
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
-  return_type read() override;
+  hardware_interface::return_type read(
+    const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
-  return_type write() override;
+  hardware_interface::return_type write(
+    const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
 private:
   // Parameters for the RRBot simulation
@@ -76,13 +81,13 @@ private:
   std::vector<double> hw_commands_positions_;
   std::vector<double> hw_commands_velocities_;
   std::vector<double> hw_commands_accelerations_;
-  std::vector<double> hw_positions_;
-  std::vector<double> hw_velocities_;
-  std::vector<double> hw_accelerations_;
+  std::vector<double> hw_states_positions_;
+  std::vector<double> hw_states_velocities_;
+  std::vector<double> hw_states_accelerations_;
 
   // Enum defining at which control level we are
   // Dumb way of maintaining the command_interface type per joint.
-  enum class integration_level_t : std::uint8_t
+  enum integration_level_t : std::uint8_t
   {
     UNDEFINED = 0,
     POSITION = 1,

@@ -1,8 +1,20 @@
 # ros2_control Demos
 
+[![Build Status](https://github.com/ros-controls/ros2_control_demos/workflows/CI/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions?query=workflow%3ACI)
+[![Linters Status](https://github.com/ros-controls/ros2_control_demos/workflows/Linters/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions?query=workflow%3ALinters)
+[![Coverage Status](https://github.com/ros-controls/ros2_control_demos/workflows/Coverage/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions?query=workflow%3ACoverage)
 [![Licence](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 This repository provides templates for the development of `ros2_control`-enabled robots and a simple simulations to demonstrate and prove `ros2_control` concepts.
+
+### First-Time Users
+
+If you're just starting out, we suggest to look at the minimal example: `ros2_control_demo_bringup/launch/rrbot_system_position_only.launch.py`.
+
+Also pay attention to these files:
+
+- `ros2_control_demo_description/rrbot_description/ros2_control/rrbot_system_position_only.ros2_control.xacro` -- this file defines the ros2_control interfaces for each joint, e.g. position or velocity. The simulation can be launched with Gazebo or simulated with RViz only.
+- `rrbot_controllers.yaml` -- list the controllers that will be launched.
 
 ### Goals
 
@@ -16,8 +28,8 @@ The repository has three goals:
 
 ROS2 Distro | Branch | Build status | Documentation | Released packages
 :---------: | :----: | :----------: | :-----------: | :---------------:
-**Rolling** | [`rolling`](https://github.com/ros-controls/ros2_control_demos/tree/rolling) | [![Rolling Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-binary-build.yml/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-binary-build.yml?branch=master) <br /> [![Rolling Semi-Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-semi-binary-build.yml/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-semi-binary-build.yml?branch=master) <br /> [![Rolling Source Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-source-build.yml/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-source-build.yml?branch=master) | [Documentation](https://control.ros.org) <br /> [API Reference](https://control.ros.org/rolling/api/) | [ros2_control_demos](https://index.ros.org/p/ros2_control_demos/#rolling)
-**Rolling - last Focal** | [`rolling`](https://github.com/ros-controls/ros2_control_demos/tree/rolling) | [![Rolling Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-binary-build-last-focal.yml/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-binary-build-last-focal.yml?branch=master) <br /> [![Rolling Semi-Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-semi-binary-build-last-focal.yml/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-semi-binary-build-last-focal.yml?branch=master) | [Documentation](https://control.ros.org) <br /> [API Reference](https://control.ros.org/rolling/api/) | [ros2_control_demos](https://index.ros.org/p/ros2_control_demos/#rolling)
+**Rolling** | [`master`](https://github.com/ros-controls/ros2_control_demos/tree/rolling) | [![Rolling Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-binary-build.yml/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-binary-build.yml?branch=master) <br /> [![Rolling Semi-Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-semi-binary-build.yml/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-semi-binary-build.yml?branch=master) <br /> [![Rolling Source Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-source-build.yml/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-source-build.yml?branch=master) | [Documentation](https://control.ros.org) <br /> [API Reference](https://control.ros.org/rolling/api/) | [ros2_control_demos](https://index.ros.org/p/ros2_control_demos/#rolling)
+**Rolling - last Focal** | [`master`](https://github.com/ros-controls/ros2_control_demos/tree/rolling) | [![Rolling Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-binary-build-last-focal.yml/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-binary-build-last-focal.yml?branch=master) <br /> [![Rolling Semi-Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-semi-binary-build-last-focal.yml/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-semi-binary-build-last-focal.yml?branch=master) | [Documentation](https://control.ros.org) <br /> [API Reference](https://control.ros.org/rolling/api/) | [ros2_control_demos](https://index.ros.org/p/ros2_control_demos/#rolling)
 **Galactic** | [`galactic`](https://github.com/ros-controls/ros2_control_demos/tree/galactic) | [![Galactic Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/galactic-binary-build.yml/badge.svg?branch=galactic)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/galactic-binary-build.yml?branch=galactic) <br /> [![Galactic Semi-Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/galactic-semi-binary-build.yml/badge.svg?branch=galactic)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/galactic-semi-binary-build.yml?branch=galactic) <br /> [![Galactic Source Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/galactic-source-build.yml/badge.svg?branch=galactic)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/galactic-source-build.yml?branch=galactic) | [Documentation](https://control.ros.org) <br /> [API Reference](https://control.ros.org/rolling/api/) | [ros2_control_demos](https://index.ros.org/p/ros2_control_demos/#galactic)
 **Foxy** | [`foxy`](https://github.com/ros-controls/ros2_control_demos/tree/foxy) | [![Foxy Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/foxy-binary-build.yml/badge.svg?branch=foxy)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/foxy-binary-build.yml?branch=foxy) <br /> [![Foxy Semi-Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/foxy-semi-binary-build.yml/badge.svg?branch=foxy)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/foxy-semi-binary-build.yml?branch=foxy) <br /> [![Foxy Source Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/foxy-source-build.yml/badge.svg?branch=foxy)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/foxy-source-build.yml?branch=foxy) | [Documentation](https://control.ros.org) <br /> [API Reference](https://control.ros.org/rolling/api/) | [ros2_control_demos](https://index.ros.org/p/ros2_control_demos/#foxy)
 
@@ -119,7 +131,8 @@ The *RRBot* URDF files can be found in the `urdf` folder of `rrbot_description` 
    ros2 launch rrbot_description view_robot.launch.py
    ```
    **NOTE**: Getting the following output in terminal is OK: `Warning: Invalid frame ID "odom" passed to canTransform argument target_frame - frame does not exist`.
-             This happens because `joint_state_publisher_gui` node need some time to start.
+   This happens because `joint_state_publisher_gui` node need some time to start.
+   The `joint_state_publisher_gui` provides a GUI to generate  a random configuration for rrbot. It is immediately displayed in `Rviz`.
 
 The `joint_state_publisher_gui` provides a GUI to generate  a random configuration for rrbot. It is immediately displayed in `Rviz`.
 
@@ -164,7 +177,7 @@ The `joint_state_publisher_gui` provides a GUI to generate  a random configurati
 
    a. Manually using ros2 cli interface:
    ```
-   ros2 topic pub /forward_position_controller/commands std_msgs/msg/Float64MultiArray "data:
+   ros2 topic pub /position_commands std_msgs/msg/Float64MultiArray "data:
    - 0.5
    - 0.5"
    ```
@@ -173,7 +186,7 @@ The `joint_state_publisher_gui` provides a GUI to generate  a random configurati
    ros2 launch ros2_control_demo_bringup test_forward_position_controller.launch.py
    ```
    You should now see orange and yellow blocks moving in `RViz`.
-   Also, you should see changing states in the termnal where launch file is started.
+   Also, you should see changing states in the terminal where launch file is started.
 
 
 Files used for this demos:
@@ -198,7 +211,80 @@ Controllers from this demo:
 The robot is basically a box moving according to differential drive kinematics.
 The *DiffBot* URDF files can be found in `urdf` folder of `diffbot_description` package.
 
-..TBD... (in the next PR!)
+1. To check that *DiffBot* description is working properly use following launch commands:
+   ```
+   ros2 launch diffbot_description view_robot.launch.py
+   ```
+   **NOTE**: Getting the following output in terminal is OK: `Warning: Invalid frame ID "odom" passed to canTransform argument target_frame - frame does not exist`.
+             This happens because `joint_state_publisher_gui` node need some time to start.
+
+1. To start *DiffBot* example open a terminal, source your ROS2-workspace and execute its launch file with:
+   ```
+   ros2 launch ros2_control_demo_bringup diffbot.launch.py
+   ```
+   The launch file loads and starts the robot hardware, controllers and opens `RViz`.
+   In the starting terminal you will see a lot of output from the hardware implementation showing its internal states.
+   This excessive printing is only added for demonstration. In general, printing to the terminal should be avoided as much as possible in a hardware interface implementation.
+
+   If you can see an orange box in `RViz` everything has started properly.
+   Still, to be sure, let's introspect the control system before moving *DiffBot*.
+
+1. Check if the hardware interface loaded properly, by opening another terminal and executing:
+   ```
+   ros2 control list_hardware_interfaces
+   ```
+   You should get:
+   ```
+   command interfaces
+        left_wheel_joint/velocity [claimed]
+        right_wheel_joint/velocity [claimed]
+   state interfaces
+         left_wheel_joint/position
+         left_wheel_joint/velocity
+         right_wheel_joint/position
+         right_wheel_joint/velocity
+   ```
+   The `[claimed]` marker on command interfaces means that a controller has access to command *DiffBot*.
+
+1. Check if controllers are running:
+   ```
+   ros2 control list_controllers
+   ```
+   You should get:
+   ```
+   diffbot_base_controller[diff_drive_controller/DiffDriveController] active
+   joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+   ```
+
+1. If everything is fine, now you can send a command to *Diff Drive Controller* using ros2 cli interface:
+   ```
+   ros2 topic pub --rate 30 /diff_drive_controller/cmd_vel_unstamped geometry_msgs/msg/Twist "linear:
+    x: 0.7
+    y: 0.0
+    z: 0.0
+   angular:
+    x: 0.0
+    y: 0.0
+    z: 1.0"
+    ```
+   You should now see an orange box circling in `RViz`.
+   Also, you should see changing states in the terminal where launch file is started.
+
+
+Files used for this demos:
+  - Launch file: [diffbot.launch.py](ros2_control_demo_bringup/launch/diffbot.launch.py)
+  - Controllers yaml: [diffbot_controllers.yaml](ros2_control_demo_bringup/config/diffbot_controllers.yaml)
+  - URDF file: [diffbot.urdf.xacro](ros2_control_demo_description/diffbot_description/urdf/diffbot.urdf.xacro)
+    - Description: [diffbot_description.urdf.xacro](ros2_control_demo_description/diffbot_description/urdf/diffbot_description.urdf.xacro)
+    - `ros2_control` tag: [diffbot.ros2_control.xacro](ros2_control_demo_description/diffbot_description/ros2_control/diffbot.ros2_control.xacro)
+  - RViz configuration: [diffbot.rviz](ros2_control_demo_description/diffbot_description/config/diffbot.rviz)
+
+  - Hardware interface plugin: [diffbot_system.cpp](ros2_control_demo_hardware/src/diffbot_system.cpp)
+
+
+Controllers from this demo:
+  - `Joint State Broadcaster` ([`ros2_controllers` repository](https://github.com/ros-controls/ros2_controllers)): [doc](https://ros-controls.github.io/control.ros.org/ros2_controllers/joint_state_broadcaster/doc/userdoc.html)
+  - `Diff Drive Controller` ([`ros2_controllers` repository](https://github.com/ros-controls/ros2_controllers)): [doc](https://ros-controls.github.io/control.ros.org/ros2_controllers/diff_drive_controller/doc/userdoc.html)
 
 
 # Examples of ros2_control concepts
@@ -229,6 +315,7 @@ Each of the described example cases from the [roadmap](https://github.com/ros-co
 
 **NOTE**: Getting the following output in terminal is OK: `Warning: Invalid frame ID "odom" passed to canTransform argument target_frame - frame does not exist`.
           This happens because `joint_state_publisher_gui` node need some time to start.
+
 
 1. To start an example open a terminal, source your ROS2-workspace and execute a launch file with:
    ```
@@ -264,27 +351,40 @@ Each of the described example cases from the [roadmap](https://github.com/ros-co
 1. Check [Controllers and moving hardware](#controllers-and-moving-hardware) section to move *RRBot*.
 
 
+*NOTE:* The examples reuse the same, configurable base-launch file [`rrbot_base.launch.py`](ros2_control_demo_bringup/launch/rrbot_base.launch.py).
+This also demonstrates how launch files are usually reused for different scenarios when working with `ros2_control`.
+
+
 ### Example 1: "Industrial Robots with only one interface"
 
-- Launch file: rrbot_system_position_only.launch.py
-- Command interfaces:
-  - joint1/position
-  - joint2/position
-- State interfaces:
-  - joint1/position
-  - joint2/position
+Files:
+  - Launch file: [rrbot_system_position_only.launch.py](ros2_control_demo_bringup/launch/rrbot_system_position_only.launch.py)
+  - Controllers yaml: [rrbot_controllers.yaml](ros2_control_demo_bringup/config/rrbot_controllers.yaml)
+  - URDF:  [rrbot_system_position_only.urdf.xacro](ros2_control_demos/ros2_control_demo_description/rrbot_description/urdf/rrbot_system_position_only.urdf.xacro)
+  - `ros2_control` URDF tag: [rrbot_system_position_only.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/rrbot_system_position_only.ros2_control.xacro)
+
+Interfaces:
+  - Command interfaces:
+    - joint1/position
+    - joint2/position
+  - State interfaces:
+    - joint1/position
+    - joint2/position
 
 Available controllers:
   - `joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]`
   - `forward_position_controller[forward_command_controller/ForwardCommandController]` (position)
 
-Available launch-file options:
+Moving the robot:
+  - see below description of `forward_position_controller`
+
+Available launch file options:
   - `use_fake_hardware:=true` - start `FakeSystem` instead of hardware.
     This is a simple simulation that mimics joint command to their states.
     This is useful to test *ros2_control* integration and controllers without physical hardware.
 
 
-### Example 2: "Industrial Robots with only one interface" (Gazebo simulation)
+### Example 1-Sim: "Industrial Robots with only one interface" (Gazebo simulation)
 
 - Launch file: rrbot_system_position_only_gazebo.launch.py
  
@@ -299,24 +399,29 @@ Available controllers:
   - `joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active`
   - `joint_trajectory_position_controller[joint_trajectory_controller/JointTrajectoryController] active`
 
+### Example 2: "Robots with multiple interfaces"
 
-### Example 3: "Robots with multiple interfaces"
+Files:
+  - Launch file: [rrbot_system_multi_interface.launch.py](ros2_control_demo_bringup/launch/rrbot_system_multi_interface.launch.py)
+  - Controllers yaml: [rrbot_multi_interface_forward_controllers.yaml](ros2_control_demo_bringup/config/rrbot_multi_interface_forward_controllers.yaml)
+  - URDF: [rrbot_system_multi_interface.urdf.xacro](ros2_control_demo_description/rrbot_description/urdf/rrbot_system_multi_interface.urdf.xacro)
+  - `ros2_control` URDF tag: [rrbot_system_multi_interface.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/rrbot_system_multi_interface.ros2_control.xacro)
 
-- Launch file: rrbot_system_multi_interface.launch.py
-- Command interfaces:
-  - joint1/position
-  - joint2/position
-  - joint1/velocity
-  - joint2/velocity
-  - joint1/acceleration
-  - joint2/acceleration
-- State interfaces:
-  - joint1/position
-  - joint2/position
-  - joint1/velocity
-  - joint2/velocity
-  - joint1/acceleration
-  - joint2/acceleration
+Interfaces:
+  - Command interfaces:
+    - joint1/position
+    - joint2/position
+    - joint1/velocity
+    - joint2/velocity
+    - joint1/acceleration
+    - joint2/acceleration
+  - State interfaces:
+    - joint1/position
+    - joint2/position
+    - joint1/velocity
+    - joint2/velocity
+    - joint1/acceleration
+    - joint2/acceleration
 
 Available controllers:
   - `joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]`
@@ -330,43 +435,33 @@ Notes:
   - The example shows how to implement multi-interface robot hardware taking care about interfaces used.
     The two illegal controllers demonstrate how hardware interface declines faulty claims to access joint command interfaces.
 
+Moving the robot:
+  - when using velocity controller:
+    ```
+    ros2 topic pub /forward_velocity_controller/commands std_msgs/msg/Float64MultiArray "data:
+    - 5
+    - 5"
+    ```
 
-### Example 4: "Differential drive mobile robot"
+  - when using acceleration controller
+    ```
+    ros2 topic pub /forward_acceleration_controller/commands std_msgs/msg/Float64MultiArray "data:
+    - 10
+    - 10"
+    ```
 
-- Launch file: diffbot_system.launch.py
-- Command interfaces:
-  - left_wheel_joint/velocity
-  - right_wheel_joint/velocity
-- State interfaces:
-  - left_wheel_joint/position
-  - left_wheel_joint/velocity
-  - right_wheel_joint/position
-  - right_wheel_joint/velocity
-
-Available controllers:
-  - `joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]`
-  - `diffbot_base_controller[diff_drive_controller/DiffDriveController] active`
-
-Sending commands to diff drive controller:
-
-```
-ros2 topic pub --rate 30 /diffbot_base_controller/cmd_vel_unstamped geometry_msgs/msg/Twist "linear:
- x: 0.7
- y: 0.0
- z: 0.0
-angular:
- x: 0.0
- y: 0.0
- z: 1.0"
-```
-
-You should now see an orange box circling in `RViz`.
+Useful launch-file options:
+  - `robot_controller:=forward_position_controller` - starts demo and spawns position controller.
+    Robot can be then controlled using `forward_position_controller` as described below.
+  - `robot_controller:=forward_acceleration_controller` - starts demo and spawns acceleration controller.
+    Robot can be then controlled using `forward_acceleration_controller` as described below.
 
 
-### Example 5: "Industrial robot with integrated sensor"
+### Example 3: "Industrial robot with integrated sensor"
 
 - Launch file: [rrbot_system_with_sensor.launch.py](ros2_control_demo_bringup/launch/rrbot_system_with_sensor.launch.py)
-- URDF: [rrbot_system_with_sensor.urdf.xacro](ros2_control_demo_bringup/config/rrbot_with_sensor_controllers.yaml)
+- Controllers: [rrbot_with_sensor_controllers.yaml](ros2_control_demo_bringup/config/rrbot_with_sensor_controllers.yaml)
+- URDF: [rrbot_system_with_sensor.urdf.xacro](ros2_control_demo_description/rrbot_description/urdf/rrbot_system_with_sensor.urdf.xacro)
 - ros2_control URDF: [rrbot_system_with_sensor.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/rrbot_system_with_sensor.ros2_control.xacro)
 
 - Command interfaces:
@@ -376,6 +471,45 @@ You should now see an orange box circling in `RViz`.
   - joint1/position
   - joint2/position
   - tcp_fts_sensor/force.x
+  - tcp_fts_sensor/torque.z
+
+Available controllers:
+- `forward_position_controller[forward_command_controller/ForwardCommandController]`
+- `fts_broadcaster[force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster]`
+- `joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]`
+
+Notes:
+  - Wrench messages are may not be displayed properly in Rviz as NaN values are not handled in Rviz and FTS Broadcaster may send NaN values.
+
+Commanding the robot: see the commands below.
+
+Accessing Wrench data from 2D FTS:
+```
+ros2 topic echo /fts_broadcaster/wrench
+```
+
+You should now see an orange box circling in `RViz`.
+
+### Example 4: "Industrial Robots with externally connected sensor"
+
+- Launch file: [rrbot_system_with_external_sensor.launch.py](ros2_control_demo_bringup/launch/rrbot_system_with_external_sensor.launch.py)
+- Controllers: [rrbot_with_external_sensor_controllers.yaml](ros2_control_demo_bringup/config/rrbot_with_external_sensor_controllers.yaml)
+- URDF: [rrbot_with_external_sensor_controllers.urdf.xacro](ros2_control_demo_description/rrbot_description/urdf/rrbot_with_external_sensor_controllers.urdf.xacro)
+- ros2_control URDF:
+  - robot: [rrbot_system_position_only.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/rrbot_system_position_only.ros2_control.xacro)
+  - sensor: [external_rrbot_force_torque_sensor.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/external_rrbot_force_torque_sensor.ros2_control.xacro)
+
+- Command interfaces:
+  - joint1/position
+  - joint2/position
+- State interfaces:
+  - joint1/position
+  - joint2/position
+  - tcp_fts_sensor/force.x
+  - tcp_fts_sensor/force.y
+  - tcp_fts_sensor/force.z
+  - tcp_fts_sensor/torque.x
+  - tcp_fts_sensor/torque.y
   - tcp_fts_sensor/torque.z
 
 Available controllers:
@@ -394,10 +528,31 @@ ros2 topic echo /fts_broadcaster/wrench
 ```
 
 
+### Example 5: "Modular Robots with separate communication to each actuator"
+
+- Launch file: [rrbot_modular_actuators.launch.py](ros2_control_demo_bringup/launch/rrbot_modular_actuators.launch.py)
+- Controllers: [rrbot_modular_actuators.yaml](ros2_control_demo_bringup/config/rrbot_modular_actuators.yaml)
+- URDF: [rrbot_modular_actuators.urdf.xacro](ros2_control_demo_description/rrbot_description/urdf/rrbot_modular_actuators.urdf.xacro)
+- ros2_control URDF: [rrbot_modular_actuators.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/rrbot_modular_actuators.ros2_control.xacro)
+
+- Command interfaces:
+  - joint1/position
+  - joint2/position
+- State interfaces:
+  - joint1/position
+  - joint2/position
+
+Available controllers:
+- `forward_position_controller[forward_command_controller/ForwardCommandController]`
+- `joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]`
+
+Commanding the robot: see the commands below.
+
+
 ## Controllers and moving hardware
 
 To move the robot you should load and start controllers.
-The `JointStateController` is used to publish the joint states to ROS topics.
+The `JointStateBroadcaster` is used to publish the joint states to ROS topics.
 Direct joint commands are sent to this robot via the `ForwardCommandController` and `JointTrajectoryController`.
 The sections below describe their usage.
 Check the [Results](##result) section on how to ensure that things went well.
@@ -408,11 +563,11 @@ ros2 control list_controllers
 ```
 
 
-### JointStateController
+### JointStateBroadcaster
 
-Open another terminal and load, configure and start `joint_state_controller`:
+Open another terminal and load, configure and start `joint_state_broadcaster`:
 ```
-ros2 control set_controller_state joint_state_controller start
+ros2 control set_controller_state joint_state_broadcaster start
 ```
 Check if controller is loaded properly:
 ```
@@ -420,7 +575,7 @@ ros2 control list_controllers
 ```
 You should get the response:
 ```
-joint_state_controller[joint_state_controller/JointStateController] active
+joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
 ```
 
 Now you should also see the *RRbot* represented correctly in `RViz`.
@@ -460,7 +615,7 @@ Now you should also see the *RRbot* represented correctly in `RViz`.
    ```
    You should get `active` in the response:
    ```
-   joint_state_controller[joint_state_controller/JointStateController] active
+   joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
    forward_position_controller[forward_command_controller/ForwardCommandController] active
    ```
 

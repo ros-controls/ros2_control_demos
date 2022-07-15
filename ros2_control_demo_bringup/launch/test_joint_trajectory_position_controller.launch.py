@@ -35,10 +35,7 @@ def generate_launch_description():
                 executable="publisher_joint_trajectory_position_controller",
                 name="publisher_joint_trajectory_position_controller",
                 parameters=[position_goals],
-                output={
-                    "stdout": "screen",
-                    "stderr": "screen",
-                },
+                output="both",
             )
         ]
     )
