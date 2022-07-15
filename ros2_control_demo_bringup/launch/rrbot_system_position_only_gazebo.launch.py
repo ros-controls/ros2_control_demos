@@ -65,7 +65,7 @@ def generate_launch_description():
         arguments=["joint_state_broadcaster"],
         output="screen",
     )
-    
+
     spawn_joint_trajectory_position_controller = Node(
         package="controller_manager",
         executable="spawner.py",
