@@ -386,8 +386,12 @@ Available launch file options:
 
 ### Example 1-Sim: "Industrial Robots with only one interface" (Gazebo simulation)
 
-- Launch file: rrbot_system_position_only_gazebo.launch.py
- 
+Files:
+  - Launch file: [rrbot_system_position_only_gazebo.launch.py](ros2_control_demo_bringup/launch/rrbot_system_position_only_gazebo.launch.py)
+  - Controllers yaml: [rrbot_controllers.yaml](ros2_control_demo_bringup/config/rrbot_controllers.yaml)
+  - URDF:  [rrbot_system_position_only.urdf.xacro](ros2_control_demos/ros2_control_demo_description/rrbot_description/urdf/rrbot_system_position_only.urdf.xacro)
+  - `ros2_control` URDF tag: [rrbot_system_position_only.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/rrbot_system_position_only.ros2_control.xacro)
+
 - Command interfaces:
   - joint1/position
   - joint2/position
