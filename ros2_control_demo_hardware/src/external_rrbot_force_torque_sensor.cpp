@@ -29,15 +29,17 @@
 
 namespace ros2_control_demo_hardware
 {
-CallbackReturn ExternalRRBotForceTorqueSensorHardware::on_init(
+hardware_interface::CallbackReturn ExternalRRBotForceTorqueSensorHardware::on_init(
   const hardware_interface::HardwareInfo & info)
 {
-  if (hardware_interface::SensorInterface::on_init(info) != CallbackReturn::SUCCESS)
+  if (
+    hardware_interface::SensorInterface::on_init(info) !=
+    hardware_interface::CallbackReturn::SUCCESS)
   {
-    return CallbackReturn::ERROR;
+    return hardware_interface::CallbackReturn::ERROR;
   }
 
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   hw_start_sec_ = stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
   hw_stop_sec_ = stod(info_.hardware_parameters["example_param_hw_stop_duration_sec"]);
   hw_sensor_change_ = stod(info_.hardware_parameters["example_param_max_sensor_change"]);
@@ -46,7 +48,7 @@ CallbackReturn ExternalRRBotForceTorqueSensorHardware::on_init(
   hw_sensor_states_.resize(
     info_.sensors[0].state_interfaces.size(), std::numeric_limits<double>::quiet_NaN());
 
-  return CallbackReturn::SUCCESS;
+  return hardware_interface::CallbackReturn::SUCCESS;
 }
 
 std::vector<hardware_interface::StateInterface>
@@ -64,10 +66,10 @@ ExternalRRBotForceTorqueSensorHardware::export_state_interfaces()
   return state_interfaces;
 }
 
-CallbackReturn ExternalRRBotForceTorqueSensorHardware::on_activate(
+hardware_interface::CallbackReturn ExternalRRBotForceTorqueSensorHardware::on_activate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(
     rclcpp::get_logger("ExternalRRBotForceTorqueSensorHardware"), "Activating ...please wait...");
 
@@ -83,13 +85,13 @@ CallbackReturn ExternalRRBotForceTorqueSensorHardware::on_activate(
     rclcpp::get_logger("ExternalRRBotForceTorqueSensorHardware"), "Successfully activated!");
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
-  return CallbackReturn::SUCCESS;
+  return hardware_interface::CallbackReturn::SUCCESS;
 }
 
-CallbackReturn ExternalRRBotForceTorqueSensorHardware::on_deactivate(
+hardware_interface::CallbackReturn ExternalRRBotForceTorqueSensorHardware::on_deactivate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(
     rclcpp::get_logger("ExternalRRBotForceTorqueSensorHardware"), "Deactivating ...please wait...");
 
@@ -105,12 +107,13 @@ CallbackReturn ExternalRRBotForceTorqueSensorHardware::on_deactivate(
     rclcpp::get_logger("ExternalRRBotForceTorqueSensorHardware"), "Successfully deactivated!");
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
-  return CallbackReturn::SUCCESS;
+  return hardware_interface::CallbackReturn::SUCCESS;
 }
 
-hardware_interface::return_type ExternalRRBotForceTorqueSensorHardware::read()
+hardware_interface::return_type ExternalRRBotForceTorqueSensorHardware::read(
+  const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(rclcpp::get_logger("ExternalRRBotForceTorqueSensorHardware"), "Reading...");
 
   for (uint i = 0; i < hw_sensor_states_.size(); i++)
