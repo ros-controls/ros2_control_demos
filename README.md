@@ -471,7 +471,7 @@ Now you should also see the *RRbot* represented correctly in `RViz`.
 
 1. If you want to test hardware with `JointTrajectoryController` first load and configure a controller (not always needed):
    ```
-   ros2 control load_controller position_trajectory_controller --set-state configure
+   ros2 control load_controller joint_trajectory_position_controller --set-state configure
    ```
    Check if the controller is loaded and configured properly:
    ```
@@ -479,12 +479,12 @@ Now you should also see the *RRbot* represented correctly in `RViz`.
    ```
    You should get the response:
    ```
-   position_trajectory_controller[joint_trajectory_controller/JointTrajectoryController] inactive
+   joint_trajectory_position_controller[joint_trajectory_controller/JointTrajectoryController] inactive
    ```
 
 2. Now start the controller (and stop other running contorller):
    ```
-   ros2 control switch_controllers --stop forward_position_controller --start position_trajectory_controller
+   ros2 control switch_controllers --stop forward_position_controller --start joint_trajectory_position_controller
    ```
    Check if controllers are activated:
    ```
@@ -493,12 +493,12 @@ Now you should also see the *RRbot* represented correctly in `RViz`.
    You should get `active` in the response:
    ```
    joint_state_controller[joint_state_controller/JointStateController] active
-   position_trajectory_controller[joint_trajectory_controller/JointTrajectoryController] active
+   joint_trajectory_position_controller[joint_trajectory_controller/JointTrajectoryController] active
    ```
 
-3. Send a command to the controller using demo node which sends two goals every 5 seconds in a loop:
+3. Send a command to the controller using demo node which sends two goals every 6 seconds in a loop:
    ```
-   ros2 launch ros2_control_demo_bringup test_forward_position_controller.launch.py
+   ros2 launch ros2_control_demo_bringup test_joint_trajectory_position_controller.launch.py
    ```
    You can adjust the goals in [rrbot_joint_trajectory_publisher.yaml](ros2_control_demo_bringup/config/rrbot_joint_trajectory_publisher.yaml).
 
