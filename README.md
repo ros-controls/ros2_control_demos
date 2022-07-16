@@ -1,8 +1,5 @@
 # ros2_control Demos
 
-[![Build Status](https://github.com/ros-controls/ros2_control_demos/workflows/CI/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions?query=workflow%3ACI)
-[![Linters Status](https://github.com/ros-controls/ros2_control_demos/workflows/Linters/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions?query=workflow%3ALinters)
-[![Coverage Status](https://github.com/ros-controls/ros2_control_demos/workflows/Coverage/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions?query=workflow%3ACoverage)
 [![Licence](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 This repository provides templates for the development of `ros2_control`-enabled robots and a simple simulations to demonstrate and prove `ros2_control` concepts.
@@ -133,8 +130,6 @@ The *RRBot* URDF files can be found in the `urdf` folder of `rrbot_description` 
    **NOTE**: Getting the following output in terminal is OK: `Warning: Invalid frame ID "odom" passed to canTransform argument target_frame - frame does not exist`.
    This happens because `joint_state_publisher_gui` node need some time to start.
    The `joint_state_publisher_gui` provides a GUI to generate  a random configuration for rrbot. It is immediately displayed in `Rviz`.
-
-The `joint_state_publisher_gui` provides a GUI to generate  a random configuration for rrbot. It is immediately displayed in `Rviz`.
 
 1. To start *RRBot* example open open a terminal, source your ROS2-workspace and execute its launch file with:
    ```
@@ -492,7 +487,6 @@ Accessing Wrench data from 2D FTS:
 ros2 topic echo /fts_broadcaster/wrench
 ```
 
-You should now see an orange box circling in `RViz`.
 
 ### Example 4: "Industrial Robots with externally connected sensor"
 
@@ -520,9 +514,6 @@ Available controllers:
 - `forward_position_controller[forward_command_controller/ForwardCommandController]`
 - `fts_broadcaster[force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster]`
 - `joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]`
-
-Notes:
-  - Wrench messages are not displayed properly in Rviz as NaN values are not handled in Rviz and FTS Broadcaster may send NaN values.
 
 Commanding the robot: see the commands below.
 
