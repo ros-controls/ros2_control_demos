@@ -55,7 +55,7 @@ def generate_launch_description():
             "description_file": "rrbot_system_multi_interface.urdf.xacro",
             "prefix": prefix,
             "use_fake_hardware": "false",
-            "fake_sensor_commands": "false",
+            "mock_sensor_commands": "false",
             "slowdown": slowdown,
             "robot_controller": robot_controller,
         }.items(),

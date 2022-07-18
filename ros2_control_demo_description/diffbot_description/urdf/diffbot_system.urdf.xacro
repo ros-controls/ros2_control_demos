@@ -9,7 +9,7 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/diffbot_de
 
   <!-- Enable setting arguments from the launch file -->
   <xacro:arg name="use_fake_hardware" default="true" />
-  <xacro:arg name="fake_sensor_commands" default="false" />
+  <xacro:arg name="mock_sensor_commands" default="false" />
   <xacro:arg name="prefix" default="" />
 
   <xacro:include filename="$(find diffbot_description)/urdf/diffbot.urdf.xacro" />
@@ -30,6 +30,6 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/diffbot_de
   <xacro:diffbot_system
     name="DiffBotSystem" prefix="$(arg prefix)"
     use_fake_hardware="$(arg use_fake_hardware)"
-    fake_sensor_commands="$(arg fake_sensor_commands)"/>
+    mock_sensor_commands="$(arg mock_sensor_commands)"/>
 
 </robot>
