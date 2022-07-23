@@ -15,6 +15,7 @@ def generate_launch_description():
             PathJoinSubstitution([FindPackageShare("6_dof_robot"), "urdf", "6_dof_robot.urdf.xacro"])
         ]
     )
+    # /opt/ros/rolling/bin/xacro /home/paul/Downloads/tutorial_ws/install/6_dof_robot/share/6_dof_robot/urdf/6_dof_robot.urdf.xacro
     robot_description = {"robot_description": robot_description_content}
 
     rviz_config_file = PathJoinSubstitution(
@@ -47,4 +48,4 @@ def generate_launch_description():
         rviz_node,
     ]
 
-    return LaunchDescription(declared_arguments + nodes_to_start)
+    return LaunchDescription(nodes_to_start)

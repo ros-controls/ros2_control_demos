@@ -11,13 +11,13 @@
             <visual>
                 <origin xyz="${xyz_offset}" rpy="${rpy_offset}"/>
                 <geometry>
-                    <mesh filename="package://${mesh_package}/meshes/${mesh_name}.dae"/>
+                    <mesh filename="package://${mesh_package}/meshes/visual/${mesh_name}.stl"/>
                 </geometry>
             </visual>
             <collision>
                 <origin xyz="${xyz_offset}" rpy="${rpy_offset}"/>
                 <geometry>
-                    <mesh filename="package://${mesh_package}/collision/${mesh_name}.stl"/>
+                    <mesh filename="package://${mesh_package}/meshes/collision/${mesh_name}.stl"/>
                 </geometry>
             </collision>
             <inertial>
