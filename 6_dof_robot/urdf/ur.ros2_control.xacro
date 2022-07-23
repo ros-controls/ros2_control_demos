@@ -1,0 +1,304 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="ur_ros2_control" params="
+    name
+    prefix
+    use_fake_hardware:=false fake_sensor_commands:=false
+    sim_gazebo:=false
+    sim_ignition:=false
+    headless_mode:=false
+    initial_positions:=${dict(shoulder_pan_joint=0.0,shoulder_lift_joint=-1.57,elbow_joint=0.0,wrist_1_joint=-1.57,wrist_2_joint=0.0,wrist_3_joint=0.0)}
+    use_tool_communication:=false
+    script_filename output_recipe_filename
+    input_recipe_filename tf_prefix
+    hash_kinematics robot_ip
+    tool_voltage:=24 tool_parity:=0 tool_baud_rate:=115200 tool_stop_bits:=1
+    tool_rx_idle_chars:=1.5 tool_tx_idle_chars:=3.5 tool_device_name:=/tmp/ttyUR tool_tcp_port:=54321
+    reverse_port:=50001
+    script_sender_port:=50002">
+
+    <ros2_control name="${name}" type="system">
+      <hardware>
+        <xacro:if value="${sim_gazebo}">
+          <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+        </xacro:if>
+        <xacro:if value="${sim_ignition}">
+          <plugin>ign_ros2_control/IgnitionSystem</plugin>
+        </xacro:if>
+        <xacro:if value="${use_fake_hardware}">
+          <plugin>fake_components/GenericSystem</plugin>
+          <param name="fake_sensor_commands">${fake_sensor_commands}</param>
+          <param name="state_following_offset">0.0</param>
+        </xacro:if>
+        <xacro:unless value="${use_fake_hardware or sim_gazebo or sim_ignition}">
+          <plugin>ur_robot_driver/URPositionHardwareInterface</plugin>
+          <param name="robot_ip">${robot_ip}</param>
+          <param name="script_filename">${script_filename}</param>
+          <param name="output_recipe_filename">${output_recipe_filename}</param>
+          <param name="input_recipe_filename">${input_recipe_filename}</param>
+          <param name="headless_mode">${headless_mode}</param>
+          <param name="reverse_port">${reverse_port}</param>
+          <param name="script_sender_port">${script_sender_port}</param>
+          <param name="tf_prefix">"${tf_prefix}"</param>
+          <param name="non_blocking_read">0</param>
+          <param name="servoj_gain">2000</param>
+          <param name="servoj_lookahead_time">0.03</param>
+          <param name="use_tool_communication">${use_tool_communication}</param>
+          <param name="kinematics/hash">${hash_kinematics}</param>
+          <param name="tool_voltage">${tool_voltage}</param>
+          <param name="tool_parity">${tool_parity}</param>
+          <param name="tool_baud_rate">${tool_baud_rate}</param>
+          <param name="tool_stop_bits">${tool_stop_bits}</param>
+          <param name="tool_rx_idle_chars">${tool_rx_idle_chars}</param>
+          <param name="tool_tx_idle_chars">${tool_tx_idle_chars}</param>
+          <param name="tool_device_name">${tool_device_name}</param>
+          <param name="tool_tcp_port">${tool_tcp_port}</param>
+        </xacro:unless>
+      </hardware>
+      <joint name="${prefix}shoulder_pan_joint">
+        <command_interface name="position">
+          <param name="min">{-2*pi}</param>
+          <param name="max">{2*pi}</param>
+        </command_interface>
+        <command_interface name="velocity">
+          <param name="min">-3.15</param>
+          <param name="max">3.15</param>
+        </command_interface>
+        <state_interface name="position">
+          <!-- initial position for the FakeSystem and simulation -->
+          <param name="initial_value">${initial_positions['shoulder_pan_joint']}</param>
+        </state_interface>
+        <state_interface name="velocity"/>
+        <state_interface name="effort"/>
+      </joint>
+      <joint name="${prefix}shoulder_lift_joint">
+        <command_interface name="position">
+          <param name="min">{-2*pi}</param>
+          <param name="max">{2*pi}</param>
+        </command_interface>
+        <command_interface name="velocity">
+          <param name="min">-3.15</param>
+          <param name="max">3.15</param>
+        </command_interface>
+        <state_interface name="position">
+          <!-- initial position for the FakeSystem and simulation -->
+          <param name="initial_value">${initial_positions['shoulder_lift_joint']}</param>
+        </state_interface>
+        <state_interface name="velocity"/>
+        <state_interface name="effort"/>
+      </joint>
+      <joint name="${prefix}elbow_joint">
+        <command_interface name="position">
+          <param name="min">{-pi}</param>
+          <param name="max">{pi}</param>
+        </command_interface>
+        <command_interface name="velocity">
+          <param name="min">-3.15</param>
+          <param name="max">3.15</param>
+        </command_interface>
+        <state_interface name="position">
+          <!-- initial position for the FakeSystem and simulation -->
+          <param name="initial_value">${initial_positions['elbow_joint']}</param>
+        </state_interface>
+        <state_interface name="velocity"/>
+        <state_interface name="effort"/>
+      </joint>
+      <joint name="${prefix}wrist_1_joint">
+        <command_interface name="position">
+          <param name="min">{-2*pi}</param>
+          <param name="max">{2*pi}</param>
+        </command_interface>
+        <command_interface name="velocity">
+          <param name="min">-3.2</param>
+          <param name="max">3.2</param>
+        </command_interface>
+        <state_interface name="position">
+          <!-- initial position for the FakeSystem and simulation -->
+          <param name="initial_value">${initial_positions['wrist_1_joint']}</param>
+        </state_interface>
+        <state_interface name="velocity"/>
+        <state_interface name="effort"/>
+      </joint>
+      <joint name="${prefix}wrist_2_joint">
+        <command_interface name="position">
+          <param name="min">{-2*pi}</param>
+          <param name="max">{2*pi}</param>
+        </command_interface>
+        <command_interface name="velocity">
+          <param name="min">-3.2</param>
+          <param name="max">3.2</param>
+        </command_interface>
+        <state_interface name="position">
+          <!-- initial position for the FakeSystem and simulation -->
+          <param name="initial_value">${initial_positions['wrist_2_joint']}</param>
+        </state_interface>
+        <state_interface name="velocity"/>
+        <state_interface name="effort"/>
+      </joint>
+      <joint name="${prefix}wrist_3_joint">
+        <command_interface name="position">
+          <param name="min">{-2*pi}</param>
+          <param name="max">{2*pi}</param>
+        </command_interface>
+        <command_interface name="velocity">
+          <param name="min">-3.2</param>
+          <param name="max">3.2</param>
+        </command_interface>
+        <state_interface name="position">
+          <!-- initial position for the FakeSystem and simulation -->
+          <param name="initial_value">${initial_positions['wrist_3_joint']}</param>
+        </state_interface>
+        <state_interface name="velocity"/>
+        <state_interface name="effort"/>
+      </joint>
+
+      <xacro:unless value="${sim_gazebo or sim_ignition}">
+        <sensor name="tcp_fts_sensor">
+          <state_interface name="force.x"/>
+          <state_interface name="force.y"/>
+          <state_interface name="force.z"/>
+          <state_interface name="torque.x"/>
+          <state_interface name="torque.y"/>
+          <state_interface name="torque.z"/>
+        </sensor>
+
+        <!-- NOTE The following are joints used only for testing with fake hardware and will change in the future -->
+        <gpio name="speed_scaling">
+          <state_interface name="speed_scaling_factor"/>
+          <param name="initial_speed_scaling_factor">1</param>
+          <command_interface name="target_speed_fraction_cmd"/>
+          <command_interface name="target_speed_fraction_async_success"/>
+        </gpio>
+
+        <gpio name="gpio">
+          <command_interface name="standard_digital_output_cmd_0"/>
+          <command_interface name="standard_digital_output_cmd_1"/>
+          <command_interface name="standard_digital_output_cmd_2"/>
+          <command_interface name="standard_digital_output_cmd_3"/>
+          <command_interface name="standard_digital_output_cmd_4"/>
+          <command_interface name="standard_digital_output_cmd_5"/>
+          <command_interface name="standard_digital_output_cmd_6"/>
+          <command_interface name="standard_digital_output_cmd_7"/>
+          <command_interface name="standard_digital_output_cmd_8"/>
+          <command_interface name="standard_digital_output_cmd_9"/>
+          <command_interface name="standard_digital_output_cmd_10"/>
+          <command_interface name="standard_digital_output_cmd_11"/>
+          <command_interface name="standard_digital_output_cmd_12"/>
+          <command_interface name="standard_digital_output_cmd_13"/>
+          <command_interface name="standard_digital_output_cmd_14"/>
+          <command_interface name="standard_digital_output_cmd_15"/>
+          <command_interface name="standard_digital_output_cmd_16"/>
+          <command_interface name="standard_digital_output_cmd_17"/>
+
+          <command_interface name="standard_analog_output_cmd_0"/>
+          <command_interface name="standard_analog_output_cmd_1"/>
+
+          <command_interface name="io_async_success"/>
+
+          <state_interface name="digital_output_0"/>
+          <state_interface name="digital_output_1"/>
+          <state_interface name="digital_output_2"/>
+          <state_interface name="digital_output_3"/>
+          <state_interface name="digital_output_4"/>
+          <state_interface name="digital_output_5"/>
+          <state_interface name="digital_output_6"/>
+          <state_interface name="digital_output_7"/>
+          <state_interface name="digital_output_8"/>
+          <state_interface name="digital_output_9"/>
+          <state_interface name="digital_output_10"/>
+          <state_interface name="digital_output_11"/>
+          <state_interface name="digital_output_12"/>
+          <state_interface name="digital_output_13"/>
+          <state_interface name="digital_output_14"/>
+          <state_interface name="digital_output_15"/>
+          <state_interface name="digital_output_16"/>
+          <state_interface name="digital_output_17"/>
+
+          <state_interface name="digital_input_0"/>
+          <state_interface name="digital_input_1"/>
+          <state_interface name="digital_input_2"/>
+          <state_interface name="digital_input_3"/>
+          <state_interface name="digital_input_4"/>
+          <state_interface name="digital_input_5"/>
+          <state_interface name="digital_input_6"/>
+          <state_interface name="digital_input_7"/>
+          <state_interface name="digital_input_8"/>
+          <state_interface name="digital_input_9"/>
+          <state_interface name="digital_input_10"/>
+          <state_interface name="digital_input_11"/>
+          <state_interface name="digital_input_12"/>
+          <state_interface name="digital_input_13"/>
+          <state_interface name="digital_input_14"/>
+          <state_interface name="digital_input_15"/>
+          <state_interface name="digital_input_16"/>
+          <state_interface name="digital_input_17"/>
+
+          <state_interface name="standard_analog_output_0"/>
+          <state_interface name="standard_analog_output_1"/>
+
+          <state_interface name="standard_analog_input_0"/>
+          <state_interface name="standard_analog_input_1"/>
+
+          <state_interface name="analog_io_type_0"/>
+          <state_interface name="analog_io_type_1"/>
+          <state_interface name="analog_io_type_2"/>
+          <state_interface name="analog_io_type_3"/>
+
+          <state_interface name="tool_mode"/>
+          <state_interface name="tool_output_voltage"/>
+          <state_interface name="tool_output_current"/>
+          <state_interface name="tool_temperature"/>
+
+          <state_interface name="tool_analog_input_0"/>
+          <state_interface name="tool_analog_input_1"/>
+
+          <state_interface name="tool_analog_input_type_0"/>
+          <state_interface name="tool_analog_input_type_1"/>
+
+          <state_interface name="robot_mode"/>
+          <state_interface name="robot_status_bit_0"/>
+          <state_interface name="robot_status_bit_1"/>
+          <state_interface name="robot_status_bit_2"/>
+          <state_interface name="robot_status_bit_3"/>
+
+          <state_interface name="safety_mode"/>
+          <state_interface name="safety_status_bit_0"/>
+          <state_interface name="safety_status_bit_1"/>
+          <state_interface name="safety_status_bit_2"/>
+          <state_interface name="safety_status_bit_3"/>
+          <state_interface name="safety_status_bit_4"/>
+          <state_interface name="safety_status_bit_5"/>
+          <state_interface name="safety_status_bit_6"/>
+          <state_interface name="safety_status_bit_7"/>
+          <state_interface name="safety_status_bit_8"/>
+          <state_interface name="safety_status_bit_9"/>
+          <state_interface name="safety_status_bit_10"/>
+
+          <state_interface name="program_running"/>
+        </gpio>
+
+        <gpio name="payload">
+          <command_interface name="mass"/>
+          <command_interface name="cog.x"/>
+          <command_interface name="cog.y"/>
+          <command_interface name="cog.z"/>
+          <command_interface name="payload_async_success"/>
+        </gpio>
+
+        <gpio name="resend_robot_program">
+          <command_interface name="resend_robot_program_cmd"/>
+          <command_interface name="resend_robot_program_async_success"/>
+        </gpio>
+
+        <gpio name="system_interface">
+          <state_interface name="initialized"/>
+        </gpio>
+
+      </xacro:unless>
+
+    </ros2_control>
+
+  </xacro:macro>
+
+</robot>
