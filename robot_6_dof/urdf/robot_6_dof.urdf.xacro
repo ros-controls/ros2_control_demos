@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://wiki.ros.org/xacro" name="6_dof_robot">
+<robot xmlns:xacro="http://wiki.ros.org/xacro" name="robot_6_dof">
   <!-- helper macro -->
-  <xacro:include filename="$(find 6_dof_robot)/urdf/inc/create_link.xacro"/>
+  <xacro:include filename="$(find robot_6_dof)/urdf/inc/create_link.xacro"/>
 
   <!-- create link fixed to the "world" -->
   <link name="world"/>
@@ -10,59 +10,60 @@
       link_name="base_link"
       xyz_offset="0 0 0"
       rpy_offset="0 0 0"
-      mesh_package="6_dof_robot"
+      mesh_package="robot_6_dof"
       mesh_name="link_0"
   />
 
   <xacro:create_link
-      link_name="shoulder_link"
+      link_name="link_1"
       xyz_offset="0 0 0"
       rpy_offset="0 0 0"
-      mesh_package="6_dof_robot"
+      mesh_package="robot_6_dof"
       mesh_name="link_1"
   />
 
   <xacro:create_link
-      link_name="upper_arm_link"
+      link_name="link_2"
       xyz_offset="0 0 0"
       rpy_offset="0 0 0"
-      mesh_package="6_dof_robot"
+      mesh_package="robot_6_dof"
       mesh_name="link_2"
   />
 
   <xacro:create_link
-      link_name="forearm_link"
+      link_name="link_3"
       xyz_offset="0 0 0"
       rpy_offset="0 0 0"
-      mesh_package="6_dof_robot"
+      mesh_package="robot_6_dof"
       mesh_name="link_3"
   />
 
   <xacro:create_link
-      link_name="wrist_1_link"
+      link_name="link_4"
       xyz_offset="0 0 0"
       rpy_offset="0 0 0"
-      mesh_package="6_dof_robot"
+      mesh_package="robot_6_dof"
       mesh_name="link_4"
   />
 
   <xacro:create_link
-      link_name="wrist_2_link"
+      link_name="link_5"
       xyz_offset="0 0 0"
       rpy_offset="0 0 0"
-      mesh_package="6_dof_robot"
+      mesh_package="robot_6_dof"
       mesh_name="link_5"
   />
 
   <xacro:create_link
-      link_name="wrist_3_link"
+      link_name="link_6"
       xyz_offset="0 0 0"
       rpy_offset="0 0 0"
-      mesh_package="6_dof_robot"
+      mesh_package="robot_6_dof"
       mesh_name="link_6"
   />
 
   <link name="ft_frame"/>
+  <link name="tool0"/>
 
   <!-- base_joint fixes base_link to the environment -->
   <joint name="base_joint" type="fixed">
@@ -73,83 +74,68 @@
   </joint>
 
   <!-- joints - main serial chain -->
-  <joint name="shoulder_pan_joint" type="revolute">
+  <joint name="joint_1" type="revolute">
     <parent link="base_link"/>
-    <child link="shoulder_link"/>
+    <child link="link_1"/>
     <origin xyz="0 0 0.061584" rpy="0 0 0"/>
     <axis xyz="0 0 1"/>
     <limit effort="1000.0" lower="${-pi}" upper="${pi}" velocity="2.5" />
   </joint>
-  <joint name="shoulder_lift_joint" type="revolute">
-    <parent link="shoulder_link"/>
-    <child link="upper_arm_link"/>
+
+  <joint name="joint_2" type="revolute">
+    <parent link="link_1"/>
+    <child link="link_2"/>
     <origin xyz="-0.101717 0 0.182284" rpy="${-pi/2} -${pi/3} ${pi/2}"/>
     <axis xyz="0 0 1"/>
     <limit effort="1000.0" lower="${-pi}" upper="${pi}" velocity="2.5" />
   </joint>
-  <joint name="elbow_joint" type="revolute">
-    <parent link="upper_arm_link"/>
-    <child link="forearm_link"/>
+
+  <joint name="joint_3" type="revolute">
+    <parent link="link_2"/>
+    <child link="link_3"/>
     <origin xyz="0.685682 0 0.041861" rpy="0 ${pi} ${pi+pi/2}"/>
     <axis xyz="0 0 1"/>
     <limit effort="1000.0" lower="${-pi}" upper="${pi}" velocity="2.5" />
   </joint>
-  <joint name="wrist_1_joint" type="revolute">
-    <parent link="forearm_link"/>
-    <child link="wrist_1_link"/>
+
+  <joint name="joint_4" type="revolute">
+    <parent link="link_3"/>
+    <child link="link_4"/>
     <origin xyz="0.518777 0 0.067458" rpy="0 ${pi} ${pi+pi/6}"/>
     <axis xyz="0 0 1"/>
     <limit effort="1000.0" lower="${-pi}" upper="${pi}" velocity="2.5" />
   </joint>
-  <joint name="wrist_2_joint" type="revolute">
-    <parent link="wrist_1_link"/>
-    <child link="wrist_2_link"/>
+
+  <joint name="joint_5" type="revolute">
+    <parent link="link_4"/>
+    <child link="link_5"/>
     <origin xyz="0.112654 0 0.110903" rpy="${pi/2} ${pi} ${pi/2}"/>
     <axis xyz="0 0 1"/>
     <limit effort="1000.0" lower="${-pi}" upper="${pi}" velocity="2.5" />
   </joint>
-  <joint name="wrist_3_joint" type="revolute">
-    <parent link="wrist_2_link"/>
-    <child link="wrist_3_link"/>
+
+  <joint name="joint_6" type="revolute">
+    <parent link="link_5"/>
+    <child link="link_6"/>
     <origin xyz="-0.085976 0 0.133436" rpy="0 ${-pi/2} 0"/>
     <axis xyz="0 0 1"/>
     <limit effort="1000.0" lower="${-pi}" upper="${pi}" velocity="2.5" />
   </joint>
-  <joint name="wrist_3_link-ft_frame" type="fixed">
-    <parent link="wrist_3_link"/>
+
+  <joint name="joint-ft_frame" type="fixed">
+    <parent link="link_6"/>
     <child link="ft_frame"/>
-    <origin xyz="0 0 0" rpy="${pi} 0 0"/>
-    <limit effort="1000.0" lower="${-pi}" upper="${pi}" velocity="2.5" />
+    <origin xyz="0 0 0" rpy="0 0 0"/>
   </joint>
 
-  <!-- ROS-Industrial 'base' frame - base_link to UR 'Base' Coordinates transform -->
-  <link name="base"/>
-  <joint name="base_link-base_fixed_joint" type="fixed">
-    <origin xyz="0 0 0" rpy="0 0 ${pi}"/>
-    <parent link="base_link"/>
-    <child link="base"/>
-  </joint>
-
-  <!-- ROS-Industrial 'flange' frame - attachment point for EEF models -->
-  <link name="flange"/>
-  <joint name="wrist_3-flange" type="fixed">
-    <parent link="wrist_3_link"/>
-    <child link="flange"/>
-    <origin xyz="0 0 0" rpy="0 ${-pi/2.0} ${-pi/2.0}"/>
-  </joint>
-
-  <!-- ROS-Industrial 'tool0' frame - all-zeros tool frame -->
-  <link name="tool0"/>
-  <joint name="flange-tool0" type="fixed">
-    <!-- default toolframe - X+ left, Y+ up, Z+ front -->
-    <origin xyz="0 0 0" rpy="${pi/2.0} 0 ${pi/2.0}"/>
-    <parent link="flange"/>
+  <joint name="joint-tool" type="fixed">
+    <parent link="ft_frame"/>
     <child link="tool0"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
   </joint>
-
 
   <!-- ros2 control tag -->
-  <ros2_control name="6_dof_robot" type="system">
+  <ros2_control name="robot_6_dof" type="system">
 
     <hardware>
       <plugin>fake_components/GenericSystem</plugin>
@@ -157,7 +143,7 @@
       <param name="state_following_offset">0.0</param>
     </hardware>
 
-    <joint name="shoulder_pan_joint">
+    <joint name="joint_1">
       <command_interface name="position">
         <param name="min">{-2*pi}</param>
         <param name="max">{2*pi}</param>
@@ -173,7 +159,7 @@
       <state_interface name="effort"/>
     </joint>
 
-    <joint name="shoulder_lift_joint">
+    <joint name="joint_2">
       <command_interface name="position">
         <param name="min">{-2*pi}</param>
         <param name="max">{2*pi}</param>
@@ -183,13 +169,13 @@
         <param name="max">3.15</param>
       </command_interface>
       <state_interface name="position">
-        <param name="initial_value">-1.57</param>
+        <param name="initial_value">0.0</param>
       </state_interface>
       <state_interface name="velocity"/>
       <state_interface name="effort"/>
     </joint>
 
-    <joint name="elbow_joint">
+    <joint name="joint_3">
       <command_interface name="position">
         <param name="min">{-pi}</param>
         <param name="max">{pi}</param>
@@ -205,23 +191,7 @@
       <state_interface name="effort"/>
     </joint>
 
-    <joint name="wrist_1_joint">
-      <command_interface name="position">
-        <param name="min">{-2*pi}</param>
-        <param name="max">{2*pi}</param>
-      </command_interface>
-      <command_interface name="velocity">
-        <param name="min">-3.2</param>
-        <param name="max">3.2</param>
-      </command_interface>
-      <state_interface name="position">
-        <param name="initial_value">-1.57</param>
-      </state_interface>
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
-    </joint>
-
-    <joint name="wrist_2_joint">
+    <joint name="joint_4">
       <command_interface name="position">
         <param name="min">{-2*pi}</param>
         <param name="max">{2*pi}</param>
@@ -237,7 +207,23 @@
       <state_interface name="effort"/>
     </joint>
 
-    <joint name="wrist_3_joint">
+    <joint name="joint_5">
+      <command_interface name="position">
+        <param name="min">{-2*pi}</param>
+        <param name="max">{2*pi}</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-3.2</param>
+        <param name="max">3.2</param>
+      </command_interface>
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+      <state_interface name="effort"/>
+    </joint>
+
+    <joint name="joint_6">
       <command_interface name="position">
         <param name="min">{-2*pi}</param>
         <param name="max">{2*pi}</param>

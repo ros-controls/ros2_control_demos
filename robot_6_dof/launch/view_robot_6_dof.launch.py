@@ -7,19 +7,24 @@ from launch_ros.substitutions import FindPackageShare
 
 
 def generate_launch_description():
-
+    # Get URDF via xacro
     robot_description_content = Command(
         [
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
-            PathJoinSubstitution([FindPackageShare("6_dof_robot"), "urdf", "6_dof_robot.urdf.xacro"])
+            PathJoinSubstitution(
+                [
+                    FindPackageShare("robot_6_dof"),
+                    "urdf",
+                    "robot_6_dof.urdf.xacro",
+                ]
+            ),
         ]
     )
-    # /opt/ros/rolling/bin/xacro /home/paul/Downloads/tutorial_ws/install/6_dof_robot/share/6_dof_robot/urdf/6_dof_robot.urdf.xacro
     robot_description = {"robot_description": robot_description_content}
 
     rviz_config_file = PathJoinSubstitution(
-        [FindPackageShare("6_dof_robot"), "rviz", "view_robot.rviz"]
+        [FindPackageShare("robot_6_dof"), "rviz", "view_robot.rviz"]
     )
 
 
