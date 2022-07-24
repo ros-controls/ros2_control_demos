@@ -11,7 +11,7 @@
             <visual>
                 <origin xyz="${xyz_offset}" rpy="${rpy_offset}"/>
                 <geometry>
-                    <mesh filename="package://${mesh_package}/meshes/visual/${mesh_name}.stl"/>
+                    <mesh filename="package://${mesh_package}/meshes/visual/${mesh_name}.dae"/>
                 </geometry>
             </visual>
             <collision>
