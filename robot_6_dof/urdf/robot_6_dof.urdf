@@ -198,8 +198,6 @@
   <ros2_control name="robot_6_dof" type="system">
     <hardware>
       <plugin>robot_6_dof_hardware/RobotSystem</plugin>
-      <param name="fake_sensor_commands">true</param>
-      <param name="state_following_offset">0.0</param>
     </hardware>
     <joint name="joint_1">
       <command_interface name="position">
@@ -214,7 +212,6 @@
         <param name="initial_value">0.0</param>
       </state_interface>
       <state_interface name="velocity"/>
-      <state_interface name="effort"/>
     </joint>
     <joint name="joint_2">
       <command_interface name="position">
@@ -229,7 +226,6 @@
         <param name="initial_value">0.0</param>
       </state_interface>
       <state_interface name="velocity"/>
-      <state_interface name="effort"/>
     </joint>
     <joint name="joint_3">
       <command_interface name="position">
@@ -244,7 +240,6 @@
         <param name="initial_value">0.0</param>
       </state_interface>
       <state_interface name="velocity"/>
-      <state_interface name="effort"/>
     </joint>
     <joint name="joint_4">
       <command_interface name="position">
@@ -259,7 +254,6 @@
         <param name="initial_value">0.0</param>
       </state_interface>
       <state_interface name="velocity"/>
-      <state_interface name="effort"/>
     </joint>
     <joint name="joint_5">
       <command_interface name="position">
@@ -274,7 +268,6 @@
         <param name="initial_value">0.0</param>
       </state_interface>
       <state_interface name="velocity"/>
-      <state_interface name="effort"/>
     </joint>
     <joint name="joint_6">
       <command_interface name="position">
@@ -289,7 +282,6 @@
         <param name="initial_value">0.0</param>
       </state_interface>
       <state_interface name="velocity"/>
-      <state_interface name="effort"/>
     </joint>
     <sensor name="tcp_fts_sensor">
       <state_interface name="force.x"/>
