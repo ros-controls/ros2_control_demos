@@ -139,8 +139,6 @@
 
     <hardware>
       <plugin>robot_6_dof_hardware/RobotSystem</plugin>
-      <param name="fake_sensor_commands">true</param>
-      <param name="state_following_offset">0.0</param>
     </hardware>
 
     <joint name="joint_1">
@@ -156,7 +154,6 @@
         <param name="initial_value">0.0</param>
       </state_interface>
       <state_interface name="velocity"/>
-      <state_interface name="effort"/>
     </joint>
 
     <joint name="joint_2">
@@ -172,7 +169,6 @@
         <param name="initial_value">0.0</param>
       </state_interface>
       <state_interface name="velocity"/>
-      <state_interface name="effort"/>
     </joint>
 
     <joint name="joint_3">
@@ -188,7 +184,6 @@
         <param name="initial_value">0.0</param>
       </state_interface>
       <state_interface name="velocity"/>
-      <state_interface name="effort"/>
     </joint>
 
     <joint name="joint_4">
@@ -204,7 +199,6 @@
         <param name="initial_value">0.0</param>
       </state_interface>
       <state_interface name="velocity"/>
-      <state_interface name="effort"/>
     </joint>
 
     <joint name="joint_5">
@@ -220,7 +214,6 @@
         <param name="initial_value">0.0</param>
       </state_interface>
       <state_interface name="velocity"/>
-      <state_interface name="effort"/>
     </joint>
 
     <joint name="joint_6">
@@ -236,7 +229,6 @@
         <param name="initial_value">0.0</param>
       </state_interface>
       <state_interface name="velocity"/>
-      <state_interface name="effort"/>
     </joint>
 
     <sensor name="tcp_fts_sensor">
