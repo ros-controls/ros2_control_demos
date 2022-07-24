@@ -131,7 +131,7 @@
   <joint name="joint-tool" type="fixed">
     <parent link="ft_frame"/>
     <child link="tool0"/>
-    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <origin xyz="0 0 .185" rpy="0 0 0"/>
   </joint>
 
   <!-- ros2 control tag -->

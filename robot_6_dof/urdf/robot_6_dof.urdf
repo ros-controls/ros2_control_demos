@@ -192,7 +192,7 @@
   <joint name="joint-tool" type="fixed">
     <parent link="ft_frame"/>
     <child link="tool0"/>
-    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <origin rpy="0 0 0" xyz="0 0 .185"/>
   </joint>
   <!-- ros2 control tag -->
   <ros2_control name="robot_6_dof" type="system">
