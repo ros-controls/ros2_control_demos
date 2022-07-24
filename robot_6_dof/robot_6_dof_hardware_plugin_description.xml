@@ -1,0 +1,9 @@
+<library path="robot_6_dof_hardware">
+
+  <class name="robot_6_dof_hardware/RobotSystem" type="robot_6_dof_hardware::RobotSystem" base_class_type="hardware_interface::SystemInterface">
+    <description>
+      Robot hardware plugin for 6 dof robot tutorial.
+    </description>
+  </class>
+
+</library>

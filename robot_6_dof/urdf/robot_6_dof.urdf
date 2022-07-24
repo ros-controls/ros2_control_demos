@@ -197,7 +197,7 @@
   <!-- ros2 control tag -->
   <ros2_control name="robot_6_dof" type="system">
     <hardware>
-      <plugin>fake_components/GenericSystem</plugin>
+      <plugin>robot_6_dof_hardware/RobotSystem</plugin>
       <param name="fake_sensor_commands">true</param>
       <param name="state_following_offset">0.0</param>
     </hardware>
