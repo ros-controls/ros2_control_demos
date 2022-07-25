@@ -11,7 +11,7 @@ This tutorial will address each component of ROS 2 control in detail, namely:
 6. Writing a ROS 2 control launch file
 
 ## ROS 2 control overview
-ROS 2 control introduces `state_interfaces` and `command_interfaces` to abstract hardware interfacing. The `state_interfaces` are read only data handles that generally represent sensors readings, e.g. joint encoder. The `command_interfaces` are read and write data handles that hardware commands, like setting a joint velocity reference. The `command_interfaces` are exclusively accessed, meaning if a controller has "claimed" an interface, it cannot be used by any other controller until it is released. The available state and command interfaces are specified in a YAML configuration file.  
+ROS 2 control introduces `state_interfaces` and `command_interfaces` to abstract hardware interfacing. The `state_interfaces` are read only data handles that generally represent sensors readings, e.g. joint encoder. The `command_interfaces` are read and write data handles that hardware commands, like setting a joint velocity reference. The `command_interfaces` are exclusively accessed, meaning if a controller has "claimed" an interface, it cannot be used by any other controller until it is released. Both interface types are uniquely designated with a name and type. The names and types for all available state and command interfaces are specified in a YAML configuration file and a URDF file.  
 
 ROS 2 control provides the `ControllerInterface` and `HardwareInterface` classes for robot agnostic control. During initialization, controllers request `state_interfaces` and `command_interfaces` required for operation through the `ControllerInterface`. On the other hand, hardware drivers offer `state_interfaces` and `command_interfaces` via the `HardwareInterface`. ROS 2 control ensure all requested interfaces are available before starting the controllers. The interface pattern allows vendors to write hardware specific drivers that are loaded at runtime.  
 
@@ -138,49 +138,81 @@ The URDF file is generally formatted according to the following template.
 * The `hardware` and `plugin` tags instruct the ROS 2 control framework to dynamically load a hardware driver conforming to `HardwareInterface` as a plugin. The plugin is specified as ` <{Name_Space}/{Class_Name}`. 
 * Finally, the `joint` tag specifies the state and command interfaces that the loaded plugin is will offer. The joint is specified with the name attribute. The `command_interface` and `state_interface` tags specify the interface type, usually position, velocity, acceleration, or effort. 
 
+The complete URDF for the robot in this tutorial is available [here](urdf/robot_6_dof.urdf).
 
 ## Writing a hardware interface
+In ROS 2 control, hardware system components integrated via user defined libraries that conform to the `HarwareInterface` public interface. Hardware plugins specified in the URDF are dynamically loaded during initialization using the pluginlib interface.The following code blocks will explain the requirements for writing a new hardware interface. 
+
+The hardware plugin for the tutorial robot is class called that inherits from `RobotSystem` `hardware_interface::SystemInterface`. The `SystemInterface` is one of the offered hardware interfaces designed for a complete robot system. For example, The UR5 uses this interface. The `RobotSystem` must implement five public methods.     
+1. `on_init` 
+2. `export_state_interfaces` 
+3. `export_command_interfaces` 
+4. `read` 
+5. `write`
 
 ```c++
-namespace robot_6_dof_hardware {
-  CallbackReturn RobotSystem::on_init(const hardware_interface::HardwareInfo &info) {
+using CallbackReturn = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
+#include "hardware_interface/types/hardware_interface_return_values.hpp"
+
+  class HARDWARE_INTERFACE_PUBLIC RobotSystem : public hardware_interface::SystemInterface {
+  public:
+    CallbackReturn on_init(const hardware_interface::HardwareInfo &info) override;
+    std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
+    std::vector<hardware_interface::CommandInterface> export_command_interfaces() override;
+    return_type read(const rclcpp::Time &time, const rclcpp::Duration &period) override;
+    return_type write(const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/) override;
+```
+The `on_init` method is called once during ROS 2 control initialization if the `RobotSystem` was specified in the URDF. In this method, communication between the robot hardware needs to be setup and memory dynamic should be allocated. Since the tutorial robot is simulated, explicit will communication not be established. Instead, vectors will be initialized that represent the state all the hardware, e.g. a vector of doubles describing joint angles, etc.      
+```c++
+CallbackReturn RobotSystem::on_init(const hardware_interface::HardwareInfo &info) {
     if (hardware_interface::SystemInterface::on_init(info) != CallbackReturn::SUCCESS) {
-      return CallbackReturn::ERROR;
+        return CallbackReturn::ERROR;
     }
     // setup communication with robot hardware
     // ...
     return CallbackReturn::SUCCESS;
-  }
+}
+```
+Notably, the behavior of `on_init` is expected to vary depending on the URDF file. The `SystemInterface::on_init(info)` call fills out the `info` object with specifics from the URDF. For example, the `info` object has fields for joints, sensors, gpios, and more. Suppose the sensor field has a name value of `tcp_force_toruqe_sensor`. Then the `on_init` must try to establish communication with that sensor. If it fails, then an error value is returned.
 
-  std::vector<hardware_interface::StateInterface> RobotSystem::export_state_interfaces() {
+Next, `export_state_interfaces` and `export_command_interfaces` methods are called in succession. The `export_state_interfaces` method returns a vector of `StateInterface`, describing the `state_interfaces` for each joint. The `StateInterface` objects are read only data handles. Their constructors require an interface nae, interface type, and a pointer to a double data value. For the `RobotSystem`, the data pointers reference class member variables. This way, the data can be access from every method.
+```c++
+std::vector<hardware_interface::StateInterface> RobotSystem::export_state_interfaces() {
     std::vector<hardware_interface::StateInterface> state_interfaces;
-    // add command interfaces to `state_interfaces` base on `info_.joints[i].state_interfaces_`
+    // add state interfaces to `state_interfaces` for each joint, e.g. `info_.joints[0].state_interfaces_`, `info_.joints[1].state_interfaces_`, `info_.joints[2].state_interfaces_` ...
     // ...
     return state_interfaces;
   }
-
-  std::vector<hardware_interface::CommandInterface> RobotSystem::export_command_interfaces() {
+  ```
+The `export_command_interfaces` method is nearly identical to the previous one. The difference is that a vector of `CommandInterface` is returned. The vector contains objects describing the `command_interfaces` for each joint.
+```c++
+std::vector<hardware_interface::CommandInterface> RobotSystem::export_command_interfaces() {
     std::vector<hardware_interface::CommandInterface> command_interfaces;
-    // add command interfaces to `command_interfaces` base on `info_.joints[i].command_interfaces`
+    // add command interfaces to `command_interfaces` for each joint, e.g. `info_.joints[0].command_interfaces_`, `info_.joints[1].command_interfaces_`, `info_.joints[2].command_interfaces_` ...
     // ...
     return command_interfaces;
-  }
+}
+```
 
-  return_type RobotSystem::read(const rclcpp::Time & time, const rclcpp::Duration &period) {
+```c++
+return_type RobotSystem::read(const rclcpp::Time & time, const rclcpp::Duration &period) {
     // read hardware values for state interfaces, e.g joint encoders and sensor readings
     // ...
-  } 
-
-  return_type write(const rclcpp::Time & time, const rclcpp::Duration & period) {
+    return return_type::OK;
+} 
+  ```
+```c++
+return_type write(const rclcpp::Time & time, const rclcpp::Duration & period) {
     // send command interface values to hardware, e.g joint set joint velocity
     // ...
     return return_type::OK;
-  }
+}
+```
 
+```c++
 #include "pluginlib/class_list_macros.hpp"
 
 PLUGINLIB_EXPORT_CLASS(robot_6_dof_hardware::RobotSystem, hardware_interface::SystemInterface)
-
 ```
 
 
