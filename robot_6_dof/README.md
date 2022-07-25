@@ -138,7 +138,7 @@ The URDF file is generally formatted according to the following template.
 * The `hardware` and `plugin` tags instruct the ROS 2 control framework to dynamically load a hardware driver conforming to `HardwareInterface` as a plugin. The plugin is specified as ` <{Name_Space}/{Class_Name}`. 
 * Finally, the `joint` tag specifies the state and command interfaces that the loaded plugin is will offer. The joint is specified with the name attribute. The `command_interface` and `state_interface` tags specify the interface type, usually position, velocity, acceleration, or effort. 
 
-The complete URDF for the robot in this tutorial is available [here](urdf/robot_6_dof.urdf).
+The complete URDF for the robot in this tutorial is available [here](robot_description/urdf/robot_6_dof.urdf).
 
 ## Writing a hardware interface
 In ROS 2 control, hardware system components integrated via user defined libraries that conform to the `HarwareInterface` public interface. Hardware plugins specified in the URDF are dynamically loaded during initialization using the pluginlib interface.The following code blocks will explain the requirements for writing a new hardware interface. 
@@ -233,16 +233,16 @@ The plugin description file is a required XML file that describes a plugin's lib
 </library>
 ```
 
-The `path` attribute of the `library` tags refers to the cmake library name of the user defined hardware plugin. See [here](robot_6_dof_hardware_plugin_description.xml) for the complete XML file.    
+The `path` attribute of the `library` tags refers to the cmake library name of the user defined hardware plugin. See [here](hardware_interface/robot_6_dof_hardware_plugin_description.xml) for the complete XML file.    
 
 ### CMake library
-The general CMake template to make a hardware plugin available in ROS 2 control is shown below. Notice that a library is created using the plugin source code just like any other  cmake library. In addition, an extra compile definition and cmake export macro (`pluginlib_export_plugin_description_file`) need to be added. See [here](CMakeLists.txt) for the complete `CMakeLists.txt` file.     
+The general CMake template to make a hardware plugin available in ROS 2 control is shown below. Notice that a library is created using the plugin source code just like any other  cmake library. In addition, an extra compile definition and cmake export macro (`pluginlib_export_plugin_description_file`) need to be added. See [here](reference_generator/CMakeLists.txt) for the complete `CMakeLists.txt` file.
 
 ```cmake
 add_library(
     hardware_plugin
     SHARED
-    src/hardware_plugin.cpp
+    reference_generator/src/hardware_plugin.cpp
 )
 
 # include and link dependencies
