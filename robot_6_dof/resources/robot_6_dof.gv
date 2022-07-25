@@ -1,0 +1,32 @@
+digraph G {
+node [shape=box];
+"world" [label="world"];
+"base_link" [label="base_link"];
+"link_1" [label="link_1"];
+"link_2" [label="link_2"];
+"link_3" [label="link_3"];
+"link_4" [label="link_4"];
+"link_5" [label="link_5"];
+"link_6" [label="link_6"];
+"ft_frame" [label="ft_frame"];
+"tool0" [label="tool0"];
+node [shape=ellipse, color=blue, fontcolor=blue];
+"world" -> "base_joint" [label="xyz: 0 0 0 \nrpy: 0 -0 0"]
+"base_joint" -> "base_link"
+"base_link" -> "joint_1" [label="xyz: 0 0 0.061584 \nrpy: 0 -0 0"]
+"joint_1" -> "link_1"
+"link_1" -> "joint_2" [label="xyz: -0.101717 0 0.182284 \nrpy: -1.5708 -1.0472 1.5708"]
+"joint_2" -> "link_2"
+"link_2" -> "joint_3" [label="xyz: 0.685682 0 0.041861 \nrpy: 3.14159 1.22465e-16 1.5708"]
+"joint_3" -> "link_3"
+"link_3" -> "joint_4" [label="xyz: 0.518777 0 0.067458 \nrpy: -3.14159 1.22465e-16 0.523599"]
+"joint_4" -> "link_4"
+"link_4" -> "joint_5" [label="xyz: 0.112654 0 0.110903 \nrpy: -1.5708 1.11022e-16 -1.5708"]
+"joint_5" -> "link_5"
+"link_5" -> "joint_6" [label="xyz: -0.085976 0 0.133436 \nrpy: 0 -1.5708 0"]
+"joint_6" -> "link_6"
+"link_6" -> "joint-ft_frame" [label="xyz: 0 0 0 \nrpy: 0 -0 0"]
+"joint-ft_frame" -> "ft_frame"
+"ft_frame" -> "joint-tool" [label="xyz: 0 0 0.185 \nrpy: 0 -0 0"]
+"joint-tool" -> "tool0"
+}
