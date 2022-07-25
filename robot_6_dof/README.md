@@ -15,7 +15,7 @@ ROS 2 control introduces `state_interfaces` and `command_interfaces` to abstract
 
 ROS 2 control provides the `ControllerInterface` and `HardwareInterface` classes for robot agnostic control. During initialization, controllers request `state_interfaces` and `command_interfaces` required for operation through the `ControllerInterface`. On the other hand, hardware drivers offer `state_interfaces` and `command_interfaces` via the `HardwareInterface`. ROS 2 control ensure all requested interfaces are available before starting the controllers. The interface pattern allows vendors to write hardware specific drivers that are loaded at runtime.  
 
-The main program is a realtime read, update, write loop. During the  read call, hardware drivers that conform to `HardwareInterface` update their offered `state_interfaces` with the newest values received from the hardware. During the update call, controllers calculate commands from the updated `state_interfaces` and writes them into its `command_interfaces`. Finally, during to write call, the hardware drivers read values from their offer `command_interfaces` and send them to the hardware.    
+The main program is a realtime read, update, write loop. During the  read call, hardware drivers that conform to `HardwareInterface` update their offered `state_interfaces` with the newest values received from the hardware. During the update call, controllers calculate commands from the updated `state_interfaces` and writes them into its `command_interfaces`. Finally, during to write call, the hardware drivers read values from their offer `command_interfaces` and send them to the hardware. The `ros_2_control` node runs the main loop a realtime thread. The `ros_2_control` node runs a second non-realtime thread to interact with ROS publishers, subscribers, and services.      
 
 ## Writing a URDF
 The URDF file is a standard XML based file used to describe characteristic of a robot. It can represent any robot with a tree structure, except those with cycles. Each link must have only one parent. For ROS 2 control, there are three primary tags: `link`, `joint`, and `ros2_control`. The `joint` tag define the robot's kinematic structure, while the `link` tag defines the dynamic properties and 3D geometry. The `ros2_control` defines the hardware and controller configuration. 
@@ -141,9 +141,11 @@ The URDF file is generally formatted according to the following template.
 The complete URDF for the robot in this tutorial is available [here](robot_description/urdf/robot_6_dof.urdf).
 
 ## Writing a hardware interface
-In ROS 2 control, hardware system components integrated via user defined libraries that conform to the `HarwareInterface` public interface. Hardware plugins specified in the URDF are dynamically loaded during initialization using the pluginlib interface.The following code blocks will explain the requirements for writing a new hardware interface. 
+In ROS 2 control, hardware system components are integrated via user defined driver plugins that conform to the `HarwareInterface` public interface. Hardware plugins specified in the URDF are dynamically loaded during initialization using the pluginlib interface. In order to run the `ros_2_control_node`, a parameter named `robot_description` must be set. This normally done in the ROS 2 control launch file.
 
-The hardware plugin for the tutorial robot is class called that inherits from `RobotSystem` `hardware_interface::SystemInterface`. The `SystemInterface` is one of the offered hardware interfaces designed for a complete robot system. For example, The UR5 uses this interface. The `RobotSystem` must implement five public methods.     
+The following code blocks will explain the requirements for writing a new hardware interface. 
+
+The hardware plugin for the tutorial robot is class called `RobotSystem` that inherits from  `hardware_interface::SystemInterface`. The `SystemInterface` is one of the offered hardware interfaces designed for a complete robot system. For example, The UR5 uses this interface. The `RobotSystem` must implement five public methods.     
 1. `on_init` 
 2. `export_state_interfaces` 
 3. `export_command_interfaces` 
@@ -257,6 +259,117 @@ pluginlib_export_plugin_description_file(hardware_driver hardware_plugin_plugin_
 ```
 
 ## Writing a controller
+
+In ROS 2 control, controllers are implemented as plugins that conforms to the `ControllerInterface` public interface. Similar to the hardware interfaces, the controller plugins to load are specified using ROS parameters. This is normally  ahcived by passing a YAML parameter file to the `ros_2_controle_node`. Unlike hardware interfaces, controllers exists in a finite set of states:
+
+2. Unconfigured
+3. Inactive 
+4. Active
+5. Finalized
+
+Certain interface methods are called when transitions between these states. During the main control loop, the controller is in the active state. 
+
+The following code blocks will explain the requirements for writing a new hardware interface.
+
+The controller plugin for the tutorial robot is class called `RobotController` that inherits from  `controller_interface::ControllerInterface`. The `RobotController` must implement nine public methods.
+1. `command_interface_configuration`
+2. `state_interface_configuration`
+3. `update`
+4. `on_configure`
+5. `on_activate`
+6. `on_deactivate`
+7. `on_cleanup`
+8. `on_error`
+9. `on_shutdown`
+
+```c++
+using CallbackReturn = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
+
+controller_interface::CallbackReturn on_init(){
+      // declare and get parameters needed for controller initialization
+      // allocate memory that will exist for the life of the controller 
+      // ...
+      return CallbackReturn::SUCCESS;
+}
+```
+
+```c++
+
+controller_interface::InterfaceConfiguration command_interface_configuration(){
+    controller_interface::InterfaceConfiguration conf;
+    // add required command interface to `conf` by specifying their names and interface types.
+    // ..
+    return conf
+}
+```
+```c++
+
+controller_interface::InterfaceConfiguration state_interface_configuration() {
+    controller_interface::InterfaceConfiguration conf;
+    // add required state interface to `conf` by specifying their names and interface types.
+    // ..
+    return conf
+}
+```
+```c++
+    
+controller_interface::CallbackReturn on_configure(const rclcpp_lifecycle::State &previous_state){
+    // declare and get parameters needed for controller operations
+    // setup realtime buffers, ROS publishers, and ROS subscribers  
+    // ...
+  return CallbackReturn::SUCCESS;
+}
+```
+```c++
+    
+controller_interface::return_type update(const rclcpp::Time &time, const rclcpp::Duration &period){
+  // Read controller inputs values from state interfaces
+  // Calculate controller output values and write them to command interfaces
+  // ...
+  return controller_interface::return_type::OK;
+}
+```
+```c++
+controller_interface::CallbackReturn on_activate(const rclcpp_lifecycle::State &previous_state){
+  // Handle controller restarts and dynamic parameter updating
+  // ...
+  return CallbackReturn::SUCCESS;
+}
+```
+    
+```c++
+    
+controller_interface::CallbackReturn on_deactivate(const rclcpp_lifecycle::State &previous_state){
+  
+  return CallbackReturn::SUCCESS;
+}
+```
+
+
+```c++
+controller_interface::CallbackReturn on_cleanup(const rclcpp_lifecycle::State &previous_state){
+  //
+  // ...
+  return CallbackReturn::SUCCESS;
+}
+```
+
+```c++
+controller_interface::CallbackReturn on_error(const rclcpp_lifecycle::State &previous_state){
+  //
+  // ...
+  return CallbackReturn::SUCCESS;
+}
+```
+
+```c++
+controller_interface::CallbackReturn on_shutdown(const rclcpp_lifecycle::State &previous_state){
+  //
+  // ...
+  return CallbackReturn::SUCCESS;
+}
+```
+
 
 
 ## Writing a reference generator
