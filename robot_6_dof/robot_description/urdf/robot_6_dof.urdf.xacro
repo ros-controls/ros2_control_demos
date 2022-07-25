@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://wiki.ros.org/xacro" name="robot_6_dof">
   <!-- helper macro -->
-  <xacro:include filename="$(find robot_6_dof)/urdf/inc/create_link.xacro"/>
+  <xacro:include filename="$(find robot_description)/urdf/inc/create_link.xacro"/>
 
   <!-- create link fixed to the "world" -->
   <link name="world"/>
@@ -10,7 +10,7 @@
       link_name="base_link"
       xyz_offset="0 0 0"
       rpy_offset="0 0 0"
-      mesh_package="robot_6_dof"
+      mesh_package="robot_description"
       mesh_name="link_0"
   />
 
@@ -18,7 +18,7 @@
       link_name="link_1"
       xyz_offset="0 0 0"
       rpy_offset="0 0 0"
-      mesh_package="robot_6_dof"
+      mesh_package="robot_description"
       mesh_name="link_1"
   />
 
@@ -26,7 +26,7 @@
       link_name="link_2"
       xyz_offset="0 0 0"
       rpy_offset="0 0 0"
-      mesh_package="robot_6_dof"
+      mesh_package="robot_description"
       mesh_name="link_2"
   />
 
@@ -34,7 +34,7 @@
       link_name="link_3"
       xyz_offset="0 0 0"
       rpy_offset="0 0 0"
-      mesh_package="robot_6_dof"
+      mesh_package="robot_description"
       mesh_name="link_3"
   />
 
@@ -42,7 +42,7 @@
       link_name="link_4"
       xyz_offset="0 0 0"
       rpy_offset="0 0 0"
-      mesh_package="robot_6_dof"
+      mesh_package="robot_description"
       mesh_name="link_4"
   />
 
@@ -50,7 +50,7 @@
       link_name="link_5"
       xyz_offset="0 0 0"
       rpy_offset="0 0 0"
-      mesh_package="robot_6_dof"
+      mesh_package="robot_description"
       mesh_name="link_5"
   />
 
@@ -58,7 +58,7 @@
       link_name="link_6"
       xyz_offset="0 0 0"
       rpy_offset="0 0 0"
-      mesh_package="robot_6_dof"
+      mesh_package="robot_description"
       mesh_name="link_6"
   />
 

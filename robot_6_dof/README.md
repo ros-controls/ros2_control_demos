@@ -233,7 +233,7 @@ The plugin description file is a required XML file that describes a plugin's lib
 </library>
 ```
 
-The `path` attribute of the `library` tags refers to the cmake library name of the user defined hardware plugin. See [here](hardware_interface/robot_6_dof_hardware_plugin_description.xml) for the complete XML file.    
+The `path` attribute of the `library` tags refers to the cmake library name of the user defined hardware plugin. See [here](hardware_driver/robot_6_dof_hardware_plugin_description.xml) for the complete XML file.    
 
 ### CMake library
 The general CMake template to make a hardware plugin available in ROS 2 control is shown below. Notice that a library is created using the plugin source code just like any other  cmake library. In addition, an extra compile definition and cmake export macro (`pluginlib_export_plugin_description_file`) need to be added. See [here](reference_generator/CMakeLists.txt) for the complete `CMakeLists.txt` file.
@@ -251,7 +251,7 @@ add_library(
 # Causes the visibility macros to use dllexport rather than dllimport, which is appropriate when building the dll but not consuming it.
 target_compile_definitions(hardware_plugin PRIVATE "HARDWARE_PLUGIN_DLL")
 # export plugin
-pluginlib_export_plugin_description_file(hardware_interface hardware_plugin_plugin_description.xml)
+pluginlib_export_plugin_description_file(hardware_driver hardware_plugin_plugin_description.xml)
 # install libraries
 # ...
 ```

@@ -4,6 +4,9 @@ project(robot_controller)
 find_package(ament_cmake REQUIRED)
 find_package(pluginlib REQUIRED)
 find_package(controller_interface REQUIRED)
+find_package(realtime_tools REQUIRED)
+find_package(trajectory_msgs REQUIRED)
+find_package(rcpputils REQUIRED)
 
 add_library(
     robot_controller
@@ -13,8 +16,8 @@ add_library(
 
 target_include_directories(
     robot_controller
-    PUBLIC
-    robot_controller/include
+    PRIVATE
+    include
 )
 
 ament_target_dependencies(
@@ -33,8 +36,8 @@ target_compile_definitions(robot_controller PRIVATE "ROBOT_CONTROLLER_DLL")
 pluginlib_export_plugin_description_file(controller_interface robot_6_dof_controller_plugin_description.xml)
 
 install(
-    DIRECTORY robot_controller/include
-    DESTINATION robot_controller/include
+    DIRECTORY include
+    DESTINATION include
 )
 
 
@@ -45,6 +48,10 @@ install(
     LIBRARY DESTINATION lib
 )
 
+install(
+    DIRECTORY config launch
+    DESTINATION share/robot_controller
+)
 
 ament_package()
 

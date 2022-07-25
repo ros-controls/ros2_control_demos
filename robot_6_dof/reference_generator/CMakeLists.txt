@@ -9,7 +9,7 @@ find_package(control_toolbox REQUIRED)
 find_package(controller_interface REQUIRED)
 find_package(kdl_parser REQUIRED)
 find_package(geometry_msgs REQUIRED)
-find_package(../hardware_interface REQUIRED)
+find_package(hardware_interface REQUIRED)
 find_package(joint_trajectory_controller REQUIRED)
 find_package(pluginlib REQUIRED)
 find_package(rclcpp REQUIRED)
@@ -28,7 +28,7 @@ ament_target_dependencies(
     controller_interface
     kdl_parser
     geometry_msgs
-    ../hardware_interface
+    hardware_interface
     joint_trajectory_controller
     pluginlib
     rclcpp
@@ -39,13 +39,14 @@ ament_target_dependencies(
 
 
 install(
-    DIRECTORY ../robot_controller/config ../launch ../robot_description/meshes ../moveit_broken/rviz ../robot_description/urdf ../robot_description/srdf
-    DESTINATION share/robot_6_dof
+    TARGETS send_trajectory
+    RUNTIME DESTINATION lib/reference_generator
 )
 
+
 install(
-    TARGETS send_trajectory
-    RUNTIME DESTINATION lib/robot_6_dof
+    DIRECTORY launch
+    DESTINATION share
 )
 
 

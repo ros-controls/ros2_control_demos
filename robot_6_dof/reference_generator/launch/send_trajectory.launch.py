@@ -14,7 +14,7 @@ def generate_launch_description():
             " ",
             PathJoinSubstitution(
                 [
-                    FindPackageShare("robot_6_dof"),
+                    FindPackageShare("robot_description"),
                     "urdf",
                     "robot_6_dof.urdf.xacro",
                 ]
@@ -24,7 +24,7 @@ def generate_launch_description():
     robot_description = {"robot_description": robot_description_content}
 
     send_trajectory_node = Node(
-        package="robot_6_dof",
+        package="reference_generator",
         executable="send_trajectory",
         name="send_trajectory_node",
         parameters=[robot_description]

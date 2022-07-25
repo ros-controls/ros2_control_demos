@@ -88,8 +88,8 @@ namespace robot_6_dof_hardware {
     return return_type::OK;
   }
 
-  return_type write(const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/) {
-    return return_type::OK;
+  return_type RobotSystem::write(const rclcpp::Time &, const rclcpp::Duration &) {
+    return  return_type::OK;
   }
 
 }  // namespace mock_components

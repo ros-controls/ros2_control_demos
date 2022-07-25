@@ -77,6 +77,7 @@ int main(int argc, char **argv) {
   }
 
   pub->publish(trajectory_msg);
+  while (rclcpp::ok()){}
 
   return 0;
 }
