@@ -26,9 +26,7 @@ namespace robot_6_dof_hardware {
 
     return_type read(const rclcpp::Time &time, const rclcpp::Duration &period) override;
 
-    return_type write(const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/) override {
-      return return_type::OK;
-    }
+    return_type write(const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/) override;
 
   protected:
 /// The size of this vector is (standard_interfaces_.size() x nr_joints)

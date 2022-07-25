@@ -3,7 +3,7 @@ ROS 2 control is a realtime control framework designed for general robotics appl
 
 
 This tutorial will address each component of ROS 2 control in detail, namely: 
-1. ROS 2 control architecture
+1. ROS 2 control overview
 2. Writing a URDF
 3. Writing a hardware interface
 4. Writing a controller
@@ -18,7 +18,7 @@ ROS 2 control provides the `ControllerInterface` and `HardwareInterface` classes
 The main program is a realtime read, update, write loop. During the  read call, hardware drivers that conform to `HardwareInterface` update their offered `state_interfaces` with the newest values received from the hardware. During the update call, controllers calculate commands from the updated `state_interfaces` and writes them into its `command_interfaces`. Finally, during to write call, the hardware drivers read values from their offer `command_interfaces` and send them to the hardware.    
 
 ## Writing a URDF
-The URDF file is a standard XML based file used to describe characteristic of a robot. For ROS 2 control, there are three primary tags: `link`, `joint`, and `ros2_control`. The `joint` tag define the robot's kinematic structure, while the `link` tag defines the dynamic properties and 3D geometry. The `ros2_control` defines the hardware and controller configuration. 
+The URDF file is a standard XML based file used to describe characteristic of a robot. It can represent any robot with a tree structure, except those with cycles. Each link must have only one parent. For ROS 2 control, there are three primary tags: `link`, `joint`, and `ros2_control`. The `joint` tag define the robot's kinematic structure, while the `link` tag defines the dynamic properties and 3D geometry. The `ros2_control` defines the hardware and controller configuration. 
 ### Geometry
 Most commercial robots already have `robot_description` packages defined, see the [Universal Robots](https://github.com/UniversalRobots/Universal_Robots_ROS2_Description) for an example. However, this tutorial will go through the details of creating one from scratch. 
 
@@ -140,6 +140,48 @@ The URDF file is generally formatted according to the following template.
 
 
 ## Writing a hardware interface
+
+```c++
+namespace robot_6_dof_hardware {
+  CallbackReturn RobotSystem::on_init(const hardware_interface::HardwareInfo &info) {
+    if (hardware_interface::SystemInterface::on_init(info) != CallbackReturn::SUCCESS) {
+      return CallbackReturn::ERROR;
+    }
+    // setup communication with robot hardware
+    // ...
+    return CallbackReturn::SUCCESS;
+  }
+
+  std::vector<hardware_interface::StateInterface> RobotSystem::export_state_interfaces() {
+    std::vector<hardware_interface::StateInterface> state_interfaces;
+    // add command interfaces to `state_interfaces` base on `info_.joints[i].state_interfaces_`
+    // ...
+    return state_interfaces;
+  }
+
+  std::vector<hardware_interface::CommandInterface> RobotSystem::export_command_interfaces() {
+    std::vector<hardware_interface::CommandInterface> command_interfaces;
+    // add command interfaces to `command_interfaces` base on `info_.joints[i].command_interfaces`
+    // ...
+    return command_interfaces;
+  }
+
+  return_type RobotSystem::read(const rclcpp::Time & time, const rclcpp::Duration &period) {
+    // read hardware values for state interfaces, e.g joint encoders and sensor readings
+    // ...
+  } 
+
+  return_type write(const rclcpp::Time & time, const rclcpp::Duration & period) {
+    // send command interface values to hardware, e.g joint set joint velocity
+    // ...
+    return return_type::OK;
+  }
+
+#include "pluginlib/class_list_macros.hpp"
+
+PLUGINLIB_EXPORT_CLASS(robot_6_dof_hardware::RobotSystem, hardware_interface::SystemInterface)
+
+```
 
 
 ## Writing a controller
