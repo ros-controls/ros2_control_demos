@@ -193,7 +193,7 @@ std::vector<hardware_interface::CommandInterface> RobotSystem::export_command_in
     return command_interfaces;
 }
 ```
-
+The `read` method is core method in the ROS 2 control loop. During the main loop, ROS 2 control loops over all hardware components and calls the `read` method. It is executed on the realtime thread, hence the method must obey by realtime constraints. The `read` method is responsible for updating the data values of the `state_interfaces`. Since the data value point to class member variables, those values can be filled with their corresponding sensor values, which will in turn update the values of each exported `StateInterface` object.            
 ```c++
 return_type RobotSystem::read(const rclcpp::Time & time, const rclcpp::Duration &period) {
     // read hardware values for state interfaces, e.g joint encoders and sensor readings
@@ -201,6 +201,7 @@ return_type RobotSystem::read(const rclcpp::Time & time, const rclcpp::Duration 
     return return_type::OK;
 } 
   ```
+The `write` method is another core method in the ROS 2 control loop. It is called after `update` in the realtime loop. For this reason, it must also obey by realtime constraints. The `write` method is responsible for updating the data values of the `command_interfaces`. As opposed to `read`, `write` accesses data values pointer to by the exported `CommandInterface` objects sends them to the corresponding hardware. For example, if the hardware supports setting a joint velocity via TCP, then this method accesses data of the corresponding `command_interface` and sends a packet with the value.      
 ```c++
 return_type write(const rclcpp::Time & time, const rclcpp::Duration & period) {
     // send command interface values to hardware, e.g joint set joint velocity
@@ -208,13 +209,52 @@ return_type write(const rclcpp::Time & time, const rclcpp::Duration & period) {
     return return_type::OK;
 }
 ```
-
+Finally, all ROS 2 control plugins should have the following two lines of code at the end of the file. 
 ```c++
 #include "pluginlib/class_list_macros.hpp"
 
 PLUGINLIB_EXPORT_CLASS(robot_6_dof_hardware::RobotSystem, hardware_interface::SystemInterface)
 ```
+`PLUGINLIB_EXPORT_CLASS` is a c++ macro creates a plugin library using `pluginlib`.
 
+### Plugin description file
+The plugin description file is a required XML file that describes a plugin's library name, class type, namespace, description, and interface type. This file allows the ROS 2 to automatically discover and load plugins.It is formatted as follows.  
+
+```xml
+<library path="{Library_Name}">
+  <class
+    name="{Namespace}/{Class_Name}"
+    type="{Namespace}::{Class_Name}" 
+    base_class_type="hardware_interface::SystemInterface">
+  <description>
+    {Human readable description}
+  </description>
+  </class>
+</library>
+```
+
+The `path` attribute of the `library` tags refers to the cmake library name of the user defined hardware plugin. See [here](robot_6_dof_hardware_plugin_description.xml) for the complete XML file.    
+
+### CMake library
+The general CMake template to make a hardware plugin available in ROS 2 control is shown below. Notice that a library is created using the plugin source code just like any other  cmake library. In addition, an extra compile definition and cmake export macro (`pluginlib_export_plugin_description_file`) need to be added. See [here](CMakeLists.txt) for the complete `CMakeLists.txt` file.     
+
+```cmake
+add_library(
+    hardware_plugin
+    SHARED
+    src/hardware_plugin.cpp
+)
+
+# include and link dependencies
+# ...
+
+# Causes the visibility macros to use dllexport rather than dllimport, which is appropriate when building the dll but not consuming it.
+target_compile_definitions(hardware_plugin PRIVATE "HARDWARE_PLUGIN_DLL")
+# export plugin
+pluginlib_export_plugin_description_file(hardware_interface hardware_plugin_plugin_description.xml)
+# install libraries
+# ...
+```
 
 ## Writing a controller
 
