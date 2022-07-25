@@ -1,14 +1,21 @@
 # ROS 2 Control for a 6 DOF Robot
-ROS 2 control is a realtime control framework designed for general robotics applications. Standard c++ interfaces exist for interacting with hardware and querying user defined controller commands. These interfaces enhance code modularity and robot agnostic design. Application specific details, e.g. what controller to use, how many joints a robot has and their kinematic structure, are specified via YAML parameter configuration files and a Universal Robot Description File (URDF). Finally, the ROS 2 control framework is deployed via ROS 2 launch a file.        
+ROS 2 control is a realtime control framework designed for general robotics applications. Standard c++ interfaces exist for interacting with hardware and querying user defined controller commands. These interfaces enhance code modularity and robot agnostic design. Application specific details, e.g. what controller to use, how many joints a robot has and their kinematic structure, are specified via YAML parameter configuration files and a Universal Robot Description File (URDF). Finally, the ROS 2 control framework is deployed via ROS 2 launch a file.
 
-## ROS 2 control architecture
 
 This tutorial will address each component of ROS 2 control in detail, namely: 
-1. Writing a URDF
-1. Writing a hardware interface
-1. Writing a controller
-1. Writing a parameter configuration file
-1. Writing a ROS 2 control launch file
+1. ROS 2 control architecture
+2. Writing a URDF
+3. Writing a hardware interface
+4. Writing a controller
+5. Writing a parameter configuration file
+6. Writing a ROS 2 control launch file
+
+## ROS 2 control overview
+ROS 2 control introduces `state_interfaces` and `command_interfaces` to abstract hardware interfacing. The `state_interfaces` are read only data handles that generally represent sensors readings, e.g. joint encoder. The `command_interfaces` are read and write data handles that hardware commands, like setting a joint velocity reference. The `command_interfaces` are exclusively accessed, meaning if a controller has "claimed" an interface, it cannot be used by any other controller until it is released. The available state and command interfaces are specified in a YAML configuration file.  
+
+ROS 2 control provides the `ControllerInterface` and `HardwareInterface` classes for robot agnostic control. During initialization, controllers request `state_interfaces` and `command_interfaces` required for operation through the `ControllerInterface`. On the other hand, hardware drivers offer `state_interfaces` and `command_interfaces` via the `HardwareInterface`. ROS 2 control ensure all requested interfaces are available before starting the controllers. The interface pattern allows vendors to write hardware specific drivers that are loaded at runtime.  
+
+The main program is a realtime read, update, write loop. During the  read call, hardware drivers that conform to `HardwareInterface` update their offered `state_interfaces` with the newest values received from the hardware. During the update call, controllers calculate commands from the updated `state_interfaces` and writes them into its `command_interfaces`. Finally, during to write call, the hardware drivers read values from their offer `command_interfaces` and send them to the hardware.    
 
 ## Writing a URDF
 The URDF file is a standard XML based file used to describe characteristic of a robot. For ROS 2 control, there are three primary tags: `link`, `joint`, and `ros2_control`. The `joint` tag define the robot's kinematic structure, while the `link` tag defines the dynamic properties and 3D geometry. The `ros2_control` defines the hardware and controller configuration. 
@@ -127,12 +134,9 @@ The URDF file is generally formatted according to the following template.
 * The `joint` tag specifies the kinematic structure of the robot. It two required attributes: name and type. The type specifies the viable motion between the two connected links. The subsequent `parent` and `child` links specify which two links are joined by the joint.
 * The `axis` tag species the joint's axis of rotation. If the meshes were process as described previously, then the axis value is always `"0 0 1"`.
 * The `limits` tag specifies kinematic and dynamics limits fo the joint. 
-* The `ros2_control` tag specifies 
-
-Explain `ros2_control` concepts
-
-
-urdf_to_graphviz pr2.urdf
+* The `ros2_control` tag specifies hardware configuration of the  robot. More specifically, the available state and command interfaces. The tag has two required attributes: name and type. Additional elements, such as sensors, are also included in this tag.
+* The `hardware` and `plugin` tags instruct the ROS 2 control framework to dynamically load a hardware driver conforming to `HardwareInterface` as a plugin. The plugin is specified as ` <{Name_Space}/{Class_Name}`. 
+* Finally, the `joint` tag specifies the state and command interfaces that the loaded plugin is will offer. The joint is specified with the name attribute. The `command_interface` and `state_interface` tags specify the interface type, usually position, velocity, acceleration, or effort. 
 
 
 ## Writing a hardware interface
