@@ -156,13 +156,16 @@ The hardware plugin for the tutorial robot is class called `RobotSystem` that in
 using CallbackReturn = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
 #include "hardware_interface/types/hardware_interface_return_values.hpp"
 
-  class HARDWARE_INTERFACE_PUBLIC RobotSystem : public hardware_interface::SystemInterface {
-  public:
+class HARDWARE_INTERFACE_PUBLIC RobotSystem : public hardware_interface::SystemInterface {
+    public:
     CallbackReturn on_init(const hardware_interface::HardwareInfo &info) override;
     std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
     std::vector<hardware_interface::CommandInterface> export_command_interfaces() override;
     return_type read(const rclcpp::Time &time, const rclcpp::Duration &period) override;
     return_type write(const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/) override;
+    // private members
+    // ...
+}
 ```
 The `on_init` method is called once during ROS 2 control initialization if the `RobotSystem` was specified in the URDF. In this method, communication between the robot hardware needs to be setup and memory dynamic should be allocated. Since the tutorial robot is simulated, explicit will communication not be established. Instead, vectors will be initialized that represent the state all the hardware, e.g. a vector of doubles describing joint angles, etc.      
 ```c++
@@ -271,7 +274,7 @@ Certain interface methods are called when transitions between these states. Duri
 
 The following code blocks will explain the requirements for writing a new hardware interface.
 
-The controller plugin for the tutorial robot is class called `RobotController` that inherits from  `controller_interface::ControllerInterface`. The `RobotController` must implement nine public methods.
+The controller plugin for the tutorial robot is class called `RobotController` that inherits from  `controller_interface::ControllerInterface`. The `RobotController` must implement nine public methods. The latter 6 are [managed node](https://design.ros2.org/articles/node_lifecycle.html) transitions callbacks.
 1. `command_interface_configuration`
 2. `state_interface_configuration`
 3. `update`
@@ -283,16 +286,35 @@ The controller plugin for the tutorial robot is class called `RobotController` t
 9. `on_shutdown`
 
 ```c++
-using CallbackReturn = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
-
-controller_interface::CallbackReturn on_init(){
-      // declare and get parameters needed for controller initialization
-      // allocate memory that will exist for the life of the controller 
-      // ...
-      return CallbackReturn::SUCCESS;
+class RobotController : public controller_interface::ControllerInterface {
+    public:
+    controller_interface::InterfaceConfiguration command_interface_configuration() const override;
+    controller_interface::InterfaceConfiguration state_interface_configuration() const override;
+    controller_interface::return_type update(const rclcpp::Time &time, const rclcpp::Duration &period) override;
+    controller_interface::CallbackReturn on_init() override;
+    controller_interface::CallbackReturn on_configure(const rclcpp_lifecycle::State &previous_state) override;
+    controller_interface::CallbackReturn on_activate(const rclcpp_lifecycle::State &previous_state) override;
+    controller_interface::CallbackReturn on_deactivate(const rclcpp_lifecycle::State &previous_state) override;
+    controller_interface::CallbackReturn on_cleanup(const rclcpp_lifecycle::State &previous_state) override;
+    controller_interface::CallbackReturn on_error(const rclcpp_lifecycle::State &previous_state) override;
+    controller_interface::CallbackReturn on_shutdown(const rclcpp_lifecycle::State &previous_state) override;
+// private members
+// ...
 }
 ```
+The `on_init` method is called immediately after the controller plugin is dynamically loaded. The method is called only once during the lifetime fo the controller, hence memory that exists for the lifetime of the controller should be allocated. Additionally, the parameter values for `joints`, `command_interfaces` and `state_interfaces` should be declared and accessed. Those parameter values are required for the next two methods. 
 
+```c++
+using CallbackReturn = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;[]()
+
+controller_interface::CallbackReturn on_init(){
+    // declare and get parameters needed for controller initialization
+    // allocate memory that will exist for the life of the controller 
+    // ...
+    return CallbackReturn::SUCCESS;
+}
+```
+The `command_interface_configuration` method 
 ```c++
 
 controller_interface::InterfaceConfiguration command_interface_configuration(){
@@ -340,15 +362,17 @@ controller_interface::CallbackReturn on_activate(const rclcpp_lifecycle::State &
 ```c++
     
 controller_interface::CallbackReturn on_deactivate(const rclcpp_lifecycle::State &previous_state){
-  
-  return CallbackReturn::SUCCESS;
+    release_interfaces();
+    // The controller should be properly shutdown during this
+    // ...
+    return CallbackReturn::SUCCESS;
 }
 ```
 
 
 ```c++
 controller_interface::CallbackReturn on_cleanup(const rclcpp_lifecycle::State &previous_state){
-  //
+  // Callback function for cleanup transition
   // ...
   return CallbackReturn::SUCCESS;
 }
@@ -356,7 +380,7 @@ controller_interface::CallbackReturn on_cleanup(const rclcpp_lifecycle::State &p
 
 ```c++
 controller_interface::CallbackReturn on_error(const rclcpp_lifecycle::State &previous_state){
-  //
+  // Callback function for erroneous transition
   // ...
   return CallbackReturn::SUCCESS;
 }
@@ -364,7 +388,7 @@ controller_interface::CallbackReturn on_error(const rclcpp_lifecycle::State &pre
 
 ```c++
 controller_interface::CallbackReturn on_shutdown(const rclcpp_lifecycle::State &previous_state){
-  //
+  // Callback function for shutdown transition
   // ...
   return CallbackReturn::SUCCESS;
 }
@@ -373,3 +397,8 @@ controller_interface::CallbackReturn on_shutdown(const rclcpp_lifecycle::State &
 
 
 ## Writing a reference generator
+
+
+<p align="center">
+  <img src="resources/trajectory.gif" width="350" title="hover text">
+</p>
