@@ -7,8 +7,6 @@ This tutorial will address each component of ROS 2 control in detail, namely:
 2. Writing a URDF
 3. Writing a hardware interface
 4. Writing a controller
-5. Writing a parameter configuration file
-6. Writing a ROS 2 control launch file
 
 ## ROS 2 control overview
 ROS 2 control introduces `state_interfaces` and `command_interfaces` to abstract hardware interfacing. The `state_interfaces` are read only data handles that generally represent sensors readings, e.g. joint encoder. The `command_interfaces` are read and write data handles that hardware commands, like setting a joint velocity reference. The `command_interfaces` are exclusively accessed, meaning if a controller has "claimed" an interface, it cannot be used by any other controller until it is released. Both interface types are uniquely designated with a name and type. The names and types for all available state and command interfaces are specified in a YAML configuration file and a URDF file.  
@@ -314,7 +312,17 @@ controller_interface::CallbackReturn on_init(){
     return CallbackReturn::SUCCESS;
 }
 ```
-The `command_interface_configuration` method 
+The `on_configure` method is called immediately after the controller is set to the inactive state. This state occurs when the controller is started for the first time, but also when it is restarted. Reconfigurable parameters should be read in this method. Additionally, publishers and subscribers should be created. 
+```c++
+controller_interface::CallbackReturn on_configure(const rclcpp_lifecycle::State &previous_state){
+    // declare and get parameters needed for controller operations
+    // setup realtime buffers, ROS publishers, and ROS subscribers  
+    // ...
+  return CallbackReturn::SUCCESS;
+}
+```
+
+The `command_interface_configuration`  method is called after `on_configure`. The method returns a list of `InterfaceConfiguration` objects to indicate which command interfaces the controller needs to operate. The command interfaces are uniquely identified by their name and interface type. If a requested interface is not offered by a loaded hardware interface, then the controller will fail.     
 ```c++
 
 controller_interface::InterfaceConfiguration command_interface_configuration(){
@@ -324,6 +332,7 @@ controller_interface::InterfaceConfiguration command_interface_configuration(){
     return conf
 }
 ```
+The `state_interface_configuration` method is then called, which is similar to the last method. The difference is that  a list of `InterfaceConfiguration` objects representing the required state interfaces to operate is returned.
 ```c++
 
 controller_interface::InterfaceConfiguration state_interface_configuration() {
@@ -333,15 +342,15 @@ controller_interface::InterfaceConfiguration state_interface_configuration() {
     return conf
 }
 ```
+The `on_activate` is called once when the controller is activated. This method should handle controller restarts, such as setting the resetting reference to safe values. It should also perform controller specific safety checks. The `command_interface_configuration` and `command_interface_configuration` are also called again when the controller is activated.     
 ```c++
-    
-controller_interface::CallbackReturn on_configure(const rclcpp_lifecycle::State &previous_state){
-    // declare and get parameters needed for controller operations
-    // setup realtime buffers, ROS publishers, and ROS subscribers  
-    // ...
+controller_interface::CallbackReturn on_activate(const rclcpp_lifecycle::State &previous_state){
+  // Handle controller restarts and dynamic parameter updating
+  // ...
   return CallbackReturn::SUCCESS;
 }
 ```
+The `update` method is part of the main control loop. Since the method is part of the realtime control loop, the realtime constraint must be enforced. The controller should read from its state interfaces and reference and calculate a control command. Normally, the reference is access via a ROS 2 subscriber. Since the subscriber runs on the non-realtime thread, a realtime buffer is used to a transfer the message to the realtime thread. The realtime buffer is eventually pointer to a ROS message with a mutex that guarantees thread safety and that the realtime thread is never blocked. The calculated control command should then be written to the command interface, which will in turn control the hardware.        
 ```c++
     
 controller_interface::return_type update(const rclcpp::Time &time, const rclcpp::Duration &period){
@@ -351,14 +360,7 @@ controller_interface::return_type update(const rclcpp::Time &time, const rclcpp:
   return controller_interface::return_type::OK;
 }
 ```
-```c++
-controller_interface::CallbackReturn on_activate(const rclcpp_lifecycle::State &previous_state){
-  // Handle controller restarts and dynamic parameter updating
-  // ...
-  return CallbackReturn::SUCCESS;
-}
-```
-    
+ The `on_deactivate` is called when a controller stops running. It is important to release the claimed command interface in this method, so other controllers can use them if needed. This is down with the `release_interfaces` function.   
 ```c++
     
 controller_interface::CallbackReturn on_deactivate(const rclcpp_lifecycle::State &previous_state){
@@ -368,8 +370,7 @@ controller_interface::CallbackReturn on_deactivate(const rclcpp_lifecycle::State
     return CallbackReturn::SUCCESS;
 }
 ```
-
-
+The `on_cleanup` and `on_shutdown` are called when the controller's lifecycle node is transitioning to shutting down. Freeing any allocated memory and general cleanup should be done in these methods. 
 ```c++
 controller_interface::CallbackReturn on_cleanup(const rclcpp_lifecycle::State &previous_state){
   // Callback function for cleanup transition
@@ -377,15 +378,6 @@ controller_interface::CallbackReturn on_cleanup(const rclcpp_lifecycle::State &p
   return CallbackReturn::SUCCESS;
 }
 ```
-
-```c++
-controller_interface::CallbackReturn on_error(const rclcpp_lifecycle::State &previous_state){
-  // Callback function for erroneous transition
-  // ...
-  return CallbackReturn::SUCCESS;
-}
-```
-
 ```c++
 controller_interface::CallbackReturn on_shutdown(const rclcpp_lifecycle::State &previous_state){
   // Callback function for shutdown transition
@@ -394,11 +386,34 @@ controller_interface::CallbackReturn on_shutdown(const rclcpp_lifecycle::State &
 }
 ```
 
+The `on_error` method is called if the managed node fails a state transition. This should generally never happen.
+```c++
+controller_interface::CallbackReturn on_error(const rclcpp_lifecycle::State &previous_state){
+  // Callback function for erroneous transition
+  // ...
+  return CallbackReturn::SUCCESS;
+}
+```
 
 
-## Writing a reference generator
 
-
+## Launching the example
+The full tutorial example can be run by first building the workspace.
+```shell
+git clone https://github.com/pac48/ros2_control_demos.git
+cd ros2_control_demos
+colcon build
+source install/setup.bash
+```
+Open a terminal and launch the `robot_6_dof.launch.py` file from the `robot_controller` package.
+```shell
+ros2 launch robot_controller robot_6_dof.launch.py
+```
+Finally, open a new  terminal and run the following command.
+```shell
+ros2 launch reference_generator send_trajectory.launch.py
+```
+You should see the tutorial robot making a circular motion in RViz.
 <p align="center">
   <img src="resources/trajectory.gif" width="350" title="hover text">
 </p>
