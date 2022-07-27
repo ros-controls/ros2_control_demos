@@ -1,22 +1,22 @@
-# ROS 2 Control for a 6 DOF Robot
-ROS 2 control is a realtime control framework designed for general robotics applications. Standard c++ interfaces exist for interacting with hardware and querying user defined controller commands. These interfaces enhance code modularity and robot agnostic design. Application specific details, e.g. what controller to use, how many joints a robot has and their kinematic structure, are specified via YAML parameter configuration files and a Universal Robot Description File (URDF). Finally, the ROS 2 control framework is deployed via ROS 2 launch a file.
+# ros2_control for a 6 DOF Robot
+ros2_control is a realtime control framework designed for general robotics applications. Standard c++ interfaces exist for interacting with hardware and querying user defined controller commands. These interfaces enhance code modularity and robot agnostic design. Application specific details, e.g. what controller to use, how many joints a robot has and their kinematic structure, are specified via YAML parameter configuration files and a Universal Robot Description File (URDF). Finally, the ros2_control framework is deployed via ROS 2 launch a file.
 
 
-This tutorial will address each component of ROS 2 control in detail, namely: 
-1. ROS 2 control overview
+This tutorial will address each component of ros2_control in detail, namely: 
+1. ros2_control overview
 2. Writing a URDF
 3. Writing a hardware interface
 4. Writing a controller
 
-## ROS 2 control overview
-ROS 2 control introduces `state_interfaces` and `command_interfaces` to abstract hardware interfacing. The `state_interfaces` are read only data handles that generally represent sensors readings, e.g. joint encoder. The `command_interfaces` are read and write data handles that hardware commands, like setting a joint velocity reference. The `command_interfaces` are exclusively accessed, meaning if a controller has "claimed" an interface, it cannot be used by any other controller until it is released. Both interface types are uniquely designated with a name and type. The names and types for all available state and command interfaces are specified in a YAML configuration file and a URDF file.  
+## ros2_control overview
+ros2_control introduces `state_interfaces` and `command_interfaces` to abstract hardware interfacing. The `state_interfaces` are read only data handles that generally represent sensors readings, e.g. joint encoder. The `command_interfaces` are read and write data handles that hardware commands, like setting a joint velocity reference. The `command_interfaces` are exclusively accessed, meaning if a controller has "claimed" an interface, it cannot be used by any other controller until it is released. Both interface types are uniquely designated with a name and type. The names and types for all available state and command interfaces are specified in a YAML configuration file and a URDF file.  
 
-ROS 2 control provides the `ControllerInterface` and `HardwareInterface` classes for robot agnostic control. During initialization, controllers request `state_interfaces` and `command_interfaces` required for operation through the `ControllerInterface`. On the other hand, hardware drivers offer `state_interfaces` and `command_interfaces` via the `HardwareInterface`. ROS 2 control ensure all requested interfaces are available before starting the controllers. The interface pattern allows vendors to write hardware specific drivers that are loaded at runtime.  
+ros2_control provides the `ControllerInterface` and `HardwareInterface` classes for robot agnostic control. During initialization, controllers request `state_interfaces` and `command_interfaces` required for operation through the `ControllerInterface`. On the other hand, hardware drivers offer `state_interfaces` and `command_interfaces` via the `HardwareInterface`. ros2_control ensure all requested interfaces are available before starting the controllers. The interface pattern allows vendors to write hardware specific drivers that are loaded at runtime.  
 
 The main program is a realtime read, update, write loop. During the  read call, hardware drivers that conform to `HardwareInterface` update their offered `state_interfaces` with the newest values received from the hardware. During the update call, controllers calculate commands from the updated `state_interfaces` and writes them into its `command_interfaces`. Finally, during to write call, the hardware drivers read values from their offer `command_interfaces` and send them to the hardware. The `ros_2_control` node runs the main loop a realtime thread. The `ros_2_control` node runs a second non-realtime thread to interact with ROS publishers, subscribers, and services.      
 
 ## Writing a URDF
-The URDF file is a standard XML based file used to describe characteristic of a robot. It can represent any robot with a tree structure, except those with cycles. Each link must have only one parent. For ROS 2 control, there are three primary tags: `link`, `joint`, and `ros2_control`. The `joint` tag define the robot's kinematic structure, while the `link` tag defines the dynamic properties and 3D geometry. The `ros2_control` defines the hardware and controller configuration. 
+The URDF file is a standard XML based file used to describe characteristic of a robot. It can represent any robot with a tree structure, except those with cycles. Each link must have only one parent. For ros2_control, there are three primary tags: `link`, `joint`, and `ros2_control`. The `joint` tag define the robot's kinematic structure, while the `link` tag defines the dynamic properties and 3D geometry. The `ros2_control` defines the hardware and controller configuration. 
 ### Geometry
 Most commercial robots already have `robot_description` packages defined, see the [Universal Robots](https://github.com/UniversalRobots/Universal_Robots_ROS2_Description) for an example. However, this tutorial will go through the details of creating one from scratch. 
 
@@ -133,13 +133,13 @@ The URDF file is generally formatted according to the following template.
 * The `axis` tag species the joint's axis of rotation. If the meshes were process as described previously, then the axis value is always `"0 0 1"`.
 * The `limits` tag specifies kinematic and dynamics limits fo the joint. 
 * The `ros2_control` tag specifies hardware configuration of the  robot. More specifically, the available state and command interfaces. The tag has two required attributes: name and type. Additional elements, such as sensors, are also included in this tag.
-* The `hardware` and `plugin` tags instruct the ROS 2 control framework to dynamically load a hardware driver conforming to `HardwareInterface` as a plugin. The plugin is specified as ` <{Name_Space}/{Class_Name}`. 
+* The `hardware` and `plugin` tags instruct the ros2_control framework to dynamically load a hardware driver conforming to `HardwareInterface` as a plugin. The plugin is specified as ` <{Name_Space}/{Class_Name}`. 
 * Finally, the `joint` tag specifies the state and command interfaces that the loaded plugin is will offer. The joint is specified with the name attribute. The `command_interface` and `state_interface` tags specify the interface type, usually position, velocity, acceleration, or effort. 
 
 The complete URDF for the robot in this tutorial is available [here](robot_description/urdf/robot_6_dof.urdf).
 
 ## Writing a hardware interface
-In ROS 2 control, hardware system components are integrated via user defined driver plugins that conform to the `HarwareInterface` public interface. Hardware plugins specified in the URDF are dynamically loaded during initialization using the pluginlib interface. In order to run the `ros_2_control_node`, a parameter named `robot_description` must be set. This normally done in the ROS 2 control launch file.
+In ros2_control, hardware system components are integrated via user defined driver plugins that conform to the `HarwareInterface` public interface. Hardware plugins specified in the URDF are dynamically loaded during initialization using the pluginlib interface. In order to run the `ros_2_control_node`, a parameter named `robot_description` must be set. This normally done in the ros2_control launch file.
 
 The following code blocks will explain the requirements for writing a new hardware interface. 
 
@@ -165,7 +165,7 @@ class HARDWARE_INTERFACE_PUBLIC RobotSystem : public hardware_interface::SystemI
     // ...
 }
 ```
-The `on_init` method is called once during ROS 2 control initialization if the `RobotSystem` was specified in the URDF. In this method, communication between the robot hardware needs to be setup and memory dynamic should be allocated. Since the tutorial robot is simulated, explicit will communication not be established. Instead, vectors will be initialized that represent the state all the hardware, e.g. a vector of doubles describing joint angles, etc.      
+The `on_init` method is called once during ros2_control initialization if the `RobotSystem` was specified in the URDF. In this method, communication between the robot hardware needs to be setup and memory dynamic should be allocated. Since the tutorial robot is simulated, explicit will communication not be established. Instead, vectors will be initialized that represent the state all the hardware, e.g. a vector of doubles describing joint angles, etc.      
 ```c++
 CallbackReturn RobotSystem::on_init(const hardware_interface::HardwareInfo &info) {
     if (hardware_interface::SystemInterface::on_init(info) != CallbackReturn::SUCCESS) {
@@ -196,7 +196,7 @@ std::vector<hardware_interface::CommandInterface> RobotSystem::export_command_in
     return command_interfaces;
 }
 ```
-The `read` method is core method in the ROS 2 control loop. During the main loop, ROS 2 control loops over all hardware components and calls the `read` method. It is executed on the realtime thread, hence the method must obey by realtime constraints. The `read` method is responsible for updating the data values of the `state_interfaces`. Since the data value point to class member variables, those values can be filled with their corresponding sensor values, which will in turn update the values of each exported `StateInterface` object.            
+The `read` method is core method in the ros2_control loop. During the main loop, ros2_control loops over all hardware components and calls the `read` method. It is executed on the realtime thread, hence the method must obey by realtime constraints. The `read` method is responsible for updating the data values of the `state_interfaces`. Since the data value point to class member variables, those values can be filled with their corresponding sensor values, which will in turn update the values of each exported `StateInterface` object.            
 ```c++
 return_type RobotSystem::read(const rclcpp::Time & time, const rclcpp::Duration &period) {
     // read hardware values for state interfaces, e.g joint encoders and sensor readings
@@ -204,7 +204,7 @@ return_type RobotSystem::read(const rclcpp::Time & time, const rclcpp::Duration 
     return return_type::OK;
 } 
   ```
-The `write` method is another core method in the ROS 2 control loop. It is called after `update` in the realtime loop. For this reason, it must also obey by realtime constraints. The `write` method is responsible for updating the data values of the `command_interfaces`. As opposed to `read`, `write` accesses data values pointer to by the exported `CommandInterface` objects sends them to the corresponding hardware. For example, if the hardware supports setting a joint velocity via TCP, then this method accesses data of the corresponding `command_interface` and sends a packet with the value.      
+The `write` method is another core method in the ros2_control loop. It is called after `update` in the realtime loop. For this reason, it must also obey by realtime constraints. The `write` method is responsible for updating the data values of the `command_interfaces`. As opposed to `read`, `write` accesses data values pointer to by the exported `CommandInterface` objects sends them to the corresponding hardware. For example, if the hardware supports setting a joint velocity via TCP, then this method accesses data of the corresponding `command_interface` and sends a packet with the value.      
 ```c++
 return_type write(const rclcpp::Time & time, const rclcpp::Duration & period) {
     // send command interface values to hardware, e.g joint set joint velocity
@@ -212,7 +212,7 @@ return_type write(const rclcpp::Time & time, const rclcpp::Duration & period) {
     return return_type::OK;
 }
 ```
-Finally, all ROS 2 control plugins should have the following two lines of code at the end of the file. 
+Finally, all ros2_control plugins should have the following two lines of code at the end of the file. 
 ```c++
 #include "pluginlib/class_list_macros.hpp"
 
@@ -239,7 +239,7 @@ The plugin description file is a required XML file that describes a plugin's lib
 The `path` attribute of the `library` tags refers to the cmake library name of the user defined hardware plugin. See [here](hardware_driver/robot_6_dof_hardware_plugin_description.xml) for the complete XML file.    
 
 ### CMake library
-The general CMake template to make a hardware plugin available in ROS 2 control is shown below. Notice that a library is created using the plugin source code just like any other  cmake library. In addition, an extra compile definition and cmake export macro (`pluginlib_export_plugin_description_file`) need to be added. See [here](reference_generator/CMakeLists.txt) for the complete `CMakeLists.txt` file.
+The general CMake template to make a hardware plugin available in ros2_control is shown below. Notice that a library is created using the plugin source code just like any other  cmake library. In addition, an extra compile definition and cmake export macro (`pluginlib_export_plugin_description_file`) need to be added. See [here](reference_generator/CMakeLists.txt) for the complete `CMakeLists.txt` file.
 
 ```cmake
 add_library(
@@ -261,7 +261,7 @@ pluginlib_export_plugin_description_file(hardware_driver hardware_plugin_plugin_
 
 ## Writing a controller
 
-In ROS 2 control, controllers are implemented as plugins that conforms to the `ControllerInterface` public interface. Similar to the hardware interfaces, the controller plugins to load are specified using ROS parameters. This is normally  ahcived by passing a YAML parameter file to the `ros_2_controle_node`. Unlike hardware interfaces, controllers exists in a finite set of states:
+In ros2_control, controllers are implemented as plugins that conforms to the `ControllerInterface` public interface. Similar to the hardware interfaces, the controller plugins to load are specified using ROS parameters. This is normally  ahcived by passing a YAML parameter file to the `ros_2_controle_node`. Unlike hardware interfaces, controllers exists in a finite set of states:
 
 2. Unconfigured
 3. Inactive 
