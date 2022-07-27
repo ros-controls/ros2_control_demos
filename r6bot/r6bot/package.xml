@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>r6bot</name>
+  <version>0.0.0</version>
+  <description>
+    Demo package r6bot
+  </description>
+  <author>Paul Gesel</author>
+  <maintainer email="paul.gesel@picknik.ai">Paul Gesel</maintainer>
+  <license>BSD-3-Clause</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
