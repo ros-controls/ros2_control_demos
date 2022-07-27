@@ -239,22 +239,22 @@ The plugin description file is a required XML file that describes a plugin's lib
 The `path` attribute of the `library` tags refers to the cmake library name of the user defined hardware plugin. See [here](hardware_driver/robot_6_dof_hardware_plugin_description.xml) for the complete XML file.    
 
 ### CMake library
-The general CMake template to make a hardware plugin available in ros2_control is shown below. Notice that a library is created using the plugin source code just like any other  cmake library. In addition, an extra compile definition and cmake export macro (`pluginlib_export_plugin_description_file`) need to be added. See [here](reference_generator/CMakeLists.txt) for the complete `CMakeLists.txt` file.
+The general CMake template to make a hardware plugin available in ros2_control is shown below. Notice that a library is created using the plugin source code just like any other  cmake library. In addition, an extra compile definition and cmake export macro (`pluginlib_export_plugin_description_file`) need to be added. See [here](hardware_driver/CMakeLists.txt) for the complete `CMakeLists.txt` file.
 
 ```cmake
 add_library(
-    hardware_plugin
+    robot_6_dof_hardware
     SHARED
-    reference_generator/src/hardware_plugin.cpp
+    src/robot_hardware.cpp
 )
 
 # include and link dependencies
 # ...
 
 # Causes the visibility macros to use dllexport rather than dllimport, which is appropriate when building the dll but not consuming it.
-target_compile_definitions(hardware_plugin PRIVATE "HARDWARE_PLUGIN_DLL")
+target_compile_definitions(robot_6_dof_hardware PRIVATE "HARDWARE_PLUGIN_DLL")
 # export plugin
-pluginlib_export_plugin_description_file(hardware_driver hardware_plugin_plugin_description.xml)
+pluginlib_export_plugin_description_file(robot_6_dof_hardware hardware_plugin_plugin_description.xml)
 # install libraries
 # ...
 ```
@@ -394,7 +394,42 @@ controller_interface::CallbackReturn on_error(const rclcpp_lifecycle::State &pre
   return CallbackReturn::SUCCESS;
 }
 ```
+### Plugin description file
+The plugin description file is again required for the control, since it is exported as a library. The controller plugin description file is formatted as follows. See [here](robot_controller/robot_6_dof_controller_plugin_description.xml) for the complete XML file.
 
+```xml
+<library path="{Library_Name}">
+  <class
+    name="{Namespace}/{Class_Name}"
+    type="{Namespace}::{Class_Name}" 
+    base_class_type="controller_interface::ControllerInterface">
+  <description>
+    {Human readable description}
+  </description>
+  </class>
+</library>
+```
+
+### CMake library
+The plugin must be specified in the CMake file that builds the controller plugin. See [here](robot_controller/CMakeLists.txt) for the complete `CMakeLists.txt` file.
+
+```cmake
+add_library(
+    robot_controller
+    SHARED
+    src/robot_controller.cpp
+)
+
+# include and link dependencies
+# ...
+
+# Causes the visibility macros to use dllexport rather than dllimport, which is appropriate when building the dll but not consuming it.
+target_compile_definitions(robot_controller PRIVATE "CONTROLLER_PLUGIN_DLL")
+# export plugin
+pluginlib_export_plugin_description_file(robot_controller robot_6_dof_controller_plugin_description.xml)
+# install libraries
+# ...
+```
 
 
 ## Launching the example
