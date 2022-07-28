@@ -12,7 +12,7 @@
     <joint name="joint_5" value="0"/>
     <joint name="joint_6" value="0"/>
   </group_state>
- <!--DISABLE COLLISIONS - By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
+  <!--DISABLE COLLISIONS - By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
   <disable_collisions link1="base_link" link2="link_1" reason="Adjacent"/>
   <disable_collisions link1="link_1" link2="link_2" reason="Adjacent"/>
   <disable_collisions link1="link_2" link2="link_3" reason="Adjacent"/>
