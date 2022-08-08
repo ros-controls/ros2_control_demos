@@ -665,3 +665,54 @@ Now you should also see the *RRbot* represented correctly in `RViz`.
    ```
 
 3. You should also see the *RRbot* moving in `RViz`.
+
+
+# Testing JTC with Ruckig
+
+Checkout `chainable-jtc-with-ruckig-smoothing` from https://github.com/destogl/ros2_controllers.git
+
+### One DoF & position only commands
+
+1. First terminal:
+   ```
+   ros2 launch ros2_control_demo_bringup rrbot_jtc_ruckig_one_dof_test.launch.py
+   ```
+
+2. Second terminal - launch publisher within limits:
+   ```
+   ros2 launch ros2_control_demo_bringup test_rrbot_jtc_position_only_ruckig_one_dof_within_limits.launch.py
+   ```
+
+3. or start publisher with goals outside of limits:
+   ```
+   ros2 launch ros2_control_demo_bringup test_rrbot_jtc_position_only_ruckig_one_dof_outside_limits.launch.py
+   ```
+
+### One DoF & velocity only commands
+
+1. First terminal:
+   ```
+   ros2 launch ros2_control_demo_bringup rrbot_jtc_ruckig_one_dof_test.launch.py
+   ```
+
+2. Second terminal:
+   ```
+   ros2 launch ros2_control_demo_bringup test_rrbot_jtc_velocity_only_ruckig_one_dof_within_limits.launch.py
+   ```
+
+3. or start publisher with goals outside of limits:
+   ```
+   ros2 launch ros2_control_demo_bringup test_rrbot_jtc_velocity_only_ruckig_one_dof_outside_limits.launch.py
+   ```
+
+### Two DoFs & velocity only commands
+
+1. First terminal:
+   ```
+   ros2 launch ros2_control_demo_bringup rrbot_jtc_ruckig_two_dofs_test.launch.py
+   ```
+
+2. Second terminal:
+   ```
+   ros2 launch ros2_control_demo_bringup test_rrbot_jtc_velocity_only_ruckig_two_dofs_within_limits.launch.py
+   ```

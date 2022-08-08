@@ -1,0 +1,20 @@
+publisher_joint_trajectory_controller:
+  ros__parameters:
+
+    controller_name: "joint_trajectory_controller_ruckig_smoothing"
+    wait_sec_between_publish: 6.0
+    repeat_the_same_goal: 1  # useful to simulate continuous inputs
+
+    goal_time_from_start: 3.0
+    goal_names: ["pos1", "pos2", "pos3", "pos4"]
+    pos1:
+      velocities: [4.0]
+    pos2:
+      velocities: [0.0]
+    pos3:
+      velocities: [-4.0]
+    pos4:
+      velocities: [0.0]
+
+    joints:
+      - joint1

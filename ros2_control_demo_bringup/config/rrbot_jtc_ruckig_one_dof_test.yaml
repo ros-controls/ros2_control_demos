@@ -1,0 +1,45 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 100  # Hz
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    joint_trajectory_controller_ruckig_smoothing:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+
+joint_trajectory_controller_ruckig_smoothing:
+  ros__parameters:
+    joints:
+      - joint1
+
+    command_interfaces:
+      - position
+      - velocity
+
+    state_interfaces:
+      - position
+      - velocity
+
+    state_publish_rate: 200.0 # Defaults to 50
+    action_monitor_rate: 20.0 # Defaults to 20
+
+    interpolation_method: ruckig
+
+    allow_partial_joints_goal: false # Defaults to false
+    open_loop_control: true
+    allow_integration_in_goal_trajectories: true
+    constraints:
+      stopped_velocity_tolerance: 0.01 # Defaults to 0.01
+      goal_time: 0.0 # Defaults to 0.0 (start immediately)
+
+    joint_limits:
+      joint1:
+        has_position_limits: false
+        has_velocity_limits: true
+        max_velocity: 8.0
+        has_acceleration_limits: true
+        max_acceleration: 2.0
+        has_jerk_limits: true
+        max_jerk: 1000.0
