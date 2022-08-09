@@ -671,6 +671,15 @@ Now you should also see the *RRbot* represented correctly in `RViz`.
 
 Checkout `chainable-jtc-with-ruckig-smoothing` from https://github.com/destogl/ros2_controllers.git
 
+To test the output consider the following data:
+
+- Splines output: topic `~/splines_output` field `actual`
+- Ruckig input curent state: topic `~/ruckig_input_current` field `actual`
+- Ruckig input target state: topic `~/ruckig_input_target` field `actual`
+- Ruckig output (controllers output): topic `~/state` field `desired`
+
+**TIPP**: Ploting positions independantly from velocities and accelerations is very helpful :D
+
 ### One DoF & position only commands
 
 1. First terminal:
