@@ -131,13 +131,13 @@ The *RRBot* URDF files can be found in the `urdf` folder of `rrbot_description` 
    The `joint_state_publisher_gui` provides a GUI to generate  a random configuration for rrbot. It is immediately displayed in `Rviz`.
 
 
-1. To start *RRBot* example open open a terminal, source your ROS2-workspace and execute its launch file with:
+1. To start *RRBot* example open a terminal, source your ROS2-workspace and execute its launch file with:
    ```
    ros2 launch ros2_control_demo_bringup rrbot.launch.py
    ```
    The launch file loads and starts the robot hardware, controllers and opens `RViz`.
    In starting terminal you will see a lot of output from the hardware implementation showing its internal states.
-   This is only of exemplary purpuses and should be avoided as much as possible in a hardware interface implementation.
+   This is only of exemplary purposes and should be avoided as much as possible in a hardware interface implementation.
 
    If you can see two orange and one yellow rectangle in in `RViz` everything has started properly.
    Still, to be sure, let's introspect the control system before moving *RRBot*.
