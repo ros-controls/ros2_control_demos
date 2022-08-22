@@ -57,12 +57,13 @@ Nevertheless, you can configure updating parameters without reactivation using `
 
 1. Change a parameter of admittance controller, e.g., stiffness:
    ```
-   ros2 param set /admittance_controller admittance.stiffness [10.0,10.0,10.0,10.0,1.0,1.0,1.0]
+   ros2 param set /admittance_controller admittance.stiffness [5.0,5.0,5.0,5.0,1.0,1.0,1.0]
    ```
 
 1. Then restart controller:
    ```
-   ros2 control switch_controllers --stop admittance_controller --start admittance_controller
+   ros2 control switch_controllers --stop admittance_controller
+   ros2 control switch_controllers --start admittance_controller
    ```
 
 1. Then you should see how the controllers dynamic has changed when executing the same movements.
