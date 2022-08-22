@@ -20,9 +20,6 @@ controller_manager:
     joint_trajectory_controller:
       type: joint_trajectory_controller/JointTrajectoryController
 
-    scaled_joint_trajectory_controller:
-      type: ur_controllers/ScaledJointTrajectoryController
-
     forward_velocity_controller:
       type: velocity_controllers/JointGroupVelocityController
 
@@ -93,50 +90,35 @@ joint_trajectory_controller:
       - wrist_3_joint
     command_interfaces:
       - position
+      - velocity
     state_interfaces:
       - position
       - velocity
+    command_joints:
+      - admittance_controller/shoulder_pan_joint
+      - admittance_controller/shoulder_lift_joint
+      - admittance_controller/elbow_joint
+      - admittance_controller/wrist_1_joint
+      - admittance_controller/wrist_2_joint
+      - admittance_controller/wrist_3_joint
     state_publish_rate: 100.0
     action_monitor_rate: 20.0
     allow_partial_joints_goal: false
     constraints:
-      stopped_velocity_tolerance: 0.2
+      stopped_velocity_tolerance: 0.0
       goal_time: 0.0
-      shoulder_pan_joint: { trajectory: 0.2, goal: 0.1 }
-      shoulder_lift_joint: { trajectory: 0.2, goal: 0.1 }
-      elbow_joint: { trajectory: 0.2, goal: 0.1 }
-      wrist_1_joint: { trajectory: 0.2, goal: 0.1 }
-      wrist_2_joint: { trajectory: 0.2, goal: 0.1 }
-      wrist_3_joint: { trajectory: 0.2, goal: 0.1 }
-
-
-scaled_joint_trajectory_controller:
-  ros__parameters:
-    joints:
-      - shoulder_pan_joint
-      - shoulder_lift_joint
-      - elbow_joint
-      - wrist_1_joint
-      - wrist_2_joint
-      - wrist_3_joint
-    command_interfaces:
-      - position
-    state_interfaces:
-      - position
-      - velocity
-    state_publish_rate: 100.0
-    action_monitor_rate: 20.0
-    allow_partial_joints_goal: false
-    constraints:
-      stopped_velocity_tolerance: 0.2
-      goal_time: 0.0
-      shoulder_pan_joint: { trajectory: 0.2, goal: 0.1 }
-      shoulder_lift_joint: { trajectory: 0.2, goal: 0.1 }
-      elbow_joint: { trajectory: 0.2, goal: 0.1 }
-      wrist_1_joint: { trajectory: 0.2, goal: 0.1 }
-      wrist_2_joint: { trajectory: 0.2, goal: 0.1 }
-      wrist_3_joint: { trajectory: 0.2, goal: 0.1 }
-
+      shoulder_pan_joint:
+        goal: 0.05
+      shoulder_lift_joint:
+        goal: 0.05
+      elbow_joint:
+        goal: 0.05
+      wrist_1_joint:
+        goal: 0.05
+      wrist_2_joint:
+        goal: 0.05
+      wrist_3_joint:
+        goal: 0.05
 
 forward_velocity_controller:
   ros__parameters:
@@ -167,102 +149,84 @@ admittance_controller:
       - position
       - velocity
 
-    enable_parameter_update_without_reactivation: false
+    chainable_command_interfaces:
+      - position
+      - velocity
 
-    ft_sensor_name: tcp_fts_sensor
-    use_joint_commands_as_input: true
-    #joint_limiter_type: "joint_limits/SimpleJointLimiter"
-
-    state_publish_rate: 200.0 # Defaults to 50
-    action_monitor_rate: 20.0 # Defaults to 20
-
-    allow_partial_joints_goal: false # Defaults to false
-    open_loop_control: true
-    allow_integration_in_goal_trajectories: true
-    constraints:
-      stopped_velocity_tolerance: 0.01 # Defaults to 0.01
-      goal_time: 0.0 # Defaults to 0.0 (start immediately)
-
-    IK:
+    kinematics:
+      plugin_name: kinematics_interface_kdl/KinematicsInterfaceKDL
+      plugin_package: kinematics_interface
       base: base_link # Assumed to be stationary
       tip: tool0
       group_name: ur5e_manipulator
+      alpha: 0.0005
 
-    endeffector_frame: tool0
-    control_frame: base_link # Admittance calcs (displacement etc) are done in this frame. Usually the tool or end-effector
-    fixed_world_frame: base_link  # Gravity points down (neg. Z) in this frame (Usually: world or base_link)
-    sensor_frame: ft_frame  # Wrench measurements are in this frame
+    ft_sensor:
+      name: tcp_fts_sensor
+      frame:
+        id: tool0  # Wrench measurements are in this frame
+        external: false # force torque frame exists within URDF kinematic chain
+      filter_coefficient: 0.005
+
+    control:
+      frame:
+        id: base_link # Admittance calcs (displacement etc) are done in this frame. Usually the tool or end-effector
+        external: false # control frame exists within URDF kinematic chain
+
+    fixed_world_frame:
+      frame:   # Gravity points down (neg. Z) in this frame (Usually: world or base_link)
+        id: base_link # Admittance calcs (displacement etc) are done in this frame. Usually the tool or end-effector
+        external: false # control frame exists within URDF kinematic chain
+
+    gravity_compensation:
+      frame:
+        id: tool0
+        external: false
+
+      CoG: # specifies the center of gravity of the end effector
+        pos:
+          - 0.1 # x
+          - 0.0 # y
+          - 0.0 # z
+        force: 23.0 # mass * 9.81
 
     admittance:
       selected_axes:
-        x: true
-        y: true
-        z: true
-        rx: true
-        ry: true
-        rz: true
+        - true # x
+        - true # y
+        - true # z
+        - true # rx
+        - true # ry
+        - true # rz
 
       # Having ".0" at the end is MUST, otherwise there is a loading error
       # F = M*a + D*v + S*(x - x_d)
       mass:
-        x: 10.0
-        y: 10.0
-        z: 10.0
-        rx: 10.0
-        ry: 10.0
-        rz: 10.0
+        - 3.0 # x
+        - 3.0 # y
+        - 3.0 # z
+        - 0.05 # rx
+        - 0.05 # ry
+        - 0.05 # rz
 
-      damping_ratio:    # damping can be used instead: zeta = D / (2 * sqrt( M * S ))
-        x: 2.828427
-        y: 2.828427
-        z: 2.828427
-        rx: 2.23607
-        ry: 2.23607
-        rz: 2.23607
+      damping_ratio: # damping can be used instead: zeta = D / (2 * sqrt( M * S ))
+        - 2.828427 # x
+        - 2.828427 # y
+        - 2.828427 # z
+        - 2.828427 # rx
+        - 2.828427 # ry
+        - 2.828427 # rz
 
       stiffness:
-        x: 50.0
-        y: 50.0
-        z: 50.0
-        rx: 50.0
-        ry: 50.0
-        rz: 50.0
+        - 50.0 # x
+        - 50.0 # y
+        - 50.0 # z
+        - 1.0 # rx
+        - 1.0 # ry
+        - 1.0 # rz
 
-    input_wrench_filter_chain:
-      filter1:
-        type: control_filters/LowPassFilterWrench
-        name: low_pass_filter
-        params:
-          sampling_frequency: 200.0
-          damping_frequency: 50.0
-          damping_intensity: 1.0
-          divider: 1
-
-      filter2:
-        type: control_filters/GravityCompensationWrench
-        name: wrist_gravity_compensation
-        params:
-          CoG:
-            x: 0.0
-            y: 0.0
-            z: 0.1
-          force: 0.0        # mass * 9.81
-          force_frame: wrist_3_link
-          sensor_frame: ft_frame
-          world_frame: base_link
-
-      filter3:
-        type: control_filters/GravityCompensationWrench
-        name: tool_gravity_compensation
-        params:
-          CoG:
-            x: 0.0
-            y: 0.0
-            z: 0.1
-          force: 0.0        # mass * 9.81
-          force_frame: wrist_3_link
-          sensor_frame: ft_frame
-          world_frame: base_link
+    # general settings
+    enable_parameter_update_without_reactivation: false
 
 
 faked_forces_controller:

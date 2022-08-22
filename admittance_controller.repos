@@ -1,51 +1,55 @@
 repositories:
-
+  control_msgs:
+    type: git
+    url: https://github.com/pac48/control_msgs.git
+    version: add-admittance-controller
+    
   control_toolbox:
     type: git
     url: https://github.com/ros-controls/control_toolbox.git
-    verstion: demo-admittance-controller-delete-when-paramhandler-gravity-comp-merged
-
-  control_msgs: # Branch: rolling/add-addmittance-controller-state
-    type: git
-    url: https://github.com/nbbrooks/control_msgs.git
-    version: 81419078f8544e9e320f3405a4fa5d3a7ba3dc1e  # Add calculation values of the admittance rule
-
-  geometry2: # Branch: twist_wrench_transform_foxy
-    type: git
-    url: https://github.com/JafarAbdi/geometry2.git
-    version: 2888c23b97cb76674129314cc648b5b355bda3f4  # Add tomsg conversion for geometry_msgs/Transform
+    verstion: ros2-master
 
   ros2_control:
     type: git
-    url: https://github.com/destogl/ros2_control.git
-    version: admittance-controller-development
-
+    url: https://github.com/ros-controls/ros2_control.git
+    version: master
+    
   ros2_control_demos:
     type: git
-    url: https://github.com/destogl/ros2_control_demos.git
-    version: admittance-controller-setup
+    url: https://github.com/pac48/ros2_control_demos.git
+    version: add-admittance-controller
 
   ros2_controllers:
     type: git
-    url: https://github.com/destogl/ros2_controllers.git
-    version: admittance-controller-demo
+    url: https://github.com/pac48/ros2_controllers.git
+    version: add-admittance-controller
 
   teleop_twist_keyboard: # Branch: wrench
     type: git
     url: https://github.com/nbbrooks/teleop_twist_keyboard.git
     version: 63de1c17c4c5d0724018f3b5fd8139c472cd15ab  # Add Float64MultiArray publisher
 
-  Universal_Robots_Client_Library:  # Branch: master
+  Universal_Robots_Client_Library:
     type: git
     url: https://github.com/UniversalRobots/Universal_Robots_Client_Library.git
-    version: 90338a76d65d86240710c8f976fd40296a49cd84  # Merge pull request #85 from jornb/feat/target_frequency
+    version: 1.1.0
 
-  Universal_Robots_ROS2_Driver:  # Branch: main
+  Universal_Robots_ROS2_Driver:
     type: git
     url: https://github.com/UniversalRobots/Universal_Robots_ROS2_Driver.git
-    version: 10f16b8869bb47aa82daf7bc05e0b62406ae8c5d  # Add ft_sensor frame.
+    version: 2.2.3
 
-  ur_msgs:  # Branch: ros2
+  ur_msgs:
     type: git
-    url: https://github.com/destogl/ur_msgs.git
-    version: d72e82719b72deef6a59ea50e5295817d0b4f9f6  # Corrected/updated dependencies
+    url: https://github.com/ros-industrial/ur_msgs.git
+    version: 2.0.0
+    
+  kinematics_interface:
+    type: git
+    url: https://github.com/ros-controls/kinematics_interface.git
+    version: master
+    
+  generate_parameter_library:
+    type: git
+    url: https://github.com/picknikrobotics/generate_parameter_library.git
+    version: main
