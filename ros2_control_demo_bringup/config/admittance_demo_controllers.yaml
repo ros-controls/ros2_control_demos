@@ -8,9 +8,6 @@ controller_manager:
     io_and_status_controller:
       type: ur_controllers/GPIOController
 
-    speed_scaling_state_broadcaster:
-      type: ur_controllers/SpeedScalingStateBroadcaster
-
     force_torque_sensor_broadcaster:
       type: ur_controllers/ForceTorqueStateBroadcaster
 
@@ -20,19 +17,11 @@ controller_manager:
     joint_trajectory_controller:
       type: joint_trajectory_controller/JointTrajectoryController
 
-    forward_velocity_controller:
-      type: velocity_controllers/JointGroupVelocityController
-
     admittance_controller:
       type: admittance_controller/AdmittanceController
 
     faked_forces_controller:
       type: forward_command_controller/MultiInterfaceForwardCommandController
-
-
-speed_scaling_state_broadcaster:
-  ros__parameters:
-    state_publish_rate: 100.0
 
 
 force_torque_sensor_broadcaster:
@@ -45,14 +34,14 @@ force_torque_sensor_broadcaster:
       - torque.x
       - torque.y
       - torque.z
-    frame_id: tool0
+    frame_id: wrist_3_link
     topic_name: ft_data
 
 
 force_sensor_broadcaster:
   ros__parameters:
     sensor_name: tcp_fts_sensor
-    frame_id: tool0
+    frame_id: wrist_3_link
     additional_frames_to_publish: [base_link]
 
     sensor_filter_chain:
@@ -120,17 +109,6 @@ joint_trajectory_controller:
       wrist_3_joint:
         goal: 0.05
 
-forward_velocity_controller:
-  ros__parameters:
-    joints:
-      - shoulder_pan_joint
-      - shoulder_lift_joint
-      - elbow_joint
-      - wrist_1_joint
-      - wrist_2_joint
-      - wrist_3_joint
-    interface_name: velocity
-
 
 admittance_controller:
   ros__parameters:
@@ -157,38 +135,34 @@ admittance_controller:
       plugin_name: kinematics_interface_kdl/KinematicsInterfaceKDL
       plugin_package: kinematics_interface
       base: base_link # Assumed to be stationary
-      tip: tool0
+      tip: wrist_3_link
       group_name: ur5e_manipulator
       alpha: 0.0005
 
     ft_sensor:
       name: tcp_fts_sensor
       frame:
-        id: tool0  # Wrench measurements are in this frame
-        external: false # force torque frame exists within URDF kinematic chain
-      filter_coefficient: 0.005
+        id: wrist_3_link  # Wrench measurements are in this frame
+      filter_coefficient: 0.1
 
     control:
       frame:
         id: base_link # Admittance calcs (displacement etc) are done in this frame. Usually the tool or end-effector
-        external: false # control frame exists within URDF kinematic chain
 
     fixed_world_frame:
       frame:   # Gravity points down (neg. Z) in this frame (Usually: world or base_link)
         id: base_link # Admittance calcs (displacement etc) are done in this frame. Usually the tool or end-effector
-        external: false # control frame exists within URDF kinematic chain
 
     gravity_compensation:
       frame:
-        id: tool0
-        external: false
+        id: wrist_3_link
 
       CoG: # specifies the center of gravity of the end effector
         pos:
           - 0.1 # x
           - 0.0 # y
           - 0.0 # z
-        force: 23.0 # mass * 9.81
+        force: 0.0 # mass * 9.81
 
     admittance:
       selected_axes:
@@ -202,9 +176,9 @@ admittance_controller:
       # Having ".0" at the end is MUST, otherwise there is a loading error
       # F = M*a + D*v + S*(x - x_d)
       mass:
-        - 3.0 # x
-        - 3.0 # y
-        - 3.0 # z
+        - 1.0 # x
+        - 1.0 # y
+        - 1.0 # z
         - 0.05 # rx
         - 0.05 # ry
         - 0.05 # rz
