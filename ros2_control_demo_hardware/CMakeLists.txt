@@ -26,6 +26,8 @@ add_library(
   src/rrbot_system_position_only.cpp
   src/rrbot_system_multi_interface.cpp
   src/rrbot_system_with_sensor.cpp
+  src/rrbot_actuator.cpp
+  src/external_rrbot_force_torque_sensor.cpp
 )
 target_include_directories(
   ${PROJECT_NAME}
@@ -40,6 +42,11 @@ ament_target_dependencies(
   rclcpp_lifecycle
 )
 
+# Causes the visibility macros to use dllexport rather than dllimport,
+# which is appropriate when building the dll but not consuming it.
+target_compile_definitions(${PROJECT_NAME} PRIVATE "ROS2_CONTROL_DEMO_HARDWARE_BUILDING_DLL")
+
+# Export hardware pligins
 pluginlib_export_plugin_description_file(hardware_interface ros2_control_demo_hardware.xml)
 
 # INSTALL
