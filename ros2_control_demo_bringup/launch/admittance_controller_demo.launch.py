@@ -312,10 +312,6 @@ def generate_launch_description():
             robot_description_semantic,
             joint_limits_admittance,
         ],
-        output={
-            "stdout": "screen",
-            "stderr": "screen",
-        },
     )
 
     dashboard_client_node = Node(
