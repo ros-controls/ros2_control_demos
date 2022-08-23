@@ -3,7 +3,7 @@ repositories:
     type: git
     url: https://github.com/pac48/control_msgs.git
     version: add-admittance-controller
-    
+
   control_toolbox:
     type: git
     url: https://github.com/ros-controls/control_toolbox.git
@@ -13,7 +13,7 @@ repositories:
     type: git
     url: https://github.com/ros-controls/ros2_control.git
     version: master
-    
+
   ros2_control_demos:
     type: git
     url: https://github.com/pac48/ros2_control_demos.git
@@ -43,12 +43,12 @@ repositories:
     type: git
     url: https://github.com/ros-industrial/ur_msgs.git
     version: 2.0.0
-    
+
   kinematics_interface:
     type: git
     url: https://github.com/ros-controls/kinematics_interface.git
     version: master
-    
+
   generate_parameter_library:
     type: git
     url: https://github.com/picknikrobotics/generate_parameter_library.git
