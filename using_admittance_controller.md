@@ -20,7 +20,7 @@ This manual targets ROS2 rolling.
    vcs import --input admittance_controller.repos .
    rosdep install --from-paths . -y -i --ignore-src
    ```
-   
+
 1. Compile your workspace using `colcon build`.
 
 ###  Demo: manual activation
@@ -48,7 +48,7 @@ Start the demo using:
    ```
    ros2 topic echo /faked_forces_controller/commands
    ```
-   
+
 ###  Demo: MoveIt2
 Start the demo using:
    ```

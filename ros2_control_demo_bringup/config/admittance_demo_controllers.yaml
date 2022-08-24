@@ -200,7 +200,7 @@ admittance_controller:
         - 1.0 # rz
 
     # general settings
-    enable_parameter_update_without_reactivation: false
+    enable_parameter_update_without_reactivation: true
 
 
 faked_forces_controller:
