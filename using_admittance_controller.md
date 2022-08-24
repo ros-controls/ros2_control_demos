@@ -23,7 +23,7 @@ This manual targets ROS2 rolling.
    
 1. Compile your workspace using `colcon build`.
 
-###  Demo manual activation
+###  Demo: manual activation
 Start the demo using:
    ```
    ros2 launch ros2_control_demo_bringup admittance_controller_demo.launch.py
@@ -49,7 +49,7 @@ Start the demo using:
    ros2 topic echo /faked_forces_controller/commands
    ```
    
-###  Demo manual activation
+###  Demo: MoveIt2
 Start the demo using:
    ```
    ros2 launch ros2_control_demo_bringup admittance_controller_demo.launch.py
