@@ -13,7 +13,7 @@ This manual targets ROS2 rolling.
    ```
    wget https://raw.githubusercontent.com/pac48/ros2_control_demos/add-admittance-controller/admittance_controller.repos
    vcs import --input admittance_controller.repos .
-   rosdep install --from-paths . -y -i
+   rosdep install --from-paths . -y -i --ignore-src
    ```
 
 1. Compile your workspace using `colcon build`.
