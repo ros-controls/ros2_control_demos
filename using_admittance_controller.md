@@ -2,14 +2,14 @@
 
 This manual targets ROS2 rolling.
 
-1. Create a new ROS workspace and compile it with ROS2 rolling.
+1. Create a new ROS workspace and navigate to the src folder.
 1. Install some dependencies
    ```
    sudo apt-get install python3-colcon-common-extensions python3-rosdep python3-vcstool
    sudo rosdep init
    rosdep update
    ```
-1. Checkout the repositories from `admittance_controller.repos` file:
+1. Clone this moveit2 repository and import the `moveit2/moveit2.repos` file:
    ```
    git clone https://github.com/pac48/moveit2.git -b pr-support-chained-controllers
    vcs import < "moveit2/moveit2.repos"
@@ -20,12 +20,11 @@ This manual targets ROS2 rolling.
    vcs import --input admittance_controller.repos .
    rosdep install --from-paths . -y -i --ignore-src
    ```
-
-
-
+   
 1. Compile your workspace using `colcon build`.
 
-1. Start the demo using:
+###  Demo manual activation
+Start the demo using:
    ```
    ros2 launch ros2_control_demo_bringup admittance_controller_demo.launch.py
    ```
@@ -49,6 +48,21 @@ This manual targets ROS2 rolling.
    ```
    ros2 topic echo /faked_forces_controller/commands
    ```
+   
+###  Demo manual activation
+Start the demo using:
+   ```
+   ros2 launch ros2_control_demo_bringup admittance_controller_demo.launch.py
+   ```
+
+1. Listing controller with `ros2 control list_controllers` you should see admittance controller in the state `inactive`.
+
+1. Start custom version of `teleop_twist_keyboard` to publish fake forces:
+   ```
+   ros2 run teleop_twist_keyboard teleop_twist_keyboard
+   ```
+1. Create set a random valid goal in RVIZ and press plan & execute.
+1. Use the keyboard to impose force on the robot while it is moving.
 
 ## Features
 
@@ -65,12 +79,6 @@ Nevertheless, you can configure updating parameters without reactivation using `
 1. Change a parameter of admittance controller, e.g., stiffness:
    ```
    ros2 param set /admittance_controller admittance.stiffness [5.0,5.0,5.0,5.0,1.0,1.0,1.0]
-   ```
-
-1. Then restart controller:
-   ```
-   ros2 control switch_controllers --stop admittance_controller
-   ros2 control switch_controllers --start admittance_controller
    ```
 
 1. Then you should see how the controllers dynamic has changed when executing the same movements.
