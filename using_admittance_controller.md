@@ -15,6 +15,12 @@ This manual targets ROS2 rolling.
    vcs import --input admittance_controller.repos .
    rosdep install --from-paths . -y -i --ignore-src
    ```
+1. Checkout the repositories from `admittance_controller.repos` file:
+   ```
+   git clone https://github.com/pac48/moveit2.git -b pr-support-chained-controllers
+   vcs import < "moveit2/moveit2.repos"
+   ```
+
 
 1. Compile your workspace using `colcon build`.
 
