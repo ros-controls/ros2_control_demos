@@ -185,13 +185,8 @@ def generate_launch_description():
 
     robot_controller_spawner = Node(
         package="controller_manager",
-<<<<<<< HEAD
-        executable="spawner",
-        arguments=[robot_controller, "-c", "/controller_manager"],
-=======
         executable="spawner.py",
         arguments=[robot_controller, "--controller-manager", "/controller_manager"],
->>>>>>> f43fa8a (Rename position_trajectory_controller to joint_trajectory_position_controller (#190))
     )
 
     # Delay rviz start after `joint_state_broadcaster`
