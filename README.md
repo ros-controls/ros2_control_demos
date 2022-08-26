@@ -639,23 +639,13 @@ Now you should also see the *RRbot* represented correctly in `RViz`.
    ```
    You should get `active` in the response:
    ```
-<<<<<<< HEAD
    joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
    position_trajectory_controller[joint_trajectory_controller/JointTrajectoryController] active
-   ```
-
-3. Send a command to the controller using demo node which sends four goals every 6 seconds in a loop:
-   ```
-   ros2 launch ros2_control_demo_bringup test_joint_trajectory_controller.launch.py
-=======
-   joint_state_controller[joint_state_controller/JointStateController] active
-   joint_trajectory_position_controller[joint_trajectory_controller/JointTrajectoryController] active
    ```
 
 3. Send a command to the controller using demo node which sends two goals every 6 seconds in a loop:
    ```
    ros2 launch ros2_control_demo_bringup test_joint_trajectory_position_controller.launch.py
->>>>>>> f43fa8a (Rename position_trajectory_controller to joint_trajectory_position_controller (#190))
    ```
    You can adjust the goals in [rrbot_joint_trajectory_publisher.yaml](ros2_control_demo_bringup/config/rrbot_joint_trajectory_publisher.yaml).
 
