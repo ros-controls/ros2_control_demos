@@ -588,7 +588,7 @@ Now you should also see the *RRbot* represented correctly in `RViz`.
 
 3. Now start the controller:
    ```
-   ros2 control switch_controllers --start forward_position_controller
+   ros2 control switch_controllers --activate forward_position_controller
    ```
    Check if controllers are activated:
    ```
@@ -631,7 +631,7 @@ Now you should also see the *RRbot* represented correctly in `RViz`.
 
 2. Now start the controller (and stop other running contorller):
    ```
-   ros2 control switch_controllers --stop forward_position_controller --start position_trajectory_controller
+   ros2 control switch_controllers --deactivate forward_position_controller --activate position_trajectory_controller
    ```
    Check if controllers are activated:
    ```

@@ -87,7 +87,7 @@ Let's switch controllers now to velocity
 
 .. code-block:: bash
 
-    ros2 control switch_controllers --stop forward_position_controller --start forward_velocity_controller
+    ros2 control switch_controllers --deactivate forward_position_controller --activate forward_velocity_controller
 
 List hardware interfaces again to see that indeed position interfaces have been unclaimed while velocity is claimed now
 

@@ -33,7 +33,7 @@ Start the demo using:
 
 1. Activate the admittance controller:
    ```
-   ros2 control switch_controllers --start admittance_controller
+   ros2 control switch_controllers --activate admittance_controller
    ```
 
 1. Start custom version of `teleop_twist_keyboard` to publish fake forces:

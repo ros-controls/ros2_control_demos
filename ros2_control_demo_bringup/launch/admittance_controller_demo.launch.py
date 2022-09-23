@@ -310,13 +310,13 @@ def launch_setup(context, *args, **kwargs):
     admittance_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["admittance_controller", "-c", "/controller_manager", "--stopped"],
+        arguments=["admittance_controller", "-c", "/controller_manager", "--inactive"],
     )
 
     joint_trajectory_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["joint_trajectory_controller", "-c", "/controller_manager", "--stopped"],
+        arguments=["joint_trajectory_controller", "-c", "/controller_manager", "--inactive"],
     )
 
     faked_forces_controller_spawner = Node(
