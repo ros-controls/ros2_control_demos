@@ -175,8 +175,8 @@ def launch_setup(context, *args, **kwargs):
             "initial_positions_file:=",
             PathJoinSubstitution(
                 [
-                    FindPackageShare("rrbot_description"),
-                    "admittance_demo",
+                    FindPackageShare("admittance_demo"),
+                    "config",
                     "initial_positions.yaml",
                 ]
             ),
@@ -211,11 +211,11 @@ def launch_setup(context, *args, **kwargs):
     )
 
     rviz_config_file = PathJoinSubstitution(
-        [FindPackageShare("rrbot_description"), "admittance_demo", "admittance_demo.rviz"]
+        [FindPackageShare("admittance_demo"), "config", "admittance_demo.rviz"]
     )
 
     joint_limits_admittance = PathJoinSubstitution(
-        [FindPackageShare("rrbot_description"), "admittance_demo", "joint_limits_admittance.yaml"]
+        [FindPackageShare("admittance_demo"), "config", "joint_limits_admittance.yaml"]
     )
 
     kinematics_yaml = load_yaml("ur_moveit_config", "config/kinematics.yaml")
