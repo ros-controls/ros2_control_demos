@@ -11,7 +11,7 @@ This manual targets ROS2 rolling.
    ```
 1. Clone this moveit2 repository and import the `moveit2/moveit2.repos` file:
    ```
-   git clone https://github.com/pac48/moveit2.git -b pr-support-chained-controllers
+   git clone https://github.com/ros-planning/moveit2.git -b main
    vcs import < "moveit2/moveit2.repos"
    ```
 1. Checkout the repositories from `admittance_controller.repos` file:
