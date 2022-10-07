@@ -1,27 +1,17 @@
 repositories:
   control_msgs:
     type: git
-    url: https://github.com/pac48/control_msgs.git
-    version: add-admittance-controller
+    url: https://github.com/ros-controls/control_msgs.git
+    version: humble
 
   control_toolbox:
     type: git
     url: https://github.com/ros-controls/control_toolbox.git
     verstion: ros2-master
 
-  generate_parameter_library:
-    type: git
-    url: https://github.com/picknikrobotics/generate_parameter_library.git
-    version: main
-
   kinematics_interface:
     type: git
     url: https://github.com/ros-controls/kinematics_interface.git
-    version: master
-
-  ros2_control:
-    type: git
-    url: https://github.com/ros-controls/ros2_control.git
     version: master
 
   ros2_control_demos:
@@ -47,7 +37,7 @@ repositories:
   Universal_Robots_ROS2_Driver:
     type: git
     url: https://github.com/UniversalRobots/Universal_Robots_ROS2_Driver.git
-    version: 2.2.3
+    version: main
 
   ur_msgs:
     type: git
