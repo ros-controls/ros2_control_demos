@@ -36,8 +36,8 @@ repositories:
 
   Universal_Robots_ROS2_Driver:
     type: git
-    url: https://github.com/fmauch/Universal_Robots_ROS2_Driver.git
-    version: update_ros2_controllers_api
+    url: https://github.com/UniversalRobots/Universal_Robots_ROS2_Driver.git
+    version: main
 
   ur_msgs:
     type: git
