@@ -39,7 +39,7 @@ def generate_launch_description():
     )
     declared_arguments.append(
         DeclareLaunchArgument(
-            "fake_sensor_commands",
+            "mock_sensor_commands",
             default_value="false",
             description="Enable fake command interfaces for sensors used for simple simulations. \
             Used only if 'use_fake_hardware' parameter is true.",
@@ -68,7 +68,7 @@ def generate_launch_description():
     # Initialize Arguments
     prefix = LaunchConfiguration("prefix")
     use_fake_hardware = LaunchConfiguration("use_fake_hardware")
-    fake_sensor_commands = LaunchConfiguration("fake_sensor_commands")
+    mock_sensor_commands = LaunchConfiguration("mock_sensor_commands")
     slowdown = LaunchConfiguration("slowdown")
     robot_controller = LaunchConfiguration("robot_controller")
     start_rviz = LaunchConfiguration("start_rviz")
@@ -79,7 +79,7 @@ def generate_launch_description():
             "description_file": "rrbot_system_position_only.urdf.xacro",
             "prefix": prefix,
             "use_fake_hardware": use_fake_hardware,
-            "fake_sensor_commands": fake_sensor_commands,
+            "mock_sensor_commands": mock_sensor_commands,
             "slowdown": slowdown,
             "robot_controller": robot_controller,
             "start_rviz": start_rviz,
