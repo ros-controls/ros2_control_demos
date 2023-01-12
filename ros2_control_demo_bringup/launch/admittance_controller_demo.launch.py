@@ -12,7 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# Author: Denis Stogl
+# Author: Dr.-Ing. Denis Štogl, Paul Gesel
+#
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument

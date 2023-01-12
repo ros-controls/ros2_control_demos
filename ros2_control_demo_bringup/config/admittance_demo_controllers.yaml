@@ -9,9 +9,6 @@ controller_manager:
       type: ur_controllers/GPIOController
 
     force_torque_sensor_broadcaster:
-      type: ur_controllers/ForceTorqueStateBroadcaster
-
-    force_sensor_broadcaster:
       type: force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster
 
     joint_trajectory_controller:
@@ -25,20 +22,6 @@ controller_manager:
 
 
 force_torque_sensor_broadcaster:
-  ros__parameters:
-    sensor_name: tcp_fts_sensor
-    state_interface_names:
-      - force.x
-      - force.y
-      - force.z
-      - torque.x
-      - torque.y
-      - torque.z
-    frame_id: wrist_3_link
-    topic_name: ft_data
-
-
-force_sensor_broadcaster:
   ros__parameters:
     sensor_name: tcp_fts_sensor
     frame_id: wrist_3_link

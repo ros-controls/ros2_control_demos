@@ -9,11 +9,6 @@ This manual targets ROS2 rolling.
    sudo rosdep init
    rosdep update
    ```
-1. Clone this moveit2 repository and import the `moveit2/moveit2.repos` file:
-   ```
-   git clone https://github.com/ros-planning/moveit2.git -b main
-   vcs import < "moveit2/moveit2.repos"
-   ```
 1. Checkout the repositories from `admittance_controller.repos` file:
    ```
    wget https://raw.githubusercontent.com/pac48/ros2_control_demos/add-admittance-controller/admittance_controller.repos

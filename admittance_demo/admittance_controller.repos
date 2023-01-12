@@ -1,45 +1,10 @@
 repositories:
-  control_msgs:
-    type: git
-    url: https://github.com/ros-controls/control_msgs.git
-    version: humble
-
-  control_toolbox:
-    type: git
-    url: https://github.com/ros-controls/control_toolbox.git
-    verstion: ros2-master
-
-  kinematics_interface:
-    type: git
-    url: https://github.com/ros-controls/kinematics_interface.git
-    version: master
-
   ros2_control_demos:
     type: git
     url: https://github.com/pac48/ros2_control_demos.git
-    version: add-admittance-controller
-
-  ros2_controllers:
-    type: git
-    url: https://github.com/pac48/ros2_controllers.git
     version: add-admittance-controller
 
   teleop_twist_keyboard: # Branch: wrench
     type: git
     url: https://github.com/nbbrooks/teleop_twist_keyboard.git
     version: 63de1c17c4c5d0724018f3b5fd8139c472cd15ab  # Add Float64MultiArray publisher
-
-  Universal_Robots_Client_Library:
-    type: git
-    url: https://github.com/UniversalRobots/Universal_Robots_Client_Library.git
-    version: 1.1.0
-
-  Universal_Robots_ROS2_Driver:
-    type: git
-    url: https://github.com/UniversalRobots/Universal_Robots_ROS2_Driver.git
-    version: main
-
-  ur_msgs:
-    type: git
-    url: https://github.com/ros-industrial/ur_msgs.git
-    version: 2.0.0
