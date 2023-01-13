@@ -38,7 +38,7 @@ jobs:
             }
           colcon-mixin-repository: https://raw.githubusercontent.com/colcon/colcon-mixin-repository/master/index.yaml
           skip-tests: true
-      - uses: codecov/codecov-action@v1.0.14
+      - uses: codecov/codecov-action@v3.1.1
         with:
           file: ros_ws/lcov/total_coverage.info
           flags: unittests
