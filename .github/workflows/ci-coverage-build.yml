@@ -43,7 +43,7 @@ jobs:
           file: ros_ws/lcov/total_coverage.info
           flags: unittests
           name: codecov-umbrella
-      - uses: actions/upload-artifact@v1
+      - uses: actions/upload-artifact@v3
         with:
           name: colcon-logs-${{ matrix.os }}
           path: ros_ws/log
