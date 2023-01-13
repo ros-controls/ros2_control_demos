@@ -12,7 +12,7 @@ jobs:
           linter: [copyright, cppcheck, lint_cmake]
     steps:
     - uses: actions/checkout@v3
-    - uses: ros-tooling/setup-ros@v0.2
+    - uses: ros-tooling/setup-ros@v0.4
     - uses: ros-tooling/action-ros-lint@v0.1
       with:
         distribution: rolling
@@ -33,7 +33,7 @@ jobs:
           linter: [cpplint]
     steps:
     - uses: actions/checkout@v3
-    - uses: ros-tooling/setup-ros@v0.2
+    - uses: ros-tooling/setup-ros@v0.4
     - uses: ros-tooling/action-ros-lint@v0.1
       with:
         distribution: rolling
