@@ -27,7 +27,7 @@ class PublisherForwardPosition(Node):
         self.declare_parameter("goal_names", ["pos1", "pos2"])
 
         # Read parameters
-        controller_name = self.get_parameter("controller_name").value
+        # controller_name = self.get_parameter("controller_name").value
         wait_sec_between_publish = self.get_parameter("wait_sec_between_publish").value
         goal_names = self.get_parameter("goal_names").value
 
