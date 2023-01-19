@@ -21,7 +21,7 @@
 #include <vector>
 
 #include "hardware_interface/types/hardware_interface_type_values.hpp"
-#include "rclcpp/rclcpp.hpp"
+#include "rclcpp/logging.hpp"
 
 namespace ros2_control_demo_hardware
 {
@@ -40,11 +40,10 @@ hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware:
     return hardware_interface::CallbackReturn::ERROR;
   }
 
-  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   hw_start_sec_ = stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
   hw_stop_sec_ = stod(info_.hardware_parameters["example_param_hw_stop_duration_sec"]);
   hw_slowdown_ = stod(info_.hardware_parameters["example_param_hw_slowdown"]);
-  // END: This part here is for exemplary purposes - Please do not copy to your production code
+
   joint_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   joint_commands_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
 
@@ -89,17 +88,12 @@ hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware:
 hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware::on_configure(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
-  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
-  RCLCPP_INFO(
-    *logger_, "Configuring ...please wait...");
+  RCLCPP_INFO(*logger_, "Configuring ...please wait...");
 
   for (int i = 0; i < hw_start_sec_; i++) {
     rclcpp::sleep_for(std::chrono::seconds(1));
-    RCLCPP_INFO(
-      *logger_, "%.1f seconds left...",
-      hw_start_sec_ - i);
+    RCLCPP_INFO(*logger_, "%.1f seconds left...", hw_start_sec_ - i);
   }
-  // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   // reset values always when configuring hardware
   for (uint i = 0; i < joint_states_.size(); i++) {
@@ -141,17 +135,12 @@ RRBotTransmissionsSystemPositionOnlyHardware::export_command_interfaces()
 hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware::on_activate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
-  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
-  RCLCPP_INFO(
-    *logger_, "Activating ...please wait...");
+  RCLCPP_INFO(*logger_, "Activating ...please wait...");
 
   for (int i = 0; i < hw_start_sec_; i++) {
     rclcpp::sleep_for(std::chrono::seconds(1));
-    RCLCPP_INFO(
-      *logger_, "%.1f seconds left...",
-      hw_start_sec_ - i);
+    RCLCPP_INFO(*logger_, "%.1f seconds left...", hw_start_sec_ - i);
   }
-  // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   // command and state should be equal when starting
   for (uint i = 0; i < joint_states_.size(); i++) {
@@ -166,19 +155,14 @@ hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware:
 hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware::on_deactivate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
-  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
-  RCLCPP_INFO(
-    *logger_, "Deactivating ...please wait...");
+  RCLCPP_INFO(*logger_, "Deactivating ...please wait...");
 
   for (int i = 0; i < hw_stop_sec_; i++) {
     rclcpp::sleep_for(std::chrono::seconds(1));
-    RCLCPP_INFO(
-      *logger_, "%.1f seconds left...",
-      hw_stop_sec_ - i);
+    RCLCPP_INFO(*logger_, "%.1f seconds left...", hw_stop_sec_ - i);
   }
 
   RCLCPP_INFO(*logger_, "Successfully deactivated!");
-  // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   return hardware_interface::CallbackReturn::SUCCESS;
 }
@@ -186,18 +170,14 @@ hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware:
 hardware_interface::return_type RRBotTransmissionsSystemPositionOnlyHardware::read(
   const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
-  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(*logger_, "Reading...");
 
   for (uint i = 0; i < joint_states_.size(); i++) {
     // Simulate RRBot's movement
     joint_states_[i] = joint_states_[i] + (joint_commands_[i] - joint_states_[i]) / hw_slowdown_;
-    RCLCPP_INFO(
-      *logger_, "Got state %.5f for joint %d!",
-      joint_states_[i], i);
+    RCLCPP_INFO(*logger_, "Got state %.5f for joint %d!", joint_states_[i], i);
   }
   RCLCPP_INFO(*logger_, "Joints successfully read!");
-  // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   return hardware_interface::return_type::OK;
 }
@@ -205,18 +185,13 @@ hardware_interface::return_type RRBotTransmissionsSystemPositionOnlyHardware::re
 hardware_interface::return_type RRBotTransmissionsSystemPositionOnlyHardware::write(
   const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
-  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(*logger_, "Writing...");
 
   for (uint i = 0; i < joint_commands_.size(); i++) {
     // Simulate sending commands to the hardware
-    RCLCPP_INFO(
-      *logger_, "Got command %.5f for joint %d!",
-      joint_commands_[i], i);
+    RCLCPP_INFO(*logger_, "Got command %.5f for joint %d!", joint_commands_[i], i);
   }
-  RCLCPP_INFO(
-    *logger_, "Joints successfully written!");
-  // END: This part here is for exemplary purposes - Please do not copy to your production code
+  RCLCPP_INFO(*logger_, "Joints successfully written!");
 
   return hardware_interface::return_type::OK;
 }
