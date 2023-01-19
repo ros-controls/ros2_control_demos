@@ -73,9 +73,13 @@ private:
   double hw_stop_sec_;
   double hw_slowdown_;
 
-  // Store the command for the simulated robot
-  std::vector<double> hw_commands_;
-  std::vector<double> hw_states_;
+  // interfaces for the simulated robot joints
+  std::vector<double> joint_commands_;
+  std::vector<double> joint_states_;
+
+  // interfaces for the simulated robot actuators
+  std::vector<double> actuator_commands_;
+  std::vector<double> actuator_states_;
 };
 
 }  // namespace ros2_control_demo_hardware
