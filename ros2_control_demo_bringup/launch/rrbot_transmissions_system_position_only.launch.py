@@ -76,7 +76,7 @@ def generate_launch_description():
     base_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([ThisLaunchFileDir(), "/rrbot_base.launch.py"]),
         launch_arguments={
-            "description_file": "transmissions_rrbot_system_position_only.urdf.xacro",
+            "description_file": "rrbot_transmissions_system_position_only.urdf.xacro",
             "prefix": prefix,
             "use_fake_hardware": use_fake_hardware,
             "mock_sensor_commands": mock_sensor_commands,
