@@ -15,6 +15,7 @@
 #ifndef ROS2_CONTROL_DEMO_HARDWARE__RRBOT_TRANSMISSIONS_SYSTEM_POSITION_ONLY_HPP_
 #define ROS2_CONTROL_DEMO_HARDWARE__RRBOT_TRANSMISSIONS_SYSTEM_POSITION_ONLY_HPP_
 
+#include <map>
 #include <memory>
 #include <string>
 #include <vector>
@@ -27,6 +28,7 @@
 #include "rclcpp/macros.hpp"
 #include "rclcpp_lifecycle/state.hpp"
 #include "ros2_control_demo_hardware/visibility_control.h"
+#include "transmission_interface/transmission.hpp"
 
 namespace ros2_control_demo_hardware
 {
@@ -68,18 +70,43 @@ public:
 private:
   std::unique_ptr<rclcpp::Logger> logger_;
 
-  // Parameters for the RRBot simulation
+  // parameters for the RRBot simulation
   double hw_start_sec_;
   double hw_stop_sec_;
   double hw_slowdown_;
 
+  /// @todo delete this
   // interfaces for the simulated robot joints
-  std::vector<double> joint_commands_;
-  std::vector<double> joint_states_;
+//  std::vector<double> joint_commands_;
+//  std::vector<double> joint_states_;
 
+  /// @todo delete this
   // interfaces for the simulated robot actuators
-  std::vector<double> actuator_commands_;
-  std::vector<double> actuator_states_;
+//  std::vector<double> actuator_commands_;
+//  std::vector<double> actuator_states_;
+
+  // interfaces for the transmission joint and actuator handles
+//  std::vector<double> joint_handle_interfaces_;
+//  std::vector<double> actuator_handle_interfaces_;
+
+  /// @note no need to keep them? they sort off exist in the transmission
+  // joint handles
+  // actuator handles
+
+  // transmissions
+  std::vector<std::shared_ptr<transmission_interface::Transmission>> transmissions_;
+
+  struct InterfaceData
+  {
+    InterfaceData(const std::string & name);
+
+    std::string name_;
+    double command_;
+    double state_;
+    double transmission_;
+  };
+  std::vector<InterfaceData> joint_interfaces_;
+  std::vector<InterfaceData> actuator_interfaces_;
 };
 
 }  // namespace ros2_control_demo_hardware
