@@ -75,24 +75,6 @@ private:
   double hw_stop_sec_;
   double hw_slowdown_;
 
-  /// @todo delete this
-  // interfaces for the simulated robot joints
-//  std::vector<double> joint_commands_;
-//  std::vector<double> joint_states_;
-
-  /// @todo delete this
-  // interfaces for the simulated robot actuators
-//  std::vector<double> actuator_commands_;
-//  std::vector<double> actuator_states_;
-
-  // interfaces for the transmission joint and actuator handles
-//  std::vector<double> joint_handle_interfaces_;
-//  std::vector<double> actuator_handle_interfaces_;
-
-  /// @note no need to keep them? they sort off exist in the transmission
-  // joint handles
-  // actuator handles
-
   // transmissions
   std::vector<std::shared_ptr<transmission_interface::Transmission>> transmissions_;
 

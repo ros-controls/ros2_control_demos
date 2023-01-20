@@ -129,15 +129,17 @@ hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware:
 
     std::vector<transmission_interface::JointHandle> joint_handles;
     for (const auto & joint_info : transmission_info.joints) {
+      // this demo supports only one interface per joint
       if (!(joint_info.interfaces.size() == 1 &&
         joint_info.interfaces[0] == hardware_interface::HW_IF_POSITION))
       {
         RCLCPP_FATAL(
-          *logger_, "Invalid transmission joint '%s' configuration", joint_info.name.c_str());
+          *logger_, "Invalid transmission joint '%s' configuration for this demo",
+          joint_info.name.c_str());
         return hardware_interface::CallbackReturn::ERROR;
       }
 
-      auto joint_interface =
+      const auto joint_interface =
         joint_interfaces_.insert(joint_interfaces_.end(), InterfaceData(joint_info.name));
 
       transmission_interface::JointHandle joint_handle(joint_info.name,
@@ -147,17 +149,17 @@ hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware:
 
     std::vector<transmission_interface::ActuatorHandle> actuator_handles;
     for (const auto & actuator_info : transmission_info.actuators) {
-      // no check for actuators types?
+      // no check for actuators types
 
-      auto actuator_interface =
+      const auto actuator_interface =
         actuator_interfaces_.insert(actuator_interfaces_.end(), InterfaceData(actuator_info.name));
       transmission_interface::ActuatorHandle actuator_handle(actuator_info.name,
         hardware_interface::HW_IF_POSITION, &actuator_interface->transmission_);
       actuator_handles.push_back(actuator_handle);
     }
 
-    /// @note no need to store the joint and actuator handles, the
-    /// transmission will keep whatever info it needs
+    /// @note no need to store the joint and actuator handles, the transmission
+    /// will keep whatever info it needs after is done with them
 
     /// @todo add try/catch pair for this
     transmission->configure(joint_handles, actuator_handles);
@@ -174,18 +176,6 @@ hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware:
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
   RCLCPP_INFO(*logger_, "Configuring...");
-
-//  for (int i = 0; i < hw_start_sec_; i++) {
-//    rclcpp::sleep_for(std::chrono::seconds(1));
-//    RCLCPP_INFO(*logger_, "%.1f seconds left...", hw_start_sec_ - i);
-//  }
-
-//  // reset values always when configuring hardware
-//  for (uint i = 0; i < joint_states_.size(); i++) {
-//    joint_states_[i] = 0;
-//    joint_commands_[i] = 0;
-//  }
-
 
   auto reset_interfaces = [](std::vector<InterfaceData> & interfaces)
     {
@@ -246,17 +236,6 @@ hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware:
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
   RCLCPP_INFO(*logger_, "Activating...");
-
-//  for (int i = 0; i < hw_start_sec_; i++) {
-//    rclcpp::sleep_for(std::chrono::seconds(1));
-//    RCLCPP_INFO(*logger_, "%.1f seconds left...", hw_start_sec_ - i);
-//  }
-
-//  // command and state should be equal when starting
-//  for (uint i = 0; i < joint_states_.size(); i++) {
-//    joint_commands_[i] = joint_states_[i];
-//  }
-
   RCLCPP_INFO(*logger_, "Activation successful");
 
   return hardware_interface::CallbackReturn::SUCCESS;
@@ -266,12 +245,6 @@ hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware:
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
   RCLCPP_INFO(*logger_, "Deactivating...");
-
-//  for (int i = 0; i < hw_stop_sec_; i++) {
-//    rclcpp::sleep_for(std::chrono::seconds(1));
-//    RCLCPP_INFO(*logger_, "%.1f seconds left...", hw_stop_sec_ - i);
-//  }
-
   RCLCPP_INFO(*logger_, "Deactivation successful");
 
   return hardware_interface::CallbackReturn::SUCCESS;
@@ -280,15 +253,6 @@ hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware:
 hardware_interface::return_type RRBotTransmissionsSystemPositionOnlyHardware::read(
   const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
-//  RCLCPP_INFO(*logger_, "Reading...");
-
-//  for (uint i = 0; i < joint_states_.size(); i++) {
-//    // Simulate RRBot's movement
-//    joint_states_[i] = joint_states_[i] + (joint_commands_[i] - joint_states_[i]) / hw_slowdown_;
-//    RCLCPP_INFO(*logger_, "Got state %.5f for joint %d!", joint_states_[i], i);
-//  }
-//  RCLCPP_INFO(*logger_, "Joints successfully read!");
-
   // actuator: state -> transmission
   std::for_each(
     actuator_interfaces_.begin(), actuator_interfaces_.end(),
@@ -314,14 +278,6 @@ hardware_interface::return_type RRBotTransmissionsSystemPositionOnlyHardware::re
 hardware_interface::return_type RRBotTransmissionsSystemPositionOnlyHardware::write(
   const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
-//  RCLCPP_INFO(*logger_, "Writing...");
-
-//  for (uint i = 0; i < joint_commands_.size(); i++) {
-//    // Simulate sending commands to the hardware
-//    RCLCPP_INFO(*logger_, "Got command %.5f for joint %d!", joint_commands_[i], i);
-//  }
-//  RCLCPP_INFO(*logger_, "Joints successfully written!");
-
   // joint: command -> transmission
   std::for_each(
     joint_interfaces_.begin(), joint_interfaces_.end(), [](auto & joint_interface) {
