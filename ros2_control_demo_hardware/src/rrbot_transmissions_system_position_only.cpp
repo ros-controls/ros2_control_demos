@@ -289,6 +289,25 @@ hardware_interface::return_type RRBotTransmissionsSystemPositionOnlyHardware::re
 //  }
 //  RCLCPP_INFO(*logger_, "Joints successfully read!");
 
+  // actuator: state -> transmission
+  std::for_each(
+    actuator_interfaces_.begin(), actuator_interfaces_.end(),
+    [](auto & actuator_interface) {
+      actuator_interface.transmission_ = actuator_interface.state_;
+    });
+
+  // transmission: actuator -> joint
+  std::for_each(
+    transmissions_.begin(), transmissions_.end(), [](auto & transmission) {
+      transmission->actuator_to_joint();
+    });
+
+  // joint: transmission -> state
+  std::for_each(
+    joint_interfaces_.begin(), joint_interfaces_.end(), [](auto & joint_interface) {
+      joint_interface.state_ = joint_interface.transmission_;
+    });
+
   return hardware_interface::return_type::OK;
 }
 
@@ -302,6 +321,32 @@ hardware_interface::return_type RRBotTransmissionsSystemPositionOnlyHardware::wr
 //    RCLCPP_INFO(*logger_, "Got command %.5f for joint %d!", joint_commands_[i], i);
 //  }
 //  RCLCPP_INFO(*logger_, "Joints successfully written!");
+
+  // joint: command -> transmission
+  std::for_each(
+    joint_interfaces_.begin(), joint_interfaces_.end(), [](auto & joint_interface) {
+      joint_interface.transmission_ = joint_interface.command_;
+    });
+
+  // transmission: joint -> actuator
+  std::for_each(
+    transmissions_.begin(), transmissions_.end(), [](auto & transmission) {
+      transmission->joint_to_actuator();
+    });
+
+  // actuator: transmission -> command
+  std::for_each(
+    actuator_interfaces_.begin(), actuator_interfaces_.end(),
+    [](auto & actuator_interface) {
+      actuator_interface.command_ = actuator_interface.transmission_;
+    });
+
+  // simulate motor motion
+  /// @todo for now suppose a perfect actuator with infinite velocity,
+  /// need to add ramping
+  std::for_each(
+    actuator_interfaces_.begin(), actuator_interfaces_.end(),
+    [](auto & actuator_interface) {actuator_interface.state_ = actuator_interface.command_;});
 
   return hardware_interface::return_type::OK;
 }
