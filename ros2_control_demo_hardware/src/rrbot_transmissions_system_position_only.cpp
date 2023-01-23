@@ -298,11 +298,12 @@ hardware_interface::return_type RRBotTransmissionsSystemPositionOnlyHardware::wr
     });
 
   // simulate motor motion
-  /// @todo for now suppose a perfect actuator with infinite velocity,
-  /// need to add ramping
   std::for_each(
     actuator_interfaces_.begin(), actuator_interfaces_.end(),
-    [](auto & actuator_interface) {actuator_interface.state_ = actuator_interface.command_;});
+    [&](auto & actuator_interface) {
+      actuator_interface.state_ = actuator_interface.state_ +
+      (actuator_interface.command_ - actuator_interface.state_) / hw_slowdown_;
+    });
 
   return hardware_interface::return_type::OK;
 }
