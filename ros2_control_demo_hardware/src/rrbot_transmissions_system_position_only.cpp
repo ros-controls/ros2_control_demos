@@ -19,9 +19,11 @@
 #include <limits>
 #include <memory>
 #include <numeric>
+#include <sstream>
 #include <vector>
 
 #include "hardware_interface/types/hardware_interface_type_values.hpp"
+#include "rclcpp/clock.hpp"
 #include "rclcpp/logging.hpp"
 #include "transmission_interface/simple_transmission_loader.hpp"
 
@@ -37,6 +39,8 @@ hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware:
     std::make_unique<rclcpp::Logger>(
     rclcpp::get_logger(
       "RRBotTransmissionsSystemPositionOnlyHardware"));
+
+  clock_ = std::make_unique<rclcpp::Clock>();
 
   RCLCPP_INFO(*logger_, "Initializing...");
 
@@ -272,6 +276,31 @@ hardware_interface::return_type RRBotTransmissionsSystemPositionOnlyHardware::re
       joint_interface.state_ = joint_interface.transmission_;
     });
 
+  // log state data
+  std::stringstream ss;
+  ss << "State data:";
+  for (const auto & transmission_info : info_.transmissions) {
+    // again, this only for simple transmissions, we know there is only one joint
+    const auto joint_interface = std::find_if(
+      joint_interfaces_.cbegin(), joint_interfaces_.cend(),
+      [&](const auto & joint_interface) {
+        return joint_interface.name_ == transmission_info.joints[0].name;
+      });
+
+    const auto actuator_interface = std::find_if(
+      actuator_interfaces_.cbegin(), actuator_interfaces_.cend(),
+      [&](const auto & actuator_interface) {
+        return actuator_interface.name_ == transmission_info.actuators[0].name;
+      });
+
+    const auto & reduction = transmission_info.joints[0].mechanical_reduction;
+
+    ss << std::endl << "\t" << joint_interface->name_ << ": " << joint_interface->state_ <<
+        " <-- " << transmission_info.name << "(R=" << reduction << ") <-- " <<
+        actuator_interface->name_ << ": " << actuator_interface->state_;
+  }
+  RCLCPP_INFO_THROTTLE(*logger_, *clock_, 1000, "%s", ss.str().c_str());
+
   return hardware_interface::return_type::OK;
 }
 
@@ -304,6 +333,31 @@ hardware_interface::return_type RRBotTransmissionsSystemPositionOnlyHardware::wr
       actuator_interface.state_ = actuator_interface.state_ +
       (actuator_interface.command_ - actuator_interface.state_) / hw_slowdown_;
     });
+
+  // log command data
+  std::stringstream ss;
+  ss << "Command data:";
+  for (const auto & transmission_info : info_.transmissions) {
+    // again, this only for simple transmissions, we know there is only one joint
+    const auto joint_interface = std::find_if(
+      joint_interfaces_.cbegin(), joint_interfaces_.cend(),
+      [&](const auto & joint_interface) {
+        return joint_interface.name_ == transmission_info.joints[0].name;
+      });
+
+    const auto actuator_interface = std::find_if(
+      actuator_interfaces_.cbegin(), actuator_interfaces_.cend(),
+      [&](const auto & actuator_interface) {
+        return actuator_interface.name_ == transmission_info.actuators[0].name;
+      });
+
+    const auto & reduction = transmission_info.joints[0].mechanical_reduction;
+
+    ss << std::endl << "\t" << joint_interface->name_ << ": " << joint_interface->command_ <<
+        " --> " << transmission_info.name << "(R=" << reduction << ") --> " <<
+        actuator_interface->name_ << ": " << actuator_interface->command_;
+  }
+  RCLCPP_INFO_THROTTLE(*logger_, *clock_, 1000, "%s", ss.str().c_str());
 
   return hardware_interface::return_type::OK;
 }
