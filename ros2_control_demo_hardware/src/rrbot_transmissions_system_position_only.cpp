@@ -26,6 +26,8 @@
 #include "rclcpp/clock.hpp"
 #include "rclcpp/logging.hpp"
 #include "transmission_interface/simple_transmission_loader.hpp"
+#include "transmission_interface/transmission_interface_exception.hpp"
+#include "transmission_interface/transmission.hpp"
 
 namespace ros2_control_demo_hardware
 {
@@ -53,58 +55,15 @@ hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware:
 
   actuator_slowdown_ = std::stod(info_.hardware_parameters["actuator_slowdown"]);
 
-#ifdef UNDEF
-  joint_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
-  joint_commands_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
-
-  for (const hardware_interface::ComponentInfo & joint : info_.joints) {
-    // RRBotSystemPositionOnly has exactly one state and command interface on each joint
-    if (joint.command_interfaces.size() != 1) {
-      RCLCPP_FATAL(
-        *logger_,
-        "Joint '%s' has %zu command interfaces found. 1 expected.", joint.name.c_str(),
-        joint.command_interfaces.size());
-      return hardware_interface::CallbackReturn::ERROR;
-    }
-
-    if (joint.command_interfaces[0].name != hardware_interface::HW_IF_POSITION) {
-      RCLCPP_FATAL(
-        *logger_,
-        "Joint '%s' have %s command interfaces found. '%s' expected.", joint.name.c_str(),
-        joint.command_interfaces[0].name.c_str(), hardware_interface::HW_IF_POSITION);
-      return hardware_interface::CallbackReturn::ERROR;
-    }
-
-    if (joint.state_interfaces.size() != 1) {
-      RCLCPP_FATAL(
-        *logger_,
-        "Joint '%s' has %zu state interface. 1 expected.", joint.name.c_str(),
-        joint.state_interfaces.size());
-      return hardware_interface::CallbackReturn::ERROR;
-    }
-
-    if (joint.state_interfaces[0].name != hardware_interface::HW_IF_POSITION) {
-      RCLCPP_FATAL(
-        *logger_,
-        "Joint '%s' have %s state interface. '%s' expected.", joint.name.c_str(),
-        joint.state_interfaces[0].name.c_str(), hardware_interface::HW_IF_POSITION);
-      return hardware_interface::CallbackReturn::ERROR;
-    }
-  }
-#endif
-
-  /// @todo check joint data info from the core interfaces is consistent
-  /// with the one in the transmissions, i.e., number and name of joints
-
   const auto num_joints = std::accumulate(
-    info_.transmissions.begin(), info_.transmissions.end(), 0,
+    info_.transmissions.begin(), info_.transmissions.end(), 0ul,
     [](const auto & acc, const auto & trans_info)
     {
       return acc + trans_info.joints.size();
     });
 
   const auto num_actuators = std::accumulate(
-    info_.transmissions.begin(), info_.transmissions.end(), 0,
+    info_.transmissions.begin(), info_.transmissions.end(), 0ul,
     [](const auto & acc, const auto & trans_info)
     {
       return acc + trans_info.actuators.size();
@@ -126,8 +85,15 @@ hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware:
       return hardware_interface::CallbackReturn::ERROR;
     }
 
-    /// @todo add try/catch pair for this
-    auto transmission = transmission_loader.load(transmission_info);
+    std::shared_ptr<transmission_interface::Transmission> transmission;
+    try {
+      transmission = transmission_loader.load(transmission_info);
+    } catch (const transmission_interface::TransmissionInterfaceException & exc) {
+      RCLCPP_FATAL(
+        *logger_, "Error while loading %s: %s",
+        transmission_info.name.c_str(), exc.what());
+      return hardware_interface::CallbackReturn::ERROR;
+    }
 
     std::vector<transmission_interface::JointHandle> joint_handles;
     for (const auto & joint_info : transmission_info.joints) {
@@ -163,8 +129,14 @@ hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware:
     /// @note no need to store the joint and actuator handles, the transmission
     /// will keep whatever info it needs after is done with them
 
-    /// @todo add try/catch pair for this
-    transmission->configure(joint_handles, actuator_handles);
+    try {
+      transmission->configure(joint_handles, actuator_handles);
+    } catch (const transmission_interface::TransmissionInterfaceException & exc) {
+      RCLCPP_FATAL(
+        *logger_, "Error while configuring %s: %s",
+        transmission_info.name.c_str(), exc.what());
+      return hardware_interface::CallbackReturn::ERROR;
+    }
 
     transmissions_.push_back(transmission);
   }
