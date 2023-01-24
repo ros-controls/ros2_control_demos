@@ -73,9 +73,7 @@ private:
   std::unique_ptr<rclcpp::Clock> clock_;
 
   // parameters for the RRBot simulation
-  double hw_start_sec_;
-  double hw_stop_sec_;
-  double hw_slowdown_;
+  double actuator_slowdown_;
 
   // transmissions
   std::vector<std::shared_ptr<transmission_interface::Transmission>> transmissions_;

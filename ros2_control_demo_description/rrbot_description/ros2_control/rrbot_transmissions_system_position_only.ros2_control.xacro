@@ -19,9 +19,7 @@
           </xacro:if>
           <xacro:unless value="${use_fake_hardware}">
             <plugin>ros2_control_demo_hardware/RRBotTransmissionsSystemPositionOnlyHardware</plugin>
-            <param name="example_param_hw_start_duration_sec">0.0</param>
-            <param name="example_param_hw_stop_duration_sec">3.0</param>
-            <param name="example_param_hw_slowdown">${slowdown}</param>
+            <param name="actuator_slowdown">${slowdown}</param>
           </xacro:unless>
         </hardware>
       </xacro:unless>

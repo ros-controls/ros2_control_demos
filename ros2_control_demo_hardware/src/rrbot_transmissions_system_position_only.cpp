@@ -51,9 +51,7 @@ hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware:
     return hardware_interface::CallbackReturn::ERROR;
   }
 
-  hw_start_sec_ = stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
-  hw_stop_sec_ = stod(info_.hardware_parameters["example_param_hw_stop_duration_sec"]);
-  hw_slowdown_ = stod(info_.hardware_parameters["example_param_hw_slowdown"]);
+  actuator_slowdown_ = std::stod(info_.hardware_parameters["actuator_slowdown"]);
 
 #ifdef UNDEF
   joint_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
@@ -296,8 +294,8 @@ hardware_interface::return_type RRBotTransmissionsSystemPositionOnlyHardware::re
     const auto & reduction = transmission_info.joints[0].mechanical_reduction;
 
     ss << std::endl << "\t" << joint_interface->name_ << ": " << joint_interface->state_ <<
-        " <-- " << transmission_info.name << "(R=" << reduction << ") <-- " <<
-        actuator_interface->name_ << ": " << actuator_interface->state_;
+      " <-- " << transmission_info.name << "(R=" << reduction << ") <-- " <<
+      actuator_interface->name_ << ": " << actuator_interface->state_;
   }
   RCLCPP_INFO_THROTTLE(*logger_, *clock_, 1000, "%s", ss.str().c_str());
 
@@ -331,7 +329,7 @@ hardware_interface::return_type RRBotTransmissionsSystemPositionOnlyHardware::wr
     actuator_interfaces_.begin(), actuator_interfaces_.end(),
     [&](auto & actuator_interface) {
       actuator_interface.state_ = actuator_interface.state_ +
-      (actuator_interface.command_ - actuator_interface.state_) / hw_slowdown_;
+      (actuator_interface.command_ - actuator_interface.state_) / actuator_slowdown_;
     });
 
   // log command data
@@ -354,8 +352,8 @@ hardware_interface::return_type RRBotTransmissionsSystemPositionOnlyHardware::wr
     const auto & reduction = transmission_info.joints[0].mechanical_reduction;
 
     ss << std::endl << "\t" << joint_interface->name_ << ": " << joint_interface->command_ <<
-        " --> " << transmission_info.name << "(R=" << reduction << ") --> " <<
-        actuator_interface->name_ << ": " << actuator_interface->command_;
+      " --> " << transmission_info.name << "(R=" << reduction << ") --> " <<
+      actuator_interface->name_ << ": " << actuator_interface->command_;
   }
   RCLCPP_INFO_THROTTLE(*logger_, *clock_, 1000, "%s", ss.str().c_str());
 
