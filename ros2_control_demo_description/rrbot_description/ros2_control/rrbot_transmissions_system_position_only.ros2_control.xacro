@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <xacro:macro name="rrbot_system_position_only" params="name prefix use_gazebo:=^|false use_fake_hardware:=^|true mock_sensor_commands:=^|false slowdown:=2.0">
+  <xacro:macro name="rrbot_transmissions_system_position_only" params="name prefix use_gazebo:=^|false use_fake_hardware:=^|true mock_sensor_commands:=^|false slowdown:=2.0">
 
     <ros2_control name="${name}" type="system">
 

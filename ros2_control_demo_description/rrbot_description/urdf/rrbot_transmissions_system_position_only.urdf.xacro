@@ -37,7 +37,7 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_desc
 
   <xacro:rrbot_gazebo prefix="$(arg prefix)" />
 
-  <xacro:rrbot_system_position_only
+  <xacro:rrbot_transmissions_system_position_only
     name="RRBotTransmissionsSystemPositionOnly" prefix="$(arg prefix)"
     use_fake_hardware="$(arg use_fake_hardware)"
     mock_sensor_commands="$(arg mock_sensor_commands)"
