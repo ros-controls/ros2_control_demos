@@ -41,10 +41,7 @@
 
       <transmission name="transmission1">
         <plugin>transmission_interface/SimpleTransmission</plugin>
-        <actuator name="actuator1" role="actuator1">
-          <mechanical_reduction>0.0</mechanical_reduction>
-          <offset>0.0</offset>
-        </actuator>
+        <actuator name="actuator1" role="actuator1"/>
         <joint name="joint1" role="joint1">
           <mechanical_reduction>2.0</mechanical_reduction>
           <offset>0.0</offset>
@@ -53,10 +50,7 @@
 
       <transmission name="transmission2">
         <plugin>transmission_interface/SimpleTransmission</plugin>
-        <actuator name="actuator2" role="actuator2">
-          <mechanical_reduction>0.0</mechanical_reduction>
-          <offset>0.0</offset>
-        </actuator>
+        <actuator name="actuator2" role="actuator2"/>
         <joint name="joint2" role="joint2">
           <mechanical_reduction>4.0</mechanical_reduction>
           <offset>0.0</offset>
