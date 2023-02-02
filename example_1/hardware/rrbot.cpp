@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "ros2_control_demo_hardware/rrbot_system_position_only.hpp"
+#include "ros2_control_demos_example_1/hardware/rrbot.hpp"
 
 #include <chrono>
 #include <cmath>

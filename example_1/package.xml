@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>ros2_control_demo_hardware</name>
+  <version>0.0.0</version>
+  <description>Demo package of `ros2_control` Hardware. This package provides example on how to define hardware of your own robot for ROS2 control. The package is used with `ros2_control_demo_bringup` from package `rrbot_description` and `diffbot_description`.</description>
+
+  <maintainer email="denis@stogl.de">Denis Štogl</maintainer>
+
+  <license>Apache-2.0</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <depend>hardware_interface</depend>
+  <depend>pluginlib</depend>
+  <depend>rclcpp</depend>
+  <depend>rclcpp_lifecycle</depend>
+
+  <test_depend>ament_cmake_gtest</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
