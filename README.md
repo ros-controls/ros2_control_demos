@@ -553,11 +553,6 @@ Available controllers:
 Moving the robot:
   - see below description of `forward_position_controller`
 
-Available launch file options:
-  - `use_fake_hardware:=true` - start `FakeSystem` instead of hardware.
-    This is a simple simulation that mimics joint command to their states.
-    This is useful to test *ros2_control* integration and controllers without physical hardware.
-
 
 ## Controllers and moving hardware
 

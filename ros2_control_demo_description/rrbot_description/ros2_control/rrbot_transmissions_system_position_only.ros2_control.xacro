@@ -5,24 +5,10 @@
 
     <ros2_control name="${name}" type="system">
 
-      <xacro:if value="$(arg use_gazebo)">
-        <hardware>
-          <plugin>gazebo_ros2_control/GazeboSystem</plugin>
-        </hardware>
-      </xacro:if>
-      <xacro:unless value="$(arg use_gazebo)">
-        <hardware>
-          <xacro:if value="${use_fake_hardware}">
-            <plugin>mock_components/GenericSystem</plugin>
-            <param name="mock_sensor_commands">${mock_sensor_commands}</param>
-            <param name="state_following_offset">0.0</param>
-          </xacro:if>
-          <xacro:unless value="${use_fake_hardware}">
-            <plugin>ros2_control_demo_hardware/RRBotTransmissionsSystemPositionOnlyHardware</plugin>
-            <param name="actuator_slowdown">${slowdown}</param>
-          </xacro:unless>
-        </hardware>
-      </xacro:unless>
+      <hardware>
+        <plugin>ros2_control_demo_hardware/RRBotTransmissionsSystemPositionOnlyHardware</plugin>
+        <param name="actuator_slowdown">${slowdown}</param>
+      </hardware>
 
       <joint name="${prefix}joint1">
         <command_interface name="position">
@@ -31,6 +17,7 @@
         </command_interface>
         <state_interface name="position"/>
       </joint>
+
       <joint name="${prefix}joint2">
         <command_interface name="position">
           <param name="min">-1</param>
