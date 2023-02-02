@@ -2,23 +2,91 @@
 
 [![Licence](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-This repository provides templates for the development of `ros2_control`-enabled robots and a simple simulations to demonstrate and prove `ros2_control` concepts.
+This repository provides examples for functionalities and capabilities of `ros2_control` framework.
+It consists of simple implementations that demonstrate different concepts.
 
-### First-Time Users
-
-If you're just starting out, we suggest to look at the minimal example: `ros2_control_demo_bringup/launch/rrbot_system_position_only.launch.py`.
-
-Also pay attention to these files:
-
-- `ros2_control_demo_description/rrbot_description/ros2_control/rrbot_system_position_only.ros2_control.xacro` -- this file defines the ros2_control interfaces for each joint, e.g. position or velocity. The simulation can be launched with Gazebo or simulated with RViz only.
-- `rrbot_controllers.yaml` -- list the controllers that will be launched.
+If you want to have rather step by step manual how to do things with `ros2_control` checkout [ros-control/roscon2022_workshop](https://github.com/ros-controls/roscon2022_workshop) repository.
 
 ### Goals
 
-The repository has three goals:
+The repository has two other goals goals:
+
 1. Implements the example configuration described in the `ros-controls/roadmap` repository file [components_architecture_and_urdf_examples](https://github.com/ros-controls/roadmap/blob/master/design_drafts/components_architecture_and_urdf_examples.md).
-2. It provides templates for faster implementation of custom hardware and controllers;
-3. The repository is a validation environment for `ros2_control` concepts, which can only be tested during run-time (e.g., execution of controllers by the controller manager, communication between robot hardware and controllers).
+2. The repository is a validation environment for `ros2_control` concepts, which can only be tested during run-time (e.g., execution of controllers by the controller manager, communication between robot hardware and controllers).
+
+
+## Getting started
+
+The repository is structured into `example_XY` folders that fully contained packages with names `ros2_control_demos_example_XY`.
+
+The packages have following structure of subfolders:
+
+- `bringup` - stores launch files and runtime configurations for demo robots.
+- `description` - stores URDF (and XACRO) description files, rviz configurations and meshes for the example robots.
+- `hardware` - stores implementations of example hardware components (interfaces).
+- `controllers` (optional) - stores implementation of example controllers.
+
+The important files to check in each example are:
+
+- `bringup/launch/<example_name>.launch.py` - launch file for the example
+- `bringup/config/<example_name>_controllers.yaml` - parameters with controllers' setup for the example.
+- `description/<example_name>.ros2_control.xacro` - XACRO file with `ros2_control`-URDF-tag with hardware setup and parameters.
+- `description/<example_name>.urdf.xacro` - the main description for for the example used to generate URDF on the fly that is published on the `/robot_description` topic.
+- `hardware/<example_name>.hpp` - header file of the example hardware component implementation.
+- `hardware/<example_name>.cpp` - source file with the example hardware component implementation.
+- `controllers/<example_name>.hpp` - header file of the example controller implementation.
+- `controllers/<example_name>.cpp` - source file with the example controller implementation.
+
+**NOTE** - The structure of packages, folders and files given in this repository is not recommended to be used for your robot. Usually you should have all of the above folders defined as separate packages with naming convention `<robot_name_or_type>/[bringup|description|hardware|controllers]`.
+  More standard structure can be found in [ros_control_boilerplate](https://github.com/PickNikRobotics/ros_control_boilerplate) repository from Dave Coleman or documentation on [ros_team_workspace](https://rtw.stoglrobotics.de/master/guidelines/robot_package_structure.html) from Stogl Robotics.
+
+The concepts in this package are demonstrated on the examples of *RRBot* and *DiffBot*.
+Those two world-known imaginary robots are trivial simulations to demonstrate and test `ros2_control` concepts.
+
+
+## What you can Find in This Repository and Example Description
+
+This repository demonstrates the following `ros2_control` concepts:
+
+* Creating a `*HardwareInterface` for a System, Sensor, and Actuator.
+* Creating a robot description in the form of URDF files.
+* Loading the configuration and starting a robot using launch files.
+* Control of a differential mobile base *DiffBot*.
+* Control of two joints of *RRBot*.
+* Using simulated robots and starting `ros2_control` with Gazebo simulator.
+* Implementing a controller switching strategy for a robot.
+* Using joint limits and transmission concepts in `ros2_control`.
+
+
+### Example Overview
+
+Check README file inside each example folder for detailed description.
+
+##### Example 1
+
+*RRBot* - or ''Revolute-Revolute Manipulator Robot'' - a simple position controlled robot with one hardware interface.
+
+
+##### Example 2
+
+....
+
+
+## Quick Hints
+
+These are some quick hints, especially for those coming from a ROS1 control background:
+
+* There are now three categories of hardware components: *Sensor*, *Actuator*, and *System*.
+  *Sensor* is for individual sensors; *Actuator* is for individual actuators; *System* is for any combination of multiple sensors/actuators.
+  You could think of a Sensor as read-only.
+  All components are used as plugins and therefore exported using `PLUGINLIB_EXPORT_CLASS` macro.
+* *ros(1)_control* only allowed three hardware interface types: position, velocity, and effort.
+  *ros2_control* allows you to create any interface type by defining a custom string. For example, you might define a `position_in_degrees` or a `temperature` interface.
+  The most common (position, velocity, acceleration, effort) are already defined as constants in hardware_interface/types/hardware_interface_type_values.hpp.
+* Joint names in <ros2_control> tags in the URDF must be compatible with the controller's configuration.
+* In ros2_control, all parameters for the driver are specified in the URDF.
+  The ros2_control framework uses the **<ros2_control>** tag in the URDF.
+* Joint names in <ros2_control> tags in the URDF must be compatible with the controller's configuration.
 
 
 ## Build status
@@ -45,44 +113,6 @@ ROS2 Distro | Branch | Build status | Documentation
 
 1. Source build - also core ROS packages are build from source. It shows potential issues in the mid future.
 
-
-## Description
-
-The repository is inspired by the [ros_control_boilerplate](https://github.com/PickNikRobotics/ros_control_boilerplate) repository from Dave Coleman.
-The examples have three parts/packages according to usual structure of ROS packages for robots:
-1. The bringup package `ros2_control_demo_bringup`, holds launch files and runtime configurations for demo robots.
-2. Description packages `rrbot_description` and `diffbot_description` (inside `ros2_control_demo_description`), store URDF-description files, rviz configurations and meshes for the demo robots.
-3. Hardware interface package `ros2_control_demo_hardware`, implements the hardware interfaces described in the roadmap.
-
-The examples of *RRBot* and *DiffBot* are trivial simulations to demonstrate and test `ros2_control` concepts.
-This package does not have any dependencies except `ros2` core packages and can, therefore, be used on SoC-hardware or headless systems.
-
-This repository demonstrates the following `ros2_control` concepts:
-
-* Creating a `*HardwareInterface` for a System, Sensor, and Actuator.
-* Creating a robot description in the form of URDF files.
-* Loading the configuration and starting a robot using launch files.
-* Control of a differential mobile base *DiffBot*.
-* Control of two joints of *RRBot*.
-* Using simulated robots and starting `ros2_control` with Gazebo simulator.
-* Implementing a controller switching strategy for a robot.
-* Using joint limits and transmission concepts in `ros2_control`.
-
-## Quick Hints
-
-These are some quick hints, especially for those coming from a ROS1 control background:
-
-* There are now three categories of hardware components: *Sensor*, *Actuator*, and *System*.
-  *Sensor* is for individual sensors; *Actuator* is for individual actuators; *System* is for any combination of multiple sensors/actuators.
-  You could think of a Sensor as read-only.
-  All components are used as plugins and therefore exported using `PLUGINLIB_EXPORT_CLASS` macro.
-* *ros(1)_control* only allowed three hardware interface types: position, velocity, and effort.
-  *ros2_control* allows you to create any interface type by defining a custom string. For example, you might define a `position_in_degrees` or a `temperature` interface.
-  The most common (position, velocity, acceleration, effort) are already defined as constants in hardware_interface/types/hardware_interface_type_values.hpp.
-* Joint names in <ros2_control> tags in the URDF must be compatible with the controller's configuration.
-* In ros2_control, all parameters for the driver are specified in the URDF.
-  The ros2_control framework uses the **<ros2_control>** tag in the URDF.
-* Joint names in <ros2_control> tags in the URDF must be compatible with the controller's configuration.
 
 # Build from source
 ```
@@ -113,91 +143,6 @@ However, there might be cases in which not-yet released demos or features are on
 This repository provides the following simple example robots: a 2 degrees of freedom manipulator - *RRBot* - and a mobile differential drive base - *DiffBot*.
 The first two examples demonstrate the minimal setup for those two robots to run.
 Later examples show more details about `ros2_control`-concepts and some more advanced use-cases.
-
-## *RRBot*
-
-*RRBot*, or ''Revolute-Revolute Manipulator Robot'', is a simple 3-linkage, 2-joint arm that we will use to demonstrate various features.
-It is essentially a double inverted pendulum and demonstrates some fun control concepts within a simulator and was originally introduced for Gazebo tutorials.
-The *RRBot* URDF files can be found in the `urdf` folder of `rrbot_description` package.
-
-1. To check that *RRBot* descriptions are working properly use following launch commands:
-
-   *RRBot*
-   ```
-   ros2 launch rrbot_description view_robot.launch.py
-   ```
-   **NOTE**: Getting the following output in terminal is OK: `Warning: Invalid frame ID "odom" passed to canTransform argument target_frame - frame does not exist`.
-   This happens because `joint_state_publisher_gui` node need some time to start.
-   The `joint_state_publisher_gui` provides a GUI to generate  a random configuration for rrbot. It is immediately displayed in `Rviz`.
-
-
-1. To start *RRBot* example open a terminal, source your ROS2-workspace and execute its launch file with:
-   ```
-   ros2 launch ros2_control_demo_bringup rrbot.launch.py
-   ```
-   The launch file loads and starts the robot hardware, controllers and opens `RViz`.
-   In starting terminal you will see a lot of output from the hardware implementation showing its internal states.
-   This is only of exemplary purposes and should be avoided as much as possible in a hardware interface implementation.
-
-   If you can see two orange and one yellow rectangle in in `RViz` everything has started properly.
-   Still, to be sure, let's introspect the control system before moving *RRBot*.
-
-1. Check if the hardware interface loaded properly, by opening another terminal and executing:
-   ```
-   ros2 control list_hardware_interfaces
-   ```
-   You should get:
-   ```
-   command interfaces
-        joint1/position [claimed]
-        joint2/position [claimed]
-   state interfaces
-         joint1/position
-         joint2/position
-
-   ```
-   Marker `[claimed]` by command interfaces means that a controller has access to command *RRBot*.
-
-1. Check is controllers are running:
-   ```
-   ros2 control list_controllers
-   ```
-   You should get:
-   ```
-   joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
-   forward_position_controller[forward_command_controller/ForwardCommandController] active
-   ```
-
-1. If you get output from above you can send commands to *Forward Command Controller*, either:
-
-   a. Manually using ros2 cli interface:
-   ```
-   ros2 topic pub /position_commands std_msgs/msg/Float64MultiArray "data:
-   - 0.5
-   - 0.5"
-   ```
-   B. Or you can start a demo node which sends two goals every 5 seconds in a loop:
-   ```
-   ros2 launch ros2_control_demo_bringup test_forward_position_controller.launch.py
-   ```
-   You should now see orange and yellow blocks moving in `RViz`.
-   Also, you should see changing states in the terminal where launch file is started.
-
-
-Files used for this demos:
-  - Launch file: [rrbot.launch.py](ros2_control_demo_bringup/launch/rrbot.launch.py)
-  - Controllers yaml: [rrbot_controllers.yaml](ros2_control_demo_bringup/config/rrbot_controllers.yaml)
-  - URDF file: [rrbot.urdf.xacro](ros2_control_demo_description/rrbot_description/urdf/rrbot.urdf.xacro)
-    - Description: [rrbot_description.urdf.xacro](ros2_control_demo_description/rrbot_description/urdf/rrbot_description.urdf.xacro)
-    - `ros2_control` tag: [rrbot.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/rrbot.ros2_control.xacro)
-  - RViz configuration: [rrbot.rviz](ros2_control_demo_description/rrbot_description/config/rrbot.rviz)
-
-  - Hardware interface plugin: [rrbot_system_position_only.cpp](ros2_control_demo_hardware/src/rrbot_system_position_only.cpp)
-
-
-Controllers from this demo:
-  - `Joint State Broadcaster` ([`ros2_controllers` repository](https://github.com/ros-controls/ros2_controllers)): [doc](https://ros-controls.github.io/control.ros.org/ros2_controllers/joint_state_broadcaster/doc/userdoc.html)
-  - `Forward Command Controller` ([`ros2_controllers` repository](https://github.com/ros-controls/ros2_controllers)): [doc](https://ros-controls.github.io/control.ros.org/ros2_controllers/forward_command_controller/doc/userdoc.html)
 
 
 ## *DiffBot*
