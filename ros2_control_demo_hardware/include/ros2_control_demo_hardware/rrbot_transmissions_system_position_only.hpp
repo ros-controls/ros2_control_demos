@@ -80,7 +80,7 @@ private:
 
   struct InterfaceData
   {
-    InterfaceData(const std::string & name);
+    explicit InterfaceData(const std::string & name);
 
     std::string name_;
     double command_;
