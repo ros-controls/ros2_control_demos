@@ -172,7 +172,7 @@ The *RRBot* URDF files can be found in the `urdf` folder of `rrbot_description` 
 
    a. Manually using ros2 cli interface:
    ```
-   ros2 topic pub /position_commands std_msgs/msg/Float64MultiArray "data:
+   ros2 topic pub /forward_position_controller/commands std_msgs/msg/Float64MultiArray "data:
    - 0.5
    - 0.5"
    ```
@@ -629,7 +629,7 @@ Now you should also see the *RRbot* represented correctly in `RViz`.
    position_trajectory_controller[joint_trajectory_controller/JointTrajectoryController] inactive
    ```
 
-2. Now start the controller (and stop other running contorller):
+2. Now start the controller (and stop other running controller):
    ```
    ros2 control switch_controllers --stop forward_position_controller --start position_trajectory_controller
    ```
