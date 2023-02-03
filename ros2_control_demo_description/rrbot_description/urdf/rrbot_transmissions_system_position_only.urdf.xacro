@@ -5,19 +5,13 @@ Copied and modified from ROS1 example -
 https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_description/urdf/rrbot.xacro
 -->
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="2dof_robot">
-  <xacro:arg name="use_gazebo" default="false" />
 
   <!-- Enable setting arguments from the launch file -->
-  <xacro:arg name="use_fake_hardware" default="false" />
-  <xacro:arg name="mock_sensor_commands" default="false" />
   <xacro:arg name="prefix" default="" />
   <xacro:arg name="slowdown" default="100.0" />
 
   <!-- Import RRBot macro -->
   <xacro:include filename="$(find rrbot_description)/urdf/rrbot_description.urdf.xacro" />
-
-  <!-- Import all Gazebo-customization elements, including Gazebo colors -->
-  <xacro:include filename="$(find rrbot_description)/gazebo/rrbot.gazebo.xacro" />
 
   <!-- Import Rviz colors -->
   <xacro:include filename="$(find rrbot_description)/gazebo/rrbot.materials.xacro" />
@@ -34,8 +28,6 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_desc
   <xacro:rrbot parent="world" prefix="$(arg prefix)">
     <origin xyz="0 0 0" rpy="0 0 0" />
   </xacro:rrbot>
-
-  <xacro:rrbot_gazebo prefix="$(arg prefix)" />
 
   <xacro:rrbot_transmissions_system_position_only
     name="RRBotTransmissionsSystemPositionOnly" prefix="$(arg prefix)"
