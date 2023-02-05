@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "ros2_control_demo_hardware/diffbot_system.hpp"
+#include "diffbot_system.hpp"
 
 #include <chrono>
 #include <cmath>
