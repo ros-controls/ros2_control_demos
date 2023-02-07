@@ -19,8 +19,8 @@
  * library cannot have, but the consuming code must have inorder to link.
  */
 
-#ifndef EXAMPLE_2__HARDWARE__VISIBILITY_CONTROL_H
-#define EXAMPLE_2__HARDWARE__VISIBILITY_CONTROL_H
+#ifndef ROS2_CONTROL_DEMO_EXAMPLE_2__VISIBILITY_CONTROL_H_
+#define ROS2_CONTROL_DEMO_EXAMPLE_2__VISIBILITY_CONTROL_H_
 
 // This logic was borrowed (then namespaced) from the examples on the gcc wiki:
 //     https://gcc.gnu.org/wiki/Visibility
@@ -53,4 +53,4 @@
 #define ROS2_CONTROL_DEMO_EXAMPLE_2_PUBLIC_TYPE
 #endif
 
-#endif  // EXAMPLE_2__HARDWARE__VISIBILITY_CONTROL_H
+#endif  // ROS2_CONTROL_DEMO_EXAMPLE_2__VISIBILITY_CONTROL_H_

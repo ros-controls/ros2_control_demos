@@ -27,7 +27,7 @@ add_library(
 target_include_directories(
   ${PROJECT_NAME}
   PRIVATE
-  include
+  hardware/include
 )
 ament_target_dependencies(
   ${PROJECT_NAME}
@@ -41,13 +41,17 @@ ament_target_dependencies(
 # which is appropriate when building the dll but not consuming it.
 target_compile_definitions(${PROJECT_NAME} PRIVATE "ROS2_CONTROL_DEMO_EXAMPLE_2_BUILDING_DLL")
 
-# Export hardware pligins
+# Export hardware plugins
 pluginlib_export_plugin_description_file(hardware_interface ros2_control_demo_example_2.xml)
 
 # INSTALL
 install(
   TARGETS ${PROJECT_NAME}
   DESTINATION lib
+)
+install(
+  DIRECTORY hardware/include/
+  DESTINATION include
 )
 install(
   DIRECTORY description/launch description/ros2_control description/urdf description/rviz

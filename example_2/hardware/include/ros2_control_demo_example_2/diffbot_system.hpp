@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef EXAMPLE_2__HARDWARE__DIFFBOT_SYSTEM_HPP_
-#define EXAMPLE_2__HARDWARE__DIFFBOT_SYSTEM_HPP_
+#ifndef ROS2_CONTROL_DEMO_EXAMPLE_2__DIFFBOT_SYSTEM_HPP_
+#define ROS2_CONTROL_DEMO_EXAMPLE_2__DIFFBOT_SYSTEM_HPP_
 
 #include <memory>
 #include <string>
@@ -29,7 +29,7 @@
 #include "rclcpp/time.hpp"
 #include "rclcpp_lifecycle/node_interfaces/lifecycle_node_interface.hpp"
 #include "rclcpp_lifecycle/state.hpp"
-#include "visibility_control.h"
+#include "ros2_control_demo_example_2/visibility_control.h"
 
 namespace ros2_control_demo_example_2
 {
@@ -80,4 +80,4 @@ private:
 
 }  // namespace ros2_control_demo_example_2
 
-#endif  // EXAMPLE_2__HARDWARE__DIFFBOT_SYSTEM_HPP_
+#endif  // ROS2_CONTROL_DEMO_EXAMPLE_2__DIFFBOT_SYSTEM_HPP_
