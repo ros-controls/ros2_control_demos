@@ -4,7 +4,7 @@ DiffBot
 
 *DiffBot*, or ''Differential Mobile Robot'', is a simple mobile base with differential drive.
 The robot is basically a box moving according to differential drive kinematics.
-The *DiffBot* URDF files can be found in ``urdf`` folder of ``diffbot_description`` package.
+The *DiffBot* URDF files can be found in ``description/urdf`` folder.
 
 1. To check that *DiffBot* description is working properly use following launch commands::
     ros2 launch ros2_control_demo_example_2 view_robot.launch.py
@@ -13,7 +13,7 @@ The *DiffBot* URDF files can be found in ``urdf`` folder of ``diffbot_descriptio
              This happens because ``joint_state_publisher_gui`` node need some time to start.
 
 2. To start *DiffBot* example open a terminal, source your ROS2-workspace and execute its launch file with::
-    ros2 launch ros2_control_demo_bringup diffbot.launch.py
+    ros2 launch ros2_control_demo_example_2 diffbot.launch.py
 
    The launch file loads and starts the robot hardware, controllers and opens *RViz*.
    In the starting terminal you will see a lot of output from the hardware implementation showing its internal states.
@@ -74,20 +74,20 @@ The *DiffBot* URDF files can be found in ``urdf`` folder of ``diffbot_descriptio
 Files used for this demos
 #########################
 
-  - Launch file: `diffbot.launch.py <ros2_control_demo_bringup/launch/diffbot.launch.py>`__
-  - Controllers yaml: `diffbot_controllers.yaml <ros2_control_demo_bringup/config/diffbot_controllers.yaml>`__
-  - URDF file: `diffbot.urdf.xacro <ros2_control_demo_description/diffbot_description/urdf/diffbot.urdf.xacro>`__
+  - Launch file: `diffbot.launch.py <bringup/launch/diffbot.launch.py>`__
+  - Controllers yaml: `diffbot_controllers.yaml <bringup/config/diffbot_controllers.yaml>`__
+  - URDF file: `diffbot.urdf.xacro <description/urdf/diffbot.urdf.xacro>`__
 
-    + Description: `diffbot_description.urdf.xacro <ros2_control_demo_description/diffbot_description/urdf/diffbot_description.urdf.xacro>`__
-    + ``ros2_control`` tag: `diffbot.ros2_control.xacro <ros2_control_demo_description/diffbot_description/ros2_control/diffbot.ros2_control.xacro>`__
+    + Description: `diffbot_description.urdf.xacro <description/urdf/diffbot_description.urdf.xacro>`__
+    + ``ros2_control`` tag: `diffbot.ros2_control.xacro <description/ros2_control/diffbot.ros2_control.xacro>`__
 
-  - RViz configuration: `diffbot.rviz <ros2_control_demo_description/diffbot_description/config/diffbot.rviz>`__
+  - RViz configuration: `diffbot.rviz <description/rviz/diffbot.rviz>`__
 
-  - Hardware interface plugin: `diffbot_system.cpp <ros2_control_demo_hardware/src/diffbot_system.cpp>`__
+  - Hardware interface plugin: `diffbot_system.cpp <hardware/diffbot_system.cpp>`__
 
 
 Controllers from this demo
 ##########################
 
-  - ``Joint State Broadcaster`` (`*ros2_controllers* repository <https://github.com/ros-controls/ros2_controllers>`__): `doc <https://ros-controls.github.io/control.ros.org/ros2_controllers/joint_state_broadcaster/doc/userdoc.html>`__
-  - ``Diff Drive Controller`` (`*ros2_controllers* repository <https://github.com/ros-controls/ros2_controllers>`__): `doc <https://ros-controls.github.io/control.ros.org/ros2_controllers/diff_drive_controller/doc/userdoc.html>`__
+  - ``Joint State Broadcaster`` (`*ros2_controllers* repository <https://github.com/ros-controls/ros2_controllers>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/joint_state_broadcaster/doc/userdoc.html>`__
+  - ``Diff Drive Controller`` (`*ros2_controllers* repository <https://github.com/ros-controls/ros2_controllers>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/diff_drive_controller/doc/userdoc.html>`__

@@ -3,7 +3,7 @@
 <package format="3">
   <name>ros2_control_demo_example_2</name>
   <version>0.0.0</version>
-  <description>Demo package of `ros2_control` hardware for diffbot.</description>
+  <description>Demo package of `ros2_control` hardware for DiffBot.</description>
 
   <maintainer email="denis@stogl.de">Denis Štogl</maintainer>
 
