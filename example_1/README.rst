@@ -72,8 +72,8 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
 Files used for this demos
 #########################
 
-- Launch file: `rrbot.launch.py <launch/rrbot.launch.py>`__
-- Controllers yaml: `rrbot_controllers.yaml <config/rrbot_controllers.yaml>`__
+- Launch file: `rrbot.launch.py <bringup/launch/rrbot.launch.py>`__
+- Controllers yaml: `rrbot_controllers.yaml <bringup/config/rrbot_controllers.yaml>`__
 - URDF file: `rrbot.urdf.xacro <description/urdf/rrbot.urdf.xacro>`__
 
   + Description: `rrbot_description.urdf.xacro <description/urdf/rrbot_description.urdf.xacro>`__
@@ -81,7 +81,7 @@ Files used for this demos
 
 - RViz configuration: `rrbot.rviz <description/rviz/rrbot.rviz>`__
 
-- Hardware interface plugin: `rrbot_system_position_only.cpp <hardware/rrbot_system_position_only.cpp>`__
+- Hardware interface plugin: `rrbot.cpp <hardware/rrbot.cpp>`__
 
 
 Controllers from this demo
