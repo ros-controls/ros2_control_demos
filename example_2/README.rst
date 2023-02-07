@@ -71,10 +71,10 @@ Files used for this demos:
   - Launch file: `diffbot.launch.py <ros2_control_demo_bringup/launch/diffbot.launch.py>`__
   - Controllers yaml: `diffbot_controllers.yaml <ros2_control_demo_bringup/config/diffbot_controllers.yaml>`__
   - URDF file: `diffbot.urdf.xacro <ros2_control_demo_description/diffbot_description/urdf/diffbot.urdf.xacro>`__
-  
+
     + Description: `diffbot_description.urdf.xacro <ros2_control_demo_description/diffbot_description/urdf/diffbot_description.urdf.xacro>`__
     + ``ros2_control`` tag: `diffbot.ros2_control.xacro <ros2_control_demo_description/diffbot_description/ros2_control/diffbot.ros2_control.xacro>`__
- 
+
   - RViz configuration: `diffbot.rviz <ros2_control_demo_description/diffbot_description/config/diffbot.rviz>`__
 
   - Hardware interface plugin: `diffbot_system.cpp <ros2_control_demo_hardware/src/diffbot_system.cpp>`__
