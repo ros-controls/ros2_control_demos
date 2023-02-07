@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(ros2_control_demo_hardware)
+project(ros2_control_demo_example_1)
 
 # Default to C++14
 if(NOT CMAKE_CXX_STANDARD)
@@ -27,7 +27,7 @@ add_library(
 target_include_directories(
   ${PROJECT_NAME}
   PRIVATE
-  include
+  hardware/include
 )
 ament_target_dependencies(
   ${PROJECT_NAME}
@@ -39,10 +39,10 @@ ament_target_dependencies(
 
 # Causes the visibility macros to use dllexport rather than dllimport,
 # which is appropriate when building the dll but not consuming it.
-target_compile_definitions(${PROJECT_NAME} PRIVATE "ROS2_CONTROL_DEMO_HARDWARE_BUILDING_DLL")
+target_compile_definitions(${PROJECT_NAME} PRIVATE "ROS2_CONTROL_DEMO_EXAMPLE_1_BUILDING_DLL")
 
-# Export hardware pligins
-pluginlib_export_plugin_description_file(hardware_interface ros2_control_demo_hardware.xml)
+# Export hardware plugins
+pluginlib_export_plugin_description_file(hardware_interface ros2_control_demo_example_1.xml)
 
 # INSTALL
 install(
@@ -50,8 +50,16 @@ install(
   DESTINATION lib
 )
 install(
-  DIRECTORY include/
+  DIRECTORY hardware/include/
   DESTINATION include
+)
+install(
+  DIRECTORY description/launch description/ros2_control description/urdf description/rviz
+  DESTINATION share/${PROJECT_NAME}
+)
+install(
+  DIRECTORY bringup/launch bringup/config
+  DESTINATION share/${PROJECT_NAME}
 )
 
 if(BUILD_TESTING)
