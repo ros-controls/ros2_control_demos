@@ -15,7 +15,7 @@ The *DiffBot* URDF files can be found in ``urdf`` folder of ``diffbot_descriptio
 2. To start *DiffBot* example open a terminal, source your ROS2-workspace and execute its launch file with::
     ros2 launch ros2_control_demo_bringup diffbot.launch.py
 
-   The launch file loads and starts the robot hardware, controllers and opens ``RViz``.
+   The launch file loads and starts the robot hardware, controllers and opens *RViz*.
    In the starting terminal you will see a lot of output from the hardware implementation showing its internal states.
    This excessive printing is only added for demonstration. In general, printing to the terminal should be avoided as much as possible in a hardware interface implementation.
 
@@ -63,11 +63,17 @@ The *DiffBot* URDF files can be found in ``urdf`` folder of ``diffbot_descriptio
       y: 0.0
       z: 1.0"
 
-   You should now see an orange box circling in ``RViz``.
+   You should now see an orange box circling in *RViz*.
    Also, you should see changing states in the terminal where launch file is started.
 
+   .. code-block:: shell
 
-Files used for this demos:
+    [DiffBotSystemHardware]: Got command 43.33333 for 'left_wheel_joint'!
+    [DiffBotSystemHardware]: Got command 50.00000 for 'right_wheel_joint'!
+
+Files used for this demos
+#########################
+
   - Launch file: `diffbot.launch.py <ros2_control_demo_bringup/launch/diffbot.launch.py>`__
   - Controllers yaml: `diffbot_controllers.yaml <ros2_control_demo_bringup/config/diffbot_controllers.yaml>`__
   - URDF file: `diffbot.urdf.xacro <ros2_control_demo_description/diffbot_description/urdf/diffbot.urdf.xacro>`__
@@ -80,6 +86,8 @@ Files used for this demos:
   - Hardware interface plugin: `diffbot_system.cpp <ros2_control_demo_hardware/src/diffbot_system.cpp>`__
 
 
-Controllers from this demo:
+Controllers from this demo
+##########################
+
   - ``Joint State Broadcaster`` (`*ros2_controllers* repository <https://github.com/ros-controls/ros2_controllers>`__): `doc <https://ros-controls.github.io/control.ros.org/ros2_controllers/joint_state_broadcaster/doc/userdoc.html>`__
   - ``Diff Drive Controller`` (`*ros2_controllers* repository <https://github.com/ros-controls/ros2_controllers>`__): `doc <https://ros-controls.github.io/control.ros.org/ros2_controllers/diff_drive_controller/doc/userdoc.html>`__
