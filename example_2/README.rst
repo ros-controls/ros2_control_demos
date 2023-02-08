@@ -6,14 +6,19 @@ DiffBot
 The robot is basically a box moving according to differential drive kinematics.
 The *DiffBot* URDF files can be found in ``description/urdf`` folder.
 
-1. To check that *DiffBot* description is working properly use following launch commands::
+1. To check that *DiffBot* description is working properly use following launch commands
+
+   .. code-block:: shell
 
     ros2 launch ros2_control_demo_example_2 view_robot.launch.py
 
-   **NOTE**: Getting the following output in terminal is OK: ``Warning: Invalid frame ID "odom" passed to canTransform argument target_frame - frame does not exist``.
-             This happens because ``joint_state_publisher_gui`` node need some time to start.
+    .. warning::
+      Getting the following output in terminal is OK: ``Warning: Invalid frame ID "odom" passed to canTransform argument target_frame - frame does not exist``.
+      This happens because ``joint_state_publisher_gui`` node need some time to start.
 
-2. To start *DiffBot* example open a terminal, source your ROS2-workspace and execute its launch file with::
+2. To start *DiffBot* example open a terminal, source your ROS2-workspace and execute its launch file with
+
+   .. code-block:: shell
 
     ros2 launch ros2_control_demo_example_2 diffbot.launch.py
 
@@ -24,7 +29,9 @@ The *DiffBot* URDF files can be found in ``description/urdf`` folder.
    If you can see an orange box in *RViz* everything has started properly.
    Still, to be sure, let's introspect the control system before moving *DiffBot*.
 
-3. Check if the hardware interface loaded properly, by opening another terminal and executing::
+3. Check if the hardware interface loaded properly, by opening another terminal and executing
+
+   .. code-block:: shell
 
     ros2 control list_hardware_interfaces
 
@@ -43,7 +50,9 @@ The *DiffBot* URDF files can be found in ``description/urdf`` folder.
 
    The ``[claimed]`` marker on command interfaces means that a controller has access to command *DiffBot*.
 
-4. Check if controllers are running::
+4. Check if controllers are running
+
+   .. code-block:: shell
 
     ros2 control list_controllers
 

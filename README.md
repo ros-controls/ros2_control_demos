@@ -69,7 +69,8 @@ Check README file inside each example folder for detailed description.
 
 ##### Example 2
 
-....
+*DiffBot*, or ''Differential Mobile Robot'', is a simple mobile base with differential drive.
+The robot is basically a box moving according to differential drive kinematics.
 
 
 ## Quick Hints
