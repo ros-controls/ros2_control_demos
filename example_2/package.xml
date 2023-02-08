@@ -6,6 +6,7 @@
   <description>Demo package of `ros2_control` hardware for DiffBot.</description>
 
   <maintainer email="denis@stoglrobotics.de">Dr. Denis Štogl</maintainer>
+  <maintainer email="christoph.froehlich@ait.ac.at">Dr.techn. Christoph Froehlich</maintainer>
 
   <license>Apache-2.0</license>
 
