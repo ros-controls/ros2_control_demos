@@ -11,11 +11,18 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 
 # find dependencies
+set(THIS_PACKAGE_INCLUDE_DEPENDS
+  hardware_interface
+  pluginlib
+  rclcpp
+  rclcpp_lifecycle
+)
+
+# find dependencies
 find_package(ament_cmake REQUIRED)
-find_package(hardware_interface REQUIRED)
-find_package(pluginlib REQUIRED)
-find_package(rclcpp REQUIRED)
-find_package(rclcpp_lifecycle REQUIRED)
+foreach(Dependency IN ITEMS ${THIS_PACKAGE_INCLUDE_DEPENDS})
+  find_package(${Dependency} REQUIRED)
+endforeach()
 
 
 ## COMPILE
@@ -31,10 +38,7 @@ target_include_directories(
 )
 ament_target_dependencies(
   ${PROJECT_NAME}
-  hardware_interface
-  pluginlib
-  rclcpp
-  rclcpp_lifecycle
+  ${THIS_PACKAGE_INCLUDE_DEPENDS}
 )
 
 # Causes the visibility macros to use dllexport rather than dllimport,
@@ -74,9 +78,6 @@ ament_export_libraries(
   ${PROJECT_NAME}
 )
 ament_export_dependencies(
-  hardware_interface
-  pluginlib
-  rclcpp
-  rclcpp_lifecycle
+  ${THIS_PACKAGE_INCLUDE_DEPENDS}
 )
 ament_package()
