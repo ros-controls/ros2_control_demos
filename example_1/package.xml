@@ -5,8 +5,10 @@
   <version>0.0.0</version>
   <description>Demo package of `ros2_control` hardware for RRbot.</description>
 
-  <maintainer email="denis@stogl.de">Denis Štogl</maintainer>
+  <maintainer email="denis.stogl@stoglrobotics.de">Dr.-Ing. Denis Štogl</maintainer>
   <maintainer email="christoph.froehlich@ait.ac.at">Dr.techn. Christoph Froehlich</maintainer>
+  
+  <author email="denis.stogl@stoglrobotics.de">Dr.-Ing. Denis Štogl</author>
 
   <license>Apache-2.0</license>
 
