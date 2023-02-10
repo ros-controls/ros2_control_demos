@@ -72,6 +72,8 @@ Check README file inside each example folder for detailed description.
 ....
 
 
+##### Example 6: "Modular Robots with separate communication to each actuator"
+
 ## Quick Hints
 
 These are some quick hints, especially for those coming from a ROS1 control background:
@@ -452,27 +454,6 @@ Accessing Wrench data from 2D FTS:
 ```
 ros2 topic echo /fts_broadcaster/wrench
 ```
-
-
-### Example 5: "Modular Robots with separate communication to each actuator"
-
-- Launch file: [rrbot_modular_actuators.launch.py](ros2_control_demo_bringup/launch/rrbot_modular_actuators.launch.py)
-- Controllers: [rrbot_modular_actuators.yaml](ros2_control_demo_bringup/config/rrbot_modular_actuators.yaml)
-- URDF: [rrbot_modular_actuators.urdf.xacro](ros2_control_demo_description/rrbot_description/urdf/rrbot_modular_actuators.urdf.xacro)
-- ros2_control URDF: [rrbot_modular_actuators.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/rrbot_modular_actuators.ros2_control.xacro)
-
-- Command interfaces:
-  - joint1/position
-  - joint2/position
-- State interfaces:
-  - joint1/position
-  - joint2/position
-
-Available controllers:
-- `forward_position_controller[forward_command_controller/ForwardCommandController]`
-- `joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]`
-
-Commanding the robot: see the commands below.
 
 
 ## Controllers and moving hardware
