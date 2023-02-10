@@ -71,6 +71,9 @@ Check README file inside each example folder for detailed description.
 
 ....
 
+##### Example 4: "Industrial robot with integrated sensor"
+*RRBot* - or ''Revolute-Revolute Manipulator Robot'' - a simple position controlled robot
+with an integrated sensor.
 
 ## Quick Hints
 
@@ -386,37 +389,6 @@ Useful launch-file options:
   - `robot_controller:=forward_acceleration_controller` - starts demo and spawns acceleration controller.
     Robot can be then controlled using `forward_acceleration_controller` as described below.
 
-
-### Example 3: "Industrial robot with integrated sensor"
-
-- Launch file: [rrbot_system_with_sensor.launch.py](ros2_control_demo_bringup/launch/rrbot_system_with_sensor.launch.py)
-- Controllers: [rrbot_with_sensor_controllers.yaml](ros2_control_demo_bringup/config/rrbot_with_sensor_controllers.yaml)
-- URDF: [rrbot_system_with_sensor.urdf.xacro](ros2_control_demo_description/rrbot_description/urdf/rrbot_system_with_sensor.urdf.xacro)
-- ros2_control URDF: [rrbot_system_with_sensor.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/rrbot_system_with_sensor.ros2_control.xacro)
-
-- Command interfaces:
-  - joint1/position
-  - joint2/position
-- State interfaces:
-  - joint1/position
-  - joint2/position
-  - tcp_fts_sensor/force.x
-  - tcp_fts_sensor/torque.z
-
-Available controllers:
-- `forward_position_controller[forward_command_controller/ForwardCommandController]`
-- `fts_broadcaster[force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster]`
-- `joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]`
-
-Notes:
-  - Wrench messages are may not be displayed properly in Rviz as NaN values are not handled in Rviz and FTS Broadcaster may send NaN values.
-
-Commanding the robot: see the commands below.
-
-Accessing Wrench data from 2D FTS:
-```
-ros2 topic echo /fts_broadcaster/wrench
-```
 
 
 ### Example 4: "Industrial Robots with externally connected sensor"
