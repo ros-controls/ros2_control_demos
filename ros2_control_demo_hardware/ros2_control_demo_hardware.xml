@@ -6,13 +6,6 @@
       The ROS2 Control minimal robot protocol. This is example for start porting the robot from ROS 1.
     </description>
   </class>
-  <class name="ros2_control_demo_hardware/RRBotSystemMultiInterfaceHardware"
-         type="ros2_control_demo_hardware::RRBotSystemMultiInterfaceHardware"
-         base_class_type="hardware_interface::SystemInterface">
-    <description>
-      The ROS2 Control minimal robot protocol for a system with multiple command and state interfaces.
-    </description>
-  </class>
   <class name="ros2_control_demo_hardware/DiffBotSystemHardware"
          type="ros2_control_demo_hardware::DiffBotSystemHardware"
          base_class_type="hardware_interface::SystemInterface">

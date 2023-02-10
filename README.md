@@ -72,6 +72,10 @@ Check README file inside each example folder for detailed description.
 ....
 
 
+##### Example 3
+
+*RRBot* - or ''Revolute-Revolute Manipulator Robot'' with multiple interfaces
+
 ## Quick Hints
 
 These are some quick hints, especially for those coming from a ROS1 control background:
@@ -328,63 +332,6 @@ Available launch file options:
 
 - **TBA**
 
-
-### Example 2: "Robots with multiple interfaces"
-
-Files:
-  - Launch file: [rrbot_system_multi_interface.launch.py](ros2_control_demo_bringup/launch/rrbot_system_multi_interface.launch.py)
-  - Controllers yaml: [rrbot_multi_interface_forward_controllers.yaml](ros2_control_demo_bringup/config/rrbot_multi_interface_forward_controllers.yaml)
-  - URDF: [rrbot_system_multi_interface.urdf.xacro](ros2_control_demo_description/rrbot_description/urdf/rrbot_system_multi_interface.urdf.xacro)
-  - `ros2_control` URDF tag: [rrbot_system_multi_interface.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/rrbot_system_multi_interface.ros2_control.xacro)
-
-Interfaces:
-  - Command interfaces:
-    - joint1/position
-    - joint2/position
-    - joint1/velocity
-    - joint2/velocity
-    - joint1/acceleration
-    - joint2/acceleration
-  - State interfaces:
-    - joint1/position
-    - joint2/position
-    - joint1/velocity
-    - joint2/velocity
-    - joint1/acceleration
-    - joint2/acceleration
-
-Available controllers:
-  - `joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]`
-  - `forward_position_controller[position_controllers/JointGroupPositionController]`
-  - `forward_velocity_controller[velocity_controllers/JointGroupVelocityController]`
-  - `forward_acceleration_controller[forward_command_controller/ForwardCommandController]`
-  - `forward_illegal1_controller[forward_command_controller/ForwardCommandController]`
-  - `forward_illegal2_controller[forward_command_controller/ForwardCommandController]`
-
-Notes:
-  - The example shows how to implement multi-interface robot hardware taking care about interfaces used.
-    The two illegal controllers demonstrate how hardware interface declines faulty claims to access joint command interfaces.
-
-Moving the robot:
-  - when using velocity controller:
-    ```
-    ros2 topic pub /forward_velocity_controller/commands std_msgs/msg/Float64MultiArray "data:
-    - 5
-    - 5"
-    ```
-
-  - when using acceleration controller
-    ```
-    ros2 topic pub /forward_acceleration_controller/commands std_msgs/msg/Float64MultiArray "data:
-    - 10
-    - 10"
-    ```
-
-Useful launch-file options:
-  - `robot_controller:=forward_position_controller` - starts demo and spawns position controller.
-    Robot can be then controlled using `forward_position_controller` as described below.
-  - `robot_controller:=forward_acceleration_controller` - starts demo and spawns acceleration controller.
-    Robot can be then controlled using `forward_acceleration_controller` as described below.
 
 
 ### Example 3: "Industrial robot with integrated sensor"
