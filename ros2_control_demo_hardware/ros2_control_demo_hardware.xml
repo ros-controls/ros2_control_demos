@@ -34,11 +34,4 @@
       The ros2_control robot with 2 separate actuators which can be controlled by 2 different endpoints.
     </description>
   </class>
-  <class name="ros2_control_demo_hardware/ExternalRRBotForceTorqueSensorHardware"
-         type="ros2_control_demo_hardware::ExternalRRBotForceTorqueSensorHardware"
-         base_class_type="hardware_interface::SensorInterface">
-    <description>
-      The ros2_control RRBot example using external Force Torque Sensor where it is separate from the RRBot.
-    </description>
-  </class>
 </library>
