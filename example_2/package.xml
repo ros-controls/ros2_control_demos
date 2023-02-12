@@ -6,7 +6,7 @@
   <description>Demo package of `ros2_control` hardware for DiffBot.</description>
 
   <maintainer email="denis.stogl@stoglrobotics.de">Dr.-Ing. Denis Štogl</maintainer>
-  <maintainer email="christoph.froehlich@ait.ac.at">Dr.techn. Christoph Froehlich</maintainer>
+  <maintainer email="christoph.froehlich@ait.ac.at">Christoph Froehlich</maintainer>
   
   <author email="denis.stogl@stoglrobotics.de">Dr.-Ing. Denis Štogl</author>
 
