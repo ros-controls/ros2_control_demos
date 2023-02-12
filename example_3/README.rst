@@ -22,7 +22,7 @@ The two illegal controllers demonstrate how hardware interface declines faulty c
 
     ros2 launch ros2_control_demo_example_3 rrbot_system_multi_interface.launch.py
 
-  Useful launch-file options:
+   Useful launch-file options:
     - ``robot_controller:=forward_position_controller`` - starts demo and spawns position controller.
       Robot can be then controlled using ``forward_position_controller`` as described below.
     - ``robot_controller:=forward_acceleration_controller`` - starts demo and spawns acceleration controller.
@@ -73,55 +73,55 @@ The two illegal controllers demonstrate how hardware interface declines faulty c
 
 5. If you get output from above you can send commands to *Forward Command Controller*, either:
 
-  a. Manually using ros2 cli interface.
+   #. Manually using ros2 cli interface.
 
-  - when using ``forward_position_controller`` controller
+      * when using ``forward_position_controller`` controller
 
-   .. code-block:: shell
+        .. code-block:: shell
 
-    ros2 topic pub /forward_position_controller/commands std_msgs/msg/Float64MultiArray "data:
-    - 0.5
-    - 0.5"
+          ros2 topic pub /forward_position_controller/commands std_msgs/msg/Float64MultiArray "data:
+          - 0.5
+          - 0.5"
 
-  - when using ``forward_velocity_controller`` controller
+      * when using ``forward_velocity_controller`` controller
 
-   .. code-block:: shell
+        .. code-block:: shell
 
-    ros2 topic pub /forward_velocity_controller/commands std_msgs/msg/Float64MultiArray "data:
-    - 5
-    - 5"
+          ros2 topic pub /forward_velocity_controller/commands std_msgs/msg/Float64MultiArray "data:
+          - 5
+          - 5"
 
-  - when using ``forward_acceleration_controller`` controller
+      * when using ``forward_acceleration_controller`` controller
 
-   .. code-block:: shell
+        .. code-block:: shell
 
-    ros2 topic pub /forward_acceleration_controller/commands std_msgs/msg/Float64MultiArray "data:
-    - 10
-    - 10"
+          ros2 topic pub /forward_acceleration_controller/commands std_msgs/msg/Float64MultiArray "data:
+          - 10
+          - 10"
 
 
-  b. Or you can start a demo node which sends two goals every 5 seconds in a loop
+   #. Or you can start a demo node which sends two goals every 5 seconds in a loop
 
-   .. code-block:: shell
+      .. code-block:: shell
 
-      ros2 launch ros2_control_demo_example_3 test_forward_position_controller.launch.py
+         ros2 launch ros2_control_demo_example_3 test_forward_position_controller.launch.py
 
-  You should now see orange and yellow blocks moving in *RViz*.
-  Also, you should see changing states in the terminal where launch file is started, e.g.
+      You should now see orange and yellow blocks moving in *RViz*.
+      Also, you should see changing states in the terminal where launch file is started, e.g.
 
-   .. code-block:: shell
+      .. code-block:: shell
 
-    [RRBotSystemMultiInterfaceHardware]: Got the commands pos: 0.78500, vel: 0.00000, acc: 0.00000 for joint 0, control_lvl:1
-    [RRBotSystemMultiInterfaceHardware]: Got the commands pos: 0.78500, vel: 0.00000, acc: 0.00000 for joint 1, control_lvl:1
-    [RRBotSystemMultiInterfaceHardware]: Got pos: 0.78500, vel: 0.00000, acc: 0.00000 for joint 0!
-    [RRBotSystemMultiInterfaceHardware]: Got pos: 0.78500, vel: 0.00000, acc: 0.00000 for joint 1!
+       [RRBotSystemMultiInterfaceHardware]: Got the commands pos: 0.78500, vel: 0.00000, acc: 0.00000 for joint 0, control_lvl:1
+       [RRBotSystemMultiInterfaceHardware]: Got the commands pos: 0.78500, vel: 0.00000, acc: 0.00000 for joint 1, control_lvl:1
+       [RRBotSystemMultiInterfaceHardware]: Got pos: 0.78500, vel: 0.00000, acc: 0.00000 for joint 0!
+       [RRBotSystemMultiInterfaceHardware]: Got pos: 0.78500, vel: 0.00000, acc: 0.00000 for joint 1!
 
-1. To demonstrate illegal controller configuration, use one of the following launch file arguments:
+6. To demonstrate illegal controller configuration, use one of the following launch file arguments:
 
-  - ``robot_controller:=forward_illegal1_controller`` or
-  - ``robot_controller:=forward_illegal2_controller``
+   - ``robot_controller:=forward_illegal1_controller`` or
+   - ``robot_controller:=forward_illegal2_controller``
 
-  You will see the following error messages
+   You will see the following error messages
 
    .. code-block:: shell
 
@@ -137,7 +137,7 @@ The two illegal controllers demonstrate how hardware interface declines faulty c
     [ros2_control_node-1] [ERROR] [1676209982.531223835] [controller_manager]: Could not switch controllers since prepare command mode switch was rejected.
     [spawner-4] [ERROR] [1676209982.531717376] [spawner_forward_illegal1_controller]: Failed to activate controller
 
-  Running ``ros2 control list_hardware_interfaces`` shows that no interface is claimed
+   Running ``ros2 control list_hardware_interfaces`` shows that no interface is claimed
 
    .. code-block:: shell
 
@@ -156,7 +156,7 @@ The two illegal controllers demonstrate how hardware interface declines faulty c
           joint2/position
           joint2/velocity
 
-  and ``ros2 control list_controllers`` indicates that the illegal controller was not loaded
+   and ``ros2 control list_controllers`` indicates that the illegal controller was not loaded
 
    .. code-block:: shell
 
