@@ -106,15 +106,15 @@ The two illegal controllers demonstrate how hardware interface declines faulty c
 
          ros2 launch ros2_control_demo_example_3 test_forward_position_controller.launch.py
 
-      You should now see orange and yellow blocks moving in *RViz*.
-      Also, you should see changing states in the terminal where launch file is started, e.g.
+   You should now see orange and yellow blocks moving in *RViz*.
+   Also, you should see changing states in the terminal where launch file is started, e.g.
 
-      .. code-block:: shell
+   .. code-block:: shell
 
-       [RRBotSystemMultiInterfaceHardware]: Got the commands pos: 0.78500, vel: 0.00000, acc: 0.00000 for joint 0, control_lvl:1
-       [RRBotSystemMultiInterfaceHardware]: Got the commands pos: 0.78500, vel: 0.00000, acc: 0.00000 for joint 1, control_lvl:1
-       [RRBotSystemMultiInterfaceHardware]: Got pos: 0.78500, vel: 0.00000, acc: 0.00000 for joint 0!
-       [RRBotSystemMultiInterfaceHardware]: Got pos: 0.78500, vel: 0.00000, acc: 0.00000 for joint 1!
+      [RRBotSystemMultiInterfaceHardware]: Got the commands pos: 0.78500, vel: 0.00000, acc: 0.00000 for joint 0, control_lvl:1
+      [RRBotSystemMultiInterfaceHardware]: Got the commands pos: 0.78500, vel: 0.00000, acc: 0.00000 for joint 1, control_lvl:1
+      [RRBotSystemMultiInterfaceHardware]: Got pos: 0.78500, vel: 0.00000, acc: 0.00000 for joint 0!
+      [RRBotSystemMultiInterfaceHardware]: Got pos: 0.78500, vel: 0.00000, acc: 0.00000 for joint 1!
 
 6. To demonstrate illegal controller configuration, use one of the following launch file arguments:
 
