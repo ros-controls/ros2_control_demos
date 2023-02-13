@@ -47,7 +47,7 @@ def generate_launch_description():
         ]
     )
     rviz_config_file = PathJoinSubstitution(
-        [FindPackageShare("ros2_control_demo_example_1"), "config", "rrbot.rviz"]
+        [FindPackageShare("ros2_control_demo_example_1"), "rviz", "rrbot.rviz"]
     )
 
     control_node = Node(
