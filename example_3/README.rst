@@ -100,7 +100,7 @@ The two illegal controllers demonstrate how hardware interface declines faulty c
           - 10"
 
 
-   #. Or you can start a demo node which sends two goals every 5 seconds in a loop
+   #. Or you can start a demo node which sends two goals every 5 seconds in a loop when using ``forward_position_controller`` controller
 
       .. code-block:: shell
 
