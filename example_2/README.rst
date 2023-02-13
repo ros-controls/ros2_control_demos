@@ -12,9 +12,13 @@ The *DiffBot* URDF files can be found in ``description/urdf`` folder.
 
     ros2 launch ros2_control_demo_example_2 view_robot.launch.py
 
-    .. warning::
-      Getting the following output in terminal is OK: ``Warning: Invalid frame ID "odom" passed to canTransform argument target_frame - frame does not exist``.
-      This happens because ``joint_state_publisher_gui`` node need some time to start.
+   .. warning::
+    Getting the following output in terminal is OK: ``Warning: Invalid frame ID "odom" passed to canTransform argument target_frame - frame does not exist``.
+    This happens because ``joint_state_publisher_gui`` node need some time to start.
+
+   .. image:: doc/diffbot.png
+    :width: 400
+    :alt: Differential Mobile Robot
 
 2. To start *DiffBot* example open a terminal, source your ROS2-workspace and execute its launch file with
 
