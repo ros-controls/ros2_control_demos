@@ -60,16 +60,20 @@ The two illegal controllers demonstrate how hardware interface declines faulty c
 
    Marker ``[claimed]`` by command interfaces means that a controller has access to command *RRBot*.
 
-4. Check is controllers are running
+4. Check which controllers are running
 
    .. code-block:: shell
 
     ros2 control list_controllers
 
+  gives
+
    .. code-block:: shell
 
     joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
-    forward_position_controller[forward_command_controller/ForwardCommandController] active
+    forward_velocity_controller[velocity_controllers/JointGroupVelocityController] active
+
+  Check how this output changes if you use the different launch file arguments described above.
 
 5. If you get output from above you can send commands to *Forward Command Controller*, either:
 
@@ -83,7 +87,7 @@ The two illegal controllers demonstrate how hardware interface declines faulty c
           - 0.5
           - 0.5"
 
-      * when using ``forward_velocity_controller`` controller
+      * when using ``forward_velocity_controller`` controller (default)
 
         .. code-block:: shell
 
