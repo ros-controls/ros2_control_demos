@@ -66,14 +66,14 @@ The two illegal controllers demonstrate how hardware interface declines faulty c
 
     ros2 control list_controllers
 
-  gives
+   gives
 
    .. code-block:: shell
 
     joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
     forward_velocity_controller[velocity_controllers/JointGroupVelocityController] active
 
-  Check how this output changes if you use the different launch file arguments described above.
+   Check how this output changes if you use the different launch file arguments described above.
 
 5. If you get output from above you can send commands to *Forward Command Controller*, either:
 
