@@ -45,7 +45,7 @@
          type="ros2_control_demo_hardware::RRBotTransmissionsSystemPositionOnlyHardware"
          base_class_type="hardware_interface::SystemInterface">
     <description>
-      The ROS2 Control minimal robot protocol with transmissions.
+      The ros2_control minimal robot protocol with transmissions.
     </description>
   </class>
 </library>
