@@ -1,0 +1,198 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 600  # Hz
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    io_and_status_controller:
+      type: ur_controllers/GPIOController
+
+    force_torque_sensor_broadcaster:
+      type: force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster
+
+    joint_trajectory_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+    admittance_controller:
+      type: admittance_controller/AdmittanceController
+
+    faked_forces_controller:
+      type: forward_command_controller/MultiInterfaceForwardCommandController
+
+
+force_torque_sensor_broadcaster:
+  ros__parameters:
+    sensor_name: tcp_fts_sensor
+    frame_id: wrist_3_link
+    additional_frames_to_publish: [base_link]
+
+    sensor_filter_chain:
+      filter1:
+        type: control_filters/LowPassFilterWrench
+        name: low_pass_filter
+        params:
+          sampling_frequency: 200.0
+          damping_frequency: 50.0
+          damping_intensity: 1.0
+          divider: 1
+
+      filter2:
+        type: control_filters/GravityCompensationWrench
+        name: tool_gravity_compensation
+        params:
+          CoG:
+            x: 0.0
+            y: 0.0
+            z: 0.1
+          force: 0.0        # mass * 9.81
+          force_frame: wrist_3_link
+          sensor_frame: ft_frame
+          world_frame: base_link
+
+
+joint_trajectory_controller:
+  ros__parameters:
+    joints:
+      - shoulder_pan_joint
+      - shoulder_lift_joint
+      - elbow_joint
+      - wrist_1_joint
+      - wrist_2_joint
+      - wrist_3_joint
+    command_interfaces:
+      - position
+      - velocity
+    state_interfaces:
+      - position
+      - velocity
+    command_joints:
+      - admittance_controller/shoulder_pan_joint
+      - admittance_controller/shoulder_lift_joint
+      - admittance_controller/elbow_joint
+      - admittance_controller/wrist_1_joint
+      - admittance_controller/wrist_2_joint
+      - admittance_controller/wrist_3_joint
+    state_publish_rate: 100.0
+    action_monitor_rate: 20.0
+    allow_partial_joints_goal: false
+    constraints:
+      stopped_velocity_tolerance: 0.0
+      goal_time: 0.0
+      shoulder_pan_joint:
+        goal: 0.05
+      shoulder_lift_joint:
+        goal: 0.05
+      elbow_joint:
+        goal: 0.05
+      wrist_1_joint:
+        goal: 0.05
+      wrist_2_joint:
+        goal: 0.05
+      wrist_3_joint:
+        goal: 0.05
+
+
+admittance_controller:
+  ros__parameters:
+    joints:
+      - shoulder_pan_joint
+      - shoulder_lift_joint
+      - elbow_joint
+      - wrist_1_joint
+      - wrist_2_joint
+      - wrist_3_joint
+
+    command_interfaces:
+      - position
+
+    state_interfaces:
+      - position
+      - velocity
+
+    chainable_command_interfaces:
+      - position
+      - velocity
+
+    kinematics:
+      plugin_name: kinematics_interface_kdl/KinematicsInterfaceKDL
+      plugin_package: kinematics_interface
+      base: base_link # Assumed to be stationary
+      tip: wrist_3_link
+      group_name: ur5e_manipulator
+      alpha: 0.0005
+
+    ft_sensor:
+      name: tcp_fts_sensor
+      frame:
+        id: wrist_3_link  # Wrench measurements are in this frame
+      filter_coefficient: 0.1
+
+    control:
+      frame:
+        id: base_link # Admittance calcs (displacement etc) are done in this frame. Usually the tool or end-effector
+
+    fixed_world_frame:
+      frame:   # Gravity points down (neg. Z) in this frame (Usually: world or base_link)
+        id: base_link # Admittance calcs (displacement etc) are done in this frame. Usually the tool or end-effector
+
+    gravity_compensation:
+      frame:
+        id: wrist_3_link
+
+      CoG: # specifies the center of gravity of the end effector
+        pos:
+          - 0.1 # x
+          - 0.0 # y
+          - 0.0 # z
+        force: 0.0 # mass * 9.81
+
+    admittance:
+      selected_axes:
+        - true # x
+        - true # y
+        - true # z
+        - true # rx
+        - true # ry
+        - true # rz
+
+      # Having ".0" at the end is MUST, otherwise there is a loading error
+      # F = M*a + D*v + S*(x - x_d)
+      mass:
+        - 1.0 # x
+        - 1.0 # y
+        - 1.0 # z
+        - 0.05 # rx
+        - 0.05 # ry
+        - 0.05 # rz
+
+      damping_ratio: # damping can be used instead: zeta = D / (2 * sqrt( M * S ))
+        - 2.828427 # x
+        - 2.828427 # y
+        - 2.828427 # z
+        - 2.828427 # rx
+        - 2.828427 # ry
+        - 2.828427 # rz
+
+      stiffness:
+        - 50.0 # x
+        - 50.0 # y
+        - 50.0 # z
+        - 1.0 # rx
+        - 1.0 # ry
+        - 1.0 # rz
+
+    # general settings
+    enable_parameter_update_without_reactivation: true
+
+
+faked_forces_controller:
+  ros__parameters:
+    joint: tcp_fts_sensor
+    interface_names:
+      - force.x
+      - force.y
+      - force.z
+      - torque.x
+      - torque.y
+      - torque.z

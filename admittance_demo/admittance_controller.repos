@@ -1,0 +1,10 @@
+repositories:
+  ros2_control_demos:
+    type: git
+    url: https://github.com/pac48/ros2_control_demos.git
+    version: add-admittance-controller
+
+  teleop_twist_keyboard: # Branch: wrench
+    type: git
+    url: https://github.com/nbbrooks/teleop_twist_keyboard.git
+    version: 63de1c17c4c5d0724018f3b5fd8139c472cd15ab  # Add Float64MultiArray publisher
