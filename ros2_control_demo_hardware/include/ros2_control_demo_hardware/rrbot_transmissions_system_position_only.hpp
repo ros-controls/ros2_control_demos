@@ -36,7 +36,6 @@ namespace ros2_control_demo_hardware
 class RRBotTransmissionsSystemPositionOnlyHardware : public hardware_interface::SystemInterface
 {
 public:
-  RCLCPP_SHARED_PTR_DEFINITIONS(RRBotTransmissionsSystemPositionOnlyHardware);
 
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
   hardware_interface::CallbackReturn on_init(
