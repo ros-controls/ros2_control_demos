@@ -61,7 +61,7 @@ hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware:
     info_.transmissions.begin(), info_.transmissions.end(), 0ul,
     [](const auto & acc, const auto & trans_info) { return acc + trans_info.actuators.size(); });
 
-  // prereserve the space needed for joint and actuator interfaces
+  // reserve the space needed for joint and actuator data structures
   joint_interfaces_.reserve(num_joints);
   actuator_interfaces_.reserve(num_actuators);
 
