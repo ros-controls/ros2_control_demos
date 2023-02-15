@@ -71,7 +71,9 @@ Check README file inside each example folder for detailed description.
 
 ....
 
-##### Example 4: "Industrial Robots with externally connected sensor"
+##### Example 5: "Industrial Robots with externally connected sensor"
+*RRBot* - or ''Revolute-Revolute Manipulator Robot'' - a simple position controlled robot
+with an externally connected sensor.
 
 ## Quick Hints
 
