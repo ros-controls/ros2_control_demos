@@ -81,8 +81,8 @@ A 2D Force-Torque Sensor (FTS) is simulated by generating random sensor readings
 
    .. code-block:: shell
 
-    [RRBotSystemPositionOnlyHardware]: Got command 0.50000 for joint 0!
-    [RRBotSystemPositionOnlyHardware]: Got command 0.50000 for joint 1!
+    [RRBotSystemWithSensorHardware]: Got command 0.50000 for joint 0!
+    [RRBotSystemWithSensorHardware]: Got command 0.50000 for joint 1!
 
 6. Access wrench data from 2D FTS via
 
