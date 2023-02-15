@@ -9,7 +9,7 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_desc
 
   <!-- Enable setting arguments from the launch file -->
   <xacro:arg name="use_fake_hardware" default="true" />
-  <xacro:arg name="fake_sensor_commands" default="false" />
+  <xacro:arg name="mock_sensor_commands" default="false" />
   <xacro:arg name="prefix" default="" />
   <xacro:arg name="slowdown" default="50.0" />
 
@@ -38,11 +38,11 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_desc
   <xacro:rrbot_system_position_only
     name="RRBotSystemPositionOnly" prefix="$(arg prefix)"
     use_fake_hardware="$(arg use_fake_hardware)"
-    fake_sensor_commands="$(arg fake_sensor_commands)"
+    mock_sensor_commands="$(arg mock_sensor_commands)"
     slowdown="$(arg slowdown)" />
 
   <xacro:external_rrbot_force_torque_sensor
     name="ExternalRRBotFTSensor" prefix="$(arg prefix)"
     use_fake_hardware="$(arg use_fake_hardware)"
-    fake_sensor_commands="$(arg fake_sensor_commands)" />
+    mock_sensor_commands="$(arg mock_sensor_commands)" />
 </robot>
