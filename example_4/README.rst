@@ -2,9 +2,8 @@
 Example 4: Industrial robot with integrated sensor
 ***************************************************
 
-
-The example shows how to implement multi-interface robot hardware taking care about interfaces used.
-The two illegal controllers demonstrate how hardware interface declines faulty claims to access joint command interfaces.
+This example shows how a sensor can be integrated in a hardware interface of system-type:
+A 2D Force-Torque Sensor (FTS) is simulated by generating random sensor readings.
 
 1. To check that *RRBot* descriptions are working properly use following launch commands
 
@@ -57,9 +56,9 @@ The two illegal controllers demonstrate how hardware interface declines faulty c
 
    .. code-block:: shell
 
-    joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active    
-    fts_broadcaster     [force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster] active    
-    forward_position_controller[forward_command_controller/ForwardCommandController] active   
+    joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+    fts_broadcaster     [force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster] active
+    forward_position_controller[forward_command_controller/ForwardCommandController] active
 
 5. If you get output from above you can send commands to *Forward Command Controller*, either:
 
@@ -85,18 +84,37 @@ The two illegal controllers demonstrate how hardware interface declines faulty c
     [RRBotSystemPositionOnlyHardware]: Got command 0.50000 for joint 0!
     [RRBotSystemPositionOnlyHardware]: Got command 0.50000 for joint 1!
 
-6. Accessing Wrench data from 2D FTS:
+6. Access wrench data from 2D FTS via
 
-  .. code-block:: shell
+   .. code-block:: shell
 
     ros2 topic echo /fts_broadcaster/wrench
 
+   shows the random generated sensor values, republished by *Force Torque Sensor Broadcaster* as
+   ``geometry_msgs/msg/WrenchStamped`` message
 
-  .. warning::
-    Wrench messages are may not be displayed properly in Rviz as NaN values are not handled in Rviz and FTS Broadcaster may send NaN values.
+   .. code-block:: shell
+
+    header:
+      stamp:
+        sec: 1676444704
+        nanosec: 332221422
+      frame_id: tool_link
+    wrench:
+      force:
+        x: 2.946532964706421
+        y: .nan
+        z: .nan
+      torque:
+        x: .nan
+        y: .nan
+        z: 4.0540995597839355
+
+   .. warning::
+    Wrench messages are not displayed properly in *RViz* as NaN values are not handled in *RViz* and FTS Broadcaster may send NaN values.
 
 
-Files used for this demos
+Files used for this demo
 #########################
 
 - Launch file: `rrbot_system_with_sensor.launch.py <https://github.com/ros-controls/ros2_control_demos/example_4/bringup/launch/rrbot_system_with_sensor.launch.py>`__
@@ -105,11 +123,12 @@ Files used for this demos
 
   + ``ros2_control`` URDF tag: `rrbot_system_with_sensor.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/example_4/description/ros2_control/rrbot_system_with_sensor.ros2_control.xacro>`__
 
-- RViz configuration: ?
+- RViz configuration: `rrbot.rviz <https://github.com/ros-controls/ros2_control_demos/example_4/description/rviz/rrbot.rviz>`__
+- Hardware interface plugin: `rrbot_system_with_sensor.cpp <https://github.com/ros-controls/ros2_control_demos/example_4/hardware/rrbot_system_with_sensor.cpp>`__
 
-- Hardware interface plugin: ?
 
 Controllers from this demo
 ##########################
 - ``Joint State Broadcaster`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/joint_state_broadcaster/doc/userdoc.html>`__
 - ``Forward Command Controller`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/forward_command_controller/doc/userdoc.html>`__
+- ``Force Torque Sensor Broadcaster`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/force_torque_sensor_broadcaster/doc/userdoc.html>`__

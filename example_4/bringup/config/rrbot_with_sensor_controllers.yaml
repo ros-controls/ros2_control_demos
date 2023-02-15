@@ -1,6 +1,6 @@
 controller_manager:
   ros__parameters:
-    update_rate: 1  # Hz
+    update_rate: 100  # Hz
 
     forward_position_controller:
       type: forward_command_controller/ForwardCommandController

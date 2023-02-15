@@ -231,7 +231,7 @@ hardware_interface::return_type RRBotSystemWithSensorHardware::read(
     hw_sensor_states_[i] =
       static_cast<float>(rand_r(&seed)) / (static_cast<float>(RAND_MAX / hw_sensor_change_));
     RCLCPP_INFO(
-      rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Got state %e for interface %s!",
+      rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Got value %e for interface %s!",
       hw_sensor_states_[i], info_.sensors[0].state_interfaces[i].name.c_str());
   }
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Sensors successfully read!");
