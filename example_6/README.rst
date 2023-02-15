@@ -2,11 +2,12 @@
 Example 6: Modular Robots with separate communication to each actuator
 ***********************************************************************
 
+The example shows how to implement robot hardware with separate communication to each actuator. This
+is implemented with a hardware interface of type ``hardware_interface::ActuatorInterface``.
 
-The example shows how to implement multi-interface robot hardware taking care about interfaces used.
-The two illegal controllers demonstrate how hardware interface declines faulty claims to access joint command interfaces.
+1. To check that *RRBot* descriptions are working properly use following launch commands
 
-1. To check that *RRBot* descriptions are working properly use following launch commands::
+   .. code-block:: shell
 
     ros2 launch ros2_control_demo_example_6 view_robot.launch.py
 
@@ -15,15 +16,11 @@ The two illegal controllers demonstrate how hardware interface declines faulty c
    The ``joint_state_publisher_gui`` provides a GUI to generate  a random configuration for rrbot. It is immediately displayed in *RViz*.
 
 
-2. To start *RRBot* example open a terminal, source your ROS2-workspace and execute its launch file with::
+2. To start *RRBot* example open a terminal, source your ROS2-workspace and execute its launch file with
+
+   .. code-block:: shell
 
     ros2 launch ros2_control_demo_example_6 rrbot.launch.py
-
-Useful launch-file options:
-  - ``robot_controller:=forward_position_controller`` - starts demo and spawns position controller.
-    Robot can be then controlled using ``forward_position_controller`` as described below.
-  - ``robot_controller:=forward_acceleration_controller`` - starts demo and spawns acceleration controller.
-    Robot can be then controlled using ``forward_acceleration_controller`` as described below.
 
    The launch file loads and starts the robot hardware, controllers and opens *RViz*.
    In starting terminal you will see a lot of output from the hardware implementation showing its internal states.
@@ -32,55 +29,47 @@ Useful launch-file options:
    If you can see two orange and one yellow rectangle in in *RViz* everything has started properly.
    Still, to be sure, let's introspect the control system before moving *RRBot*.
 
-3. Check if the hardware interface loaded properly, by opening another terminal and executing::
+3. Check if the hardware interface loaded properly, by opening another terminal and executing
+
+   .. code-block:: shell
 
     ros2 control list_hardware_interfaces
 
    .. code-block:: shell
 
-      - Command interfaces:
-        - joint1/position
-        - joint2/position
-      - State interfaces:
-        - joint1/position
-        - joint2/position
-        - tcp_fts_sensor/force.x
-        - tcp_fts_sensor/torque.z
+      command interfaces
+        joint1/position [available] [claimed]
+        joint2/position [available] [claimed]
+      state interfaces
+        joint1/position
+        joint2/position
 
    Marker ``[claimed]`` by command interfaces means that a controller has access to command *RRBot*.
 
-4. Check is controllers are running::
+4. Check is controllers are running
+
+   .. code-block:: shell
 
     ros2 control list_controllers
 
    .. code-block:: shell
 
     forward_position_controller[forward_command_controller/ForwardCommandController]
-    fts_broadcaster[force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster]
     joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]
 
-1. If you get output from above you can send commands to *Forward Command Controller*, either:
+5. If you get output from above you can send commands to *Forward Command Controller*, either:
 
-   a. Manually using ros2 cli interface.
+   #. Manually using ros2 cli interface.
 
-    - when using velocity controller:
+      .. code-block:: shell
 
-   .. code-block:: shell
+        ros2 topic pub /forward_position_controller/commands std_msgs/msg/Float64MultiArray "data:
+        - 0.5
+        - 0.5"
 
-    ros2 topic pub /forward_velocity_controller/commands std_msgs/msg/Float64MultiArray "data:
-    - 5
-    - 5"
+   #. Or you can start a demo node which sends two goals every 5 seconds in a loop
 
-     - when using acceleration controller
-
-   .. code-block:: shell
-
-    ros2 topic pub /forward_acceleration_controller/commands std_msgs/msg/Float64MultiArray "data:
-    - 10
-    - 10"
-
-
-   b. Or you can start a demo node which sends two goals every 5 seconds in a loop::
+      .. code-block:: shell
 
         ros2 launch ros2_control_demo_example_6 test_forward_position_controller.launch.py
 
@@ -89,18 +78,12 @@ Useful launch-file options:
 
    .. code-block:: shell
 
-    [RRBotSystemPositionOnlyHardware]: Got command 0.50000 for joint 0!
-    [RRBotSystemPositionOnlyHardware]: Got command 0.50000 for joint 1!
-
-2. Accessing Wrench data from 2D FTS:
-
-  .. code-block:: shell
-
-    ros2 topic echo /fts_broadcaster/wrench
-
-
-  .. warning::
-    Wrench messages are may not be displayed properly in Rviz as NaN values are not handled in Rviz and FTS Broadcaster may send NaN values.
+    [RRBotModularJoint]: Writing...please wait...
+    [RRBotModularJoint]: Got command 0.50000 for joint 'joint1'!
+    [RRBotModularJoint]: Joints successfully written!
+    [RRBotModularJoint]: Writing...please wait...
+    [RRBotModularJoint]: Got command 0.50000 for joint 'joint2'!
+    [RRBotModularJoint]: Joints successfully written!
 
 
 Files used for this demos
@@ -112,9 +95,9 @@ Files used for this demos
 
   + ``ros2_control`` URDF tag: `rrbot_modular_actuators.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/example_6/description/ros2_control/rrbot_modular_actuators.ros2_control.xacro>`__
 
-- RViz configuration: ?
+- RViz configuration: `rrbot.rviz <https://github.com/ros-controls/ros2_control_demos/example_6/description/rviz/rrbot.rviz>`__
 
-- Hardware interface plugin: ?
+- Hardware interface plugin: `rrbot_modular_actuators.cpp <https://github.com/ros-controls/ros2_control_demos/example_6/hardware/rrbot_modular_actuators.cpp>`__
 
 Controllers from this demo
 ##########################

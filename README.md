@@ -74,6 +74,8 @@ Check README file inside each example folder for detailed description.
 
 ##### Example 6: "Modular Robots with separate communication to each actuator"
 
+The example shows how to implement robot hardware with separate communication to each actuator.
+
 ## Quick Hints
 
 These are some quick hints, especially for those coming from a ROS1 control background:
