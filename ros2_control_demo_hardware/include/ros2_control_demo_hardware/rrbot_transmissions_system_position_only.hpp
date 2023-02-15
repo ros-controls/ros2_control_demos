@@ -36,7 +36,6 @@ namespace ros2_control_demo_hardware
 class RRBotTransmissionsSystemPositionOnlyHardware : public hardware_interface::SystemInterface
 {
 public:
-
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
   hardware_interface::CallbackReturn on_init(
     const hardware_interface::HardwareInfo & info) override;
@@ -84,7 +83,9 @@ private:
     std::string name_;
     double command_;
     double state_;
-    double transmission_;
+
+    // this is the "sink" that will be part of the transmission Joint/Actuator handles
+    double transmission_passthrough_;
   };
   std::vector<InterfaceData> joint_interfaces_;
   std::vector<InterfaceData> actuator_interfaces_;

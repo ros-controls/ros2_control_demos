@@ -108,7 +108,8 @@ hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware:
         joint_interfaces_.insert(joint_interfaces_.end(), InterfaceData(joint_info.name));
 
       transmission_interface::JointHandle joint_handle(
-        joint_info.name, hardware_interface::HW_IF_POSITION, &joint_interface->transmission_);
+        joint_info.name, hardware_interface::HW_IF_POSITION,
+        &joint_interface->transmission_passthrough_);
       joint_handles.push_back(joint_handle);
     }
 
@@ -120,7 +121,8 @@ hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware:
       const auto actuator_interface =
         actuator_interfaces_.insert(actuator_interfaces_.end(), InterfaceData(actuator_info.name));
       transmission_interface::ActuatorHandle actuator_handle(
-        actuator_info.name, hardware_interface::HW_IF_POSITION, &actuator_interface->transmission_);
+        actuator_info.name, hardware_interface::HW_IF_POSITION,
+        &actuator_interface->transmission_passthrough_);
       actuator_handles.push_back(actuator_handle);
     }
 
@@ -157,7 +159,7 @@ hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware:
     {
       interface_data.command_ = 0.0;
       interface_data.state_ = 0.0;
-      interface_data.transmission_ = kNaN;
+      interface_data.transmission_passthrough_ = kNaN;
     }
   };
 
@@ -228,7 +230,7 @@ hardware_interface::return_type RRBotTransmissionsSystemPositionOnlyHardware::re
   std::for_each(
     actuator_interfaces_.begin(), actuator_interfaces_.end(),
     [](auto & actuator_interface)
-    { actuator_interface.transmission_ = actuator_interface.state_; });
+    { actuator_interface.transmission_passthrough_ = actuator_interface.state_; });
 
   // transmission: actuator -> joint
   std::for_each(
@@ -238,7 +240,8 @@ hardware_interface::return_type RRBotTransmissionsSystemPositionOnlyHardware::re
   // joint: transmission -> state
   std::for_each(
     joint_interfaces_.begin(), joint_interfaces_.end(),
-    [](auto & joint_interface) { joint_interface.state_ = joint_interface.transmission_; });
+    [](auto & joint_interface)
+    { joint_interface.state_ = joint_interface.transmission_passthrough_; });
 
   // log state data
   std::stringstream ss;
@@ -274,7 +277,8 @@ hardware_interface::return_type RRBotTransmissionsSystemPositionOnlyHardware::wr
   // joint: command -> transmission
   std::for_each(
     joint_interfaces_.begin(), joint_interfaces_.end(),
-    [](auto & joint_interface) { joint_interface.transmission_ = joint_interface.command_; });
+    [](auto & joint_interface)
+    { joint_interface.transmission_passthrough_ = joint_interface.command_; });
 
   // transmission: joint -> actuator
   std::for_each(
@@ -285,7 +289,7 @@ hardware_interface::return_type RRBotTransmissionsSystemPositionOnlyHardware::wr
   std::for_each(
     actuator_interfaces_.begin(), actuator_interfaces_.end(),
     [](auto & actuator_interface)
-    { actuator_interface.command_ = actuator_interface.transmission_; });
+    { actuator_interface.command_ = actuator_interface.transmission_passthrough_; });
 
   // simulate motor motion
   std::for_each(
@@ -326,7 +330,7 @@ hardware_interface::return_type RRBotTransmissionsSystemPositionOnlyHardware::wr
 }
 
 RRBotTransmissionsSystemPositionOnlyHardware::InterfaceData::InterfaceData(const std::string & name)
-: name_(name), command_(kNaN), state_(kNaN), transmission_(kNaN)
+: name_(name), command_(kNaN), state_(kNaN), transmission_passthrough_(kNaN)
 {
 }
 
