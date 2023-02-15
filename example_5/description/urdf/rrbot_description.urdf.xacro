@@ -144,7 +144,7 @@
           <visual>
             <origin xyz="0 0 0" rpy="0 0 0"/>
             <geometry>
-              <mesh filename="package://rrbot_description/meshes/hokuyo.dae"/>
+              <mesh filename="package://ros2_control_demo_example_5/meshes/hokuyo.dae"/>
             </geometry>
           </visual>
 

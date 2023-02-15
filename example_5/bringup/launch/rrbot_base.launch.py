@@ -153,7 +153,7 @@ def generate_launch_description():
         ]
     )
     rviz_config_file = PathJoinSubstitution(
-        [FindPackageShare(description_package), "config", "rrbot.rviz"]
+        [FindPackageShare(description_package), "rviz", "rrbot.rviz"]
     )
 
     control_node = Node(
