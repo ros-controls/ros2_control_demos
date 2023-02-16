@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef ROS2_CONTROL_DEMO_HARDWARE__RRBOT_SYSTEM_POSITION_ONLY_HPP_
-#define ROS2_CONTROL_DEMO_HARDWARE__RRBOT_SYSTEM_POSITION_ONLY_HPP_
+#ifndef EXAMPLE_1__HARDWARE__RRBOT_HPP_
+#define EXAMPLE_1__HARDWARE__RRBOT_HPP_
 
 #include <memory>
 #include <string>
@@ -78,4 +78,4 @@ private:
 
 }  // namespace ros2_control_demo_hardware
 
-#endif  // ROS2_CONTROL_DEMO_HARDWARE__RRBOT_SYSTEM_POSITION_ONLY_HPP_
+#endif  // EXAMPLE_1__HARDWARE__RRBOT_HPP_
