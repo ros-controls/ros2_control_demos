@@ -34,4 +34,11 @@
       The ros2_control RRBot example using external Force Torque Sensor where it is separate from the RRBot.
     </description>
   </class>
+  <class name="ros2_control_demo_hardware/RRBotTransmissionsSystemPositionOnlyHardware"
+         type="ros2_control_demo_hardware::RRBotTransmissionsSystemPositionOnlyHardware"
+         base_class_type="hardware_interface::SystemInterface">
+    <description>
+      The ros2_control minimal robot protocol with transmissions.
+    </description>
+  </class>
 </library>
