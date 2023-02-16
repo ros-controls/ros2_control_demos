@@ -12,9 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef EXAMPLE_1__HARDWARE__RRBOT_HPP_
-#define EXAMPLE_1__HARDWARE__RRBOT_HPP_
+#ifndef ROS2_CONTROL_DEMO_HARDWARE__RRBOT_TRANSMISSIONS_SYSTEM_POSITION_ONLY_HPP_
+#define ROS2_CONTROL_DEMO_HARDWARE__RRBOT_TRANSMISSIONS_SYSTEM_POSITION_ONLY_HPP_
 
+#include <map>
 #include <memory>
 #include <string>
 #include <vector>
@@ -23,18 +24,18 @@
 #include "hardware_interface/hardware_info.hpp"
 #include "hardware_interface/system_interface.hpp"
 #include "hardware_interface/types/hardware_interface_return_values.hpp"
+#include "rclcpp/clock.hpp"
+#include "rclcpp/logger.hpp"
 #include "rclcpp/macros.hpp"
-#include "rclcpp_lifecycle/node_interfaces/lifecycle_node_interface.hpp"
 #include "rclcpp_lifecycle/state.hpp"
 #include "ros2_control_demo_hardware/visibility_control.h"
+#include "transmission_interface/transmission.hpp"
 
 namespace ros2_control_demo_hardware
 {
-class RRBotSystemPositionOnlyHardware : public hardware_interface::SystemInterface
+class RRBotTransmissionsSystemPositionOnlyHardware : public hardware_interface::SystemInterface
 {
 public:
-  RCLCPP_SHARED_PTR_DEFINITIONS(RRBotSystemPositionOnlyHardware);
-
   ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
   hardware_interface::CallbackReturn on_init(
     const hardware_interface::HardwareInfo & info) override;
@@ -66,16 +67,30 @@ public:
     const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
 private:
-  // Parameters for the RRBot simulation
-  double hw_start_sec_;
-  double hw_stop_sec_;
-  double hw_slowdown_;
+  std::unique_ptr<rclcpp::Logger> logger_;
+  std::unique_ptr<rclcpp::Clock> clock_;
 
-  // Store the command for the simulated robot
-  std::vector<double> hw_commands_;
-  std::vector<double> hw_states_;
+  // parameters for the RRBot simulation
+  double actuator_slowdown_;
+
+  // transmissions
+  std::vector<std::shared_ptr<transmission_interface::Transmission>> transmissions_;
+
+  struct InterfaceData
+  {
+    explicit InterfaceData(const std::string & name);
+
+    std::string name_;
+    double command_;
+    double state_;
+
+    // this is the "sink" that will be part of the transmission Joint/Actuator handles
+    double transmission_passthrough_;
+  };
+  std::vector<InterfaceData> joint_interfaces_;
+  std::vector<InterfaceData> actuator_interfaces_;
 };
 
 }  // namespace ros2_control_demo_hardware
 
-#endif  // EXAMPLE_1__HARDWARE__RRBOT_HPP_
+#endif  // ROS2_CONTROL_DEMO_HARDWARE__RRBOT_TRANSMISSIONS_SYSTEM_POSITION_ONLY_HPP_
