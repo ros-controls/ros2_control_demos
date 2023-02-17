@@ -20,7 +20,7 @@ In this example, both joints use an exposed transmission interface.
 
    .. code-block:: shell
 
-    ros2 launch ros2_control_demo_example_8 rrbot_transmissions_system_position_only.launch.launch.py
+    ros2 launch ros2_control_demo_example_8 rrbot_transmissions_system_position_only.launch.py
 
    The launch file loads and starts the robot hardware, controllers and opens *RViz*.
    In starting terminal you will see a lot of output from the hardware implementation showing its internal states.
