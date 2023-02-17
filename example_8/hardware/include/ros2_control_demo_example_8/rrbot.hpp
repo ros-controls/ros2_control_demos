@@ -12,10 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef ROS2_CONTROL_DEMO_HARDWARE__RRBOT_TRANSMISSIONS_SYSTEM_POSITION_ONLY_HPP_
-#define ROS2_CONTROL_DEMO_HARDWARE__RRBOT_TRANSMISSIONS_SYSTEM_POSITION_ONLY_HPP_
+#ifndef ROS2_CONTROL_DEMO_EXAMPLE_8__RRBOT_HPP_
+#define ROS2_CONTROL_DEMO_EXAMPLE_8__RRBOT_HPP_
 
-#include <map>
 #include <memory>
 #include <string>
 #include <vector>
@@ -24,73 +23,59 @@
 #include "hardware_interface/hardware_info.hpp"
 #include "hardware_interface/system_interface.hpp"
 #include "hardware_interface/types/hardware_interface_return_values.hpp"
-#include "rclcpp/clock.hpp"
-#include "rclcpp/logger.hpp"
 #include "rclcpp/macros.hpp"
+#include "rclcpp_lifecycle/node_interfaces/lifecycle_node_interface.hpp"
 #include "rclcpp_lifecycle/state.hpp"
-#include "ros2_control_demo_hardware/visibility_control.h"
-#include "transmission_interface/transmission.hpp"
+#include "ros2_control_demo_example_8/visibility_control.h"
 
-namespace ros2_control_demo_hardware
+namespace ros2_control_demo_example_8
 {
-class RRBotTransmissionsSystemPositionOnlyHardware : public hardware_interface::SystemInterface
+class RRBotSystemPositionOnlyHardware : public hardware_interface::SystemInterface
 {
 public:
-  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
+  RCLCPP_SHARED_PTR_DEFINITIONS(RRBotSystemPositionOnlyHardware);
+
+  ROS2_CONTROL_DEMO_EXAMPLE_8_PUBLIC
   hardware_interface::CallbackReturn on_init(
     const hardware_interface::HardwareInfo & info) override;
 
-  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
+  ROS2_CONTROL_DEMO_EXAMPLE_8_PUBLIC
   hardware_interface::CallbackReturn on_configure(
     const rclcpp_lifecycle::State & previous_state) override;
 
-  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
+  ROS2_CONTROL_DEMO_EXAMPLE_8_PUBLIC
   std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
 
-  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
+  ROS2_CONTROL_DEMO_EXAMPLE_8_PUBLIC
   std::vector<hardware_interface::CommandInterface> export_command_interfaces() override;
 
-  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
+  ROS2_CONTROL_DEMO_EXAMPLE_8_PUBLIC
   hardware_interface::CallbackReturn on_activate(
     const rclcpp_lifecycle::State & previous_state) override;
 
-  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
+  ROS2_CONTROL_DEMO_EXAMPLE_8_PUBLIC
   hardware_interface::CallbackReturn on_deactivate(
     const rclcpp_lifecycle::State & previous_state) override;
 
-  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
+  ROS2_CONTROL_DEMO_EXAMPLE_8_PUBLIC
   hardware_interface::return_type read(
     const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
-  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
+  ROS2_CONTROL_DEMO_EXAMPLE_8_PUBLIC
   hardware_interface::return_type write(
     const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
 private:
-  std::unique_ptr<rclcpp::Logger> logger_;
-  std::unique_ptr<rclcpp::Clock> clock_;
+  // Parameters for the RRBot simulation
+  double hw_start_sec_;
+  double hw_stop_sec_;
+  double hw_slowdown_;
 
-  // parameters for the RRBot simulation
-  double actuator_slowdown_;
-
-  // transmissions
-  std::vector<std::shared_ptr<transmission_interface::Transmission>> transmissions_;
-
-  struct InterfaceData
-  {
-    explicit InterfaceData(const std::string & name);
-
-    std::string name_;
-    double command_;
-    double state_;
-
-    // this is the "sink" that will be part of the transmission Joint/Actuator handles
-    double transmission_passthrough_;
-  };
-  std::vector<InterfaceData> joint_interfaces_;
-  std::vector<InterfaceData> actuator_interfaces_;
+  // Store the command for the simulated robot
+  std::vector<double> hw_commands_;
+  std::vector<double> hw_states_;
 };
 
-}  // namespace ros2_control_demo_hardware
+}  // namespace ros2_control_demo_example_8
 
-#endif  // ROS2_CONTROL_DEMO_HARDWARE__RRBOT_TRANSMISSIONS_SYSTEM_POSITION_ONLY_HPP_
+#endif  // ROS2_CONTROL_DEMO_EXAMPLE_8__RRBOT_HPP_
