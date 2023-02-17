@@ -16,6 +16,7 @@ find_package(hardware_interface REQUIRED)
 find_package(pluginlib REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
+find_package(transmission_interface REQUIRED)
 
 
 ## COMPILE
@@ -26,6 +27,7 @@ add_library(
   src/rrbot_system_position_only.cpp
   src/rrbot_system_multi_interface.cpp
   src/rrbot_system_with_sensor.cpp
+  src/rrbot_transmissions_system_position_only.cpp
   src/rrbot_actuator.cpp
   src/external_rrbot_force_torque_sensor.cpp
 )
@@ -40,13 +42,14 @@ ament_target_dependencies(
   pluginlib
   rclcpp
   rclcpp_lifecycle
+  transmission_interface
 )
 
 # Causes the visibility macros to use dllexport rather than dllimport,
 # which is appropriate when building the dll but not consuming it.
 target_compile_definitions(${PROJECT_NAME} PRIVATE "ROS2_CONTROL_DEMO_HARDWARE_BUILDING_DLL")
 
-# Export hardware pligins
+# Export hardware plugins
 pluginlib_export_plugin_description_file(hardware_interface ros2_control_demo_hardware.xml)
 
 # INSTALL
@@ -75,5 +78,6 @@ ament_export_dependencies(
   pluginlib
   rclcpp
   rclcpp_lifecycle
+  transmission_interface
 )
 ament_package()
