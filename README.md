@@ -393,6 +393,30 @@ Available controllers:
 Commanding the robot: see the commands below.
 
 
+### Example 6: "Industrial Robots with an exposed transmission interface"
+
+Files:
+  - Launch file: [rrbot_transmissions_system_position_only.launch.py](ros2_control_demo_bringup/launch/rrbot_transmissions_system_position_only.launch.py)
+  - Controllers yaml: [rrbot_controllers.yaml](ros2_control_demo_bringup/config/rrbot_controllers.yaml)
+  - URDF:  [rrbot_transmissions_system_position_only.urdf.xacro](ros2_control_demo_description/rrbot_description/urdf/rrbot_transmissions_system_position_only.urdf.xacro)
+  - `ros2_control` URDF tag: [rrbot_transmissions_system_position_only.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/rrbot_transmissions_system_position_only.ros2_control.xacro)
+
+Interfaces:
+  - Command interfaces:
+    - joint1/position
+    - joint2/position
+  - State interfaces:
+    - joint1/position
+    - joint2/position
+
+Available controllers:
+  - `joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]`
+  - `forward_position_controller[forward_command_controller/ForwardCommandController]` (position)
+
+Moving the robot:
+  - see below description of `forward_position_controller`
+
+
 ## Controllers and moving hardware
 
 To move the robot you should load and start controllers.
