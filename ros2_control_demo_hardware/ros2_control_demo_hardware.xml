@@ -1,11 +1,4 @@
 <library path="ros2_control_demo_hardware">
-  <class name="ros2_control_demo_hardware/RRBotSystemPositionOnlyHardware"
-         type="ros2_control_demo_hardware::RRBotSystemPositionOnlyHardware"
-         base_class_type="hardware_interface::SystemInterface">
-    <description>
-      The ROS2 Control minimal robot protocol. This is example for start porting the robot from ROS 1.
-    </description>
-  </class>
   <class name="ros2_control_demo_hardware/DiffBotSystemHardware"
          type="ros2_control_demo_hardware::DiffBotSystemHardware"
          base_class_type="hardware_interface::SystemInterface">
@@ -32,6 +25,13 @@
          base_class_type="hardware_interface::SensorInterface">
     <description>
       The ros2_control RRBot example using external Force Torque Sensor where it is separate from the RRBot.
+    </description>
+  </class>
+  <class name="ros2_control_demo_hardware/RRBotTransmissionsSystemPositionOnlyHardware"
+         type="ros2_control_demo_hardware::RRBotTransmissionsSystemPositionOnlyHardware"
+         base_class_type="hardware_interface::SystemInterface">
+    <description>
+      The ros2_control minimal robot protocol with transmissions.
     </description>
   </class>
 </library>
