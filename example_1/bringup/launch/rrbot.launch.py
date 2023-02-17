@@ -30,7 +30,7 @@ def generate_launch_description():
             " ",
             PathJoinSubstitution(
                 [
-                    FindPackageShare("rrbot_description"),
+                    FindPackageShare("ros2_control_demo_example_1"),
                     "urdf",
                     "rrbot.urdf.xacro",
                 ]
@@ -41,25 +41,19 @@ def generate_launch_description():
 
     robot_controllers = PathJoinSubstitution(
         [
-            FindPackageShare("ros2_control_demo_bringup"),
+            FindPackageShare("ros2_control_demo_example_1"),
             "config",
             "rrbot_controllers.yaml",
         ]
     )
     rviz_config_file = PathJoinSubstitution(
-        [FindPackageShare("rrbot_description"), "config", "rrbot.rviz"]
+        [FindPackageShare("ros2_control_demo_example_1"), "rviz", "rrbot.rviz"]
     )
 
     control_node = Node(
         package="controller_manager",
         executable="ros2_control_node",
         parameters=[robot_description, robot_controllers],
-        remappings=[
-            (
-                "/forward_position_controller/commands",
-                "/position_commands",
-            ),
-        ],
         output="both",
     )
     robot_state_pub_node = Node(
