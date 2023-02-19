@@ -87,6 +87,76 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
     [RRBotSystemPositionOnlyHardware]: Got command 0.50000 for joint 0!
     [RRBotSystemPositionOnlyHardware]: Got command 0.50000 for joint 1!
 
+   If you echo the ``/joint_states`` or ``/dynamic_joint_states`` topics you should now get similar values, namely the simulated states of the robot
+
+   .. code-block:: shell
+
+    ros2 topic echo /joint_states
+    ros2 topic echo /dynamic_joint_states
+
+6. Let's switch to a different controller, the ``Joint Trajectory Controller``.
+   Load the controller manually by
+
+   .. code-block:: shell
+
+    ros2 control load_controller position_trajectory_controller --set-state configured
+
+   Note that the parameters are already set in `rrbot_controllers.yaml <bringup/config/rrbot_controllers.yaml>`__
+   but the controller was not loaded from the `launch file rrbot.launch.py <bringup/launch/rrbot.launch.py>`__ before.
+   You should get the following result
+
+   .. code-block:: shell
+
+    Successfully loaded controller position_trajectory_controller into state active
+
+   See if it loaded properly with
+
+   .. code-block:: shell
+
+    ros2 control list_controllers
+
+   what should now return
+
+   .. code-block:: shell
+
+    joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+    forward_position_controller[forward_command_controller/ForwardCommandController] active
+    position_trajectory_controller[joint_trajectory_controller/JointTrajectoryController] inactive
+
+   Note that the controller is loaded but still ``inactive``. Now you can switch the controller by
+
+   .. code-block:: shell
+
+    ros2 control set_controller_state forward_position_controller inactive
+    ros2 control set_controller_state position_trajectory_controller active
+
+   or simply via this one-line command
+
+   .. code-block:: shell
+
+    ros2 control switch_controllers --activate position_trajectory_controller --deactivate forward_position_controller
+
+   Again, check via
+
+   .. code-block:: shell
+
+    ros2 control list_controllers
+
+   what should now return
+
+   .. code-block:: shell
+
+    joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+    forward_position_controller[forward_command_controller/ForwardCommandController] inactive
+    position_trajectory_controller[joint_trajectory_controller/JointTrajectoryController] active
+
+   Send a command to the controller using demo node, which sends four goals every 6 seconds in a loop:
+
+   .. code-block:: shell
+
+    ros2 launch ros2_control_demo_example_1 test_joint_trajectory_controller.launch.py
+
+   You can adjust the goals in `rrbot_joint_trajectory_publisher <bringup/config/rrbot_joint_trajectory_publisher.yaml>`__.
 
 Files used for this demos
 #########################
@@ -99,6 +169,10 @@ Files used for this demos
   + ``ros2_control`` tag: `rrbot.ros2_control.xacro <description/ros2_control/rrbot.ros2_control.xacro>`__
 
 - RViz configuration: `rrbot.rviz <description/rviz/rrbot.rviz>`__
+- Test nodes goals configuration:
+
+  + `rrbot_forward_position_publisher <bringup/config/rrbot_forward_position_publisher.yaml>`__
+  + `rrbot_joint_trajectory_publisher <bringup/config/rrbot_joint_trajectory_publisher.yaml>`__
 
 - Hardware interface plugin: `rrbot.cpp <hardware/rrbot.cpp>`__
 
@@ -107,3 +181,4 @@ Controllers from this demo
 ##########################
 - ``Joint State Broadcaster`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/joint_state_broadcaster/doc/userdoc.html>`__
 - ``Forward Command Controller`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/forward_command_controller/doc/userdoc.html>`__
+- ``Joint Trajectory Controller`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/joint_trajectory_controller/doc/userdoc.html>`__
