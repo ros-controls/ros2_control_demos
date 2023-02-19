@@ -69,7 +69,7 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
 
    .. code-block:: shell
 
-    ros2 topic pub /position_commands std_msgs/msg/Float64MultiArray "data:
+    ros2 topic pub /forward_position_controller/commands std_msgs/msg/Float64MultiArray "data:
     - 0.5
     - 0.5"
 
