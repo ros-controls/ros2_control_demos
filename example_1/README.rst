@@ -99,15 +99,39 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
 
    .. code-block:: shell
 
-    ros2 control load_controller position_trajectory_controller --set-state configured
+    ros2 control load_controller position_trajectory_controller
 
-   Note that the parameters are already set in `rrbot_controllers.yaml <bringup/config/rrbot_controllers.yaml>`__
-   but the controller was not loaded from the `launch file rrbot.launch.py <bringup/launch/rrbot.launch.py>`__ before.
-   You should get the following result
+   what should return ``Successfully loaded controller position_trajectory_controller``. Check the status
 
    .. code-block:: shell
 
-    Successfully loaded controller position_trajectory_controller into state active
+    ros2 control list_controllers
+
+   what shows you that the controller is loaded but unconfigured.
+
+   .. code-block:: shell
+
+    joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+    forward_position_controller[forward_command_controller/ForwardCommandController] active
+    position_trajectory_controller[joint_trajectory_controller/JointTrajectoryController] unconfigured
+
+   Configure the controller by setting it ``inactive`` by
+
+   .. code-block:: shell
+
+    ros2 control set_controller_state position_trajectory_controller inactive
+
+   what should give ``Successfully configured position_trajectory_controller``.
+   Note that the parameters are already set in `rrbot_controllers.yaml <bringup/config/rrbot_controllers.yaml>`__
+   but the controller was not loaded from the `launch file rrbot.launch.py <bringup/launch/rrbot.launch.py>`__ before.
+
+   As an alternative, you can load the controller directly in ``inactive``-state by means of the option for ``load_controller``
+
+   .. code-block:: shell
+
+    ros2 control load_controller position_trajectory_controller --set-state inactive
+
+   You should get the result ``Successfully loaded controller position_trajectory_controller into state inactive``.
 
    See if it loaded properly with
 
