@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef ROS2_CONTROL_DEMO_HARDWARE__DIFFBOT_SYSTEM_HPP_
-#define ROS2_CONTROL_DEMO_HARDWARE__DIFFBOT_SYSTEM_HPP_
+#ifndef ROS2_CONTROL_DEMO_EXAMPLE_2__DIFFBOT_SYSTEM_HPP_
+#define ROS2_CONTROL_DEMO_EXAMPLE_2__DIFFBOT_SYSTEM_HPP_
 
 #include <memory>
 #include <string>
@@ -29,38 +29,38 @@
 #include "rclcpp/time.hpp"
 #include "rclcpp_lifecycle/node_interfaces/lifecycle_node_interface.hpp"
 #include "rclcpp_lifecycle/state.hpp"
-#include "ros2_control_demo_hardware/visibility_control.h"
+#include "ros2_control_demo_example_2/visibility_control.h"
 
-namespace ros2_control_demo_hardware
+namespace ros2_control_demo_example_2
 {
 class DiffBotSystemHardware : public hardware_interface::SystemInterface
 {
 public:
   RCLCPP_SHARED_PTR_DEFINITIONS(DiffBotSystemHardware);
 
-  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
+  ROS2_CONTROL_DEMO_EXAMPLE_2_PUBLIC
   hardware_interface::CallbackReturn on_init(
     const hardware_interface::HardwareInfo & info) override;
 
-  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
+  ROS2_CONTROL_DEMO_EXAMPLE_2_PUBLIC
   std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
 
-  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
+  ROS2_CONTROL_DEMO_EXAMPLE_2_PUBLIC
   std::vector<hardware_interface::CommandInterface> export_command_interfaces() override;
 
-  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
+  ROS2_CONTROL_DEMO_EXAMPLE_2_PUBLIC
   hardware_interface::CallbackReturn on_activate(
     const rclcpp_lifecycle::State & previous_state) override;
 
-  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
+  ROS2_CONTROL_DEMO_EXAMPLE_2_PUBLIC
   hardware_interface::CallbackReturn on_deactivate(
     const rclcpp_lifecycle::State & previous_state) override;
 
-  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
+  ROS2_CONTROL_DEMO_EXAMPLE_2_PUBLIC
   hardware_interface::return_type read(
     const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
-  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
+  ROS2_CONTROL_DEMO_EXAMPLE_2_PUBLIC
   hardware_interface::return_type write(
     const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
@@ -78,6 +78,6 @@ private:
   double base_x_, base_y_, base_theta_;
 };
 
-}  // namespace ros2_control_demo_hardware
+}  // namespace ros2_control_demo_example_2
 
-#endif  // ROS2_CONTROL_DEMO_HARDWARE__DIFFBOT_SYSTEM_HPP_
+#endif  // ROS2_CONTROL_DEMO_EXAMPLE_2__DIFFBOT_SYSTEM_HPP_

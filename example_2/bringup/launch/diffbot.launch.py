@@ -28,7 +28,7 @@ def generate_launch_description():
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
             PathJoinSubstitution(
-                [FindPackageShare("diffbot_description"), "urdf", "diffbot.urdf.xacro"]
+                [FindPackageShare("ros2_control_demo_example_2"), "urdf", "diffbot.urdf.xacro"]
             ),
         ]
     )
@@ -36,13 +36,13 @@ def generate_launch_description():
 
     robot_controllers = PathJoinSubstitution(
         [
-            FindPackageShare("ros2_control_demo_bringup"),
+            FindPackageShare("ros2_control_demo_example_2"),
             "config",
             "diffbot_controllers.yaml",
         ]
     )
     rviz_config_file = PathJoinSubstitution(
-        [FindPackageShare("diffbot_description"), "config", "diffbot.rviz"]
+        [FindPackageShare("ros2_control_demo_example_2"), "rviz", "diffbot.rviz"]
     )
 
     control_node = Node(
