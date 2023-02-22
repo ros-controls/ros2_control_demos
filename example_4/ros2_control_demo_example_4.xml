@@ -1,0 +1,9 @@
+<library path="ros2_control_demo_example_4">
+  <class name="ros2_control_demo_example_4/RRBotSystemWithSensorHardware"
+         type="ros2_control_demo_example_4::RRBotSystemWithSensorHardware"
+         base_class_type="hardware_interface::SystemInterface">
+    <description>
+      The ros2_control RRbot example with an integrated sensor.
+    </description>
+  </class>
+</library>
