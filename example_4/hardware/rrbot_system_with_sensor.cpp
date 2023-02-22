@@ -16,7 +16,7 @@
 // Authors: Subhas Das, Denis Stogl
 //
 
-#include "ros2_control_demo_hardware/rrbot_system_with_sensor.hpp"
+#include "ros2_control_demo_example_4/rrbot_system_with_sensor.hpp"
 
 #include <chrono>
 #include <cmath>
@@ -27,7 +27,7 @@
 #include "hardware_interface/types/hardware_interface_type_values.hpp"
 #include "rclcpp/rclcpp.hpp"
 
-namespace ros2_control_demo_hardware
+namespace ros2_control_demo_example_4
 {
 hardware_interface::CallbackReturn RRBotSystemWithSensorHardware::on_init(
   const hardware_interface::HardwareInfo & info)
@@ -231,7 +231,7 @@ hardware_interface::return_type RRBotSystemWithSensorHardware::read(
     hw_sensor_states_[i] =
       static_cast<float>(rand_r(&seed)) / (static_cast<float>(RAND_MAX / hw_sensor_change_));
     RCLCPP_INFO(
-      rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Got state %e for interface %s!",
+      rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Got value %e for interface %s!",
       hw_sensor_states_[i], info_.sensors[0].state_interfaces[i].name.c_str());
   }
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Sensors successfully read!");
@@ -240,7 +240,7 @@ hardware_interface::return_type RRBotSystemWithSensorHardware::read(
   return hardware_interface::return_type::OK;
 }
 
-hardware_interface::return_type ros2_control_demo_hardware::RRBotSystemWithSensorHardware::write(
+hardware_interface::return_type ros2_control_demo_example_4::RRBotSystemWithSensorHardware::write(
   const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
@@ -259,9 +259,9 @@ hardware_interface::return_type ros2_control_demo_hardware::RRBotSystemWithSenso
   return hardware_interface::return_type::OK;
 }
 
-}  // namespace ros2_control_demo_hardware
+}  // namespace ros2_control_demo_example_4
 
 #include "pluginlib/class_list_macros.hpp"
 
 PLUGINLIB_EXPORT_CLASS(
-  ros2_control_demo_hardware::RRBotSystemWithSensorHardware, hardware_interface::SystemInterface)
+  ros2_control_demo_example_4::RRBotSystemWithSensorHardware, hardware_interface::SystemInterface)
