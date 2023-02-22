@@ -12,16 +12,13 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_desc
   <xacro:arg name="slowdown" default="2.0" />
 
   <!-- Import RRBot macro -->
-  <xacro:include filename="$(find rrbot_description)/urdf/rrbot_description.urdf.xacro" />
-
-  <!-- Import all Gazebo-customization elements, including Gazebo colors -->
-  <xacro:include filename="$(find rrbot_description)/gazebo/rrbot.gazebo.xacro" />
+  <xacro:include filename="$(find ros2_control_demo_example_6)/urdf/rrbot_description.urdf.xacro" />
 
   <!-- Import Rviz colors -->
-  <xacro:include filename="$(find rrbot_description)/gazebo/rrbot.materials.xacro" />
+  <xacro:include filename="$(find ros2_control_demo_example_6)/urdf/rrbot.materials.xacro" />
 
   <!-- Import RRBot ros2_control description -->
-  <xacro:include filename="$(find rrbot_description)/ros2_control/rrbot_modular_actuators.ros2_control.xacro" />
+  <xacro:include filename="$(find ros2_control_demo_example_6)/ros2_control/rrbot_modular_actuators.ros2_control.xacro" />
 
   <!-- Used for fixing robot -->
   <link name="world"/>
@@ -32,8 +29,6 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_desc
   <xacro:rrbot parent="world" prefix="$(arg prefix)">
     <origin xyz="0 0 0" rpy="0 0 0" />
   </xacro:rrbot>
-
-  <xacro:rrbot_gazebo prefix="$(arg prefix)" />
 
   <xacro:rrbot_modular_actuators
     name="RRBotModularJoint" prefix="$(arg prefix)"
