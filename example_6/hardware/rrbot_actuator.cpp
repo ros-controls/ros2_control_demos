@@ -16,7 +16,7 @@
 // Authors: Subhas Das, Denis Stogl
 //
 
-#include "ros2_control_demo_hardware/rrbot_actuator.hpp"
+#include "ros2_control_demo_example_6/rrbot_actuator.hpp"
 
 #include <chrono>
 #include <cmath>
@@ -28,7 +28,7 @@
 #include "hardware_interface/types/hardware_interface_type_values.hpp"
 #include "rclcpp/rclcpp.hpp"
 
-namespace ros2_control_demo_hardware
+namespace ros2_control_demo_example_6
 {
 hardware_interface::CallbackReturn RRBotModularJoint::on_init(
   const hardware_interface::HardwareInfo & info)
@@ -169,7 +169,7 @@ hardware_interface::return_type RRBotModularJoint::read(
   return hardware_interface::return_type::OK;
 }
 
-hardware_interface::return_type ros2_control_demo_hardware::RRBotModularJoint::write(
+hardware_interface::return_type ros2_control_demo_example_6::RRBotModularJoint::write(
   const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
@@ -186,9 +186,9 @@ hardware_interface::return_type ros2_control_demo_hardware::RRBotModularJoint::w
   return hardware_interface::return_type::OK;
 }
 
-}  // namespace ros2_control_demo_hardware
+}  // namespace ros2_control_demo_example_6
 
 #include "pluginlib/class_list_macros.hpp"
 
 PLUGINLIB_EXPORT_CLASS(
-  ros2_control_demo_hardware::RRBotModularJoint, hardware_interface::ActuatorInterface)
+  ros2_control_demo_example_6::RRBotModularJoint, hardware_interface::ActuatorInterface)
