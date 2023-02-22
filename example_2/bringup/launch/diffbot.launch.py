@@ -1,4 +1,4 @@
-# Copyright 2021 Stogl Robotics Consulting UG (haftungsbeschränkt)
+# Copyright 2020 ros2_control Development Team
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,7 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 
 from launch import LaunchDescription
 from launch.actions import RegisterEventHandler
@@ -29,11 +28,7 @@ def generate_launch_description():
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
             PathJoinSubstitution(
-                [
-                    FindPackageShare("ros2_control_demo_example_1"),
-                    "urdf",
-                    "rrbot.urdf.xacro",
-                ]
+                [FindPackageShare("ros2_control_demo_example_2"), "urdf", "diffbot.urdf.xacro"]
             ),
         ]
     )
@@ -41,13 +36,13 @@ def generate_launch_description():
 
     robot_controllers = PathJoinSubstitution(
         [
-            FindPackageShare("ros2_control_demo_example_1"),
+            FindPackageShare("ros2_control_demo_example_2"),
             "config",
-            "rrbot_controllers.yaml",
+            "diffbot_controllers.yaml",
         ]
     )
     rviz_config_file = PathJoinSubstitution(
-        [FindPackageShare("ros2_control_demo_example_1"), "rviz", "rrbot.rviz"]
+        [FindPackageShare("ros2_control_demo_example_2"), "rviz", "diffbot.rviz"]
     )
 
     control_node = Node(
@@ -61,6 +56,9 @@ def generate_launch_description():
         executable="robot_state_publisher",
         output="both",
         parameters=[robot_description],
+        remappings=[
+            ("/diff_drive_controller/cmd_vel_unstamped", "/cmd_vel"),
+        ],
     )
     rviz_node = Node(
         package="rviz2",
@@ -79,7 +77,7 @@ def generate_launch_description():
     robot_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["forward_position_controller", "-c", "/controller_manager"],
+        arguments=["diffbot_base_controller", "-c", "/controller_manager"],
     )
 
     # Delay rviz start after `joint_state_broadcaster`
