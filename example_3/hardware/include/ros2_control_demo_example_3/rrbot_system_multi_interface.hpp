@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef ROS2_CONTROL_DEMO_HARDWARE__RRBOT_SYSTEM_MULTI_INTERFACE_HPP_
-#define ROS2_CONTROL_DEMO_HARDWARE__RRBOT_SYSTEM_MULTI_INTERFACE_HPP_
+#ifndef ROS2_CONTROL_DEMO_EXAMPLE_3__RRBOT_SYSTEM_MULTI_INTERFACE_HPP_
+#define ROS2_CONTROL_DEMO_EXAMPLE_3__RRBOT_SYSTEM_MULTI_INTERFACE_HPP_
 
 #include <chrono>
 #include <cstdint>
@@ -31,43 +31,43 @@
 #include "rclcpp/time.hpp"
 #include "rclcpp_lifecycle/node_interfaces/lifecycle_node_interface.hpp"
 #include "rclcpp_lifecycle/state.hpp"
-#include "ros2_control_demo_hardware/visibility_control.h"
+#include "ros2_control_demo_example_3/visibility_control.h"
 
-namespace ros2_control_demo_hardware
+namespace ros2_control_demo_example_3
 {
 class RRBotSystemMultiInterfaceHardware : public hardware_interface::SystemInterface
 {
 public:
   RCLCPP_SHARED_PTR_DEFINITIONS(RRBotSystemMultiInterfaceHardware);
 
-  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
+  ROS2_CONTROL_DEMO_EXAMPLE_3_PUBLIC
   hardware_interface::CallbackReturn on_init(
     const hardware_interface::HardwareInfo & info) override;
 
-  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
+  ROS2_CONTROL_DEMO_EXAMPLE_3_PUBLIC
   std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
 
-  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
+  ROS2_CONTROL_DEMO_EXAMPLE_3_PUBLIC
   std::vector<hardware_interface::CommandInterface> export_command_interfaces() override;
 
-  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
+  ROS2_CONTROL_DEMO_EXAMPLE_3_PUBLIC
   hardware_interface::return_type prepare_command_mode_switch(
     const std::vector<std::string> & start_interfaces,
     const std::vector<std::string> & stop_interfaces) override;
 
-  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
+  ROS2_CONTROL_DEMO_EXAMPLE_3_PUBLIC
   hardware_interface::CallbackReturn on_activate(
     const rclcpp_lifecycle::State & previous_state) override;
 
-  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
+  ROS2_CONTROL_DEMO_EXAMPLE_3_PUBLIC
   hardware_interface::CallbackReturn on_deactivate(
     const rclcpp_lifecycle::State & previous_state) override;
 
-  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
+  ROS2_CONTROL_DEMO_EXAMPLE_3_PUBLIC
   hardware_interface::return_type read(
     const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
-  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
+  ROS2_CONTROL_DEMO_EXAMPLE_3_PUBLIC
   hardware_interface::return_type write(
     const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
@@ -99,5 +99,5 @@ private:
   std::vector<integration_level_t> control_level_;
 };
 
-}  // namespace ros2_control_demo_hardware
-#endif  // ROS2_CONTROL_DEMO_HARDWARE__RRBOT_SYSTEM_MULTI_INTERFACE_HPP_
+}  // namespace ros2_control_demo_example_3
+#endif  // ROS2_CONTROL_DEMO_EXAMPLE_3__RRBOT_SYSTEM_MULTI_INTERFACE_HPP_
