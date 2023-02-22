@@ -72,9 +72,6 @@ Check README file inside each example folder for detailed description.
 *DiffBot*, or ''Differential Mobile Robot'', is a simple mobile base with differential drive.
 The robot is basically a box moving according to differential drive kinematics.
 
-##### Example 4: "Industrial robot with integrated sensor"
-*RRBot* - or ''Revolute-Revolute Manipulator Robot'' - a simple position controlled robot
-with an integrated sensor.
 
 ##### Example 3
 
@@ -95,6 +92,14 @@ These are some quick hints, especially for those coming from a ROS1 control back
 * In ros2_control, all parameters for the driver are specified in the URDF.
   The ros2_control framework uses the **<ros2_control>** tag in the URDF.
 * Joint names in <ros2_control> tags in the URDF must be compatible with the controller's configuration.
+
+
+##### Example 4: "Industrial robot with integrated sensor"
+*RRBot* - or ''Revolute-Revolute Manipulator Robot'' - a simple position controlled robot with an integrated sensor.
+
+
+##### Example 5: "Industrial Robots with externally connected sensor"
+*RRBot* - or ''Revolute-Revolute Manipulator Robot'' - a simple position controlled robot with an externally connected sensor.
 
 
 ## Build status
@@ -254,41 +259,6 @@ Available launch file options:
 - **TBA**
 
 
-
-
-### Example 4: "Industrial Robots with externally connected sensor"
-
-- Launch file: [rrbot_system_with_external_sensor.launch.py](ros2_control_demo_bringup/launch/rrbot_system_with_external_sensor.launch.py)
-- Controllers: [rrbot_with_external_sensor_controllers.yaml](ros2_control_demo_bringup/config/rrbot_with_external_sensor_controllers.yaml)
-- URDF: [rrbot_with_external_sensor_controllers.urdf.xacro](ros2_control_demo_description/rrbot_description/urdf/rrbot_with_external_sensor_controllers.urdf.xacro)
-- ros2_control URDF:
-  - robot: [rrbot_system_position_only.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/rrbot_system_position_only.ros2_control.xacro)
-  - sensor: [external_rrbot_force_torque_sensor.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/external_rrbot_force_torque_sensor.ros2_control.xacro)
-
-- Command interfaces:
-  - joint1/position
-  - joint2/position
-- State interfaces:
-  - joint1/position
-  - joint2/position
-  - tcp_fts_sensor/force.x
-  - tcp_fts_sensor/force.y
-  - tcp_fts_sensor/force.z
-  - tcp_fts_sensor/torque.x
-  - tcp_fts_sensor/torque.y
-  - tcp_fts_sensor/torque.z
-
-Available controllers:
-- `forward_position_controller[forward_command_controller/ForwardCommandController]`
-- `fts_broadcaster[force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster]`
-- `joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]`
-
-Commanding the robot: see the commands below.
-
-Accessing Wrench data from 2D FTS:
-```
-ros2 topic echo /fts_broadcaster/wrench
-```
 
 
 ### Example 5: "Modular Robots with separate communication to each actuator"

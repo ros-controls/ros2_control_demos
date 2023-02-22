@@ -16,7 +16,7 @@
 // Authors: Subhas Das, Denis Stogl
 //
 
-#include "ros2_control_demo_hardware/external_rrbot_force_torque_sensor.hpp"
+#include "ros2_control_demo_example_5/external_rrbot_force_torque_sensor.hpp"
 
 #include <chrono>
 #include <cmath>
@@ -27,7 +27,7 @@
 #include "hardware_interface/types/hardware_interface_type_values.hpp"
 #include "rclcpp/rclcpp.hpp"
 
-namespace ros2_control_demo_hardware
+namespace ros2_control_demo_example_5
 {
 hardware_interface::CallbackReturn ExternalRRBotForceTorqueSensorHardware::on_init(
   const hardware_interface::HardwareInfo & info)
@@ -133,10 +133,10 @@ hardware_interface::return_type ExternalRRBotForceTorqueSensorHardware::read(
   return hardware_interface::return_type::OK;
 }
 
-}  // namespace ros2_control_demo_hardware
+}  // namespace ros2_control_demo_example_5
 
 #include "pluginlib/class_list_macros.hpp"
 
 PLUGINLIB_EXPORT_CLASS(
-  ros2_control_demo_hardware::ExternalRRBotForceTorqueSensorHardware,
+  ros2_control_demo_example_5::ExternalRRBotForceTorqueSensorHardware,
   hardware_interface::SensorInterface)
