@@ -92,7 +92,7 @@ The robot is basically a box moving according to differential drive kinematics.
 The example shows how to implement robot hardware with separate communication to each actuator.
 
 
-##### Example 7
+##### Example 8
 *RRBot* - or ''Revolute-Revolute Manipulator Robot'' - with an exposed transmission interface
 
 
