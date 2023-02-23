@@ -59,7 +59,7 @@ install(
   DESTINATION include
 )
 install(
-  DIRECTORY description/launch description/ros2_control description/urdf description/rviz description/meshes
+  DIRECTORY description/launch description/ros2_control description/urdf description/rviz
   DESTINATION share/${PROJECT_NAME}
 )
 install(
