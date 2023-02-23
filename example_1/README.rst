@@ -15,11 +15,21 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
 
    **NOTE**: Getting the following output in terminal is OK: ``Warning: Invalid frame ID "odom" passed to canTransform argument target_frame - frame does not exist``.
    This happens because ``joint_state_publisher_gui`` node need some time to start.
-   The ``joint_state_publisher_gui`` provides a GUI to change the configuration for rrbot. It is immediately displayed in *RViz*.
+
+   The ``joint_state_publisher_gui`` provides a GUI to change the configuration for *RRbot*. It is immediately displayed in *RViz*.
 
    .. image:: doc/rrbot.png
     :width: 400
     :alt: Revolute-Revolute Manipulator Robot
+
+   The *RViz* setup can be recreated following these steps:
+
+   - The robot models can be visualized using ``RobotModel`` display using ``/robot_description`` topic.
+   - Or you can simply open the configuration from ``description/rviz`` folder manually or directly by executing
+
+   .. code-block:: shell
+
+    rviz2 --display-config `ros2 pkg prefix ros2_control_demo_example_1`/share/ros2_control_demo_example_1/rviz/rrbot.rviz
 
 
 2. To start *RRBot* example open a terminal, source your ROS2-workspace and execute its launch file with

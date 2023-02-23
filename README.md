@@ -43,17 +43,15 @@ The important files to check in each example are:
 The concepts in this package are demonstrated on the examples of *RRBot* and *DiffBot*.
 Those two world-known imaginary robots are trivial simulations to demonstrate and test `ros2_control` concepts.
 
-
 ## What you can Find in This Repository and Example Description
 
 This repository demonstrates the following `ros2_control` concepts:
 
-* Creating a `*HardwareInterface` for a System, Sensor, and Actuator.
+* Creating a `HardwareInterface` for a System, Sensor, and Actuator.
 * Creating a robot description in the form of URDF files.
 * Loading the configuration and starting a robot using launch files.
 * Control of a differential mobile base *DiffBot*.
 * Control of two joints of *RRBot*.
-* Using simulated robots and starting `ros2_control` with Gazebo simulator.
 * Implementing a controller switching strategy for a robot.
 * Using joint limits and transmission concepts in `ros2_control`.
 
@@ -63,37 +61,36 @@ This repository demonstrates the following `ros2_control` concepts:
 Check README file inside each example folder for detailed description.
 
 
-##### Example 1
+##### Example 1: RRBot
 
-*RRBot* - or ''Revolute-Revolute Manipulator Robot'' - a simple position controlled robot with one hardware interface.
+*RRBot* - or ''Revolute-Revolute Manipulator Robot'' - a simple position controlled robot with one hardware interface. This example also demonstrates the switching between different controllers.
 
 
-##### Example 2
+##### Example 2: Diffbot
 
 *DiffBot*, or ''Differential Mobile Robot'', is a simple mobile base with differential drive.
 The robot is basically a box moving according to differential drive kinematics.
 
 
-##### Example 3
+##### Example 3: "RRBot with multiple interfaces"
 
-*RRBot* - or ''Revolute-Revolute Manipulator Robot'' with multiple interfaces
+*RRBot* with multiple interfaces.
 
 
 ##### Example 4: "Industrial robot with integrated sensor"
-*RRBot* - or ''Revolute-Revolute Manipulator Robot'' - a simple position controlled robot with an integrated sensor.
+*RRBot* with an integrated sensor.
 
 
 ##### Example 5: "Industrial Robots with externally connected sensor"
-*RRBot* - or ''Revolute-Revolute Manipulator Robot'' - a simple position controlled robot with an externally connected sensor.
+*RRBot* with an externally connected sensor.
 
 
 ##### Example 6: "Modular Robots with separate communication to each actuator"
-
 The example shows how to implement robot hardware with separate communication to each actuator.
 
 
 ##### Example 8: Using transmissions
-*RRBot* - or ''Revolute-Revolute Manipulator Robot'' - with an exposed transmission interface
+*RRBot* with an exposed transmission interface.
 
 
 ## Quick Hints
@@ -145,7 +142,7 @@ git clone https://github.com/ros-controls/ros2_controllers
 git clone https://github.com/ros-controls/ros2_control_demos
 ```
 
-**NOTE**: `ros2_control` and `ros2_controllers` packages are released for foxy and can be installed using a package manager.
+**NOTE**: `ros2_control` and `ros2_controllers` packages are released and can be installed using a package manager.
 We provide officially released and maintained debian packages, which can easily be installed via aptitude.
 However, there might be cases in which not-yet released demos or features are only available through a source build in your own workspace.
 
@@ -161,110 +158,13 @@ However, there might be cases in which not-yet released demos or features are on
 
 * Do not forget to source `setup.bash` from the `install` folder!
 
-
 # Getting Started with demos
 
-This repository provides the following simple example robots: a 2 degrees of freedom manipulator - *RRBot* - and a mobile differential drive base - *DiffBot*.
-The first two examples demonstrate the minimal setup for those two robots to run.
-Later examples show more details about `ros2_control`-concepts and some more advanced use-cases.
 
 # Examples of ros2_control concepts
 
-Each of the described example cases from the [roadmap](https://github.com/ros-controls/roadmap/blob/master/design_drafts/components_architecture_and_urdf_examples.md) has its own launch and URDF file.
-
-
-### General notes about examples
-
-1. Each example is started with a single launch file which starts up the robot hardware, loads controller configurations and it also opens `RViz`.
-
-   The `RViz` setup can be recreated following these steps:
-
-   - The robot models can be visualized using `RobotModel` display using `/robot_description` topic.
-   - Or you can simply open the configuration from `rviz` folder in `rrbot_description` or `diffbot_description` package manually or directly by executing:
-   ```
-   rviz2 --display-config `ros2 pkg prefix rrbot_description`/share/rrbot_description/config/rrbot.rviz
-   ```
-
-1. To check that robot descriptions are working properly use following launch commands:
-   ```
-   ros2 launch rrbot_description view_robot.launch.py
-   ```
-   Optional arguments for specific example (the robot visualization will be the same for all examples):
-   ```
-   description_file:=rrbot_system_multi_interface.urdf.xacro
-   ```
-
-**NOTE**: Getting the following output in terminal is OK: `Warning: Invalid frame ID "odom" passed to canTransform argument target_frame - frame does not exist`.
-          This happens because `joint_state_publisher_gui` node need some time to start.
-
-
-1. To start an example open a terminal, source your ROS2-workspace and execute a launch file with:
-   ```
-   ros2 launch ros2_control_demo_bringup <example_launch_file>
-   ```
-
-1. To stop RViz2 from auto-start use `start_rviz:=false` launch file argument.
-
-1. To check if the hardware interface loaded properly, open another terminal and execute:
-   ```
-   ros2 control list_hardware_interfaces
-   ```
-   You should get something like:
-   ```
-   command interfaces
-         joint1/position [unclaimed]
-         joint2/position [unclaimed]
-   state interfaces
-         joint1/position
-         joint2/position
-   ```
-
-1. Check which controllers are running using:
-   ```
-   ros2 control list_controllers
-   ```
-   You should get something like:
-   ```
-   forward_position_controller[forward_command_controller/ForwardCommandController] unconfigured
-   joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
-   ```
-
-1. Check [Controllers and moving hardware](#controllers-and-moving-hardware) section to move *RRBot*.
-
-
-*NOTE:* The examples reuse the same, configurable base-launch file [`rrbot_base.launch.py`](ros2_control_demo_bringup/launch/rrbot_base.launch.py).
-This also demonstrates how launch files are usually reused for different scenarios when working with `ros2_control`.
-
-
-### Example 1: "Industrial Robots with only one interface"
-
-Files:
-  - Launch file: [rrbot_system_position_only.launch.py](ros2_control_demo_bringup/launch/rrbot_system_position_only.launch.py)
-  - Controllers yaml: [rrbot_controllers.yaml](ros2_control_demo_bringup/config/rrbot_controllers.yaml)
-  - URDF:  [rrbot_system_position_only.urdf.xacro](ros2_control_demos/ros2_control_demo_description/rrbot_description/urdf/rrbot_system_position_only.urdf.xacro)
-  - `ros2_control` URDF tag: [rrbot_system_position_only.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/rrbot_system_position_only.ros2_control.xacro)
-
-Interfaces:
-  - Command interfaces:
-    - joint1/position
-    - joint2/position
-  - State interfaces:
-    - joint1/position
-    - joint2/position
-
-Available controllers:
-  - `joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]`
-  - `forward_position_controller[forward_command_controller/ForwardCommandController]` (position)
-
-Moving the robot:
-  - see below description of `forward_position_controller`
 
 Available launch file options:
   - `use_fake_hardware:=true` - start `FakeSystem` instead of hardware.
     This is a simple simulation that mimics joint command to their states.
     This is useful to test *ros2_control* integration and controllers without physical hardware.
-
-
-### Example 1-Sim: "Industrial Robots with only one interface" (Gazebo simulation)
-
-- **TBA**
