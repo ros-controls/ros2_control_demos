@@ -6,6 +6,7 @@
   <description>Demo package of `ros2_control` hardware for RRbot with integrated sensor.</description>
 
   <maintainer email="denis@stogl.de">Denis Štogl</maintainer>
+  <maintainer email="bence.magyar.robotics@gmail.com">Bence Magyar</maintainer>
   <maintainer email="christoph.froehlich@ait.ac.at">Christoph Froehlich</maintainer>
 
   <license>Apache-2.0</license>
