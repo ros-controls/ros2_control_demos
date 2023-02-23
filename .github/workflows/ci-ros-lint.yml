@@ -18,11 +18,13 @@ jobs:
         distribution: rolling
         linter: ${{ matrix.linter }}
         package-name:
-          diffbot_description
-          ros2_control_demo_bringup
-          ros2_control_demo_hardware
-          rrbot_description
-
+          ros2_control_demo_example_1
+          ros2_control_demo_example_2
+          ros2_control_demo_example_3
+          ros2_control_demo_example_4
+          ros2_control_demo_example_5
+          ros2_control_demo_example_6
+          ros2_control_demo_example_8
 
   ament_lint_100:
     name: ament_${{ matrix.linter }}
@@ -40,7 +42,10 @@ jobs:
         linter: cpplint
         arguments: "--linelength=100 --filter=-whitespace/newline"
         package-name:
-          diffbot_description
-          ros2_control_demo_bringup
-          ros2_control_demo_hardware
-          rrbot_description
+          ros2_control_demo_example_1
+          ros2_control_demo_example_2
+          ros2_control_demo_example_3
+          ros2_control_demo_example_4
+          ros2_control_demo_example_5
+          ros2_control_demo_example_6
+          ros2_control_demo_example_8
