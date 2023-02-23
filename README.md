@@ -158,8 +158,6 @@ However, there might be cases in which not-yet released demos or features are on
 
 * Do not forget to source `setup.bash` from the `install` folder!
 
-# Getting Started with demos
-
 
 # Examples of ros2_control concepts
 

@@ -1,30 +1,23 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <xacro:macro name="rrbot_system_multi_interface" params="name prefix use_gazebo:=^|false use_fake_hardware:=^|true mock_sensor_commands:=^|false slowdown:=2.0">
+  <xacro:macro name="rrbot_system_multi_interface" params="name prefix use_fake_hardware:=^|true mock_sensor_commands:=^|false slowdown:=2.0">
 
     <ros2_control name="${name}" type="system">
 
-      <xacro:if value="$(arg use_gazebo)">
-        <hardware>
-          <plugin>gazebo_ros2_control/GazeboSystem</plugin>
-        </hardware>
-      </xacro:if>
-      <xacro:unless value="$(arg use_gazebo)">
-        <hardware>
-          <xacro:if value="${use_fake_hardware}">
-            <plugin>mock_components/GenericSystem</plugin>
-            <param name="mock_sensor_commands">${mock_sensor_commands}</param>
-            <param name="state_following_offset">0.0</param>
-          </xacro:if>
-          <xacro:unless value="${use_fake_hardware}">
-            <plugin>ros2_control_demo_example_3/RRBotSystemMultiInterfaceHardware</plugin>
-            <param name="example_param_hw_start_duration_sec">0.0</param>
-            <param name="example_param_hw_stop_duration_sec">3.0</param>
-            <param name="example_param_hw_slowdown">${slowdown}</param>
-          </xacro:unless>
-        </hardware>
-      </xacro:unless>
+      <hardware>
+        <xacro:if value="${use_fake_hardware}">
+          <plugin>mock_components/GenericSystem</plugin>
+          <param name="mock_sensor_commands">${mock_sensor_commands}</param>
+          <param name="state_following_offset">0.0</param>
+        </xacro:if>
+        <xacro:unless value="${use_fake_hardware}">
+          <plugin>ros2_control_demo_example_3/RRBotSystemMultiInterfaceHardware</plugin>
+          <param name="example_param_hw_start_duration_sec">0.0</param>
+          <param name="example_param_hw_stop_duration_sec">3.0</param>
+          <param name="example_param_hw_slowdown">${slowdown}</param>
+        </xacro:unless>
+      </hardware>
 
       <joint name="${prefix}joint1">
         <command_interface name="position">
