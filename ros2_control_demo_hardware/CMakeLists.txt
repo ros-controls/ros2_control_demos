@@ -16,6 +16,7 @@ find_package(hardware_interface REQUIRED)
 find_package(pluginlib REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
+find_package(transmission_interface REQUIRED)
 
 ## COMPILE
 add_library(
@@ -25,6 +26,7 @@ add_library(
   src/rrbot_system_position_only.cpp
   src/rrbot_system_multi_interface.cpp
   src/rrbot_system_with_sensor.cpp
+  src/rrbot_transmissions_system_position_only.cpp
   src/rrbot_actuator.cpp
   src/external_rrbot_force_torque_sensor.cpp
 )
