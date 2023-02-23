@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "ros2_control_demo_hardware/rrbot_transmissions_system_position_only.hpp"
+#include "ros2_control_demo_example_8/rrbot_transmissions_system_position_only.hpp"
 
 #include <chrono>
 #include <cmath>
@@ -29,7 +29,7 @@
 #include "transmission_interface/transmission.hpp"
 #include "transmission_interface/transmission_interface_exception.hpp"
 
-namespace ros2_control_demo_hardware
+namespace ros2_control_demo_example_8
 {
 
 constexpr double kNaN = std::numeric_limits<double>::quiet_NaN();
@@ -334,10 +334,10 @@ RRBotTransmissionsSystemPositionOnlyHardware::InterfaceData::InterfaceData(const
 {
 }
 
-}  // namespace ros2_control_demo_hardware
+}  // namespace ros2_control_demo_example_8
 
 #include "pluginlib/class_list_macros.hpp"
 
 PLUGINLIB_EXPORT_CLASS(
-  ros2_control_demo_hardware::RRBotTransmissionsSystemPositionOnlyHardware,
+  ros2_control_demo_example_8::RRBotTransmissionsSystemPositionOnlyHardware,
   hardware_interface::SystemInterface)
