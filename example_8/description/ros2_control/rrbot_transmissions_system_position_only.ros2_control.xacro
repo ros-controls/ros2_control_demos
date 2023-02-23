@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="rrbot_transmissions_system_position_only" params="name prefix slowdown:=2.0">
+
+    <ros2_control name="${name}" type="system">
+
+      <hardware>
+        <plugin>ros2_control_demo_example_8/RRBotTransmissionsSystemPositionOnlyHardware</plugin>
+        <param name="actuator_slowdown">${slowdown}</param>
+      </hardware>
+
+      <joint name="${prefix}joint1">
+        <command_interface name="position">
+          <param name="min">-1</param>
+          <param name="max">1</param>
+        </command_interface>
+        <state_interface name="position"/>
+      </joint>
+
+      <joint name="${prefix}joint2">
+        <command_interface name="position">
+          <param name="min">-1</param>
+          <param name="max">1</param>
+        </command_interface>
+        <state_interface name="position"/>
+      </joint>
+
+      <transmission name="transmission1">
+        <plugin>transmission_interface/SimpleTransmission</plugin>
+        <actuator name="actuator1" role="actuator1"/>
+        <joint name="joint1" role="joint1">
+          <mechanical_reduction>2.0</mechanical_reduction>
+          <offset>0.0</offset>
+        </joint>
+      </transmission>
+
+      <transmission name="transmission2">
+        <plugin>transmission_interface/SimpleTransmission</plugin>
+        <actuator name="actuator2" role="actuator2"/>
+        <joint name="joint2" role="joint2">
+          <mechanical_reduction>4.0</mechanical_reduction>
+          <offset>0.0</offset>
+        </joint>
+      </transmission>
+    </ros2_control>
+
+  </xacro:macro>
+
+</robot>
