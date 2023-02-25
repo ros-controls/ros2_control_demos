@@ -68,7 +68,7 @@ generating random sensor readings.
 
 5. If you get output from above you can send commands to *Forward Command Controller*, either:
 
-   #. Manually using ros2 cli interface.
+   #. Manually using ROS 2 CLI interface.
 
       .. code-block:: shell
 

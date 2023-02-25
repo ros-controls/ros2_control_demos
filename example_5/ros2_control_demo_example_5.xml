@@ -10,7 +10,7 @@
          type="ros2_control_demo_example_5::RRBotSystemPositionOnlyHardware"
          base_class_type="hardware_interface::SystemInterface">
     <description>
-      The ROS2 Control minimal robot protocol. This is example for start porting the robot from ROS 1.
+      The ros2_control RRbot example using a system hardware interface-type.
     </description>
   </class>
 </library>

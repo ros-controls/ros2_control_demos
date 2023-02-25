@@ -61,7 +61,7 @@ In this example, both joints use an exposed transmission interface.
 
 5. If you get output from above you can send commands to *Forward Command Controller*, either:
 
-   a. Manually using ros2 cli interface:
+   a. Manually using ROS 2 CLI interface:
 
    .. code-block:: shell
 

@@ -67,7 +67,7 @@ The *DiffBot* URDF files can be found in ``description/urdf`` folder.
     diffbot_base_controller[diff_drive_controller/DiffDriveController] active
     joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
 
-5. If everything is fine, now you can send a command to *Diff Drive Controller* using ros2 cli interface:
+5. If everything is fine, now you can send a command to *Diff Drive Controller* using ROS 2 CLI interface:
 
    .. code-block:: shell
 
