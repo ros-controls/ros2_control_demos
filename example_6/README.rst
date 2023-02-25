@@ -22,7 +22,7 @@ is implemented with a hardware interface of type ``hardware_interface::ActuatorI
 
    .. code-block:: shell
 
-    ros2 launch ros2_control_demo_example_6 rrbot.launch.py
+    ros2 launch ros2_control_demo_example_6 rrbot_modular_actuators.launch.py
 
    The launch file loads and starts the robot hardware, controllers and opens *RViz*.
    In starting terminal you will see a lot of output from the hardware implementation showing its internal states.
