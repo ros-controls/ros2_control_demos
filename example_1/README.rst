@@ -13,8 +13,10 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
 
     ros2 launch ros2_control_demo_example_1 view_robot.launch.py
 
-   **NOTE**: Getting the following output in terminal is OK: ``Warning: Invalid frame ID "odom" passed to canTransform argument target_frame - frame does not exist``.
-   This happens because ``joint_state_publisher_gui`` node need some time to start.
+   .. note::
+
+     Getting the following output in terminal is OK: ``Warning: Invalid frame ID "odom" passed to canTransform argument target_frame - frame does not exist``.
+     This happens because ``joint_state_publisher_gui`` node need some time to start.
 
    The ``joint_state_publisher_gui`` provides a GUI to change the configuration for *RRbot*. It is immediately displayed in *RViz*.
 
@@ -132,8 +134,11 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
     ros2 control set_controller_state position_trajectory_controller inactive
 
    what should give ``Successfully configured position_trajectory_controller``.
-   Note that the parameters are already set in `rrbot_controllers.yaml <bringup/config/rrbot_controllers.yaml>`__
-   but the controller was not loaded from the `launch file rrbot.launch.py <bringup/launch/rrbot.launch.py>`__ before.
+
+   .. note::
+
+     The parameters are already set in `rrbot_controllers.yaml <bringup/config/rrbot_controllers.yaml>`__
+     but the controller was not loaded from the `launch file rrbot.launch.py <bringup/launch/rrbot.launch.py>`__ before.
 
    As an alternative, you can load the controller directly in ``inactive``-state by means of the option for ``load_controller``
 

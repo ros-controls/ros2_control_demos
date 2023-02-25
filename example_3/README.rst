@@ -11,9 +11,10 @@ The two illegal controllers demonstrate how hardware interface declines faulty c
 
     ros2 launch ros2_control_demo_example_3 view_robot.launch.py
 
-   **NOTE**: Getting the following output in terminal is OK: ``Warning: Invalid frame ID "odom" passed to canTransform argument target_frame - frame does not exist``.
-   This happens because ``joint_state_publisher_gui`` node need some time to start.
-   The ``joint_state_publisher_gui`` provides a GUI to generate  a random configuration for rrbot. It is immediately displayed in *RViz*.
+   .. note::
+    Getting the following output in terminal is OK: ``Warning: Invalid frame ID "odom" passed to canTransform argument target_frame - frame does not exist``.
+    This happens because ``joint_state_publisher_gui`` node need some time to start.
+    The ``joint_state_publisher_gui`` provides a GUI to generate  a random configuration for rrbot. It is immediately displayed in *RViz*.
 
 
 2. To start *RRBot* example open a terminal, source your ROS2-workspace and execute its launch file with
