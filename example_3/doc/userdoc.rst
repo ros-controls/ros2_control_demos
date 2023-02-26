@@ -1,3 +1,5 @@
+.. _ros2_control_demos_example_3_userdoc:
+
 ************************************************
 Example 3: Robots with multiple interfaces
 ************************************************

@@ -1,3 +1,5 @@
+.. _ros2_control_demos_example_2_userdoc:
+
 *********
 DiffBot
 *********
@@ -16,7 +18,7 @@ The *DiffBot* URDF files can be found in ``description/urdf`` folder.
     Getting the following output in terminal is OK: ``Warning: Invalid frame ID "odom" passed to canTransform argument target_frame - frame does not exist``.
     This happens because ``joint_state_publisher_gui`` node need some time to start.
 
-   .. image:: doc/diffbot.png
+   .. image:: diffbot.png
     :width: 400
     :alt: Differential Mobile Robot
 

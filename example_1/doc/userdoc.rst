@@ -1,6 +1,7 @@
-****************
+.. _ros2_control_demos_example_1_userdoc:
+
 Example 1: RRBot
-****************
+=====================
 
 
 *RRBot*, or ''Revolute-Revolute Manipulator Robot'', is a simple 3-linkage, 2-joint arm that we will use to demonstrate various features.
@@ -20,7 +21,7 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
 
    The ``joint_state_publisher_gui`` provides a GUI to change the configuration for *RRbot*. It is immediately displayed in *RViz*.
 
-   .. image:: doc/rrbot.png
+   .. image:: rrbot.png
     :width: 400
     :alt: Revolute-Revolute Manipulator Robot
 
@@ -198,7 +199,7 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
    You can adjust the goals in `rrbot_joint_trajectory_publisher <bringup/config/rrbot_joint_trajectory_publisher.yaml>`__.
 
 Files used for this demos
-#########################
+-------------------------
 
 - Launch file: `rrbot.launch.py <bringup/launch/rrbot.launch.py>`__
 - Controllers yaml: `rrbot_controllers.yaml <bringup/config/rrbot_controllers.yaml>`__
@@ -217,7 +218,7 @@ Files used for this demos
 
 
 Controllers from this demo
-##########################
+--------------------------
 - ``Joint State Broadcaster`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/joint_state_broadcaster/doc/userdoc.html>`__
 - ``Forward Command Controller`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/forward_command_controller/doc/userdoc.html>`__
 - ``Joint Trajectory Controller`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/joint_trajectory_controller/doc/userdoc.html>`__

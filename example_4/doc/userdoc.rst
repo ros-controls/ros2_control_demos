@@ -1,16 +1,17 @@
-*************************************************************
-Example 5: Industrial robot with externally connected sensor
-*************************************************************
+.. _ros2_control_demos_example_4_userdoc:
 
-This example shows how an externally connected sensor can be accessed via a hardware interface of
-type ``hardware_interface::SensorInterface``: A 3D Force-Torque Sensor (FTS) is simulated by
-generating random sensor readings.
+***************************************************
+Example 4: Industrial robot with integrated sensor
+***************************************************
+
+This example shows how a sensor can be integrated in a hardware interface of system-type:
+A 2D Force-Torque Sensor (FTS) is simulated by generating random sensor readings.
 
 1. To check that *RRBot* descriptions are working properly use following launch commands
 
    .. code-block:: shell
 
-    ros2 launch ros2_control_demo_example_5 view_robot.launch.py
+    ros2 launch ros2_control_demo_example_4 view_robot.launch.py
 
    .. note::
 
@@ -23,7 +24,7 @@ generating random sensor readings.
 
    .. code-block:: shell
 
-    ros2 launch ros2_control_demo_example_5 rrbot_system_with_external_sensor.launch.py
+    ros2 launch ros2_control_demo_example_4 rrbot_system_with_sensor.launch.py
 
    The launch file loads and starts the robot hardware, controllers and opens *RViz*.
    In starting terminal you will see a lot of output from the hardware implementation showing its internal states.
@@ -40,17 +41,14 @@ generating random sensor readings.
 
    .. code-block:: shell
 
-      command interfaces
-        joint1/position [available] [claimed]
-        joint2/position [available] [claimed]
-      state interfaces
-        joint1/position
-        joint2/position
-        tcp_fts_sensor/force.x
-        tcp_fts_sensor/force.y
-        tcp_fts_sensor/force.z
-        tcp_fts_sensor/torque.x
-        tcp_fts_sensor/torque.y
+    command interfaces
+            joint1/position [available] [claimed]
+            joint2/position [available] [claimed]
+    state interfaces
+            joint1/position
+            joint2/position
+            tcp_fts_sensor/force.x
+            tcp_fts_sensor/torque.z
 
    Marker ``[claimed]`` by command interfaces means that a controller has access to command *RRBot*.
 
@@ -62,9 +60,9 @@ generating random sensor readings.
 
    .. code-block:: shell
 
-    forward_position_controller[forward_command_controller/ForwardCommandController] active
-    fts_broadcaster[force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster] active
     joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+    fts_broadcaster     [force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster] active
+    forward_position_controller[forward_command_controller/ForwardCommandController] active
 
 5. If you get output from above you can send commands to *Forward Command Controller*, either:
 
@@ -80,15 +78,15 @@ generating random sensor readings.
 
       .. code-block:: shell
 
-         ros2 launch ros2_control_demo_example_5 test_forward_position_controller.launch.py
+         ros2 launch ros2_control_demo_example_4 test_forward_position_controller.launch.py
 
    You should now see orange and yellow blocks moving in *RViz*.
    Also, you should see changing states in the terminal where launch file is started, e.g.
 
    .. code-block:: shell
 
-    [RRBotSystemPositionOnlyHardware]: Got command 0.50000 for joint 0!
-    [RRBotSystemPositionOnlyHardware]: Got command 0.50000 for joint 1!
+    [RRBotSystemWithSensorHardware]: Got command 0.50000 for joint 0!
+    [RRBotSystemWithSensorHardware]: Got command 0.50000 for joint 1!
 
 6. Access wrench data from 2D FTS via
 
@@ -108,35 +106,30 @@ generating random sensor readings.
       frame_id: tool_link
     wrench:
       force:
-        x: 1.2126582860946655
-        y: 2.3202226161956787
-        z: 3.4302282333374023
+        x: 2.946532964706421
+        y: .nan
+        z: .nan
       torque:
-        x: 4.540233612060547
-        y: 0.647800624370575
-        z: 1.7602499723434448
+        x: .nan
+        y: .nan
+        z: 4.0540995597839355
 
-   Wrench data are also visualized in *RViz*:
+   .. warning::
+    Wrench messages are not displayed properly in *RViz* as NaN values are not handled in *RViz* and FTS Broadcaster may send NaN values.
 
-   .. image:: doc/rrbot_wrench.png
-    :width: 400
-    :alt: Revolute-Revolute Manipulator Robot with wrench visualization
 
-Files used for this demos
+Files used for this demo
 #########################
 
-- Launch file: `rrbot_system_with_external_sensor.launch.py <https://github.com/ros-controls/ros2_control_demos/example_5/bringup/launch/rrbot_system_with_external_sensor.launch.py>`__
-- Controllers yaml: `rrbot_with_external_sensor_controllers.yaml <https://github.com/ros-controls/ros2_control_demos/example_5/bringup/config/rrbot_with_external_sensor_controllers.yaml>`__
-- URDF: `rrbot_with_external_sensor_controllers.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/example_5/description/urdf/rrbot_with_external_sensor_controllers.urdf.xacro>`__
+- Launch file: `rrbot_system_with_sensor.launch.py <https://github.com/ros-controls/ros2_control_demos/example_4/bringup/launch/rrbot_system_with_sensor.launch.py>`__
+- Controllers yaml: `rrbot_with_sensor_controllers.yaml <https://github.com/ros-controls/ros2_control_demos/example_4/bringup/config/rrbot_with_sensor_controllers.yaml>`__
+- URDF: `rrbot_system_with_sensor.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/example_4/description/urdf/rrbot_system_with_sensor.urdf.xacro>`__
 
-  + ``ros2_control`` robot: `rrbot_system_position_only.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/example_5/description/ros2_control/rrbot_system_position_only.ros2_control.xacro>`__
-  + ``ros2_control`` sensor: `external_rrbot_force_torque_sensor.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/example_5/description/ros2_control/external_rrbot_force_torque_sensor.ros2_control.xacro>`__
+  + ``ros2_control`` URDF tag: `rrbot_system_with_sensor.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/example_4/description/ros2_control/rrbot_system_with_sensor.ros2_control.xacro>`__
 
 - RViz configuration: `rrbot.rviz <https://github.com/ros-controls/ros2_control_demos/example_4/description/rviz/rrbot.rviz>`__
-- Hardware interface plugin:
+- Hardware interface plugin: `rrbot_system_with_sensor.cpp <https://github.com/ros-controls/ros2_control_demos/example_4/hardware/rrbot_system_with_sensor.cpp>`__
 
-  + robot `rrbot.cpp <https://github.com/ros-controls/ros2_control_demos/example_5/hardware/rrbot.cpp>`__
-  + sensor `external_rrbot_force_torque_sensor.cpp <https://github.com/ros-controls/ros2_control_demos/example_5/hardware/external_rrbot_force_torque_sensor.cpp>`__
 
 Controllers from this demo
 ##########################

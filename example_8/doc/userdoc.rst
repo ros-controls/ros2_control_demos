@@ -1,3 +1,5 @@
+.. _ros2_control_demos_example_8_userdoc:
+
 ********************************************************************************
 Example 8: Industrial Robots with an exposed transmission interface
 ********************************************************************************

@@ -1,3 +1,5 @@
+.. _ros2_control_demos_example_6_userdoc:
+
 ***********************************************************************
 Example 6: Modular Robots with separate communication to each actuator
 ***********************************************************************
