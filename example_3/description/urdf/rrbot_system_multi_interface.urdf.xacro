@@ -7,7 +7,7 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_desc
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="2dof_robot">
 
   <!-- Enable setting arguments from the launch file -->
-  <xacro:arg name="use_fake_hardware" default="false" />
+  <xacro:arg name="use_mock_hardware" default="false" />
   <xacro:arg name="mock_sensor_commands" default="false" />
   <xacro:arg name="prefix" default="" />
   <xacro:arg name="slowdown" default="100.0" />
@@ -30,7 +30,7 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_desc
 
   <xacro:rrbot_system_multi_interface
     name="RRBotSystemMultiInterface" prefix="$(arg prefix)"
-    use_fake_hardware="$(arg use_fake_hardware)"
+    use_mock_hardware="$(arg use_mock_hardware)"
     mock_sensor_commands="$(arg mock_sensor_commands)"
     slowdown="$(arg slowdown)" />
 

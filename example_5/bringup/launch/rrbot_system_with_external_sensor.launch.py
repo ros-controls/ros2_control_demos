@@ -35,9 +35,9 @@ def generate_launch_description():
     )
     declared_arguments.append(
         DeclareLaunchArgument(
-            "use_fake_hardware",
+            "use_mock_hardware",
             default_value="false",
-            description="Start robot with fake hardware mirroring command to its states.",
+            description="Start robot with mock hardware mirroring command to its states.",
         )
     )
     declared_arguments.append(
@@ -45,7 +45,7 @@ def generate_launch_description():
             "mock_sensor_commands",
             default_value="false",
             description="Enable fake command interfaces for sensors used for simple simulations. \
-            Used only if 'use_fake_hardware' parameter is true.",
+            Used only if 'use_mock_hardware' parameter is true.",
         )
     )
 
@@ -59,7 +59,7 @@ def generate_launch_description():
 
     # Initialize Arguments
     prefix = LaunchConfiguration("prefix")
-    use_fake_hardware = LaunchConfiguration("use_fake_hardware")
+    use_mock_hardware = LaunchConfiguration("use_mock_hardware")
     mock_sensor_commands = LaunchConfiguration("mock_sensor_commands")
     slowdown = LaunchConfiguration("slowdown")
 
@@ -69,7 +69,7 @@ def generate_launch_description():
             "controllers_file": "rrbot_with_external_sensor_controllers.yaml",
             "description_file": "rrbot_system_with_external_sensor.urdf.xacro",
             "prefix": prefix,
-            "use_fake_hardware": use_fake_hardware,
+            "use_mock_hardware": use_mock_hardware,
             "mock_sensor_commands": mock_sensor_commands,
             "slowdown": slowdown,
         }.items(),

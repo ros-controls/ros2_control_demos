@@ -54,7 +54,7 @@ def generate_launch_description():
             "controllers_file": "rrbot_modular_actuators.yaml",
             "description_file": "rrbot_modular_actuators.urdf.xacro",
             "prefix": prefix,
-            "use_fake_hardware": "false",
+            "use_mock_hardware": "false",
             "slowdown": slowdown,
             "robot_controller": robot_controller,
         }.items(),
