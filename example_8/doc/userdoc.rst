@@ -1,3 +1,5 @@
+.. _ros2_control_demos_example_8_userdoc:
+
 ********************************************************************************
 Example 8: Industrial Robots with an exposed transmission interface
 ********************************************************************************
@@ -12,9 +14,11 @@ In this example, both joints use an exposed transmission interface.
 
     ros2 launch ros2_control_demo_example_8 view_robot.launch.py
 
-   **NOTE**: Getting the following output in terminal is OK: ``Warning: Invalid frame ID "odom" passed to canTransform argument target_frame - frame does not exist``.
-   This happens because ``joint_state_publisher_gui`` node need some time to start.
-   The ``joint_state_publisher_gui`` provides a GUI to change the configuration for rrbot. It is immediately displayed in *RViz*.
+   .. note::
+
+    Getting the following output in terminal is OK: ``Warning: Invalid frame ID "odom" passed to canTransform argument target_frame - frame does not exist``.
+    This happens because ``joint_state_publisher_gui`` node need some time to start.
+    The ``joint_state_publisher_gui`` provides a GUI to change the configuration for rrbot. It is immediately displayed in *RViz*.
 
 2. To start *RRBot* example open a terminal, source your ROS2-workspace and execute its launch file with
 
@@ -59,7 +63,7 @@ In this example, both joints use an exposed transmission interface.
 
 5. If you get output from above you can send commands to *Forward Command Controller*, either:
 
-   a. Manually using ros2 cli interface:
+   a. Manually using ROS 2 CLI interface:
 
    .. code-block:: shell
 

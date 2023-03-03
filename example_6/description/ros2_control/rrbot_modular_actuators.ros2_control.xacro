@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <xacro:macro name="rrbot_modular_actuators" params="name prefix use_gazebo:=^|false slowdown:=2.0">
+  <xacro:macro name="rrbot_modular_actuators" params="name prefix slowdown:=2.0">
 
     <ros2_control name="RRBotModularJoint1" type="actuator">
       <hardware>

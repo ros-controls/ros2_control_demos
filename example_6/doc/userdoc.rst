@@ -1,3 +1,5 @@
+.. _ros2_control_demos_example_6_userdoc:
+
 ***********************************************************************
 Example 6: Modular Robots with separate communication to each actuator
 ***********************************************************************
@@ -11,16 +13,18 @@ is implemented with a hardware interface of type ``hardware_interface::ActuatorI
 
     ros2 launch ros2_control_demo_example_6 view_robot.launch.py
 
-   **NOTE**: Getting the following output in terminal is OK: ``Warning: Invalid frame ID "odom" passed to canTransform argument target_frame - frame does not exist``.
-   This happens because ``joint_state_publisher_gui`` node need some time to start.
-   The ``joint_state_publisher_gui`` provides a GUI to generate  a random configuration for rrbot. It is immediately displayed in *RViz*.
+   .. note::
+
+    Getting the following output in terminal is OK: ``Warning: Invalid frame ID "odom" passed to canTransform argument target_frame - frame does not exist``.
+    This happens because ``joint_state_publisher_gui`` node need some time to start.
+    The ``joint_state_publisher_gui`` provides a GUI to generate  a random configuration for rrbot. It is immediately displayed in *RViz*.
 
 
 2. To start *RRBot* example open a terminal, source your ROS2-workspace and execute its launch file with
 
    .. code-block:: shell
 
-    ros2 launch ros2_control_demo_example_6 rrbot.launch.py
+    ros2 launch ros2_control_demo_example_6 rrbot_modular_actuators.launch.py
 
    The launch file loads and starts the robot hardware, controllers and opens *RViz*.
    In starting terminal you will see a lot of output from the hardware implementation showing its internal states.
@@ -59,7 +63,7 @@ is implemented with a hardware interface of type ``hardware_interface::ActuatorI
 
 5. If you get output from above you can send commands to *Forward Command Controller*, either:
 
-   #. Manually using ros2 cli interface.
+   #. Manually using ROS 2 CLI interface.
 
       .. code-block:: shell
 

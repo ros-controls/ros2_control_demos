@@ -23,10 +23,13 @@ jobs:
           import-token: ${{ secrets.GITHUB_TOKEN }}
           # build all packages listed in the meta package
           package-name:
-            diffbot_description
-            ros2_control_demo_bringup
-            ros2_control_demo_hardware
-            rrbot_description
+            ros2_control_demo_example_1
+            ros2_control_demo_example_2
+            ros2_control_demo_example_3
+            ros2_control_demo_example_4
+            ros2_control_demo_example_5
+            ros2_control_demo_example_6
+            ros2_control_demo_example_8
 
           vcs-repo-file-url: |
             https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/ros2_control_demos-not-released.${{ env.ROS_DISTRO }}.repos?token=${{ secrets.GITHUB_TOKEN }}

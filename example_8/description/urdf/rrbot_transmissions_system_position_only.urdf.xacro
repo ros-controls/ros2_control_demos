@@ -21,9 +21,6 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_desc
 
   <!-- Used for fixing robot -->
   <link name="world"/>
-  <gazebo reference="world">
-    <static>true</static>
-  </gazebo>
 
   <xacro:rrbot parent="world" prefix="$(arg prefix)">
     <origin xyz="0 0 0" rpy="0 0 0" />

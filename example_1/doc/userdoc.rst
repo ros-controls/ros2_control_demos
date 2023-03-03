@@ -1,6 +1,7 @@
-****************
+.. _ros2_control_demos_example_1_userdoc:
+
 Example 1: RRBot
-****************
+=====================
 
 
 *RRBot*, or ''Revolute-Revolute Manipulator Robot'', is a simple 3-linkage, 2-joint arm that we will use to demonstrate various features.
@@ -13,13 +14,25 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
 
     ros2 launch ros2_control_demo_example_1 view_robot.launch.py
 
-   **NOTE**: Getting the following output in terminal is OK: ``Warning: Invalid frame ID "odom" passed to canTransform argument target_frame - frame does not exist``.
-   This happens because ``joint_state_publisher_gui`` node need some time to start.
-   The ``joint_state_publisher_gui`` provides a GUI to change the configuration for rrbot. It is immediately displayed in *RViz*.
+   .. note::
 
-   .. image:: doc/rrbot.png
+     Getting the following output in terminal is OK: ``Warning: Invalid frame ID "odom" passed to canTransform argument target_frame - frame does not exist``.
+     This happens because ``joint_state_publisher_gui`` node need some time to start.
+
+   The ``joint_state_publisher_gui`` provides a GUI to change the configuration for *RRbot*. It is immediately displayed in *RViz*.
+
+   .. image:: rrbot.png
     :width: 400
     :alt: Revolute-Revolute Manipulator Robot
+
+   The *RViz* setup can be recreated following these steps:
+
+   - The robot models can be visualized using ``RobotModel`` display using ``/robot_description`` topic.
+   - Or you can simply open the configuration from ``description/rviz`` folder manually or directly by executing
+
+   .. code-block:: shell
+
+    rviz2 --display-config `ros2 pkg prefix ros2_control_demo_example_1`/share/ros2_control_demo_example_1/rviz/rrbot.rviz
 
 
 2. To start *RRBot* example open a terminal, source your ROS2-workspace and execute its launch file with
@@ -65,7 +78,7 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
 
 5. If you get output from above you can send commands to *Forward Command Controller*, either:
 
-   a. Manually using ros2 cli interface:
+   a. Manually using ROS 2 CLI interface:
 
    .. code-block:: shell
 
@@ -122,8 +135,11 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
     ros2 control set_controller_state position_trajectory_controller inactive
 
    what should give ``Successfully configured position_trajectory_controller``.
-   Note that the parameters are already set in `rrbot_controllers.yaml <bringup/config/rrbot_controllers.yaml>`__
-   but the controller was not loaded from the `launch file rrbot.launch.py <bringup/launch/rrbot.launch.py>`__ before.
+
+   .. note::
+
+     The parameters are already set in `rrbot_controllers.yaml <bringup/config/rrbot_controllers.yaml>`__
+     but the controller was not loaded from the `launch file rrbot.launch.py <bringup/launch/rrbot.launch.py>`__ before.
 
    As an alternative, you can load the controller directly in ``inactive``-state by means of the option for ``load_controller``
 
@@ -183,7 +199,7 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
    You can adjust the goals in `rrbot_joint_trajectory_publisher <bringup/config/rrbot_joint_trajectory_publisher.yaml>`__.
 
 Files used for this demos
-#########################
+-------------------------
 
 - Launch file: `rrbot.launch.py <bringup/launch/rrbot.launch.py>`__
 - Controllers yaml: `rrbot_controllers.yaml <bringup/config/rrbot_controllers.yaml>`__
@@ -202,7 +218,7 @@ Files used for this demos
 
 
 Controllers from this demo
-##########################
+--------------------------
 - ``Joint State Broadcaster`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/joint_state_broadcaster/doc/userdoc.html>`__
 - ``Forward Command Controller`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/forward_command_controller/doc/userdoc.html>`__
 - ``Joint Trajectory Controller`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/joint_trajectory_controller/doc/userdoc.html>`__

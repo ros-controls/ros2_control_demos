@@ -1,12 +1,7 @@
-cmake_minimum_required(VERSION 3.5)
-project(ros2_control_demo_example_5)
+cmake_minimum_required(VERSION 3.16)
+project(ros2_control_demo_example_5 LANGUAGES CXX)
 
-# Default to C++14
-if(NOT CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD 14)
-endif()
-
-if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+if(CMAKE_CXX_COMPILER_ID MATCHES "(GNU|Clang)")
   add_compile_options(-Wall -Wextra)
 endif()
 
@@ -27,18 +22,18 @@ endforeach()
 
 ## COMPILE
 add_library(
-  ${PROJECT_NAME}
+  ros2_control_demo_example_5
   SHARED
   hardware/external_rrbot_force_torque_sensor.cpp
   hardware/rrbot.cpp
 )
-target_include_directories(
-  ${PROJECT_NAME}
-  PRIVATE
-  hardware/include
+target_compile_features(ros2_control_demo_example_5 PUBLIC cxx_std_17)
+target_include_directories(ros2_control_demo_example_5 PUBLIC
+$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/hardware/include>
+$<INSTALL_INTERFACE:include/ros2_control_demo_example_5>
 )
 ament_target_dependencies(
-  ${PROJECT_NAME}
+  ros2_control_demo_example_5 PUBLIC
   ${THIS_PACKAGE_INCLUDE_DEPENDS}
 )
 
@@ -51,20 +46,22 @@ pluginlib_export_plugin_description_file(hardware_interface ros2_control_demo_ex
 
 # INSTALL
 install(
-  TARGETS ${PROJECT_NAME}
-  DESTINATION lib
-)
-install(
   DIRECTORY hardware/include/
-  DESTINATION include
+  DESTINATION include/ros2_control_demo_example_5
 )
 install(
-  DIRECTORY description/launch description/ros2_control description/urdf description/rviz description/meshes
-  DESTINATION share/${PROJECT_NAME}
+  DIRECTORY description/launch description/ros2_control description/urdf description/rviz
+  DESTINATION share/ros2_control_demo_example_5
 )
 install(
   DIRECTORY bringup/launch bringup/config
-  DESTINATION share/${PROJECT_NAME}
+  DESTINATION share/ros2_control_demo_example_5
+)
+install(TARGETS ros2_control_demo_example_5
+  EXPORT export_ros2_control_demo_example_5
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
 )
 
 if(BUILD_TESTING)
@@ -72,13 +69,6 @@ if(BUILD_TESTING)
 endif()
 
 ## EXPORTS
-ament_export_include_directories(
-  include
-)
-ament_export_libraries(
-  ${PROJECT_NAME}
-)
-ament_export_dependencies(
-  ${THIS_PACKAGE_INCLUDE_DEPENDS}
-)
+ament_export_targets(export_ros2_control_demo_example_5 HAS_LIBRARY_TARGET)
+ament_export_dependencies(${THIS_PACKAGE_INCLUDE_DEPENDS})
 ament_package()

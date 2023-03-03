@@ -7,16 +7,20 @@
   <author email="denis@stogl.de">Denis Štogl</author>
 
   <maintainer email="denis@stogl.de">Denis Štogl</maintainer>
+  <maintainer email="bence.magyar.robotics@gmail.com">Bence Magyar</maintainer>
+  <maintainer email="christoph.froehlich@ait.ac.at">Christoph Froehlich</maintainer>
 
   <license>Apache-2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
-  <exec_depend>ros2_control_demo_bringup</exec_depend>
-  <exec_depend>diffbot_description</exec_depend>
-  <exec_depend>rrbot_description</exec_depend>
-  <exec_depend>ros2_control_demo_hardware</exec_depend>
-  <exec_depend>ros2_control_test_nodes</exec_depend>
+  <exec_depend>ros2_control_demo_example_1</exec_depend>
+  <exec_depend>ros2_control_demo_example_2</exec_depend>
+  <exec_depend>ros2_control_demo_example_3</exec_depend>
+  <exec_depend>ros2_control_demo_example_4</exec_depend>
+  <exec_depend>ros2_control_demo_example_5</exec_depend>
+  <exec_depend>ros2_control_demo_example_6</exec_depend>
+  <exec_depend>ros2_control_demo_example_8</exec_depend>
 
   <export>
     <build_type>ament_cmake</build_type>
