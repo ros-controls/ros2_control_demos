@@ -2,11 +2,11 @@ repositories:
   control_msgs:
     type: git
     url: https://github.com/ros-controls/control_msgs.git
-    version: galactic-devel
+    version: master
   realtime_tools:
     type: git
     url: https://github.com/ros-controls/realtime_tools.git
-    version: foxy-devel
+    version: master
   ros2_control:
     type: git
     url: https://github.com/ros-controls/ros2_control.git
