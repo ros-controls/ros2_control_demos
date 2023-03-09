@@ -5,17 +5,18 @@
 This repository provides examples for functionalities and capabilities of `ros2_control` framework.
 It consists of simple implementations that demonstrate different concepts.
 
-If you want to have rather step by step manual how to do things with `ros2_control` checkout [ros-control/roscon2022_workshop](https://github.com/ros-controls/roscon2022_workshop) repository.
+If you want to have rather step by step manual how to do things with `ros2_control` checkout the [ros-control/roscon2022_workshop](https://github.com/ros-controls/roscon2022_workshop) repository.
 
 ## Content
 
+The following examples are part of this demo repository:
 
-* [Example 1: RRBot](example_1)
+* Example 1: [*RRBot*](example_1)
 
    *RRBot* - or ''Revolute-Revolute Manipulator Robot'' - a simple position controlled robot with one hardware interface. This example also demonstrates the switching between different controllers.
 
 
-* Example 2: [DiffBot](example_2)
+* Example 2: [*DiffBot*](example_2)
 
    *DiffBot*, or ''Differential Mobile Robot'', is a simple mobile base with differential drive.
    The robot is basically a box moving according to differential drive kinematics.
