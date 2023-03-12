@@ -129,7 +129,7 @@ The `joint_state_publisher_gui` provides a GUI to generate  a random configurati
    ```
    The launch file loads and starts the robot hardware, controllers and opens `RViz`.
    In starting terminal you will see a lot of output from the hardware implementation showing its internal states.
-   This is only of exemplary purpuses and should be avoided as much as possible in a hardware interface implementation.
+   This is only of exemplary purposes and should be avoided as much as possible in a hardware interface implementation.
 
    If you can see two orange and one yellow rectangle in in `RViz` everything has started properly.
    Still, to be sure, let's introspect the control system before moving *RRBot*.
