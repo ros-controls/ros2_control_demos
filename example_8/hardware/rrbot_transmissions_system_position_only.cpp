@@ -95,8 +95,10 @@ hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware:
     for (const auto & joint_info : transmission_info.joints)
     {
       // this demo supports only one interface per joint
-      if (!(joint_info.interfaces.size() == 1 &&
-            joint_info.interfaces[0] == hardware_interface::HW_IF_POSITION))
+      if (!(joint_info.state_interfaces.size() == 1 &&
+            joint_info.state_interfaces[0] == hardware_interface::HW_IF_POSITION &&
+            joint_info.command_interfaces.size() == 1 &&
+            joint_info.command_interfaces[0] == hardware_interface::HW_IF_POSITION))
       {
         RCLCPP_FATAL(
           *logger_, "Invalid transmission joint '%s' configuration for this demo",
