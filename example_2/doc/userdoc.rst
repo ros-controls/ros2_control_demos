@@ -46,8 +46,8 @@ The *DiffBot* URDF files can be found in ``description/urdf`` folder.
    .. code-block:: shell
 
     command interfaces
-          left_wheel_joint/velocity [claimed]
-          right_wheel_joint/velocity [claimed]
+          left_wheel_joint/velocity [available] [claimed]
+          right_wheel_joint/velocity [available] [claimed]
     state interfaces
           left_wheel_joint/position
           left_wheel_joint/velocity

@@ -66,7 +66,7 @@ Example Overview
    The example shows how to implement robot hardware with separate communication to each actuator.
 
 
-* Example 8: Using transmissions
+* Example 8: "Using transmissions"
 
    *RRBot* with an exposed transmission interface.
 
