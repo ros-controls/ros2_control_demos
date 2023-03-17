@@ -8,6 +8,9 @@ controller_manager:
     forward_position_controller:
       type: forward_command_controller/ForwardCommandController
 
+    gpio_controller:
+      type: ros2_control_demo_example_10/GPIOController
+
 
 forward_position_controller:
   ros__parameters:

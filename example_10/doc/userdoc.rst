@@ -40,10 +40,8 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
    .. code-block::
 
     command interfaces
-        flange_analog_IOs/analog_input1 [available] [unclaimed]
-        flange_analog_IOs/analog_input2 [available] [unclaimed]
-        flange_analog_IOs/analog_output1 [available] [unclaimed]
-        flange_vacuum/vacuum [available] [unclaimed]
+        flange_analog_IOs/analog_output1 [available] [claimed]
+        flange_vacuum/vacuum [available] [claimed]
         joint1/position [available] [claimed]
         joint2/position [available] [claimed]
     state interfaces
