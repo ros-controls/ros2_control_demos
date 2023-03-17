@@ -20,7 +20,16 @@ namespace ros2_control_demo_example_10
 {
 controller_interface::CallbackReturn GPIOController::on_init()
 {
-  initMsgs();
+  try
+  {
+    auto_declare<std::vector<std::string>>("inputs", std::vector<std::string>());
+    auto_declare<std::vector<std::string>>("outputs", std::vector<std::string>());
+  }
+  catch (const std::exception & e)
+  {
+    fprintf(stderr, "Exception thrown during init stage with message: %s \n", e.what());
+    return controller_interface::CallbackReturn::ERROR;
+  }
   return controller_interface::CallbackReturn::SUCCESS;
 }
 
@@ -29,7 +38,7 @@ controller_interface::InterfaceConfiguration GPIOController::command_interface_c
   controller_interface::InterfaceConfiguration config;
   config.type = controller_interface::interface_configuration_type::INDIVIDUAL;
 
-  for (auto command_interfaces_name : command_interfaces_names)
+  for (auto command_interfaces_name : outputs_)
   {
     config.names.emplace_back(command_interfaces_name);
   }
@@ -43,7 +52,7 @@ ros2_control_demo_example_10::GPIOController::state_interface_configuration() co
   controller_interface::InterfaceConfiguration config;
   config.type = controller_interface::interface_configuration_type::INDIVIDUAL;
 
-  for (auto state_interface_name : state_interfaces_names)
+  for (auto state_interface_name : inputs_)
   {
     config.names.emplace_back(state_interface_name);
   }
@@ -95,6 +104,11 @@ controller_interface::CallbackReturn ros2_control_demo_example_10::GPIOControlle
 {
   try
   {
+    inputs_ = get_node()->get_parameter("inputs").as_string_array();
+    outputs_ = get_node()->get_parameter("outputs").as_string_array();
+
+    initMsgs();
+
     // register publisher
     gpio_publisher_ = get_node()->create_publisher<control_msgs::msg::InterfaceValue>(
       "~/inputs", rclcpp::SystemDefaultsQoS());
@@ -113,11 +127,11 @@ controller_interface::CallbackReturn ros2_control_demo_example_10::GPIOControlle
 
 void GPIOController::initMsgs()
 {
-  for (auto state_interfaces_name : state_interfaces_names)
+  for (auto state_interfaces_name : inputs_)
   {
     gpio_msg_.interface_names.emplace_back(state_interfaces_name);
   }
-  gpio_msg_.values.resize(state_interfaces_names.size());
+  gpio_msg_.values.resize(inputs_.size());
 }
 
 controller_interface::CallbackReturn ros2_control_demo_example_10::GPIOController::on_activate(
