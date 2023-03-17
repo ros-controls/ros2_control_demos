@@ -32,11 +32,11 @@ The following examples are part of this demo repository:
    *RRBot* with an integrated sensor.
 
 
-* Example 5: ["Industrial Robots with externally connected sensor"](example_5)
+* Example 5: ["Industrial robot with externally connected sensor"](example_5)
 
    *RRBot* with an externally connected sensor.
 
-* Example 6: ["Modular Robots with separate communication to each actuator"](example_6)
+* Example 6: ["Modular robot with separate communication to each actuator"](example_6)
 
    The example shows how to implement robot hardware with separate communication to each actuator.
 
@@ -47,6 +47,10 @@ The following examples are part of this demo repository:
    *RRBot* with an exposed transmission interface.
 
 * Example 9: "Gazebo Classic and Gazebo Sim (tba.)"
+
+* Example 10: ["Industrial robot with GPIO interfaces"](example_10)
+
+   *RRBot* with GPIO interfaces.
 
 ## Getting started
 

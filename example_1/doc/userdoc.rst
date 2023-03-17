@@ -50,11 +50,11 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
 
 3. Check if the hardware interface loaded properly, by opening another terminal and executing
 
-   .. code-block:: shell
+   .. code-block:: console
 
     ros2 control list_hardware_interfaces
 
-   .. code-block:: shell
+   .. code-block::
 
     command interfaces
           joint1/position [available] [claimed]

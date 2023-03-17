@@ -98,6 +98,7 @@ Examples
    Example 2: DiffBot <../example_2/doc/userdoc.rst>
    Example 3: RRBot with multiple interfaces <../example_3/doc/userdoc.rst>
    Example 4: Industrial robot with integrated sensor <../example_4/doc/userdoc.rst>
-   Example 5: Industrial Robots with externally connected sensor <../example_5/doc/userdoc.rst>
-   Example 6: Modular Robots with separate communication to each actuator <../example_6/doc/userdoc.rst>
+   Example 5: Industrial robot with externally connected sensor <../example_5/doc/userdoc.rst>
+   Example 6: Modular robot with separate communication to each actuator <../example_6/doc/userdoc.rst>
    Example 8: Using transmissions <../example_8/doc/userdoc.rst>
+   Example 10: Industrial robot with GPIO interfaces <../example_10/doc/userdoc.rst>
