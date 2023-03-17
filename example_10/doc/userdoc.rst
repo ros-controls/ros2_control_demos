@@ -57,7 +57,7 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
     gpio_controller     [ros2_control_demo_example_10/GPIOController] active
     forward_position_controller[forward_command_controller/ForwardCommandController] active
 
-5. If you get output from above you can subscribe to the ``gpio`` topic published by the *GPIO Controller* using ROS 2 CLI interface:
+5. If you get output from above you can subscribe to the ``/gpio_controller/inputs`` topic published by the *GPIO Controller* using ROS 2 CLI interface:
 
    .. code-block:: shell
 
