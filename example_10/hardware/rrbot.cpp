@@ -78,6 +78,45 @@ hardware_interface::CallbackReturn RRBotSystemWithGPIOHardware::on_init(
     }
   }
 
+  // RRBotSystemWithGPIOHardware has exactly two GPIO components
+  if (info_.gpios.size() != 2)
+  {
+    RCLCPP_FATAL(
+      rclcpp::get_logger("RRBotSystemWithGPIOHardware"),
+      "RRBotSystemWithGPIOHardware has '%ld' GPIO components, '%d' expected.", info_.gpios.size(),
+      2);
+    return hardware_interface::CallbackReturn::ERROR;
+  }
+  // with exactly 1 command interface
+  for (int i = 0; i < 2; i++)
+  {
+    if (info_.gpios[i].command_interfaces.size() != 1)
+    {
+      RCLCPP_FATAL(
+        rclcpp::get_logger("RRBotSystemWithGPIOHardware"),
+        "GPIO component %s has '%ld' command interfaces, '%d' expected.",
+        info_.gpios[i].name.c_str(), info_.gpios[i].command_interfaces.size(), 1);
+      return hardware_interface::CallbackReturn::ERROR;
+    }
+  }
+  // and 3/1 state interfaces, respectively
+  if (info_.gpios[0].state_interfaces.size() != 3)
+  {
+    RCLCPP_FATAL(
+      rclcpp::get_logger("RRBotSystemWithGPIOHardware"),
+      "GPIO component %s has '%ld' state interfaces, '%d' expected.", info_.gpios[0].name.c_str(),
+      info_.gpios[0].state_interfaces.size(), 3);
+    return hardware_interface::CallbackReturn::ERROR;
+  }
+  if (info_.gpios[1].state_interfaces.size() != 1)
+  {
+    RCLCPP_FATAL(
+      rclcpp::get_logger("RRBotSystemWithGPIOHardware"),
+      "GPIO component %s has '%ld' state interfaces, '%d' expected.", info_.gpios[0].name.c_str(),
+      info_.gpios[0].state_interfaces.size(), 1);
+    return hardware_interface::CallbackReturn::ERROR;
+  }
+
   return hardware_interface::CallbackReturn::SUCCESS;
 }
 
