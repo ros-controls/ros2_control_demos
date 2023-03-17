@@ -13,10 +13,6 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
 
     ros2 launch ros2_control_demo_example_10 view_robot.launch.py
 
-   .. image:: rrbot.png
-    :width: 400
-    :alt: Revolute-Revolute Manipulator Robot
-
 
 2. To start *RRBot* example open a terminal, source your ROS2-workspace and execute its launch file with
 
@@ -24,12 +20,7 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
 
     ros2 launch ros2_control_demo_example_10 rrbot.launch.py
 
-   The launch file loads and starts the robot hardware, controllers and opens *RViz*.
-   In starting terminal you will see a lot of output from the hardware implementation showing its internal states.
-   This is only of exemplary purposes and should be avoided as much as possible in a hardware interface implementation.
-
-   If you can see two orange and one yellow rectangle in in *RViz* everything has started properly.
-   Still, to be sure, let's introspect the control system before moving *RRBot*.
+   The launch file loads and starts the robot hardware and controllers.
 
 3. Check if the hardware interface loaded properly, by opening another terminal and executing
 
@@ -54,7 +45,7 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
 
    In contrast to the *RRBot* of example_1, you see in addition to the joints now also GPIO interfaces.
 
-4. Check is controllers are running by
+4. Check if controllers are running by
 
    .. code-block:: shell
 
@@ -63,11 +54,10 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
    .. code-block:: shell
 
     joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+    gpio_controller     [ros2_control_demo_example_10/GPIOController] active
     forward_position_controller[forward_command_controller/ForwardCommandController] active
 
-5. If you get output from above you can send commands to *Forward Command Controller*, either:
-
-   a. Manually using ROS 2 CLI interface:
+5. If you get output from above you can subscribe to the ``gpio`` topic published by the *GPIO Controller* using ROS 2 CLI interface:
 
    .. code-block:: shell
 
@@ -86,8 +76,7 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
     - 1676318848.0
     - 0.0
 
-   You should now see orange and yellow blocks moving in *RViz*.
-   Also, you should see changing states in the terminal where launch file is started, e.g.
+6. Now you can send commands to the *GPIO Controller* using ROS 2 CLI interface:
 
    .. code-block:: shell
 
@@ -104,22 +93,20 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
 Files used for this demos
 -------------------------
 
-- Launch file: `rrbot.launch.py <bringup/launch/rrbot.launch.py>`__
-- Controllers yaml: `rrbot_controllers.yaml <bringup/config/rrbot_controllers.yaml>`__
-- URDF file: `rrbot.urdf.xacro <description/urdf/rrbot.urdf.xacro>`__
+- Launch file: `rrbot.launch.py <https://github.com/ros-controls/ros2_control_demos/tree/master/example_10/bringup/launch/rrbot.launch.py>`__
+- Controllers yaml: `rrbot_controllers.yaml <https://github.com/ros-controls/ros2_control_demos/tree/master/example_10/bringup/config/rrbot_controllers.yaml>`__
+- URDF file: `rrbot.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/master/example_10/description/urdf/rrbot.urdf.xacro>`__
 
-  + Description: `rrbot_description.urdf.xacro <description/urdf/rrbot_description.urdf.xacro>`__
-  + ``ros2_control`` tag: `rrbot.ros2_control.xacro <description/ros2_control/rrbot.ros2_control.xacro>`__
+  + Description: `rrbot_description.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/master/example_10/description/urdf/rrbot_description.urdf.xacro>`__
+  + ``ros2_control`` tag: `rrbot.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/tree/master/example_10/description/ros2_control/rrbot.ros2_control.xacro>`__
 
-- RViz configuration: `rrbot.rviz <description/rviz/rrbot.rviz>`__
-- Test nodes goals configuration:
+- RViz configuration: `rrbot.rviz <https://github.com/ros-controls/ros2_control_demos/tree/master/example_10/description/rviz/rrbot.rviz>`__
 
-  + `rrbot_forward_position_publisher <bringup/config/rrbot_forward_position_publisher.yaml>`__
-
-- Hardware interface plugin: `rrbot.cpp <hardware/rrbot.cpp>`__
+- Hardware interface plugin: `rrbot.cpp <https://github.com/ros-controls/ros2_control_demos/tree/master/example_10/hardware/rrbot.cpp>`__
+- GPIO controller: `gpio_controller.cpp <https://github.com/ros-controls/ros2_control_demos/tree/master/example_10/controllers/gpio_controller.cpp>`__
 
 
 Controllers from this demo
 --------------------------
-- ``Joint State Broadcaster`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/joint_state_broadcaster/doc/userdoc.html>`__
-- ``Forward Command Controller`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/forward_command_controller/doc/userdoc.html>`__
+- ``Joint State Broadcaster`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/master/joint_state_broadcaster>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/joint_state_broadcaster/doc/userdoc.html>`__
+- ``Forward Command Controller`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/master/forward_command_controller>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/forward_command_controller/doc/userdoc.html>`__
