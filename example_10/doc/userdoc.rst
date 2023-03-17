@@ -93,7 +93,7 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
 
     ros2 topic pub /gpio_controller/commands std_msgs/msg/Float64MultiArray "{data: [0.5,0.7]}"
 
-   If you echo the ``/joint_states`` or ``/dynamic_joint_states`` topics you should now get similar values, namely the simulated states of the robot
+   You should see a change in the ``/gpio_controller/inputs`` topic and a different output in the terminal where launch file is started, e.g.
 
    .. code-block:: shell
 
