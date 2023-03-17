@@ -68,7 +68,7 @@ public:
 private:
   // Parameters for the RRBot simulation
 
-  // Store the command for the simulated robot
+  // Store the command and state interfaces for the simulated robot
   std::vector<double> hw_commands_;
   std::vector<double> hw_states_;
   std::vector<double> hw_gpio_in_;

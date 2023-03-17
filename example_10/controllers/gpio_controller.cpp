@@ -21,9 +21,9 @@ namespace ros2_control_demo_example_10
 controller_interface::CallbackReturn GPIOController::on_init()
 {
   initMsgs();
-  // internal commands
+  // init internal commands
   vacuum_output_cmd_ = 42.;
-  analog_output_cmd_ = 0.;
+  analog_output_cmd_ = 42.;
   return controller_interface::CallbackReturn::SUCCESS;
 }
 
@@ -58,27 +58,24 @@ controller_interface::return_type ros2_control_demo_example_10::GPIOController::
   const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
   // send inputs
-  RCLCPP_INFO(get_node()->get_logger(), "state size (%zu)", state_interfaces_.size());
   for (size_t i = 0; i < state_interfaces_.size(); i++)
   {
-    RCLCPP_INFO(
-      get_node()->get_logger(), "%s: (%f)", state_interfaces_[i].get_name().c_str(),
-      state_interfaces_[i].get_value());
+    // RCLCPP_INFO(
+    //   get_node()->get_logger(), "%s: (%f)", state_interfaces_[i].get_name().c_str(),
+    //   state_interfaces_[i].get_value());
     gpio_msg_.values.at(i) = static_cast<float>(state_interfaces_.at(i).get_value());
   }
   gpio_publisher_->publish(gpio_msg_);
 
   // set outputs
-  RCLCPP_INFO(get_node()->get_logger(), "command size (%zu)", command_interfaces_.size());
   for (size_t i = 0; i < command_interfaces_.size(); i++)
   {
-    RCLCPP_INFO(
-      get_node()->get_logger(), "%s: (%f)", command_interfaces_[i].get_name().c_str(),
-      command_interfaces_[i].get_value());
+    // RCLCPP_INFO(
+    //   get_node()->get_logger(), "%s: (%f)", command_interfaces_[i].get_name().c_str(),
+    //   command_interfaces_[i].get_value());
   }
-  // command_interfaces_[0].set_value(analog_output_cmd_);
-  // command_interfaces_[1].set_value(vacuum_output_cmd_);
-  command_interfaces_[0].set_value(vacuum_output_cmd_);
+  command_interfaces_[0].set_value(analog_output_cmd_);
+  command_interfaces_[1].set_value(vacuum_output_cmd_);
 
   return controller_interface::return_type::OK;
 }
@@ -95,11 +92,7 @@ controller_interface::CallbackReturn ros2_control_demo_example_10::GPIOControlle
     // register subscriber
     subscription_vacuum_ = get_node()->create_subscription<std_msgs::msg::Float64>(
       "vacuum", rclcpp::SystemDefaultsQoS(),
-      [this](const std_msgs::msg::Float64 msg)
-      {
-        vacuum_output_cmd_ = msg.data;
-        RCLCPP_INFO(get_node()->get_logger(), "vacuum command received: (%f)", msg.data);
-      });
+      [this](const std_msgs::msg::Float64 msg) { vacuum_output_cmd_ = msg.data; });
     subscription_analog_out_ = get_node()->create_subscription<std_msgs::msg::Float64>(
       "analog", rclcpp::SystemDefaultsQoS(),
       [this](const std_msgs::msg::Float64 msg) { analog_output_cmd_ = msg.data; });

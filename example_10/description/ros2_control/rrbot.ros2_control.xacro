@@ -26,12 +26,12 @@
         <state_interface name="position"/>
       </joint>
       <!-- from https://github.com/ros-controls/ros2_control/blob/f58d4072dbd1c3fd4e1f64cd10a19a2b60f59049/ros2_control_test_assets/include/ros2_control_test_assets/components_urdfs.hpp#L344 -->
-      <!-- <gpio name="flange_analog_IOs">
+      <gpio name="flange_analog_IOs">
         <command_interface name="analog_output1"/>
-        <state_interface name="analog_output1"/>
+        <state_interface name="analog_output1"/> <!-- Needed to know current state of the output -->
         <state_interface name="analog_input1"/>
         <state_interface name="analog_input2"/>
-      </gpio> -->
+      </gpio>
       <gpio name="flange_vacuum">
         <command_interface name="vacuum"/>
         <state_interface name="vacuum"/> <!-- Needed to know current state of the input -->

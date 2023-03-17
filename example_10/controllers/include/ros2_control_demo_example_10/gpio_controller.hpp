@@ -48,11 +48,10 @@ public:
 private:
   // we hardcode the names of the interfaces here
   std::vector<std::string> state_interfaces_names = {
-    // "flange_analog_IOs/analog_output1","flange_analog_IOs/analog_input1",
-    // "flange_analog_IOs/analog_input2",
-    "flange_vacuum/vacuum"};
-  std::vector<std::string> command_interfaces_names = {// "flange_analog_IOs/analog_output1",
-                                                       "flange_vacuum/vacuum"};
+    "flange_analog_IOs/analog_output1", "flange_analog_IOs/analog_input1",
+    "flange_analog_IOs/analog_input2", "flange_vacuum/vacuum"};
+  std::vector<std::string> command_interfaces_names = {
+    "flange_analog_IOs/analog_output1", "flange_vacuum/vacuum"};
 
 protected:
   void initMsgs();
