@@ -21,9 +21,6 @@ namespace ros2_control_demo_example_10
 controller_interface::CallbackReturn GPIOController::on_init()
 {
   initMsgs();
-  // init internal commands
-  vacuum_output_cmd_ = 42.;
-  analog_output_cmd_ = 42.;
   return controller_interface::CallbackReturn::SUCCESS;
 }
 
@@ -68,14 +65,27 @@ controller_interface::return_type ros2_control_demo_example_10::GPIOController::
   gpio_publisher_->publish(gpio_msg_);
 
   // set outputs
+  if (!output_cmd_ptr_)
+  {
+    // no command received yet
+    return controller_interface::return_type::OK;
+  }
+  if (output_cmd_ptr_->data.size() != command_interfaces_.size())
+  {
+    RCLCPP_ERROR_THROTTLE(
+      get_node()->get_logger(), *(get_node()->get_clock()), 1000,
+      "command size (%zu) does not match number of interfaces (%zu)", output_cmd_ptr_->data.size(),
+      command_interfaces_.size());
+    return controller_interface::return_type::ERROR;
+  }
+
   for (size_t i = 0; i < command_interfaces_.size(); i++)
   {
+    command_interfaces_[i].set_value(output_cmd_ptr_->data[i]);
     // RCLCPP_INFO(
     //   get_node()->get_logger(), "%s: (%f)", command_interfaces_[i].get_name().c_str(),
     //   command_interfaces_[i].get_value());
   }
-  command_interfaces_[0].set_value(analog_output_cmd_);
-  command_interfaces_[1].set_value(vacuum_output_cmd_);
 
   return controller_interface::return_type::OK;
 }
@@ -87,15 +97,12 @@ controller_interface::CallbackReturn ros2_control_demo_example_10::GPIOControlle
   {
     // register publisher
     gpio_publisher_ = get_node()->create_publisher<control_msgs::msg::InterfaceValue>(
-      "gpio", rclcpp::SystemDefaultsQoS());
+      "~/inputs", rclcpp::SystemDefaultsQoS());
 
     // register subscriber
-    subscription_vacuum_ = get_node()->create_subscription<std_msgs::msg::Float64>(
-      "vacuum", rclcpp::SystemDefaultsQoS(),
-      [this](const std_msgs::msg::Float64 msg) { vacuum_output_cmd_ = msg.data; });
-    subscription_analog_out_ = get_node()->create_subscription<std_msgs::msg::Float64>(
-      "analog", rclcpp::SystemDefaultsQoS(),
-      [this](const std_msgs::msg::Float64 msg) { analog_output_cmd_ = msg.data; });
+    subscription_command_ = get_node()->create_subscription<CmdType>(
+      "~/commands", rclcpp::SystemDefaultsQoS(),
+      [this](const CmdType::SharedPtr msg) { output_cmd_ptr_ = msg; });
   }
   catch (...)
   {

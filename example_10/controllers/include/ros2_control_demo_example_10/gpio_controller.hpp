@@ -20,12 +20,13 @@
 #include <vector>
 
 #include "control_msgs/msg/interface_value.hpp"
-#include "std_msgs/msg/float64.hpp"
+#include "std_msgs/msg/float64_multi_array.hpp"
 
 #include "controller_interface/controller_interface.hpp"
 
 namespace ros2_control_demo_example_10
 {
+using CmdType = std_msgs::msg::Float64MultiArray;
 
 class GPIOController : public controller_interface::ControllerInterface
 {
@@ -57,16 +58,14 @@ protected:
   void initMsgs();
 
   // internal commands
-  double vacuum_output_cmd_;
-  double analog_output_cmd_;
+  std::shared_ptr<CmdType> output_cmd_ptr_;
 
   // publisher
   std::shared_ptr<rclcpp::Publisher<control_msgs::msg::InterfaceValue>> gpio_publisher_;
   control_msgs::msg::InterfaceValue gpio_msg_;
 
   // subscriber
-  rclcpp::Subscription<std_msgs::msg::Float64>::SharedPtr subscription_vacuum_;
-  rclcpp::Subscription<std_msgs::msg::Float64>::SharedPtr subscription_analog_out_;
+  rclcpp::Subscription<CmdType>::SharedPtr subscription_command_;
 };
 }  // namespace ros2_control_demo_example_10
 

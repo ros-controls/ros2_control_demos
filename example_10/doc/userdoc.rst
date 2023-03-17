@@ -71,30 +71,34 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
 
    .. code-block:: shell
 
-    ros2 topic pub /forward_position_controller/commands std_msgs/msg/Float64MultiArray "data:
-    - 0.5
-    - 0.5"
-
-   B. Or you can start a demo node which sends two goals every 5 seconds in a loop
+    ros2 topic echo /gpio_controller/inputs
 
    .. code-block:: shell
 
-    ros2 launch ros2_control_demo_example_1 test_forward_position_controller.launch.py
+    interface_names:
+    - flange_analog_IOs/analog_output1
+    - flange_analog_IOs/analog_input1
+    - flange_analog_IOs/analog_input2
+    - flange_vacuum/vacuum
+    values:
+    - 0.0
+    - 1199574016.0
+    - 1676318848.0
+    - 0.0
 
    You should now see orange and yellow blocks moving in *RViz*.
    Also, you should see changing states in the terminal where launch file is started, e.g.
 
    .. code-block:: shell
 
-    [RRBotSystemPositionOnlyHardware]: Got command 0.50000 for joint 0!
-    [RRBotSystemPositionOnlyHardware]: Got command 0.50000 for joint 1!
+    ros2 topic pub /gpio_controller/commands std_msgs/msg/Float64MultiArray "{data: [0.5,0.7]}"
 
    If you echo the ``/joint_states`` or ``/dynamic_joint_states`` topics you should now get similar values, namely the simulated states of the robot
 
    .. code-block:: shell
 
-    ros2 topic echo /joint_states
-    ros2 topic echo /dynamic_joint_states
+    [RRBotSystemWithGPIOHardware]: Got command 0.5 for GP output 0!
+    [RRBotSystemWithGPIOHardware]: Got command 0.7 for GP output 1!
 
 
 Files used for this demos
