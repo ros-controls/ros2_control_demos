@@ -65,7 +65,7 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
 
    Marker ``[claimed]`` by command interfaces means that a controller has access to command *RRBot*.
 
-4. Check is controllers are running by
+4. Check if controllers are running by
 
    .. code-block:: shell
 

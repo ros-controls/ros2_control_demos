@@ -52,7 +52,7 @@ A 2D Force-Torque Sensor (FTS) is simulated by generating random sensor readings
 
    Marker ``[claimed]`` by command interfaces means that a controller has access to command *RRBot*.
 
-4. Check is controllers are running
+4. Check if controllers are running
 
    .. code-block:: shell
 

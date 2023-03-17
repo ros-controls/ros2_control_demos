@@ -50,7 +50,7 @@ is implemented with a hardware interface of type ``hardware_interface::ActuatorI
 
    Marker ``[claimed]`` by command interfaces means that a controller has access to command *RRBot*.
 
-4. Check is controllers are running
+4. Check if controllers are running
 
    .. code-block:: shell
 
@@ -93,7 +93,7 @@ is implemented with a hardware interface of type ``hardware_interface::ActuatorI
 Files used for this demos
 #########################
 
-- Launch file: `rrbot_modular_actuators.launch.py <../bringup/launch/rrbot_modular_actuators.launch.py>`__
+- Launch file: `rrbot_modular_actuators.launch.py <https://github.com/ros-controls/ros2_control_demos/tree/master/example_6/bringup/launch/rrbot_modular_actuators.launch.py>`__
 - Controllers yaml: `rrbot_modular_actuators.yaml <https://github.com/ros-controls/ros2_control_demos/tree/master/example_6/bringup/config/rrbot_modular_actuators.yaml>`__
 - URDF: `rrbot_modular_actuators.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/master/example_6/description/urdf/rrbot_modular_actuators.urdf.xacro>`__
 

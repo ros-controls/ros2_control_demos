@@ -56,7 +56,7 @@ generating random sensor readings.
 
    Marker ``[claimed]`` by command interfaces means that a controller has access to command *RRBot*.
 
-4. Check is controllers are running
+4. Check if controllers are running
 
    .. code-block:: shell
 
@@ -134,7 +134,7 @@ Files used for this demos
   + ``ros2_control`` robot: `rrbot_system_position_only.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/tree/master/example_5/description/ros2_control/rrbot_system_position_only.ros2_control.xacro>`__
   + ``ros2_control`` sensor: `external_rrbot_force_torque_sensor.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/tree/master/example_5/description/ros2_control/external_rrbot_force_torque_sensor.ros2_control.xacro>`__
 
-- RViz configuration: `rrbot.rviz <https://github.com/ros-controls/ros2_control_demos/example_4/description/rviz/rrbot.rviz>`__
+- RViz configuration: `rrbot.rviz <https://github.com/ros-controls/ros2_control_demos/tree/master/example_5/description/rviz/rrbot.rviz>`__
 - Hardware interface plugin:
 
   + robot `rrbot.cpp <https://github.com/ros-controls/ros2_control_demos/tree/master/example_5/hardware/rrbot.cpp>`__
