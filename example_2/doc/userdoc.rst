@@ -93,20 +93,20 @@ The *DiffBot* URDF files can be found in ``description/urdf`` folder.
 Files used for this demos
 #########################
 
-  - Launch file: `diffbot.launch.py <bringup/launch/diffbot.launch.py>`__
-  - Controllers yaml: `diffbot_controllers.yaml <bringup/config/diffbot_controllers.yaml>`__
-  - URDF file: `diffbot.urdf.xacro <description/urdf/diffbot.urdf.xacro>`__
+  - Launch file: `diffbot.launch.py <https://github.com/ros-controls/ros2_control_demos/tree/master/example_2/bringup/launch/diffbot.launch.py>`__
+  - Controllers yaml: `diffbot_controllers.yaml <https://github.com/ros-controls/ros2_control_demos/tree/master/example_2/bringup/config/diffbot_controllers.yaml>`__
+  - URDF file: `diffbot.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/master/example_2/description/urdf/diffbot.urdf.xacro>`__
 
-    + Description: `diffbot_description.urdf.xacro <description/urdf/diffbot_description.urdf.xacro>`__
-    + ``ros2_control`` tag: `diffbot.ros2_control.xacro <description/ros2_control/diffbot.ros2_control.xacro>`__
+    + Description: `diffbot_description.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/master/example_2/description/urdf/diffbot_description.urdf.xacro>`__
+    + ``ros2_control`` tag: `diffbot.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/tree/master/example_2/description/ros2_control/diffbot.ros2_control.xacro>`__
 
-  - RViz configuration: `diffbot.rviz <description/rviz/diffbot.rviz>`__
+  - RViz configuration: `diffbot.rviz <https://github.com/ros-controls/ros2_control_demos/tree/master/example_2/description/rviz/diffbot.rviz>`__
 
-  - Hardware interface plugin: `diffbot_system.cpp <hardware/diffbot_system.cpp>`__
+  - Hardware interface plugin: `diffbot_system.cpp <https://github.com/ros-controls/ros2_control_demos/tree/master/example_2/hardware/diffbot_system.cpp>`__
 
 
 Controllers from this demo
 ##########################
 
-  - ``Joint State Broadcaster`` (`*ros2_controllers* repository <https://github.com/ros-controls/ros2_controllers>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/joint_state_broadcaster/doc/userdoc.html>`__
-  - ``Diff Drive Controller`` (`*ros2_controllers* repository <https://github.com/ros-controls/ros2_controllers>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/diff_drive_controller/doc/userdoc.html>`__
+- ``Joint State Broadcaster`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/master/joint_state_broadcaster>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/joint_state_broadcaster/doc/userdoc.html>`__
+- ``Diff Drive Controller`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/master/diff_drive_controller>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/diff_drive_controller/doc/userdoc.html>`__

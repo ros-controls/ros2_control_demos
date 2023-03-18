@@ -50,7 +50,7 @@ In this example, both joints use an exposed transmission interface.
 
    Marker ``[claimed]`` by command interfaces means that a controller has access to command *RRBot*.
 
-4. Check is controllers are running by
+4. Check if controllers are running by
 
    .. code-block:: shell
 
@@ -93,19 +93,19 @@ In this example, both joints use an exposed transmission interface.
 Files used for this demos
 #########################
 
-- Launch file: `rrbot_transmissions_system_position_only.launch.py <bringup/launch/rrbot_transmissions_system_position_only.launch.py>`__
-- Controllers yaml: `rrbot_controllers.yaml <bringup/config/rrbot_controllers.yaml>`__
-- URDF file: `rrbot_transmissions_system_position_only.urdf.xacro <description/urdf/rrbot_transmissions_system_position_only.urdf.xacro>`__
+- Launch file: `rrbot_transmissions_system_position_only.launch.py <https://github.com/ros-controls/ros2_control_demos/tree/master/example_8/bringup/launch/rrbot_transmissions_system_position_only.launch.py>`__
+- Controllers yaml: `rrbot_controllers.yaml <https://github.com/ros-controls/ros2_control_demos/tree/master/example_8/bringup/config/rrbot_controllers.yaml>`__
+- URDF file: `rrbot_transmissions_system_position_only.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/master/example_8/description/urdf/rrbot_transmissions_system_position_only.urdf.xacro>`__
 
-  + Description: `rrbot_description.urdf.xacro <description/urdf/rrbot_description.urdf.xacro>`__
-  + ``ros2_control`` tag: `rrbot_transmissions_system_position_only.ros2_control.xacro <description/ros2_control/rrbot_transmissions_system_position_only.ros2_control.xacro>`__
+  + Description: `rrbot_description.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/master/example_8/description/urdf/rrbot_description.urdf.xacro>`__
+  + ``ros2_control`` tag: `rrbot_transmissions_system_position_only.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/tree/master/example_8/description/ros2_control/rrbot_transmissions_system_position_only.ros2_control.xacro>`__
 
-- RViz configuration: `rrbot.rviz <description/rviz/rrbot.rviz>`__
+- RViz configuration: `rrbot.rviz <https://github.com/ros-controls/ros2_control_demos/tree/master/example_8/description/rviz/rrbot.rviz>`__
 
-- Hardware interface plugin: `rrbot_transmissions_system_position_only.cpp <hardware/rrbot_transmissions_system_position_only.cpp>`__
+- Hardware interface plugin: `rrbot_transmissions_system_position_only.cpp <https://github.com/ros-controls/ros2_control_demos/tree/master/example_8/hardware/rrbot_transmissions_system_position_only.cpp>`__
 
 
 Controllers from this demo
 ##########################
-- ``Joint State Broadcaster`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/joint_state_broadcaster/doc/userdoc.html>`__
-- ``Forward Command Controller`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/forward_command_controller/doc/userdoc.html>`__
+- ``Joint State Broadcaster`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/master/joint_state_broadcaster>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/joint_state_broadcaster/doc/userdoc.html>`__
+- ``Forward Command Controller`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/master/forward_command_controller>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/forward_command_controller/doc/userdoc.html>`__
