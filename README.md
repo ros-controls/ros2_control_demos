@@ -613,7 +613,7 @@ Now you should also see the *RRbot* represented correctly in `RViz`.
    joint_trajectory_position_controller[joint_trajectory_controller/JointTrajectoryController] inactive
    ```
 
-2. Now start the controller (and stop other running contorller):
+2. Now start the controller (and stop other running controller):
    ```
    ros2 control switch_controllers --stop forward_position_controller --start joint_trajectory_position_controller
    ```
@@ -623,7 +623,7 @@ Now you should also see the *RRbot* represented correctly in `RViz`.
    ```
    You should get `active` in the response:
    ```
-   joint_state_controller[joint_state_controller/JointStateController] active
+   joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
    joint_trajectory_position_controller[joint_trajectory_controller/JointTrajectoryController] active
    ```
 
