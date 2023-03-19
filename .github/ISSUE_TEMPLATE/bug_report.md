@@ -29,4 +29,4 @@ If applicable, add screenshots to help explain your problem.
 - Anything that may be unusual about your environment
 
 **Additional context**
-Add any other context about the problem here, especially include any modifications to ros2_control that relate to this issue.
+Add any other context about the problem here, especially include any modifications to ros2_control_demos that relate to this issue.
