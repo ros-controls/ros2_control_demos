@@ -21,27 +21,30 @@ jobs:
     strategy:
       fail-fast: false
     steps:
-      - uses: ros-tooling/setup-ros@v0.3
+      - uses: ros-tooling/setup-ros@v0.6
         with:
           required-ros-distributions: ${{ inputs.ros_distro }}
       - uses: actions/checkout@v3
         with:
           ref: ${{ inputs.ref }}
-      - uses: ros-tooling/action-ros-ci@v0.2
+      - uses: ros-tooling/action-ros-ci@v0.3
         with:
           target-ros2-distro: ${{ inputs.ros_distro }}
           # build all packages listed in the meta package
           package-name:
-            diffbot_description
-            ros2_control_demo_bringup
-            ros2_control_demo_hardware
-            rrbot_description
+            ros2_control_demo_example_1
+            ros2_control_demo_example_2
+            ros2_control_demo_example_3
+            ros2_control_demo_example_4
+            ros2_control_demo_example_5
+            ros2_control_demo_example_6
+            ros2_control_demo_example_8
 
           vcs-repo-file-url: |
             https://raw.githubusercontent.com/ros2/ros2/${{ inputs.ros_distro }}/ros2.repos
             https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/ros2_control_demos.${{ inputs.ros_distro }}.repos?token=${{ secrets.GITHUB_TOKEN }}
           colcon-mixin-repository: https://raw.githubusercontent.com/colcon/colcon-mixin-repository/master/index.yaml
-      - uses: actions/upload-artifact@v1
+      - uses: actions/upload-artifact@v3
         with:
           name: colcon-logs-ubuntu-20.04
           path: ros_ws/log

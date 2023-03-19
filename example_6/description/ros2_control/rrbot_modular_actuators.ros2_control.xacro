@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="rrbot_modular_actuators" params="name prefix slowdown:=2.0">
+
+    <ros2_control name="RRBotModularJoint1" type="actuator">
+      <hardware>
+        <plugin>ros2_control_demo_example_6/RRBotModularJoint</plugin>
+        <param name="example_param_hw_start_duration_sec">2.0</param>
+        <param name="example_param_hw_stop_duration_sec">3.0</param>
+        <param name="example_param_hw_slowdown">${slowdown}</param>
+      </hardware>
+      <joint name="${prefix}joint1">
+        <command_interface name="position">
+          <param name="min">-100</param>
+          <param name="max">100</param>
+        </command_interface>
+        <state_interface name="position"/>
+      </joint>
+    </ros2_control>
+    <ros2_control name="RRBotModularJoint2" type="actuator">
+      <hardware>
+        <plugin>ros2_control_demo_example_6/RRBotModularJoint</plugin>
+        <param name="example_param_hw_start_duration_sec">2.0</param>
+        <param name="example_param_hw_stop_duration_sec">3.0</param>
+        <param name="example_param_hw_slowdown">${slowdown}</param>
+      </hardware>
+      <joint name="${prefix}joint2">
+        <command_interface name="position">
+          <param name="min">-100</param>
+          <param name="max">100</param>
+        </command_interface>
+        <state_interface name="position"/>
+      </joint>
+    </ros2_control>
+  </xacro:macro>
+
+</robot>
