@@ -46,8 +46,7 @@ controller_interface::InterfaceConfiguration GPIOController::command_interface_c
   return config;
 }
 
-controller_interface::InterfaceConfiguration
-ros2_control_demo_example_10::GPIOController::state_interface_configuration() const
+controller_interface::InterfaceConfiguration GPIOController::state_interface_configuration() const
 {
   controller_interface::InterfaceConfiguration config;
   config.type = controller_interface::interface_configuration_type::INDIVIDUAL;
@@ -60,7 +59,7 @@ ros2_control_demo_example_10::GPIOController::state_interface_configuration() co
   return config;
 }
 
-controller_interface::return_type ros2_control_demo_example_10::GPIOController::update(
+controller_interface::return_type GPIOController::update(
   const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
   // send inputs
@@ -99,7 +98,7 @@ controller_interface::return_type ros2_control_demo_example_10::GPIOController::
   return controller_interface::return_type::OK;
 }
 
-controller_interface::CallbackReturn ros2_control_demo_example_10::GPIOController::on_configure(
+controller_interface::CallbackReturn GPIOController::on_configure(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
   try
@@ -134,13 +133,13 @@ void GPIOController::initMsgs()
   gpio_msg_.values.resize(inputs_.size());
 }
 
-controller_interface::CallbackReturn ros2_control_demo_example_10::GPIOController::on_activate(
+controller_interface::CallbackReturn GPIOController::on_activate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
   return LifecycleNodeInterface::CallbackReturn::SUCCESS;
 }
 
-controller_interface::CallbackReturn ros2_control_demo_example_10::GPIOController::on_deactivate(
+controller_interface::CallbackReturn GPIOController::on_deactivate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
   try

@@ -20,6 +20,7 @@
 #include <vector>
 
 #include "control_msgs/msg/interface_value.hpp"
+#include "ros2_control_demo_example_10/visibility_control.h"
 #include "std_msgs/msg/float64_multi_array.hpp"
 
 #include "controller_interface/controller_interface.hpp"
@@ -31,19 +32,28 @@ using CmdType = std_msgs::msg::Float64MultiArray;
 class GPIOController : public controller_interface::ControllerInterface
 {
 public:
+  RCLCPP_SHARED_PTR_DEFINITIONS(GPIOController);
+
+  ROS2_CONTROL_DEMO_EXAMPLE_10_PUBLIC
   controller_interface::InterfaceConfiguration command_interface_configuration() const override;
 
+  ROS2_CONTROL_DEMO_EXAMPLE_10_PUBLIC
   controller_interface::InterfaceConfiguration state_interface_configuration() const override;
 
+  ROS2_CONTROL_DEMO_EXAMPLE_10_PUBLIC
   controller_interface::return_type update(
     const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
+  ROS2_CONTROL_DEMO_EXAMPLE_10_PUBLIC
   CallbackReturn on_configure(const rclcpp_lifecycle::State & previous_state) override;
 
+  ROS2_CONTROL_DEMO_EXAMPLE_10_PUBLIC
   CallbackReturn on_activate(const rclcpp_lifecycle::State & previous_state) override;
 
+  ROS2_CONTROL_DEMO_EXAMPLE_10_PUBLIC
   CallbackReturn on_deactivate(const rclcpp_lifecycle::State & previous_state) override;
 
+  ROS2_CONTROL_DEMO_EXAMPLE_10_PUBLIC
   CallbackReturn on_init() override;
 
 private:
