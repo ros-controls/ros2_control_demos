@@ -1,0 +1,9 @@
+<library path="ros2_control_demo_example_1">
+  <class name="ros2_control_demo_example_1/RRBotSystemPositionOnlyHardware"
+         type="ros2_control_demo_example_1::RRBotSystemPositionOnlyHardware"
+         base_class_type="hardware_interface::SystemInterface">
+    <description>
+      The ros2_control RRbot example using a system hardware interface-type.
+    </description>
+  </class>
+</library>
