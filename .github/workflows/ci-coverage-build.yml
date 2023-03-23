@@ -7,11 +7,13 @@ on:
 jobs:
   coverage:
     name: coverage build
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
     env:
       ROS_DISTRO: rolling
+    container:
+      image: ubuntu:jammy
     steps:
       - uses: ros-tooling/setup-ros@v0.6
         with:
@@ -48,5 +50,5 @@ jobs:
           name: codecov-umbrella
       - uses: actions/upload-artifact@v3
         with:
-          name: colcon-logs-${{ matrix.os }}
+          name: colcon-logs-coverage-ubuntu-22.04
           path: ros_ws/log
