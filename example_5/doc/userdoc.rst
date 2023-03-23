@@ -56,7 +56,7 @@ generating random sensor readings.
 
    Marker ``[claimed]`` by command interfaces means that a controller has access to command *RRBot*.
 
-4. Check is controllers are running
+4. Check if controllers are running
 
    .. code-block:: shell
 
@@ -127,21 +127,21 @@ generating random sensor readings.
 Files used for this demos
 #########################
 
-- Launch file: `rrbot_system_with_external_sensor.launch.py <https://github.com/ros-controls/ros2_control_demos/example_5/bringup/launch/rrbot_system_with_external_sensor.launch.py>`__
-- Controllers yaml: `rrbot_with_external_sensor_controllers.yaml <https://github.com/ros-controls/ros2_control_demos/example_5/bringup/config/rrbot_with_external_sensor_controllers.yaml>`__
-- URDF: `rrbot_with_external_sensor_controllers.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/example_5/description/urdf/rrbot_with_external_sensor_controllers.urdf.xacro>`__
+- Launch file: `rrbot_system_with_external_sensor.launch.py <https://github.com/ros-controls/ros2_control_demos/tree/master/example_5/bringup/launch/rrbot_system_with_external_sensor.launch.py>`__
+- Controllers yaml: `rrbot_with_external_sensor_controllers.yaml <https://github.com/ros-controls/ros2_control_demos/tree/master/example_5/bringup/config/rrbot_with_external_sensor_controllers.yaml>`__
+- URDF: `rrbot_with_external_sensor_controllers.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/blob/master/example_5/description/urdf/rrbot_system_with_external_sensor.urdf.xacro>`__
 
-  + ``ros2_control`` robot: `rrbot_system_position_only.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/example_5/description/ros2_control/rrbot_system_position_only.ros2_control.xacro>`__
-  + ``ros2_control`` sensor: `external_rrbot_force_torque_sensor.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/example_5/description/ros2_control/external_rrbot_force_torque_sensor.ros2_control.xacro>`__
+  + ``ros2_control`` robot: `rrbot_system_position_only.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/tree/master/example_5/description/ros2_control/rrbot_system_position_only.ros2_control.xacro>`__
+  + ``ros2_control`` sensor: `external_rrbot_force_torque_sensor.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/tree/master/example_5/description/ros2_control/external_rrbot_force_torque_sensor.ros2_control.xacro>`__
 
-- RViz configuration: `rrbot.rviz <https://github.com/ros-controls/ros2_control_demos/example_4/description/rviz/rrbot.rviz>`__
+- RViz configuration: `rrbot.rviz <https://github.com/ros-controls/ros2_control_demos/tree/master/example_5/description/rviz/rrbot.rviz>`__
 - Hardware interface plugin:
 
-  + robot `rrbot.cpp <https://github.com/ros-controls/ros2_control_demos/example_5/hardware/rrbot.cpp>`__
-  + sensor `external_rrbot_force_torque_sensor.cpp <https://github.com/ros-controls/ros2_control_demos/example_5/hardware/external_rrbot_force_torque_sensor.cpp>`__
+  + robot `rrbot.cpp <https://github.com/ros-controls/ros2_control_demos/tree/master/example_5/hardware/rrbot.cpp>`__
+  + sensor `external_rrbot_force_torque_sensor.cpp <https://github.com/ros-controls/ros2_control_demos/tree/master/example_5/hardware/external_rrbot_force_torque_sensor.cpp>`__
 
 Controllers from this demo
 ##########################
-- ``Joint State Broadcaster`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/joint_state_broadcaster/doc/userdoc.html>`__
-- ``Forward Command Controller`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/forward_command_controller/doc/userdoc.html>`__
-- ``Force Torque Sensor Broadcaster`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/force_torque_sensor_broadcaster/doc/userdoc.html>`__
+- ``Joint State Broadcaster`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/master/joint_state_broadcaster>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/joint_state_broadcaster/doc/userdoc.html>`__
+- ``Forward Command Controller`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/master/forward_command_controller>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/forward_command_controller/doc/userdoc.html>`__
+- ``Force Torque Sensor Broadcaster`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/master/force_torque_sensor_broadcaster>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/force_torque_sensor_broadcaster/doc/userdoc.html>`__
