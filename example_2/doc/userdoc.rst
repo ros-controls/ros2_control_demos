@@ -6,7 +6,16 @@ DiffBot
 
 *DiffBot*, or ''Differential Mobile Robot'', is a simple mobile base with differential drive.
 The robot is basically a box moving according to differential drive kinematics.
+
+For *example_2*, the hardware interface plugin is implemented having only one interface.
+
+- The communication is done using proprietary API to communicate with the robot control box.
+- Data for all joints is exchanged in batch (at once).
+
 The *DiffBot* URDF files can be found in ``description/urdf`` folder.
+
+Tutorial steps
+--------------------------
 
 1. To check that *DiffBot* description is working properly use following launch commands
 

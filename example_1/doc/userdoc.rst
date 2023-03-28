@@ -3,10 +3,22 @@
 Example 1: RRBot
 =====================
 
+*RRBot*, or ''Revolute-Revolute Manipulator Robot'', is a simple 3-linkage, 2-joint arm that we will
+use to demonstrate various features.
 
-*RRBot*, or ''Revolute-Revolute Manipulator Robot'', is a simple 3-linkage, 2-joint arm that we will use to demonstrate various features.
-It is essentially a double inverted pendulum and demonstrates some fun control concepts within a simulator and was originally introduced for Gazebo tutorials.
+It is essentially a double inverted pendulum and demonstrates some fun control concepts within a
+simulator and was originally introduced for Gazebo tutorials.
+
+For *example_1*, the hardware interface plugin is implemented having only one interface.
+
+- The communication is done using proprietary API to communicate with the robot control box.
+- Data for all joints is exchanged in batch (at once).
+- Examples: KUKA RSI
+
 The *RRBot* URDF files can be found in the ``description/urdf`` folder.
+
+Tutorial steps
+--------------------------
 
 1. To check that *RRBot* descriptions are working properly use following launch commands
 

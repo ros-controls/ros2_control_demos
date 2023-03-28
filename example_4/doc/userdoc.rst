@@ -4,8 +4,19 @@
 Example 4: Industrial robot with integrated sensor
 ***************************************************
 
-This example shows how a sensor can be integrated in a hardware interface of system-type:
-A 2D Force-Torque Sensor (FTS) is simulated by generating random sensor readings.
+This example shows how a sensor can be integrated in a hardware interface:
+
+- The communication is done using proprietary API to communicate with the robot control box.
+- Data for all joints is exchanged in batch (at once).
+- Sensor data are exchanged together with joint data
+- Examples: KUKA RSI with sensor connected to KRC (KUKA control box)
+
+A 2D Force-Torque Sensor (FTS) is simulated by generating random sensor readings via a hardware interface of
+type ``hardware_interface::SystemInterface``.
+
+
+Tutorial steps
+--------------------------
 
 1. To check that *RRBot* descriptions are working properly use following launch commands
 
