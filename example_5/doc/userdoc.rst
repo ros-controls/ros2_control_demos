@@ -4,9 +4,18 @@
 Example 5: Industrial robot with externally connected sensor
 *************************************************************
 
-This example shows how an externally connected sensor can be accessed via a hardware interface of
-type ``hardware_interface::SensorInterface``: A 3D Force-Torque Sensor (FTS) is simulated by
-generating random sensor readings.
+This example shows how an externally connected sensor can be accessed:
+
+- The communication is done using proprietary API to communicate with the robot control box.
+- Data for all joints is exchanged at once.
+- Sensor data are exchanged independently of joint data.
+- Examples: KUKA RSI and FTS connected to independent PC with ROS 2.
+
+A 3D Force-Torque Sensor (FTS) is simulated by generating random sensor readings via a hardware interface of
+type ``hardware_interface::SensorInterface``.
+
+Tutorial steps
+--------------------------
 
 1. To check that *RRBot* descriptions are working properly use following launch commands
 
