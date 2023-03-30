@@ -124,9 +124,9 @@ Tutorial steps
 
    .. code-block:: shell
 
-    ros2 control load_controller position_trajectory_controller
+    ros2 control load_controller joint_trajectory_position_controller
 
-   what should return ``Successfully loaded controller position_trajectory_controller``. Check the status
+   what should return ``Successfully loaded controller joint_trajectory_position_controller``. Check the status
 
    .. code-block:: shell
 
@@ -138,15 +138,15 @@ Tutorial steps
 
     joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
     forward_position_controller[forward_command_controller/ForwardCommandController] active
-    position_trajectory_controller[joint_trajectory_controller/JointTrajectoryController] unconfigured
+    joint_trajectory_position_controller[joint_trajectory_controller/JointTrajectoryController] unconfigured
 
    Configure the controller by setting it ``inactive`` by
 
    .. code-block:: shell
 
-    ros2 control set_controller_state position_trajectory_controller inactive
+    ros2 control set_controller_state joint_trajectory_position_controller inactive
 
-   what should give ``Successfully configured position_trajectory_controller``.
+   what should give ``Successfully configured joint_trajectory_position_controller``.
 
    .. note::
 
@@ -157,9 +157,9 @@ Tutorial steps
 
    .. code-block:: shell
 
-    ros2 control load_controller position_trajectory_controller --set-state inactive
+    ros2 control load_controller joint_trajectory_position_controller --set-state inactive
 
-   You should get the result ``Successfully loaded controller position_trajectory_controller into state inactive``.
+   You should get the result ``Successfully loaded controller joint_trajectory_position_controller into state inactive``.
 
    See if it loaded properly with
 
@@ -173,20 +173,20 @@ Tutorial steps
 
     joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
     forward_position_controller[forward_command_controller/ForwardCommandController] active
-    position_trajectory_controller[joint_trajectory_controller/JointTrajectoryController] inactive
+    joint_trajectory_position_controller[joint_trajectory_controller/JointTrajectoryController] inactive
 
    Note that the controller is loaded but still ``inactive``. Now you can switch the controller by
 
    .. code-block:: shell
 
     ros2 control set_controller_state forward_position_controller inactive
-    ros2 control set_controller_state position_trajectory_controller active
+    ros2 control set_controller_state joint_trajectory_position_controller active
 
    or simply via this one-line command
 
    .. code-block:: shell
 
-    ros2 control switch_controllers --activate position_trajectory_controller --deactivate forward_position_controller
+    ros2 control switch_controllers --activate joint_trajectory_position_controller --deactivate forward_position_controller
 
    Again, check via
 
@@ -200,7 +200,7 @@ Tutorial steps
 
     joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
     forward_position_controller[forward_command_controller/ForwardCommandController] inactive
-    position_trajectory_controller[joint_trajectory_controller/JointTrajectoryController] active
+    joint_trajectory_position_controller[joint_trajectory_controller/JointTrajectoryController] active
 
    Send a command to the controller using demo node, which sends four goals every 6 seconds in a loop:
 
