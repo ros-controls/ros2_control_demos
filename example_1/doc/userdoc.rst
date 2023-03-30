@@ -12,7 +12,7 @@ simulator and was originally introduced for Gazebo tutorials.
 For *example_1*, the hardware interface plugin is implemented having only one interface.
 
 - The communication is done using proprietary API to communicate with the robot control box.
-- Data for all joints is exchanged in batch (at once).
+- Data for all joints is exchanged at once.
 - Examples: KUKA RSI
 
 The *RRBot* URDF files can be found in the ``description/urdf`` folder.

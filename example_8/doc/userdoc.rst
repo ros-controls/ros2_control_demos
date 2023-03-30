@@ -9,7 +9,7 @@ Example 8: Industrial Robots with an exposed transmission interface
 In this example, both joints use an exposed transmission interface:
 
 - The communication is done using proprietary API to communicate with the robot control box.
-- Data for all joints is exchanged in batch (at once).
+- Data for all joints is exchanged at once.
 
 Tutorial steps
 --------------------------

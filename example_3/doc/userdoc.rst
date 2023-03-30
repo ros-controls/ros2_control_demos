@@ -9,7 +9,7 @@ The example shows how to implement multi-interface robot hardware taking care ab
 For *example_3*, the hardware interface plugin is implemented having multiple interfaces.
 
 - The communication is done using proprietary API to communicate with the robot control box.
-- Data for all joints is exchanged in batch (at once).
+- Data for all joints is exchanged at once.
 - Examples: KUKA FRI, ABB Yumi, Schunk LWA4p, etc.
 
 Two illegal controllers demonstrate how hardware interface declines faulty claims to access joint command interfaces.

@@ -7,7 +7,7 @@ Example 5: Industrial robot with externally connected sensor
 This example shows how an externally connected sensor can be accessed:
 
 - The communication is done using proprietary API to communicate with the robot control box.
-- Data for all joints is exchanged in batch (at once).
+- Data for all joints is exchanged at once.
 - Sensor data are exchanged independently of joint data.
 - Examples: KUKA RSI and FTS connected to independent PC with ROS 2.
 
