@@ -36,7 +36,8 @@ def generate_launch_description():
             PathJoinSubstitution(
                 [FindPackageShare("ros2_control_demo_example_9"), "urdf", "rrbot.urdf.xacro"]
             ),
-            "use_gazebo:=true",
+            " ",
+            "use_gazebo_classic:=true",
         ]
     )
     robot_description = {"robot_description": robot_description_content}
