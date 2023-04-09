@@ -101,3 +101,4 @@ Examples
    Example 5: Industrial Robots with externally connected sensor <../example_5/doc/userdoc.rst>
    Example 6: Modular Robots with separate communication to each actuator <../example_6/doc/userdoc.rst>
    Example 8: Using transmissions <../example_8/doc/userdoc.rst>
+   Example 9: Gazebo Classic and Gazebo <../example_9/doc/userdoc.rst>
