@@ -15,10 +15,25 @@ Gazebo Classic and Gazebo is used for this purpose.
 
 .. note::
 
-   For this example to work, you have to install *gazebo_ros2_control* or build from source by
-   adding the following repositories to your workspace:
+   For this example to work, you have to install Gazebo Classic and Gazebo itself. At the time of writing this tutorial,
+   it is not possible to install Gazebo Classic and Gazebo Garden at the same time, see the notes in the `official docs <https://gazebosim.org/docs/garden/install_ubuntu>`_. Therefore, we recommend installing
 
- - gazebo_ros2_control: ``git clone git@github.com:ros-simulation/gazebo_ros2_control.git --branch master``
+   .. code-block:: shell
+
+    sudo apt-get install ros-rolling-gazebo-ros ignition-fortress ros-rolling-ros-gz
+
+   Then install the ros2_control integrations *gazebo_ros2_control* and *gz_ros2_control* via
+
+   .. code-block:: shell
+
+    sudo apt-get install ros-rolling-gazebo-ros2-control ros-rolling-ign-ros2-control
+
+  or build from source by adding the following repositories to your workspace
+
+ - *gazebo_ros2_control*: ``git clone git@github.com:ros-simulation/gazebo_ros2_control.git --branch master``
+ - *gz_ros2_control*: ``git clone git@github.com:ros-simulation/gz_ros2_control.git --branch master``
+
+   and following the build descriptions in the respective repositories.
 
 .. **NOTE**: For this example to work, you will probably have to use Ignition Gazebo version ``edifice`` by setting up the environment variable with:
 ..           ```
@@ -56,21 +71,31 @@ Tutorial steps
 
    It uses an identical hardware interface as already discussed with *example_9*, see its docs on details on the hardware interface.
 
-3. To start *RRBot* in Gazebo Classic simulation open a terminal, source your ROS2-workspace and Gazebo classic installation first
+3. To start *RRBot* in the simulators, choose between Gazebo Classic and Gazebo:
 
-   .. code-block:: shell
+   a.  For Gazebo Classic simulation open a terminal, source your ROS2-workspace and Gazebo classic installation first
 
-    source /usr/share/gazebo/setup.sh
+    .. code-block:: shell
 
-   Then, execute its launch file with
+      source /usr/share/gazebo/setup.sh
 
-   .. code-block:: shell
+    Then, execute its launch file with
 
-    ros2 launch ros2_control_demo_example_9 rrbot_gazebo_classic.launch.py
+    .. code-block:: shell
 
-   The launch file loads the robot description, starts Gazebo Classic, *Joint State Broadcaster* and *Forward Command Controller*.
+      ros2 launch ros2_control_demo_example_9 rrbot_gazebo_classic.launch.py
 
-   If you can see two orange and one black "box" in Gazebo Classic everything has started properly.
+    The launch file loads the robot description, starts Gazebo Classic, *Joint State Broadcaster* and *Forward Command Controller*.
+    If you can see two orange and one black "box" in Gazebo Classic everything has started properly.
+
+   b.  For Gazebo simulation open a terminal, source your ROS2-workspace and execute its launch file with
+
+    .. code-block:: shell
+
+      ros2 launch ros2_control_demo_example_9 rrbot_gazebo.launch.py
+
+    The launch file loads the robot description, starts Gazebo, *Joint State Broadcaster* and *Forward Command Controller*.
+    If you can see two orange and one black "box" in Gazebo everything has started properly.
 
 4. Check if the hardware interface loaded properly, by opening another terminal and executing
 
@@ -116,9 +141,10 @@ Tutorial steps
 
     ros2 launch ros2_control_demo_example_9 test_forward_position_controller.launch.py
 
-   You should now see the robot moving in Gazebo Classic.
+   You should now see the robot moving in Gazebo Classic / Gazebo.
 
-   If you echo the ``/joint_states`` or ``/dynamic_joint_states`` topics you should now get similar values, namely the simulated states of the robot
+   If you echo the ``/joint_states`` or ``/dynamic_joint_states`` topics you should see the changing values,
+   namely the simulated states of the robot
 
    .. code-block:: shell
 
@@ -129,7 +155,12 @@ Tutorial steps
 Files used for this demos
 -------------------------
 
-- Launch file: `rrbot.launch.py <https://github.com/ros-controls/ros2_control_demos/tree/master/example_9/bringup/launch/rrbot.launch.py>`__
+- Launch files:
+
+  + Hardware: `rrbot.launch.py <https://github.com/ros-controls/ros2_control_demos/tree/master/example_9/bringup/launch/rrbot.launch.py>`__
+  + Gazebo Classic: `rrbot_gazebo_classic.launch.py <https://github.com/ros-controls/ros2_control_demos/tree/master/example_9/bringup/launch/rrbot_gazebo_classic.launch.py>`__
+  + Gazebo `rrbot_gazebo.launch.py <https://github.com/ros-controls/ros2_control_demos/tree/master/example_9/bringup/launch/rrbot_gazebo.launch.py>`__
+
 - Controllers yaml: `rrbot_controllers.yaml <https://github.com/ros-controls/ros2_control_demos/tree/master/example_9/bringup/config/rrbot_controllers.yaml>`__
 - URDF file: `rrbot.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/master/example_9/description/urdf/rrbot.urdf.xacro>`__
 

@@ -31,8 +31,13 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_desc
   <xacro:if value="$(arg use_gazebo_classic)">
     <gazebo>
       <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
-        <!-- <robot_param>robot_description</robot_param>
-        <robot_param_node>robot_state_publisher</robot_param_node> -->
+        <parameters>$(find ros2_control_demo_example_9)/config/rrbot_controllers.yaml</parameters>
+      </plugin>
+    </gazebo>
+  </xacro:if>
+  <xacro:if value="$(arg use_gazebo)">
+    <gazebo>
+      <plugin filename="libgz_ros2_control-system.so" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
         <parameters>$(find ros2_control_demo_example_9)/config/rrbot_controllers.yaml</parameters>
       </plugin>
     </gazebo>
