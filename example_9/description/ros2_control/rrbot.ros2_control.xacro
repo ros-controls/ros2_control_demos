@@ -10,7 +10,7 @@
         </xacro:if>
         <xacro:unless value="${use_gazebo_classic}">
           <xacro:if value="${use_gazebo}">
-            <plugin>ignition_ros2_control/IgnitionSystem</plugin>
+            <plugin>gz_ros2_control/GazeboSimSystem</plugin>
           </xacro:if>
           <xacro:unless value="${use_gazebo}">
             <plugin>ros2_control_demo_example_9/RRBotSystemPositionOnlyHardware</plugin>

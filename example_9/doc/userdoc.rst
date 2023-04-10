@@ -22,34 +22,23 @@ Gazebo Classic and Gazebo is used for this purpose.
 
     sudo apt-get install ros-rolling-gazebo-ros ignition-fortress ros-rolling-ros-gz
 
+   If like at the time of writing ``ros-rolling-ros-gz`` is not released, one has to `build it from source <https://github.com/gazebosim/ros_gz#from-source>`__ (use the humble branch with fortress, because ros2 only supports garden onwards).
+
    Then install the ros2_control integrations *gazebo_ros2_control* and *gz_ros2_control* via
 
    .. code-block:: shell
 
     sudo apt-get install ros-rolling-gazebo-ros2-control ros-rolling-ign-ros2-control
 
-  or build from source by adding the following repositories to your workspace
+   or build from source by adding the following repositories to your workspace
 
- - *gazebo_ros2_control*: ``git clone git@github.com:ros-simulation/gazebo_ros2_control.git --branch master``
- - *gz_ros2_control*: ``git clone git@github.com:ros-simulation/gz_ros2_control.git --branch master``
+   .. code-block:: shell
+
+    git clone git@github.com:ros-simulation/gazebo_ros2_control.git --branch master
+    git clone git@github.com:ros-simulation/gz_ros2_control.git --branch master
 
    and following the build descriptions in the respective repositories.
 
-.. **NOTE**: For this example to work, you will probably have to use Ignition Gazebo version ``edifice`` by setting up the environment variable with:
-..           ```
-..           export IGNITION_VERSION=edifice
-..           ```
-..           and calling ``rosdep install --from-paths . -i -y``
-..           Also take care to delete all other version of Gazebo on your computer using:
-..           ```
-..           sudo apt purge libignition-gazebo3 && sudo apt autoremove
-..           ```
-..           There are some issues with the current gazebo version "fortress" v6.3.0.
-
-.. **ATTENTION**: The simulation brakes after first movement. This has to be debugged, feel free to help or simply use setup for your robot.
-
-..  - ign_ros2_control: ``git clone https://github.com/ignitionrobotics/ign_ros2_control.git --branch main``
-..  - ros_ign: ``git clone https://github.com/ignitionrobotics/ros_ign.git --branch ros2``
 
 Tutorial steps
 --------------------------
