@@ -52,39 +52,47 @@ Tutorial steps
    The ``joint_state_publisher_gui`` provides a GUI to change the configuration for *RRbot*. It is immediately displayed in *RViz*.
 
 
-2. To start *RRBot* with the hardware interface, open a terminal, source your ROS2-workspace and execute its launch file with
+2. To start *RRBot* with the hardware interface instead of the simulators, open a terminal, source your ROS2-workspace and execute its launch file with
 
    .. code-block:: shell
 
     ros2 launch ros2_control_demo_example_9 rrbot.launch.py
 
-   It uses an identical hardware interface as already discussed with *example_9*, see its docs on details on the hardware interface.
+   It uses an identical hardware interface as already discussed with *example_1*, see its docs on details on the hardware interface.
 
 3. To start *RRBot* in the simulators, choose between Gazebo Classic and Gazebo:
 
-   a.  For Gazebo Classic simulation open a terminal, source your ROS2-workspace and Gazebo classic installation first
+   a.  For Gazebo Classic simulation open a terminal, source your ROS2-workspace and Gazebo Classic installation first, i.e., by
 
     .. code-block:: shell
 
       source /usr/share/gazebo/setup.sh
 
-    Then, execute its launch file with
+    Then, execute the launch file with
 
     .. code-block:: shell
 
       ros2 launch ros2_control_demo_example_9 rrbot_gazebo_classic.launch.py
 
     The launch file loads the robot description, starts Gazebo Classic, *Joint State Broadcaster* and *Forward Command Controller*.
-    If you can see two orange and one black "box" in Gazebo Classic everything has started properly.
+    If you can see two orange and one yellow "box" in Gazebo Classic everything has started properly.
 
-   b.  For Gazebo simulation open a terminal, source your ROS2-workspace and execute its launch file with
+    .. image:: rrbot_gazebo_classic.png
+      :width: 400
+      :alt: Revolute-Revolute Manipulator Robot in Gazebo Classic
+
+   b.  For Gazebo simulation open a terminal, source your ROS2-workspace and execute the launch file with
 
     .. code-block:: shell
 
       ros2 launch ros2_control_demo_example_9 rrbot_gazebo.launch.py
 
     The launch file loads the robot description, starts Gazebo, *Joint State Broadcaster* and *Forward Command Controller*.
-    If you can see two orange and one black "box" in Gazebo everything has started properly.
+    If you can see two orange and one yellow "box" in Gazebo everything has started properly.
+
+    .. image:: rrbot_gazebo.png
+      :width: 400
+      :alt: Revolute-Revolute Manipulator Robot in Gazebo
 
 4. Check if the hardware interface loaded properly, by opening another terminal and executing
 
@@ -131,6 +139,9 @@ Tutorial steps
     ros2 launch ros2_control_demo_example_9 test_forward_position_controller.launch.py
 
    You should now see the robot moving in Gazebo Classic / Gazebo.
+
+   .. note::
+    The two simulators show different behavior due to a different implementation of the position interface. For further information see `this comment (Gazebo Classic) <https://github.com/ros-controls/gazebo_ros2_control/pull/172#issuecomment-1441805536>`__ vs. `this discussion (Gazebo) <https://github.com/ros-controls/gz_ros2_control/issues/87>`__.
 
    If you echo the ``/joint_states`` or ``/dynamic_joint_states`` topics you should see the changing values,
    namely the simulated states of the robot
