@@ -5,7 +5,18 @@ Example 3: Robots with multiple interfaces
 ************************************************
 
 The example shows how to implement multi-interface robot hardware taking care about interfaces used.
-The two illegal controllers demonstrate how hardware interface declines faulty claims to access joint command interfaces.
+
+For *example_3*, the hardware interface plugin is implemented having multiple interfaces.
+
+- The communication is done using proprietary API to communicate with the robot control box.
+- Data for all joints is exchanged at once.
+- Examples: KUKA FRI, ABB Yumi, Schunk LWA4p, etc.
+
+Two illegal controllers demonstrate how hardware interface declines faulty claims to access joint command interfaces.
+
+
+Tutorial steps
+--------------------------
 
 1. To check that *RRBot* descriptions are working properly use following launch commands
 
@@ -128,7 +139,7 @@ The two illegal controllers demonstrate how hardware interface declines faulty c
    - ``robot_controller:=forward_illegal1_controller`` or
    - ``robot_controller:=forward_illegal2_controller``
 
-   You will see the following error messages
+   You will see the following error messages, because the hardware interface enforces all joints having the same command interface
 
    .. code-block:: shell
 

@@ -4,8 +4,16 @@
 Example 6: Modular Robots with separate communication to each actuator
 ***********************************************************************
 
-The example shows how to implement robot hardware with separate communication to each actuator. This
-is implemented with a hardware interface of type ``hardware_interface::ActuatorInterface``.
+The example shows how to implement robot hardware with separate communication to each actuator:
+
+- The communication is done on actuator level using proprietary or standardized API (e.g., canopen_402, Modbus, RS232, RS485).
+- Data for all actuators is exchanged separately from each other.
+- Examples: Mara, Arduino-based-robots
+
+This is implemented with a hardware interface of type ``hardware_interface::ActuatorInterface``.
+
+Tutorial steps
+--------------------------
 
 1. To check that *RRBot* descriptions are working properly use following launch commands
 
