@@ -49,7 +49,7 @@ install(
   DESTINATION include/ros2_control_demo_example_9
 )
 install(
-  DIRECTORY description/launch description/ros2_control description/urdf description/rviz
+  DIRECTORY description/launch description/ros2_control description/urdf description/gazebo description/rviz
   DESTINATION share/ros2_control_demo_example_9
 )
 install(
