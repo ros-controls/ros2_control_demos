@@ -28,9 +28,9 @@ Gazebo Classic and Gazebo is used for this purpose.
 
    .. code-block:: shell
 
-    sudo apt-get install ros-rolling-gazebo-ros2-control ros-rolling-ign-ros2-control
+    sudo apt-get install ros-rolling-gazebo-ros2-control ros-rolling-gz-ros2-control
 
-   or build from source by adding the following repositories to your workspace
+   At the time of writing, the package ``ros-rolling-ros-gz`` is not released yet. Build it from source by adding the following repositories to your workspace
 
    .. code-block:: shell
 
