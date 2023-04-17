@@ -22,7 +22,7 @@ Gazebo Classic and Gazebo is used for this purpose.
 
     sudo apt-get install ros-rolling-gazebo-ros ignition-fortress ros-rolling-ros-gz
 
-   If like at the time of writing ``ros-rolling-ros-gz`` is not released, one has to `build it from source <https://github.com/gazebosim/ros_gz#from-source>`__ (use the humble branch with fortress, because ros2 only supports garden onwards).
+   At the time of writing, the package ``ros-rolling-ros-gz`` is `not released yet <https://github.com/gazebosim/ros_gz/issues/300>`__: One has to `build it from source <https://github.com/gazebosim/ros_gz/tree/humble#from-source>`__ (use the humble branch with fortress, because ros2-branch only supports garden onwards).
 
    Then install the ros2_control integrations *gazebo_ros2_control* and *gz_ros2_control* via
 
