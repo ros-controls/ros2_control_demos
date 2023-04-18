@@ -120,46 +120,62 @@ Tutorial steps
     ros2 topic echo /dynamic_joint_states
 
 6. Let's switch to a different controller, the ``Joint Trajectory Controller``.
-   Load the controller manually by
-
-   .. code-block:: shell
-
-    ros2 control load_controller joint_trajectory_position_controller
-
-   what should return ``Successfully loaded controller joint_trajectory_position_controller``. Check the status
-
-   .. code-block:: shell
-
-    ros2 control list_controllers
-
-   what shows you that the controller is loaded but unconfigured.
-
-   .. code-block:: shell
-
-    joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
-    forward_position_controller[forward_command_controller/ForwardCommandController] active
-    joint_trajectory_position_controller[joint_trajectory_controller/JointTrajectoryController] unconfigured
-
-   Configure the controller by setting it ``inactive`` by
-
-   .. code-block:: shell
-
-    ros2 control set_controller_state joint_trajectory_position_controller inactive
-
-   what should give ``Successfully configured joint_trajectory_position_controller``.
 
    .. note::
 
-     The parameters are already set in `rrbot_controllers.yaml <https://github.com/ros-controls/ros2_control_demos/tree/master/example_1/bringup/config/rrbot_controllers.yaml>`__
-     but the controller was not loaded from the `launch file rrbot.launch.py <https://github.com/ros-controls/ros2_control_demos/tree/master/example_1/bringup/launch/rrbot.launch.py>`__ before.
+    The parameters are already set in `rrbot_controllers.yaml <https://github.com/ros-controls/ros2_control_demos/tree/master/example_1/bringup/config/rrbot_controllers.yaml>`__
+    but the controller was not loaded from the `launch file rrbot.launch.py <https://github.com/ros-controls/ros2_control_demos/tree/master/example_1/bringup/launch/rrbot.launch.py>`__ before.
 
-   As an alternative, you can load the controller directly in ``inactive``-state by means of the option for ``load_controller``
+   There are different ways to achieve this:
 
-   .. code-block:: shell
+   a. Load the controller manually by
 
-    ros2 control load_controller joint_trajectory_position_controller --set-state inactive
+      .. code-block:: shell
 
-   You should get the result ``Successfully loaded controller joint_trajectory_position_controller into state inactive``.
+        ros2 control load_controller joint_trajectory_position_controller
+
+      what should return ``Successfully loaded controller joint_trajectory_position_controller``. Check the status
+
+      .. code-block:: shell
+
+        ros2 control list_controllers
+
+      what shows you that the controller is loaded but unconfigured.
+
+      .. code-block:: shell
+
+        joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+        forward_position_controller[forward_command_controller/ForwardCommandController] active
+        joint_trajectory_position_controller[joint_trajectory_controller/JointTrajectoryController] unconfigured
+
+      Configure the controller by setting it ``inactive`` by
+
+      .. code-block:: shell
+
+        ros2 control set_controller_state joint_trajectory_position_controller inactive
+
+      what should give ``Successfully configured joint_trajectory_position_controller``.
+
+   b. As one alternative, you can load the controller directly in ``inactive``-state by means of the option for ``load_controller``
+
+      .. code-block:: shell
+
+        ros2 control load_controller joint_trajectory_position_controller --set-state inactive
+
+      which should five the result ``Successfully loaded controller joint_trajectory_position_controller into state inactive``.
+
+   c. Another alternative is the use of a launch file, see
+
+      .. code-block:: shell
+
+        ros2 launch ros2_control_demo_example_1 joint_trajectory_position_controller.launch.py
+
+      giving the following output (which is not accurate, because the controller was not activated yet)
+
+      .. code-block:: shell
+
+        [spawner_joint_trajectory_position_controller]: Loaded joint_trajectory_position_controller
+        [spawner_joint_trajectory_position_controller]: Configured and activated joint_trajectory_position_controller
 
    See if it loaded properly with
 
@@ -202,7 +218,7 @@ Tutorial steps
     forward_position_controller[forward_command_controller/ForwardCommandController] inactive
     joint_trajectory_position_controller[joint_trajectory_controller/JointTrajectoryController] active
 
-   Send a command to the controller using demo node, which sends four goals every 6 seconds in a loop:
+   Send a command to the controller using the demo node, which sends four goals every 6 seconds in a loop:
 
    .. code-block:: shell
 
