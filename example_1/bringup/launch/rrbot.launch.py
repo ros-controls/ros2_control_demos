@@ -56,11 +56,22 @@ def generate_launch_description():
         parameters=[robot_description, robot_controllers],
         output="both",
     )
+    hardware_activation = Node(
+        package="controller_manager",
+        executable="hardware_spawner",
+        arguments=["RRBot", "--activate"],
+    )
     robot_state_pub_node = Node(
         package="robot_state_publisher",
         executable="robot_state_publisher",
         output="both",
         parameters=[robot_description],
+    )
+    delay_robot_state_pub = RegisterEventHandler(
+        event_handler=OnProcessExit(
+            target_action=hardware_activation,
+            on_exit=[robot_state_pub_node],
+        )
     )
     rviz_node = Node(
         package="rviz2",
@@ -69,19 +80,22 @@ def generate_launch_description():
         output="log",
         arguments=["-d", rviz_config_file],
     )
-
     joint_state_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
         arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager"],
     )
-
+    delay_joint_state_broadcaster_spawner = RegisterEventHandler(
+        event_handler=OnProcessExit(
+            target_action=hardware_activation,
+            on_exit=[joint_state_broadcaster_spawner],
+        )
+    )
     robot_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
         arguments=["forward_position_controller", "--controller-manager", "/controller_manager"],
     )
-
     # Delay rviz start after `joint_state_broadcaster`
     delay_rviz_after_joint_state_broadcaster_spawner = RegisterEventHandler(
         event_handler=OnProcessExit(
@@ -89,7 +103,6 @@ def generate_launch_description():
             on_exit=[rviz_node],
         )
     )
-
     # Delay start of robot_controller after `joint_state_broadcaster`
     delay_robot_controller_spawner_after_joint_state_broadcaster_spawner = RegisterEventHandler(
         event_handler=OnProcessExit(
@@ -100,8 +113,9 @@ def generate_launch_description():
 
     nodes = [
         control_node,
-        robot_state_pub_node,
-        joint_state_broadcaster_spawner,
+        hardware_activation,
+        delay_robot_state_pub,
+        delay_joint_state_broadcaster_spawner,
         delay_rviz_after_joint_state_broadcaster_spawner,
         delay_robot_controller_spawner_after_joint_state_broadcaster_spawner,
     ]
