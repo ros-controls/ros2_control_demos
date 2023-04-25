@@ -1,5 +1,5 @@
 ## General
-Please consider the infos from [CONTRIBUTING.md](CONTRIBUTING.md) before you open a pull request.
+Please consider the guidelines from [CONTRIBUTING.md](CONTRIBUTING.md) before you open a pull request.
 
 ## New Examples
 If you propose adding a new example, make sure that your new example has:
