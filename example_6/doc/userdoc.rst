@@ -6,9 +6,9 @@ Example 6: Modular Robots with separate communication to each actuator
 
 The example shows how to implement robot hardware with separate communication to each actuator:
 
-- The communication is done on actuator level using proprietary or standardized API (e.g., canopen_402, Modbus, RS232, RS485).
-- Data for all actuators is exchanged separately from each other.
-- Examples: Mara, Arduino-based-robots
+* The communication is done on actuator level using proprietary or standardized API (e.g., canopen_402, Modbus, RS232, RS485).
+* Data for all actuators is exchanged separately from each other.
+* Examples: Mara, Arduino-based-robots
 
 This is implemented with a hardware interface of type ``hardware_interface::ActuatorInterface``.
 
@@ -99,19 +99,19 @@ Tutorial steps
 
 
 Files used for this demos
-#########################
+--------------------------
 
-- Launch file: `rrbot_modular_actuators.launch.py <https://github.com/ros-controls/ros2_control_demos/tree/master/example_6/bringup/launch/rrbot_modular_actuators.launch.py>`__
-- Controllers yaml: `rrbot_modular_actuators.yaml <https://github.com/ros-controls/ros2_control_demos/tree/master/example_6/bringup/config/rrbot_modular_actuators.yaml>`__
-- URDF: `rrbot_modular_actuators.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/master/example_6/description/urdf/rrbot_modular_actuators.urdf.xacro>`__
+* Launch file: `rrbot_modular_actuators.launch.py <https://github.com/ros-controls/ros2_control_demos/tree/master/example_6/bringup/launch/rrbot_modular_actuators.launch.py>`__
+* Controllers yaml: `rrbot_modular_actuators.yaml <https://github.com/ros-controls/ros2_control_demos/tree/master/example_6/bringup/config/rrbot_modular_actuators.yaml>`__
+* URDF: `rrbot_modular_actuators.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/master/example_6/description/urdf/rrbot_modular_actuators.urdf.xacro>`__
 
-  + ``ros2_control`` URDF tag: `rrbot_modular_actuators.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/tree/master/example_6/description/ros2_control/rrbot_modular_actuators.ros2_control.xacro>`__
+  * ``ros2_control`` URDF tag: `rrbot_modular_actuators.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/tree/master/example_6/description/ros2_control/rrbot_modular_actuators.ros2_control.xacro>`__
 
-- RViz configuration: `rrbot.rviz <https://github.com/ros-controls/ros2_control_demos/tree/master/example_6/description/rviz/rrbot.rviz>`__
+* RViz configuration: `rrbot.rviz <https://github.com/ros-controls/ros2_control_demos/tree/master/example_6/description/rviz/rrbot.rviz>`__
 
-- Hardware interface plugin: `rrbot_actuator.cpp <https://github.com/ros-controls/ros2_control_demos/blob/master/example_6/hardware/rrbot_actuator.cpp>`__
+* Hardware interface plugin: `rrbot_actuator.cpp <https://github.com/ros-controls/ros2_control_demos/blob/master/example_6/hardware/rrbot_actuator.cpp>`__
 
 Controllers from this demo
-##########################
-- ``Joint State Broadcaster`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/master/joint_state_broadcaster>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/joint_state_broadcaster/doc/userdoc.html>`__
-- ``Forward Command Controller`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/master/forward_command_controller>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/forward_command_controller/doc/userdoc.html>`__
+--------------------------
+* ``Joint State Broadcaster`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/master/joint_state_broadcaster>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/joint_state_broadcaster/doc/userdoc.html>`__
+* ``Forward Command Controller`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/master/forward_command_controller>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/forward_command_controller/doc/userdoc.html>`__
