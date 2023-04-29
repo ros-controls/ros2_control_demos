@@ -8,8 +8,8 @@ Example 8: Industrial Robots with an exposed transmission interface
 
 In this example, both joints use an exposed transmission interface:
 
-- The communication is done using proprietary API to communicate with the robot control box.
-- Data for all joints is exchanged at once.
+  * The communication is done using proprietary API to communicate with the robot control box.
+  * Data for all joints is exchanged at once.
 
 Tutorial steps
 --------------------------
@@ -97,21 +97,21 @@ Tutorial steps
 
 
 Files used for this demos
-#########################
+--------------------------
 
-- Launch file: `rrbot_transmissions_system_position_only.launch.py <https://github.com/ros-controls/ros2_control_demos/tree/master/example_8/bringup/launch/rrbot_transmissions_system_position_only.launch.py>`__
-- Controllers yaml: `rrbot_controllers.yaml <https://github.com/ros-controls/ros2_control_demos/tree/master/example_8/bringup/config/rrbot_controllers.yaml>`__
-- URDF file: `rrbot_transmissions_system_position_only.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/master/example_8/description/urdf/rrbot_transmissions_system_position_only.urdf.xacro>`__
+* Launch file: `rrbot_transmissions_system_position_only.launch.py <https://github.com/ros-controls/ros2_control_demos/tree/master/example_8/bringup/launch/rrbot_transmissions_system_position_only.launch.py>`__
+* Controllers yaml: `rrbot_controllers.yaml <https://github.com/ros-controls/ros2_control_demos/tree/master/example_8/bringup/config/rrbot_controllers.yaml>`__
+* URDF file: `rrbot_transmissions_system_position_only.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/master/example_8/description/urdf/rrbot_transmissions_system_position_only.urdf.xacro>`__
 
-  + Description: `rrbot_description.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/master/example_8/description/urdf/rrbot_description.urdf.xacro>`__
-  + ``ros2_control`` tag: `rrbot_transmissions_system_position_only.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/tree/master/example_8/description/ros2_control/rrbot_transmissions_system_position_only.ros2_control.xacro>`__
+  * Description: `rrbot_description.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/master/example_8/description/urdf/rrbot_description.urdf.xacro>`__
+  * ``ros2_control`` tag: `rrbot_transmissions_system_position_only.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/tree/master/example_8/description/ros2_control/rrbot_transmissions_system_position_only.ros2_control.xacro>`__
 
-- RViz configuration: `rrbot.rviz <https://github.com/ros-controls/ros2_control_demos/tree/master/example_8/description/rviz/rrbot.rviz>`__
+* RViz configuration: `rrbot.rviz <https://github.com/ros-controls/ros2_control_demos/tree/master/example_8/description/rviz/rrbot.rviz>`__
 
-- Hardware interface plugin: `rrbot_transmissions_system_position_only.cpp <https://github.com/ros-controls/ros2_control_demos/tree/master/example_8/hardware/rrbot_transmissions_system_position_only.cpp>`__
+* Hardware interface plugin: `rrbot_transmissions_system_position_only.cpp <https://github.com/ros-controls/ros2_control_demos/tree/master/example_8/hardware/rrbot_transmissions_system_position_only.cpp>`__
 
 
 Controllers from this demo
-##########################
-- ``Joint State Broadcaster`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/master/joint_state_broadcaster>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/joint_state_broadcaster/doc/userdoc.html>`__
-- ``Forward Command Controller`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/master/forward_command_controller>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/forward_command_controller/doc/userdoc.html>`__
+--------------------------
+* ``Joint State Broadcaster`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/master/joint_state_broadcaster>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/joint_state_broadcaster/doc/userdoc.html>`__
+* ``Forward Command Controller`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/master/forward_command_controller>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/forward_command_controller/doc/userdoc.html>`__

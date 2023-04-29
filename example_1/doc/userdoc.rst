@@ -11,9 +11,9 @@ simulator and was originally introduced for Gazebo tutorials.
 
 For *example_1*, the hardware interface plugin is implemented having only one interface.
 
-- The communication is done using proprietary API to communicate with the robot control box.
-- Data for all joints is exchanged at once.
-- Examples: KUKA RSI
+* The communication is done using proprietary API to communicate with the robot control box.
+* Data for all joints is exchanged at once.
+* Examples: KUKA RSI
 
 The *RRBot* URDF files can be found in the ``description/urdf`` folder.
 
@@ -39,8 +39,8 @@ Tutorial steps
 
    The *RViz* setup can be recreated following these steps:
 
-   - The robot models can be visualized using ``RobotModel`` display using ``/robot_description`` topic.
-   - Or you can simply open the configuration from ``description/rviz`` folder manually or directly by executing
+   * The robot models can be visualized using ``RobotModel`` display using ``/robot_description`` topic.
+   * Or you can simply open the configuration from ``description/rviz`` folder manually or directly by executing
 
    .. code-block:: shell
 
@@ -213,24 +213,24 @@ Tutorial steps
 Files used for this demos
 -------------------------
 
-- Launch file: `rrbot.launch.py <https://github.com/ros-controls/ros2_control_demos/tree/master/example_1/bringup/launch/rrbot.launch.py>`__
-- Controllers yaml: `rrbot_controllers.yaml <https://github.com/ros-controls/ros2_control_demos/tree/master/example_1/bringup/config/rrbot_controllers.yaml>`__
-- URDF file: `rrbot.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/master/example_1/description/urdf/rrbot.urdf.xacro>`__
+* Launch file: `rrbot.launch.py <https://github.com/ros-controls/ros2_control_demos/tree/master/example_1/bringup/launch/rrbot.launch.py>`__
+* Controllers yaml: `rrbot_controllers.yaml <https://github.com/ros-controls/ros2_control_demos/tree/master/example_1/bringup/config/rrbot_controllers.yaml>`__
+* URDF file: `rrbot.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/master/example_1/description/urdf/rrbot.urdf.xacro>`__
 
-  + Description: `rrbot_description.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/master/example_1/description/urdf/rrbot_description.urdf.xacro>`__
-  + ``ros2_control`` tag: `rrbot.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/tree/master/example_1/description/ros2_control/rrbot.ros2_control.xacro>`__
+  * Description: `rrbot_description.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/master/example_1/description/urdf/rrbot_description.urdf.xacro>`__
+  * ``ros2_control`` tag: `rrbot.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/tree/master/example_1/description/ros2_control/rrbot.ros2_control.xacro>`__
 
-- RViz configuration: `rrbot.rviz <https://github.com/ros-controls/ros2_control_demos/tree/master/example_1/description/rviz/rrbot.rviz>`__
-- Test nodes goals configuration:
+* RViz configuration: `rrbot.rviz <https://github.com/ros-controls/ros2_control_demos/tree/master/example_1/description/rviz/rrbot.rviz>`__
+* Test nodes goals configuration:
 
   + `rrbot_forward_position_publisher <https://github.com/ros-controls/ros2_control_demos/tree/master/example_1/bringup/config/rrbot_forward_position_publisher.yaml>`__
   + `rrbot_joint_trajectory_publisher <https://github.com/ros-controls/ros2_control_demos/tree/master/example_1/bringup/config/rrbot_joint_trajectory_publisher.yaml>`__
 
-- Hardware interface plugin: `rrbot.cpp <https://github.com/ros-controls/ros2_control_demos/tree/master/example_1/hardware/rrbot.cpp>`__
+* Hardware interface plugin: `rrbot.cpp <https://github.com/ros-controls/ros2_control_demos/tree/master/example_1/hardware/rrbot.cpp>`__
 
 
 Controllers from this demo
 --------------------------
-- ``Joint State Broadcaster`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/master/joint_state_broadcaster>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/joint_state_broadcaster/doc/userdoc.html>`__
-- ``Forward Command Controller`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/master/forward_command_controller>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/forward_command_controller/doc/userdoc.html>`__
-- ``Joint Trajectory Controller`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/master/joint_trajectory_controller>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/joint_trajectory_controller/doc/userdoc.html>`__
+  * ``Joint State Broadcaster`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/master/joint_state_broadcaster>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/joint_state_broadcaster/doc/userdoc.html>`__
+  * ``Forward Command Controller`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/master/forward_command_controller>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/forward_command_controller/doc/userdoc.html>`__
+  * ``Joint Trajectory Controller`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/master/joint_trajectory_controller>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/joint_trajectory_controller/doc/userdoc.html>`__
