@@ -216,8 +216,7 @@ hardware_interface::return_type RRBotSystemWithSensorHardware::read(
   for (uint i = 0; i < hw_joint_states_.size(); i++)
   {
     // Simulate RRBot's movement
-    hw_joint_states_[i] =
-      hw_joint_commands_[i] + (hw_joint_states_[i] - hw_joint_commands_[i]) / hw_slowdown_;
+    hw_joint_states_[i] += (hw_joint_commands_[i] - hw_joint_states_[i]) / hw_slowdown_;
     RCLCPP_INFO(
       rclcpp::get_logger("RRBotSystemWithSensorHardware"), "Got state %.5f for joint %u!",
       hw_joint_states_[i], i);
