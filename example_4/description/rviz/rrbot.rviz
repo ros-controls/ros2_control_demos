@@ -103,7 +103,8 @@ Visualization Manager:
       Update Interval: 0
       Value: true
       Visual Enabled: true
-    - Alpha: 1
+    - Accept NaN Values: true
+      Alpha: 1
       Arrow Width: 0.5
       Class: rviz_default_plugins/Wrench
       Enabled: true
