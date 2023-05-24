@@ -134,18 +134,18 @@ Tutorial steps
 Files used for this demo
 --------------------------
 
-* Launch file: `rrbot_system_with_sensor.launch.py <https://github.com/ros-controls/ros2_control_demos/tree/master/example_4/bringup/launch/rrbot_system_with_sensor.launch.py>`__
-* Controllers yaml: `rrbot_with_sensor_controllers.yaml <https://github.com/ros-controls/ros2_control_demos/tree/master/example_4/bringup/config/rrbot_with_sensor_controllers.yaml>`__
-* URDF: `rrbot_system_with_sensor.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/master/example_4/description/urdf/rrbot_system_with_sensor.urdf.xacro>`__
+* Launch file: `rrbot_system_with_sensor.launch.py <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_4/bringup/launch/rrbot_system_with_sensor.launch.py>`__
+* Controllers yaml: `rrbot_with_sensor_controllers.yaml <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_4/bringup/config/rrbot_with_sensor_controllers.yaml>`__
+* URDF: `rrbot_system_with_sensor.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_4/description/urdf/rrbot_system_with_sensor.urdf.xacro>`__
 
-  * ``ros2_control`` URDF tag: `rrbot_system_with_sensor.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/tree/master/example_4/description/ros2_control/rrbot_system_with_sensor.ros2_control.xacro>`__
+  * ``ros2_control`` URDF tag: `rrbot_system_with_sensor.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_4/description/ros2_control/rrbot_system_with_sensor.ros2_control.xacro>`__
 
-* RViz configuration: `rrbot.rviz <https://github.com/ros-controls/ros2_control_demos/tree/master/example_4/description/rviz/rrbot.rviz>`__
-* Hardware interface plugin: `rrbot_system_with_sensor.cpp <https://github.com/ros-controls/ros2_control_demos/tree/master/example_4/hardware/rrbot_system_with_sensor.cpp>`__
+* RViz configuration: `rrbot.rviz <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_4/description/rviz/rrbot.rviz>`__
+* Hardware interface plugin: `rrbot_system_with_sensor.cpp <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_4/hardware/rrbot_system_with_sensor.cpp>`__
 
 
 Controllers from this demo
 --------------------------
-* ``Joint State Broadcaster`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/master/joint_state_broadcaster>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/joint_state_broadcaster/doc/userdoc.html>`__
-* ``Forward Command Controller`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/master/forward_command_controller>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/forward_command_controller/doc/userdoc.html>`__
-* ``Force Torque Sensor Broadcaster`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/master/force_torque_sensor_broadcaster>`__): `doc <https://control.ros.org/master/doc/ros2_controllers/force_torque_sensor_broadcaster/doc/userdoc.html>`__
+* ``Joint State Broadcaster`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/{REPOS_FILE_BRANCH}/joint_state_broadcaster>`__): `doc <https://control.ros.org/{REPOS_FILE_BRANCH}/doc/ros2_controllers/joint_state_broadcaster/doc/userdoc.html>`__
+* ``Forward Command Controller`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/{REPOS_FILE_BRANCH}/forward_command_controller>`__): `doc <https://control.ros.org/{REPOS_FILE_BRANCH}/doc/ros2_controllers/forward_command_controller/doc/userdoc.html>`__
+* ``Force Torque Sensor Broadcaster`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/{REPOS_FILE_BRANCH}/force_torque_sensor_broadcaster>`__): `doc <https://control.ros.org/{REPOS_FILE_BRANCH}/doc/ros2_controllers/force_torque_sensor_broadcaster/doc/userdoc.html>`__
