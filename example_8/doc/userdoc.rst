@@ -1,3 +1,5 @@
+:github_url: https://github.com/ros-controls/ros2_control_demos/blob/|github_branch|/example_8/doc/userdoc.rst
+
 .. _ros2_control_demos_example_8_userdoc:
 
 ********************************************************************************
