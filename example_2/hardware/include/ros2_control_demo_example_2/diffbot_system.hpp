@@ -29,6 +29,7 @@
 #include "rclcpp/time.hpp"
 #include "rclcpp_lifecycle/node_interfaces/lifecycle_node_interface.hpp"
 #include "rclcpp_lifecycle/state.hpp"
+
 #include "ros2_control_demo_example_2/visibility_control.h"
 
 namespace ros2_control_demo_example_2
@@ -73,9 +74,6 @@ private:
   std::vector<double> hw_commands_;
   std::vector<double> hw_positions_;
   std::vector<double> hw_velocities_;
-
-  // Store the wheeled robot position
-  double base_x_, base_y_, base_theta_;
 };
 
 }  // namespace ros2_control_demo_example_2
