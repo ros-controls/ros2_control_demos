@@ -22,6 +22,7 @@
   <depend>transmission_interface</depend>
 
   <exec_depend>ros2launch</exec_depend>
+  <exec_depend>xacro</exec_depend>
   <exec_depend>ros2_controllers_test_nodes</exec_depend>
   <exec_depend>joint_state_broadcaster</exec_depend>
   <exec_depend>forward_command_controller</exec_depend>
