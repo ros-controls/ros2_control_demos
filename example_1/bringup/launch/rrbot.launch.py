@@ -27,9 +27,9 @@ def generate_launch_description():
     start_rviz = LaunchConfiguration("start_rviz")
     
     start_rviz_arg = DeclareLaunchArgument(
-            "start_rviz",
-            default_value="true",
-            description="Start RViz2 automatically with this launch file.",
+        "start_rviz",
+        default_value="true",
+        description="Start RViz2 automatically with this launch file.",
     )
     
     
@@ -65,7 +65,7 @@ def generate_launch_description():
         executable="ros2_control_node",
         parameters=[robot_description, robot_controllers],
         output="both",
-        condition=IfCondition(start_rviz)
+        condition=IfCondition(start_rviz),
     )
     robot_state_pub_node = Node(
         package="robot_state_publisher",
