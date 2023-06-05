@@ -25,14 +25,13 @@ from launch_ros.substitutions import FindPackageShare
 
 def generate_launch_description():
     start_rviz = LaunchConfiguration("start_rviz")
-    
+
     start_rviz_arg = DeclareLaunchArgument(
         "start_rviz",
         default_value="true",
         description="Start RViz2 automatically with this launch file.",
     )
-    
-    
+
     # Get URDF via xacro
     robot_description_content = Command(
         [
