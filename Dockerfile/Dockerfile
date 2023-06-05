@@ -43,4 +43,4 @@ RUN cd /home/ros2_ws/ \
 COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 
-CMD ros2 launch ros2_control_demo_example_2 diffbot.launch.py gui:=false
+CMD ros2 launch ros2_control_demo_example_2 diffbot.launch.py start_rviz:=false

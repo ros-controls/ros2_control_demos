@@ -76,6 +76,28 @@ The important files to check in each example are:
 The concepts in this package are demonstrated on the examples of *RRBot* and *DiffBot*.
 Those two world-known imaginary robots are trivial simulations to demonstrate and test `ros2_control` concepts.
 
+## Running
+### Modifying or building your own
+
+```bash
+cd Dockerfile
+docker build -t ros2_control_demos .
+```
+
+### To run the demo
+
+#### Using Docker
+
+Docker allows us to run the demo without the GUI if configured properly. The following command runs the demo without the GUI:
+
+Then on your local machine, you can run the Gazebo client:
+
+```bash
+cd ~/ros2_ws
+source /opt/ros/humble/setup.sh
+rviz2 -d src/ros2_control_demos/example_2/description/rviz/diffbot.rviz
+```
+
 
 ## Build status
 
