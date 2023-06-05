@@ -80,8 +80,8 @@ Those two world-known imaginary robots are trivial simulations to demonstrate an
 ### Modifying or building your own
 
 ```bash
-cd Dockerfile
-docker build -t ros2_control_demos .
+cd ros2_control_demos
+docker build . -t ros2_control_demos -f Dockerfile/Dockerfile
 ```
 
 ### To run the demo
@@ -89,6 +89,9 @@ docker build -t ros2_control_demos .
 #### Using Docker
 
 Docker allows us to run the demo without the GUI if configured properly. The following command runs the demo without the GUI:
+```bash
+docker run -it --rm ros2_control_demos
+```
 
 Then on your local machine, you can run the Gazebo client:
 

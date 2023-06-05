@@ -27,11 +27,9 @@ RUN curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o 
     python3-vcstool \
     && apt-get clean
 
-RUN mkdir -p /home/ros2_ws/src \
-    && cd /home/ros2_ws/src \
-    && git clone https://github.com/ARK3r/ros2_control_demos -b humble \
-    && echo "ros2_control_demos/ros2_control_demos.${ROS_DISTRO}.repos" \
-    # import all packages from ros2_control_demos/ros2_control_demos.${ROS_DISTRO}.repos
+COPY . /home/ros2_ws/src/ros2_control_demos
+
+RUN cd /home/ros2_ws/src \
     && vcs import < ros2_control_demos/ros2_control_demos.${ROS_DISTRO}.repos \
     && rosdep init && rosdep update \
     && rosdep install --from-paths ./ -i -y --rosdistro ${ROS_DISTRO}
@@ -40,7 +38,7 @@ RUN cd /home/ros2_ws/ \
   && . /opt/ros/"${ROS_DISTRO}"/setup.sh \
   && colcon build --merge-install
 
-COPY entrypoint.sh /entrypoint.sh
+COPY Dockerfile/entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 
 CMD ros2 launch ros2_control_demo_example_2 diffbot.launch.py start_rviz:=false
