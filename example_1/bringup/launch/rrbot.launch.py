@@ -14,15 +14,25 @@
 
 
 from launch import LaunchDescription
-from launch.actions import RegisterEventHandler
+from launch.actions import DeclareLaunchArgument, RegisterEventHandler
+from launch.conditions import IfCondition
 from launch.event_handlers import OnProcessExit
-from launch.substitutions import Command, FindExecutable, PathJoinSubstitution
+from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
 
 def generate_launch_description():
+    start_rviz = LaunchConfiguration("start_rviz")
+    
+    start_rviz_arg = DeclareLaunchArgument(
+            "start_rviz",
+            default_value="true",
+            description="Start RViz2 automatically with this launch file.",
+    )
+    
+    
     # Get URDF via xacro
     robot_description_content = Command(
         [
@@ -55,6 +65,7 @@ def generate_launch_description():
         executable="ros2_control_node",
         parameters=[robot_description, robot_controllers],
         output="both",
+        condition=IfCondition(start_rviz)
     )
     robot_state_pub_node = Node(
         package="robot_state_publisher",
@@ -99,6 +110,7 @@ def generate_launch_description():
     )
 
     nodes = [
+        start_rviz_arg,
         control_node,
         robot_state_pub_node,
         joint_state_broadcaster_spawner,
