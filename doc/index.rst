@@ -65,6 +65,9 @@ Example 6: "Modular Robots with separate communication to each actuator"
 Example 8: "Using transmissions"
    *RRBot* with an exposed transmission interface.
 
+Example 10: "GPIO interfaces"
+   Industrial robot with GPIO interfaces
+
 =====================
 Quick Hints
 =====================
