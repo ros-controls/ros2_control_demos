@@ -114,6 +114,16 @@
           </inertial>
         </link>
 
+        <joint name="${prefix}tool_joint" type="fixed">
+          <origin xyz="0 0 1" rpy="0 0 0" />
+          <parent link="${prefix}link2"/>
+          <child link="${prefix}tool_link" />
+        </joint>
+
+        <!-- Tool Link -->
+        <link name="${prefix}tool_link">
+        </link>
+
   </xacro:macro>
 
 </robot>
