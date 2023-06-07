@@ -60,7 +60,6 @@ Example 5: "Industrial Robots with externally connected sensor"
 
 
 Example 6: "Modular Robots with separate communication to each actuator"
-
    The example shows how to implement robot hardware with separate communication to each actuator.
 
 
@@ -68,8 +67,7 @@ Example 8: "Using transmissions"
    *RRBot* with an exposed transmission interface.
 
 
-* Example 9: "Gazebo Classic and Gazebo Sim"
-
+Example 9: "Gazebo Classic and Gazebo Sim"
    Demonstrates how to switch between simulation and hardware.
 
 =====================
