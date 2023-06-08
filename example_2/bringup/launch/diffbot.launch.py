@@ -23,13 +23,18 @@ from launch_ros.substitutions import FindPackageShare
 
 
 def generate_launch_description():
-    start_rviz = LaunchConfiguration("start_rviz")
-
-    start_rviz_arg = DeclareLaunchArgument(
-        "start_rviz",
-        default_value="true",
-        description="Start RViz2 automatically with this launch file.",
+    # Declare arguments
+    declared_arguments = []
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "start_rviz",
+            default_value="true",
+            description="Start RViz2 automatically with this launch file.",
+        )
     )
+
+    # Initialize Arguments
+    start_rviz = LaunchConfiguration("start_rviz")
 
     # Get URDF via xacro
     robot_description_content = Command(
@@ -107,7 +112,6 @@ def generate_launch_description():
     )
 
     nodes = [
-        start_rviz_arg,
         control_node,
         robot_state_pub_node,
         joint_state_broadcaster_spawner,
@@ -115,4 +119,4 @@ def generate_launch_description():
         delay_robot_controller_spawner_after_joint_state_broadcaster_spawner,
     ]
 
-    return LaunchDescription(nodes)
+    return LaunchDescription(declared_arguments + nodes)
