@@ -78,7 +78,7 @@ Those two world-known imaginary robots are trivial simulations to demonstrate an
 
 ## Usage
 ### Using Docker
-**Modifying or building your own**
+**Building your own**
 
 ```bash
 mkdir -p ~/ros2_ws/src
