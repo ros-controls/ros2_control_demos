@@ -1,3 +1,5 @@
+:github_url: https://github.com/ros-controls/ros2_control_demos/blob/{REPOS_FILE_BRANCH}/doc/index.rst
+
 .. _ros2_control_demos:
 
 #################
