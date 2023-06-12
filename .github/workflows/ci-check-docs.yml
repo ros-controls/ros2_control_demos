@@ -1,0 +1,12 @@
+name: Check Docs
+
+on:
+  workflow_dispatch:
+  pull_request:
+
+jobs:
+  check-docs:
+    name: Check Docs
+    uses: christophfroehlich/control.ros.org/.github/workflows/reusable-sphinx-check-single-version.yml@reusable_wf
+    with:
+      ROS2_CONTROL_DEMOS_PR: ${{ github.ref }}
