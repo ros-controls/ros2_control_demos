@@ -1,4 +1,4 @@
-ARG ROS_DISTRO=humble
+ARG ROS_DISTRO=rolling
 
 FROM ros:${ROS_DISTRO}-ros-base
 
