@@ -4,6 +4,9 @@ FROM ros:${ROS_DISTRO}-ros-base
 
 ENV DEBIAN_FRONTEND noninteractive
 
+RUN apt-get update \
+    && apt-get upgrade -y
+
 COPY . /home/ros2_ws/src/ros2_control_demos
 
 RUN cd /home/ros2_ws/src \
