@@ -2,7 +2,7 @@ name: Coverage Build
 on:
   pull_request:
     branches:
-      - humble
+      - master
 
 jobs:
   coverage:
@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: false
     env:
-      ROS_DISTRO: humble
+      ROS_DISTRO: rolling
     container:
       image: ubuntu:jammy
     steps:
