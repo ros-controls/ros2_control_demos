@@ -83,7 +83,7 @@ Those two world-known imaginary robots are trivial simulations to demonstrate an
 ```bash
 mkdir -p ~/ros2_ws/src
 cd ~/ros2_ws/src
-git clone https://github.com/ros-controls/ros2_control_demos -b humble
+git clone https://github.com/ros-controls/ros2_control_demos
 cd ros2_control_demos
 docker build . -t ros2_control_demos -f Dockerfile/Dockerfile
 ```
