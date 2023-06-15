@@ -99,7 +99,7 @@ Then on your local machine, you can run rviz with the config file specified:
 
 ```bash
 cd ~/ros2_ws
-source /opt/ros/humble/setup.sh
+source /opt/ros/rolling/setup.sh
 rviz2 -d src/ros2_control_demos/example_2/description/rviz/diffbot.rviz
 ```
 
