@@ -6,7 +6,7 @@ Example 9: Simulation with RRBot
 =================================
 
 With *example_9*, we demonstrate the interaction of simulators with ros2_control. More specifically,
-Gazebo Classic is used for this purpose.
+Gazebo Classic is used for this purpose. For details on the ``gazebo_ros2_control`` plugin, see :ref:`gazebo_ros2_control`.
 
 Tutorial steps
 --------------------------
