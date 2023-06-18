@@ -81,7 +81,17 @@ Manual Install
 ---------------
 
 First, you have to install `ROS 2 on your computer <https://docs.ros.org/en/rolling/Installation.html>`__.
-Then download the ``ros2_control_demos`` repository and install its dependencies
+
+.. note::
+
+  ``ros2_control`` and ``ros2_controllers`` packages are released and can be installed using a package manager.
+  We provide officially released and maintained debian packages, which can easily be installed via aptitude.
+  However, there might be cases in which not-yet released demos or features are only available through a source build in your own workspace.
+
+Build from debian packages
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Download the ``ros2_control_demos`` repository and install its dependencies with
 
 .. code-block:: shell
 
@@ -100,6 +110,37 @@ Now you can build the repository (source your ROS 2 installation first)
   cd ~/ros2_ws/
   . /opt/ros/${ROS_DISTRO}/setup.sh
   colcon build --merge-install
+
+
+Build from source
+^^^^^^^^^^^^^^^^^
+
+* Download all repositories
+
+  .. code-block:: shell
+
+    mkdir -p ~/ros2_ws/src
+    cd ~/ros2_ws/src
+    git clone https://github.com/ros-controls/ros2_control_demos
+    cd ~/ros2_ws/
+    vcs import src < src/ros2_control_demos/ros2_control_demos.$ROS_DISTRO.repos
+    rosdep update --rosdistro=$ROS_DISTRO
+    sudo apt-get update
+
+* Install dependencies:
+
+  .. code-block:: shell
+
+    rosdep install --from-paths src --ignore-src -r -y
+
+* Build everything, e.g. with:
+
+  .. code-block:: shell
+
+    . /opt/ros/${ROS_DISTRO}/setup.sh
+    colcon build --symlink-install
+
+* Do not forget to source ``setup.bash`` from the ``install`` folder!
 
 Using Docker
 ---------------
@@ -129,7 +170,7 @@ Then on your local machine, you can run rviz2 with the config file specified:
 .. code-block:: shell
 
   cd ~/ros2_ws
-  source /opt/ros/rolling/setup.sh
+  source /opt/ros/${ROS_DISTRO}/setup.sh
   rviz2 -d src/ros2_control_demos/example_1/description/rviz/rrbot.rviz
 
 You can also run other commands or launch files from the docker, e.g.

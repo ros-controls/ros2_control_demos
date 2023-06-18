@@ -101,27 +101,3 @@ ROS 2 Distro | Branch | Build status | Documentation
    Uses repos file: `src/$NAME$/$NAME$.repos`
 
 1. Source build - also core ROS packages are build from source. It shows potential issues in the mid future.
-
-
-# Build from source
-```
-git clone https://github.com/ros-controls/ros2_control
-git clone https://github.com/ros-controls/ros2_controllers
-git clone https://github.com/ros-controls/ros2_control_demos
-```
-
-**NOTE**: `ros2_control` and `ros2_controllers` packages are released and can be installed using a package manager.
-We provide officially released and maintained debian packages, which can easily be installed via aptitude.
-However, there might be cases in which not-yet released demos or features are only available through a source build in your own workspace.
-
-* Install dependencies:
-  ```
-  rosdep install --from-paths src --ignore-src -r -y
-  ```
-
-* Build everything, e.g. with:
-  ```
-  colcon build --symlink-install
-  ```
-
-* Do not forget to source `setup.bash` from the `install` folder!
