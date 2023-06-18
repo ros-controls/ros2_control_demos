@@ -13,6 +13,11 @@ on:
     # Run every morning to detect flakiness and broken dependencies
     - cron: '03 1 * * *'
 
+#TODO(christophfroehlich): remove once it is released
+# otherwise ros-gz won't build
+env:
+  GZ_VERSION: fortress
+
 jobs:
   binary:
     uses: ./.github/workflows/reusable-industrial-ci-with-cache.yml
