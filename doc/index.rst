@@ -65,6 +65,74 @@ Example 6: "Modular Robots with separate communication to each actuator"
 Example 8: "Using transmissions"
    *RRBot* with an exposed transmission interface.
 
+
+=====================
+Installation
+=====================
+
+You can install the demos manually or use the provided docker file.
+
+Manual Install
+---------------
+
+First, you have to install `ROS 2 on your computer <https://docs.ros.org/en/rolling/Installation.html>`__.
+Then download the ``ros2_control_demos`` repository and install its dependencies
+
+.. code-block:: shell
+
+  mkdir -p ~/ros2_ws/src
+  cd ~/ros2_ws/src
+  git clone https://github.com/ros-controls/ros2_control_demos
+  cd ~/ros2_ws/
+  rosdep update --rosdistro=$ROS_DISTRO
+  sudo apt-get update
+  sudo rosdep install --from-paths ./ -i -y --rosdistro ${ROS_DISTRO}
+
+Now you can build the repository (source your ROS 2 installation first)
+
+.. code-block:: shell
+
+  cd ~/ros2_ws/
+  . /opt/ros/${ROS_DISTRO}/setup.sh
+  colcon build --merge-install
+
+Using Docker
+---------------
+
+First, build the dockerfile with
+
+.. code-block:: shell
+
+  mkdir -p ~/ros2_ws/src
+  cd ~/ros2_ws/src
+  git clone https://github.com/ros-controls/ros2_control_demos
+  cd ros2_control_demos
+  docker build . -t ros2_control_demos -f Dockerfile/Dockerfile
+
+Docker now allows us to run the demo without the GUI if configured properly. The following command runs the demo without the GUI:
+
+.. code-block:: shell
+
+  docker run -it --rm --name ros2_control_demos --net host ros2_control_demos
+
+.. note::
+
+  Depending on your machine settings, it might be possible that you have to omit ``--net host``.
+
+Then on your local machine, you can run rviz2 with the config file specified:
+
+.. code-block:: shell
+
+  cd ~/ros2_ws
+  source /opt/ros/rolling/setup.sh
+  rviz2 -d src/ros2_control_demos/example_1/description/rviz/rrbot.rviz
+
+You can also run other commands or launch files from the docker, e.g.
+
+.. code-block:: shell
+
+  docker run -it --rm --name ros2_control_demos --net host ros2_control_demos ros2 launch ros2_control_demo_example_2 diffbot.launch.py
+
 =====================
 Quick Hints
 =====================
