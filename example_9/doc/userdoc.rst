@@ -6,7 +6,27 @@ Example 9: Simulation with RRBot
 =================================
 
 With *example_9*, we demonstrate the interaction of simulators with ros2_control. More specifically,
-Gazebo Classic is used for this purpose. For details on the ``gazebo_ros2_control`` plugin, see :ref:`gazebo_ros2_control`.
+Gazebo Classic is used for this purpose.
+
+.. note::
+
+  Follow the installation instructions on :ref:`ros2_control_demos` how to install all dependencies,
+  Gazebo Classic should be automatically installed.
+
+  * If you have installed and compiled this repository locally, you can directly use the commands below.
+  * If you have installed it via the provided docker image, run the example with
+
+    .. code::
+
+      docker run -it --rm --name ros2_control_demos --net host ros2_control_demos ros2 launch ros2_control_demo_example_9 rrbot_gazebo_classic.launch.py gui:=false
+
+    Then in your local machine you can run the Gazebo Classic client:
+
+    .. code-block:: shell
+
+      gzclient
+
+  For details on the ``gazebo_ros2_control`` plugin, see :ref:`gazebo_ros2_control`.
 
 Tutorial steps
 --------------------------
