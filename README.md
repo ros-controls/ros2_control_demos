@@ -46,7 +46,9 @@ The following examples are part of this demo repository:
 
    *RRBot* with an exposed transmission interface.
 
-* Example 9: "Gazebo Classic and Gazebo Sim (tba.)"
+* Example 9: ["Gazebo Classic Simulation"](example_10)
+
+   Demonstrates how to switch between simulation and hardware.
 
 ## Getting started
 
@@ -75,6 +77,33 @@ The important files to check in each example are:
 
 The concepts in this package are demonstrated on the examples of *RRBot* and *DiffBot*.
 Those two world-known imaginary robots are trivial simulations to demonstrate and test `ros2_control` concepts.
+
+## Usage
+### Using Docker
+**Building your own**
+
+```bash
+mkdir -p ~/ros2_ws/src
+cd ~/ros2_ws/src
+git clone https://github.com/ros-controls/ros2_control_demos
+cd ros2_control_demos
+docker build . -t ros2_control_demos -f Dockerfile/Dockerfile
+```
+
+**To run the demo**
+
+Docker allows us to run the demo without the GUI if configured properly. The following command runs the demo without the GUI:
+```bash
+docker run -it --rm ros2_control_demos
+```
+
+Then on your local machine, you can run rviz with the config file specified:
+
+```bash
+cd ~/ros2_ws
+source /opt/ros/rolling/setup.sh
+rviz2 -d src/ros2_control_demos/example_2/description/rviz/diffbot.rviz
+```
 
 
 ## Build status
