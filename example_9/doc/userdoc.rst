@@ -10,21 +10,29 @@ Gazebo Classic is used for this purpose.
 
 .. note::
 
-  Follow the installation instructions on :ref:`ros2_control_demos` how to install all dependencies,
+  Follow the installation instructions on :ref:`ros2_control_demos_install` how to install all dependencies,
   Gazebo Classic should be automatically installed.
 
   * If you have installed and compiled this repository locally, you can directly use the commands below.
-  * If you have installed it via the provided docker image, run the example with
+  * If you have installed it via the provided docker image, use the commands as described with :ref:`ros2_control_demos_install`
+    to run the examples without Gazebo Classic. To run the example with Gazebo Classic execute
 
     .. code::
 
       docker run -it --rm --name ros2_control_demos --net host ros2_control_demos ros2 launch ros2_control_demo_example_9 rrbot_gazebo_classic.launch.py gui:=false
 
-    Then in your local machine you can run the Gazebo Classic client:
+    Then in your local machine you can run the Gazebo Classic client with
 
     .. code-block:: shell
 
       gzclient
+
+    and/or rviz2 with
+
+    .. code-block:: shell
+
+      rviz2 -d src/ros2_control_demos/example_9/description/rviz/rrbot.rviz
+
 
   For details on the ``gazebo_ros2_control`` plugin, see :ref:`gazebo_ros2_control`.
 

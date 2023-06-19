@@ -71,6 +71,8 @@ Example 9: "Gazebo Classic"
    Demonstrates how to switch between simulation and hardware.
 
 
+.. _ros2_control_demos_install:
+
 =====================
 Installation
 =====================
