@@ -165,7 +165,7 @@ Docker now allows us to run the demo without the GUI if configured properly. Now
 After having `ROS 2 installed <https://docs.ros.org/en/rolling/Installation.html>`__ on your local system (not inside the docker),  we can use ``rviz2`` to visualize the robot state and ``joint_state_publisher_gui`` package to give manual joint values to the robot. To install the package you can run:
 
 .. code-block:: shell
-  
+
   sudo apt-get install -y ros-${ROS_DISTRO}-joint-state-publisher-gui ros-${ROS_DISTRO}-rviz2
 
 Then we are ready to bring up all the components to view the robot. Let's start with the docker container by running the following command:
