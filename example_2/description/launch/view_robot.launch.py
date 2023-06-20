@@ -44,7 +44,7 @@ def generate_launch_description():
             "gui",
             default_value="true",
             description="Start Rviz2 and Joint State Publisher gui automatically \
-        with this launch file."
+        with this launch file.",
         )
     )
     declared_arguments.append(
