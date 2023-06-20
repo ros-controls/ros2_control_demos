@@ -46,7 +46,7 @@ The following examples are part of this demo repository:
 
    *RRBot* with an exposed transmission interface.
 
-* Example 9: ["Gazebo Classic Simulation"](example_10)
+* Example 9: ["Gazebo Classic Simulation"](example_9)
 
    Demonstrates how to switch between simulation and hardware.
 
