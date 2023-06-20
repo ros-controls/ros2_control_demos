@@ -50,6 +50,8 @@ The following examples are part of this demo repository:
 
    Demonstrates how to switch between simulation and hardware.
 
+* Example 11: "Carlike Robot using steering controller library derivatives (ackermann and bicycle) (tba.)"
+
 ## Getting started
 
 The repository is structured into `example_XY` folders that fully contained packages with names `ros2_control_demos_example_XY`.
