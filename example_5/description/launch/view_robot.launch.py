@@ -14,6 +14,7 @@
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
+from launch.conditions import IfCondition
 from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
 
 from launch_ros.actions import Node
@@ -40,6 +41,14 @@ def generate_launch_description():
     )
     declared_arguments.append(
         DeclareLaunchArgument(
+            "gui",
+            default_value="true",
+            description="Start Rviz2 and Joint State Publisher gui automatically \
+        with this launch file."
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
             "prefix",
             default_value='""',
             description="Prefix of the joint names, useful for \
@@ -51,6 +60,7 @@ def generate_launch_description():
     # Initialize Arguments
     description_package = LaunchConfiguration("description_package")
     description_file = LaunchConfiguration("description_file")
+    gui = LaunchConfiguration("gui")
     prefix = LaunchConfiguration("prefix")
 
     # Get URDF via xacro
@@ -75,6 +85,7 @@ def generate_launch_description():
     joint_state_publisher_node = Node(
         package="joint_state_publisher_gui",
         executable="joint_state_publisher_gui",
+        condition=IfCondition(gui),
     )
     robot_state_publisher_node = Node(
         package="robot_state_publisher",
@@ -88,6 +99,7 @@ def generate_launch_description():
         name="rviz2",
         output="log",
         arguments=["-d", rviz_config_file],
+        condition=IfCondition(gui),
     )
 
     nodes = [
