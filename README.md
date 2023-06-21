@@ -52,6 +52,8 @@ The following examples are part of this demo repository:
 
 * Example 11: ["Carlike Robot using steering controllers library"](example_11)
 
+   Demonstrates how to use the ackermann steering controller and bicycle steering controller for simulation vs physical robot.
+
 ## Getting started
 
 The repository is structured into `example_XY` folders that fully contained packages with names `ros2_control_demos_example_XY`.
