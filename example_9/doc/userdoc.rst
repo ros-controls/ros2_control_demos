@@ -14,7 +14,7 @@ Gazebo Classic is used for this purpose.
   Gazebo Classic should be automatically installed.
 
   * If you have installed and compiled this repository locally, you can directly use the commands below.
-  * If you have installed it via the provided docker image: To run the first two steps of this example (without Gazebo Classic), use the   commands as described with :ref:`ros2_control_demos_install`. To run the later steps using Gazebo Classic, execute
+  * If you have installed it via the provided docker image: To run the first two steps of this example (without Gazebo Classic), use the commands as described with :ref:`ros2_control_demos_install`. To run the later steps using Gazebo Classic, execute
 
     .. code::
 
