@@ -1,0 +1,70 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 10  # Hz
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    joint1_position_controller:
+      type: forward_command_controller/ChainableForwardCommandController
+
+    joint2_position_controller:
+      type: forward_command_controller/ChainableForwardCommandController
+
+    position_controller:
+      type: forward_command_controller/ChainableForwardCommandController
+
+    position_trajectory_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+
+# First-level controllers
+joint1_position_controller:
+  ros__parameters:
+    joints:
+      - joint1
+    interface_name: position
+
+
+joint2_position_controller:
+  ros__parameters:
+    joints:
+      - joint2
+    interface_name: position
+
+
+# Second-level controller
+position_controller:
+  ros__parameters:
+    joints:
+      - joint1_position_controller/joint1
+      - joint2_position_controller/joint2
+    interface_name: position
+
+
+# Third-level controller
+position_trajectory_controller:
+  ros__parameters:
+    joints:
+      - joint1
+      - joint2
+
+    command_joints:
+      - position_controller/joint1_position_controller/joint1
+      - position_controller/joint2_position_controller/joint2
+
+    command_interfaces:
+      - position
+
+    state_interfaces:
+      - position
+
+    state_publish_rate: 200.0 # Defaults to 50
+    action_monitor_rate: 20.0 # Defaults to 20
+
+    allow_partial_joints_goal: false # Defaults to false
+    open_loop_control: true
+    allow_integration_in_goal_trajectories: true
+    constraints:
+      stopped_velocity_tolerance: 0.01 # Defaults to 0.01
+      goal_time: 0.0 # Defaults to 0.0 (start immediately)
