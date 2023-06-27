@@ -14,7 +14,7 @@
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, RegisterEventHandler
-from launch.conditions import IfCondition
+from launch.conditions import IfCondition, UnlessCondition
 from launch.event_handlers import OnProcessExit
 from launch.substitutions import Command, FindExecutable, PathJoinSubstitution, LaunchConfiguration
 
@@ -30,11 +30,17 @@ def generate_launch_description():
             "start_rviz",
             default_value="true",
             description="Start RViz2 automatically with this launch file.",
+        ),
+        DeclareLaunchArgument(
+            "sim",
+            default_value="true",
+            description="Whether to start controllers for simulation or real hardware."
         )
     )
 
     # Initialize Arguments
     start_rviz = LaunchConfiguration("start_rviz")
+    sim = LaunchConfiguration("sim")
 
     # Get URDF via xacro
     robot_description_content = Command(
@@ -42,7 +48,7 @@ def generate_launch_description():
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
             PathJoinSubstitution(
-                [FindPackageShare("ros2_control_demo_example_2"), "urdf", "diffbot.urdf.xacro"]
+                [FindPackageShare("ros2_control_demo_example_11"), "urdf", "carlikebot.urdf.xacro"]
             ),
         ]
     )
@@ -50,13 +56,13 @@ def generate_launch_description():
 
     robot_controllers = PathJoinSubstitution(
         [
-            FindPackageShare("ros2_control_demo_example_2"),
+            FindPackageShare("ros2_control_demo_example_11"),
             "config",
-            "diffbot_controllers.yaml",
+            "carlikebot_controllers.yaml",
         ]
     )
     rviz_config_file = PathJoinSubstitution(
-        [FindPackageShare("ros2_control_demo_example_2"), "rviz", "diffbot.rviz"]
+        [FindPackageShare("ros2_control_demo_example_11"), "rviz", "carlikebot.rviz"]
     )
 
     control_node = Node(
@@ -65,14 +71,25 @@ def generate_launch_description():
         parameters=[robot_description, robot_controllers],
         output="both",
     )
-    robot_state_pub_node = Node(
+    robot_state_pub_ackermann_node = Node(
         package="robot_state_publisher",
         executable="robot_state_publisher",
         output="both",
         parameters=[robot_description],
         remappings=[
-            ("/diff_drive_controller/cmd_vel_unstamped", "/cmd_vel"),
+            ("/ackermann_steering_controller/reference_unstamped", "/cmd_vel"),
         ],
+        condition=IfCondition(sim),
+    )
+    robot_state_pub_bicycle_node = Node(
+        package="robot_state_publisher",
+        executable="robot_state_publisher",
+        output="both",
+        parameters=[robot_description],
+        remappings=[
+            ("/bicycle_steering_controller/reference_unstamped", "/cmd_vel"),
+        ],
+        condition=UnlessCondition(sim),
     )
     rviz_node = Node(
         package="rviz2",
@@ -113,7 +130,8 @@ def generate_launch_description():
 
     nodes = [
         control_node,
-        robot_state_pub_node,
+        robot_state_pub_ackermann_node,
+        robot_state_pub_bicycle_node,
         joint_state_broadcaster_spawner,
         delay_rviz_after_joint_state_broadcaster_spawner,
         delay_robot_controller_spawner_after_joint_state_broadcaster_spawner,
