@@ -46,11 +46,13 @@ The following examples are part of this demo repository:
 
    *RRBot* with an exposed transmission interface.
 
-* Example 9: ["Gazebo Classic Simulation"](example_10)
+* Example 9: ["Gazebo Classic Simulation"](example_9)
 
    Demonstrates how to switch between simulation and hardware.
 
 * Example 11: ["Carlike Robot using steering controllers library"](example_11)
+
+   Demonstrates how to use the ackermann steering controller and bicycle steering controller for simulation vs physical robot.
 
 ## Getting started
 
