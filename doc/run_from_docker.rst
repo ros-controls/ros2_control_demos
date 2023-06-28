@@ -1,6 +1,6 @@
 .. note::
 
-   The commands below are given for a local installation of this repository and its dependencies. If you use the provided docker container, add the  prefix
+   The commands below are given for a local installation of this repository and its dependencies. If you use the provided docker container, add the prefix
 
    .. code::
 
