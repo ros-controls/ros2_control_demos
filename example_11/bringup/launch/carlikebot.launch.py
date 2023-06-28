@@ -30,7 +30,9 @@ def generate_launch_description():
             "start_rviz",
             default_value="true",
             description="Start RViz2 automatically with this launch file.",
-        ),
+        )
+    )
+    declared_arguments.append(
         DeclareLaunchArgument(
             "sim",
             default_value="true",
@@ -50,6 +52,8 @@ def generate_launch_description():
             PathJoinSubstitution(
                 [FindPackageShare("ros2_control_demo_example_11"), "urdf", "carlikebot.urdf.xacro"]
             ),
+            " sim:=",
+            sim,
         ]
     )
     robot_description = {"robot_description": robot_description_content}
@@ -106,10 +110,23 @@ def generate_launch_description():
         arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager"],
     )
 
-    robot_controller_spawner = Node(
+    # robot_controller_spawner = Node(
+    #     package="controller_manager",
+    #     executable="spawner",
+    #     arguments=["diffbot_base_controller", "--controller-manager", "/controller_manager"],
+    # )
+    
+    robot_ackermann_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["diffbot_base_controller", "--controller-manager", "/controller_manager"],
+        arguments=["ackermann_steering_controller", "--controller-manager", "/controller_manager"],
+        condition=IfCondition(sim),
+    )
+    robot_bicycle_controller_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["bicycle_steering_controller", "--controller-manager", "/controller_manager"],
+        condition=UnlessCondition(sim),
     )
 
     # Delay rviz start after `joint_state_broadcaster`
@@ -124,7 +141,7 @@ def generate_launch_description():
     delay_robot_controller_spawner_after_joint_state_broadcaster_spawner = RegisterEventHandler(
         event_handler=OnProcessExit(
             target_action=joint_state_broadcaster_spawner,
-            on_exit=[robot_controller_spawner],
+            on_exit=[robot_ackermann_controller_spawner, robot_bicycle_controller_spawner],
         )
     )
 
