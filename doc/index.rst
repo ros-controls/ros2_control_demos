@@ -70,6 +70,160 @@ Example 8: "Using transmissions"
 Example 9: "Gazebo Classic"
    Demonstrates how to switch between simulation and hardware.
 
+
+.. _ros2_control_demos_install:
+
+=====================
+Installation
+=====================
+
+You can install the demos manually or use the provided docker file.
+
+Manual Install
+---------------
+
+First, you have to install `ROS 2 on your computer <https://docs.ros.org/en/humble/Installation.html>`__.
+
+.. note::
+
+  ``ros2_control`` and ``ros2_controllers`` packages are released and can be installed using a package manager.
+  We provide officially released and maintained debian packages, which can easily be installed via aptitude.
+  However, there might be cases in which not-yet released demos or features are only available through a source build in your own workspace.
+
+Build from debian packages
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Download the ``ros2_control_demos`` repository and install its dependencies with
+
+.. code-block:: shell
+
+  mkdir -p ~/ros2_ws/src
+  cd ~/ros2_ws/src
+  git clone https://github.com/ros-controls/ros2_control_demos
+  cd ~/ros2_ws/
+  rosdep update --rosdistro=$ROS_DISTRO
+  sudo apt-get update
+  sudo rosdep install --from-paths ./ -i -y --rosdistro ${ROS_DISTRO}
+
+Now you can build the repository (source your ROS 2 installation first)
+
+.. code-block:: shell
+
+  cd ~/ros2_ws/
+  . /opt/ros/${ROS_DISTRO}/setup.sh
+  colcon build --merge-install
+
+
+Build from source
+^^^^^^^^^^^^^^^^^
+
+* Download all repositories
+
+  .. code-block:: shell
+
+    mkdir -p ~/ros2_ws/src
+    cd ~/ros2_ws/src
+    git clone https://github.com/ros-controls/ros2_control_demos
+    cd ~/ros2_ws/
+    vcs import src < src/ros2_control_demos/ros2_control_demos.$ROS_DISTRO.repos
+    rosdep update --rosdistro=$ROS_DISTRO
+    sudo apt-get update
+
+* Install dependencies:
+
+  .. code-block:: shell
+
+    rosdep install --from-paths src --ignore-src -r -y
+
+* Build everything, e.g. with:
+
+  .. code-block:: shell
+
+    . /opt/ros/${ROS_DISTRO}/setup.sh
+    colcon build --symlink-install
+
+* Do not forget to source ``setup.bash`` from the ``install`` folder!
+
+Using Docker
+---------------
+
+First, build the dockerfile with
+
+.. code-block:: shell
+
+  mkdir -p ~/ros2_ws/src
+  cd ~/ros2_ws/src
+  git clone https://github.com/ros-controls/ros2_control_demos
+  cd ros2_control_demos
+  docker build . -t ros2_control_demos -f Dockerfile/Dockerfile
+
+To view the robot
+^^^^^^^^^^^^^^^^^
+
+Docker now allows us to run the demo without the GUI if configured properly. Now we can view the robot by the following procedure:
+
+After having `ROS 2 installed <https://docs.ros.org/en/humble/Installation.html>`__ on your local system (not inside the docker),  we can use ``rviz2`` to visualize the robot state and ``joint_state_publisher_gui`` package to give manual joint values to the robot. To install the package you can run:
+
+.. code-block:: shell
+
+  sudo apt-get install -y ros-${ROS_DISTRO}-joint-state-publisher-gui ros-${ROS_DISTRO}-rviz2
+
+Then we are ready to bring up all the components to view the robot. Let's start with the docker container by running the following command:
+
+.. code-block:: shell
+
+  docker run -it --rm --name ros2_control_demos --net host ros2_control_demos ros2 launch ros2_control_demos_example_1 view_robot.launch.py gui:=false
+
+.. note::
+
+  Depending on your machine settings, it might be possible that you have to omit ``--net host``.
+
+Now, we need to start ``rviz2`` to view the robot as well as ``joint_state_publisher_gui``, each in their own terminals after sourcing our ROS 2  installation.
+
+Terminal 1:
+
+.. code-block:: shell
+
+  source /opt/ros/${ROS_DISTRO}/setup.bash
+  ros2 run joint_state_publisher_gui joint_state_publisher_gui
+
+Terminal 2:
+
+.. code-block:: shell
+
+  source /opt/ros/${ROS_DISTRO}/setup.bash
+  cd ~/ros2_ws
+  rviz2 -d src/ros2_control_demos/example_1/description/rviz/rrbot.rviz
+
+Now, you can see the robot moving by changing the values of the joints by moving the sliders around in the ``joint_state_publisher_gui``.
+
+To run the ros2_control demos
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The following command runs the demo without the GUI:
+
+.. code-block:: shell
+
+  docker run -it --rm --name ros2_control_demos --net host ros2_control_demos
+
+.. note::
+
+  Depending on your machine settings, it might be possible that you have to omit ``--net host``.
+
+Then on your local machine, you can run rviz2 with the config file specified:
+
+.. code-block:: shell
+
+  cd ~/ros2_ws
+  source /opt/ros/${ROS_DISTRO}/setup.sh
+  rviz2 -d src/ros2_control_demos/example_1/description/rviz/rrbot.rviz
+
+You can also run other commands or launch files from the docker, e.g.
+
+.. code-block:: shell
+
+  docker run -it --rm --name ros2_control_demos --net host ros2_control_demos ros2 launch ros2_control_demo_example_2 diffbot.launch.py
+
 =====================
 Quick Hints
 =====================
