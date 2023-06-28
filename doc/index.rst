@@ -82,7 +82,7 @@ You can install the demos manually or use the provided docker file.
 Manual Install
 ---------------
 
-First, you have to install `ROS 2 on your computer <https://docs.ros.org/en/rolling/Installation.html>`__.
+First, you have to install `ROS 2 on your computer <https://docs.ros.org/en/humble/Installation.html>`__.
 
 .. note::
 
@@ -162,7 +162,7 @@ To view the robot
 
 Docker now allows us to run the demo without the GUI if configured properly. Now we can view the robot by the following procedure:
 
-After having `ROS 2 installed <https://docs.ros.org/en/rolling/Installation.html>`__ on your local system (not inside the docker),  we can use ``rviz2`` to visualize the robot state and ``joint_state_publisher_gui`` package to give manual joint values to the robot. To install the package you can run:
+After having `ROS 2 installed <https://docs.ros.org/en/humble/Installation.html>`__ on your local system (not inside the docker),  we can use ``rviz2`` to visualize the robot state and ``joint_state_publisher_gui`` package to give manual joint values to the robot. To install the package you can run:
 
 .. code-block:: shell
 
