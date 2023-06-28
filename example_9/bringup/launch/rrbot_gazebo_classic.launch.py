@@ -27,14 +27,14 @@ def generate_launch_description():
     declared_arguments = []
     declared_arguments.append(
         DeclareLaunchArgument(
-            "start_rviz",
+            "gui",
             default_value="false",
             description="Start RViz2 automatically with this launch file.",
         )
     )
 
     # Initialize Arguments
-    start_rviz = LaunchConfiguration("start_rviz")
+    gui = LaunchConfiguration("gui")
 
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -91,7 +91,7 @@ def generate_launch_description():
         name="rviz2",
         output="log",
         arguments=["-d", rviz_config_file],
-        condition=IfCondition(start_rviz),
+        condition=IfCondition(gui),
     )
 
     nodes = [

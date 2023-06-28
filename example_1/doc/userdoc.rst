@@ -19,15 +19,7 @@ For *example_1*, the hardware interface plugin is implemented having only one in
 
 The *RRBot* URDF files can be found in the ``description/urdf`` folder.
 
-.. note::
-
-   The commands below are given for a local installation of this repository and its dependencies. If you use the provided docker container, add the  prefix
-
-   .. code::
-
-      docker run -it --rm --name ros2_control_demos --net host ros2_control_demos
-
-   to every command followed by a ``gui:=false``. For more information on the docker usage see :ref:`ros2_control_demos_install`.
+.. include:: ../../doc/run_from_docker.rst
 
 Tutorial steps
 --------------------------
