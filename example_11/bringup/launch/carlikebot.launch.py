@@ -36,7 +36,7 @@ def generate_launch_description():
         DeclareLaunchArgument(
             "sim",
             default_value="true",
-            description="Whether to start controllers for simulation or real hardware."
+            description="Whether to start controllers for simulation or real hardware.",
         )
     )
 
@@ -115,7 +115,7 @@ def generate_launch_description():
     #     executable="spawner",
     #     arguments=["diffbot_base_controller", "--controller-manager", "/controller_manager"],
     # )
-    
+
     robot_ackermann_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",

@@ -110,7 +110,8 @@ std::vector<hardware_interface::StateInterface> CarlikeBotSystemHardware::export
   return state_interfaces;
 }
 
-std::vector<hardware_interface::CommandInterface> CarlikeBotSystemHardware::export_command_interfaces()
+std::vector<hardware_interface::CommandInterface>
+CarlikeBotSystemHardware::export_command_interfaces()
 {
   std::vector<hardware_interface::CommandInterface> command_interfaces;
   for (auto i = 0u; i < info_.joints.size(); i++)
