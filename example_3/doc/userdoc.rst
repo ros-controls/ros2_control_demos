@@ -16,6 +16,8 @@ For *example_3*, the hardware interface plugin is implemented having multiple in
 
 Two illegal controllers demonstrate how hardware interface declines faulty claims to access joint command interfaces.
 
+.. include:: ../../doc/run_from_docker.rst
+
 
 Tutorial steps
 --------------------------

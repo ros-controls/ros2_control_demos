@@ -19,6 +19,8 @@ For *example_1*, the hardware interface plugin is implemented having only one in
 
 The *RRBot* URDF files can be found in the ``description/urdf`` folder.
 
+.. include:: ../../doc/run_from_docker.rst
+
 Tutorial steps
 --------------------------
 

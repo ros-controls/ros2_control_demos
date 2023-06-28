@@ -14,6 +14,8 @@ The example shows how to implement robot hardware with separate communication to
 
 This is implemented with a hardware interface of type ``hardware_interface::ActuatorInterface``.
 
+.. include:: ../../doc/run_from_docker.rst
+
 Tutorial steps
 --------------------------
 
