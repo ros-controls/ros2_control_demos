@@ -18,6 +18,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <map>
 
 #include "hardware_interface/handle.hpp"
 #include "hardware_interface/hardware_info.hpp"
@@ -66,14 +67,22 @@ public:
     const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
 private:
-  // Parameters for the DiffBot simulation
+  // Parameter disnguishing between simulation and physical robot
+  bool m_running_simulation;
+  
+  // Parameters for the CarlikeBot simulation
   double hw_start_sec_;
   double hw_stop_sec_;
 
-  // Store the command for the simulated robot
-  std::vector<double> hw_commands_;
-  std::vector<double> hw_positions_;
-  std::vector<double> hw_velocities_;
+
+  // Store the command for the CarlikeBot robot
+  // std::vector<double> hw_commands_;
+  // std::vector<double> hw_positions_;
+  // std::vector<double> hw_velocities_;
+
+  std::map<std::string, double> hw_commands_;
+  std::map<std::string, double> hw_positions_;
+  std::map<std::string, double> hw_velocities_;
 };
 
 }  // namespace ros2_control_demo_example_11

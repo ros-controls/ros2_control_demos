@@ -4,16 +4,18 @@
   <xacro:arg name="prefix" default="" />
   <xacro:arg name="sim" default="false" />
 
-  <xacro:include filename="$(find ros2_control_demo_example_11)/urdf/carlikebot_description.urdf.xacro" />
 
   <!-- Import Rviz colors -->
   <xacro:include filename="$(find ros2_control_demo_example_11)/urdf/carlikebot.materials.xacro" />
 
-  <!-- Import carlikebot ros2_control description based on sim arg -->
+  <!-- Import carlikebot description and ros2_control based on sim arg -->
   <xacro:if value="$(arg sim)">
+    <xacro:include filename="$(find ros2_control_demo_example_11)/urdf/carlikebot_ackermann_description.urdf.xacro" />
     <xacro:include filename="$(find ros2_control_demo_example_11)/ros2_control/carlikebot_ackermann.ros2_control.xacro" />
   </xacro:if>
+
   <xacro:unless value="$(arg sim)">
+    <xacro:include filename="$(find ros2_control_demo_example_11)/urdf/carlikebot_bicycle_description.urdf.xacro" />
     <xacro:include filename="$(find ros2_control_demo_example_11)/ros2_control/carlikebot_bicycle.ros2_control.xacro" />
   </xacro:unless>
 
