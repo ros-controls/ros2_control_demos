@@ -19,6 +19,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <utility>
 
 #include "hardware_interface/handle.hpp"
 #include "hardware_interface/hardware_info.hpp"
@@ -76,13 +77,15 @@ private:
 
 
   // Store the command for the CarlikeBot robot
-  // std::vector<double> hw_commands_;
-  // std::vector<double> hw_positions_;
-  // std::vector<double> hw_velocities_;
+  std::vector<double> hw_commands_;
+  std::vector<double> hw_positions_;
+  std::vector<double> hw_velocities_;
 
-  std::map<std::string, double> hw_commands_;
-  std::map<std::string, double> hw_positions_;
-  std::map<std::string, double> hw_velocities_;
+  std::vector<std::tuple<int, std::string, int>> commands_counterpart_;
+
+  // std::map<std::string, double> hw_commands_;
+  // std::map<std::string, double> hw_positions_;
+  // std::map<std::string, double> hw_velocities_;
 };
 
 }  // namespace ros2_control_demo_example_11

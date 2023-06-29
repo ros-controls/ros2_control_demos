@@ -27,7 +27,7 @@ def generate_launch_description():
     declared_arguments = []
     declared_arguments.append(
         DeclareLaunchArgument(
-            "start_rviz",
+            "gui",
             default_value="true",
             description="Start RViz2 automatically with this launch file.",
         )
@@ -41,7 +41,7 @@ def generate_launch_description():
     )
 
     # Initialize Arguments
-    start_rviz = LaunchConfiguration("start_rviz")
+    gui = LaunchConfiguration("gui")
     sim = LaunchConfiguration("sim")
 
     # Get URDF via xacro
@@ -101,7 +101,7 @@ def generate_launch_description():
         name="rviz2",
         output="log",
         arguments=["-d", rviz_config_file],
-        condition=IfCondition(start_rviz),
+        condition=IfCondition(gui),
     )
 
     joint_state_broadcaster_spawner = Node(

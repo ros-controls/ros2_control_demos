@@ -2,7 +2,7 @@
 <!-- 4 Wheel Robot with front steering and rear drive -->
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="carlikebot_robot">
   <xacro:arg name="prefix" default="" />
-  <xacro:arg name="sim" default="false" />
+  <xacro:arg name="sim" default="true" />
 
 
   <!-- Import Rviz colors -->
