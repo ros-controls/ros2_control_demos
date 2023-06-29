@@ -59,7 +59,7 @@
     <!-- rear right wheel -->
 
     <link name="${prefix}rear_right_wheel">
-    
+
       <collision>
         <origin xyz="0 0 0" rpy="${PI/2} 0 ${PI/2}"/>
         <geometry>
@@ -83,7 +83,7 @@
           iyy="${wheel_mass / 12.0 * wheel_radius*wheel_radius}" iyz="0.0"
           izz="${wheel_mass / 12.0 * wheel_radius*wheel_radius}"/>
       </inertial>
-    
+
     </link>
 
     <joint name="${prefix}rear_right_wheel_joint" type="continuous">
@@ -96,14 +96,14 @@
 
     <!-- rear left wheel -->
     <link name="${prefix}rear_left_wheel">
-      
+
         <collision>
           <origin xyz="0 0 0" rpy="${PI/2} 0 ${PI/2}"/>
           <geometry>
             <cylinder length="${wheel_len}" radius="${wheel_radius}"/>
           </geometry>
         </collision>
-  
+
         <visual>
           <origin xyz="0 0 0" rpy="${PI/2} 0 ${PI/2}"/>
           <geometry>
@@ -111,7 +111,7 @@
           </geometry>
           <material name="black"/>
         </visual>
-  
+
         <inertial>
           <origin xyz="0 0 0" rpy="${PI/2} 0 ${PI/2}"/>
           <mass value="${wheel_mass}"/>
@@ -120,7 +120,7 @@
             iyy="${wheel_mass / 12.0 * wheel_radius*wheel_radius}" iyz="0.0"
             izz="${wheel_mass / 12.0 * wheel_radius*wheel_radius}"/>
         </inertial>
-    
+
     </link>
 
     <joint name="${prefix}rear_left_wheel_joint" type="continuous">
@@ -129,7 +129,7 @@
       <origin xyz="-${base_width/2} -${wheelbase/2} -${base_height/2}" rpy="0 0 0"/>
       <axis xyz="-1 0 0"/>
       <dynamics damping="0.2"/>
-    
+
     </joint>
 
     <!-- front wheels -->
@@ -137,7 +137,7 @@
     <!-- front right wheel -->
 
     <link name="${prefix}right_steering_hinge">
-        
+
       <collision>
         <origin xyz="0 0 0" rpy="${PI/2} 0 ${PI/2}"/>
         <geometry>

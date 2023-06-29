@@ -15,11 +15,11 @@
 #ifndef ROS2_CONTROL_DEMO_EXAMPLE_11__CARLIKEBOT_SYSTEM_HPP_
 #define ROS2_CONTROL_DEMO_EXAMPLE_11__CARLIKEBOT_SYSTEM_HPP_
 
+#include <map>
 #include <memory>
 #include <string>
-#include <vector>
-#include <map>
 #include <utility>
+#include <vector>
 
 #include "hardware_interface/handle.hpp"
 #include "hardware_interface/hardware_info.hpp"
@@ -70,11 +70,10 @@ public:
 private:
   // Parameter disnguishing between simulation and physical robot
   bool m_running_simulation;
-  
+
   // Parameters for the CarlikeBot simulation
   double hw_start_sec_;
   double hw_stop_sec_;
-
 
   // Store the command for the CarlikeBot robot
   std::vector<double> hw_commands_;
