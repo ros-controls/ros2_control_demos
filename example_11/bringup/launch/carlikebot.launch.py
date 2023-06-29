@@ -110,12 +110,6 @@ def generate_launch_description():
         arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager"],
     )
 
-    # robot_controller_spawner = Node(
-    #     package="controller_manager",
-    #     executable="spawner",
-    #     arguments=["diffbot_base_controller", "--controller-manager", "/controller_manager"],
-    # )
-
     robot_ackermann_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",

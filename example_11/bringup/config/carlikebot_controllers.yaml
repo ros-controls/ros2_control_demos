@@ -19,10 +19,10 @@ ackermann_steering_controller:
     front_steering: true
     open_loop: false
     velocity_rolling_window_size: 10
-    position_feedback: false
+    position_feedback: true
     use_stamped_vel: false
+    front_wheels_names: [right_steering_joint, left_steering_joint]
     rear_wheels_names: [rear_right_wheel_joint, rear_left_wheel_joint]
-    front_wheels_names: [left_steering_hinge_joint, right_steering_hinge_joint]
     odom_frame_id: odom
     base_frame_id: base_link
     enable_odom_tf: true

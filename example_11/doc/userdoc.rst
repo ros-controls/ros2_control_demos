@@ -27,11 +27,11 @@ Tutorial steps
 
    .. warning::
     Getting the following output in terminal is OK: ``Warning: Invalid frame ID "odom" passed to canTransform argument target_frame - frame does not exist``.
-    This happens because ``joint_state_publisher_gui`` node need some time to start.
+    This happens because ``joint_state_publisher_gui`` node needs some time to start.
 
-   .. image:: diffbot.png
+   .. image:: carlikebot.png
     :width: 400
-    :alt: Differential Mobile Robot
+    :alt: Carlike Mobile Robot
 
 2. To start *DiffBot* example open a terminal, source your ROS2-workspace and execute its launch file with
 

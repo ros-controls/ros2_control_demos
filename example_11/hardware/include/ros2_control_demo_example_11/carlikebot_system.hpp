@@ -80,7 +80,7 @@ private:
   std::vector<double> hw_positions_;
   std::vector<double> hw_velocities_;
 
-  std::vector<std::tuple<int, std::string, int>> commands_counterpart_;
+  std::vector<std::tuple<unsigned int, std::string, int>> commands_counterpart_;
 
   // std::map<std::string, double> hw_commands_;
   // std::map<std::string, double> hw_positions_;
