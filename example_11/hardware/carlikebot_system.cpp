@@ -62,38 +62,38 @@ hardware_interface::CallbackReturn CarlikeBotSystemHardware::on_init(
     rclcpp::get_logger("CarlikeBotSystemHardware"), "CarlikeBotSystemHardware is %s.",
     m_running_simulation ? "running in simulation" : "running on hardware");
 
-  // All joints should have one state interface and one command interface
-  for (const hardware_interface::ComponentInfo & joint : info_.joints)
+  for (const hardware_interfacec::ComponentInfo & joint : info_.joints)
   {
-    if (joint.command_interfaces.size() != 1)
-    {
-      RCLCPP_FATAL(
-        rclcpp::get_logger("CarlikeBotSystemHardware"),
-        "Joint '%s' has %zu command interfaces found. 1 expected.", joint.name.c_str(),
-        joint.command_interfaces.size());
-      return hardware_interface::CallbackReturn::ERROR;
-    }
+    bool joint_is_steering = info_.joints[i].name.find("steering") != std::string::npos;
 
-    if (joint.state_interfaces.size() != 1)
+    // Steering joints have a position command and state interface
+    if (joint_is_steering)
     {
-      RCLCPP_FATAL(
-        rclcpp::get_logger("CarlikeBotSystemHardware"),
-        "Joint '%s' has %zu state interface. 1 expected.", joint.name.c_str(),
-        joint.state_interfaces.size());
-      return hardware_interface::CallbackReturn::ERROR;
-    }
+      if (joint.command_interfaces.size() != 1)
+      {
+        RCLCPP_FATAL(
+          rclcpp::get_logger("CarlikeBotSystemHardware"),
+          "Joint '%s' has %zu command interfaces found. 1 expected.", joint.name.c_str(),
+          joint.command_interfaces.size());
+        return hardware_interface::CallbackReturn::ERROR;
+      }
 
-    // Check that the joints have the correct interfaces
-    // The steering joints have position interfaces and the drive joints velocity
-    if (joint.name.find("steering") != std::string::npos)
-    {
-      // Steering joints should have a single position command and state interface
       if (joint.command_interfaces[0].name != hardware_interface::HW_IF_POSITION)
       {
         RCLCPP_FATAL(
           rclcpp::get_logger("CarlikeBotSystemHardware"),
           "Joint '%s' has %s command interface. '%s' expected.", joint.name.c_str(),
           joint.command_interfaces[0].name.c_str(), hardware_interface::HW_IF_POSITION);
+        return hardware_interface::CallbackReturn::ERROR;
+      }
+
+      if (joint.state_interfaces.size() != 1)
+      {
+        RCLCPP_FATAL(
+          rclcpp::get_logger("CarlikeBotSystemHardware"),
+          "Joint '%s' has %zu state interface. 1 expected.", joint.name.c_str(),
+          joint.state_interfaces.size());
+        return hardware_interface::CallbackReturn::ERROR;
       }
 
       if (joint.state_interfaces[0].name != hardware_interface::HW_IF_POSITION)
@@ -102,25 +102,55 @@ hardware_interface::CallbackReturn CarlikeBotSystemHardware::on_init(
           rclcpp::get_logger("CarlikeBotSystemHardware"),
           "Joint '%s' has %s state interface. '%s' expected.", joint.name.c_str(),
           joint.state_interfaces[0].name.c_str(), hardware_interface::HW_IF_POSITION);
+        return hardware_interface::CallbackReturn::ERROR;
       }
     }
     else
     {
-      // Drive joints should have a single velocity command and state interface
+      // Drive joints have a velocity command interface and velocity and position state interface
+      if (joint.command_interfaces.size() != 1)
+      {
+        RCLCPP_FATAL(
+          rclcpp::get_logger("CarlikeBotSystemHardware"),
+          "Joint '%s' has %zu command interfaces found. 1 expected.", joint.name.c_str(),
+          joint.command_interfaces.size());
+        return hardware_interface::CallbackReturn::ERROR;
+      }
+
       if (joint.command_interfaces[0].name != hardware_interface::HW_IF_VELOCITY)
       {
         RCLCPP_FATAL(
           rclcpp::get_logger("CarlikeBotSystemHardware"),
           "Joint '%s' has %s command interface. '%s' expected.", joint.name.c_str(),
           joint.command_interfaces[0].name.c_str(), hardware_interface::HW_IF_VELOCITY);
+        return hardware_interface::CallbackReturn::ERROR;
       }
 
-      if (joint.state_interfaces[0].name != hardware_interface::HW_IF_VELOCITY)
+      if (joint.state_interfaces.size() != 2)
+      {
+        RCLCPP_FATAL(
+          rclcpp::get_logger("CarlikeBotSystemHardware"),
+          "Joint '%s' has %zu state interface. 2 expected.", joint.name.c_str(),
+          joint.state_interfaces.size());
+        return hardware_interface::CallbackReturn::ERROR;
+      }
+
+      if (joint.state_interfaces[0].name != hardware_interface::HW_IF_POSITION)
       {
         RCLCPP_FATAL(
           rclcpp::get_logger("CarlikeBotSystemHardware"),
           "Joint '%s' has %s state interface. '%s' expected.", joint.name.c_str(),
-          joint.state_interfaces[0].name.c_str(), hardware_interface::HW_IF_VELOCITY);
+          joint.state_interfaces[0].name.c_str(), hardware_interface::HW_IF_POSITION);
+        return hardware_interface::CallbackReturn::ERROR;
+      }
+
+      if (joint.state_interfaces[1].name != hardware_interface::HW_IF_VELOCITY)
+      {
+        RCLCPP_FATAL(
+          rclcpp::get_logger("CarlikeBotSystemHardware"),
+          "Joint '%s' has %s state interface. '%s' expected.", joint.name.c_str(),
+          joint.state_interfaces[1].name.c_str(), hardware_interface::HW_IF_VELOCITY);
+        return hardware_interface::CallbackReturn::ERROR;
       }
     }
   }
@@ -129,26 +159,20 @@ hardware_interface::CallbackReturn CarlikeBotSystemHardware::on_init(
   // drive wheels
   if (m_running_simulation)
   {
-    // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
+    // // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
     hw_start_sec_ = std::stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
     hw_stop_sec_ = std::stod(info_.hardware_parameters["example_param_hw_stop_duration_sec"]);
-    // END: This part here is for exemplary purposes - Please do not copy to your production code
+    // // END: This part here is for exemplary purposes - Please do not copy to your production code
 
-    // Two steering joints and two drive joints
-    hw_positions_.resize(2, std::numeric_limits<double>::quiet_NaN());
-    hw_velocities_.resize(2, std::numeric_limits<double>::quiet_NaN());
-    // Which means 4 commands
-    hw_commands_.resize(4, std::numeric_limits<double>::quiet_NaN());
   }
   // Running on hardware: we have a single front steering and a single rear drive motor
   else if (!m_running_simulation)
   {
-    // A single steering joint and a single drive joint
-    hw_positions_.resize(1, std::numeric_limits<double>::quiet_NaN());
-    hw_velocities_.resize(1, std::numeric_limits<double>::quiet_NaN());
-    // Which means 2 commands
-    hw_commands_.resize(2, std::numeric_limits<double>::quiet_NaN());
   }
+  
+  hw_positions_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
+  hw_velocities_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
+  hw_commands_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
 
   return hardware_interface::CallbackReturn::SUCCESS;
 }
@@ -164,19 +188,19 @@ std::vector<hardware_interface::StateInterface> CarlikeBotSystemHardware::export
 
   for (auto i = 0u; i < info_.joints.size(); i++)
   {
-    bool is_steering_joint = info_.joints[i].name.find("steering") != std::string::npos;
+    bool joint_is_steering = info_.joints[i].name.find("steering") != std::string::npos;
 
-    if (is_steering_joint)
+    state_interfaces.emplace_back(hardware_interface::StateInterface(
+      info_.joints[i].name, hardware_interface::HW_IF_POSITION, &hw_positions_[i]));
+
+    if (!joint_is_steering)
     {
       state_interfaces.emplace_back(hardware_interface::StateInterface(
-        info_.joints[i].name, hardware_interface::HW_IF_POSITION, &hw_positions_[positions_idx]));
-      positions_idx++;
+        info_.joints[i].name, hardware_interface::HW_IF_VELOCITY, &hw_velocities_[i]));
     }
     else
     {
-      state_interfaces.emplace_back(hardware_interface::StateInterface(
-        info_.joints[i].name, hardware_interface::HW_IF_VELOCITY, &hw_velocities_[velocities_idx]));
-      velocities_idx++;
+
     }
   }
 
@@ -199,31 +223,19 @@ CarlikeBotSystemHardware::export_command_interfaces()
 {
   std::vector<hardware_interface::CommandInterface> command_interfaces;
 
-  int position_commands_counter = 0;
-  int velocity_commands_counter = 0;
-  int commands_counter = 0;
-
-  for (auto i = 0u; i < info_.joints.size(); i++)
+  for (uint i = 0; i < info_.joints.size(); i++)
   {
-    bool is_steering_joint = info_.joints[i].name.find("steering") != std::string::npos;
+    bool joint_is_steering = info_.joints[i].name.find("steering") != std::string::npos;
 
-    if (is_steering_joint)
+    if (joint_is_steering)
     {
       command_interfaces.emplace_back(hardware_interface::CommandInterface(
         info_.joints[i].name, hardware_interface::HW_IF_POSITION, &hw_commands_[i]));
-      commands_counterpart_.emplace_back(
-        commands_counter, hardware_interface::HW_IF_POSITION, position_commands_counter);
-      position_commands_counter++;
-      commands_counter++;
     }
     else
     {
       command_interfaces.emplace_back(hardware_interface::CommandInterface(
         info_.joints[i].name, hardware_interface::HW_IF_VELOCITY, &hw_commands_[i]));
-      commands_counterpart_.emplace_back(
-        commands_counter, hardware_interface::HW_IF_VELOCITY, velocity_commands_counter);
-      velocity_commands_counter++;
-      commands_counter++;
     }
   }
 
@@ -255,18 +267,10 @@ hardware_interface::CallbackReturn CarlikeBotSystemHardware::on_activate(
         rclcpp::get_logger("CarlikeBotSystemHardware"), "%.1f seconds left...", hw_start_sec_ - i);
     }
 
-    for (auto i = 0u; i < hw_positions_.size(); i++)
+    for (uint i = 0; i < hw_positions_.size(); i++)
     {
       hw_positions_[i] = 0.0;
-    }
-
-    for (auto i = 0u; i < hw_velocities_.size(); i++)
-    {
       hw_velocities_[i] = 0.0;
-    }
-
-    for (auto i = 0u; i < hw_commands_.size(); i++)
-    {
       hw_commands_[i] = 0.0;
     }
   }
@@ -300,6 +304,18 @@ hardware_interface::CallbackReturn CarlikeBotSystemHardware::on_deactivate(
 hardware_interface::return_type CarlikeBotSystemHardware::read(
   const rclcpp::Time & /*time*/, const rclcpp::Duration & period)
 {
+  for (std::size_t i = 0; i < hw_velocities_.size(); ++i)
+  {
+
+    hw_positions_[i] += hw_velocities_[i] * period.seconds();
+    
+    RCLCPP_INFO(
+      rclcpp::get_logger("F1TENTHSystemHardware"), 
+      "Got position state %.5f and velocity state %.5f for '%s'", 
+      hw_positions_[i], hw_velocities_[i],
+      info_.joints[i].name.c_str());
+  }
+
   if (m_running_simulation)
   {
     // Inside the write method both position and velocity states for the simulation are updated
@@ -315,6 +331,19 @@ hardware_interface::return_type ros2_control_demo_example_11 ::CarlikeBotSystemH
   const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
   RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), "Writing...");
+
+  for (auto i = 0u; i < hw_commands_.size(); ++i)
+  {
+    hw_velocities_[i] = hw_commands_[i];
+
+    RCLCPP_INFO(
+      rclcpp::get_logger("F1TENTHSystemHardware"), 
+      "Got command %.5f for '%s'", 
+      hw_commands_[0], info_.joints[i].name.c_str());
+  }
+
+  return hardware_interface::return_type::OK;
+
 
   if (m_running_simulation)
   {

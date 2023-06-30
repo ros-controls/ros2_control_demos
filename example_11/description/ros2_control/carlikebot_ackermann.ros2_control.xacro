@@ -20,10 +20,12 @@
       </joint>
       <joint name="${prefix}rear_left_wheel_joint">
         <command_interface name="velocity"/>
+        <state_interface name="position"/>
         <state_interface name="velocity"/>
       </joint>
       <joint name="${prefix}rear_right_wheel_joint">
         <command_interface name="velocity"/>
+        <state_interface name="position"/>
         <state_interface name="velocity"/>
       </joint>
     </ros2_control>

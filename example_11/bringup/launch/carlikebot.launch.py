@@ -80,9 +80,9 @@ def generate_launch_description():
         executable="robot_state_publisher",
         output="both",
         parameters=[robot_description],
-        remappings=[
-            ("/ackermann_steering_controller/reference_unstamped", "/cmd_vel"),
-        ],
+        # remappings=[
+        #     ("/ackermann_steering_controller/reference_unstamped", "/cmd_vel"),
+        # ],
         condition=IfCondition(sim),
     )
     robot_state_pub_bicycle_node = Node(
@@ -90,9 +90,9 @@ def generate_launch_description():
         executable="robot_state_publisher",
         output="both",
         parameters=[robot_description],
-        remappings=[
-            ("/bicycle_steering_controller/reference_unstamped", "/cmd_vel"),
-        ],
+        # remappings=[
+        #     ("/bicycle_steering_controller/reference_unstamped", "/cmd_vel"),
+        # ],
         condition=UnlessCondition(sim),
     )
     rviz_node = Node(

@@ -23,14 +23,14 @@
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
-        <box size="${base_width} ${base_length} ${base_height}"/>
+        <box size="${base_length} ${base_width} ${base_height}"/>
       </geometry>
     </collision>
 
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
-        <box size="${base_width} ${base_length} ${base_height}"/>
+        <box size="${base_length} ${base_width} ${base_height}"/>
       </geometry>
       <material name="orange"/>
     </visual>
@@ -89,7 +89,7 @@
     <joint name="${prefix}rear_right_wheel_joint" type="continuous">
       <parent link="${prefix}chassis_link"/>
       <child link="${prefix}rear_right_wheel"/>
-      <origin xyz="${base_width/2} -${wheelbase/2} -${base_height/2}" rpy="0 0 0"/>
+      <origin xyz="-${wheelbase/2} ${base_width/2} -${base_height/2}" rpy="0 0 ${PI/2}"/>
       <axis xyz="-1 0 0"/>
       <limit effort="100.0" velocity="100.0"/>
       <dynamics damping="0.2"/>
@@ -127,7 +127,7 @@
     <joint name="${prefix}rear_left_wheel_joint" type="continuous">
       <parent link="${prefix}chassis_link" />
       <child link="${prefix}rear_left_wheel" />
-      <origin xyz="-${base_width/2} -${wheelbase/2} -${base_height/2}" rpy="0 0 0"/>
+      <origin xyz="-${wheelbase/2} -${base_width/2} -${base_height/2}" rpy="0 0 ${PI/2}"/>
       <axis xyz="-1 0 0"/>
       <limit effort="100.0" velocity="100.0"/>
       <dynamics damping="0.2"/>
@@ -167,8 +167,8 @@
     <joint name="${prefix}right_steering_joint" type="revolute">
       <parent link="${prefix}chassis_link" />
       <child link="${prefix}right_steering" />
-      <origin xyz="${base_width/2} ${wheelbase/2} -${base_height/2}" rpy="0 0 0"/>
-      <axis xyz="0 0 -1"/>
+      <origin xyz="${wheelbase/2} ${base_width/2} -${base_height/2}" rpy="0 0 ${PI/2}"/>
+      <axis xyz="0 0 1"/>
       <limit lower="-0.4" upper="0.4" effort="100.0" velocity="0.0"/>
       <dynamics damping="0.2"/>
     </joint>
@@ -204,8 +204,8 @@
     <joint name="${prefix}left_steering_joint" type="revolute">
       <parent link="${prefix}chassis_link" />
       <child link="${prefix}left_steering" />
-      <origin xyz="-${base_width/2} ${wheelbase/2} -${base_height/2}" rpy="0 0 0"/>
-      <axis xyz="0 0 -1"/>
+      <origin xyz="${wheelbase/2} -${base_width/2} -${base_height/2}" rpy="0 0 ${PI/2}"/>
+      <axis xyz="0 0 1"/>
       <limit lower="-0.4" upper="0.4" effort="0.0" velocity="0.0"/>
       <dynamics damping="0.2"/>
     </joint>
