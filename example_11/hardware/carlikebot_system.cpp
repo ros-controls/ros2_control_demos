@@ -159,17 +159,17 @@ hardware_interface::CallbackReturn CarlikeBotSystemHardware::on_init(
   // drive wheels
   if (m_running_simulation)
   {
-    // // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
+    // // BEGIN: This part here is for exemplary purposes - Please do not copy to your production
+    // code
     hw_start_sec_ = std::stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
     hw_stop_sec_ = std::stod(info_.hardware_parameters["example_param_hw_stop_duration_sec"]);
     // // END: This part here is for exemplary purposes - Please do not copy to your production code
-
   }
   // Running on hardware: we have a single front steering and a single rear drive motor
   else if (!m_running_simulation)
   {
   }
-  
+
   hw_positions_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   hw_velocities_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   hw_commands_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
@@ -200,7 +200,6 @@ std::vector<hardware_interface::StateInterface> CarlikeBotSystemHardware::export
     }
     else
     {
-
     }
   }
 
@@ -306,14 +305,12 @@ hardware_interface::return_type CarlikeBotSystemHardware::read(
 {
   for (std::size_t i = 0; i < hw_velocities_.size(); ++i)
   {
-
     hw_positions_[i] += hw_velocities_[i] * period.seconds();
-    
+
     RCLCPP_INFO(
-      rclcpp::get_logger("F1TENTHSystemHardware"), 
-      "Got position state %.5f and velocity state %.5f for '%s'", 
-      hw_positions_[i], hw_velocities_[i],
-      info_.joints[i].name.c_str());
+      rclcpp::get_logger("F1TENTHSystemHardware"),
+      "Got position state %.5f and velocity state %.5f for '%s'", hw_positions_[i],
+      hw_velocities_[i], info_.joints[i].name.c_str());
   }
 
   if (m_running_simulation)
@@ -337,13 +334,11 @@ hardware_interface::return_type ros2_control_demo_example_11 ::CarlikeBotSystemH
     hw_velocities_[i] = hw_commands_[i];
 
     RCLCPP_INFO(
-      rclcpp::get_logger("F1TENTHSystemHardware"), 
-      "Got command %.5f for '%s'", 
-      hw_commands_[0], info_.joints[i].name.c_str());
+      rclcpp::get_logger("F1TENTHSystemHardware"), "Got command %.5f for '%s'", hw_commands_[0],
+      info_.joints[i].name.c_str());
   }
 
   return hardware_interface::return_type::OK;
-
 
   if (m_running_simulation)
   {
