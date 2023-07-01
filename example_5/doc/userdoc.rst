@@ -16,6 +16,8 @@ This example shows how an externally connected sensor can be accessed:
 A 3D Force-Torque Sensor (FTS) is simulated by generating random sensor readings via a hardware interface of
 type ``hardware_interface::SensorInterface``.
 
+.. include:: ../../doc/run_from_docker.rst
+
 Tutorial steps
 --------------------------
 

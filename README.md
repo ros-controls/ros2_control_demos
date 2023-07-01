@@ -46,7 +46,7 @@ The following examples are part of this demo repository:
 
    *RRBot* with an exposed transmission interface.
 
-* Example 9: ["Gazebo Classic Simulation"](example_10)
+* Example 9: ["Gazebo Classic Simulation"](example_9)
 
    Demonstrates how to switch between simulation and hardware.
 
@@ -78,34 +78,6 @@ The important files to check in each example are:
 The concepts in this package are demonstrated on the examples of *RRBot* and *DiffBot*.
 Those two world-known imaginary robots are trivial simulations to demonstrate and test `ros2_control` concepts.
 
-## Usage
-### Using Docker
-**Building your own**
-
-```bash
-mkdir -p ~/ros2_ws/src
-cd ~/ros2_ws/src
-git clone https://github.com/ros-controls/ros2_control_demos
-cd ros2_control_demos
-docker build . -t ros2_control_demos -f Dockerfile/Dockerfile
-```
-
-**To run the demo**
-
-Docker allows us to run the demo without the GUI if configured properly. The following command runs the demo without the GUI:
-```bash
-docker run -it --rm ros2_control_demos
-```
-
-Then on your local machine, you can run rviz with the config file specified:
-
-```bash
-cd ~/ros2_ws
-source /opt/ros/rolling/setup.sh
-rviz2 -d src/ros2_control_demos/example_2/description/rviz/diffbot.rviz
-```
-
-
 ## Build status
 
 ROS 2 Distro | Branch | Build status | Documentation
@@ -129,27 +101,3 @@ ROS 2 Distro | Branch | Build status | Documentation
    Uses repos file: `src/$NAME$/$NAME$.repos`
 
 1. Source build - also core ROS packages are build from source. It shows potential issues in the mid future.
-
-
-# Build from source
-```
-git clone https://github.com/ros-controls/ros2_control
-git clone https://github.com/ros-controls/ros2_controllers
-git clone https://github.com/ros-controls/ros2_control_demos
-```
-
-**NOTE**: `ros2_control` and `ros2_controllers` packages are released and can be installed using a package manager.
-We provide officially released and maintained debian packages, which can easily be installed via aptitude.
-However, there might be cases in which not-yet released demos or features are only available through a source build in your own workspace.
-
-* Install dependencies:
-  ```
-  rosdep install --from-paths src --ignore-src -r -y
-  ```
-
-* Build everything, e.g. with:
-  ```
-  colcon build --symlink-install
-  ```
-
-* Do not forget to source `setup.bash` from the `install` folder!

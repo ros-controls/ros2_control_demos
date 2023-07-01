@@ -16,6 +16,7 @@ This example shows how a sensor can be integrated in a hardware interface:
 A 2D Force-Torque Sensor (FTS) is simulated by generating random sensor readings via a hardware interface of
 type ``hardware_interface::SystemInterface``.
 
+.. include:: ../../doc/run_from_docker.rst
 
 Tutorial steps
 --------------------------
