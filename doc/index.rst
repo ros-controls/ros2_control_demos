@@ -172,7 +172,7 @@ Then we are ready to bring up all the components to view the robot. Let's start 
 
 .. code-block:: shell
 
-  docker run -it --rm --name ros2_control_demos --net host ros2_control_demos ros2 launch ros2_control_demos_example_1 view_robot.launch.py gui:=false
+  docker run -it --rm --name ros2_control_demos --net host ros2_control_demos ros2 launch ros2_control_demo_example_1 view_robot.launch.py gui:=false
 
 .. note::
 
