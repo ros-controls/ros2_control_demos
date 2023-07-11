@@ -1,0 +1,6 @@
+passthrough_controller:
+  interfaces: {
+    type: string_array,
+    default_value: [],
+    description: "Names of the interfaces to be forwarded",
+  }
