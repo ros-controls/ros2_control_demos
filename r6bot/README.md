@@ -125,21 +125,21 @@ The URDF file is generally formatted according to the following template.
 * The `link` tag defines the robot's geometry and inertia properties. It has a name attribute which will be referred to by the `joint` tags.
 * The `visual` tag specifies the rotation and translation of the visual mesh. If the meshes were process as described previously, then the `orgin` tag can be left at all zeros.
 * The `geometry` and `mesh` tags specify the location of the 3D mesh file relative to a specified ROS 2 package.
-* The `collision` tag is equivalent to the `visual` tag, except the specified mesh is used for commission checking in some applications.
+* The `collision` tag is equivalent to the `visual` tag, except the specified mesh is used for collision checking in some applications.
 * The `inertial` tag specifies mass and inertia for the link. The origin tag specifies the link's center of mass. These values are used to calculate forward and inverse dynamics. Since our application does not use dynamics, uniform arbitrary values are used.
 * The `<!-- additional links ... -->` comments indicates that many consecutive `link` tags will be defined, one for each link.
 * The `<link name="world"/>` and `<link name="tool0"/>` elements are not required. However, it is convention to set the link at the tip of the robot to  tool0 and to define the robot's base link relative to a world frame.
-* The `joint` tag specifies the kinematic structure of the robot. It two required attributes: name and type. The type specifies the viable motion between the two connected links. The subsequent `parent` and `child` links specify which two links are joined by the joint.
-* The `axis` tag species the joint's axis of rotation. If the meshes were process as described previously, then the axis value is always `"0 0 1"`.
+* The `joint` tag specifies the kinematic structure of the robot. It has two required attributes: name and type. The type specifies the viable motion between the two connected links. The subsequent `parent` and `child` links specify which two links are joined by the joint.
+* The `axis` tag species the joint's degree of freedom. If the meshes were process as described previously, then the axis value is always `"0 0 1"`.
 * The `limits` tag specifies kinematic and dynamics limits for the joint.
 * The `ros2_control` tag specifies hardware configuration of the  robot. More specifically, the available state and command interfaces. The tag has two required attributes: name and type. Additional elements, such as sensors, are also included in this tag.
 * The `hardware` and `plugin` tags instruct the ros2_control framework to dynamically load a hardware driver conforming to `HardwareInterface` as a plugin. The plugin is specified as ` <{Name_Space}/{Class_Name}`.
-* Finally, the `joint` tag specifies the state and command interfaces that the loaded plugin is will offer. The joint is specified with the name attribute. The `command_interface` and `state_interface` tags specify the interface type, usually position, velocity, acceleration, or effort.
+* Finally, the `joint` tag specifies the state and command interfaces that the loaded plugins will offer. The joint is specified with the name attribute. The `command_interface` and `state_interface` tags specify the interface type, usually position, velocity, acceleration, or effort.
 
 The complete URDF for the robot in this tutorial is available [here](r6bot_description/urdf/r6bot.urdf).
 
 ## Writing a hardware interface
-In ros2_control, hardware system components are integrated via user defined driver plugins that conform to the `HarwareInterface` public interface. Hardware plugins specified in the URDF are dynamically loaded during initialization using the pluginlib interface. In order to run the `ros_2_control_node`, a parameter named `robot_description` must be set. This normally done in the ros2_control launch file.
+In ros2_control, hardware system components are integrated via user defined driver plugins that conform to the `HardwareInterface` public interface. Hardware plugins specified in the URDF are dynamically loaded during initialization using the pluginlib interface. In order to run the `ros2_control_node`, a parameter named `robot_description` must be set. This normally done in the ros2_control launch file.
 
 The following code blocks will explain the requirements for writing a new hardware interface.
 
@@ -261,18 +261,18 @@ pluginlib_export_plugin_description_file(robot_6_dof_hardware hardware_plugin_pl
 
 ## Writing a controller
 
-In ros2_control, controllers are implemented as plugins that conforms to the `ControllerInterface` public interface. Similar to the hardware interfaces, the controller plugins to load are specified using ROS parameters. This is normally  ahcived by passing a YAML parameter file to the `ros_2_controle_node`. Unlike hardware interfaces, controllers exists in a finite set of states:
+In ros2_control, controllers are implemented as plugins that conforms to the `ControllerInterface` public interface. Similar to the hardware interfaces, the controller plugins to load are specified using ROS parameters. This is normally  achieved by passing a YAML parameter file to the `ros2_control_node`. Unlike hardware interfaces, controllers exists in a finite set of states:
 
 2. Unconfigured
 3. Inactive
 4. Active
 5. Finalized
 
-Certain interface methods are called when transitions between these states. During the main control loop, the controller is in the active state.
+Certain interface methods are called during transitions between these states. During the main control loop, the controller is in the active state.
 
 The following code blocks will explain the requirements for writing a new hardware interface.
 
-The controller plugin for the tutorial robot is class called `RobotController` that inherits from  `controller_interface::ControllerInterface`. The `RobotController` must implement nine public methods. The latter 6 are [managed node](https://design.ros2.org/articles/node_lifecycle.html) transitions callbacks.
+The controller plugin for the tutorial robot is class called `RobotController` that inherits from  `controller_interface::ControllerInterface`. The `RobotController` must implement nine public methods. The last six are [managed node](https://design.ros2.org/articles/node_lifecycle.html) transitions callbacks.
 1. `command_interface_configuration`
 2. `state_interface_configuration`
 3. `update`
@@ -342,7 +342,7 @@ controller_interface::InterfaceConfiguration state_interface_configuration() {
     return conf
 }
 ```
-The `on_activate` is called once when the controller is activated. This method should handle controller restarts, such as setting the resetting reference to safe values. It should also perform controller specific safety checks. The `command_interface_configuration` and `command_interface_configuration` are also called again when the controller is activated.
+The `on_activate` is called once when the controller is activated. This method should handle controller restarts, such as setting the resetting reference to safe values. It should also perform controller specific safety checks. The `command_interface_configuration` and `state_interface_configuration` methods are also called again when the controller is activated.
 ```c++
 controller_interface::CallbackReturn on_activate(const rclcpp_lifecycle::State &previous_state){
   // Handle controller restarts and dynamic parameter updating
@@ -350,7 +350,7 @@ controller_interface::CallbackReturn on_activate(const rclcpp_lifecycle::State &
   return CallbackReturn::SUCCESS;
 }
 ```
-The `update` method is part of the main control loop. Since the method is part of the realtime control loop, the realtime constraint must be enforced. The controller should read from its state interfaces and reference and calculate a control command. Normally, the reference is access via a ROS 2 subscriber. Since the subscriber runs on the non-realtime thread, a realtime buffer is used to a transfer the message to the realtime thread. The realtime buffer is eventually pointer to a ROS message with a mutex that guarantees thread safety and that the realtime thread is never blocked. The calculated control command should then be written to the command interface, which will in turn control the hardware.
+The `update` method is part of the main control loop. Since the method is part of the realtime control loop, the realtime constraint must be enforced. The controller should read from its state interfaces, read its reference and calculate a control output. Normally, the reference is accessed via a ROS 2 subscriber. Since the subscriber runs on the non-realtime thread, a realtime buffer is used to a transfer the message to the realtime thread. The realtime buffer is eventually a pointer to a ROS message with a mutex that guarantees thread safety and that the realtime thread is never blocked. The calculated control output should then be written to the command interface, which will in turn control the hardware.
 ```c++
 
 controller_interface::return_type update(const rclcpp::Time &time, const rclcpp::Duration &period){
@@ -395,7 +395,7 @@ controller_interface::CallbackReturn on_error(const rclcpp_lifecycle::State &pre
 }
 ```
 ### Plugin description file
-The plugin description file is again required for the control, since it is exported as a library. The controller plugin description file is formatted as follows. See [here](r6bot_controller/robot_6_dof_controller_plugin_description.xml) for the complete XML file.
+The plugin description file is again required for the controller, since it is exported as a library. The controller plugin description file is formatted as follows. See [here](r6bot_controller/robot_6_dof_controller_plugin_description.xml) for the complete XML file.
 
 ```xml
 <library path="{Library_Name}">
@@ -442,13 +442,13 @@ source install/setup.bash
 ```
 Open a terminal and launch the `r6bot.launch.py` file from the `robot_controller` package.
 ```shell
-ros2 launch robot_controller r6bot.launch.py
+ros2 launch r6bot_controller r6bot_controller.launch.py
 ```
 Finally, open a new  terminal and run the following command.
 ```shell
 ros2 launch reference_generator send_trajectory.launch.py
 ```
-You should see the tutorial robot making a circular motion in RViz.
+You should see the tutorial robot making a circular motion in RViz2.
 <p align="center">
   <img src="resources/trajectory.gif" width="350" title="hover text">
 </p>
