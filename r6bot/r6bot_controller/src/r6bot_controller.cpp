@@ -15,9 +15,11 @@
 #include "r6bot_controller/r6bot_controller.hpp"
 
 #include <stddef.h>
+#include <algorithm>
 #include <memory>
 #include <string>
 #include <vector>
+
 #include "rclcpp/qos.hpp"
 #include "rclcpp/time.hpp"
 #include "rclcpp_lifecycle/node_interfaces/lifecycle_node_interface.hpp"
@@ -141,7 +143,7 @@ void interpolate_trajectory_point(
   double total_time = last_time.sec + last_time.nanosec * 1E-9;
 
   size_t ind = cur_time.seconds() * (traj_len / total_time);
-  ind = std::min(ind, static_cast<double>(traj_len) - 2);
+  ind = std::min(static_cast<double>(ind), traj_len - 2);
   double delta = cur_time.seconds() - ind * (total_time / traj_len);
   interpolate_point(traj_msg.points[ind], traj_msg.points[ind + 1], point_interp, delta);
 }
