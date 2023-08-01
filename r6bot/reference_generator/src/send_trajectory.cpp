@@ -1,3 +1,17 @@
+// Copyright 2023 ros2_control Development Team
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 #include <kdl/chainfksolverpos_recursive.hpp>
 #include <kdl/chainiksolvervel_pinv.hpp>
 #include <kdl/jntarray.hpp>
@@ -30,7 +44,6 @@ int main(int argc, char ** argv)
   auto joint_velocities = KDL::JntArray(chain.getNrOfJoints());
   auto twist = KDL::Twist();
   // create KDL solvers
-  auto fk_pos_solver_ = std::make_shared<KDL::ChainFkSolverPos_recursive>(chain);
   auto ik_vel_solver_ = std::make_shared<KDL::ChainIkSolverVel_pinv>(chain, 0.0000001);
 
   trajectory_msgs::msg::JointTrajectory trajectory_msg;
@@ -76,8 +89,9 @@ int main(int argc, char ** argv)
 
     // set timing information
     trajectory_point_msg.time_from_start.sec = i / loop_rate;
-    trajectory_point_msg.time_from_start.nanosec =
-      1E9 / loop_rate * (double)(i - loop_rate * (i / loop_rate));
+    trajectory_point_msg.time_from_start.nanosec = static_cast<int>(
+      1E9 / loop_rate *
+      static_cast<double>(t - loop_rate * (i / loop_rate)));  // implicit integer division
 
     trajectory_msg.points.push_back(trajectory_point_msg);
   }

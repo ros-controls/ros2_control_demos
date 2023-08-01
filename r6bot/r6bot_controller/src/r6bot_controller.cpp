@@ -1,3 +1,17 @@
+// Copyright 2023 ros2_control Development Team
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 #include "r6bot_controller/r6bot_controller.hpp"
 
 #include <stddef.h>
@@ -66,7 +80,8 @@ controller_interface::InterfaceConfiguration RobotController::state_interface_co
 controller_interface::CallbackReturn RobotController::on_configure(const rclcpp_lifecycle::State &)
 {
   auto callback =
-    [this](const std::shared_ptr<trajectory_msgs::msg::JointTrajectory> traj_msg) -> void {
+    [this](const std::shared_ptr<trajectory_msgs::msg::JointTrajectory> traj_msg) -> void
+  {
     traj_msg_external_point_ptr_.writeFromNonRT(traj_msg);
     new_msg_ = true;
   };
@@ -126,7 +141,7 @@ void interpolate_trajectory_point(
   double total_time = last_time.sec + last_time.nanosec * 1E-9;
 
   size_t ind = cur_time.seconds() * (traj_len / total_time);
-  ind = std::min(ind, (size_t)traj_len - 2);
+  ind = std::min(ind, static_cast<double>(traj_len) - 2);
   double delta = cur_time.seconds() - ind * (total_time / traj_len);
   interpolate_point(traj_msg.points[ind], traj_msg.points[ind + 1], point_interp, delta);
 }
