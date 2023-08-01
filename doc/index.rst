@@ -41,31 +41,27 @@ Example Overview
 Example 1: RRBot
    *RRBot* - or ''Revolute-Revolute Manipulator Robot'' - a simple position controlled robot with one hardware interface. This example also demonstrates the switching between different controllers.
 
-
 Example 2: DiffBot
    *DiffBot*, or ''Differential Mobile Robot'', is a simple mobile base with differential drive.
    The robot is basically a box moving according to differential drive kinematics.
 
-
 Example 3: "RRBot with multiple interfaces"
    *RRBot* with multiple interfaces.
-
 
 Example 4: "Industrial robot with integrated sensor"
    *RRBot* with an integrated sensor.
 
-
 Example 5: "Industrial Robots with externally connected sensor"
    *RRBot* with an externally connected sensor.
-
 
 Example 6: "Modular Robots with separate communication to each actuator"
    The example shows how to implement robot hardware with separate communication to each actuator.
 
+Example 7: "6-DOF robot"
+   A full tutorial for a 6 DOF robot for intermediate ROS 2 users.
 
 Example 8: "Using transmissions"
    *RRBot* with an exposed transmission interface.
-
 
 Example 9: "Gazebo Classic"
    Demonstrates how to switch between simulation and hardware.
@@ -252,7 +248,8 @@ Examples
    Example 2: DiffBot <../example_2/doc/userdoc.rst>
    Example 3: RRBot with multiple interfaces <../example_3/doc/userdoc.rst>
    Example 4: Industrial robot with integrated sensor <../example_4/doc/userdoc.rst>
-   Example 5: Industrial Robots with externally connected sensor <../example_5/doc/userdoc.rst>
-   Example 6: Modular Robots with separate communication to each actuator <../example_6/doc/userdoc.rst>
+   Example 5: Industrial robots with externally connected sensor <../example_5/doc/userdoc.rst>
+   Example 6: Modular robots with separate communication to each actuator <../example_6/doc/userdoc.rst>
+   Example 7: 6DOF robot <../r6bot/doc/userdoc.rst>
    Example 8: Using transmissions <../example_8/doc/userdoc.rst>
-   Example 9: Gazebo Classic <../example_9/doc/userdoc.rst>
+   Example 9: Gazebo classic <../example_9/doc/userdoc.rst>
