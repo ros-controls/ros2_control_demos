@@ -1,9 +1,0 @@
-<library path="r6bot_hardware">
-  <class name="r6bot_hardware/RobotSystem"
-         type="r6bot_hardware::RobotSystem"
-         base_class_type="hardware_interface::SystemInterface">
-    <description>
-      Robot hardware plugin for 6 dof robot tutorial.
-    </description>
-  </class>
-</library>

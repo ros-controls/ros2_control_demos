@@ -1,9 +1,0 @@
-<library path="r6bot_controller">
-  <class name="r6bot_controller/RobotController"
-         type="r6bot_controller::RobotController"
-         base_class_type="controller_interface::ControllerInterface">
-    <description>
-      Robot controller plugin for 6 dof robot tutorial.
-    </description>
-  </class>
-</library>
