@@ -250,6 +250,6 @@ Examples
    Example 4: Industrial robot with integrated sensor <../example_4/doc/userdoc.rst>
    Example 5: Industrial robots with externally connected sensor <../example_5/doc/userdoc.rst>
    Example 6: Modular robots with separate communication to each actuator <../example_6/doc/userdoc.rst>
-   Example 7: 6DOF robot <../r6bot/doc/userdoc.rst>
+   Example 7: 6DOF robot <../example_7/doc/userdoc.rst>
    Example 8: Using transmissions <../example_8/doc/userdoc.rst>
    Example 9: Gazebo classic <../example_9/doc/userdoc.rst>
