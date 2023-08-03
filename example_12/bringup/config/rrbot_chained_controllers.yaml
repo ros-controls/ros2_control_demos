@@ -6,13 +6,13 @@ controller_manager:
       type: joint_state_broadcaster/JointStateBroadcaster
 
     joint1_position_controller:
-      type: forward_command_controller/ChainableForwardCommandController
+      type: passthrough_controller/PassthroughController
 
     joint2_position_controller:
-      type: forward_command_controller/ChainableForwardCommandController
+      type: passthrough_controller/PassthroughController
 
     position_controller:
-      type: forward_command_controller/ChainableForwardCommandController
+      type: passthrough_controller/PassthroughController
 
     position_trajectory_controller:
       type: joint_trajectory_controller/JointTrajectoryController
@@ -21,25 +21,20 @@ controller_manager:
 # First-level controllers
 joint1_position_controller:
   ros__parameters:
-    joints:
-      - joint1
-    interface_name: position
+    interfaces: ["joint1/position"]
 
 
 joint2_position_controller:
   ros__parameters:
-    joints:
-      - joint2
-    interface_name: position
+    interfaces: ["joint2/position"]
 
 
 # Second-level controller
 position_controller:
   ros__parameters:
-    joints:
-      - joint1_position_controller/joint1
-      - joint2_position_controller/joint2
-    interface_name: position
+    interfaces:
+      - joint1_position_controller/joint1/position
+      - joint2_position_controller/joint2/position
 
 
 # Third-level controller
