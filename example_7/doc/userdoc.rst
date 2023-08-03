@@ -159,7 +159,7 @@ In ros2_control, hardware system components are integrated via user defined driv
 
 The following code blocks will explain the requirements for writing a new hardware interface.
 
-The hardware plugin for the tutorial robot is class called ``RobotSystem`` that inherits from  ``hardware_interface::SystemInterface``. The ``SystemInterface`` is one of the offered hardware interfaces designed for a complete robot system. For example, The UR5 uses this interface. The ``RobotSystem`` must implement five public methods.
+The hardware plugin for the tutorial robot is a class called ``RobotSystem`` that inherits from  ``hardware_interface::SystemInterface``. The ``SystemInterface`` is one of the offered hardware interfaces designed for a complete robot system. For example, The UR5 uses this interface. The ``RobotSystem`` must implement five public methods.
 
 1. ``on_init``
 2. ``export_state_interfaces``
@@ -253,7 +253,7 @@ Finally, all ros2_control plugins should have the following two lines of code at
 Plugin description file
 ************************
 
-The plugin description file is a required XML file that describes a plugin's library name, class type, namespace, description, and interface type. This file allows the ROS 2 to automatically discover and load plugins.It is formatted as follows.
+The plugin description file is a required XML file that describes a plugin's library name, class type, namespace, description, and interface type. This file allows the ROS 2 to automatically discover and load plugins. It is formatted as follows.
 
 
 .. code-block:: xml
@@ -310,7 +310,7 @@ Certain interface methods are called during transitions between these states. Du
 
 The following code blocks will explain the requirements for writing a new hardware interface.
 
-The controller plugin for the tutorial robot is class called ``RobotController`` that inherits from  ``controller_interface::ControllerInterface``. The ``RobotController`` must implement nine public methods. The last six are `managed node <https://design.ros2.org/articles/node_lifecycle.html>`__  transitions callbacks.
+The controller plugin for the tutorial robot is a class called ``RobotController`` that inherits from  ``controller_interface::ControllerInterface``. The ``RobotController`` must implement nine public methods. The last six are `managed node <https://design.ros2.org/articles/node_lifecycle.html>`__  transitions callbacks.
 
 1. ``command_interface_configuration``
 2. ``state_interface_configuration``
