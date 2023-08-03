@@ -41,7 +41,7 @@ def generate_launch_description():
 
     robot_controllers = PathJoinSubstitution(
         [
-            FindPackageShare("ros2_control_demo_bringup"),
+            FindPackageShare("ros2_control_demo_example_12"),
             "config",
             "rrbot_chained_controllers.yaml",
         ]
