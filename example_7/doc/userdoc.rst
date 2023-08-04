@@ -36,34 +36,60 @@ Most commercial robots already have ``robot_description`` packages defined, see 
 
 First, we need a 3D model of our robot. For illustration, a generic 6 DOF robot manipulator will be used.
 
-.. image:: resources/robot.png
- :width: 400
+.. figure:: resources/robot.png
+  :width: 100%
+  :align: center
+  :alt: r6bot
+
+  a generic 6 DOF robot manipulator
 
 The robot's 6 links each need to be processed and exported to their own ``.stl`` and ``.dae`` files. Generally, the ``.stl`` 3D model files are coarse meshes used for fast collision checking, while the ``.dae`` files are used for visualization purposed only. We will use the same mesh in our case for simplicity.
 
 By convention, each ``.stl`` file expresses the position its vertices in its own reference frame. Hence, we need to specify the linear transformation (rotation and translation) between each link to define the robot's full geometry. The 3D model for each link should be adjusted such that the proximal joint axis (the axis that connects the link to its parent) is in the z-axis direction. The 3D model's origin should also be adjusted such that the bottom face of the mesh is co-planer with the xy-plane. The following mesh illustrates this configuration.
 
-.. image:: resources/link_1.png
- :width: 400
-.. image:: resources/link_2_aligned.png
- :width: 400
+.. figure:: resources/link_1.png
+  :width: 400
+  :align: center
+  :alt: link_1
+
+  Link 1
+
+.. figure:: resources/link_2_aligned.png
+  :width: 400
+  :align: center
+  :alt: link_2_aligned
+
+  Link 2 aligned
 
 Each mesh should be exported to its own file after processing them. `Blender <https://www.blender.org/>`__ is an open source 3D modeling software, which can import/export ``.stl`` and ``.dae`` files and manipulate their vertices. Blender was used to process the robot model in this tutorial.
 
 We can finally calculate the transforms between the robot's joints and begin writing the URDF. First, apply a negative 90 degree roll to link 2 in its frame.
 
-.. image:: resources/link_2_roll.png
- :width: 400
+.. figure:: resources/link_2_roll.png
+  :width: 400
+  :align: center
+  :alt: link_2_roll
+
+  Link 2 with -90 degree roll
 
 To keep the example simple, we will not apply a pitch now. Then, we apply a positive 90 degree yaw.
 
-.. image:: resources/link_2_roll_yaw.png
- :width: 400
+.. figure:: resources/link_2_roll_yaw.png
+  :width: 400
+  :align: center
+  :alt: link_2_roll_yaw
+
+  Link 2 with -90 degree roll and 90 degree yaw
 
 Finally, we apply a translation of -0.1 meters in the x-axis and 0.18 meters in the z-axis between the link 2 and link 1 frame. The final result is shown below.
 
-.. image:: resources/link_2_roll_yaw_trans.png
- :width: 400
+.. figure:: resources/link_2_roll_yaw_trans.png
+  :width: 400
+  :align: center
+  :alt: link_2_roll_yaw_trans
+
+  Link 2 with -90 degree roll, 90 degree yaw, and translation
+
 
 The described process is then repeated for all links.
 
@@ -539,5 +565,9 @@ Finally, open a new  terminal and run the following command.
 
 You should see the tutorial robot making a circular motion in RViz.
 
-.. image:: resources/trajectory.gif
- :width: 400
+.. figure:: resources/trajectory.gif
+  :align: center
+  :width: 100%
+  :alt: trajectory
+
+  Trajectory following example.
