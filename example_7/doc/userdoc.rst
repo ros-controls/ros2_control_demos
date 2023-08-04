@@ -2,8 +2,8 @@
 
 .. _ros2_control_demos_example_7_userdoc:
 
-Example 7: 6DOF robot
-=====================
+Example 7: Full tutorial with a 6DOF robot
+==========================================
 
 ros2_control is a realtime control framework designed for general robotics applications. Standard c++ interfaces exist for interacting with hardware and querying user defined controller commands. These interfaces enhance code modularity and robot agnostic design. Application specific details, e.g. what controller to use, how many joints a robot has and their kinematic structure, are specified via YAML parameter configuration files and a Universal Robot Description File (URDF). Finally, the ros2_control framework is deployed via ROS 2 launch a file.
 

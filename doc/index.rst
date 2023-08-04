@@ -7,7 +7,7 @@ Demos
 #################
 
 This `GitHub Repository <https://github.com/ros-controls/ros2_control_demos>`_
-provides templates for the development of ros2_control-enabled robots and a simple simulations to demonstrate and prove ros2_control concepts.
+provides templates for the development of ``ros2_control``-enabled robots and simple simulations to demonstrate and prove ``ros2_control`` concepts.
 
 If you want to have a rather step by step manual how to do things with ``ros2_control`` checkout `ros-control/roscon2022_workshop <https://github.com/ros-controls/roscon2022_workshop>`_ repository.
 
@@ -22,6 +22,7 @@ This repository demonstrates the following ``ros2_control`` concepts:
   * Loading the configuration and starting a robot using launch files.
   * Control of a differential mobile base *DiffBot*.
   * Control of two joints of *RRBot*.
+  * Control of a 6-degrees-of-freedom robot.
   * Implementing a controller switching strategy for a robot.
   * Using joint limits and transmission concepts in ``ros2_control``.
 
@@ -35,7 +36,7 @@ The repository has two other goals:
 2. The repository is a validation environment for ``ros2_control`` concepts, which can only be tested during run-time (e.g., execution of controllers by the controller manager, communication between robot hardware and controllers).
 
 =====================
-Example Overview
+Examples Overview
 =====================
 
 Example 1: RRBot
@@ -250,6 +251,6 @@ Examples
    Example 4: Industrial robot with integrated sensor <../example_4/doc/userdoc.rst>
    Example 5: Industrial robots with externally connected sensor <../example_5/doc/userdoc.rst>
    Example 6: Modular robots with separate communication to each actuator <../example_6/doc/userdoc.rst>
-   Example 7: 6DOF robot <../example_7/doc/userdoc.rst>
+   Example 7: Full tutorial with a 6DOF robot <../example_7/doc/userdoc.rst>
    Example 8: Using transmissions <../example_8/doc/userdoc.rst>
    Example 9: Gazebo classic <../example_9/doc/userdoc.rst>
