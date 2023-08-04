@@ -32,23 +32,33 @@ The following examples are part of this demo repository:
    *RRBot* with an integrated sensor.
 
 
-* Example 5: ["Industrial Robots with externally connected sensor"](example_5)
+* Example 5: ["Industrial robots with externally connected sensor"](example_5)
 
    *RRBot* with an externally connected sensor.
 
-* Example 6: ["Modular Robots with separate communication to each actuator"](example_6)
+* Example 6: ["Modular robots with separate communication to each actuator"](example_6)
 
    The example shows how to implement robot hardware with separate communication to each actuator.
 
-* Example 7: "Multi-robot example (tba.)"
+* Example 7: ["6-DOF robot"](example_7)
+
+   A full tutorial for a 6 DOF robot for intermediate ROS 2 users.
 
 * Example 8: ["Using transmissions"](example_8)
 
    *RRBot* with an exposed transmission interface.
 
-* Example 9: ["Gazebo Classic Simulation"](example_9)
+* Example 9: ["Gazebo classic simulation"](example_9)
 
    Demonstrates how to switch between simulation and hardware.
+
+* Example 10: "RRbot with GPIO interfaces (tba.)"
+
+* Example 11: "Car-like robot using steering controller library (tba.)"
+
+* Example 12: "Controller chaining example (tba.)"
+
+* Example 13: "Multi-robot example (tba.)"
 
 ## Getting started
 
