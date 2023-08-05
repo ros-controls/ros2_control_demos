@@ -16,6 +16,7 @@ find_package(hardware_interface REQUIRED)
 find_package(pluginlib REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
+find_package(realtime_tools REQUIRED)
 
 
 ## COMPILE
@@ -42,6 +43,7 @@ ament_target_dependencies(
   pluginlib
   rclcpp
   rclcpp_lifecycle
+  realtime_tools
 )
 
 # Causes the visibility macros to use dllexport rather than dllimport,

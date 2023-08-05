@@ -31,11 +31,14 @@
 
 namespace ros2_control_demo_hardware
 {
-CallbackReturn RRBotActuatorWithoutFeedback::on_init(const hardware_interface::HardwareInfo & info)
+hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_init(
+  const hardware_interface::HardwareInfo & info)
 {
-  if (hardware_interface::ActuatorInterface::on_init(info) != CallbackReturn::SUCCESS)
+  if (
+    hardware_interface::ActuatorInterface::on_init(info) !=
+    hardware_interface::CallbackReturn::SUCCESS)
   {
-    return CallbackReturn::ERROR;
+    return hardware_interface::CallbackReturn::ERROR;
   }
   // START: This part here is for exemplary purposes - Please do not copy to your production code
   hw_start_sec_ = std::stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
@@ -53,7 +56,7 @@ CallbackReturn RRBotActuatorWithoutFeedback::on_init(const hardware_interface::H
       rclcpp::get_logger("RRBotActuatorWithoutFeedback"),
       "Joint '%s' has %zu command interfaces found. 1 expected.", joint.name.c_str(),
       joint.command_interfaces.size());
-    return CallbackReturn::ERROR;
+    return hardware_interface::CallbackReturn::ERROR;
   }
 
   if (joint.command_interfaces[0].name != hardware_interface::HW_IF_VELOCITY)
@@ -62,7 +65,7 @@ CallbackReturn RRBotActuatorWithoutFeedback::on_init(const hardware_interface::H
       rclcpp::get_logger("RRBotActuatorWithoutFeedback"),
       "Joint '%s' have %s command interfaces found. '%s' expected.", joint.name.c_str(),
       joint.command_interfaces[0].name.c_str(), hardware_interface::HW_IF_VELOCITY);
-    return CallbackReturn::ERROR;
+    return hardware_interface::CallbackReturn::ERROR;
   }
 
   // START: This part here is for exemplary purposes - Please do not copy to your production code
@@ -71,7 +74,7 @@ CallbackReturn RRBotActuatorWithoutFeedback::on_init(const hardware_interface::H
   if (sock_ < 0)
   {
     RCLCPP_FATAL(rclcpp::get_logger("RRBotActuatorWithoutFeedback"), "Creating socket failed.");
-    return CallbackReturn::ERROR;
+    return hardware_interface::CallbackReturn::ERROR;
   }
 
   auto server = gethostbyname("localhost");
@@ -89,20 +92,20 @@ CallbackReturn RRBotActuatorWithoutFeedback::on_init(const hardware_interface::H
   {
     RCLCPP_FATAL(
       rclcpp::get_logger("RRBotActuatorWithoutFeedback"), "Connection over socket failed.");
-    return CallbackReturn::ERROR;
+    return hardware_interface::CallbackReturn::ERROR;
   }
   RCLCPP_INFO(rclcpp::get_logger("RRBotActuatorWithoutFeedback"), "Connected to socket");
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
-  return CallbackReturn::SUCCESS;
+  return hardware_interface::CallbackReturn::SUCCESS;
 }
 
-CallbackReturn RRBotActuatorWithoutFeedback::on_shutdown(
+hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_shutdown(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
   shutdown(sock_, SHUT_RDWR);  // shutdown socket
 
-  return CallbackReturn::SUCCESS;
+  return hardware_interface::CallbackReturn::SUCCESS;
 }
 
 std::vector<hardware_interface::StateInterface>
@@ -123,7 +126,7 @@ RRBotActuatorWithoutFeedback::export_command_interfaces()
   return command_interfaces;
 }
 
-CallbackReturn RRBotActuatorWithoutFeedback::on_activate(
+hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_activate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
   // START: This part here is for exemplary purposes - Please do not copy to your production code
@@ -146,10 +149,10 @@ CallbackReturn RRBotActuatorWithoutFeedback::on_activate(
 
   RCLCPP_INFO(rclcpp::get_logger("RRBotActuatorWithoutFeedback"), "Successfully activated!");
 
-  return CallbackReturn::SUCCESS;
+  return hardware_interface::CallbackReturn::SUCCESS;
 }
 
-CallbackReturn RRBotActuatorWithoutFeedback::on_deactivate(
+hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_deactivate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
   // START: This part here is for exemplary purposes - Please do not copy to your production code
@@ -165,15 +168,17 @@ CallbackReturn RRBotActuatorWithoutFeedback::on_deactivate(
   RCLCPP_INFO(rclcpp::get_logger("RRBotActuatorWithoutFeedback"), "Successfully deactivated!");
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
-  return CallbackReturn::SUCCESS;
+  return hardware_interface::CallbackReturn::SUCCESS;
 }
 
-hardware_interface::return_type RRBotActuatorWithoutFeedback::read()
+hardware_interface::return_type RRBotActuatorWithoutFeedback::read(
+  const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
   return hardware_interface::return_type::OK;
 }
 
-hardware_interface::return_type ros2_control_demo_hardware::RRBotActuatorWithoutFeedback::write()
+hardware_interface::return_type ros2_control_demo_hardware::RRBotActuatorWithoutFeedback::write(
+  const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
   // START: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(
