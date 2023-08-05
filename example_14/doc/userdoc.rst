@@ -113,11 +113,11 @@ Tutorial steps
 
 5. If you get output from above you can send commands to *Forward Command Controller*:
 
-      .. code-block:: shell
+   .. code-block:: shell
 
-        ros2 topic pub /forward_velocity_controller/commands std_msgs/msg/Float64MultiArray "data:
-        - 5
-        - 5"
+    ros2 topic pub /forward_velocity_controller/commands std_msgs/msg/Float64MultiArray "data:
+    - 5
+    - 5"
 
    You should now see orange and yellow blocks moving in *RViz*.
    Also, you should see changing states in the terminal where launch file is started, e.g.
@@ -151,7 +151,7 @@ Files used for this demos
 
 * RViz configuration: `rrbot.rviz <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_14/description/rviz/rrbot.rviz>`__
 
-* Hardware interface plugin:
+* Hardware interface plugins:
 
   * `rrbot_actuator_without_feedback.cpp <https://github.com/ros-controls/ros2_control_demos/blob/{REPOS_FILE_BRANCH}/example_14/hardware/rrbot_actuator_without_feedback.cpp>`__
   * `rrbot_sensor_for_position_feedback.cpp <https://github.com/ros-controls/ros2_control_demos/blob/{REPOS_FILE_BRANCH}/example_14/hardware/rrbot_sensor_for_position_feedback.cpp>`__
