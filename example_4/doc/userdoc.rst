@@ -66,6 +66,30 @@ Tutorial steps
 
    Marker ``[claimed]`` by command interfaces means that a controller has access to command *RRBot*.
 
+   Now, lets introspect the hardware components with
+
+   .. code-block:: shell
+
+    ros2 control list_hardware_components -v
+
+   There is a single hardware component for the robot providing the command and state interfaces:
+
+   .. code-block:: shell
+
+    Hardware Component 1
+        name: RRBotSystemWithSensor
+        type: system
+        plugin name: ros2_control_demo_example_4/RRBotSystemWithSensorHardware
+        state: id=3 label=active
+        command interfaces
+                joint1/position [available] [claimed]
+                joint2/position [available] [claimed]
+        state interfaces
+                joint1/position [available]
+                joint2/position [available]
+                tcp_fts_sensor/force.x [available]
+                tcp_fts_sensor/torque.z [available]
+
 4. Check if controllers are running
 
    .. code-block:: shell
