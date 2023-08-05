@@ -60,7 +60,7 @@ The following examples are part of this demo repository:
 
 * Example 13: "Multi-robot example (tba.)"
 
-* Example 14: ["Modular Robots with actuators not providing states and with additional sensors"](example_14)
+* Example 14: ["Modular robots with actuators not providing states and with additional sensors"](example_14)
 
 ## Getting started
 

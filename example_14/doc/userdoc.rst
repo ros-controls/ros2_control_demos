@@ -2,17 +2,17 @@
 
 .. _ros2_control_demos_example_14_userdoc:
 
-***********************************************************************
-Example 6: Modular Robots with separate communication to each actuator
-***********************************************************************
+**************************************************************
+Example 14: Modular robot with actuators not providing states
+**************************************************************
 
-The example shows how to implement robot hardware with separate communication to each actuator:
+The example shows how to implement robot hardware with separate communication to each actuator as well as separate sensors for position feedback:
 
 * The communication is done on actuator level using proprietary or standardized API (e.g., canopen_402, Modbus, RS232, RS485).
-* Data for all actuators is exchanged separately from each other.
-* Examples: Mara, Arduino-based-robots
+* Data for all actuators and sensors is exchanged separately from each other
+* Examples: Arduino-based-robots, custom robots
 
-This is implemented with a hardware interface of type ``hardware_interface::ActuatorInterface``.
+This is implemented with hardware interfaces of type ``hardware_interface::ActuatorInterface`` and ``hardware_interface::SensorInterface``.
 
 .. include:: ../../doc/run_from_docker.rst
 
