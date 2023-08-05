@@ -30,13 +30,16 @@
 
 namespace ros2_control_demo_hardware
 {
-CallbackReturn RRBotModularJoint::on_init(const hardware_interface::HardwareInfo & info)
+hardware_interface::CallbackReturn RRBotModularJoint::on_init(
+  const hardware_interface::HardwareInfo & info)
 {
-  if (hardware_interface::ActuatorInterface::on_init(info) != CallbackReturn::SUCCESS)
+  if (
+    hardware_interface::ActuatorInterface::on_init(info) !=
+    hardware_interface::CallbackReturn::SUCCESS)
   {
-    return CallbackReturn::ERROR;
+    return hardware_interface::CallbackReturn::ERROR;
   }
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   hw_start_sec_ = stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
   hw_stop_sec_ = stod(info_.hardware_parameters["example_param_hw_stop_duration_sec"]);
   hw_slowdown_ = stod(info_.hardware_parameters["example_param_hw_slowdown"]);
@@ -53,7 +56,7 @@ CallbackReturn RRBotModularJoint::on_init(const hardware_interface::HardwareInfo
       rclcpp::get_logger("RRBotModularJoint"),
       "Joint '%s' has %zu command interfaces found. 1 expected.", joint.name.c_str(),
       joint.command_interfaces.size());
-    return CallbackReturn::ERROR;
+    return hardware_interface::CallbackReturn::ERROR;
   }
 
   if (joint.command_interfaces[0].name != hardware_interface::HW_IF_POSITION)
@@ -62,7 +65,7 @@ CallbackReturn RRBotModularJoint::on_init(const hardware_interface::HardwareInfo
       rclcpp::get_logger("RRBotModularJoint"),
       "Joint '%s' have %s command interfaces found. '%s' expected.", joint.name.c_str(),
       joint.command_interfaces[0].name.c_str(), hardware_interface::HW_IF_POSITION);
-    return CallbackReturn::ERROR;
+    return hardware_interface::CallbackReturn::ERROR;
   }
 
   if (joint.state_interfaces.size() != 1)
@@ -70,7 +73,7 @@ CallbackReturn RRBotModularJoint::on_init(const hardware_interface::HardwareInfo
     RCLCPP_FATAL(
       rclcpp::get_logger("RRBotModularJoint"), "Joint '%s' has %zu state interface. 1 expected.",
       joint.name.c_str(), joint.state_interfaces.size());
-    return CallbackReturn::ERROR;
+    return hardware_interface::CallbackReturn::ERROR;
   }
 
   if (joint.state_interfaces[0].name != hardware_interface::HW_IF_POSITION)
@@ -79,10 +82,10 @@ CallbackReturn RRBotModularJoint::on_init(const hardware_interface::HardwareInfo
       rclcpp::get_logger("RRBotModularJoint"), "Joint '%s' have %s state interface. '%s' expected.",
       joint.name.c_str(), joint.state_interfaces[0].name.c_str(),
       hardware_interface::HW_IF_POSITION);
-    return CallbackReturn::ERROR;
+    return hardware_interface::CallbackReturn::ERROR;
   }
 
-  return CallbackReturn::SUCCESS;
+  return hardware_interface::CallbackReturn::SUCCESS;
 }
 
 std::vector<hardware_interface::StateInterface> RRBotModularJoint::export_state_interfaces()
@@ -105,9 +108,10 @@ std::vector<hardware_interface::CommandInterface> RRBotModularJoint::export_comm
   return command_interfaces;
 }
 
-CallbackReturn RRBotModularJoint::on_activate(const rclcpp_lifecycle::State & /*previous_state*/)
+hardware_interface::CallbackReturn RRBotModularJoint::on_activate(
+  const rclcpp_lifecycle::State & /*previous_state*/)
 {
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(rclcpp::get_logger("RRBotModularJoint"), "Activating ...please wait...");
 
   for (int i = 0; i < hw_start_sec_; i++)
@@ -126,12 +130,13 @@ CallbackReturn RRBotModularJoint::on_activate(const rclcpp_lifecycle::State & /*
 
   RCLCPP_INFO(rclcpp::get_logger("RRBotModularJoint"), "Successfully activated!");
 
-  return CallbackReturn::SUCCESS;
+  return hardware_interface::CallbackReturn::SUCCESS;
 }
 
-CallbackReturn RRBotModularJoint::on_deactivate(const rclcpp_lifecycle::State & /*previous_state*/)
+hardware_interface::CallbackReturn RRBotModularJoint::on_deactivate(
+  const rclcpp_lifecycle::State & /*previous_state*/)
 {
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(rclcpp::get_logger("RRBotModularJoint"), "Deactivating ...please wait...");
 
   for (int i = 0; i < hw_stop_sec_; i++)
@@ -143,12 +148,13 @@ CallbackReturn RRBotModularJoint::on_deactivate(const rclcpp_lifecycle::State & 
   RCLCPP_INFO(rclcpp::get_logger("RRBotModularJoint"), "Successfully deactivated!");
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
-  return CallbackReturn::SUCCESS;
+  return hardware_interface::CallbackReturn::SUCCESS;
 }
 
-hardware_interface::return_type RRBotModularJoint::read()
+hardware_interface::return_type RRBotModularJoint::read(
+  const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(rclcpp::get_logger("RRBotModularJoint"), "Reading...");
 
   // Simulate RRBot's movement
@@ -163,9 +169,10 @@ hardware_interface::return_type RRBotModularJoint::read()
   return hardware_interface::return_type::OK;
 }
 
-hardware_interface::return_type ros2_control_demo_hardware::RRBotModularJoint::write()
+hardware_interface::return_type ros2_control_demo_hardware::RRBotModularJoint::write(
+  const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(rclcpp::get_logger("RRBotModularJoint"), "Writing...please wait...");
 
   // Simulate sending commands to the hardware

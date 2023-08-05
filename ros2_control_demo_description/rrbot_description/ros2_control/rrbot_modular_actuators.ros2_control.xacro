@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <xacro:macro name="rrbot_modular_actuators" params="name prefix use_sim:=^|false slowdown:=2.0">
+  <xacro:macro name="rrbot_modular_actuators" params="name prefix use_gazebo:=^|false slowdown:=2.0">
 
     <ros2_control name="RRBotModularJoint1" type="actuator">
       <hardware>
@@ -10,7 +10,7 @@
         <param name="example_param_hw_stop_duration_sec">3.0</param>
         <param name="example_param_hw_slowdown">${slowdown}</param>
       </hardware>
-      <joint name="joint1">
+      <joint name="${prefix}joint1">
         <command_interface name="position">
           <param name="min">-100</param>
           <param name="max">100</param>
@@ -25,7 +25,7 @@
         <param name="example_param_hw_stop_duration_sec">3.0</param>
         <param name="example_param_hw_slowdown">${slowdown}</param>
       </hardware>
-      <joint name="joint2">
+      <joint name="${prefix}joint2">
         <command_interface name="position">
           <param name="min">-100</param>
           <param name="max">100</param>
