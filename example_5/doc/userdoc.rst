@@ -69,7 +69,7 @@ Tutorial steps
 
    Marker ``[claimed]`` by command interfaces means that a controller has access to command *RRBot*.
 
-   Now, lets introspect the hardware components with
+   Now, let's introspect the hardware components with
 
    .. code-block:: shell
 
