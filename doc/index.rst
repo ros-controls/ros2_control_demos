@@ -67,6 +67,16 @@ Example 8: "Using transmissions"
 Example 9: "Gazebo Classic"
    Demonstrates how to switch between simulation and hardware.
 
+Example 10: "RRbot with GPIO interfaces (tba.)"
+
+Example 11: "Car-like robot using steering controller library (tba.)"
+
+Example 12: "Controller chaining example (tba.)"
+
+Example 13: "Multi-robot example (tba.)"
+
+Example 14: "Modular Robots with actuators not providing states and with additional sensors"
+
 
 .. _ros2_control_demos_install:
 
@@ -254,3 +264,4 @@ Examples
    Example 7: Full tutorial with a 6DOF robot <../example_7/doc/userdoc.rst>
    Example 8: Using transmissions <../example_8/doc/userdoc.rst>
    Example 9: Gazebo classic <../example_9/doc/userdoc.rst>
+   Example 14: Modular Robots with actuators not providing states <../example_14/doc/userdoc.rst>
