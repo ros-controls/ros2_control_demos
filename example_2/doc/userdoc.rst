@@ -16,6 +16,8 @@ For *example_2*, the hardware interface plugin is implemented having only one in
 
 The *DiffBot* URDF files can be found in ``description/urdf`` folder.
 
+.. include:: ../../doc/run_from_docker.rst
+
 Tutorial steps
 --------------------------
 

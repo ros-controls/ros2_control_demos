@@ -13,6 +13,8 @@ In this example, both joints use an exposed transmission interface:
   * The communication is done using proprietary API to communicate with the robot control box.
   * Data for all joints is exchanged at once.
 
+.. include:: ../../doc/run_from_docker.rst
+
 Tutorial steps
 --------------------------
 
