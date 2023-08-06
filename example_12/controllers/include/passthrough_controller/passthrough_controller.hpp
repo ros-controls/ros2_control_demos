@@ -15,6 +15,12 @@
 #ifndef PASSTHROUGH_CONTROLLER__PASSTHROUGH_CONTROLLER_HPP_
 #define PASSTHROUGH_CONTROLLER__PASSTHROUGH_CONTROLLER_HPP_
 
+// system
+#include <limits>
+#include <memory>
+#include <string>
+#include <vector>
+
 #include <controller_interface/chainable_controller_interface.hpp>
 #include "controller_interface/helpers.hpp"
 #include "realtime_tools/realtime_buffer.h"

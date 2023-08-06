@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef ROS2_CONTROL_DEMO_EXAMPLE_9__RRBOT_HPP_
-#define ROS2_CONTROL_DEMO_EXAMPLE_9__RRBOT_HPP_
+#ifndef ROS2_CONTROL_DEMO_EXAMPLE_12__RRBOT_HPP_
+#define ROS2_CONTROL_DEMO_EXAMPLE_12__RRBOT_HPP_
 
 #include <memory>
 #include <string>
@@ -35,33 +35,33 @@ class RRBotSystemPositionOnlyHardware : public hardware_interface::SystemInterfa
 public:
   RCLCPP_SHARED_PTR_DEFINITIONS(RRBotSystemPositionOnlyHardware);
 
-  ROS2_CONTROL_DEMO_EXAMPLE_9_PUBLIC
+  ROS2_CONTROL_DEMO_EXAMPLE_12_PUBLIC
   hardware_interface::CallbackReturn on_init(
     const hardware_interface::HardwareInfo & info) override;
 
-  ROS2_CONTROL_DEMO_EXAMPLE_9_PUBLIC
+  ROS2_CONTROL_DEMO_EXAMPLE_12_PUBLIC
   hardware_interface::CallbackReturn on_configure(
     const rclcpp_lifecycle::State & previous_state) override;
 
-  ROS2_CONTROL_DEMO_EXAMPLE_9_PUBLIC
+  ROS2_CONTROL_DEMO_EXAMPLE_12_PUBLIC
   std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
 
-  ROS2_CONTROL_DEMO_EXAMPLE_9_PUBLIC
+  ROS2_CONTROL_DEMO_EXAMPLE_12_PUBLIC
   std::vector<hardware_interface::CommandInterface> export_command_interfaces() override;
 
-  ROS2_CONTROL_DEMO_EXAMPLE_9_PUBLIC
+  ROS2_CONTROL_DEMO_EXAMPLE_12_PUBLIC
   hardware_interface::CallbackReturn on_activate(
     const rclcpp_lifecycle::State & previous_state) override;
 
-  ROS2_CONTROL_DEMO_EXAMPLE_9_PUBLIC
+  ROS2_CONTROL_DEMO_EXAMPLE_12_PUBLIC
   hardware_interface::CallbackReturn on_deactivate(
     const rclcpp_lifecycle::State & previous_state) override;
 
-  ROS2_CONTROL_DEMO_EXAMPLE_9_PUBLIC
+  ROS2_CONTROL_DEMO_EXAMPLE_12_PUBLIC
   hardware_interface::return_type read(
     const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
-  ROS2_CONTROL_DEMO_EXAMPLE_9_PUBLIC
+  ROS2_CONTROL_DEMO_EXAMPLE_12_PUBLIC
   hardware_interface::return_type write(
     const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
@@ -78,4 +78,4 @@ private:
 
 }  // namespace ros2_control_demo_example_12
 
-#endif  // ROS2_CONTROL_DEMO_EXAMPLE_9__RRBOT_HPP_
+#endif  // ROS2_CONTROL_DEMO_EXAMPLE_12__RRBOT_HPP_

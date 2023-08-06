@@ -233,4 +233,5 @@ hardware_interface::return_type RRBotSystemPositionOnlyHardware::write(
 #include "pluginlib/class_list_macros.hpp"
 
 PLUGINLIB_EXPORT_CLASS(
-  ros2_control_demo_example_12::RRBotSystemPositionOnlyHardware, hardware_interface::SystemInterface)
+  ros2_control_demo_example_12::RRBotSystemPositionOnlyHardware,
+  hardware_interface::SystemInterface)

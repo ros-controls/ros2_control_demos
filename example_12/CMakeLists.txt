@@ -60,9 +60,7 @@ target_include_directories(passthrough_controller PUBLIC
 $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/controllers/include>
 $<INSTALL_INTERFACE:include/passthrough_controller>
 )
-target_link_libraries(passthrough_controller PUBLIC
-   passthrough_controller_parameters
- )
+target_link_libraries(passthrough_controller PUBLIC passthrough_controller_parameters)
 ament_target_dependencies(passthrough_controller PUBLIC ${THIS_PACKAGE_INCLUDE_DEPENDS})
 
 # Causes the visibility macros to use dllexport rather than dllimport,

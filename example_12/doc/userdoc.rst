@@ -3,13 +3,13 @@
 .. _ros2_control_demos_example_12_userdoc:
 
 Example 12: Controller Chaining with RRBot
-=================================
+===========================================
 
 The example shows how to write a simple Chainable Controller, and then how to integrate properly to have a functional controller chaining.
 
 For *example_12*, we will use RRBot, or ‘’Revolute-Revolute Manipulator Robot’’, is a simple 3-linkage, 2-joint arm to demonstrate the controller chaining functionality in ROS2 control.
 
-For *example_12*, a simple chainable ros2 controller has been implemented that takes a vector of interfaces as an input and simple forwards them without any changes, such controller is simple known as a `passthrough_controller` .
+For *example_12*, a simple chainable ros2 controller has been implemented that takes a vector of interfaces as an input and simple forwards them without any changes, such controller is simple known as a ``passthrough_controller``.
 
 Tutorial steps
 --------------------------
@@ -69,7 +69,7 @@ Tutorial steps
           joint2/position
 
    Marker ``[claimed]`` by command interfaces means that a controller has access to command *RRBot*.
-   Marker ``[unclaimed]`` by command interfaces means that the reference interfaces of `joint1_position_controller` and `joint2_position_controller` are not yet chained mode. However, their reference interface is available to be chained, as the controller is active.
+   Marker ``[unclaimed]`` by command interfaces means that the reference interfaces of ``joint1_position_controller`` and ``joint2_position_controller`` are not yet chained mode. However, their reference interface is available to be chained, as the controller is active.
 
 5. To start the complete controller chain, open a terminal, source your ROS2-workspace and execute its launch file with
 
@@ -77,7 +77,7 @@ Tutorial steps
 
     ros2 launch ros2_control_demo_example_12 launch_chained_controllers.launch.py
 
-   This launch file starts the `position_controller` that uses the reference interfaces of both `joint1_position_controller` and `joint2_position_controller` and streamlines into one, and then the `forward_position_controller` uses the reference interfaces of the `position_controller` to command the *RRBot* joints.
+   This launch file starts the ``position_controller`` that uses the reference interfaces of both ``joint1_position_controller`` and ``joint2_position_controller`` and streamlines into one, and then the ``forward_position_controller`` uses the reference interfaces of the ``position_controller`` to command the *RRBot* joints.
 
 6. Check if the new controllers are running by
 
@@ -95,7 +95,7 @@ Tutorial steps
 
 7. Now check if the interfaces are loaded  properly, by opening another terminal and executing
 
-    At this stage the reference interfaces of all the controllers are listed under `command_interfaces` should be `available` and `claimed` when `ros2 control list_hardware_interfaces` command is executed. The output should be something like this:
+    At this stage the reference interfaces of all the controllers are listed under ``command_interfaces`` should be ``available`` and ``claimed`` when ``ros2 control list_hardware_interfaces`` command is executed. The output should be something like this:
 
    .. code-block:: shell
 
@@ -139,7 +139,7 @@ Tutorial steps
     ros2 topic echo /joint_states
     ros2 topic echo /dynamic_joint_states
 
-   This clearly shows that the controller chaining is functional, as the commands sent to the `forward_position_controller` are passed through properly and then it is reflected in the hardware interfaces of the *RRBot*.
+   This clearly shows that the controller chaining is functional, as the commands sent to the ``forward_position_controller`` are passed through properly and then it is reflected in the hardware interfaces of the *RRBot*.
 
 
 Files used for this demos
