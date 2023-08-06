@@ -2,11 +2,14 @@
 
 .. _ros2_control_demos_example_12_userdoc:
 
-Example 9: Simulation with RRBot
+Example 12: Controller Chaining with RRBot
 =================================
 
-With *example_12*, we demonstrate the interaction of simulators with ros2_control. More specifically,
-Gazebo Classic is used for this purpose. For details on the ``gazebo_ros2_control`` plugin, see :ref:`gazebo_ros2_control`.
+The example shows how to write a simple Chainable Controller, and then how to integrate properly to have a functional controller chaining.
+
+For *example_12*, we will use RRBot, or ‘’Revolute-Revolute Manipulator Robot’’, is a simple 3-linkage, 2-joint arm to demonstrate the controller chaining functionality in ROS2 control.
+
+For *example_12*, a simple chainable ros2 controller has been implemented that takes a vector of interfaces as an input and simple forwards them without any changes, such controller is simple known as a `passthrough_controller` .
 
 Tutorial steps
 --------------------------
@@ -20,34 +23,31 @@ Tutorial steps
    The ``joint_state_publisher_gui`` provides a GUI to change the configuration for *RRbot*. It is immediately displayed in *RViz*.
 
 
-2. To start *RRBot* with the hardware interface instead of the simulators, open a terminal, source your ROS2-workspace and execute its launch file with
+2. To start *RRBot* with the hardware interface, open a terminal, source your ROS2-workspace and execute its launch file with
 
    .. code-block:: shell
 
     ros2 launch ros2_control_demo_example_12 rrbot.launch.py
 
-   It uses an identical hardware interface as already discussed with *example_1*, see its docs on details on the hardware interface.
+   The launch file loads and starts the robot hardware, controllers and opens RViz. In starting terminal you will see a lot of output from the hardware implementation showing its internal states. It uses an identical hardware interface as already discussed with *example_1*, see its docs on details on the hardware interface.
 
-3. To start *RRBot* in the simulators, open a terminal, source your ROS2-workspace and Gazebo Classic installation first, i.e., by
+   If you can see two orange and one yellow rectangle in in RViz everything has started properly. Still, to be sure, let’s introspect the control system before moving RRBot.
 
-  .. code-block:: shell
+3. Check if controllers are running by
 
-    source /usr/share/gazebo/setup.sh
+   .. code-block:: shell
 
-  Then, execute the launch file with
+    ros2 control list_controllers
 
-  .. code-block:: shell
+   .. code-block:: shell
 
-    ros2 launch ros2_control_demo_example_12 rrbot_gazebo_classic.launch.py
-
-  The launch file loads the robot description, starts Gazebo Classic, *Joint State Broadcaster* and *Forward Command Controller*.
-  If you can see two orange and one yellow "box" in Gazebo Classic everything has started properly.
-
-  .. image:: rrbot_gazebo_classic.png
-    :width: 400
-    :alt: Revolute-Revolute Manipulator Robot in Gazebo Classic
+    joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+    joint2_position_controller[passthrough_controller/PassthroughController] active
+    joint1_position_controller[passthrough_controller/PassthroughController] active
 
 4. Check if the hardware interface loaded properly, by opening another terminal and executing
+
+    At this stage the reference interfaces of controllers are listed under `command_interfaces` when `ros2 control list_hardware_interfaces` command is executed. The output should be something like this:
 
    .. code-block:: shell
 
@@ -57,14 +57,25 @@ Tutorial steps
 
     command interfaces
           joint1/position [available] [claimed]
+          joint1_position_controller/joint1/position [unavailable] [unclaimed]
           joint2/position [available] [claimed]
+          joint2_position_controller/joint2/position [unavailable] [unclaimed]
     state interfaces
           joint1/position
           joint2/position
 
    Marker ``[claimed]`` by command interfaces means that a controller has access to command *RRBot*.
+   Marker ``[unclaimed]`` by command interfaces means that the reference interfaces of `joint1_position_controller` and `joint2_position_controller` are not yet chained mode. However, their reference interface is available to be chained, as the controller is active.
 
-5. Check if controllers are running by
+5. To start the complete controller chain, open a terminal, source your ROS2-workspace and execute its launch file with
+
+   .. code-block:: shell
+
+    ros2 launch ros2_control_demo_example_12 launch_chained_controllers.launch.py
+
+   This launch file starts the `position_controller` that uses the reference interfaces of both `joint1_position_controller` and `joint2_position_controller` and streamlines into one, and then the `forward_position_controller` uses the reference interfaces of the `position_controller` to command the *RRBot* joints.
+
+6. Check if the new controllers are running by
 
    .. code-block:: shell
 
@@ -73,11 +84,35 @@ Tutorial steps
    .. code-block:: shell
 
     joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+    joint2_position_controller[passthrough_controller/PassthroughController] active
+    joint1_position_controller[passthrough_controller/PassthroughController] active
+    position_controller [passthrough_controller/PassthroughController] active
     forward_position_controller[forward_command_controller/ForwardCommandController] active
 
-6. If you get output from above you can send commands to *Forward Command Controller*, either:
+7. Now check if the interfaces are loaded  properly, by opening another terminal and executing
 
-   a. Manually using ROS 2 CLI interface:
+    At this stage the reference interfaces of all the controllers are listed under `command_interfaces` should be `available` and `claimed` when `ros2 control list_hardware_interfaces` command is executed. The output should be something like this:
+
+   .. code-block:: shell
+
+    ros2 control list_hardware_interfaces
+
+   .. code-block:: shell
+
+    command interfaces
+          joint1/position [available] [claimed]
+          joint1_position_controller/joint1/position [available] [claimed]
+          joint2/position [available] [claimed]
+          joint2_position_controller/joint2/position [available] [claimed]
+          position_controller/joint1_position_controller/joint1/position [available] [claimed]
+          position_controller/joint2_position_controller/joint2/position [available] [claimed]
+    state interfaces
+          joint1/position
+          joint2/position
+
+   Marker ``[claimed]`` by command interfaces means that a controller has access to command *RRBot*.
+
+8. If you get output from above you can send commands to *Forward Command Controller*:
 
    .. code-block:: shell
 
@@ -85,21 +120,22 @@ Tutorial steps
     - 0.5
     - 0.5"
 
-   B. Or you can start a demo node which sends two goals every 5 seconds in a loop
+   You should now see orange and yellow blocks moving in *RViz*.
+   Also, you should see changing states in the terminal where launch file is started, e.g.
 
    .. code-block:: shell
 
-    ros2 launch ros2_control_demo_example_12 test_forward_position_controller.launch.py
+    [RRBotSystemPositionOnlyHardware]: Got command 0.50000 for joint 0!
+    [RRBotSystemPositionOnlyHardware]: Got command 0.50000 for joint 1!
 
-   You should now see the robot moving in Gazebo Classic.
-
-   If you echo the ``/joint_states`` or ``/dynamic_joint_states`` topics you should see the changing values,
-   namely the simulated states of the robot
+   If you echo the ``/joint_states`` or ``/dynamic_joint_states`` topics you should now get similar values, namely the simulated states of the robot
 
    .. code-block:: shell
 
     ros2 topic echo /joint_states
     ros2 topic echo /dynamic_joint_states
+
+   This clearly shows that the controller chaining is functional, as the commands sent to the `forward_position_controller` are passed through properly and then it is reflected in the hardware interfaces of the *RRBot*.
 
 
 Files used for this demos
@@ -108,19 +144,14 @@ Files used for this demos
 - Launch files:
 
   + Hardware: `rrbot.launch.py <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_12/bringup/launch/rrbot.launch.py>`__
-  + Gazebo Classic: `rrbot_gazebo_classic.launch.py <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_12/bringup/launch/rrbot_gazebo_classic.launch.py>`__
-
-- Controllers yaml: `rrbot_controllers.yaml <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_12/bringup/config/rrbot_controllers.yaml>`__
+  + Controllers: `rrbot.launch.py <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_12/bringup/launch/launch_chained_controllers.launch.py>`__
+- ROS2 Controller: `passthrough_controller.cpp <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_12/controllers/src/passthrough_controller.cpp>`__
+- Controllers yaml: `rrbot_controllers.yaml <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_12/bringup/config/rrbot_chained_controllers.yaml>`__
 - URDF file: `rrbot.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_12/description/urdf/rrbot.urdf.xacro>`__
 
   + Description: `rrbot_description.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_12/description/urdf/rrbot_description.urdf.xacro>`__
   + ``ros2_control`` tag: `rrbot.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_12/description/ros2_control/rrbot.ros2_control.xacro>`__
-
 - RViz configuration: `rrbot.rviz <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_12/description/rviz/rrbot.rviz>`__
-- Test nodes goals configuration:
-
-  + `rrbot_forward_position_publisher <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_12/bringup/config/rrbot_forward_position_publisher.yaml>`__
-
 - Hardware interface plugin: `rrbot.cpp <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_12/hardware/rrbot.cpp>`__
 
 
