@@ -20,6 +20,10 @@ Tutorial steps
 
     ros2 launch ros2_control_demo_example_12 view_robot.launch.py
 
+   .. image:: rrbot.png
+    :width: 400
+    :alt: Revolute-Revolute Manipulator Robot
+
    The ``joint_state_publisher_gui`` provides a GUI to change the configuration for *RRbot*. It is immediately displayed in *RViz*.
 
 
