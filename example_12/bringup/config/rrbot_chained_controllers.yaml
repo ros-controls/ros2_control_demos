@@ -14,9 +14,8 @@ controller_manager:
     position_controller:
       type: passthrough_controller/PassthroughController
 
-    position_trajectory_controller:
-      type: joint_trajectory_controller/JointTrajectoryController
-
+    forward_position_controller:
+      type: forward_command_controller/ForwardCommandController
 
 # First-level controllers
 joint1_position_controller:
@@ -36,30 +35,10 @@ position_controller:
       - joint1_position_controller/joint1/position
       - joint2_position_controller/joint2/position
 
-
-# Third-level controller
-position_trajectory_controller:
+# Third-level controllers
+forward_position_controller:
   ros__parameters:
     joints:
-      - joint1
-      - joint2
-
-    command_joints:
       - position_controller/joint1_position_controller/joint1
       - position_controller/joint2_position_controller/joint2
-
-    command_interfaces:
-      - position
-
-    state_interfaces:
-      - position
-
-    state_publish_rate: 200.0 # Defaults to 50
-    action_monitor_rate: 20.0 # Defaults to 20
-
-    allow_partial_joints_goal: false # Defaults to false
-    open_loop_control: true
-    allow_integration_in_goal_trajectories: true
-    constraints:
-      stopped_velocity_tolerance: 0.01 # Defaults to 0.01
-      goal_time: 0.0 # Defaults to 0.0 (start immediately)
+    interface_name: position
