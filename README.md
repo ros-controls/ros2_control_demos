@@ -56,7 +56,9 @@ The following examples are part of this demo repository:
 
 * Example 11: "Car-like robot using steering controller library (tba.)"
 
-* Example 12: "Controller chaining example (tba.)"
+* Example 12: ["Controller Chaining"](example_12)
+
+   The example shows a simple chainable controller and its integration to form a controller chain to control the joints of *RRBot*.
 
 * Example 13: "Multi-robot example (tba.)"
 
