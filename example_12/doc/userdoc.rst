@@ -80,7 +80,8 @@ Tutorial steps
 
    Marker ``[unclaimed]`` by command interfaces means that the reference interfaces of ``joint1_position_controller`` and ``joint2_position_controller`` are not yet in chained mode. However, their reference interfaces are available to be chained, as the controllers are active.
 
-      .. note::
+   .. note::
+
     In case of chained controllers, the command interfaces appear to be ``unavailable`` and ``unclaimed``, even though the controllers whose exposed reference interfaces are active, because these command interfaces become ``available`` only in chained mode i.e., when an another controller makes use of these command interface. In non-chained mode, it is expected for the chained controller to use references from subscribers, hence they are marked as ``unavailable``.
 
 5. To start the complete controller chain, open a terminal, source your ROS2-workspace and execute its launch file with
