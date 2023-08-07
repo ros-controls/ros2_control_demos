@@ -71,8 +71,17 @@ Tutorial steps
           joint2/position
 
    At this stage the reference interfaces of controllers are listed under ``command_interfaces`` when ``ros2 control list_hardware_interfaces`` command is executed.
+
+   Marker ``[available]`` by command interfaces means that the hardware interfaces are available and are ready to command.
+
    Marker ``[claimed]`` by command interfaces means that a controller has access to command *RRBot*.
-   Marker ``[unclaimed]`` by command interfaces means that the reference interfaces of ``joint1_position_controller`` and ``joint2_position_controller`` are not yet in chained mode. However, their reference interface is available to be chained, as the controller is active.
+
+   Marker ``[unavailable]`` by command interfaces means that the hardware interfaces are unavailable and cannot be commanded. For instance, when there is an error in reading or writing an actuator module, it's interfaces are automatically become unavailable.
+
+   Marker ``[unclaimed]`` by command interfaces means that the reference interfaces of ``joint1_position_controller`` and ``joint2_position_controller`` are not yet in chained mode. However, their reference interfaces are available to be chained, as the controllers are active.
+
+      .. note::
+    In case of chained controllers, the command interfaces appear to be ``unavailable`` and ``unclaimed``, even though the controllers whose exposed reference interfaces are active, because these command interfaces become ``available`` only in chained mode i.e., when an another controller makes use of these command interface. In non-chained mode, it is expected for the chained controller to use references from subscribers, hence they are marked as ``unavailable``.
 
 5. To start the complete controller chain, open a terminal, source your ROS2-workspace and execute its launch file with
 
