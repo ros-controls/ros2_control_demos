@@ -5,11 +5,13 @@
 Example 12: Controller Chaining with RRBot
 ===========================================
 
-The example shows how to write a simple Chainable Controller, and then how to integrate properly to have a functional controller chaining.
+The example shows how to write a simple chainable controller, and how to integrate it properly to have a functional controller chaining.
 
-For *example_12*, we will use RRBot, or ‘’Revolute-Revolute Manipulator Robot’’, is a simple 3-linkage, 2-joint arm to demonstrate the controller chaining functionality in ROS2 control.
+For *example_12*, we will use RRBot, or ''Revolute-Revolute Manipulator Robot'', is a simple 3-linkage, 2-joint arm to demonstrate the controller chaining functionality in ROS2 control.
 
-For *example_12*, a simple chainable ros2 controller has been implemented that takes a vector of interfaces as an input and simple forwards them without any changes, such controller is simple known as a ``passthrough_controller``.
+For *example_12*, a simple chainable ros2_controller has been implemented that takes a vector of interfaces as an input and simple forwards them without any changes. Such a controller is simple known as a ``passthrough_controller``.
+
+.. include:: ../../doc/run_from_docker.rst
 
 Tutorial steps
 --------------------------
@@ -51,11 +53,11 @@ Tutorial steps
 
 4. Check if the hardware interface loaded properly, by opening another terminal and executing
 
-    At this stage the reference interfaces of controllers are listed under `command_interfaces` when `ros2 control list_hardware_interfaces` command is executed. The output should be something like this:
-
    .. code-block:: shell
 
     ros2 control list_hardware_interfaces
+
+   The output should be something like this:
 
    .. code-block:: shell
 
@@ -68,8 +70,9 @@ Tutorial steps
           joint1/position
           joint2/position
 
+   At this stage the reference interfaces of controllers are listed under ``command_interfaces`` when ``ros2 control list_hardware_interfaces`` command is executed.
    Marker ``[claimed]`` by command interfaces means that a controller has access to command *RRBot*.
-   Marker ``[unclaimed]`` by command interfaces means that the reference interfaces of ``joint1_position_controller`` and ``joint2_position_controller`` are not yet chained mode. However, their reference interface is available to be chained, as the controller is active.
+   Marker ``[unclaimed]`` by command interfaces means that the reference interfaces of ``joint1_position_controller`` and ``joint2_position_controller`` are not yet in chained mode. However, their reference interface is available to be chained, as the controller is active.
 
 5. To start the complete controller chain, open a terminal, source your ROS2-workspace and execute its launch file with
 
@@ -95,11 +98,11 @@ Tutorial steps
 
 7. Now check if the interfaces are loaded  properly, by opening another terminal and executing
 
-    At this stage the reference interfaces of all the controllers are listed under ``command_interfaces`` should be ``available`` and ``claimed`` when ``ros2 control list_hardware_interfaces`` command is executed. The output should be something like this:
-
    .. code-block:: shell
 
     ros2 control list_hardware_interfaces
+
+   The output should be something like this:
 
    .. code-block:: shell
 
@@ -114,7 +117,7 @@ Tutorial steps
           joint1/position
           joint2/position
 
-   Marker ``[claimed]`` by command interfaces means that a controller has access to command *RRBot*.
+   At this stage the reference interfaces of all the controllers are listed under ``command_interfaces`` should be ``available`` and ``claimed`` when ``ros2 control list_hardware_interfaces`` command is executed.  Marker ``[claimed]`` by command interfaces means that a controller has access to command *RRBot*.
 
 8. If you get output from above you can send commands to *Forward Command Controller*:
 
