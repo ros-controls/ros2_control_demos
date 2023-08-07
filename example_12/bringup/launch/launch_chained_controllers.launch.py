@@ -34,7 +34,7 @@ def generate_launch_description():
     )
 
     # Delay start of forward_position_controller_spawner after `position_controller_spawner`
-    delay_forward_position_controller_spawner_after_joint_state_broadcaster_spawner = (
+    delay_forward_position_controller_spawner_after_position_controller_spawner = (
         RegisterEventHandler(
             event_handler=OnProcessExit(
                 target_action=position_controller_spawner,
@@ -45,7 +45,7 @@ def generate_launch_description():
 
     nodes = [
         position_controller_spawner,
-        delay_forward_position_controller_spawner_after_joint_state_broadcaster_spawner,
+        delay_forward_position_controller_spawner_after_position_controller_spawner,
     ]
 
     return LaunchDescription(nodes)
