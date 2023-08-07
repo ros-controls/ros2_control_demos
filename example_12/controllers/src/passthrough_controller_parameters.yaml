@@ -3,4 +3,8 @@ passthrough_controller:
     type: string_array,
     default_value: [],
     description: "Names of the interfaces to be forwarded",
+    validation: {
+          not_empty<>: null,
+          unique<>: null,
+        }
   }

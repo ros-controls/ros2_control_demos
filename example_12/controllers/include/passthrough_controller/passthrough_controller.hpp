@@ -61,12 +61,6 @@ public:
     params_ = param_listener_->get_params();
     command_interface_names_ = params_.interfaces;
 
-    if (command_interface_names_.empty())
-    {
-      RCLCPP_ERROR(get_node()->get_logger(), "'interfaces' parameter list was empty");
-      return controller_interface::CallbackReturn::ERROR;
-    }
-
     joints_cmd_sub_ = this->get_node()->create_subscription<DataType>(
       "~/commands", rclcpp::SystemDefaultsQoS(),
       [this](const DataType::SharedPtr msg)
