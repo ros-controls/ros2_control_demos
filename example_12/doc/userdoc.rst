@@ -2,7 +2,7 @@
 
 .. _ros2_control_demos_example_12_userdoc:
 
-Example 12: Controller Chaining with RRBot
+Example 12: Controller chaining with RRBot
 ===========================================
 
 The example shows how to write a simple chainable controller, and how to integrate it properly to have a functional controller chaining.
@@ -72,13 +72,13 @@ Tutorial steps
 
    At this stage the reference interfaces of controllers are listed under ``command_interfaces`` when ``ros2 control list_hardware_interfaces`` command is executed.
 
-   Marker ``[available]`` by command interfaces means that the hardware interfaces are available and are ready to command.
+   * Marker ``[available]`` by command interfaces means that the hardware interfaces are available and are ready to command.
 
-   Marker ``[claimed]`` by command interfaces means that a controller has access to command *RRBot*.
+   * Marker ``[claimed]`` by command interfaces means that a controller has access to command *RRBot*.
 
-   Marker ``[unavailable]`` by command interfaces means that the hardware interfaces are unavailable and cannot be commanded. For instance, when there is an error in reading or writing an actuator module, it's interfaces are automatically become unavailable.
+   * Marker ``[unavailable]`` by command interfaces means that the hardware interfaces are unavailable and cannot be commanded. For instance, when there is an error in reading or writing an actuator module, it's interfaces are automatically become unavailable.
 
-   Marker ``[unclaimed]`` by command interfaces means that the reference interfaces of ``joint1_position_controller`` and ``joint2_position_controller`` are not yet in chained mode. However, their reference interfaces are available to be chained, as the controllers are active.
+   * Marker ``[unclaimed]`` by command interfaces means that the reference interfaces of ``joint1_position_controller`` and ``joint2_position_controller`` are not yet in chained mode. However, their reference interfaces are available to be chained, as the controllers are active.
 
    .. note::
 
