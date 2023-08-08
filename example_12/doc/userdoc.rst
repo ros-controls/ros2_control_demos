@@ -92,6 +92,10 @@ Tutorial steps
 
    This launch file starts the ``position_controller`` that uses the reference interfaces of both ``joint1_position_controller`` and ``joint2_position_controller`` and streamlines into one, and then the ``forward_position_controller`` uses the reference interfaces of the ``position_controller`` to command the *RRBot* joints.
 
+   .. note::
+
+    The second level ``position_controller`` is only added for demonstration purposes, however, a new chainable controller can be configured to directly command the reference interfaces of both ``joint1_position_controller`` and ``joint2_position_controller``.
+
 6. Check if the new controllers are running by
 
    .. code-block:: shell
