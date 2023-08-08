@@ -71,8 +71,7 @@ public:
 protected:
   std::vector<hardware_interface::CommandInterface> on_export_reference_interfaces() override;
 
-  controller_interface::return_type update_reference_from_subscribers(
-    const rclcpp::Time & time, const rclcpp::Duration & period) override;
+  controller_interface::return_type update_reference_from_subscribers() override;
 
   std::shared_ptr<ParamListener> param_listener_;
   Params params_;
