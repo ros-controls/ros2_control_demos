@@ -157,8 +157,7 @@ PassthroughController::on_export_reference_interfaces()
   return reference_interfaces;
 }
 
-controller_interface::return_type PassthroughController::update_reference_from_subscribers(
-  const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
+controller_interface::return_type PassthroughController::update_reference_from_subscribers()
 {
   auto joint_commands = rt_buffer_ptr_.readFromRT();
   // message is valid
