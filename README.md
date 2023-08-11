@@ -31,22 +31,35 @@ The following examples are part of this demo repository:
 
    *RRBot* with an integrated sensor.
 
-
-* Example 5: ["Industrial robot with externally connected sensor"](example_5)
+* Example 5: ["Industrial robots with externally connected sensor"](example_5)
 
    *RRBot* with an externally connected sensor.
 
-* Example 6: ["Modular robot with separate communication to each actuator"](example_6)
+* Example 6: ["Modular robots with separate communication to each actuator"](example_6)
 
    The example shows how to implement robot hardware with separate communication to each actuator.
 
-* Example 7: "Multi-robot example (tba.)"
+* Example 7: ["6-DOF robot"](example_7)
+
+   A full tutorial for a 6 DOF robot for intermediate ROS 2 users.
 
 * Example 8: ["Using transmissions"](example_8)
 
    *RRBot* with an exposed transmission interface.
 
-* Example 9: "Gazebo Classic and Gazebo Sim (tba.)"
+* Example 9: ["Gazebo classic simulation"](example_9)
+
+   Demonstrates how to switch between simulation and hardware.
+
+* Example 10: "RRbot with GPIO interfaces (tba.)"
+
+* Example 11: "Car-like robot using steering controller library (tba.)"
+
+* Example 12: ["Controller chaining"](example_12)
+
+   The example shows a simple chainable controller and its integration to form a controller chain to control the joints of *RRBot*.
+
+* Example 13: "Multi-robot example (tba.)"
 
 * Example 10: ["Industrial robot with GPIO interfaces"](example_10)
 
@@ -80,7 +93,6 @@ The important files to check in each example are:
 The concepts in this package are demonstrated on the examples of *RRBot* and *DiffBot*.
 Those two world-known imaginary robots are trivial simulations to demonstrate and test `ros2_control` concepts.
 
-
 ## Build status
 
 ROS 2 Distro | Branch | Build status | Documentation
@@ -104,27 +116,3 @@ ROS 2 Distro | Branch | Build status | Documentation
    Uses repos file: `src/$NAME$/$NAME$.repos`
 
 1. Source build - also core ROS packages are build from source. It shows potential issues in the mid future.
-
-
-# Build from source
-```
-git clone https://github.com/ros-controls/ros2_control
-git clone https://github.com/ros-controls/ros2_controllers
-git clone https://github.com/ros-controls/ros2_control_demos
-```
-
-**NOTE**: `ros2_control` and `ros2_controllers` packages are released and can be installed using a package manager.
-We provide officially released and maintained debian packages, which can easily be installed via aptitude.
-However, there might be cases in which not-yet released demos or features are only available through a source build in your own workspace.
-
-* Install dependencies:
-  ```
-  rosdep install --from-paths src --ignore-src -r -y
-  ```
-
-* Build everything, e.g. with:
-  ```
-  colcon build --symlink-install
-  ```
-
-* Do not forget to source `setup.bash` from the `install` folder!

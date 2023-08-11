@@ -1,0 +1,9 @@
+<library path="passthrough_controller">
+  <class name="passthrough_controller/PassthroughController"
+         type="passthrough_controller::PassthroughController"
+         base_class_type="controller_interface::ChainableControllerInterface">
+    <description>
+      A simple demo of chainable controllers. It passes commands through without change.
+    </description>
+  </class>
+</library>
