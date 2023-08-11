@@ -71,7 +71,8 @@ Example 10: "RRbot with GPIO interfaces (tba.)"
 
 Example 11: "Car-like robot using steering controller library (tba.)"
 
-Example 12: "Controller chaining example (tba.)"
+Example 12: "Controller chaining"
+   The example shows a simple chainable controller and its integration to form a controller chain to control the joints of *RRBot*.
 
 Example 13: "Multi-robot example (tba.)"
 
@@ -264,4 +265,6 @@ Examples
    Example 7: Full tutorial with a 6DOF robot <../example_7/doc/userdoc.rst>
    Example 8: Using transmissions <../example_8/doc/userdoc.rst>
    Example 9: Gazebo classic <../example_9/doc/userdoc.rst>
+   Example 12: Controller chaining <../example_12/doc/userdoc.rst>
    Example 14: Modular robots with actuators not providing states <../example_14/doc/userdoc.rst>
+
