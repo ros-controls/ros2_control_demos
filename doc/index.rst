@@ -267,4 +267,3 @@ Examples
    Example 9: Gazebo classic <../example_9/doc/userdoc.rst>
    Example 12: Controller chaining <../example_12/doc/userdoc.rst>
    Example 14: Modular robots with actuators not providing states <../example_14/doc/userdoc.rst>
-
