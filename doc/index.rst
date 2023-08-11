@@ -66,7 +66,7 @@ Example 8: "Using transmissions"
 
 Example 9: "Gazebo Classic"
    Demonstrates how to switch between simulation and hardware.
-   
+
 Example 10: "GPIO interfaces"
    Industrial robot with GPIO interfaces
 
