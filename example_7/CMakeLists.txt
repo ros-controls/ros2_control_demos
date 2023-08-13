@@ -79,7 +79,7 @@ install(
   DESTINATION include/ros2_control_demo_example_7
 )
 install(
-  DIRECTORY description/launch description/ros2_control description/urdf description/rviz description/srdf  description/meshes
+  DIRECTORY description/launch description/ros2_control description/urdf
   DESTINATION share/ros2_control_demo_example_7
 )
 install(
