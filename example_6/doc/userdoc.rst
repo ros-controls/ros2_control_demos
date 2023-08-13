@@ -109,6 +109,7 @@ Files used for this demos
 * Controllers yaml: `rrbot_modular_actuators.yaml <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_6/bringup/config/rrbot_modular_actuators.yaml>`__
 * URDF: `rrbot_modular_actuators.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_6/description/urdf/rrbot_modular_actuators.urdf.xacro>`__
 
+  * Description: `rrbot_description.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/ros2_control_demo_description/rrbot/urdf/rrbot_description.urdf.xacro>`__
   * ``ros2_control`` URDF tag: `rrbot_modular_actuators.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_6/description/ros2_control/rrbot_modular_actuators.ros2_control.xacro>`__
 
 * RViz configuration: `rrbot.rviz <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/ros2_control_demo_description/rrbot/rviz/rrbot.rviz>`__

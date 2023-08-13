@@ -9,7 +9,7 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_desc
   <xacro:arg name="use_gazebo_classic" default="false" />
 
   <!-- Import RRBot macro -->
-  <xacro:include filename="$(find ros2_control_demo_example_9)/urdf/rrbot_description.urdf.xacro" />
+  <xacro:include filename="$(find ros2_control_demo_description)/rrbot/urdf/rrbot_description.urdf.xacro" />
 
   <!-- Import Rviz colors -->
   <xacro:include filename="$(find ros2_control_demo_description)/rrbot/urdf/rrbot.materials.xacro" />
