@@ -65,7 +65,7 @@ Tutorial steps
 
   .. code-block:: shell
 
-    ros2 launch ros2_control_demo_example_9 rrbot_gazebo_classic.launch.py
+    ros2 launch ros2_control_demo_example_9 rrbot_gazebo_classic.launch.py gui:=true
 
   The launch file loads the robot description, starts Gazebo Classic, *Joint State Broadcaster* and *Forward Command Controller*.
   If you can see two orange and one yellow "box" in Gazebo Classic everything has started properly.
