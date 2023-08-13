@@ -111,7 +111,7 @@ Files used for this demos
 
   * ``ros2_control`` URDF tag: `rrbot_modular_actuators.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_6/description/ros2_control/rrbot_modular_actuators.ros2_control.xacro>`__
 
-* RViz configuration: `rrbot.rviz <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_6/description/rviz/rrbot.rviz>`__
+* RViz configuration: `rrbot.rviz <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/ros2_control_demo_description/rrbot/rviz/rrbot.rviz>`__
 
 * Hardware interface plugin: `rrbot_actuator.cpp <https://github.com/ros-controls/ros2_control_demos/blob/{REPOS_FILE_BRANCH}/example_6/hardware/rrbot_actuator.cpp>`__
 

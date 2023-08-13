@@ -14,7 +14,7 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_desc
   <xacro:include filename="$(find ros2_control_demo_example_8)/urdf/rrbot_description.urdf.xacro" />
 
   <!-- Import Rviz colors -->
-  <xacro:include filename="$(find ros2_control_demo_example_8)/urdf/rrbot.materials.xacro" />
+  <xacro:include filename="$(find ros2_control_demo_description)/rrbot/urdf/rrbot.materials.xacro" />
 
   <!-- Import RRBot ros2_control description -->
   <xacro:include filename="$(find ros2_control_demo_example_8)/ros2_control/rrbot_transmissions_system_position_only.ros2_control.xacro" />
