@@ -6,4 +6,4 @@
 
       docker run -it --rm --name ros2_control_demos --net host ros2_control_demos
 
-   to every command followed by a ``gui:=false``. For more information on the docker usage see :ref:`doc/ros2_control_demos/doc/index:using docker`.
+   to every command followed by a ``gui:=false``. For more information on the docker usage see :ref:`ros2_control_demos_install`.

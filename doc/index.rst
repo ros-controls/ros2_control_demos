@@ -146,7 +146,7 @@ Build from source
 Using Docker
 ---------------
 
-After `installing docker <https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository>`__, build the dockerfile with
+First, build the dockerfile with
 
 .. code-block:: shell
 
@@ -221,7 +221,7 @@ You can also run other commands or launch files from the docker, e.g.
 
 .. code-block:: shell
 
-  docker run -it --rm --name ros2_control_demos --net host ros2_control_demos ros2 launch ros2_control_demo_example_2 diffbot.launch.py gui:=false
+  docker run -it --rm --name ros2_control_demos --net host ros2_control_demos ros2 launch ros2_control_demo_example_2 diffbot.launch.py
 
 =====================
 Quick Hints
