@@ -284,8 +284,8 @@ Finally, all ros2_control plugins should have the following two lines of code at
 
 ``PLUGINLIB_EXPORT_CLASS`` is a c++ macro creates a plugin library using ``pluginlib``.
 
-Plugin description file
-************************
+Plugin description file (hardware)
+**********************************
 
 The plugin description file is a required XML file that describes a plugin's library name, class type, namespace, description, and interface type. This file allows the ROS 2 to automatically discover and load plugins. It is formatted as follows.
 
@@ -306,8 +306,8 @@ The plugin description file is a required XML file that describes a plugin's lib
 
 The ``path`` attribute of the ``library`` tags refers to the cmake library name of the user defined hardware plugin. See `here <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_7/ros2_control_demo_example_7.xml>`__ for the complete XML file.
 
-CMake library
-*************
+CMake library (hardware)
+************************
 
 The general CMake template to make a hardware plugin available in ros2_control is shown below. Notice that a library is created using the plugin source code just like any other  cmake library. In addition, an extra compile definition and cmake export macro (``pluginlib_export_plugin_description_file``) need to be added. See `here <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_7/CMakeLists.txt>`__ for the complete ``CMakeLists.txt`` file.
 
@@ -484,8 +484,8 @@ The ``on_error`` method is called if the managed node fails a state transition. 
   }
 
 
-Plugin description file
-**************************
+Plugin description file (controller)
+************************************
 
 The plugin description file is again required for the controller, since it is exported as a library. The controller plugin description file is formatted as follows. See `here <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_7/ros2_control_demo_example_7.xml>`__ for the complete XML file.
 
@@ -504,8 +504,8 @@ The plugin description file is again required for the controller, since it is ex
   </library>
 
 
-CMake library
-*************
+CMake library (controller)
+**************************
 
 The plugin must be specified in the CMake file that builds the controller plugin. See `here <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_7/CMakeLists.txt>`__ for the complete ``CMakeLists.txt`` file.
 
