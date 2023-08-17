@@ -194,9 +194,10 @@ Files used for this demos
 * Controllers yaml: `rrbot_multi_interface_forward_controllers.yaml <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_3/bringup/config/rrbot_multi_interface_forward_controllers.yaml>`__
 * URDF: `rrbot_system_multi_interface.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_3/description/urdf/rrbot_system_multi_interface.urdf.xacro>`__
 
+  * Description: `rrbot_description.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/ros2_control_demo_description/rrbot/urdf/rrbot_description.urdf.xacro>`__
   * ``ros2_control`` URDF tag: `rrbot_system_multi_interface.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_3/description/ros2_control/rrbot_system_multi_interface.ros2_control.xacro>`__
 
-* RViz configuration: `rrbot.rviz <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_3/description/rviz/rrbot.rviz>`__
+* RViz configuration: `rrbot.rviz <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/ros2_control_demo_description/rrbot/rviz/rrbot.rviz>`__
 * Hardware interface plugin: `rrbot_system_multi_interface.cpp <https://github.com/ros-controls/ros2_control_demos/blob/{REPOS_FILE_BRANCH}/example_3/hardware/rrbot_system_multi_interface.cpp>`__
 
 Controllers from this demo
