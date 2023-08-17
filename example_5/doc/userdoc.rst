@@ -169,6 +169,7 @@ Files used for this demos
 * Controllers yaml: `rrbot_with_external_sensor_controllers.yaml <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_5/bringup/config/rrbot_with_external_sensor_controllers.yaml>`__
 * URDF: `rrbot_with_external_sensor_controllers.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/blob/{REPOS_FILE_BRANCH}/example_5/description/urdf/rrbot_system_with_external_sensor.urdf.xacro>`__
 
+  * Description: `rrbot_description.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/ros2_control_demo_description/rrbot/urdf/rrbot_description.urdf.xacro>`__
   * ``ros2_control`` robot: `rrbot_system_position_only.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_5/description/ros2_control/rrbot_system_position_only.ros2_control.xacro>`__
   * ``ros2_control`` sensor: `external_rrbot_force_torque_sensor.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_5/description/ros2_control/external_rrbot_force_torque_sensor.ros2_control.xacro>`__
 
