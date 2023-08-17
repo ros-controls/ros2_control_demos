@@ -79,16 +79,12 @@ Installation
 You can install the demos locally or use the provided docker file.
 
 
-<<<<<<< HEAD
-First, you have to install `ROS 2 on your computer <https://docs.ros.org/en/humble/Installation.html>`__.
-=======
 Local installation
 ------------------
 
 If you have ROS 2 installed already, choose the right version of this documentation and branch of the ``ros2_control_demos`` repository matching you ROS 2 distribution, see `this table <https://github.com/ros-controls/ros2_control_demos#build-status>`__.
 
 Otherwise, install `ROS 2 {DISTRO} on your computer <https://docs.ros.org/en/rolling/Installation.html>`__.
->>>>>>> b8dd69e (Add info about ROS 2 distro (#345))
 
 .. note::
 
