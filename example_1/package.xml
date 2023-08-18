@@ -26,6 +26,7 @@
   <exec_depend>joint_state_publisher_gui</exec_depend>
   <exec_depend>joint_trajectory_controller</exec_depend>
   <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>ros2_control_demo_description</exec_depend>
   <exec_depend>ros2_controllers_test_nodes</exec_depend>
   <exec_depend>ros2controlcli</exec_depend>
   <exec_depend>ros2launch</exec_depend>

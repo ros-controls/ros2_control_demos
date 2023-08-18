@@ -65,7 +65,7 @@ Tutorial steps
 
   .. code-block:: shell
 
-    ros2 launch ros2_control_demo_example_9 rrbot_gazebo_classic.launch.py
+    ros2 launch ros2_control_demo_example_9 rrbot_gazebo_classic.launch.py gui:=true
 
   The launch file loads the robot description, starts Gazebo Classic, *Joint State Broadcaster* and *Forward Command Controller*.
   If you can see two orange and one yellow "box" in Gazebo Classic everything has started properly.
@@ -140,10 +140,10 @@ Files used for this demos
 - Controllers yaml: `rrbot_controllers.yaml <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_9/bringup/config/rrbot_controllers.yaml>`__
 - URDF file: `rrbot.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_9/description/urdf/rrbot.urdf.xacro>`__
 
-  + Description: `rrbot_description.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_9/description/urdf/rrbot_description.urdf.xacro>`__
+  + Description: `rrbot_description.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/ros2_control_demo_description/rrbot/urdf/rrbot_description.urdf.xacro>`__
   + ``ros2_control`` tag: `rrbot.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_9/description/ros2_control/rrbot.ros2_control.xacro>`__
 
-- RViz configuration: `rrbot.rviz <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_9/description/rviz/rrbot.rviz>`__
+- RViz configuration: `rrbot.rviz <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/ros2_control_demo_description/rrbot/rviz/rrbot.rviz>`__
 - Test nodes goals configuration:
 
   + `rrbot_forward_position_publisher <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_9/bringup/config/rrbot_forward_position_publisher.yaml>`__
