@@ -35,6 +35,7 @@ jobs:
             ros2_control_demo_example_8
             ros2_control_demo_example_9
             ros2_control_demo_example_12
+            ros2_control_demo_example_14
 
           vcs-repo-file-url: |
             https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/ros2_control_demos-not-released.${{ env.ROS_DISTRO }}.repos?token=${{ secrets.GITHUB_TOKEN }}
