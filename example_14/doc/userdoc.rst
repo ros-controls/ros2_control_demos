@@ -147,9 +147,10 @@ Files used for this demos
 * Controllers yaml: `rrbot_modular_actuators_without_feedback_sensors_for_position_feedback.yaml <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_14/bringup/config/rrbot_modular_actuators_without_feedback_sensors_for_position_feedback.yaml>`__
 * URDF: `rrbot_modular_actuators_without_feedback_sensors_for_position_feedback.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_14/description/urdf/rrbot_modular_actuators_without_feedback_sensors_for_position_feedback.urdf.xacro>`__
 
+  * Description: `rrbot_description.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/ros2_control_demo_description/rrbot/urdf/rrbot_description.urdf.xacro>`__
   * ``ros2_control`` URDF tag: `rrbot_modular_actuators_without_feedback_sensors_for_position_feedback.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_14/description/ros2_control/rrbot_modular_actuators_without_feedback_sensors_for_position_feedback.ros2_control.xacro>`__
 
-* RViz configuration: `rrbot.rviz <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_14/description/rviz/rrbot.rviz>`__
+* RViz configuration: `rrbot.rviz <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/ros2_control_demo_description/rrbot/rviz/rrbot.rviz>`__
 
 * Hardware interface plugins:
 
