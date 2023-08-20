@@ -76,12 +76,15 @@ Example 12: "Controller chaining"
 Installation
 =====================
 
-You can install the demos manually or use the provided docker file.
+You can install the demos locally or use the provided docker file.
 
-Manual Install
----------------
 
-First, you have to install `ROS 2 on your computer <https://docs.ros.org/en/rolling/Installation.html>`__.
+Local installation
+------------------
+
+If you have ROS 2 installed already, choose the right version of this documentation and branch of the ``ros2_control_demos`` repository matching you ROS 2 distribution, see `this table <https://github.com/ros-controls/ros2_control_demos#build-status>`__.
+
+Otherwise, install `ROS 2 {DISTRO} on your computer <https://docs.ros.org/en/rolling/Installation.html>`__.
 
 .. note::
 
@@ -98,7 +101,7 @@ Download the ``ros2_control_demos`` repository and install its dependencies with
 
   mkdir -p ~/ros2_ws/src
   cd ~/ros2_ws/src
-  git clone https://github.com/ros-controls/ros2_control_demos
+  git clone https://github.com/ros-controls/ros2_control_demos -b {REPOS_FILE_BRANCH}
   cd ~/ros2_ws/
   rosdep update --rosdistro=$ROS_DISTRO
   sudo apt-get update

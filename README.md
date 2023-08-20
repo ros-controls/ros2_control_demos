@@ -3,7 +3,7 @@
 [![Licence](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 This repository provides examples for functionalities and capabilities of `ros2_control` framework.
-It consists of simple implementations that demonstrate different concepts.
+It consists of simple implementations that demonstrate different concepts. Choose the right branch of this repository matching you ROS 2 distribution as well as the full documentation on [control.ros.org](https://control.ros.org), see [this table](#build-status).
 
 If you want to have rather step by step manual how to do things with `ros2_control` checkout the [ros-control/roscon2022_workshop](https://github.com/ros-controls/roscon2022_workshop) repository.
 
