@@ -47,7 +47,7 @@
       <parent link="${prefix}base_link"/>
       <child link="${prefix}left_wheel"/>
       <origin xyz="0 -${base_width/2} ${z_offset}" rpy="0 0 0"/>
-      <axis xyz="0 1 0"/>
+      <axis xyz="0 -1 0"/>
       <dynamics damping="0.2"/>
     </joint>
 
