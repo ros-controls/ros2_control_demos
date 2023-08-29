@@ -51,7 +51,9 @@ The following examples are part of this demo repository:
 
    Demonstrates how to switch between simulation and hardware.
 
-* Example 10: "RRbot with GPIO interfaces (tba.)"
+* Example 10: ["Industrial robot with GPIO interfaces"](example_10)
+
+   *RRBot* with GPIO interfaces.
 
 * Example 11: "Car-like robot using steering controller library (tba.)"
 
@@ -60,10 +62,6 @@ The following examples are part of this demo repository:
    The example shows a simple chainable controller and its integration to form a controller chain to control the joints of *RRBot*.
 
 * Example 13: "Multi-robot example (tba.)"
-
-* Example 10: ["Industrial robot with GPIO interfaces"](example_10)
-
-   *RRBot* with GPIO interfaces.
 
 ## Getting started
 
