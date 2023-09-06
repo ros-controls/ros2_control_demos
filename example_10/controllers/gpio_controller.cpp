@@ -37,11 +37,7 @@ controller_interface::InterfaceConfiguration GPIOController::command_interface_c
 {
   controller_interface::InterfaceConfiguration config;
   config.type = controller_interface::interface_configuration_type::INDIVIDUAL;
-
-  for (auto command_interfaces_name : outputs_)
-  {
-    config.names.emplace_back(command_interfaces_name);
-  }
+  config.names = outputs_;
 
   return config;
 }
@@ -50,11 +46,7 @@ controller_interface::InterfaceConfiguration GPIOController::state_interface_con
 {
   controller_interface::InterfaceConfiguration config;
   config.type = controller_interface::interface_configuration_type::INDIVIDUAL;
-
-  for (auto state_interface_name : inputs_)
-  {
-    config.names.emplace_back(state_interface_name);
-  }
+  config.names = inputs_;
 
   return config;
 }
@@ -126,10 +118,7 @@ controller_interface::CallbackReturn GPIOController::on_configure(
 
 void GPIOController::initMsgs()
 {
-  for (auto state_interfaces_name : inputs_)
-  {
-    gpio_msg_.interface_names.emplace_back(state_interfaces_name);
-  }
+  gpio_msg_.interface_names = inputs_;
   gpio_msg_.values.resize(inputs_.size());
 }
 
