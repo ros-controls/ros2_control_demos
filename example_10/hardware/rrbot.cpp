@@ -128,19 +128,10 @@ hardware_interface::CallbackReturn RRBotSystemWithGPIOHardware::on_configure(
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   // reset values always when configuring hardware
-  for (uint i = 0; i < hw_states_.size(); i++)
-  {
-    hw_states_[i] = 0;
-    hw_commands_[i] = 0;
-  }
-  for (uint i = 0; i < hw_gpio_in_.size(); i++)
-  {
-    hw_gpio_in_[i] = 0;
-  }
-  for (uint i = 0; i < hw_gpio_out_.size(); i++)
-  {
-    hw_gpio_out_[i] = 0;
-  }
+  std::fill(hw_states_.begin(), hw_states_.end(), 0);
+  std::fill(hw_commands_.begin(), hw_commands_.end(), 0);
+  std::fill(hw_gpio_in_.begin(), hw_gpio_in_.end(), 0);
+  std::fill(hw_gpio_out_.begin(), hw_gpio_out_.end(), 0);
 
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithGPIOHardware"), "Successfully configured!");
 
