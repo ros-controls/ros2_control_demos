@@ -84,7 +84,7 @@ Tutorial steps
 
    .. code-block:: shell
 
-    joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active    
+    joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
     ackermann_steering_controller[ackermann_steering_controller/AckermannSteeringController] active
 
 5. If everything is fine, now you can send a command to *Diff Drive Controller* using ROS 2 CLI interface:
