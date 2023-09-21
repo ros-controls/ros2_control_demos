@@ -32,17 +32,9 @@ def generate_launch_description():
             description="Start RViz2 automatically with this launch file.",
         )
     )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "sim",
-            default_value="true",
-            description="Whether to start controllers for simulation or real hardware.",
-        )
-    )
 
     # Initialize Arguments
     gui = LaunchConfiguration("gui")
-    sim = LaunchConfiguration("sim")
 
     # Get URDF via xacro
     robot_description_content = Command(
@@ -52,8 +44,6 @@ def generate_launch_description():
             PathJoinSubstitution(
                 [FindPackageShare("ros2_control_demo_example_11"), "urdf", "carlikebot.urdf.xacro"]
             ),
-            " sim:=",
-            sim,
         ]
     )
     robot_description = {"robot_description": robot_description_content}
@@ -66,7 +56,7 @@ def generate_launch_description():
         ]
     )
     rviz_config_file = PathJoinSubstitution(
-        [FindPackageShare("ros2_control_demo_example_11"), "rviz", "carlikebot.rviz"]
+        [FindPackageShare("ros2_control_demo_description"), "carlikebot/rviz", "carlikebot.rviz"]
     )
 
     control_node = Node(
@@ -80,20 +70,9 @@ def generate_launch_description():
         executable="robot_state_publisher",
         output="both",
         parameters=[robot_description],
-        # remappings=[
-        #     ("/ackermann_steering_controller/reference_unstamped", "/cmd_vel"),
-        # ],
-        condition=IfCondition(sim),
-    )
-    robot_state_pub_bicycle_node = Node(
-        package="robot_state_publisher",
-        executable="robot_state_publisher",
-        output="both",
-        parameters=[robot_description],
-        # remappings=[
-        #     ("/bicycle_steering_controller/reference_unstamped", "/cmd_vel"),
-        # ],
-        condition=UnlessCondition(sim),
+        remappings=[
+            ("/ackermann_steering_controller/reference_unstamped", "/cmd_vel"),
+        ],
     )
     rviz_node = Node(
         package="rviz2",
@@ -114,13 +93,6 @@ def generate_launch_description():
         package="controller_manager",
         executable="spawner",
         arguments=["ackermann_steering_controller", "--controller-manager", "/controller_manager"],
-        condition=IfCondition(sim),
-    )
-    robot_bicycle_controller_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["bicycle_steering_controller", "--controller-manager", "/controller_manager"],
-        condition=UnlessCondition(sim),
     )
 
     # Delay rviz start after `joint_state_broadcaster`
@@ -135,17 +107,25 @@ def generate_launch_description():
     delay_robot_controller_spawner_after_joint_state_broadcaster_spawner = RegisterEventHandler(
         event_handler=OnProcessExit(
             target_action=joint_state_broadcaster_spawner,
-            on_exit=[robot_ackermann_controller_spawner, robot_bicycle_controller_spawner],
+            on_exit=[robot_ackermann_controller_spawner],
         )
+    )
+    
+    # the steering controller libraries by default publish odometry on a seperate topic than /tf
+    relay_topic_to_tf_node = Node(
+        package='topic_tools',
+        executable='relay',
+        arguments=['/ackermann_steering_controller/tf_odometry', '/tf'],
+        output='screen',
     )
 
     nodes = [
         control_node,
         robot_state_pub_ackermann_node,
-        robot_state_pub_bicycle_node,
         joint_state_broadcaster_spawner,
         delay_rviz_after_joint_state_broadcaster_spawner,
         delay_robot_controller_spawner_after_joint_state_broadcaster_spawner,
+        relay_topic_to_tf_node,
     ]
 
     return LaunchDescription(declared_arguments + nodes)

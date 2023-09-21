@@ -19,6 +19,7 @@
   <depend>pluginlib</depend>
   <depend>rclcpp</depend>
   <depend>rclcpp_lifecycle</depend>
+  <depend>topic_tools</depend>
 
   <exec_depend>ackermann_steering_controller</exec_depend>
   <exec_depend>bicycle_steering_controller</exec_depend>

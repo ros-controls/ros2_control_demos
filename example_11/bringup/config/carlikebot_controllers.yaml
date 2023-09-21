@@ -8,9 +8,6 @@ controller_manager:
     ackermann_steering_controller:
       type: ackermann_steering_controller/AckermannSteeringController
 
-    bicycle_steering_controller:
-      type: bicycle_steering_controller/BicycleSteeringController
-
 
 ackermann_steering_controller:
   ros__parameters:
@@ -33,23 +30,3 @@ ackermann_steering_controller:
     front_wheels_radius: 0.05
     rear_wheels_radius: 0.05
 
-bicycle_steering_controller:
-  ros__parameters:
-
-    reference_timeout: 2.0
-    front_steering: true
-    open_loop: false
-    velocity_rolling_window_size: 10
-    position_feedback: false
-    use_stamped_vel: false
-    rear_wheels_names: [rear_wheel_joint]
-    front_wheels_names: [steering_axis_joint]
-
-    odom_frame_id: odom
-    base_frame_id: base_link
-    enable_odom_tf: true
-
-
-    wheelbase: 0.325
-    front_wheel_radius: 0.05
-    rear_wheel_radius: 0.05

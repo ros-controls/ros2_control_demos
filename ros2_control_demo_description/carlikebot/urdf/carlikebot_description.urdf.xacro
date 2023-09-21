@@ -13,6 +13,7 @@
   <xacro:property name="wheel_mass" value="0.34055" /> <!-- arbitrary value for wheel mass -->
   <xacro:property name="wheel_len" value="0.045" />
   <xacro:property name="wheel_radius" value="0.05" />
+  <!-- <xacro:property name="wheeltrack" value="" -->
 
   <!-- Base Link -->
   <link name="${prefix}base_link" />
