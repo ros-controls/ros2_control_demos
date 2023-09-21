@@ -29,4 +29,3 @@ ackermann_steering_controller:
     rear_wheel_track: 0.2
     front_wheels_radius: 0.05
     rear_wheels_radius: 0.05
-

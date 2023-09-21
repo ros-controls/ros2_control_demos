@@ -55,9 +55,8 @@ hardware_interface::CallbackReturn CarlikeBotSystemHardware::on_init(
     if (joint_is_steering)
     {
       RCLCPP_INFO(
-        rclcpp::get_logger("CarlikeBotSystemHardware"),
-        "Joint '%s' is a steering joint.", joint.name.c_str()
-      );
+        rclcpp::get_logger("CarlikeBotSystemHardware"), "Joint '%s' is a steering joint.",
+        joint.name.c_str());
 
       if (joint.command_interfaces.size() != 1)
       {
@@ -98,9 +97,8 @@ hardware_interface::CallbackReturn CarlikeBotSystemHardware::on_init(
     else
     {
       RCLCPP_INFO(
-        rclcpp::get_logger("CarlikeBotSystemHardware"),
-        "Joint '%s' is a drive joint.", joint.name.c_str()
-      );
+        rclcpp::get_logger("CarlikeBotSystemHardware"), "Joint '%s' is a drive joint.",
+        joint.name.c_str());
 
       // Drive joints have a velocity command interface and velocity and position state interface
       if (joint.command_interfaces.size() != 1)

@@ -110,13 +110,13 @@ def generate_launch_description():
             on_exit=[robot_ackermann_controller_spawner],
         )
     )
-    
-    # the steering controller libraries by default publish odometry on a seperate topic than /tf
+
+    # the steering controller libraries by default publish odometry on a separate topic than /tf
     relay_topic_to_tf_node = Node(
-        package='topic_tools',
-        executable='relay',
-        arguments=['/ackermann_steering_controller/tf_odometry', '/tf'],
-        output='screen',
+        package="topic_tools",
+        executable="relay",
+        arguments=["/ackermann_steering_controller/tf_odometry", "/tf"],
+        output="screen",
     )
 
     nodes = [

@@ -68,7 +68,6 @@ public:
     const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
 private:
-
   // Parameters for the CarlikeBot simulation
   double hw_start_sec_;
   double hw_stop_sec_;
