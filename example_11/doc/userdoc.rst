@@ -2,9 +2,9 @@
 
 .. _ros2_control_demos_example_11_userdoc:
 
-*********
+************
 CarlikeBot
-*********
+************
 
 *CarlikeBot* is a simple mobile base with ackermann drive.
 
