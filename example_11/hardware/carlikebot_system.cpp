@@ -301,7 +301,7 @@ hardware_interface::return_type ros2_control_demo_example_11 ::CarlikeBotSystemH
     hw_velocities_[i] = hw_commands_[i];
 
     RCLCPP_INFO(
-      rclcpp::get_logger("CarlikeBotSystemHardware"), "Got command %.5f for '%s'", hw_commands_[0],
+      rclcpp::get_logger("CarlikeBotSystemHardware"), "Got command %.5f for '%s'", hw_commands_[i],
       info_.joints[i].name.c_str());
   }
 
