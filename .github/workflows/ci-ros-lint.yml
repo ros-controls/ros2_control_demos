@@ -5,14 +5,16 @@ on:
 jobs:
   ament_lint:
     name: ament_${{ matrix.linter }}
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
           linter: [copyright, cppcheck, lint_cmake]
+    env:
+      AMENT_CPPCHECK_ALLOW_SLOW_VERSIONS: true
     steps:
-    - uses: actions/checkout@v3
-    - uses: ros-tooling/setup-ros@v0.6
+    - uses: actions/checkout@v4
+    - uses: ros-tooling/setup-ros@v0.7
     - uses: ros-tooling/action-ros-lint@v0.1
       with:
         distribution: rolling
@@ -24,19 +26,21 @@ jobs:
           ros2_control_demo_example_4
           ros2_control_demo_example_5
           ros2_control_demo_example_6
+          ros2_control_demo_example_7
           ros2_control_demo_example_8
           ros2_control_demo_example_9
+          ros2_control_demo_example_12
 
   ament_lint_100:
     name: ament_${{ matrix.linter }}
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
           linter: [cpplint]
     steps:
-    - uses: actions/checkout@v3
-    - uses: ros-tooling/setup-ros@v0.6
+    - uses: actions/checkout@v4
+    - uses: ros-tooling/setup-ros@v0.7
     - uses: ros-tooling/action-ros-lint@v0.1
       with:
         distribution: rolling
@@ -49,5 +53,7 @@ jobs:
           ros2_control_demo_example_4
           ros2_control_demo_example_5
           ros2_control_demo_example_6
+          ros2_control_demo_example_7
           ros2_control_demo_example_8
           ros2_control_demo_example_9
+          ros2_control_demo_example_12

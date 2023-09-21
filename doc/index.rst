@@ -7,7 +7,7 @@ Demos
 #################
 
 This `GitHub Repository <https://github.com/ros-controls/ros2_control_demos>`_
-provides templates for the development of ros2_control-enabled robots and a simple simulations to demonstrate and prove ros2_control concepts.
+provides templates for the development of ``ros2_control``-enabled robots and simple simulations to demonstrate and prove ``ros2_control`` concepts.
 
 If you want to have a rather step by step manual how to do things with ``ros2_control`` checkout `ros-control/roscon2022_workshop <https://github.com/ros-controls/roscon2022_workshop>`_ repository.
 
@@ -22,6 +22,7 @@ This repository demonstrates the following ``ros2_control`` concepts:
   * Loading the configuration and starting a robot using launch files.
   * Control of a differential mobile base *DiffBot*.
   * Control of two joints of *RRBot*.
+  * Control of a 6-degrees-of-freedom robot.
   * Implementing a controller switching strategy for a robot.
   * Using joint limits and transmission concepts in ``ros2_control``.
 
@@ -35,41 +36,39 @@ The repository has two other goals:
 2. The repository is a validation environment for ``ros2_control`` concepts, which can only be tested during run-time (e.g., execution of controllers by the controller manager, communication between robot hardware and controllers).
 
 =====================
-Example Overview
+Examples Overview
 =====================
 
 Example 1: RRBot
    *RRBot* - or ''Revolute-Revolute Manipulator Robot'' - a simple position controlled robot with one hardware interface. This example also demonstrates the switching between different controllers.
 
-
 Example 2: DiffBot
    *DiffBot*, or ''Differential Mobile Robot'', is a simple mobile base with differential drive.
    The robot is basically a box moving according to differential drive kinematics.
 
-
 Example 3: "RRBot with multiple interfaces"
    *RRBot* with multiple interfaces.
-
 
 Example 4: "Industrial robot with integrated sensor"
    *RRBot* with an integrated sensor.
 
-
 Example 5: "Industrial Robots with externally connected sensor"
    *RRBot* with an externally connected sensor.
-
 
 Example 6: "Modular Robots with separate communication to each actuator"
    The example shows how to implement robot hardware with separate communication to each actuator.
 
+Example 7: "6-DOF robot"
+   A full tutorial for a 6 DOF robot for intermediate ROS 2 users.
 
 Example 8: "Using transmissions"
    *RRBot* with an exposed transmission interface.
 
-
 Example 9: "Gazebo Classic"
    Demonstrates how to switch between simulation and hardware.
 
+Example 12: "Controller chaining"
+   The example shows a simple chainable controller and its integration to form a controller chain to control the joints of *RRBot*.
 
 .. _ros2_control_demos_install:
 
@@ -77,12 +76,15 @@ Example 9: "Gazebo Classic"
 Installation
 =====================
 
-You can install the demos manually or use the provided docker file.
+You can install the demos locally or use the provided docker file.
 
-Manual Install
----------------
 
-First, you have to install `ROS 2 on your computer <https://docs.ros.org/en/rolling/Installation.html>`__.
+Local installation
+------------------
+
+If you have ROS 2 installed already, choose the right version of this documentation and branch of the ``ros2_control_demos`` repository matching you ROS 2 distribution, see `this table <https://github.com/ros-controls/ros2_control_demos#build-status>`__.
+
+Otherwise, install `ROS 2 {DISTRO} on your computer <https://docs.ros.org/en/{DISTRO}/Installation.html>`__.
 
 .. note::
 
@@ -99,7 +101,7 @@ Download the ``ros2_control_demos`` repository and install its dependencies with
 
   mkdir -p ~/ros2_ws/src
   cd ~/ros2_ws/src
-  git clone https://github.com/ros-controls/ros2_control_demos
+  git clone https://github.com/ros-controls/ros2_control_demos -b {REPOS_FILE_BRANCH}
   cd ~/ros2_ws/
   rosdep update --rosdistro=$ROS_DISTRO
   sudo apt-get update
@@ -172,7 +174,7 @@ Then we are ready to bring up all the components to view the robot. Let's start 
 
 .. code-block:: shell
 
-  docker run -it --rm --name ros2_control_demos --net host ros2_control_demos ros2 launch ros2_control_demos_example_1 view_robot.launch.py gui:=false
+  docker run -it --rm --name ros2_control_demos --net host ros2_control_demos ros2 launch ros2_control_demo_example_1 view_robot.launch.py gui:=false
 
 .. note::
 
@@ -252,7 +254,9 @@ Examples
    Example 2: DiffBot <../example_2/doc/userdoc.rst>
    Example 3: RRBot with multiple interfaces <../example_3/doc/userdoc.rst>
    Example 4: Industrial robot with integrated sensor <../example_4/doc/userdoc.rst>
-   Example 5: Industrial Robots with externally connected sensor <../example_5/doc/userdoc.rst>
-   Example 6: Modular Robots with separate communication to each actuator <../example_6/doc/userdoc.rst>
+   Example 5: Industrial robots with externally connected sensor <../example_5/doc/userdoc.rst>
+   Example 6: Modular robots with separate communication to each actuator <../example_6/doc/userdoc.rst>
+   Example 7: Full tutorial with a 6DOF robot <../example_7/doc/userdoc.rst>
    Example 8: Using transmissions <../example_8/doc/userdoc.rst>
-   Example 9: Gazebo Classic <../example_9/doc/userdoc.rst>
+   Example 9: Gazebo classic <../example_9/doc/userdoc.rst>
+   Example 12: Controller chaining <../example_12/doc/userdoc.rst>

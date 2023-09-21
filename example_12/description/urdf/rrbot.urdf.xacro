@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!-- Revolute-Revolute Manipulator -->
+<!--
+Copied and modified from ROS1 example -
+https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_description/urdf/rrbot.xacro
+-->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="2dof_robot">
+  <xacro:arg name="prefix" default="" />
+  <xacro:arg name="use_gazebo_classic" default="false" />
+
+  <!-- Import RRBot macro -->
+  <xacro:include filename="$(find ros2_control_demo_description)/rrbot/urdf/rrbot_description.urdf.xacro" />
+
+  <!-- Import Rviz colors -->
+  <xacro:include filename="$(find ros2_control_demo_description)/rrbot/urdf/rrbot.materials.xacro" />
+
+  <!-- Import RRBot ros2_control description -->
+  <xacro:include filename="$(find ros2_control_demo_example_12)/ros2_control/rrbot.ros2_control.xacro" />
+
+  <!-- Used for fixing robot -->
+  <link name="world"/>
+
+  <xacro:rrbot parent="world" prefix="$(arg prefix)">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </xacro:rrbot>
+
+  <xacro:rrbot_ros2_control
+    name="RRBot" prefix="$(arg prefix)" use_gazebo_classic="$(arg use_gazebo_classic)"/>
+
+  <xacro:if value="$(arg use_gazebo_classic)">
+    <!-- Import Gazebo Classic definitions + plugin -->
+    <xacro:include filename="$(find ros2_control_demo_example_12)/gazebo/rrbot.gazebo.xacro" />
+    <xacro:rrbot_gazebo prefix="$(arg prefix)"/>
+  </xacro:if>
+</robot>
