@@ -68,8 +68,6 @@ public:
     const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
 private:
-  // Parameter disnguishing between simulation and physical robot
-  bool m_running_simulation;
 
   // Parameters for the CarlikeBot simulation
   double hw_start_sec_;

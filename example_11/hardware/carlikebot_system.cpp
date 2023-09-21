@@ -233,23 +233,20 @@ CarlikeBotSystemHardware::export_command_interfaces()
 hardware_interface::CallbackReturn CarlikeBotSystemHardware::on_activate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
-  if (m_running_simulation)
+  RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), "Activating ...please wait...");
+
+  for (auto i = 0; i < hw_start_sec_; i++)
   {
-    RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), "Activating ...please wait...");
+    rclcpp::sleep_for(std::chrono::seconds(1));
+    RCLCPP_INFO(
+      rclcpp::get_logger("CarlikeBotSystemHardware"), "%.1f seconds left...", hw_start_sec_ - i);
+  }
 
-    for (auto i = 0; i < hw_start_sec_; i++)
-    {
-      rclcpp::sleep_for(std::chrono::seconds(1));
-      RCLCPP_INFO(
-        rclcpp::get_logger("CarlikeBotSystemHardware"), "%.1f seconds left...", hw_start_sec_ - i);
-    }
-
-    for (uint i = 0; i < hw_positions_.size(); i++)
-    {
-      hw_positions_[i] = 0.0;
-      hw_velocities_[i] = 0.0;
-      hw_commands_[i] = 0.0;
-    }
+  for (uint i = 0; i < hw_positions_.size(); i++)
+  {
+    hw_positions_[i] = 0.0;
+    hw_velocities_[i] = 0.0;
+    hw_commands_[i] = 0.0;
   }
 
   RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), "Successfully activated!");
@@ -260,19 +257,16 @@ hardware_interface::CallbackReturn CarlikeBotSystemHardware::on_activate(
 hardware_interface::CallbackReturn CarlikeBotSystemHardware::on_deactivate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
-  if (m_running_simulation)
-  {
-    // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
-    RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), "Deactivating ...please wait...");
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
+  RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), "Deactivating ...please wait...");
 
-    for (auto i = 0; i < hw_stop_sec_; i++)
-    {
-      rclcpp::sleep_for(std::chrono::seconds(1));
-      RCLCPP_INFO(
-        rclcpp::get_logger("CarlikeBotSystemHardware"), "%.1f seconds left...", hw_stop_sec_ - i);
-    }
-    // END: This part here is for exemplary purposes - Please do not copy to your production code
+  for (auto i = 0; i < hw_stop_sec_; i++)
+  {
+    rclcpp::sleep_for(std::chrono::seconds(1));
+    RCLCPP_INFO(
+      rclcpp::get_logger("CarlikeBotSystemHardware"), "%.1f seconds left...", hw_stop_sec_ - i);
   }
+  // END: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), "Successfully deactivated!");
 
   return hardware_interface::CallbackReturn::SUCCESS;
