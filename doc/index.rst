@@ -67,6 +67,9 @@ Example 8: "Using transmissions"
 Example 9: "Gazebo Classic"
    Demonstrates how to switch between simulation and hardware.
 
+Example 10: "GPIO interfaces"
+   Industrial robot with GPIO interfaces
+
 Example 12: "Controller chaining"
    The example shows a simple chainable controller and its integration to form a controller chain to control the joints of *RRBot*.
 
@@ -259,4 +262,5 @@ Examples
    Example 7: Full tutorial with a 6DOF robot <../example_7/doc/userdoc.rst>
    Example 8: Using transmissions <../example_8/doc/userdoc.rst>
    Example 9: Gazebo classic <../example_9/doc/userdoc.rst>
+   Example 10: Industrial robot with GPIO interfaces <../example_10/doc/userdoc.rst>
    Example 12: Controller chaining <../example_12/doc/userdoc.rst>

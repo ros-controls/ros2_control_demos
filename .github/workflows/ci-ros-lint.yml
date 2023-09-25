@@ -26,6 +26,11 @@ jobs:
           ros2_control_demo_example_6
           ros2_control_demo_example_8
           ros2_control_demo_example_9
+<<<<<<< HEAD
+=======
+          ros2_control_demo_example_10
+          ros2_control_demo_example_12
+>>>>>>> 60b788f ([Example 10] RRbot with GPIO interfaces (#256))
 
   ament_lint_100:
     name: ament_${{ matrix.linter }}
