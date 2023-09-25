@@ -1,0 +1,31 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 1  # Hz
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    forward_position_controller:
+      type: forward_command_controller/ForwardCommandController
+
+    gpio_controller:
+      type: ros2_control_demo_example_10/GPIOController
+
+
+forward_position_controller:
+  ros__parameters:
+    joints:
+      - joint1
+      - joint2
+    interface_name: position
+
+gpio_controller:
+  ros__parameters:
+    inputs:
+     - flange_analog_IOs/analog_output1
+     - flange_analog_IOs/analog_input1
+     - flange_analog_IOs/analog_input2
+     - flange_vacuum/vacuum
+    outputs:
+     - flange_analog_IOs/analog_output1
+     - flange_vacuum/vacuum
