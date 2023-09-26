@@ -24,7 +24,7 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
 Tutorial steps
 --------------------------
 
-1. To check that *RRBot* descriptions are working properly use following launch commands
+1. (Optional) To check that *RRBot* descriptions are working properly use following launch commands
 
    .. tabs::
 
@@ -95,8 +95,11 @@ Tutorial steps
    In starting terminal you will see a lot of output from the hardware implementation showing its internal states.
    This is only of exemplary purposes and should be avoided as much as possible in a hardware interface implementation.
 
-   If you can see two orange and one yellow rectangle in in *RViz* everything has started properly.
+   If you can see two orange and one yellow rectangle in *RViz* everything has started properly.
    Still, to be sure, let's introspect the control system before moving *RRBot*.
+   
+   Once it is working you can stop rviz using CTRL+C as the next launch file is starting RViz.
+
 
 3. Check if the hardware interface loaded properly, by opening another terminal and executing
 
