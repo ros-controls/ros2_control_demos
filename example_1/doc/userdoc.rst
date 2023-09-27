@@ -70,6 +70,7 @@ Tutorial steps
     :width: 400
     :alt: Revolute-Revolute Manipulator Robot
 
+   Once it is working you can stop rviz using CTRL+C as the next launch file is starting RViz.
 
 2. To start *RRBot* example open a terminal, source your ROS2-workspace and execute its launch file with
 
@@ -97,9 +98,6 @@ Tutorial steps
 
    If you can see two orange and one yellow rectangle in *RViz* everything has started properly.
    Still, to be sure, let's introspect the control system before moving *RRBot*.
-   
-   Once it is working you can stop rviz using CTRL+C as the next launch file is starting RViz.
-
 
 3. Check if the hardware interface loaded properly, by opening another terminal and executing
 
