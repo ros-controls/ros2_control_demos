@@ -15,10 +15,10 @@ jobs:
     container:
       image: ubuntu:jammy
     steps:
-      - uses: ros-tooling/setup-ros@v0.6
+      - uses: ros-tooling/setup-ros@v0.7
         with:
           required-ros-distributions: ${{ env.ROS_DISTRO }}
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ros-tooling/action-ros-ci@v0.3
         with:
           target-ros2-distro: ${{ env.ROS_DISTRO }}
@@ -31,7 +31,11 @@ jobs:
             ros2_control_demo_example_4
             ros2_control_demo_example_5
             ros2_control_demo_example_6
+            ros2_control_demo_example_7
             ros2_control_demo_example_8
+            ros2_control_demo_example_9
+            ros2_control_demo_example_10
+            ros2_control_demo_example_12
 
           vcs-repo-file-url: |
             https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/ros2_control_demos-not-released.${{ env.ROS_DISTRO }}.repos?token=${{ secrets.GITHUB_TOKEN }}
@@ -43,7 +47,7 @@ jobs:
             }
           colcon-mixin-repository: https://raw.githubusercontent.com/colcon/colcon-mixin-repository/master/index.yaml
           skip-tests: true
-      - uses: codecov/codecov-action@v3.1.3
+      - uses: codecov/codecov-action@v3.1.4
         with:
           file: ros_ws/lcov/total_coverage.info
           flags: unittests

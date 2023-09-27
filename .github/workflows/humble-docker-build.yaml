@@ -1,0 +1,22 @@
+name: Build Humble Dockerfile
+# description: builds the dockerfile contained within the repo
+
+on:
+  pull_request:
+    branches:
+      - humble
+  push:
+    branches:
+      - humble
+  schedule:
+    # Run every morning to detect broken dependencies
+    - cron: '40 1 * * *'
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile/Dockerfile --tag ros2_control_demos_humble
