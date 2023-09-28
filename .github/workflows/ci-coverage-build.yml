@@ -34,6 +34,7 @@ jobs:
             ros2_control_demo_example_7
             ros2_control_demo_example_8
             ros2_control_demo_example_9
+            ros2_control_demo_example_10
             ros2_control_demo_example_12
             ros2_control_demo_example_14
 

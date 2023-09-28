@@ -31,7 +31,6 @@ The following examples are part of this demo repository:
 
    *RRBot* with an integrated sensor.
 
-
 * Example 5: ["Industrial robots with externally connected sensor"](example_5)
 
    *RRBot* with an externally connected sensor.
@@ -52,7 +51,9 @@ The following examples are part of this demo repository:
 
    Demonstrates how to switch between simulation and hardware.
 
-* Example 10: "RRbot with GPIO interfaces (tba.)"
+* Example 10: ["Industrial robot with GPIO interfaces"](example_10)
+
+   *RRBot* with GPIO interfaces.
 
 * Example 11: "Car-like robot using steering controller library (tba.)"
 
@@ -97,6 +98,7 @@ Those two world-known imaginary robots are trivial simulations to demonstrate an
 ROS 2 Distro | Branch | Build status | Documentation
 :----------: | :----: | :----------: | :-----------:
 **Rolling** | [`master`](https://github.com/ros-controls/ros2_control_demos/tree/rolling) | [![Rolling Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-binary-build.yml/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-binary-build.yml?branch=master) <br /> [![Rolling Semi-Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-semi-binary-build.yml/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-semi-binary-build.yml?branch=master) <br /> | [Documentation](https://control.ros.org/master/index.html) <br /> [API Reference](https://control.ros.org/master/doc/api/index.html)
+**Iron** | [`master`](https://github.com/ros-controls/ros2_control_demos/tree/master) | [![Iron Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/iron-binary-build.yml/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/iron-binary-build.yml?branch=master) <br /> [![Iron Semi-Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/iron-semi-binary-build.yml/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/iron-semi-binary-build.yml?branch=master) <br /> | [Documentation](https://control.ros.org/iron/index.html) <br /> [API Reference](https://control.ros.org/iron/doc/api/index.html)
 **Humble** | [`humble`](https://github.com/ros-controls/ros2_control_demos/tree/humble) | [![Humble Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/humble-binary-build.yml/badge.svg?branch=humble)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/humble-binary-build.yml?branch=humble) <br /> [![Humble Semi-Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/humble-semi-binary-build.yml/badge.svg?branch=humble)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/humble-semi-binary-build.yml?branch=humble) <br /> | [Documentation](https://control.ros.org/humble/index.html) <br /> [API Reference](https://control.ros.org/humble/doc/api/index.html)
 **Galactic** | [`galactic`](https://github.com/ros-controls/ros2_control_demos/tree/galactic) | [![Galactic Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/galactic-binary-build.yml/badge.svg?branch=galactic)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/galactic-binary-build.yml?branch=galactic) <br /> [![Galactic Semi-Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/galactic-semi-binary-build.yml/badge.svg?branch=galactic)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/galactic-semi-binary-build.yml?branch=galactic) <br /> | [Documentation](https://control.ros.org/galactic/index.html) <br /> [API Reference](https://control.ros.org/galactic/doc/api/index.html)
 **Foxy** | [`foxy`](https://github.com/ros-controls/ros2_control_demos/tree/foxy) | [![Foxy Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/foxy-binary-build.yml/badge.svg?branch=foxy)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/foxy-binary-build.yml?branch=foxy) <br /> [![Foxy Semi-Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/foxy-semi-binary-build.yml/badge.svg?branch=foxy)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/foxy-semi-binary-build.yml?branch=foxy) <br /> | [Documentation](https://control.ros.org/foxy/index.html) <br /> [API Reference](https://control.ros.org/foxy/doc/api/index.html)
