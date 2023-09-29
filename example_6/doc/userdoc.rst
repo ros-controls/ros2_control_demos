@@ -62,6 +62,31 @@ Tutorial steps
 
    Marker ``[claimed]`` by command interfaces means that a controller has access to command *RRBot*.
 
+   Now, let's introspect the hardware components with
+
+   .. code-block:: shell
+
+    ros2 control list_hardware_components
+
+   There are two hardware components, one for each actuator and one for each sensor:
+
+   .. code-block:: shell
+
+    Hardware Component 1
+            name: RRBotModularJoint2
+            type: actuator
+            plugin name: ros2_control_demo_example_6/RRBotModularJoint
+            state: id=3 label=active
+            command interfaces
+                    joint2/position [available] [claimed]
+    Hardware Component 2
+            name: RRBotModularJoint1
+            type: actuator
+            plugin name: ros2_control_demo_example_6/RRBotModularJoint
+            state: id=3 label=active
+            command interfaces
+                    joint1/position [available] [claimed]
+
 4. Check if controllers are running
 
    .. code-block:: shell
@@ -70,8 +95,8 @@ Tutorial steps
 
    .. code-block:: shell
 
-    forward_position_controller[forward_command_controller/ForwardCommandController]
-    joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]
+    forward_position_controller[forward_command_controller/ForwardCommandController] active
+    joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
 
 5. If you get output from above you can send commands to *Forward Command Controller*, either:
 

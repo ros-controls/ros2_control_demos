@@ -29,6 +29,7 @@ jobs:
           ros2_control_demo_example_9
           ros2_control_demo_example_10
           ros2_control_demo_example_12
+          ros2_control_demo_example_14
 
   ament_lint_100:
     name: ament_${{ matrix.linter }}
@@ -57,3 +58,4 @@ jobs:
           ros2_control_demo_example_9
           ros2_control_demo_example_10
           ros2_control_demo_example_12
+          ros2_control_demo_example_14
