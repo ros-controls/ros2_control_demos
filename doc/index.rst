@@ -69,7 +69,7 @@ Example 9: "Gazebo Classic"
 
 Example 10: "GPIO interfaces"
    Industrial robot with GPIO interfaces
-   
+
 Example 11: "CarlikeBot"
     *CarlikeBot* with an Ackermann steering controller
 
