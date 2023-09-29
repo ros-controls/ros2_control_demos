@@ -164,6 +164,7 @@ hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_init(
         bzero(buffer, reading_size_bytes);
         std::this_thread::sleep_for(std::chrono::nanoseconds(1000000000 / incoming_data_read_rate));
       }
+      return hardware_interface::CallbackReturn::SUCCESS;
     });
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
