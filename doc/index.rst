@@ -52,10 +52,10 @@ Example 3: "RRBot with multiple interfaces"
 Example 4: "Industrial robot with integrated sensor"
    *RRBot* with an integrated sensor.
 
-Example 5: "Industrial Robots with externally connected sensor"
+Example 5: "Industrial robot with externally connected sensor"
    *RRBot* with an externally connected sensor.
 
-Example 6: "Modular Robots with separate communication to each actuator"
+Example 6: "Modular robot with separate communication to each actuator"
    The example shows how to implement robot hardware with separate communication to each actuator.
 
 Example 7: "6-DOF robot"
@@ -69,12 +69,17 @@ Example 9: "Gazebo Classic"
 
 Example 10: "GPIO interfaces"
    Industrial robot with GPIO interfaces
-
+   
 Example 11: "CarlikeBot"
-    *CarlikeBot* with an Ackermann steering controller would be similar to how a car would be controlled.
+    *CarlikeBot* with an Ackermann steering controller
 
 Example 12: "Controller chaining"
    The example shows a simple chainable controller and its integration to form a controller chain to control the joints of *RRBot*.
+
+Example 13: "Multi-robot example (tba.)"
+
+Example 14: "Modular robots with actuators not providing states and with additional sensors"
+
 
 .. _ros2_control_demos_install:
 
@@ -268,3 +273,4 @@ Examples
    Example 10: Industrial robot with GPIO interfaces <../example_10/doc/userdoc.rst>
    Example 11: CarlikeBot <../example_11/doc/userdoc.rst>
    Example 12: Controller chaining <../example_12/doc/userdoc.rst>
+   Example 14: Modular robots with actuators not providing states <../example_14/doc/userdoc.rst>
