@@ -95,7 +95,7 @@ Tutorial steps
       x: 0.7
       y: 0.0
       z: 0.0
-      angular:
+    angular:
       x: 0.0
       y: 0.0
       z: 0.01"
