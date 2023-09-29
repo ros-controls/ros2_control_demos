@@ -63,6 +63,8 @@ The following examples are part of this demo repository:
 
 * Example 13: "Multi-robot example (tba.)"
 
+* Example 14: ["Modular robots with actuators not providing states and with additional sensors"](example_14)
+
 ## Getting started
 
 The repository is structured into `example_XY` folders that fully contained packages with names `ros2_control_demos_example_XY`.
