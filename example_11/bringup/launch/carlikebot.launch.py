@@ -59,11 +59,13 @@ def generate_launch_description():
         [FindPackageShare("ros2_control_demo_description"), "carlikebot/rviz", "carlikebot.rviz"]
     )
 
+    # the steering controller libraries by default publish odometry on a separate topic than /tf
     control_node = Node(
         package="controller_manager",
         executable="ros2_control_node",
         parameters=[robot_description, robot_controllers],
         output="both",
+        remappings=[("/ackermann_steering_controller/tf_odometry", "/tf")],
     )
     robot_state_pub_ackermann_node = Node(
         package="robot_state_publisher",
@@ -111,21 +113,12 @@ def generate_launch_description():
         )
     )
 
-    # the steering controller libraries by default publish odometry on a separate topic than /tf
-    relay_topic_to_tf_node = Node(
-        package="topic_tools",
-        executable="relay",
-        arguments=["/ackermann_steering_controller/tf_odometry", "/tf"],
-        output="screen",
-    )
-
     nodes = [
         control_node,
         robot_state_pub_ackermann_node,
         joint_state_broadcaster_spawner,
         delay_rviz_after_joint_state_broadcaster_spawner,
         delay_robot_controller_spawner_after_joint_state_broadcaster_spawner,
-        relay_topic_to_tf_node,
     ]
 
     return LaunchDescription(declared_arguments + nodes)
