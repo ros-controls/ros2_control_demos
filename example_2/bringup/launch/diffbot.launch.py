@@ -32,9 +32,17 @@ def generate_launch_description():
             description="Start RViz2 automatically with this launch file.",
         )
     )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "use_mock_hardware",
+            default_value="false",
+            description="Start robot with mock hardware mirroring command to its states.",
+        )
+    )
 
     # Initialize Arguments
     gui = LaunchConfiguration("gui")
+    use_mock_hardware = LaunchConfiguration("use_mock_hardware")
 
     # Get URDF via xacro
     robot_description_content = Command(
@@ -44,6 +52,9 @@ def generate_launch_description():
             PathJoinSubstitution(
                 [FindPackageShare("ros2_control_demo_example_2"), "urdf", "diffbot.urdf.xacro"]
             ),
+            " ",
+            "use_mock_hardware:=",
+            use_mock_hardware,
         ]
     )
     robot_description = {"robot_description": robot_description_content}
