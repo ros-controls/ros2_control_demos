@@ -9,7 +9,7 @@
         <xacro:if value="${use_mock_hardware}">
           <plugin>mock_components/GenericSystem</plugin>
           <param name="mock_sensor_commands">${mock_sensor_commands}</param>
-          <param name="state_following_offset">0.0</param>
+          <param name="position_state_following_offset">0.0</param>
         </xacro:if>
         <xacro:unless value="${use_mock_hardware}">
           <plugin>ros2_control_demo_example_5/RRBotSystemPositionOnlyHardware</plugin>
