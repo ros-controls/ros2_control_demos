@@ -23,6 +23,7 @@ ackermann_steering_controller:
     odom_frame_id: odom
     base_frame_id: base_link
     enable_odom_tf: true
+    in_chained_mode: false
 
     wheelbase: 0.325
     front_wheel_track: 0.2

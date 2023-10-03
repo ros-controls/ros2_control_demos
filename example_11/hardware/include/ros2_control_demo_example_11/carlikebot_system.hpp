@@ -73,11 +73,22 @@ private:
   double hw_stop_sec_;
 
   // Store the command for the CarlikeBot robot
-  std::vector<double> hw_commands_;
-  std::vector<double> hw_positions_;
-  std::vector<double> hw_velocities_;
+  // std::vector<double> hw_position_commands_;
+  // std::vector<double> hw_velocity_commands_;
+  // std::vector<double> hw_position_states_;
+  // std::vector<double> hw_velocity_states_;
 
-  std::vector<std::tuple<unsigned int, std::string, int>> commands_counterpart_;
+  // std::vector<std::string> hw_interfaces_;
+  // std::vector<double> hw_commands_;
+  // std::vector<double> hw_states_;
+
+  std::vector<std::tuple<std::string, double, double>> hw_interfaces_; // name of joint, state, command
+
+  // std::vector<std::tuple<unsigned int, std::string, int>> commands_counterpart_;
+
+  // std::vector<double> hw_commands_;
+  // std::vector<double> hw_positions_;
+  // std::vector<double> hw_velocities_;
 
   // std::map<std::string, double> hw_commands_;
   // std::map<std::string, double> hw_positions_;
