@@ -31,7 +31,6 @@ The following examples are part of this demo repository:
 
    *RRBot* with an integrated sensor.
 
-
 * Example 5: ["Industrial robots with externally connected sensor"](example_5)
 
    *RRBot* with an externally connected sensor.
@@ -52,7 +51,9 @@ The following examples are part of this demo repository:
 
    Demonstrates how to switch between simulation and hardware.
 
-* Example 10: "RRbot with GPIO interfaces (tba.)"
+* Example 10: ["Industrial robot with GPIO interfaces"](example_10)
+
+   *RRBot* with GPIO interfaces.
 
 * Example 11: "Car-like robot using steering controller library (tba.)"
 
@@ -61,6 +62,8 @@ The following examples are part of this demo repository:
    The example shows a simple chainable controller and its integration to form a controller chain to control the joints of *RRBot*.
 
 * Example 13: "Multi-robot example (tba.)"
+
+* Example 14: ["Modular robots with actuators not providing states and with additional sensors"](example_14)
 
 ## Getting started
 
