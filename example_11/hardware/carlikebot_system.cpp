@@ -146,14 +146,10 @@ hardware_interface::CallbackReturn CarlikeBotSystemHardware::on_init(
   // // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   // joint name, state, command
-  hw_interfaces_.resize(4, std::make_tuple(
-    std::string(), 
-    std::numeric_limits<double>::quiet_NaN(),
-    std::numeric_limits<double>::quiet_NaN()
-    )
-  );
-
-
+  hw_interfaces_.resize(
+    4, std::make_tuple(
+         std::string(), std::numeric_limits<double>::quiet_NaN(),
+         std::numeric_limits<double>::quiet_NaN()));
 
   // hw_positions_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   // hw_velocities_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
@@ -164,7 +160,6 @@ hardware_interface::CallbackReturn CarlikeBotSystemHardware::on_init(
 
   // hw_position_states_.resize(2, std::numeric_limits<double>::queit_NaN());
   // hw_velocity_states_.resize(2, std::numeric_limits<double>::queit_NaN());
-
 
   return hardware_interface::CallbackReturn::SUCCESS;
 }
@@ -186,9 +181,8 @@ std::vector<hardware_interface::StateInterface> CarlikeBotSystemHardware::export
     // get the index of the joint name in hw_interfaces_
     auto it = std::find_if(
       hw_interfaces_.begin(), hw_interfaces_.end(),
-      [this, i](const std::tuple<std::string, double, double> & element) {
-        return std::get<0>(element) == info_.joints[i].name;
-      });
+      [this, i](const std::tuple<std::string, double, double> & element)
+      { return std::get<0>(element) == info_.joints[i].name; });
 
     if (joint_is_steering)
     {
@@ -234,9 +228,8 @@ CarlikeBotSystemHardware::export_command_interfaces()
     // get the index of the joint name in hw_interfaces_
     auto it = std::find_if(
       hw_interfaces_.begin(), hw_interfaces_.end(),
-      [this, i](const std::tuple<std::string, double, double> & element) {
-        return std::get<0>(element) == info_.joints[i].name;
-      });
+      [this, i](const std::tuple<std::string, double, double> & element)
+      { return std::get<0>(element) == info_.joints[i].name; });
 
     if (joint_is_steering)
     {
@@ -346,8 +339,8 @@ hardware_interface::return_type ros2_control_demo_example_11 ::CarlikeBotSystemH
     std::get<2>(hw_interfaces_[i]) = std::get<2>(hw_interfaces_[i]);
 
     // RCLCPP_INFO(
-    //   rclcpp::get_logger("CarlikeBotSystemHardware"), "Got command %.5f for '%s'", hw_commands_[i],
-    //   info_.joints[i].name.c_str());
+    //   rclcpp::get_logger("CarlikeBotSystemHardware"), "Got command %.5f for '%s'",
+    //   hw_commands_[i], info_.joints[i].name.c_str());
   }
 
   return hardware_interface::return_type::OK;

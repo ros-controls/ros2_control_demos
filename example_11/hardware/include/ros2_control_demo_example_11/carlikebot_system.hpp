@@ -82,7 +82,8 @@ private:
   // std::vector<double> hw_commands_;
   // std::vector<double> hw_states_;
 
-  std::vector<std::tuple<std::string, double, double>> hw_interfaces_; // name of joint, state, command
+  std::vector<std::tuple<std::string, double, double>>
+    hw_interfaces_;  // name of joint, state, command
 
   // std::vector<std::tuple<unsigned int, std::string, int>> commands_counterpart_;
 
