@@ -69,6 +69,8 @@ Tutorial steps
 
    The ``[claimed]`` marker on command interfaces means that a controller has access to command *DiffBot*.
 
+   Furthermore, we can see that the command interface is of type ``velocity``, which is typical for a differential drive robot.
+
 4. Check if controllers are running
 
    .. code-block:: shell
@@ -102,6 +104,69 @@ Tutorial steps
 
     [DiffBotSystemHardware]: Got command 43.33333 for 'left_wheel_joint'!
     [DiffBotSystemHardware]: Got command 50.00000 for 'right_wheel_joint'!
+
+6. Let's introspect the ros2_control hardware component. Calling
+
+  .. code-block:: shell
+
+    ros2 control list_hardware_components
+
+  should give you
+
+  .. code-block:: shell
+
+    Hardware Component 1
+            name: DiffBot
+            type: system
+            plugin name: ros2_control_demo_example_2/DiffBotSystemHardware
+            state: id=3 label=active
+            command interfaces
+                    left_wheel_joint/velocity [available] [claimed]
+                    right_wheel_joint/velocity [available] [claimed]
+
+  This shows that the custom hardware interface plugin is loaded and running. If you work on a real
+  robot and don't have a simulator running, it is often faster to use the ``mock_components/GenericSystem``
+  hardware component instead of writing a custom one. Stop the launch file and start it again with
+  an additional parameter
+
+  .. code-block:: shell
+
+    ros2 launch ros2_control_demo_example_2 diffbot.launch.py use_mock_hardware:=True
+
+  Calling
+
+  .. code-block:: shell
+
+    ros2 control list_hardware_components
+
+  now should give you
+
+  .. code-block:: shell
+
+    Hardware Component 1
+        name: DiffBot
+        type: system
+        plugin name: mock_components/GenericSystem
+        state: id=3 label=active
+        command interfaces
+                left_wheel_joint/velocity [available] [claimed]
+                right_wheel_joint/velocity [available] [claimed]
+
+  You see that a different plugin was loaded. Having a look into the `diffbot.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_2/description/ros2_control/diffbot.ros2_control.xacro>`__, one can find the
+  instructions to load this plugin together with the parameter ``calculate_dynamics``.
+
+  .. code-block:: xml
+
+    <hardware>
+      <plugin>mock_components/GenericSystem</plugin>
+      <param name="calculate_dynamics">true</param>
+    </hardware>
+
+  This enables the integration of the velocity commands to the position state interface, which can be
+  checked by means of ``ros2 topic echo /joint_states``: The position values are increasing over time if the robot is moving.
+  You now can test the setup with the commands from above, it should work identically as the custom hardware component plugin.
+
+  More information on mock_components can be found in the :ref:`ros2_control documentation <mock_components_userdoc>`.
 
 Files used for this demos
 --------------------------
