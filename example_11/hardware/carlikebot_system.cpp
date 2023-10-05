@@ -37,12 +37,12 @@ hardware_interface::CallbackReturn CarlikeBotSystemHardware::on_init(
   }
 
   // Check if the number of joints is correct based on the mode of operation
-  if (info_.joints.size() != 4)
+  if (info_.joints.size() != 6)
   {
     RCLCPP_ERROR(
       rclcpp::get_logger("CarlikeBotSystemHardware"),
       "CarlikeBotSystemHardware::on_init() - Failed to initialize, "
-      "because the number of joints %ld is not 4.",
+      "because the number of joints %ld is not 6.",
       info_.joints.size());
     return hardware_interface::CallbackReturn::ERROR;
   }
@@ -147,19 +147,9 @@ hardware_interface::CallbackReturn CarlikeBotSystemHardware::on_init(
 
   // joint name, state, command
   hw_interfaces_.resize(
-    4, std::make_tuple(
+    6, std::make_tuple(
          std::string(), std::numeric_limits<double>::quiet_NaN(),
          std::numeric_limits<double>::quiet_NaN()));
-
-  // hw_positions_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
-  // hw_velocities_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
-  // hw_commands_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
-
-  // hw_commands_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
-  // hw_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
-
-  // hw_position_states_.resize(2, std::numeric_limits<double>::queit_NaN());
-  // hw_velocity_states_.resize(2, std::numeric_limits<double>::queit_NaN());
 
   return hardware_interface::CallbackReturn::SUCCESS;
 }
