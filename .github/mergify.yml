@@ -1,0 +1,26 @@
+pull_request_rules:
+  - name: Backport to humble at reviewers discretion
+    conditions:
+      - base=master
+      - "label=backport-humble"
+    actions:
+      backport:
+        branches:
+          - humble
+
+  - name: Backport to iron at reviewers discretion
+    conditions:
+      - base=master
+      - "label=backport-iron"
+    actions:
+      backport:
+        branches:
+          - iron
+
+  - name: Ask to resolve conflict
+    conditions:
+      - conflict
+      - author!=mergify
+    actions:
+        comment:
+          message: This pull request is in conflict. Could you fix it @{{author}}?
