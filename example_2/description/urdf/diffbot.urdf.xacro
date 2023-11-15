@@ -2,6 +2,7 @@
 <!-- Basic differential drive mobile base -->
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="diffdrive_robot">
   <xacro:arg name="prefix" default="" />
+  <xacro:arg name="use_mock_hardware" default="false" />
 
   <xacro:include filename="$(find ros2_control_demo_description)/diffbot/urdf/diffbot_description.urdf.xacro" />
 
