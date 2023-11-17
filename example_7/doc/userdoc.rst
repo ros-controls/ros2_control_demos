@@ -217,7 +217,7 @@ The hardware plugin for the tutorial robot is a class called ``RobotSystem`` tha
       // ...
   }
 
-The ``on_init`` method is called once during ros2_control initialization if the ``RobotSystem`` was specified in the URDF. In this method, communication between the robot hardware needs to be setup and memory dynamic should be allocated. Since the tutorial robot is simulated, explicit will communication not be established. Instead, vectors will be initialized that represent the state all the hardware, e.g. a vector of doubles describing joint angles, etc.
+The ``on_init`` method is called once during ros2_control initialization if the ``RobotSystem`` was specified in the URDF. In this method, communication between the robot hardware needs to be setup and memory dynamic should be allocated. Since the tutorial robot is simulated, explicit communication will not be established. Instead, vectors will be initialized that represent the state all the hardware, e.g. a vector of doubles describing joint angles, etc.
 
 .. code-block:: c++
 
@@ -232,7 +232,7 @@ The ``on_init`` method is called once during ros2_control initialization if the 
 
 Notably, the behavior of ``on_init`` is expected to vary depending on the URDF file. The ``SystemInterface::on_init(info)`` call fills out the ``info`` object with specifics from the URDF. For example, the ``info`` object has fields for joints, sensors, gpios, and more. Suppose the sensor field has a name value of ``tcp_force_torque_sensor``. Then the ``on_init`` must try to establish communication with that sensor. If it fails, then an error value is returned.
 
-Next, ``export_state_interfaces`` and ``export_command_interfaces`` methods are called in succession. The ``export_state_interfaces`` method returns a vector of ``StateInterface``, describing the ``state_interfaces`` for each joint. The ``StateInterface`` objects are read only data handles. Their constructors require an interface nae, interface type, and a pointer to a double data value. For the ``RobotSystem``, the data pointers reference class member variables. This way, the data can be access from every method.
+Next, ``export_state_interfaces`` and ``export_command_interfaces`` methods are called in succession. The ``export_state_interfaces`` method returns a vector of ``StateInterface``, describing the ``state_interfaces`` for each joint. The ``StateInterface`` objects are read only data handles. Their constructors require an interface name, interface type, and a pointer to a double data value. For the ``RobotSystem``, the data pointers reference class member variables. This way, the data can be access from every method.
 
 .. code-block:: c++
 
@@ -342,7 +342,7 @@ In ros2_control, controllers are implemented as plugins that conforms to the ``C
 
 Certain interface methods are called during transitions between these states. During the main control loop, the controller is in the active state.
 
-The following code blocks will explain the requirements for writing a new hardware interface.
+The following code blocks will explain the requirements for writing a new controller.
 
 The controller plugin for the tutorial robot is a class called ``RobotController`` that inherits from  ``controller_interface::ControllerInterface``. The ``RobotController`` must implement nine public methods. The last six are `managed node <https://design.ros2.org/articles/node_lifecycle.html>`__  transitions callbacks.
 
