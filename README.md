@@ -9,7 +9,7 @@ If you want to have rather step by step manual how to do things with `ros2_contr
 
 ## Getting Started
 
-1. Follow the steps provided in the [documentation](https://control.ros.org/master/doc/ros2_control_demos/doc/index.html#installation) to install ros2_control_demos.
+Follow the steps provided in the [documentation](https://control.ros.org/master/doc/ros2_control_demos/doc/index.html#installation) to install ros2_control_demos.
 
 
 ## Content
