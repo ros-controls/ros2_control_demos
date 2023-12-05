@@ -7,6 +7,11 @@ It consists of simple implementations that demonstrate different concepts. Choos
 
 If you want to have rather step by step manual how to do things with `ros2_control` checkout the [ros-control/roscon2022_workshop](https://github.com/ros-controls/roscon2022_workshop) repository.
 
+## Getting Started
+
+Follow the steps provided in the [documentation](https://control.ros.org/humble/doc/ros2_control_demos/doc/index.html#installation) to install ros2_control_demos.
+
+
 ## Content
 
 The following examples are part of this demo repository:
@@ -65,7 +70,7 @@ The following examples are part of this demo repository:
 
 * Example 14: ["Modular robots with actuators not providing states and with additional sensors"](example_14)
 
-## Getting started
+## Structure
 
 The repository is structured into `example_XY` folders that fully contained packages with names `ros2_control_demos_example_XY`.
 
