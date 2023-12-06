@@ -14,27 +14,20 @@ groups:
   - name: reviewers
     reviewers: 5
     usernames:
-      - rosterloh
-      - progtologist
-      - arne48
-      - DasRoteSkelett
-      - sgmurray
-      - harderthan
-      - jaron-l
-      - malapatiravi
-      - erickisos
-      - sachinkum0009
-      - qiayuanliao
-      - homalozoa
-      - anfemosa
-      - jackcenter
-      - VX792
-      - mhubii
-      - livanov93
       - aprotyas
-      - peterdavidfagan
-      - duringhof
-      - VanshGehlot
+      - arne48
       - bijoua29
-      - LukasMacha97
+      - DasRoteSkelett
+      - duringhof
+      - erickisos
+      - fmauch
+      - jaron-l
+      - livanov93
       - mcbed
+      - moriarty
+      - olivier-stasse
+      - peterdavidfagan
+      - progtologist
+      - saikishor
+      - VanshGehlot
+      - VX792
