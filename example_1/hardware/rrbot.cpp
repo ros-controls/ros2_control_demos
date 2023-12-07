@@ -40,8 +40,6 @@ hardware_interface::CallbackReturn RRBotSystemPositionOnlyHardware::on_init(
   hw_stop_sec_ = stod(info_.hardware_parameters["example_param_hw_stop_duration_sec"]);
   hw_slowdown_ = stod(info_.hardware_parameters["example_param_hw_slowdown"]);
   // END: This part here is for exemplary purposes - Please do not copy to your production code
-  hw_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
-  hw_commands_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
 
   for (const hardware_interface::ComponentInfo & joint : info_.joints)
   {
@@ -103,41 +101,17 @@ hardware_interface::CallbackReturn RRBotSystemPositionOnlyHardware::on_configure
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   // reset values always when configuring hardware
-  for (uint i = 0; i < hw_states_.size(); i++)
+  for (uint i = 0; i < joint_pos_states_.size(); i++)
   {
-    hw_states_[i] = 0;
-    hw_commands_[i] = 0;
+    joint_pos_states_[i] = 0.0;
   }
-
+  for (uint i = 0; i < joint_pos_commands_.size(); i++)
+  {
+    joint_pos_commands_[i] = 0.0;
+  }
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "Successfully configured!");
 
   return hardware_interface::CallbackReturn::SUCCESS;
-}
-
-std::vector<hardware_interface::StateInterface>
-RRBotSystemPositionOnlyHardware::export_state_interfaces()
-{
-  std::vector<hardware_interface::StateInterface> state_interfaces;
-  for (uint i = 0; i < info_.joints.size(); i++)
-  {
-    state_interfaces.emplace_back(hardware_interface::StateInterface(
-      info_.joints[i].name, hardware_interface::HW_IF_POSITION, &hw_states_[i]));
-  }
-
-  return state_interfaces;
-}
-
-std::vector<hardware_interface::CommandInterface>
-RRBotSystemPositionOnlyHardware::export_command_interfaces()
-{
-  std::vector<hardware_interface::CommandInterface> command_interfaces;
-  for (uint i = 0; i < info_.joints.size(); i++)
-  {
-    command_interfaces.emplace_back(hardware_interface::CommandInterface(
-      info_.joints[i].name, hardware_interface::HW_IF_POSITION, &hw_commands_[i]));
-  }
-
-  return command_interfaces;
 }
 
 hardware_interface::CallbackReturn RRBotSystemPositionOnlyHardware::on_activate(
@@ -157,9 +131,9 @@ hardware_interface::CallbackReturn RRBotSystemPositionOnlyHardware::on_activate(
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   // command and state should be equal when starting
-  for (uint i = 0; i < hw_states_.size(); i++)
+  for (uint i = 0; i < joint_pos_states_.size(); i++)
   {
-    hw_commands_[i] = hw_states_[i];
+    joint_pos_commands_[i] = joint_pos_states_[i];
   }
 
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "Successfully activated!");
@@ -194,13 +168,14 @@ hardware_interface::return_type RRBotSystemPositionOnlyHardware::read(
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "Reading...");
 
-  for (uint i = 0; i < hw_states_.size(); i++)
+  for (uint i = 0; i < joint_pos_states_.size(); i++)
   {
     // Simulate RRBot's movement
-    hw_states_[i] = hw_states_[i] + (hw_commands_[i] - hw_states_[i]) / hw_slowdown_;
+    joint_pos_states_[i] =
+      joint_pos_states_[i] + (joint_pos_commands_[i] - joint_pos_states_[i]) / hw_slowdown_;
     RCLCPP_INFO(
       rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "Got state %.5f for joint %d!",
-      hw_states_[i], i);
+      joint_pos_states_[i], i);
   }
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "Joints successfully read!");
   // END: This part here is for exemplary purposes - Please do not copy to your production code
@@ -214,12 +189,12 @@ hardware_interface::return_type RRBotSystemPositionOnlyHardware::write(
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "Writing...");
 
-  for (uint i = 0; i < hw_commands_.size(); i++)
+  for (uint i = 0; i < joint_pos_commands_.size(); i++)
   {
     // Simulate sending commands to the hardware
     RCLCPP_INFO(
       rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "Got command %.5f for joint %d!",
-      hw_commands_[i], i);
+      joint_pos_commands_[i], i);
   }
   RCLCPP_INFO(
     rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "Joints successfully written!");
