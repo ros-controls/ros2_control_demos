@@ -13,6 +13,7 @@ groups:
   - name: reviewers
     reviewers: 5
     usernames:
+<<<<<<< HEAD
       - rosterloh
       - progtologist
       - arne48
@@ -32,4 +33,22 @@ groups:
       - duringhof
       - bijoua29
       - lm2292
+=======
+      - aprotyas
+      - arne48
+      - bijoua29
+      - DasRoteSkelett
+      - duringhof
+      - erickisos
+      - fmauch
+      - jaron-l
+      - livanov93
+>>>>>>> 01dadce (Update list of reviewers (#386))
       - mcbed
+      - moriarty
+      - olivier-stasse
+      - peterdavidfagan
+      - progtologist
+      - saikishor
+      - VanshGehlot
+      - VX792
