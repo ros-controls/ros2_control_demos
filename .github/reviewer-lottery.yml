@@ -3,37 +3,17 @@ groups:
   # Usually, at least on of the maintainers should approve PR before merging.
   # The best is if two maintainers do that.
   - name: maintainers # name of the group
-    reviewers: 2 # how many reviewers do you want to assign?
+    reviewers: 3 # how many reviewers do you want to assign?
     internal_reviewers: 1 # how many reviewers do you want to assign when the PR author belongs to this group?
     usernames: # github usernames of the reviewers
       - bmagyar
       - destogl
+      - christophfroehlich
 
   # Reviewers group to get broader feedback.
   - name: reviewers
     reviewers: 5
     usernames:
-<<<<<<< HEAD
-      - rosterloh
-      - progtologist
-      - arne48
-      - DasRoteSkelett
-      - Serafadam
-      - harderthan
-      - jaron-l
-      - malapatiravi
-      - homalozoa
-      - erickisos
-      - anfemosa
-      - VX792
-      - mhubii
-      - livanov93
-      - aprotyas
-      - peterdavidfagan
-      - duringhof
-      - bijoua29
-      - lm2292
-=======
       - aprotyas
       - arne48
       - bijoua29
@@ -43,7 +23,6 @@ groups:
       - fmauch
       - jaron-l
       - livanov93
->>>>>>> 01dadce (Update list of reviewers (#386))
       - mcbed
       - moriarty
       - olivier-stasse
