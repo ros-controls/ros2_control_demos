@@ -101,11 +101,11 @@ hardware_interface::CallbackReturn RRBotSystemPositionOnlyHardware::on_configure
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   // reset values always when configuring hardware
-  for (const auto & descr : joint_states_descriptions_)
+  for (const auto & [name, descr] : joint_state_interfaces_)
   {
     joint_state_set_value(descr, 0.0);
   }
-  for (const auto & descr : joint_commands_descriptions_)
+  for (const auto & [name, descr] : joint_command_interfaces_)
   {
     joint_command_set_value(descr, 0.0);
   }
@@ -131,7 +131,7 @@ hardware_interface::CallbackReturn RRBotSystemPositionOnlyHardware::on_activate(
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   // command and state should be equal when starting
-  for (const auto & descr : joint_states_descriptions_)
+  for (const auto & [name, descr] : joint_state_interfaces_)
   {
     joint_command_set_value(descr, joint_state_get_value(descr));
   }
@@ -168,7 +168,7 @@ hardware_interface::return_type RRBotSystemPositionOnlyHardware::read(
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "Reading...");
 
-  for (const auto & descr : joint_states_descriptions_)
+  for (const auto & [name, descr] : joint_state_interfaces_)
   {
     auto new_value = joint_state_get_value(descr) +
                      (joint_command_get_value(descr) - joint_state_get_value(descr)) / hw_slowdown_;
@@ -190,7 +190,7 @@ hardware_interface::return_type RRBotSystemPositionOnlyHardware::write(
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "Writing...");
 
-  for (const auto & descr : joint_commands_descriptions_)
+  for (const auto & [name, descr] : joint_command_interfaces_)
   {
     // Simulate sending commands to the hardware
     RCLCPP_INFO_STREAM(
