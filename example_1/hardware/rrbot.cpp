@@ -103,11 +103,11 @@ hardware_interface::CallbackReturn RRBotSystemPositionOnlyHardware::on_configure
   // reset values always when configuring hardware
   for (const auto & [name, descr] : joint_state_interfaces_)
   {
-    joint_state_set_value(descr, 0.0);
+    set_state(name, 0.0);
   }
   for (const auto & [name, descr] : joint_command_interfaces_)
   {
-    joint_command_set_value(descr, 0.0);
+    set_command(name, 0.0);
   }
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "Successfully configured!");
 
@@ -133,7 +133,7 @@ hardware_interface::CallbackReturn RRBotSystemPositionOnlyHardware::on_activate(
   // command and state should be equal when starting
   for (const auto & [name, descr] : joint_state_interfaces_)
   {
-    joint_command_set_value(descr, joint_state_get_value(descr));
+    set_command(name, get_state(name));
   }
 
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "Successfully activated!");
@@ -170,13 +170,12 @@ hardware_interface::return_type RRBotSystemPositionOnlyHardware::read(
 
   for (const auto & [name, descr] : joint_state_interfaces_)
   {
-    auto new_value = joint_state_get_value(descr) +
-                     (joint_command_get_value(descr) - joint_state_get_value(descr)) / hw_slowdown_;
-    joint_state_set_value(descr, new_value);
+    auto new_value = get_state(name) + (get_command(name) - get_state(name)) / hw_slowdown_;
+    set_state(name, new_value);
     // Simulate RRBot's movement
     RCLCPP_INFO_STREAM(
       rclcpp::get_logger("RRBotSystemPositionOnlyHardware"),
-      "Got state " << joint_state_get_value(descr) << " for joint: " << descr.get_name() << "!");
+      "Got state " << get_state(name) << " for joint: " << name << "!");
   }
   RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "Joints successfully read!");
   // END: This part here is for exemplary purposes - Please do not copy to your production code
@@ -195,7 +194,7 @@ hardware_interface::return_type RRBotSystemPositionOnlyHardware::write(
     // Simulate sending commands to the hardware
     RCLCPP_INFO_STREAM(
       rclcpp::get_logger("RRBotSystemPositionOnlyHardware"),
-      "Got command" << joint_command_get_value(descr) << " for joint: " << descr.get_name() << "!");
+      "Got command" << get_command(name) << " for joint: " << name << "!");
   }
   RCLCPP_INFO(
     rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "Joints successfully written!");
