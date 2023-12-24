@@ -6,8 +6,20 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    if: ${{ github.actor != 'dependabot[bot]' && github.actor != 'mergify[bot]' }}
     steps:
+<<<<<<< HEAD
     - uses: actions/checkout@v3
     - uses: uesteibar/reviewer-lottery@v2
+=======
+    - name: Dump GitHub context
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
+      run: |
+        echo "$GITHUB_CONTEXT"
+        echo "The GitHub Actor's username is: $GITHUB_ACTOR"
+    - uses: actions/checkout@v4
+    - uses: uesteibar/reviewer-lottery@v3
+>>>>>>> 159e89b (Don't run reviewer lottery from bots (#397))
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
