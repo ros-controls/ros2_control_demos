@@ -15,7 +15,7 @@ jobs:
     container:
       image: ubuntu:jammy
     steps:
-      - uses: ros-tooling/setup-ros@v0.6
+      - uses: ros-tooling/setup-ros@v0.7
         with:
           required-ros-distributions: ${{ env.ROS_DISTRO }}
       - uses: actions/checkout@v3
