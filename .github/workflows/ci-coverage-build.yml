@@ -15,7 +15,7 @@ jobs:
     container:
       image: ubuntu:jammy
     steps:
-      - uses: ros-tooling/setup-ros@v0.6
+      - uses: ros-tooling/setup-ros@v0.7
         with:
           required-ros-distributions: ${{ env.ROS_DISTRO }}
       - uses: actions/checkout@v3
@@ -53,7 +53,7 @@ jobs:
           file: ros_ws/lcov/total_coverage.info
           flags: unittests
           name: codecov-umbrella
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: colcon-logs-coverage-ubuntu-22.04
           path: ros_ws/log
