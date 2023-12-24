@@ -17,7 +17,7 @@ jobs:
     - uses: ros-tooling/setup-ros@v0.7
     - uses: ros-tooling/action-ros-lint@v0.1
       with:
-        distribution: rolling
+        distribution: humble
         linter: ${{ matrix.linter }}
         package-name:
           ros2_control_demo_example_1
@@ -45,7 +45,7 @@ jobs:
     - uses: ros-tooling/setup-ros@v0.7
     - uses: ros-tooling/action-ros-lint@v0.1
       with:
-        distribution: rolling
+        distribution: humble
         linter: cpplint
         arguments: "--linelength=100 --filter=-whitespace/newline"
         package-name:
