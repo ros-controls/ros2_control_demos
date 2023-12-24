@@ -6,7 +6,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    if: github.actor != 'dependabot[bot]' && github.actor != 'mergify[bot]'
+    if: ${{ github.actor != 'dependabot[bot]' && github.actor != 'mergify[bot]' }}
     steps:
     - name: Dump GitHub context
       env:
