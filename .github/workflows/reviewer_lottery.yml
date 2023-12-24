@@ -4,10 +4,11 @@ on:
     types: [opened, ready_for_review, reopened]
 
 jobs:
-  test:
+  reviewer-lottery:
     runs-on: ubuntu-latest
+    if: ${{ ! contains(fromJSON('["dependabot[bot]", "mergify[bot]"]'), github.actor) }}
     steps:
-    - uses: actions/checkout@v3
-    - uses: uesteibar/reviewer-lottery@v2
+    - uses: actions/checkout@v4
+    - uses: uesteibar/reviewer-lottery@v3
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
