@@ -6,7 +6,16 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    if: ${{ github.actor != 'dependabot[bot]' && github.actor != 'mergify[bot]' }}
+    steps:
+    - name: Dump GitHub context
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
+      run: |
+        echo "$GITHUB_CONTEXT"
+        echo "The GitHub Actor's username is: $GITHUB_ACTOR"
+  reviewer-lottery:
+    runs-on: ubuntu-latest
+    if: ${{ ! contains(fromJSON('["dependabot[bot]", "mergify[bot]"]'), github.actor) }}
     steps:
     - name: Dump GitHub context
       env:
