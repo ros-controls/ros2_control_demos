@@ -1,7 +1,6 @@
 name: Context testing
 on:
-  pull_request_target:
-    types: [opened, ready_for_review, reopened]
+  pull_request:
 
 jobs:
   dump_contexts_to_log:
