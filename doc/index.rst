@@ -272,3 +272,4 @@ Examples
    Example 10: Industrial robot with GPIO interfaces <../example_10/doc/userdoc.rst>
    Example 12: Controller chaining <../example_12/doc/userdoc.rst>
    Example 14: Modular robots with actuators not providing states <../example_14/doc/userdoc.rst>
+   Example 15: Multi-robot system with namespaced controller_manager <../example_15/doc/userdoc.rst>
