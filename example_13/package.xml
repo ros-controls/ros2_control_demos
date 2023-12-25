@@ -16,8 +16,6 @@
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
-  <exec_depend>rrbot_description</exec_depend>
-  <exec_depend>r3bot_description</exec_depend>
   <exec_depend>ros2_control_demo_example_4</exec_depend>
   <exec_depend>ros2_control_demo_example_5</exec_depend>
   <exec_depend>rviz2</exec_depend>
