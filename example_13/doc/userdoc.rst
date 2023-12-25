@@ -117,12 +117,17 @@ Tutorial steps
 
 1. After starting the example there should be the following scene:
     - right robot is moving (RRBotSystemPositionOnly - using auto-start)
+
       - All interfaces are available and position controller is started and receives commands
       - all controllers running
+
     - left robot is standing upright (RRBotWithSensor - using auto-configure)
+
       - only state interfaces are available therefore it can visualized, but not moved
       - only position command controller is not running
+
     - middle robot is "broken" (FakeThreeDofBot - it is only initialized)
+
       - no interfaces are available
       - all controllers inactive
 
@@ -248,7 +253,7 @@ Tutorial steps
 
   - right robot is moving
   - left robot is moving
-  - middle robot is standing still
+  - middle robot is still "broken"
 
   Hardware status: ``FakeThreeDofBot`` is in inactive state.
 
@@ -377,7 +382,7 @@ Tutorial steps
 
   Scenario state:
 
-  - right robot is "standing"
+  - right robot is now "standing" at the last position
   - left robot is moving
   - middle robot is moving
 

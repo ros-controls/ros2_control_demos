@@ -45,10 +45,15 @@ controller_manager:
     threedofbot_pid_gain_controller:
       type: forward_command_controller/ForwardCommandController
 
+# global joint_state_broadcaster
+# joint_state_broadcaster:
+#   ros__parameters:
+    # nothing to configure
 
 # RRBot controllers
 rrbot_joint_state_broadcaster:
   ros__parameters:
+    use_local_topics: True
     joints:
       - rrbot_joint1
       - rrbot_joint2
@@ -71,6 +76,7 @@ rrbot_external_fts_broadcaster:
 # RRBot with sensor controllers
 rrbot_with_sensor_joint_state_broadcaster:
   ros__parameters:
+    use_local_topics: True
     joints:
       - rrbot_with_sensor_joint1
       - rrbot_with_sensor_joint2
@@ -93,6 +99,7 @@ rrbot_with_sensor_fts_broadcaster:
 # ThreeDofBot controllers
 threedofbot_joint_state_broadcaster:
   ros__parameters:
+    use_local_topics: True
     joints:
       - threedofbot_joint1
       - threedofbot_joint2
