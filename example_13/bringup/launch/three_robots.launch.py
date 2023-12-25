@@ -68,7 +68,6 @@ def generate_launch_description():
     position_goals = PathJoinSubstitution(
         [
             FindPackageShare("ros2_control_demo_example_13"),
-            "bringup",
             "config",
             "three_robots_position_command_publishers.yaml",
         ]
@@ -177,30 +176,18 @@ def generate_launch_description():
         executable="publisher_forward_position_controller",
         name="rrbot_position_command_publisher",
         parameters=[position_goals],
-        output={
-            "stdout": "screen",
-            "stderr": "screen",
-        },
     )
     rrbot_with_sensor_position_command_publisher = Node(
         package="ros2_controllers_test_nodes",
         executable="publisher_forward_position_controller",
         name="rrbot_with_sensor_position_command_publisher",
         parameters=[position_goals],
-        output={
-            "stdout": "screen",
-            "stderr": "screen",
-        },
     )
     threedofbot_position_command_publisher = Node(
         package="ros2_controllers_test_nodes",
         executable="publisher_forward_position_controller",
         name="threedofbot_position_command_publisher",
         parameters=[position_goals],
-        output={
-            "stdout": "screen",
-            "stderr": "screen",
-        },
     )
 
     nodes = [
