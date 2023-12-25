@@ -26,6 +26,7 @@
   <exec_depend>ros2_control_demo_example_10</exec_depend>
   <exec_depend>ros2_control_demo_example_12</exec_depend>
   <exec_depend>ros2_control_demo_example_14</exec_depend>
+  <exec_depend>ros2_control_demo_example_15</exec_depend>
 
   <export>
     <build_type>ament_cmake</build_type>
