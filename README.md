@@ -70,7 +70,7 @@ The following examples are part of this demo repository:
 
 * Example 14: ["Modular robots with actuators not providing states and with additional sensors"](example_14)
 
-* Example 15: ["Multi-robot system with namepaced controller_manager"](example_15)
+* Example 15: ["Using multiple controller managers under different namespaces"](example_15)
 
    This example shows how to include multiple robots in namespaced controller manager instances.
 

@@ -2,9 +2,10 @@
 
 .. _ros2_control_demos_example_15_userdoc:
 
-Example 15: Multi-robot system with namespaced controller_manager
-=================================================================
+Example 15: Using multiple controller managers under different namespaces
+=========================================================================
 
+This example shows how to include multiple robots in namespaced controller manager instances.
 
 .. include:: ../../doc/run_from_docker.rst
 
