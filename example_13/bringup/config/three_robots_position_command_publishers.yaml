@@ -1,7 +1,7 @@
 rrbot_position_command_publisher:
   ros__parameters:
 
-    controller_name: "rrbot_position_controller"
+    publish_topic: "/rrbot_position_controller/commands"
     wait_sec_between_publish: 5
 
     goal_names: ["pos1", "pos2", "pos3", "pos4"]
@@ -14,7 +14,7 @@ rrbot_position_command_publisher:
 rrbot_with_sensor_position_command_publisher:
   ros__parameters:
 
-    controller_name: "rrbot_with_sensor_position_controller"
+    publish_topic: "/rrbot_with_sensor_position_controller/commands"
     wait_sec_between_publish: 4
 
     goal_names: ["pos1", "pos2", "pos3", "pos4"]
@@ -27,7 +27,7 @@ rrbot_with_sensor_position_command_publisher:
 threedofbot_position_command_publisher:
   ros__parameters:
 
-    controller_name: "threedofbot_position_controller"
+    publish_topic: "/threedofbot_position_controller/commands"
     wait_sec_between_publish: 3
 
     goal_names: ["pos1", "pos2", "pos3", "pos4"]
