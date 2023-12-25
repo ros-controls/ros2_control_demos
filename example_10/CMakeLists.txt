@@ -67,6 +67,10 @@ install(
   DIRECTORY bringup/launch bringup/config
   DESTINATION share/ros2_control_demo_example_10
 )
+install(
+  DIRECTORY test
+  DESTINATION share/ros2_control_demo_example_10
+)
 install(TARGETS ros2_control_demo_example_10
   EXPORT export_ros2_control_demo_example_10
   ARCHIVE DESTINATION lib
@@ -75,7 +79,10 @@ install(TARGETS ros2_control_demo_example_10
 )
 
 if(BUILD_TESTING)
-  find_package(ament_cmake_gtest REQUIRED)
+  find_package(ament_cmake_pytest REQUIRED)
+
+  ament_add_pytest_test(example_10_urdf_xacro test/test_urdf_xacro.py)
+  ament_add_pytest_test(view_example_10_launch test/test_view_robot_launch.py)
 endif()
 
 ## EXPORTS
