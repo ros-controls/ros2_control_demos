@@ -67,10 +67,6 @@ install(
   DIRECTORY bringup/launch bringup/config
   DESTINATION share/ros2_control_demo_example_10
 )
-install(
-  DIRECTORY test
-  DESTINATION share/ros2_control_demo_example_10
-)
 install(TARGETS ros2_control_demo_example_10
   EXPORT export_ros2_control_demo_example_10
   ARCHIVE DESTINATION lib

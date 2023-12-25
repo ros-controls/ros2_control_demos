@@ -87,10 +87,6 @@ install(
   DESTINATION share/ros2_control_demo_example_7
 )
 install(
-  DIRECTORY test
-  DESTINATION share/ros2_control_demo_example_7
-)
-install(
     TARGETS send_trajectory
     RUNTIME DESTINATION lib/ros2_control_demo_example_7
 )
