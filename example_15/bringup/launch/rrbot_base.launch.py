@@ -51,7 +51,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "description_package",
-            default_value="rrbot_description",
+            default_value="ros2_control_demo_description",
             description="Description package with robot URDF/xacro files. Usually the argument \
         is not set, it enables use of a custom description.",
         )
@@ -80,17 +80,17 @@ def generate_launch_description():
     )
     declared_arguments.append(
         DeclareLaunchArgument(
-            "use_fake_hardware",
+            "use_mock_hardware",
             default_value="true",
-            description="Start robot with fake hardware mirroring command to its states.",
+            description="Start robot with mock hardware mirroring command to its states.",
         )
     )
     declared_arguments.append(
         DeclareLaunchArgument(
             "mock_sensor_commands",
             default_value="false",
-            description="Enable fake command interfaces for sensors used for simple simulations. \
-            Used only if 'use_fake_hardware' parameter is true.",
+            description="Enable mock command interfaces for sensors used for simple simulations. \
+            Used only if 'use_mock_hardware' parameter is true.",
         )
     )
     declared_arguments.append(
@@ -129,7 +129,7 @@ def generate_launch_description():
     description_file = LaunchConfiguration("description_file")
     prefix = LaunchConfiguration("prefix")
     use_gazebo = LaunchConfiguration("use_gazebo")
-    use_fake_hardware = LaunchConfiguration("use_fake_hardware")
+    use_mock_hardware = LaunchConfiguration("use_mock_hardware")
     mock_sensor_commands = LaunchConfiguration("mock_sensor_commands")
     slowdown = LaunchConfiguration("slowdown")
     controller_manager_name = LaunchConfiguration("controller_manager_name")
@@ -151,8 +151,8 @@ def generate_launch_description():
             "use_gazebo:=",
             use_gazebo,
             " ",
-            "use_fake_hardware:=",
-            use_fake_hardware,
+            "use_mock_hardware:=",
+            use_mock_hardware,
             " ",
             "mock_sensor_commands:=",
             mock_sensor_commands,

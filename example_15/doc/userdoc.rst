@@ -31,6 +31,12 @@ Scenario showcase: Using ros2_control within a local namespace
 
   When running ``ros2 control`` CLI commands you have to use additional parameter with exact controller manager node name, i.e., ``-c /rrbot/controller_manager``.
 
+Launch the example with
+
+.. code-block:: shell
+
+  ros2 launch ros2_control_demo_example_15 rrbot_namespace.launch.py
+
 - Command interfaces:
 
   - joint1/position
@@ -43,24 +49,21 @@ Scenario showcase: Using ros2_control within a local namespace
 
 Available controllers: (nodes under namespace "/rrbot")
 
-- ``forward_position_controller[forward_command_controller/ForwardCommandController]``
-- ``joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]``
+.. code-block:: shell
 
-List controllers:
+  $ ros2 control list_controllers -c /rrbot/controller_manager
+  joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+  forward_position_controller[forward_command_controller/ForwardCommandController] active
+  position_trajectory_controller[joint_trajectory_controller/JointTrajectoryController] inactive
+
+
+Commanding the robot using a ``ForwardCommandController`` (name: ``/rrbot/forward_position_controller``)
 
 .. code-block:: shell
 
-  ros2 control list_controllers -c /rrbot/controller_manager
+  ros2 launch ros2_control_demo_example_15 test_forward_position_controller.launch.py publisher_config:=rrbot_namespace_forward_position_publisher.yaml
 
-
-Commanding the robot using ``/rrbot/forward_position_controller`` (a ``ForwardCommandController``))
-
-.. code-block:: shell
-
-  ros2 launch ros2_control_demo_bringup test_forward_position_controller.launch.py publisher_config:=rrbot_namespace_forward_position_publisher.yaml
-
-
-Switch controller to use ``JointTrajectoryController`` (name: ``/rrbot/position_trajectory_controller``):
+Abort the command and switch controller to use ``JointTrajectoryController`` (name: ``/rrbot/position_trajectory_controller``):
 
 .. code-block:: shell
 
@@ -70,7 +73,7 @@ Commanding the robot using ``JointTrajectoryController`` (name: ``/rrbot/positio
 
 .. code-block:: shell
 
-  ros2 launch ros2_control_demo_bringup test_joint_trajectory_controller.launch.py publisher_config:=rrbot_namespace_joint_trajectory_publisher.yaml
+  ros2 launch ros2_control_demo_example_15 test_joint_trajectory_controller.launch.py publisher_config:=rrbot_namespace_joint_trajectory_publisher.yaml
 
 Scenario showcase: Using multiple controller managers on the same machine
 -------------------------------------------------------------------------
@@ -97,6 +100,18 @@ Scenario showcase: Using multiple controller managers on the same machine
 
   When running ``ros2 control`` CLI commands you have to use additional parameter with exact controller manager node name, e.g., ``-c /rrbot_1/controller_manager`` or ``-c /rrbot_2/controller_manager``.
 
+Launch the example with
+
+.. code-block:: shell
+
+  ros2 launch ros2_control_demo_example_15 multi_controller_manager_example_two_rrbots.launch.py
+
+You should see two robots in RViz:
+
+   .. image:: two_rrbot.png
+    :width: 400
+    :alt: Two Revolute-Revolute Manipulator Robot
+
 ``rrbot_1`` namespace:
 
   - Command interfaces:
@@ -121,38 +136,38 @@ Scenario showcase: Using multiple controller managers on the same machine
     - rrbot_2_joint1/position
     - rrbot_2_joint2/position
 
-Available controllers (nodes under namespace "/rrbot_1" and "/rrbot_2"):
-
-- ``forward_position_controller[forward_command_controller/ForwardCommandController]``
-- ``joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]``
-
-List controllers:
+Available controllers (nodes under namespace ``/rrbot_1`` and ``/rrbot_2``):
 
 .. code-block:: shell
 
-  ros2 control list_controllers -c /rrbot_1/controller_manager
-  ros2 control list_controllers -c /rrbot_2/controller_manager
+  $ ros2 control list_controllers -c /rrbot_1/controller_manager
+  position_trajectory_controller[joint_trajectory_controller/JointTrajectoryController] inactive
+  joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+  forward_position_controller[forward_command_controller/ForwardCommandController] active
 
-Commanding the robot using ``forward_position_controller`` (a ``ForwardCommandController``)
+  $ ros2 control list_controllers -c /rrbot_2/controller_manager
+  joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+  position_trajectory_controller[joint_trajectory_controller/JointTrajectoryController] inactive
+  forward_position_controller[forward_command_controller/ForwardCommandController] active
 
+Commanding the robots using the ``forward_position_controller`` (of type ``ForwardCommandController``)
 
 .. code-block:: shell
 
-  ros2 launch ros2_control_demo_bringup test_multi_controller_manager_forward_position_controller.launch.py
+  ros2 launch ros2_control_demo_example_15 test_multi_controller_manager_forward_position_controller.launch.py
 
-Switch controller to use ``position_trajectory_controller`` (a ``JointTrajectoryController``) - alternatively start main launch file with argument ``robot_controller:=position_trajectory_controller``:
-
+Switch controller to use the ``position_trajectory_controller`` (of type ``JointTrajectoryController``) - alternatively start main launch file with argument ``robot_controller:=position_trajectory_controller``:
 
 .. code-block:: shell
 
   ros2 control switch_controllers -c /rrbot_1/controller_manager --deactivate forward_position_controller --activate position_trajectory_controller
   ros2 control switch_controllers -c /rrbot_2/controller_manager --deactivate forward_position_controller --activate position_trajectory_controller
 
-Commanding the robot using ``position_trajectory_controller`` (a ``JointTrajectoryController``):
+Commanding the robots using the now activated ``position_trajectory_controller``:
 
 .. code-block:: shell
 
-  ros2 launch ros2_control_demo_bringup test_multi_controller_manager_joint_trajectory_controller.launch.py
+  ros2 launch ros2_control_demo_example_15 test_multi_controller_manager_joint_trajectory_controller.launch.py
 
 Controllers from this demo
 --------------------------

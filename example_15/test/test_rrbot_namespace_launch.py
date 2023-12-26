@@ -45,7 +45,7 @@ def generate_test_description():
         PythonLaunchDescriptionSource(
             os.path.join(
                 get_package_share_directory("ros2_control_demo_example_15"),
-                "launch/three_robots.launch.py",
+                "launch/rrbot_namespace.launch.py",
             )
         ),
         launch_arguments={"gui": "true"}.items(),

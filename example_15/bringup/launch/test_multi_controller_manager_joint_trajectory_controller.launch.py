@@ -23,7 +23,7 @@ def generate_launch_description():
     # For example: the parameters for different node may be placed into the same yaml file
     position_goals = PathJoinSubstitution(
         [
-            FindPackageShare("ros2_control_demo_bringup"),
+            FindPackageShare("ros2_control_demo_example_15"),
             "config",
             "multi_controller_manager_joint_trajectory_publisher.yaml",
         ]

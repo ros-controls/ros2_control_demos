@@ -26,17 +26,17 @@ def generate_launch_description():
     declared_arguments = []
     declared_arguments.append(
         DeclareLaunchArgument(
-            "use_fake_hardware",
+            "use_mock_hardware",
             default_value="false",
             description="Start robot with fake hardware mirroring command to its states.",
         )
     )
     declared_arguments.append(
         DeclareLaunchArgument(
-            "fake_sensor_commands",
+            "mock_sensor_commands",
             default_value="false",
             description="Enable fake command interfaces for sensors used for simple simulations. \
-            Used only if 'use_fake_hardware' parameter is true.",
+            Used only if 'use_mock_hardware' parameter is true.",
         )
     )
     declared_arguments.append(
@@ -53,8 +53,8 @@ def generate_launch_description():
     )
 
     # Initialize Arguments
-    use_fake_hardware = LaunchConfiguration("use_fake_hardware")
-    fake_sensor_commands = LaunchConfiguration("fake_sensor_commands")
+    use_mock_hardware = LaunchConfiguration("use_mock_hardware")
+    mock_sensor_commands = LaunchConfiguration("mock_sensor_commands")
     slowdown = LaunchConfiguration("slowdown")
     robot_controller = LaunchConfiguration("robot_controller")
 
@@ -62,11 +62,13 @@ def generate_launch_description():
         PythonLaunchDescriptionSource([ThisLaunchFileDir(), "/rrbot_base.launch.py"]),
         launch_arguments={
             "namespace": "rrbot_1",
-            "controllers_file": "multi_controller_manager_rrbot_1_controllers.yaml",
+            "description_package": "ros2_control_demo_example_1",
             "description_file": "rrbot.urdf.xacro",
+            "runtime_config_package": "ros2_control_demo_example_15",
+            "controllers_file": "multi_controller_manager_rrbot_1_controllers.yaml",
             "prefix": "rrbot_1_",
-            "use_fake_hardware": use_fake_hardware,
-            "fake_sensor_commands": fake_sensor_commands,
+            "use_mock_hardware": use_mock_hardware,
+            "mock_sensor_commands": mock_sensor_commands,
             "slowdown": slowdown,
             "controller_manager_name": "/rrbot_1/controller_manager",
             "robot_controller": robot_controller,
@@ -89,11 +91,13 @@ def generate_launch_description():
         PythonLaunchDescriptionSource([ThisLaunchFileDir(), "/rrbot_base.launch.py"]),
         launch_arguments={
             "namespace": "rrbot_2",
+            "description_package": "ros2_control_demo_example_5",
+            "description_file": "rrbot_system_with_external_sensor.urdf.xacro",
+            "runtime_config_package": "ros2_control_demo_example_15",
             "controllers_file": "multi_controller_manager_rrbot_2_controllers.yaml",
-            "description_file": "rrbot_system_position_only.urdf.xacro",
             "prefix": "rrbot_2_",
-            "use_fake_hardware": use_fake_hardware,
-            "fake_sensor_commands": fake_sensor_commands,
+            "use_mock_hardware": use_mock_hardware,
+            "mock_sensor_commands": mock_sensor_commands,
             "slowdown": slowdown,
             "controller_manager_name": "/rrbot_2/controller_manager",
             "robot_controller": robot_controller,
@@ -113,7 +117,7 @@ def generate_launch_description():
     )
 
     rviz_config_file = PathJoinSubstitution(
-        [FindPackageShare("rrbot_description"), "config", "multi_controller_manager.rviz"]
+        [FindPackageShare("ros2_control_demo_example_15"), "rviz", "multi_controller_manager.rviz"]
     )
 
     rviz_node = Node(

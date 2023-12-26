@@ -17,7 +17,7 @@ endforeach()
 
 # INSTALL
 install(
-  DIRECTORY description/ros2_control description/urdf description/rviz
+  DIRECTORY description/rviz
   DESTINATION share/ros2_control_demo_example_15
 )
 install(
@@ -29,8 +29,9 @@ if(BUILD_TESTING)
   find_package(ament_cmake_gtest REQUIRED)
   find_package(ament_cmake_pytest REQUIRED)
 
-  ament_add_pytest_test(example_15_urdf_xacro test/test_urdf_xacro.py)
-  ament_add_pytest_test(view_example_15_launch test/test_view_robot_launch.py)
+  ament_add_pytest_test(test_rrbot_namespace_launch test/test_rrbot_namespace_launch.py)
+  ament_add_pytest_test(test_multi_controller_manager_launch test/test_multi_controller_manager_launch.py)
+
 endif()
 
 ## EXPORTS
