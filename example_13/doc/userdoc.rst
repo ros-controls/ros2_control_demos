@@ -115,6 +115,11 @@ Tutorial steps
 .. include:: ../../doc/run_from_docker.rst
 
 1. After starting the example there should be the following scene:
+
+   .. code-block:: shell
+
+   ros2 launch ros2_control_demo_example_13 three_robots.launch.py
+    
     - right robot is moving (RRBotSystemPositionOnly - using auto-start)
 
       - All interfaces are available and position controller is started and receives commands
