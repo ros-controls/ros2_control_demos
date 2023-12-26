@@ -75,8 +75,8 @@ Example 11: "Car-like robot using steering controller library (tba.)"
 Example 12: "Controller chaining"
    The example shows a simple chainable controller and its integration to form a controller chain to control the joints of *RRBot*.
 
-Example 13: "Multi-robot system with lifecycle management"
-   This example shows how to include multiple robots in a single controller manager instance.
+Example 13: "Multi-robot system with hardware lifecycle management"
+   This example shows how to handle multiple robots in a single controller manager instance.
 
 Example 14: "Modular robots with actuators not providing states and with additional sensors"
 
