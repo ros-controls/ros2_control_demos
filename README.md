@@ -70,9 +70,11 @@ The following examples are part of this demo repository:
 
 * Example 14: ["Modular robots with actuators not providing states and with additional sensors"](example_14)
 
-* Example 15: ["Using multiple controller managers under different namespaces"](example_15)
+   The example shows how to implement robot hardware with actuators not providing states and with additional sensors.
 
-   This example shows how to include multiple robots in namespaced controller manager instances.
+* Example 15: ["Using multiple controller managers"](example_15)
+
+   This example shows how to integrate multiple robots under different controller manager instances.
 
 ## Structure
 

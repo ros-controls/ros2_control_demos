@@ -2,15 +2,15 @@
 
 .. _ros2_control_demos_example_15_userdoc:
 
-Example 15: Using multiple controller managers under different namespaces
-=========================================================================
+Example 15: Using multiple controller managers
+==============================================
 
-This example shows how to include multiple robots in namespaced controller manager instances.
+This example shows how to integrate multiple robots under different controller manager instances.
 
 .. include:: ../../doc/run_from_docker.rst
 
-Scenario showcase: Using ros2_control within a local namespace
-----------------------------------------------------------------
+Scenario: Using ros2_control within a local namespace
+-----------------------------------------------------
 
 * Launch file: `rrbot_namespace.launch.py <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_15/bringup/launch/rrbot_namespace.launch.py>`__
 * Controllers yaml: `rrbot_namespace_controllers.yaml <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_15/bringup/config/rrbot_namespace_controllers.yaml>`__
@@ -75,8 +75,8 @@ Commanding the robot using ``JointTrajectoryController`` (name: ``/rrbot/positio
 
   ros2 launch ros2_control_demo_example_15 test_joint_trajectory_controller.launch.py publisher_config:=rrbot_namespace_joint_trajectory_publisher.yaml
 
-Scenario showcase: Using multiple controller managers on the same machine
--------------------------------------------------------------------------
+Scenario: Using multiple controller managers on the same machine
+----------------------------------------------------------------
 
 * Launch file: `multi_controller_manager_example_two_rrbots.launch.py <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_15/bringup/launch/multi_controller_manager_example_two_rrbots.launch.py>`__
 * Controllers yaml:

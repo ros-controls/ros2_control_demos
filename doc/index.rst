@@ -80,8 +80,8 @@ Example 13: "Multi-robot example (tba.)"
 Example 14: "Modular robots with actuators not providing states and with additional sensors"
    The example shows how to implement robot hardware with actuators not providing states and with additional sensors.
 
-Example 15: "Using multiple controller managers under different namespaces"
-   This example shows how to include multiple robots in namespaced controller manager instances.
+Example 15: "Using multiple controller managers"
+   This example shows how to integrate multiple robots under different controller manager instances.
 
 
 .. _ros2_control_demos_install:
@@ -276,4 +276,4 @@ Examples
    Example 10: Industrial robot with GPIO interfaces <../example_10/doc/userdoc.rst>
    Example 12: Controller chaining <../example_12/doc/userdoc.rst>
    Example 14: Modular robots with actuators not providing states <../example_14/doc/userdoc.rst>
-   Example 15: Using multiple controller managers under different namespaces <../example_15/doc/userdoc.rst>
+   Example 15: Using multiple controller managers <../example_15/doc/userdoc.rst>
