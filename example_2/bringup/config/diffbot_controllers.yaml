@@ -32,7 +32,6 @@ diffbot_base_controller:
 
     cmd_vel_timeout: 0.5
     #publish_limited_velocity: true
-    use_stamped_vel: false
     #velocity_rolling_window_size: 10
 
     # Velocity and acceleration limits
