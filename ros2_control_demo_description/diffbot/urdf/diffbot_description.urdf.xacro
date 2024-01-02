@@ -49,6 +49,7 @@
       <origin xyz="0 -${base_width/2} ${z_offset}" rpy="0 0 0"/>
       <axis xyz="0 1 0"/>
       <dynamics damping="0.2"/>
+      <limit effort="100" velocity="1.0"/>
     </joint>
 
     <!-- left wheel Link -->
@@ -72,9 +73,9 @@
         <origin xyz="0 0 0" rpy="${PI/2} 0 0"/>
         <mass value="${wheel_mass}"/>
         <inertia
-          ixx="${wheel_mass / 12.0 * (3*wheel_radius + wheel_len*wheel_len)}" ixy="0.0" ixz="0.0"
-          iyy="${wheel_mass / 12.0 * wheel_radius*wheel_radius}" iyz="0.0"
-          izz="${wheel_mass / 12.0 * wheel_radius*wheel_radius}"/>
+          ixx="${wheel_mass / 12.0 * (3*wheel_radius*wheel_radius + wheel_len*wheel_len)}" ixy="0.0" ixz="0.0"
+          iyy="${wheel_mass / 12.0 * (3*wheel_radius*wheel_radius + wheel_len*wheel_len)}" iyz="0.0"
+          izz="${wheel_mass / 2.0 * wheel_radius*wheel_radius}"/>
         </inertial>
       </link>
 
@@ -84,6 +85,7 @@
       <origin xyz="0 ${base_width/2} ${z_offset}" rpy="0 0 0"/>
       <axis xyz="0 1 0"/>
       <dynamics damping="0.2"/>
+      <limit effort="100" velocity="1.0"/>
     </joint>
 
     <!-- right wheel Link -->
@@ -107,9 +109,9 @@
         <origin xyz="0 0 0" rpy="${PI/2} 0 0"/>
         <mass value="${wheel_mass}"/>
         <inertia
-          ixx="${wheel_mass / 12.0 * (3*wheel_radius + wheel_len*wheel_len)}" ixy="0.0" ixz="0.0"
-          iyy="${wheel_mass / 12.0 * wheel_radius*wheel_radius}" iyz="0.0"
-          izz="${wheel_mass / 12.0 * wheel_radius*wheel_radius}"/>
+          ixx="${wheel_mass / 12.0 * (3*wheel_radius*wheel_radius + wheel_len*wheel_len)}" ixy="0.0" ixz="0.0"
+          iyy="${wheel_mass / 12.0 * (3*wheel_radius*wheel_radius + wheel_len*wheel_len)}" iyz="0.0"
+          izz="${wheel_mass / 2.0 * wheel_radius*wheel_radius}"/>
         </inertial>
       </link>
 

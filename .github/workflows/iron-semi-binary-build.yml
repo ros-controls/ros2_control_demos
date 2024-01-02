@@ -4,10 +4,10 @@ name: Iron Semi-Binary Build
 on:
   pull_request:
     branches:
-      - master
+      - iron
   push:
     branches:
-      - master
+      - iron
   schedule:
     # Run every morning to detect flakiness and broken dependencies
     - cron: '33 1 * * *'
