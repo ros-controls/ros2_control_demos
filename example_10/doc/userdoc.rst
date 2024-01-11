@@ -91,6 +91,83 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
     [RRBotSystemWithGPIOHardware]: Got command 0.5 for GP output 0!
     [RRBotSystemWithGPIOHardware]: Got command 0.7 for GP output 1!
 
+7. Let's introspect the ros2_control hardware component. Calling
+
+  .. code-block:: shell
+
+    ros2 control list_hardware_components
+
+  should give you
+
+  .. code-block:: shell
+
+    Hardware Component 1
+        name: RRBot
+        type: system
+        plugin name: ros2_control_demo_example_10/RRBotSystemWithGPIOHardware
+        state: id=3 label=active
+        command interfaces
+                joint1/position [available] [claimed]
+                joint2/position [available] [claimed]
+                flange_analog_IOs/analog_output1 [available] [claimed]
+                flange_vacuum/vacuum [available] [claimed]
+
+  This shows that the custom hardware interface plugin is loaded and running. If you work on a real
+  robot and don't have a simulator running, it is often faster to use the ``mock_components/GenericSystem``
+  hardware component instead of writing a custom one. Stop the launch file and start it again with
+  an additional parameter
+
+  .. code-block:: shell
+
+    ros2 launch ros2_control_demo_example_10 rrbot.launch.py use_mock_hardware:=True
+
+  Calling
+
+  .. code-block:: shell
+
+    ros2 control list_hardware_components
+
+  now should give you
+
+  .. code-block:: shell
+
+    Hardware Component 1
+        name: RRBot
+        type: system
+        plugin name: mock_components/GenericSystem
+        state: id=3 label=active
+        command interfaces
+                joint1/position [available] [claimed]
+                joint2/position [available] [claimed]
+                flange_analog_IOs/analog_output1 [available] [claimed]
+                flange_vacuum/vacuum [available] [claimed]
+
+  Call ``ros2 topic echo /gpio_controller/inputs``
+
+  .. code-block:: shell
+
+    $ ros2 topic echo /gpio_controller/inputs
+    interface_names:
+    - flange_analog_IOs/analog_output1
+    - flange_analog_IOs/analog_input1
+    - flange_analog_IOs/analog_input2
+    - flange_vacuum/vacuum
+    values:
+    - .nan
+    - .nan
+    - .nan
+    - 1.0
+
+  You can see that the values are now ``nan`` except for the vacuum interface, where an initial value of ``1.0`` is set in the URDF file.
+
+  .. code-block:: xml
+
+      <gpio name="flange_vacuum">
+        <command_interface name="vacuum"/>
+        <state_interface name="vacuum">
+          <param name="initial_value">1.0</param>
+        </state_interface>
+      </gpio>
 
 Files used for this demos
 -------------------------
