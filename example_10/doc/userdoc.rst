@@ -121,11 +121,11 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
 
     ros2 launch ros2_control_demo_example_10 rrbot.launch.py use_mock_hardware:=True
 
-  Calling
+  Calling ``list_hardware_components`` with the ``-v`` option
 
   .. code-block:: shell
 
-    ros2 control list_hardware_components
+    ros2 control list_hardware_components -v
 
   now should give you
 
@@ -141,14 +141,21 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
                 joint2/position [available] [claimed]
                 flange_analog_IOs/analog_output1 [available] [claimed]
                 flange_vacuum/vacuum [available] [claimed]
+        state interfaces
+                joint1/position [available]
+                joint2/position [available]
+                flange_analog_IOs/analog_output1 [available]
+                flange_analog_IOs/analog_input1 [available]
+                flange_analog_IOs/analog_input2 [available]
+                flange_vacuum/vacuum [available]
 
-  Call
+  One can see that the plugin ``mock_components/GenericSystem`` was now loaded instead: It will mirror the command interfaces to state interfaces with identical name. Call
 
   .. code-block:: shell
 
     ros2 topic echo /gpio_controller/inputs
 
-  again and you should see that the values are now ``nan`` except for the vacuum interface.
+  again and you should see that - unless commands are received - the values of the state interfaces are now ``nan`` except for the vacuum interface.
 
   .. code-block:: shell
 
@@ -163,7 +170,7 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
     - .nan
     - 1.0
 
-  For the vacuum interface, an initial value of ``1.0`` is set in the URDF file.
+  This is, because for the vacuum interface an initial value of ``1.0`` is set in the URDF file.
 
   .. code-block:: xml
 
@@ -176,7 +183,7 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
 
   Call again
 
-   .. code-block:: shell
+  .. code-block:: shell
 
     ros2 topic pub /gpio_controller/commands std_msgs/msg/Float64MultiArray "{data: [0.5,0.7]}"
 
@@ -194,7 +201,11 @@ Files used for this demos
 
 - RViz configuration: `rrbot.rviz <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/ros2_control_demo_description/rrbot/rviz/rrbot.rviz>`__
 
-- Hardware interface plugin: `rrbot.cpp <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_10/hardware/rrbot.cpp>`__
+- Hardware interface plugin:
+
+  + `rrbot.cpp <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_10/hardware/rrbot.cpp>`__
+  + `generic_system.cpp <https://github.com/ros-controls/ros2_control/tree/{REPOS_FILE_BRANCH}/hardware_interface/src/mock_components/generic_system.cpp>`__
+
 - GPIO controller: `gpio_controller.cpp <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_10/controllers/gpio_controller.cpp>`__
 
 
