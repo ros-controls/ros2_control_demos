@@ -32,14 +32,15 @@ pull_request_rules:
       - author=mergify[bot]
     actions:
         comment:
-          message: This pull request is in conflict. Could you fix it @bmagyar @dstogl @christophfroehlich?
+          message: This pull request is in conflict. Could you fix it @bmagyar @destogl @christophfroehlich @saikishor?
 
   - name: development targets master branch
     conditions:
       - base!=master
       - author!=bmagyar
-      - author!=dstogl
+      - author!=destogl
       - author!=christophfroehlich
+      - author!=saikishor
       - author!=mergify[bot]
       - author!=dependabot[bot]
     actions:
