@@ -81,7 +81,7 @@ int main(int argc, char ** argv)
       trajectory_point_msg.positions.data(), joint_positions.data.data(),
       trajectory_point_msg.positions.size() * sizeof(double));
     std::memcpy(
-      trajectory_point_msg.velocities.data(), joint_positions.data.data(),
+      trajectory_point_msg.velocities.data(), joint_velocities.data.data(),
       trajectory_point_msg.velocities.size() * sizeof(double));
 
     // integrate joint velocities
