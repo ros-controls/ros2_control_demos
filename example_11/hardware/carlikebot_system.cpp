@@ -154,14 +154,9 @@ hardware_interface::CallbackReturn CarlikeBotSystemHardware::on_init(
   hw_stop_sec_ = std::stod(info_.hardware_parameters["example_param_hw_stop_duration_sec"]);
   // // END: This part here is for exemplary purposes - Please do not copy to your production code
 
-  hw_interfaces_["steering"] = Joint(
-    "virtual_front_wheel_joint"
-  );
+  hw_interfaces_["steering"] = Joint("virtual_front_wheel_joint");
 
-  hw_interfaces_["traction"] = Joint(
-    "virtual_rear_wheel_joint"
-  );
-
+  hw_interfaces_["traction"] = Joint("virtual_rear_wheel_joint");
 
   return hardware_interface::CallbackReturn::SUCCESS;
 }
@@ -172,20 +167,15 @@ std::vector<hardware_interface::StateInterface> CarlikeBotSystemHardware::export
 
   for (auto & joint : hw_interfaces_)
   {
-    state_interfaces.emplace_back(
-      hardware_interface::StateInterface(
-        joint.second.joint_name, hardware_interface::HW_IF_POSITION, &joint.second.state.position));
+    state_interfaces.emplace_back(hardware_interface::StateInterface(
+      joint.second.joint_name, hardware_interface::HW_IF_POSITION, &joint.second.state.position));
 
     if (joint.first == "traction")
     {
-      state_interfaces.emplace_back(
-        hardware_interface::StateInterface(
-          joint.second.joint_name, hardware_interface::HW_IF_VELOCITY,
-          &joint.second.state.velocity));
+      state_interfaces.emplace_back(hardware_interface::StateInterface(
+        joint.second.joint_name, hardware_interface::HW_IF_VELOCITY, &joint.second.state.velocity));
     }
   }
-
-  
 
   RCLCPP_INFO(
     rclcpp::get_logger("CarlikeBotSystemHardware"), "Exported %zu state interfaces.",
@@ -210,17 +200,15 @@ CarlikeBotSystemHardware::export_command_interfaces()
   {
     if (joint.first == "steering")
     {
-      command_interfaces.emplace_back(
-        hardware_interface::CommandInterface(
-          joint.second.joint_name, hardware_interface::HW_IF_POSITION,
-          &joint.second.command.position));
+      command_interfaces.emplace_back(hardware_interface::CommandInterface(
+        joint.second.joint_name, hardware_interface::HW_IF_POSITION,
+        &joint.second.command.position));
     }
     else if (joint.first == "traction")
     {
-      command_interfaces.emplace_back(
-        hardware_interface::CommandInterface(
-          joint.second.joint_name, hardware_interface::HW_IF_VELOCITY,
-          &joint.second.command.velocity));
+      command_interfaces.emplace_back(hardware_interface::CommandInterface(
+        joint.second.joint_name, hardware_interface::HW_IF_VELOCITY,
+        &joint.second.command.velocity));
     }
   }
 
@@ -338,7 +326,6 @@ hardware_interface::return_type ros2_control_demo_example_11 ::CarlikeBotSystemH
     }
   }
   // END: This part here is for exemplary purposes - Please do not copy to your production code
-
 
   return hardware_interface::return_type::OK;
 }

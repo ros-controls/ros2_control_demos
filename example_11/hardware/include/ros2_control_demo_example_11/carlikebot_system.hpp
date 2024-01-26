@@ -38,27 +38,24 @@ namespace ros2_control_demo_example_11
 {
 struct JointValue
 {
-    double position{0.0};
-    double velocity{0.0};
-    double effort{0.0};
+  double position{0.0};
+  double velocity{0.0};
+  double effort{0.0};
 };
 
 struct Joint
 {
-    Joint(
-        const std::string & name
-        ) :
-        joint_name(name)
-        {
-            state = JointValue();
-            command = JointValue();
-        }
+  Joint(const std::string & name) : joint_name(name)
+  {
+    state = JointValue();
+    command = JointValue();
+  }
 
-    Joint() = default;
+  Joint() = default;
 
-    std::string joint_name;
-    JointValue state;
-    JointValue command;
+  std::string joint_name;
+  JointValue state;
+  JointValue command;
 };
 class CarlikeBotSystemHardware : public hardware_interface::SystemInterface
 {
