@@ -56,16 +56,22 @@ def generate_launch_description():
         ]
     )
     rviz_config_file = PathJoinSubstitution(
-        [FindPackageShare("ros2_control_demo_description"), "carlikebot/rviz", "carlikebot.rviz"]
+        [
+            FindPackageShare("ros2_control_demo_description"),
+            "carlikebot/rviz",
+            "carlikebot.rviz",
+        ]
     )
 
     # the steering controller libraries by default publish odometry on a separate topic than /tf
     control_node = Node(
         package="controller_manager",
         executable="ros2_control_node",
-        parameters=[robot_description, robot_controllers],
+        parameters=[robot_controllers],
         output="both",
-        remappings=[("/ackermann_steering_controller/tf_odometry", "/tf")],
+        remappings=[
+            ("~/robot_description", "/robot_description"),
+        ],
     )
     robot_state_pub_ackermann_node = Node(
         package="robot_state_publisher",
@@ -73,7 +79,8 @@ def generate_launch_description():
         output="both",
         parameters=[robot_description],
         remappings=[
-            ("/ackermann_steering_controller/reference_unstamped", "/cmd_vel"),
+            ("/bicycle_steering_controller/reference", "/reference"),
+            ("~/robot_description", "/robot_description"),
         ],
     )
     rviz_node = Node(
@@ -94,7 +101,7 @@ def generate_launch_description():
     robot_ackermann_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["ackermann_steering_controller", "--controller-manager", "/controller_manager"],
+        arguments=["bicycle_steering_controller", "--controller-manager", "/controller_manager"],
     )
 
     # Delay rviz start after `joint_state_broadcaster`

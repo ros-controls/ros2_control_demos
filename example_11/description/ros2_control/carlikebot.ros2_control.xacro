@@ -10,29 +10,14 @@
         <param name="example_param_hw_stop_duration_sec">3.0</param>
         <param name="is_simulation">1</param>
       </hardware>
-      <joint name="${prefix}front_left_steering_joint">
+      <joint name="${prefix}virtual_front_wheel_joint">
         <command_interface name="position"/>
         <state_interface name="position"/>
       </joint>
-      <joint name="${prefix}front_right_steering_joint">
-        <command_interface name="position"/>
+      <joint name="${prefix}virtual_rear_wheel_joint">
+        <command_interface name="velocity"/>
+        <state_interface name="velocity"/>
         <state_interface name="position"/>
-      </joint>
-      <joint name="${prefix}front_left_wheel_joint">
-        <command_interface name="velocity"/>
-        <state_interface name="velocity"/>
-      </joint>
-      <joint name="${prefix}front_right_wheel_joint">
-        <command_interface name="velocity"/>
-        <state_interface name="velocity"/>
-      </joint>
-      <joint name="${prefix}rear_left_wheel_joint">
-        <command_interface name="velocity"/>
-        <state_interface name="velocity"/>
-      </joint>
-      <joint name="${prefix}rear_right_wheel_joint">
-        <command_interface name="velocity"/>
-        <state_interface name="velocity"/>
       </joint>
     </ros2_control>
 

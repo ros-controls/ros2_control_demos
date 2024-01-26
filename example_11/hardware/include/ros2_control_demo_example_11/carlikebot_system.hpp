@@ -36,6 +36,30 @@
 
 namespace ros2_control_demo_example_11
 {
+struct JointValue
+{
+    double position{0.0};
+    double velocity{0.0};
+    double effort{0.0};
+};
+
+struct Joint
+{
+    Joint(
+        const std::string & name
+        ) :
+        joint_name(name)
+        {
+            state = JointValue();
+            command = JointValue();
+        }
+
+    Joint() = default;
+
+    std::string joint_name;
+    JointValue state;
+    JointValue command;
+};
 class CarlikeBotSystemHardware : public hardware_interface::SystemInterface
 {
 public:
@@ -72,9 +96,9 @@ private:
   double hw_start_sec_;
   double hw_stop_sec_;
 
-  std::vector<std::tuple<std::string, double, double>>
-    hw_interfaces_;  // name of joint, state, command
-
+  // std::vector<std::tuple<std::string, double, double>>
+  //   hw_interfaces_;  // name of joint, state, command
+  std::map<std::string, Joint> hw_interfaces_;
 };
 
 }  // namespace ros2_control_demo_example_11

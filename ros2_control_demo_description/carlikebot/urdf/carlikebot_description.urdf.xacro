@@ -39,10 +39,10 @@
     <inertial>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <mass value="${base_mass}"/>
-      <inertia
-        ixx="${base_mass / 12.0 * (base_length*base_length + base_height*base_height)}" ixy="0.0" ixz="0.0"
-        iyy="${base_mass / 12.0 * (base_height*base_height + base_width*base_width)}" iyz="0.0"
-        izz="${base_mass / 12.0 * (base_width*base_width + base_length*base_length)}"/>
+        <inertia
+          ixx="0.000270" ixy="0.0" ixz="0.0"
+          iyy="0.000270" iyz="0.0"
+          izz="0.000426"/>
       </inertial>
     </link>
 
@@ -73,7 +73,7 @@
       <parent link="${prefix}chassis_link"/>
       <child link="${prefix}virtual_rear_wheel"/>
       <origin xyz="-${wheelbase/2} 0 -${base_height/2}" rpy="0 0 ${PI/2}"/>
-      <axis xyz="-1 0 0"/>
+      <axis xyz="1 0 0"/>
       <limit effort="100.0" velocity="100.0"/>
       <dynamics damping="0.2"/>
     </joint>
@@ -100,9 +100,9 @@
         <origin xyz="0 0 0" rpy="${PI/2} 0 ${PI/2}"/>
         <mass value="${wheel_mass}"/>
         <inertia
-          ixx="${wheel_mass / 12.0 * (3*wheel_radius + wheel_len*wheel_len)}" ixy="0.0" ixz="0.0"
-          iyy="${wheel_mass / 12.0 * wheel_radius*wheel_radius}" iyz="0.0"
-          izz="${wheel_mass / 12.0 * wheel_radius*wheel_radius}"/>
+          ixx="0.000270" ixy="0.0" ixz="0.0"
+          iyy="0.000270" iyz="0.0"
+          izz="0.000426"/>
       </inertial>
 
     </link>
@@ -111,7 +111,7 @@
       <parent link="${prefix}chassis_link"/>
       <child link="${prefix}rear_right_wheel"/>
       <origin xyz="-${wheelbase/2} ${base_width/2} -${base_height/2}" rpy="0 0 ${PI/2}"/>
-      <axis xyz="-1 0 0"/>
+      <axis xyz="1 0 0"/>
       <limit effort="100.0" velocity="100.0"/>
       <dynamics damping="0.2"/>
       <mimic joint="${prefix}virtual_rear_wheel_joint" multiplier="1.0" offset="0.0"/>
@@ -138,9 +138,9 @@
           <origin xyz="0 0 0" rpy="${PI/2} 0 ${PI/2}"/>
           <mass value="${wheel_mass}"/>
           <inertia
-            ixx="${wheel_mass / 12.0 * (3*wheel_radius + wheel_len*wheel_len)}" ixy="0.0" ixz="0.0"
-            iyy="${wheel_mass / 12.0 * wheel_radius*wheel_radius}" iyz="0.0"
-            izz="${wheel_mass / 12.0 * wheel_radius*wheel_radius}"/>
+            ixx="0.000270" ixy="0.0" ixz="0.0"
+            iyy="0.000270" iyz="0.0"
+            izz="0.000426"/>
         </inertial>
 
     </link>
@@ -149,7 +149,7 @@
       <parent link="${prefix}chassis_link" />
       <child link="${prefix}rear_left_wheel" />
       <origin xyz="-${wheelbase/2} -${base_width/2} -${base_height/2}" rpy="0 0 ${PI/2}"/>
-      <axis xyz="-1 0 0"/>
+      <axis xyz="1 0 0"/>
       <limit effort="100.0" velocity="100.0"/>
       <dynamics damping="0.2"/>
       <mimic joint="${prefix}virtual_rear_wheel_joint" multiplier="1.0" offset="0.0"/>
@@ -157,7 +157,7 @@
 
     <!-- front wheels -->
 
-    <!-- virtual front steering -->
+    <!-- virtual front wheel -->
 
     <link name="${prefix}virtual_front_wheel">
       <visual>
@@ -178,7 +178,7 @@
       <dynamics damping="0.2"/>
     </joint>
 
-    <!-- front right steering -->
+    <!-- front right wheel -->
 
 
     <link name="${prefix}front_right_wheel">
@@ -202,9 +202,9 @@
         <origin xyz="0 0 0" rpy="${PI/2} 0 ${PI/2}"/>
         <mass value="${wheel_mass}"/>
         <inertia
-          ixx="${wheel_mass / 12.0 * (3*wheel_radius + wheel_len*wheel_len)}" ixy="0.0" ixz="0.0"
-          iyy="${wheel_mass / 12.0 * wheel_radius*wheel_radius}" iyz="0.0"
-          izz="${wheel_mass / 12.0 * wheel_radius*wheel_radius}"/>
+          ixx="0.000270" ixy="0.0" ixz="0.0"
+          iyy="0.000270" iyz="0.0"
+          izz="0.000426"/>
       </inertial>
     </link>
 
@@ -241,9 +241,9 @@
         <origin xyz="0 0 0" rpy="${PI/2} 0 ${PI/2}"/>
         <mass value="${wheel_mass}"/>
         <inertia
-          ixx="${wheel_mass / 12.0 * (3 * wheel_radius + wheel_len * wheel_len)}" ixy="0.0" ixz="0.0"
-          iyy="${wheel_mass / 12.0 * wheel_radius*wheel_radius}" iyz="0.0"
-          izz="${wheel_mass / 12.0 * wheel_radius*wheel_radius}"/>
+          ixx="0.000270" ixy="0.0" ixz="0.0"
+          iyy="0.000270" iyz="0.0"
+          izz="0.000426"/>
       </inertial>
 
     </link>
