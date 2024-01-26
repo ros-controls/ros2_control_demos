@@ -32,9 +32,17 @@ def generate_launch_description():
             description="Start RViz2 automatically with this launch file.",
         )
     )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "relay_odometry_tf",
+            default_value="false",
+            description="Relay odometry TF from the steering controller to the TF tree.",
+        )
+    )
 
     # Initialize Arguments
     gui = LaunchConfiguration("gui")
+    relay_odometry_tf = LaunchConfiguration("relay_odometry_tf")
 
     # Get URDF via xacro
     robot_description_content = Command(
@@ -71,6 +79,7 @@ def generate_launch_description():
         output="both",
         remappings=[
             ("~/robot_description", "/robot_description"),
+            ("/bicycle_steering_controller/odometry_tf", "/tf"),
         ],
     )
     robot_state_pub_ackermann_node = Node(
@@ -104,6 +113,14 @@ def generate_launch_description():
         arguments=["bicycle_steering_controller", "--controller-manager", "/controller_manager"],
     )
 
+    relay_node = Node(
+        package="topic_tools",
+        executable="relay",
+        name="relay_odometry_node",
+        arguments=["/bicycle_steering_controller/tf_odometry", "/tf"],
+        condition=IfCondition(relay_odometry_tf),
+    )
+
     # Delay rviz start after `joint_state_broadcaster`
     delay_rviz_after_joint_state_broadcaster_spawner = RegisterEventHandler(
         event_handler=OnProcessExit(
@@ -124,6 +141,7 @@ def generate_launch_description():
         control_node,
         robot_state_pub_ackermann_node,
         joint_state_broadcaster_spawner,
+        relay_node,
         delay_rviz_after_joint_state_broadcaster_spawner,
         delay_robot_controller_spawner_after_joint_state_broadcaster_spawner,
     ]
