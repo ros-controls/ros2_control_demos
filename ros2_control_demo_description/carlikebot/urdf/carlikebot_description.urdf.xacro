@@ -57,6 +57,27 @@
 
     <!-- rear wheels -->
 
+    <!-- virtual rear wheel -->
+
+    <link name="${prefix}virtual_rear_wheel">
+      <visual>
+        <origin xyz="0 0 0" rpy="${PI/2} 0 ${PI/2}"/>
+        <geometry>
+          <cylinder length="0.01" radius="${wheel_radius}"/>
+        </geometry>
+        <material name="invisible"/>
+      </visual>
+    </link>
+
+    <joint name="${prefix}virtual_rear_wheel_joint" type="continuous">
+      <parent link="${prefix}chassis_link"/>
+      <child link="${prefix}virtual_rear_wheel"/>
+      <origin xyz="-${wheelbase/2} 0 -${base_height/2}" rpy="0 0 ${PI/2}"/>
+      <axis xyz="-1 0 0"/>
+      <limit effort="100.0" velocity="100.0"/>
+      <dynamics damping="0.2"/>
+    </joint>
+
     <!-- rear right wheel -->
 
     <link name="${prefix}rear_right_wheel">
@@ -93,6 +114,7 @@
       <axis xyz="-1 0 0"/>
       <limit effort="100.0" velocity="100.0"/>
       <dynamics damping="0.2"/>
+      <mimic joint="${prefix}virtual_rear_wheel_joint" multiplier="1.0" offset="0.0"/>
     </joint>
 
     <!-- rear left wheel -->
@@ -130,24 +152,34 @@
       <axis xyz="-1 0 0"/>
       <limit effort="100.0" velocity="100.0"/>
       <dynamics damping="0.2"/>
+      <mimic joint="${prefix}virtual_rear_wheel_joint" multiplier="1.0" offset="0.0"/>
     </joint>
 
     <!-- front wheels -->
 
-    <!-- front right steering -->
+    <!-- virtual front steering -->
 
-    <link name="${prefix}front_right_steering" />
+    <link name="${prefix}virtual_front_wheel">
+      <visual>
+        <origin xyz="0 0 0" rpy="${PI/2} 0 ${PI/2}"/>
+        <geometry>
+          <cylinder length="0.01" radius="${wheel_radius}"/>
+        </geometry>
+        <material name="invisible"/>
+      </visual>
+    </link>
 
-    <joint name="${prefix}front_right_steering_joint" type="revolute">
-      <parent link="${prefix}chassis_link" />
-      <child link="${prefix}front_right_steering" />
-      <origin xyz="${wheelbase/2} ${base_width/2} -${base_height/2}" rpy="0 0 ${PI/2}"/>
+    <joint name="${prefix}virtual_front_wheel_joint" type="revolute">
+      <parent link="${prefix}chassis_link"/>
+      <child link="${prefix}virtual_front_wheel"/>
+      <origin xyz="${wheelbase/2} 0 -${base_height/2}" rpy="0 0 ${PI/2}"/>
       <axis xyz="0 0 1"/>
       <limit lower="-0.4" upper="0.4" effort="100.0" velocity="0.0"/>
       <dynamics damping="0.2"/>
     </joint>
 
-    <!-- front right wheel -->
+    <!-- front right steering -->
+
 
     <link name="${prefix}front_right_wheel">
 
@@ -176,29 +208,18 @@
       </inertial>
     </link>
 
-    <joint name="${prefix}front_right_wheel_joint" type="continuous">
-      <parent link="${prefix}front_right_steering"/>
-      <child link="${prefix}front_right_wheel"/>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-      <axis xyz="0 1 0"/>
-      <limit effort="100.0" velocity="100.0"/>
+    <joint name="${prefix}front_right_wheel_joint" type="revolute">
+      <parent link="${prefix}chassis_link" />
+      <child link="${prefix}front_right_wheel" />
+      <origin xyz="${wheelbase/2} ${base_width/2} -${base_height/2}" rpy="0 0 ${PI/2}"/>
+      <axis xyz="0 0 1"/>
+      <limit lower="-0.4" upper="0.4" effort="100.0" velocity="0.0"/>
       <dynamics damping="0.2"/>
+      <mimic joint="${prefix}virtual_front_wheel_joint" multiplier="1.0" offset="0.0"/>
     </joint>
 
     <!-- front left steering -->
 
-    <link name="${prefix}front_left_steering" />
-
-    <joint name="${prefix}front_left_steering_joint" type="revolute">
-      <parent link="${prefix}chassis_link" />
-      <child link="${prefix}front_left_steering" />
-      <origin xyz="${wheelbase/2} -${base_width/2} -${base_height/2}" rpy="0 0 ${PI/2}"/>
-      <axis xyz="0 0 1"/>
-      <limit lower="-0.4" upper="0.4" effort="100.0" velocity="0.0"/>
-      <dynamics damping="0.2"/>
-    </joint>
-
-    <!-- front left wheel -->
 
     <link name="${prefix}front_left_wheel">
       <collision>
@@ -220,20 +241,21 @@
         <origin xyz="0 0 0" rpy="${PI/2} 0 ${PI/2}"/>
         <mass value="${wheel_mass}"/>
         <inertia
-          ixx="${wheel_mass / 12.0 * (3*wheel_radius + wheel_len*wheel_len)}" ixy="0.0" ixz="0.0"
+          ixx="${wheel_mass / 12.0 * (3 * wheel_radius + wheel_len * wheel_len)}" ixy="0.0" ixz="0.0"
           iyy="${wheel_mass / 12.0 * wheel_radius*wheel_radius}" iyz="0.0"
           izz="${wheel_mass / 12.0 * wheel_radius*wheel_radius}"/>
       </inertial>
 
     </link>
 
-    <joint name="${prefix}front_left_wheel_joint" type="continuous">
-      <parent link="${prefix}front_left_steering"/>
-      <child link="${prefix}front_left_wheel"/>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-      <axis xyz="0 1 0"/>
-      <limit effort="100.0" velocity="100.0"/>
+    <joint name="${prefix}front_left_wheel_joint" type="revolute">
+      <parent link="${prefix}chassis_link" />
+      <child link="${prefix}front_left_wheel" />
+      <origin xyz="${wheelbase/2} -${base_width/2} -${base_height/2}" rpy="0 0 ${PI/2}"/>
+      <axis xyz="0 0 1"/>
+      <limit lower="-0.4" upper="0.4" effort="100.0" velocity="0.0"/>
       <dynamics damping="0.2"/>
+      <mimic joint="${prefix}virtual_front_wheel_joint" multiplier="1.0" offset="0.0"/>
     </joint>
 
   </xacro:macro>

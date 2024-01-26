@@ -37,4 +37,8 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_desc
     <color rgba="1.0 1.0 1.0 1.0"/>
   </material>
 
+  <material name="invisible">
+    <color rgba="0.0 0.0 0.0 0.0"/>
+  </material>
+
 </robot>
