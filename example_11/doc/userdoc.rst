@@ -6,14 +6,18 @@
 CarlikeBot
 ************
 
-*CarlikeBot* is a simple mobile base with ackermann drive.
+*CarlikeBot* is a simple mobile base using bicycle model with 4 wheels.
 
-This example shows how to use the ackermann steering controller, which is a sub-design of the steering controller library.
+This example shows how to use the bicycle steering controller, which is a sub-design of the steering controller library.
+
+Even though the robot has 4 wheels with front steering, the vehicle dynamics of this robot is similar to a bicycle. There is a virtual front wheel joint that is used to control the steering angle of the front wheels and the front wheels on the robot mimic the steering angle of the virtual front wheel joint. Similarly the rear wheels are controlled by a virtual rear wheel joint.
+
+This example shows how to use the bicycle steering controller to control a carlike robot with 4 wheels but only 2 joints that can be controlled, one for steering and one for driving.
 
 * The communication is done using proprietary API to communicate with the robot control box.
 * Data for all joints is exchanged at once.
 
-The *CarlikeBot* URDF files can be found in ``description/urdf`` folder.
+The *CarlikeBot* URDF files can be found in ``ros2_control_demo_description/carlikebot/urdf`` folder.
 
 .. include:: ../../doc/run_from_docker.rst
 
@@ -32,20 +36,20 @@ Tutorial steps
 
    .. image:: carlikebot.png
     :width: 400
-    :alt: Ackermann Mobile Robot
+    :alt: Carlike Mobile Robot
 
 2. To start *CarlikeBot* example open a terminal, source your ROS2-workspace and execute its launch file with
 
    .. code-block:: shell
 
-    ros2 launch ros2_control_demo_example_11 carlikebot.launch.py
+    ros2 launch ros2_control_demo_example_11 carlikebot.launch.py relay_odometry_tf:=true
 
    The launch file loads and starts the robot hardware, controllers and opens *RViz*.
    In the starting terminal you will see a lot of output from the hardware implementation showing its internal states.
    This excessive printing is only added for demonstration. In general, printing to the terminal should be avoided as much as possible in a hardware interface implementation.
 
-   If you can see an orange box in *RViz* everything has started properly.
-   Still, to be sure, let's introspect the control system before moving *CarlikeBot*.
+   If you can see an orange box with four wheels in *RViz* everything has started properly. By default the controller publishes the odometry of the robot to the ``/tf_odometry`` topic. The ``relay_odometry_tf`` argument is used to relay the odometry TF to the TF tree. If you set this argument to ``false`` (or not set it at all) the TF tree will not be updated with the odometry data.
+   Now, let's introspect the control system before moving *CarlikeBot*.
 
 3. Check if the hardware interface loaded properly, by opening another terminal and executing
 
@@ -57,20 +61,15 @@ Tutorial steps
 
    .. code-block:: shell
 
-    command interfaces
-        ackermann_steering_controller/angular/position [unavailable] [unclaimed]
-        ackermann_steering_controller/linear/velocity [unavailable] [unclaimed]
-        left_steering_joint/position [available] [claimed]
-        rear_left_wheel_joint/velocity [available] [claimed]
-        rear_right_wheel_joint/velocity [available] [claimed]
-        right_steering_joint/position [available] [claimed]
-    state interfaces
-        left_steering_joint/position
-        rear_left_wheel_joint/position
-        rear_left_wheel_joint/velocity
-        rear_right_wheel_joint/position
-        rear_right_wheel_joint/velocity
-        right_steering_joint/position
+      command interfaces
+         bicycle_steering_controller/angular/position [unavailable] [unclaimed]
+         bicycle_steering_controller/linear/velocity [unavailable] [unclaimed]
+         virtual_front_wheel_joint/position [available] [claimed]
+         virtual_rear_wheel_joint/velocity [available] [claimed]
+      state interfaces
+         virtual_front_wheel_joint/position
+         virtual_rear_wheel_joint/position
+         virtual_rear_wheel_joint/velocity
 
    The ``[claimed]`` marker on command interfaces means that a controller has access to command *CarlikeBot*.
 
@@ -85,30 +84,30 @@ Tutorial steps
    .. code-block:: shell
 
     joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
-    ackermann_steering_controller[ackermann_steering_controller/AckermannSteeringController] active
+    bicycle_steering_controller[bicycle_steering_controller/BicycleSteeringController] active
 
 5. If everything is fine, now you can send a command to *Diff Drive Controller* using ROS 2 CLI interface:
 
    .. code-block:: shell
 
-    ros2 topic pub --rate 30 /ackermann_steering_controller/reference_unstamped geometry_msgs/msg/Twist "linear:
-      x: 0.7
-      y: 0.0
-      z: 0.0
-    angular:
-      x: 0.0
-      y: 0.0
-      z: 0.01"
+    ros2 topic pub --rate 30 /bicycle_steering_controller/reference geometry_msgs/msg/TwistStamped "
+      twist:
+      linear:
+         x: 1.0
+         y: 0.0
+         z: 0.0
+      angular:
+         x: 0.0
+         y: 0.0
+         z: 0.1"
 
    You should now see an orange box circling in *RViz*.
    Also, you should see changing states in the terminal where launch file is started.
 
    .. code-block:: shell
 
-    [CarlikeBotSystemHardware]: Got command 0.00464 for 'left_steering_joint'
-    [CarlikeBotSystemHardware]: Got command 0.00465 for 'right_steering_joint'
-    [CarlikeBotSystemHardware]: Got command 13.97230 for 'rear_left_wheel_joint'
-    [CarlikeBotSystemHardware]: Got command 14.02830 for 'rear_right_wheel_joint'
+      [CarlikeBotSystemHardware]: Got position command: 0.03 for joint 'virtual_front_wheel_joint'.
+      [CarlikeBotSystemHardware]: Got velocity command: 20.01 for joint 'virtual_rear_wheel_joint'.
 
 Files used for this demos
 --------------------------
@@ -129,4 +128,4 @@ Controllers from this demo
 --------------------------
 
 * ``Joint State Broadcaster`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/{REPOS_FILE_BRANCH}/joint_state_broadcaster>`__): `doc <https://control.ros.org/{REPOS_FILE_BRANCH}/doc/ros2_controllers/joint_state_broadcaster/doc/userdoc.html>`__
-* ``Ackermann Steering Controller`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/{REPOS_FILE_BRANCH}/ackermann_steering_controller>`__): `doc <https://control.ros.org/{REPOS_FILE_BRANCH}/doc/ros2_controllers/ackermann_steering_controller/doc/userdoc.html>`__
+* ``Bicycle Steering Controller`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/{REPOS_FILE_BRANCH}/bicycle_steering_controller>`__): `doc <https://control.ros.org/{REPOS_FILE_BRANCH}/doc/ros2_controllers/ackermann_steering_controller/doc/userdoc.html>`__

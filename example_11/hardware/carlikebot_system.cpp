@@ -301,28 +301,22 @@ hardware_interface::return_type CarlikeBotSystemHardware::read(
 hardware_interface::return_type ros2_control_demo_example_11 ::CarlikeBotSystemHardware::write(
   const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
-  RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), "Writing...");
-
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   for (auto & joint : hw_interfaces_)
   {
     if (joint.first == "steering")
     {
       RCLCPP_INFO(
-        rclcpp::get_logger("CarlikeBotSystemHardware"), "Writing to steering joint '%s'.",
+        rclcpp::get_logger("CarlikeBotSystemHardware"),
+        "Got position command: %.2f for joint '%s'.", joint.second.command.position,
         joint.second.joint_name.c_str());
-      RCLCPP_INFO(
-        rclcpp::get_logger("CarlikeBotSystemHardware"), "Position command: %.2f.",
-        joint.second.command.position);
     }
     else if (joint.first == "traction")
     {
       RCLCPP_INFO(
-        rclcpp::get_logger("CarlikeBotSystemHardware"), "Writing to traction joint '%s'.",
+        rclcpp::get_logger("CarlikeBotSystemHardware"),
+        "Got velocity command: %.2f for joint '%s'.", joint.second.command.velocity,
         joint.second.joint_name.c_str());
-      RCLCPP_INFO(
-        rclcpp::get_logger("CarlikeBotSystemHardware"), "Velocity command: %.2f.",
-        joint.second.command.velocity);
     }
   }
   // END: This part here is for exemplary purposes - Please do not copy to your production code
