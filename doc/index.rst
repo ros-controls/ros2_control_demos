@@ -71,7 +71,7 @@ Example 10: "GPIO interfaces"
    Industrial robot with GPIO interfaces
 
 Example 11: "CarlikeBot"
-    *CarlikeBot* with an Ackermann steering controller
+    *CarlikeBot* with a bicycle steering controller
 
 Example 12: "Controller chaining"
    The example shows a simple chainable controller and its integration to form a controller chain to control the joints of *RRBot*.

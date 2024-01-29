@@ -281,18 +281,21 @@ hardware_interface::return_type CarlikeBotSystemHardware::read(
   const rclcpp::Time & /*time*/, const rclcpp::Duration & period)
 {
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
-  for (auto & joint : hw_interfaces_)
-  {
-    if (joint.first == "steering")
-    {
-      joint.second.state.position = joint.second.command.position;
-    }
-    else if (joint.first == "traction")
-    {
-      joint.second.state.velocity = joint.second.command.velocity;
-      joint.second.state.position += joint.second.state.velocity * period.seconds();
-    }
-  }
+
+  hw_interfaces_["steering"].state.position = hw_interfaces_["steering"].command.position;
+
+  hw_interfaces_["traction"].state.velocity = hw_interfaces_["traction"].command.velocity;
+  hw_interfaces_["traction"].state.position +=
+    hw_interfaces_["traction"].state.velocity * period.seconds();
+
+  RCLCPP_INFO(
+    rclcpp::get_logger("CarlikeBotSystemHardware"), "Got position state: %.2f for joint '%s'.",
+    hw_interfaces_["steering"].command.position, hw_interfaces_["steering"].joint_name.c_str());
+
+  RCLCPP_INFO(
+    rclcpp::get_logger("CarlikeBotSystemHardware"), "Got velocity state: %.2f for joint '%s'.",
+    hw_interfaces_["traction"].command.velocity, hw_interfaces_["traction"].joint_name.c_str());
+
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   return hardware_interface::return_type::OK;
@@ -302,23 +305,15 @@ hardware_interface::return_type ros2_control_demo_example_11 ::CarlikeBotSystemH
   const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
-  for (auto & joint : hw_interfaces_)
-  {
-    if (joint.first == "steering")
-    {
-      RCLCPP_INFO(
-        rclcpp::get_logger("CarlikeBotSystemHardware"),
-        "Got position command: %.2f for joint '%s'.", joint.second.command.position,
-        joint.second.joint_name.c_str());
-    }
-    else if (joint.first == "traction")
-    {
-      RCLCPP_INFO(
-        rclcpp::get_logger("CarlikeBotSystemHardware"),
-        "Got velocity command: %.2f for joint '%s'.", joint.second.command.velocity,
-        joint.second.joint_name.c_str());
-    }
-  }
+
+  RCLCPP_INFO(
+    rclcpp::get_logger("CarlikeBotSystemHardware"), "Got position command: %.2f for joint '%s'.",
+    hw_interfaces_["steering"].command.position, hw_interfaces_["steering"].joint_name.c_str());
+
+  RCLCPP_INFO(
+    rclcpp::get_logger("CarlikeBotSystemHardware"), "Got velocity command: %.2f for joint '%s'.",
+    hw_interfaces_["traction"].command.velocity, hw_interfaces_["traction"].joint_name.c_str());
+
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   return hardware_interface::return_type::OK;
