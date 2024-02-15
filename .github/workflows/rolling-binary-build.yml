@@ -15,8 +15,13 @@ on:
 
 jobs:
   binary:
-    uses: ./.github/workflows/reusable-industrial-ci-with-cache.yml
+    uses: ros-controls/ros2_control_ci/.github/workflows/reusable-industrial-ci-with-cache.yml@master
+    strategy:
+      matrix:
+        ROS_DISTRO: [rolling]
+        ROS_REPO: [main, testing]
     with:
-      ros_distro: rolling
-      upstream_workspace: ros2_control_demos-not-released.rolling.repos
+      ros_distro: ${{ matrix.ROS_DISTRO }}
+      ros_repo: ${{ matrix.ROS_REPO }}
+      upstream_workspace: ros2_control_demos-not-released.${{ matrix.ROS_DISTRO }}.repos
       ref_for_scheduled_build: master
