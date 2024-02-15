@@ -27,6 +27,7 @@
 #include <thread>
 #include <vector>
 
+#include "hardware_interface/lexical_casts.hpp"
 #include "hardware_interface/sensor_interface.hpp"
 #include "hardware_interface/types/hardware_interface_type_values.hpp"
 #include "rclcpp/rclcpp.hpp"
@@ -43,9 +44,11 @@ hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_init(
     return hardware_interface::CallbackReturn::ERROR;
   }
   // START: This part here is for exemplary purposes - Please do not copy to your production code
-  hw_start_sec_ = std::stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
-  hw_stop_sec_ = std::stod(info_.hardware_parameters["example_param_hw_stop_duration_sec"]);
-  hw_slowdown_ = std::stod(info_.hardware_parameters["example_param_hw_slowdown"]);
+  hw_start_sec_ =
+    hardware_interface::stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
+  hw_stop_sec_ =
+    hardware_interface::stod(info_.hardware_parameters["example_param_hw_stop_duration_sec"]);
+  hw_slowdown_ = hardware_interface::stod(info_.hardware_parameters["example_param_hw_slowdown"]);
   socket_port_ = std::stoi(info_.hardware_parameters["example_param_socket_port"]);
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
@@ -151,7 +154,7 @@ hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_init(
             rclcpp::get_logger("RRBotSensorPositionFeedback"),
             "Read form buffer sockets data: '%s'", buffer);
 
-          rt_incomming_data_ptr_.writeFromNonRT(std::stod(buffer));
+          rt_incomming_data_ptr_.writeFromNonRT(hardware_interface::stod(buffer));
         }
         else
         {
