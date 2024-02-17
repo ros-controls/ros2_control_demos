@@ -14,6 +14,11 @@ install(
 )
 
 install(
+  DIRECTORY carlikebot/urdf carlikebot/rviz
+  DESTINATION share/${PROJECT_NAME}/carlikebot
+)
+
+install(
   DIRECTORY r6bot/meshes r6bot/srdf r6bot/urdf r6bot/rviz
   DESTINATION share/${PROJECT_NAME}/r6bot
 )
