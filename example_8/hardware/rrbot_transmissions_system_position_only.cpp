@@ -22,6 +22,7 @@
 #include <sstream>
 #include <vector>
 
+#include "hardware_interface/lexical_casts.hpp"
 #include "hardware_interface/types/hardware_interface_type_values.hpp"
 #include "rclcpp/clock.hpp"
 #include "rclcpp/logging.hpp"
@@ -51,7 +52,7 @@ hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware:
     return hardware_interface::CallbackReturn::ERROR;
   }
 
-  actuator_slowdown_ = std::stod(info_.hardware_parameters["actuator_slowdown"]);
+  actuator_slowdown_ = hardware_interface::stod(info_.hardware_parameters["actuator_slowdown"]);
 
   const auto num_joints = std::accumulate(
     info_.transmissions.begin(), info_.transmissions.end(), 0ul,
