@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!-- 4 Wheel Robot with front steering and rear drive -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="carlikebot_robot">
+  <xacro:arg name="prefix" default="" />
+
+  <xacro:include filename="$(find ros2_control_demo_description)/carlikebot/urdf/carlikebot_description.urdf.xacro" />
+
+  <!-- Import Rviz colors -->
+  <xacro:include filename="$(find ros2_control_demo_description)/carlikebot/urdf/carlikebot.materials.xacro" />
+
+  <!-- Import carlikebot ros2_control description -->
+  <xacro:include filename="$(find ros2_control_demo_example_11)/ros2_control/carlikebot.ros2_control.xacro" />
+
+  <xacro:carlikebot prefix="$(arg prefix)" />
+
+  <xacro:carlikebot_ros2_control
+    name="CarlikeBot" prefix="$(arg prefix)" />
+
+</robot>
