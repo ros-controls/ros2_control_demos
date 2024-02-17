@@ -60,7 +60,7 @@ The following examples are part of this demo repository:
 
    *RRBot* with GPIO interfaces.
 
-* Example 11: "Car-like robot using steering controller library (tba.)"
+* Example 11: ["Car-like robot using steering controller library"](example_11)
 
 * Example 12: ["Controller chaining"](example_12)
 
