@@ -42,16 +42,21 @@ Tutorial steps
 
    .. code-block:: shell
 
-    ros2 launch ros2_control_demo_example_11 carlikebot.launch.py relay_odometry_tf:=true
+    ros2 launch ros2_control_demo_example_11 carlikebot.launch.py remap_odometry_tf:=true
 
    The launch file loads and starts the robot hardware, controllers and opens *RViz*.
    In the starting terminal you will see a lot of output from the hardware implementation showing its internal states.
    This excessive printing is only added for demonstration. In general, printing to the terminal should be avoided as much as possible in a hardware interface implementation.
 
-   If you can see an orange box with four wheels in *RViz* everything has started properly. By default the controller publishes the odometry of the robot to the ``/tf_odometry`` topic. The ``relay_odometry_tf`` argument is used to relay the odometry TF to the TF tree. If you set this argument to ``false`` (or not set it at all) the TF tree will not be updated with the odometry data.
-   Now, let's introspect the control system before moving *CarlikeBot*.
+   If you can see an orange box with four wheels in *RViz* everything has started properly.
 
-3. Check if the hardware interface loaded properly, by opening another terminal and executing
+   .. note::
+
+    For robots being fixed to the world frame, like the RRbot examples of this repository, the ``robot_state_publisher`` subscribes to the ``/joint_states`` topic and creates the TF tree. For mobile robots, we need a node publishing the TF tree including the pose of the robot in the world coordinate systems. The most simple one is the odometry calculated by the ``bicycle_steering_controller``.
+
+   By default, the controller publishes the odometry of the robot to the ``~/tf_odometry`` topic. The ``remap_odometry_tf`` argument is used to remap the odometry TF to the ``/tf`` topic. If you set this argument to ``false`` (or not set it at all) the TF tree will not be updated with the odometry data.
+
+3. Now, let's introspect the control system before moving *CarlikeBot*. Check if the hardware interface loaded properly, by opening another terminal and executing
 
    .. code-block:: shell
 
@@ -86,20 +91,20 @@ Tutorial steps
     joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
     bicycle_steering_controller[bicycle_steering_controller/BicycleSteeringController] active
 
-5. If everything is fine, now you can send a command to *Diff Drive Controller* using ROS 2 CLI interface:
+5. If everything is fine, now you can send a command to *bicycle_steering_controller* using ROS 2 CLI:
 
    .. code-block:: shell
 
     ros2 topic pub --rate 30 /bicycle_steering_controller/reference geometry_msgs/msg/TwistStamped "
       twist:
-      linear:
-         x: 1.0
-         y: 0.0
-         z: 0.0
-      angular:
-         x: 0.0
-         y: 0.0
-         z: 0.1"
+        linear:
+          x: 1.0
+          y: 0.0
+          z: 0.0
+        angular:
+          x: 0.0
+          y: 0.0
+          z: 0.1"
 
    You should now see an orange box circling in *RViz*.
    Also, you should see changing states in the terminal where launch file is started.

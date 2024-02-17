@@ -14,7 +14,7 @@
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, RegisterEventHandler
-from launch.conditions import IfCondition
+from launch.conditions import IfCondition, UnlessCondition
 from launch.event_handlers import OnProcessExit
 from launch.substitutions import Command, FindExecutable, PathJoinSubstitution, LaunchConfiguration
 
@@ -34,15 +34,15 @@ def generate_launch_description():
     )
     declared_arguments.append(
         DeclareLaunchArgument(
-            "relay_odometry_tf",
+            "remap_odometry_tf",
             default_value="false",
-            description="Relay odometry TF from the steering controller to the TF tree.",
+            description="Remap odometry TF from the steering controller to the TF tree.",
         )
     )
 
     # Initialize Arguments
     gui = LaunchConfiguration("gui")
-    relay_odometry_tf = LaunchConfiguration("relay_odometry_tf")
+    remap_odometry_tf = LaunchConfiguration("remap_odometry_tf")
 
     # Get URDF via xacro
     robot_description_content = Command(
@@ -72,6 +72,17 @@ def generate_launch_description():
     )
 
     # the steering controller libraries by default publish odometry on a separate topic than /tf
+    control_node_remapped = Node(
+        package="controller_manager",
+        executable="ros2_control_node",
+        parameters=[robot_controllers],
+        output="both",
+        remappings=[
+            ("~/robot_description", "/robot_description"),
+            ("/bicycle_steering_controller/tf_odometry", "/tf"),
+        ],
+        condition=IfCondition(remap_odometry_tf),
+    )
     control_node = Node(
         package="controller_manager",
         executable="ros2_control_node",
@@ -79,16 +90,15 @@ def generate_launch_description():
         output="both",
         remappings=[
             ("~/robot_description", "/robot_description"),
-            ("/bicycle_steering_controller/odometry_tf", "/tf"),
         ],
+        condition=UnlessCondition(remap_odometry_tf),
     )
-    robot_state_pub_ackermann_node = Node(
+    robot_state_pub_bicycle_node = Node(
         package="robot_state_publisher",
         executable="robot_state_publisher",
         output="both",
         parameters=[robot_description],
         remappings=[
-            ("/bicycle_steering_controller/reference", "/reference"),
             ("~/robot_description", "/robot_description"),
         ],
     )
@@ -107,18 +117,10 @@ def generate_launch_description():
         arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager"],
     )
 
-    robot_ackermann_controller_spawner = Node(
+    robot_bicycle_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
         arguments=["bicycle_steering_controller", "--controller-manager", "/controller_manager"],
-    )
-
-    relay_node = Node(
-        package="topic_tools",
-        executable="relay",
-        name="relay_odometry_node",
-        arguments=["/bicycle_steering_controller/tf_odometry", "/tf"],
-        condition=IfCondition(relay_odometry_tf),
     )
 
     # Delay rviz start after `joint_state_broadcaster`
@@ -133,15 +135,15 @@ def generate_launch_description():
     delay_robot_controller_spawner_after_joint_state_broadcaster_spawner = RegisterEventHandler(
         event_handler=OnProcessExit(
             target_action=joint_state_broadcaster_spawner,
-            on_exit=[robot_ackermann_controller_spawner],
+            on_exit=[robot_bicycle_controller_spawner],
         )
     )
 
     nodes = [
         control_node,
-        robot_state_pub_ackermann_node,
+        control_node_remapped,
+        robot_state_pub_bicycle_node,
         joint_state_broadcaster_spawner,
-        relay_node,
         delay_rviz_after_joint_state_broadcaster_spawner,
         delay_robot_controller_spawner_after_joint_state_broadcaster_spawner,
     ]
