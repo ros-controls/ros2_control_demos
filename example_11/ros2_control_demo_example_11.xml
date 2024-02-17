@@ -1,0 +1,9 @@
+<library path="ros2_control_demo_example_11">
+  <class name="ros2_control_demo_example_11/CarlikeBotSystemHardware"
+         type="ros2_control_demo_example_11::CarlikeBotSystemHardware"
+         base_class_type="hardware_interface::SystemInterface">
+    <description>
+      The ros2_control CarlikeBot example using a system hardware interface-type. It uses velocity and position command and state interface for the drive motor and position command and state interface for the steering. The example is the starting point to implement a hardware interface for ackermann and bicycle drive robots.
+    </description>
+  </class>
+</library>
