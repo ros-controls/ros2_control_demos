@@ -1,0 +1,263 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="carlikebot" params="prefix">
+
+  <!-- Constants for robot dimensions -->
+  <xacro:property name="PI" value="3.1415926535897931"/>
+  <xacro:property name="base_mass" value="4.0" /> <!-- arbitrary value for base mass -->
+  <xacro:property name="base_width" value="0.260" />
+  <xacro:property name="base_length" value="0.525" />
+  <xacro:property name="base_height" value="0.060" />
+  <xacro:property name="wheelbase" value="0.325" />
+  <xacro:property name="wheel_mass" value="0.34055" /> <!-- arbitrary value for wheel mass -->
+  <xacro:property name="wheel_len" value="0.045" />
+  <xacro:property name="wheel_radius" value="0.05" />
+  <!-- <xacro:property name="wheeltrack" value="" -->
+
+  <!-- Base Link -->
+  <link name="${prefix}base_link" />
+
+  <!-- Chassis -->
+
+  <link name="${prefix}chassis_link">
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="${base_length} ${base_width} ${base_height}"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="${base_length} ${base_width} ${base_height}"/>
+      </geometry>
+      <material name="orange"/>
+    </visual>
+
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="${base_mass}"/>
+        <inertia
+          ixx="0.000270" ixy="0.0" ixz="0.0"
+          iyy="0.000270" iyz="0.0"
+          izz="0.000426"/>
+      </inertial>
+    </link>
+
+    <joint name="${prefix}chassis_joint" type="fixed">
+      <parent link="${prefix}base_link"/>
+      <child link="${prefix}chassis_link"/>
+      <origin xyz="0 0 ${base_height/2 + wheel_radius}" rpy="0 0 0"/>
+      <axis xyz="0 0 1"/>
+      <dynamics damping="0.2"/>
+    </joint>
+
+
+    <!-- rear wheels -->
+
+    <!-- virtual rear wheel -->
+
+    <link name="${prefix}virtual_rear_wheel">
+      <visual>
+        <origin xyz="0 0 0" rpy="${PI/2} 0 ${PI/2}"/>
+        <geometry>
+          <cylinder length="0.01" radius="${wheel_radius}"/>
+        </geometry>
+        <material name="invisible"/>
+      </visual>
+    </link>
+
+    <joint name="${prefix}virtual_rear_wheel_joint" type="continuous">
+      <parent link="${prefix}chassis_link"/>
+      <child link="${prefix}virtual_rear_wheel"/>
+      <origin xyz="-${wheelbase/2} 0 -${base_height/2}" rpy="0 0 ${PI/2}"/>
+      <axis xyz="1 0 0"/>
+      <limit effort="100.0" velocity="100.0"/>
+      <dynamics damping="0.2"/>
+    </joint>
+
+    <!-- rear right wheel -->
+
+    <link name="${prefix}rear_right_wheel">
+      <collision>
+        <origin xyz="0 0 0" rpy="${PI/2} 0 ${PI/2}"/>
+        <geometry>
+          <cylinder length="${wheel_len}" radius="${wheel_radius}"/>
+        </geometry>
+      </collision>
+
+      <visual>
+        <origin xyz="0 0 0" rpy="${PI/2} 0 ${PI/2}"/>
+        <geometry>
+          <cylinder length="${wheel_len}" radius="${wheel_radius}"/>
+        </geometry>
+        <material name="black"/>
+      </visual>
+
+      <inertial>
+        <origin xyz="0 0 0" rpy="${PI/2} 0 ${PI/2}"/>
+        <mass value="${wheel_mass}"/>
+        <inertia
+          ixx="0.000270" ixy="0.0" ixz="0.0"
+          iyy="0.000270" iyz="0.0"
+          izz="0.000426"/>
+      </inertial>
+
+    </link>
+
+    <joint name="${prefix}rear_right_wheel_joint" type="continuous">
+      <parent link="${prefix}chassis_link"/>
+      <child link="${prefix}rear_right_wheel"/>
+      <origin xyz="-${wheelbase/2} ${base_width/2} -${base_height/2}" rpy="0 0 ${PI/2}"/>
+      <axis xyz="1 0 0"/>
+      <limit effort="100.0" velocity="100.0"/>
+      <dynamics damping="0.2"/>
+      <mimic joint="${prefix}virtual_rear_wheel_joint" multiplier="1.0" offset="0.0"/>
+    </joint>
+
+    <!-- rear left wheel -->
+    <link name="${prefix}rear_left_wheel">
+        <collision>
+          <origin xyz="0 0 0" rpy="${PI/2} 0 ${PI/2}"/>
+          <geometry>
+            <cylinder length="${wheel_len}" radius="${wheel_radius}"/>
+          </geometry>
+        </collision>
+
+        <visual>
+          <origin xyz="0 0 0" rpy="${PI/2} 0 ${PI/2}"/>
+          <geometry>
+            <cylinder length="${wheel_len}" radius="${wheel_radius}"/>
+          </geometry>
+          <material name="black"/>
+        </visual>
+
+        <inertial>
+          <origin xyz="0 0 0" rpy="${PI/2} 0 ${PI/2}"/>
+          <mass value="${wheel_mass}"/>
+          <inertia
+            ixx="0.000270" ixy="0.0" ixz="0.0"
+            iyy="0.000270" iyz="0.0"
+            izz="0.000426"/>
+        </inertial>
+
+    </link>
+
+    <joint name="${prefix}rear_left_wheel_joint" type="continuous">
+      <parent link="${prefix}chassis_link" />
+      <child link="${prefix}rear_left_wheel" />
+      <origin xyz="-${wheelbase/2} -${base_width/2} -${base_height/2}" rpy="0 0 ${PI/2}"/>
+      <axis xyz="1 0 0"/>
+      <limit effort="100.0" velocity="100.0"/>
+      <dynamics damping="0.2"/>
+      <mimic joint="${prefix}virtual_rear_wheel_joint" multiplier="1.0" offset="0.0"/>
+    </joint>
+
+    <!-- front wheels -->
+
+    <!-- virtual front wheel -->
+
+    <link name="${prefix}virtual_front_wheel">
+      <visual>
+        <origin xyz="0 0 0" rpy="${PI/2} 0 ${PI/2}"/>
+        <geometry>
+          <cylinder length="0.01" radius="${wheel_radius}"/>
+        </geometry>
+        <material name="invisible"/>
+      </visual>
+    </link>
+
+    <joint name="${prefix}virtual_front_wheel_joint" type="revolute">
+      <parent link="${prefix}chassis_link"/>
+      <child link="${prefix}virtual_front_wheel"/>
+      <origin xyz="${wheelbase/2} 0 -${base_height/2}" rpy="0 0 ${PI/2}"/>
+      <axis xyz="0 0 1"/>
+      <limit lower="-0.4" upper="0.4" effort="100.0" velocity="0.0"/>
+      <dynamics damping="0.2"/>
+    </joint>
+
+    <!-- front right wheel -->
+
+
+    <link name="${prefix}front_right_wheel">
+
+      <collision>
+        <origin xyz="0 0 0" rpy="${PI/2} 0 ${PI/2}"/>
+        <geometry>
+          <cylinder length="${wheel_len}" radius="${wheel_radius}"/>
+        </geometry>
+      </collision>
+
+      <visual>
+        <origin xyz="0 0 0" rpy="${PI/2} 0 ${PI/2}"/>
+        <geometry>
+          <cylinder length="${wheel_len}" radius="${wheel_radius}"/>
+        </geometry>
+        <material name="black"/>
+      </visual>
+
+      <inertial>
+        <origin xyz="0 0 0" rpy="${PI/2} 0 ${PI/2}"/>
+        <mass value="${wheel_mass}"/>
+        <inertia
+          ixx="0.000270" ixy="0.0" ixz="0.0"
+          iyy="0.000270" iyz="0.0"
+          izz="0.000426"/>
+      </inertial>
+    </link>
+
+    <joint name="${prefix}front_right_wheel_joint" type="revolute">
+      <parent link="${prefix}chassis_link" />
+      <child link="${prefix}front_right_wheel" />
+      <origin xyz="${wheelbase/2} ${base_width/2} -${base_height/2}" rpy="0 0 ${PI/2}"/>
+      <axis xyz="0 0 1"/>
+      <limit lower="-0.4" upper="0.4" effort="100.0" velocity="0.0"/>
+      <dynamics damping="0.2"/>
+      <mimic joint="${prefix}virtual_front_wheel_joint" multiplier="1.0" offset="0.0"/>
+    </joint>
+
+    <!-- front left steering -->
+
+
+    <link name="${prefix}front_left_wheel">
+      <collision>
+        <origin xyz="0 0 0" rpy="${PI/2} 0 ${PI/2}"/>
+        <geometry>
+          <cylinder length="${wheel_len}" radius="${wheel_radius}"/>
+        </geometry>
+      </collision>
+
+      <visual>
+        <origin xyz="0 0 0" rpy="${PI/2} 0 ${PI/2}"/>
+        <geometry>
+          <cylinder length="${wheel_len}" radius="${wheel_radius}"/>
+        </geometry>
+        <material name="black"/>
+      </visual>
+
+      <inertial>
+        <origin xyz="0 0 0" rpy="${PI/2} 0 ${PI/2}"/>
+        <mass value="${wheel_mass}"/>
+        <inertia
+          ixx="0.000270" ixy="0.0" ixz="0.0"
+          iyy="0.000270" iyz="0.0"
+          izz="0.000426"/>
+      </inertial>
+
+    </link>
+
+    <joint name="${prefix}front_left_wheel_joint" type="revolute">
+      <parent link="${prefix}chassis_link" />
+      <child link="${prefix}front_left_wheel" />
+      <origin xyz="${wheelbase/2} -${base_width/2} -${base_height/2}" rpy="0 0 ${PI/2}"/>
+      <axis xyz="0 0 1"/>
+      <limit lower="-0.4" upper="0.4" effort="100.0" velocity="0.0"/>
+      <dynamics damping="0.2"/>
+      <mimic joint="${prefix}virtual_front_wheel_joint" multiplier="1.0" offset="0.0"/>
+    </joint>
+
+  </xacro:macro>
+
+</robot>
