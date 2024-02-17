@@ -1,13 +1,13 @@
-name: Humble Semi-Binary Build
+name: Rolling Semi-Binary Build
 # description: 'Build & test that compiles the main dependencies from source.'
 
 on:
   pull_request:
     branches:
-      - humble
+      - master
   push:
     branches:
-      - humble
+      - master
   schedule:
     # Run every morning to detect flakiness and broken dependencies
     - cron: '33 1 * * *'
@@ -18,10 +18,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ROS_DISTRO: [humble]
+        ROS_DISTRO: [rolling]
         ROS_REPO: [main, testing]
     with:
       ros_distro: ${{ matrix.ROS_DISTRO }}
       ros_repo: ${{ matrix.ROS_REPO }}
       upstream_workspace: ros2_control_demos.${{ matrix.ROS_DISTRO }}.repos
-      ref_for_scheduled_build: humble
+      ref_for_scheduled_build: master
