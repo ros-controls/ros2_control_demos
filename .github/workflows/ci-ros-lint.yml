@@ -2,6 +2,22 @@ name: ROS Lint
 on:
   pull_request:
 
+env:
+  package-name:
+    ros2_control_demo_example_1
+    ros2_control_demo_example_2
+    ros2_control_demo_example_3
+    ros2_control_demo_example_4
+    ros2_control_demo_example_5
+    ros2_control_demo_example_6
+    ros2_control_demo_example_7
+    ros2_control_demo_example_8
+    ros2_control_demo_example_9
+    ros2_control_demo_example_10
+    ros2_control_demo_example_11
+    ros2_control_demo_example_12
+    ros2_control_demo_example_14
+
 jobs:
   ament_lint:
     name: ament_${{ matrix.linter }}
@@ -19,20 +35,7 @@ jobs:
       with:
         distribution: humble
         linter: ${{ matrix.linter }}
-        package-name:
-          ros2_control_demo_example_1
-          ros2_control_demo_example_2
-          ros2_control_demo_example_3
-          ros2_control_demo_example_4
-          ros2_control_demo_example_5
-          ros2_control_demo_example_6
-          ros2_control_demo_example_7
-          ros2_control_demo_example_8
-          ros2_control_demo_example_9
-          ros2_control_demo_example_10
-          ros2_control_demo_example_11
-          ros2_control_demo_example_12
-          ros2_control_demo_example_14
+        package-name: ${{ env.package-name }}
 
   ament_lint_100:
     name: ament_${{ matrix.linter }}
@@ -49,6 +52,7 @@ jobs:
         distribution: humble
         linter: cpplint
         arguments: "--linelength=100 --filter=-whitespace/newline"
+<<<<<<< HEAD
         package-name:
           ros2_control_demo_example_1
           ros2_control_demo_example_2
@@ -62,3 +66,6 @@ jobs:
           ros2_control_demo_example_10
           ros2_control_demo_example_12
           ros2_control_demo_example_14
+=======
+        package-name: ${{ env.package-name }}
+>>>>>>> 044db05 ([CI] Use a single list for lint job (#451))
