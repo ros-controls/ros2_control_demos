@@ -52,20 +52,4 @@ jobs:
         distribution: humble
         linter: cpplint
         arguments: "--linelength=100 --filter=-whitespace/newline"
-<<<<<<< HEAD
-        package-name:
-          ros2_control_demo_example_1
-          ros2_control_demo_example_2
-          ros2_control_demo_example_3
-          ros2_control_demo_example_4
-          ros2_control_demo_example_5
-          ros2_control_demo_example_6
-          ros2_control_demo_example_7
-          ros2_control_demo_example_8
-          ros2_control_demo_example_9
-          ros2_control_demo_example_10
-          ros2_control_demo_example_12
-          ros2_control_demo_example_14
-=======
         package-name: ${{ env.package-name }}
->>>>>>> 044db05 ([CI] Use a single list for lint job (#451))
