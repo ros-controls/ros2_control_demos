@@ -45,7 +45,7 @@ struct JointValue
 
 struct Joint
 {
-  Joint(const std::string & name) : joint_name(name)
+  explicit Joint(const std::string & name) : joint_name(name)
   {
     state = JointValue();
     command = JointValue();
