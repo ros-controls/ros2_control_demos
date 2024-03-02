@@ -183,21 +183,23 @@ hardware_interface::return_type RRBotActuatorWithoutFeedback::read(
 hardware_interface::return_type ros2_control_demo_example_14::RRBotActuatorWithoutFeedback::write(
   const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
-  RCLCPP_INFO(
-    rclcpp::get_logger("RRBotActuatorWithoutFeedback"), "Writing command: %f", hw_joint_command_);
+  if (!std::isnan(hw_joint_command_))
+  {
+    // START: This part here is for exemplary purposes - Please do not copy to your production code
+    RCLCPP_INFO(
+      rclcpp::get_logger("RRBotActuatorWithoutFeedback"), "Writing command: %f", hw_joint_command_);
 
-  // Simulate sending commands to the hardware
-  std::ostringstream data;
-  data << hw_joint_command_;
-  RCLCPP_INFO(
-    rclcpp::get_logger("RRBotActuatorWithoutFeedback"), "Sending data command: %s",
-    data.str().c_str());
-  send(sock_, data.str().c_str(), strlen(data.str().c_str()), 0);
+    // Simulate sending commands to the hardware
+    std::ostringstream data;
+    data << hw_joint_command_;
+    RCLCPP_INFO(
+      rclcpp::get_logger("RRBotActuatorWithoutFeedback"), "Sending data command: %s",
+      data.str().c_str());
+    send(sock_, data.str().c_str(), strlen(data.str().c_str()), 0);
 
-  RCLCPP_INFO(rclcpp::get_logger("RRBotActuatorWithoutFeedback"), "Joints successfully written!");
-  // END: This part here is for exemplary purposes - Please do not copy to your production code
-
+    RCLCPP_INFO(rclcpp::get_logger("RRBotActuatorWithoutFeedback"), "Joints successfully written!");
+    // END: This part here is for exemplary purposes - Please do not copy to your production code
+  }
   return hardware_interface::return_type::OK;
 }
 
