@@ -70,7 +70,8 @@ Example 9: "Gazebo Classic"
 Example 10: "GPIO interfaces"
    Industrial robot with GPIO interfaces
 
-Example 11: "Car-like robot using steering controller library (tba.)"
+Example 11: "CarlikeBot"
+    *CarlikeBot* with a bicycle steering controller
 
 Example 12: "Controller chaining"
    The example shows a simple chainable controller and its integration to form a controller chain to control the joints of *RRBot*.
@@ -274,6 +275,7 @@ Examples
    Example 8: Using transmissions <../example_8/doc/userdoc.rst>
    Example 9: Gazebo classic <../example_9/doc/userdoc.rst>
    Example 10: Industrial robot with GPIO interfaces <../example_10/doc/userdoc.rst>
+   Example 11: CarlikeBot <../example_11/doc/userdoc.rst>
    Example 12: Controller chaining <../example_12/doc/userdoc.rst>
    Example 14: Modular robots with actuators not providing states <../example_14/doc/userdoc.rst>
    Example 15: Using multiple controller managers <../example_15/doc/userdoc.rst>

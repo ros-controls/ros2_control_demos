@@ -26,6 +26,7 @@
 #include <vector>
 
 #include "hardware_interface/actuator_interface.hpp"
+#include "hardware_interface/lexical_casts.hpp"
 #include "hardware_interface/types/hardware_interface_type_values.hpp"
 #include "rclcpp/rclcpp.hpp"
 
@@ -41,8 +42,10 @@ hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_init(
     return hardware_interface::CallbackReturn::ERROR;
   }
   // START: This part here is for exemplary purposes - Please do not copy to your production code
-  hw_start_sec_ = std::stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
-  hw_stop_sec_ = std::stod(info_.hardware_parameters["example_param_hw_stop_duration_sec"]);
+  hw_start_sec_ =
+    hardware_interface::stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
+  hw_stop_sec_ =
+    hardware_interface::stod(info_.hardware_parameters["example_param_hw_stop_duration_sec"]);
   socket_port_ = std::stoi(info_.hardware_parameters["example_param_socket_port"]);
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
@@ -180,21 +183,23 @@ hardware_interface::return_type RRBotActuatorWithoutFeedback::read(
 hardware_interface::return_type ros2_control_demo_example_14::RRBotActuatorWithoutFeedback::write(
   const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
-  RCLCPP_INFO(
-    rclcpp::get_logger("RRBotActuatorWithoutFeedback"), "Writing command: %f", hw_joint_command_);
+  if (std::isfinite(hw_joint_command_))
+  {
+    // START: This part here is for exemplary purposes - Please do not copy to your production code
+    RCLCPP_INFO(
+      rclcpp::get_logger("RRBotActuatorWithoutFeedback"), "Writing command: %f", hw_joint_command_);
 
-  // Simulate sending commands to the hardware
-  std::ostringstream data;
-  data << hw_joint_command_;
-  RCLCPP_INFO(
-    rclcpp::get_logger("RRBotActuatorWithoutFeedback"), "Sending data command: %s",
-    data.str().c_str());
-  send(sock_, data.str().c_str(), strlen(data.str().c_str()), 0);
+    // Simulate sending commands to the hardware
+    std::ostringstream data;
+    data << hw_joint_command_;
+    RCLCPP_INFO(
+      rclcpp::get_logger("RRBotActuatorWithoutFeedback"), "Sending data command: %s",
+      data.str().c_str());
+    send(sock_, data.str().c_str(), strlen(data.str().c_str()), 0);
 
-  RCLCPP_INFO(rclcpp::get_logger("RRBotActuatorWithoutFeedback"), "Joints successfully written!");
-  // END: This part here is for exemplary purposes - Please do not copy to your production code
-
+    RCLCPP_INFO(rclcpp::get_logger("RRBotActuatorWithoutFeedback"), "Joints successfully written!");
+    // END: This part here is for exemplary purposes - Please do not copy to your production code
+  }
   return hardware_interface::return_type::OK;
 }
 
