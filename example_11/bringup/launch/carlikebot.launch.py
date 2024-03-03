@@ -78,7 +78,6 @@ def generate_launch_description():
         parameters=[robot_controllers],
         output="both",
         remappings=[
-            ("~/robot_description", "/robot_description"),
             ("/bicycle_steering_controller/tf_odometry", "/tf"),
         ],
         condition=IfCondition(remap_odometry_tf),
@@ -88,9 +87,7 @@ def generate_launch_description():
         executable="ros2_control_node",
         parameters=[robot_controllers],
         output="both",
-        remappings=[
-            ("~/robot_description", "/robot_description"),
-        ],
+        remappings=[],
         condition=UnlessCondition(remap_odometry_tf),
     )
     robot_state_pub_bicycle_node = Node(
@@ -98,9 +95,6 @@ def generate_launch_description():
         executable="robot_state_publisher",
         output="both",
         parameters=[robot_description],
-        remappings=[
-            ("~/robot_description", "/robot_description"),
-        ],
     )
     rviz_node = Node(
         package="rviz2",
