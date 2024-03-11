@@ -1,16 +1,16 @@
-name: Build Humble Dockerfile
+name: Build Rolling Dockerfile
 # description: builds the dockerfile contained within the repo
 
 on:
   pull_request:
     branches:
-      - humble
+      - master
   push:
     branches:
-      - humble
+      - master
   schedule:
     # Run every morning to detect broken dependencies
-    - cron: '40 1 * * *'
+    - cron: '50 1 * * *'
 
 
 jobs:
@@ -19,6 +19,6 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
-        ref: humble
+        ref: master
     - name: Build the Docker image
-      run: docker build --file Dockerfile/Dockerfile --tag ros2_control_demos_humble --build-arg ROS_DISTRO=humble .
+      run: docker build --file Dockerfile/Dockerfile --tag ros2_control_demos_rolling --build-arg ROS_DISTRO=rolling .
