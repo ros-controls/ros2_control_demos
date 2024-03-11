@@ -18,5 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+      with:
+        ref: iron
     - name: Build the Docker image
-      run: docker build . --file Dockerfile/Dockerfile --tag ros2_control_demos_iron
+      run: docker build --file Dockerfile/Dockerfile --tag ros2_control_demos_iron --build-arg ROS_DISTRO=iron .
