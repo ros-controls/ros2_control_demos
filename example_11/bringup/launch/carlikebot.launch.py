@@ -98,9 +98,6 @@ def generate_launch_description():
         executable="robot_state_publisher",
         output="both",
         parameters=[robot_description],
-        remappings=[
-            ("~/robot_description", "/robot_description"),
-        ],
     )
     rviz_node = Node(
         package="rviz2",
