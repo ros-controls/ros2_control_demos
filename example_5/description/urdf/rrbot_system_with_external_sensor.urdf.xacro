@@ -28,7 +28,7 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_desc
   <link name="world"/>
 
   <xacro:rrbot parent="world" prefix="$(arg prefix)">
-    <origin xyz="0 0 0" rpy="0 0 0" />
+    <origin xyz="1 1 0" rpy="0 0 0" />
   </xacro:rrbot>
 
   <xacro:rrbot_system_position_only
