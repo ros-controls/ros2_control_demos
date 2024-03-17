@@ -14,6 +14,7 @@ controller_manager:
 
 forward_position_controller:
   ros__parameters:
+    update_rate: 20  # Hz
     joints:
       - joint1
       - joint2
