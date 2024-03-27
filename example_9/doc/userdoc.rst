@@ -11,29 +11,7 @@ gazebo is used for this purpose.
 .. note::
 
   Follow the installation instructions on :ref:`ros2_control_demos_install` how to install all dependencies,
-  gazebo should be automatically installed.
-
-  * If you have installed and compiled this repository locally, you can directly use the commands below.
-  * If you have installed it via the provided docker image: To run the first two steps of this example (without gazebo), use the commands as described with :ref:`ros2_control_demos_install`. To run the later steps using gazebo, execute
-
-    .. code::
-
-      docker run -it --rm --name ros2_control_demos --net host ros2_control_demos ros2 launch ros2_control_demo_example_9 rrbot_gazebo.launch.py gui:=false
-
-    first. Then on your local machine you can run the gazebo client with
-
-    .. code-block:: shell
-
-      gzclient
-
-    and/or ``rviz2`` with
-
-    .. code-block:: shell
-
-      rviz2 -d src/ros2_control_demos/example_9/description/rviz/rrbot.rviz
-
-
-  For details on the ``gz_ros2_control`` plugin, see :ref:`gz_ros2_control`.
+  gazebo should be automatically installed. For details on the ``gz_ros2_control`` plugin, see :ref:`gz_ros2_control`.
 
 Tutorial steps
 --------------------------
