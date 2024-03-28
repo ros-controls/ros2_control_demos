@@ -7,10 +7,13 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_desc
 
   <xacro:macro name="rrbot_gazebo" params="prefix">
 
-    <!-- ros_control plugin -->
+    <!-- ros2_control GZ Sim plugin -->
+    <gazebo reference="world">
+    </gazebo>
     <gazebo>
-      <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
+      <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
         <parameters>$(find ros2_control_demo_example_9)/config/rrbot_controllers.yaml</parameters>
+        <controller_manager_node_name>${prefix}controller_manager</controller_manager_node_name>
       </plugin>
     </gazebo>
 

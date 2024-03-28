@@ -36,13 +36,6 @@ def generate_launch_description():
     # Initialize Arguments
     gui = LaunchConfiguration("gui")
 
-    gazebo = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            [PathJoinSubstitution([FindPackageShare("gazebo_ros"), "launch", "gazebo.launch.py"])]
-        ),
-        launch_arguments={"verbose": "false"}.items(),
-    )
-
     # Get URDF via xacro
     robot_description_content = Command(
         [
@@ -52,13 +45,10 @@ def generate_launch_description():
                 [FindPackageShare("ros2_control_demo_example_9"), "urdf", "rrbot.urdf.xacro"]
             ),
             " ",
-            "use_gazebo_classic:=true",
+            "use_gazebo_sim:=true",
         ]
     )
     robot_description = {"robot_description": robot_description_content}
-    rviz_config_file = PathJoinSubstitution(
-        [FindPackageShare("ros2_control_demo_description"), "rrbot/rviz", "rrbot.rviz"]
-    )
 
     node_robot_state_publisher = Node(
         package="robot_state_publisher",
@@ -67,10 +57,30 @@ def generate_launch_description():
         parameters=[robot_description],
     )
 
+    # Start Gazebo
+    gazebo_world = PathJoinSubstitution(
+        [FindPackageShare("ros2_control_demo_example_9"), "worlds", "empty.world"]
+    )
+    gazebo = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            [PathJoinSubstitution([FindPackageShare("ros_gz_sim"), "launch", "gz_sim.launch.py"])]
+        ),
+        launch_arguments=[("gz_args", [" -r -v 4 ", gazebo_world])],
+    )
+
     spawn_entity = Node(
-        package="gazebo_ros",
-        executable="spawn_entity.py",
-        arguments=["-topic", "robot_description", "-entity", "rrbot_system_position"],
+        package="ros_gz_sim",
+        executable="create",
+        arguments=["-topic", "robot_description", "-name", "rrbot_system_position"],
+        output="screen",
+    )
+
+    clock_bridge = Node(
+        package="ros_gz_bridge",
+        executable="parameter_bridge",
+        name="clock_bridge",
+        parameters=[{"use_sim_time": True}],
+        arguments=["/clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock"],
         output="screen",
     )
 
@@ -85,6 +95,10 @@ def generate_launch_description():
         executable="spawner",
         arguments=["forward_position_controller", "--controller-manager", "/controller_manager"],
     )
+
+    rviz_config_file = PathJoinSubstitution(
+        [FindPackageShare("ros2_control_demo_description"), "rrbot/rviz", "rrbot.rviz"]
+    )
     rviz_node = Node(
         package="rviz2",
         executable="rviz2",
@@ -98,6 +112,7 @@ def generate_launch_description():
         gazebo,
         node_robot_state_publisher,
         spawn_entity,
+        clock_bridge,
         joint_state_broadcaster_spawner,
         robot_controller_spawner,
         rviz_node,
