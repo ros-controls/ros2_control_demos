@@ -273,7 +273,7 @@ Examples
    Example 6: Modular robots with separate communication to each actuator <../example_6/doc/userdoc.rst>
    Example 7: Full tutorial with a 6DOF robot <../example_7/doc/userdoc.rst>
    Example 8: Using transmissions <../example_8/doc/userdoc.rst>
-   Example 9: Gazebo classic <../example_9/doc/userdoc.rst>
+   Example 9: Gazebo <../example_9/doc/userdoc.rst>
    Example 10: Industrial robot with GPIO interfaces <../example_10/doc/userdoc.rst>
    Example 11: CarlikeBot <../example_11/doc/userdoc.rst>
    Example 12: Controller chaining <../example_12/doc/userdoc.rst>
