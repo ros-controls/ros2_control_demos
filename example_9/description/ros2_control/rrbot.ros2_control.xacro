@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <xacro:macro name="rrbot_ros2_control" params="name prefix use_gazebo_classic:=^|false">
+  <xacro:macro name="rrbot_ros2_control" params="name prefix use_gazebo:=^|false">
 
     <ros2_control name="${name}" type="system">
       <hardware>
-        <xacro:if value="${use_gazebo_classic}">
-          <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+        <xacro:if value="${use_gazebo}">
+          <plugin>gz_ros2_control/GazeboSimSystem</plugin>
         </xacro:if>
-        <xacro:unless value="${use_gazebo_classic}">
+        <xacro:unless value="${use_gazebo}">
           <plugin>ros2_control_demo_example_9/RRBotSystemPositionOnlyHardware</plugin>
           <param name="example_param_hw_start_duration_sec">0</param>
           <param name="example_param_hw_stop_duration_sec">3.0</param>
