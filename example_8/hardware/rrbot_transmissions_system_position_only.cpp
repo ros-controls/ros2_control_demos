@@ -231,8 +231,7 @@ hardware_interface::return_type RRBotTransmissionsSystemPositionOnlyHardware::re
 {
   // actuator: state -> transmission
   std::for_each(
-    actuator_interfaces_.begin(), actuator_interfaces_.end(),
-    [](auto & actuator_interface)
+    actuator_interfaces_.begin(), actuator_interfaces_.end(), [](auto & actuator_interface)
     { actuator_interface.transmission_passthrough_ = actuator_interface.state_; });
 
   // transmission: actuator -> joint
@@ -242,8 +241,7 @@ hardware_interface::return_type RRBotTransmissionsSystemPositionOnlyHardware::re
 
   // joint: transmission -> state
   std::for_each(
-    joint_interfaces_.begin(), joint_interfaces_.end(),
-    [](auto & joint_interface)
+    joint_interfaces_.begin(), joint_interfaces_.end(), [](auto & joint_interface)
     { joint_interface.state_ = joint_interface.transmission_passthrough_; });
 
   // log state data
@@ -253,8 +251,7 @@ hardware_interface::return_type RRBotTransmissionsSystemPositionOnlyHardware::re
   {
     // again, this only for simple transmissions, we know there is only one joint
     const auto joint_interface = std::find_if(
-      joint_interfaces_.cbegin(), joint_interfaces_.cend(),
-      [&](const auto & joint_interface)
+      joint_interfaces_.cbegin(), joint_interfaces_.cend(), [&](const auto & joint_interface)
       { return joint_interface.name_ == transmission_info.joints[0].name; });
 
     const auto actuator_interface = std::find_if(
@@ -279,8 +276,7 @@ hardware_interface::return_type RRBotTransmissionsSystemPositionOnlyHardware::wr
 {
   // joint: command -> transmission
   std::for_each(
-    joint_interfaces_.begin(), joint_interfaces_.end(),
-    [](auto & joint_interface)
+    joint_interfaces_.begin(), joint_interfaces_.end(), [](auto & joint_interface)
     { joint_interface.transmission_passthrough_ = joint_interface.command_; });
 
   // transmission: joint -> actuator
@@ -290,8 +286,7 @@ hardware_interface::return_type RRBotTransmissionsSystemPositionOnlyHardware::wr
 
   // actuator: transmission -> command
   std::for_each(
-    actuator_interfaces_.begin(), actuator_interfaces_.end(),
-    [](auto & actuator_interface)
+    actuator_interfaces_.begin(), actuator_interfaces_.end(), [](auto & actuator_interface)
     { actuator_interface.command_ = actuator_interface.transmission_passthrough_; });
 
   // simulate motor motion
@@ -311,8 +306,7 @@ hardware_interface::return_type RRBotTransmissionsSystemPositionOnlyHardware::wr
   {
     // again, this only for simple transmissions, we know there is only one joint
     const auto joint_interface = std::find_if(
-      joint_interfaces_.cbegin(), joint_interfaces_.cend(),
-      [&](const auto & joint_interface)
+      joint_interfaces_.cbegin(), joint_interfaces_.cend(), [&](const auto & joint_interface)
       { return joint_interface.name_ == transmission_info.joints[0].name; });
 
     const auto actuator_interface = std::find_if(

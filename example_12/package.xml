@@ -10,7 +10,7 @@
   <maintainer email="christoph.froehlich@ait.ac.at">Christoph Froehlich</maintainer>
 
   <author email="denis.stogl@stoglrobotics.de">Dr.-Ing. Denis Štogl</author>
-  <author email="christoph.froehlich@ait.ac.at">Christoph Froehlich</author>
+  <author email="sai.kishor@pal-robotics.com">Sai Kishor Kothakota</author>
 
   <license>Apache-2.0</license>
 
@@ -23,8 +23,6 @@
 
   <exec_depend>controller_manager</exec_depend>
   <exec_depend>forward_command_controller</exec_depend>
-  <exec_depend>gazebo_ros</exec_depend>
-  <exec_depend>gazebo_ros2_control</exec_depend>
   <exec_depend>joint_state_broadcaster</exec_depend>
   <exec_depend>joint_state_publisher_gui</exec_depend>
   <exec_depend>joint_trajectory_controller</exec_depend>

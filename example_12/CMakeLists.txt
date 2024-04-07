@@ -76,7 +76,7 @@ install(
   DESTINATION include/ros2_control_demo_example_12
 )
 install(
-  DIRECTORY description/launch description/ros2_control description/urdf description/gazebo
+  DIRECTORY description/launch description/ros2_control description/urdf
   DESTINATION share/ros2_control_demo_example_12
 )
 install(

@@ -9,7 +9,7 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_desc
 
     <!-- ros_control plugin -->
     <gazebo>
-      <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
+      <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
         <parameters>$(find ros2_control_demo_example_9)/config/rrbot_controllers.yaml</parameters>
       </plugin>
     </gazebo>

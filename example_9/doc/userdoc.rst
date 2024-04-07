@@ -6,34 +6,12 @@ Example 9: Simulation with RRBot
 =================================
 
 With *example_9*, we demonstrate the interaction of simulators with ros2_control. More specifically,
-Gazebo Classic is used for this purpose.
+gazebo is used for this purpose.
 
 .. note::
 
   Follow the installation instructions on :ref:`ros2_control_demos_install` how to install all dependencies,
-  Gazebo Classic should be automatically installed.
-
-  * If you have installed and compiled this repository locally, you can directly use the commands below.
-  * If you have installed it via the provided docker image: To run the first two steps of this example (without Gazebo Classic), use the commands as described with :ref:`ros2_control_demos_install`. To run the later steps using Gazebo Classic, execute
-
-    .. code::
-
-      docker run -it --rm --name ros2_control_demos --net host ros2_control_demos ros2 launch ros2_control_demo_example_9 rrbot_gazebo_classic.launch.py gui:=false
-
-    first. Then on your local machine you can run the Gazebo Classic client with
-
-    .. code-block:: shell
-
-      gzclient
-
-    and/or ``rviz2`` with
-
-    .. code-block:: shell
-
-      rviz2 -d src/ros2_control_demos/example_9/description/rviz/rrbot.rviz
-
-
-  For details on the ``gazebo_ros2_control`` plugin, see :ref:`gazebo_ros2_control`.
+  gazebo should be automatically installed. For details on the ``gz_ros2_control`` plugin, see :ref:`gz_ros2_control`.
 
 Tutorial steps
 --------------------------
@@ -55,24 +33,18 @@ Tutorial steps
 
    It uses an identical hardware interface as already discussed with *example_1*, see its docs on details on the hardware interface.
 
-3. To start *RRBot* in the simulators, open a terminal, source your ROS2-workspace and Gazebo Classic installation first, i.e., by
+3. To start *RRBot* in the simulators, open a terminal, source your ROS2-workspace first. Then, execute the launch file with
 
   .. code-block:: shell
 
-    source /usr/share/gazebo/setup.sh
+    ros2 launch ros2_control_demo_example_9 rrbot_gazebo.launch.py gui:=true
 
-  Then, execute the launch file with
+  The launch file loads the robot description, starts gazebo, *Joint State Broadcaster* and *Forward Command Controller*.
+  If you can see two orange and one yellow "box" in gazebo everything has started properly.
 
-  .. code-block:: shell
-
-    ros2 launch ros2_control_demo_example_9 rrbot_gazebo_classic.launch.py gui:=true
-
-  The launch file loads the robot description, starts Gazebo Classic, *Joint State Broadcaster* and *Forward Command Controller*.
-  If you can see two orange and one yellow "box" in Gazebo Classic everything has started properly.
-
-  .. image:: rrbot_gazebo_classic.png
+  .. image:: rrbot_gazebo.png
     :width: 400
-    :alt: Revolute-Revolute Manipulator Robot in Gazebo Classic
+    :alt: Revolute-Revolute Manipulator Robot in gazebo
 
 4. Check if the hardware interface loaded properly, by opening another terminal and executing
 
@@ -118,7 +90,7 @@ Tutorial steps
 
     ros2 launch ros2_control_demo_example_9 test_forward_position_controller.launch.py
 
-   You should now see the robot moving in Gazebo Classic.
+   You should now see the robot moving in gazebo.
 
    If you echo the ``/joint_states`` or ``/dynamic_joint_states`` topics you should see the changing values,
    namely the simulated states of the robot
@@ -135,7 +107,7 @@ Files used for this demos
 - Launch files:
 
   + Hardware: `rrbot.launch.py <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_9/bringup/launch/rrbot.launch.py>`__
-  + Gazebo Classic: `rrbot_gazebo_classic.launch.py <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_9/bringup/launch/rrbot_gazebo_classic.launch.py>`__
+  + gazebo: `rrbot_gazebo.launch.py <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_9/bringup/launch/rrbot_gazebo.launch.py>`__
 
 - Controllers yaml: `rrbot_controllers.yaml <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_9/bringup/config/rrbot_controllers.yaml>`__
 - URDF file: `rrbot.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_9/description/urdf/rrbot.urdf.xacro>`__
