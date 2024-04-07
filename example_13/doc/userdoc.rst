@@ -194,7 +194,13 @@ Tutorial steps
     threedofbot_position_controller[forward_command_controller/ForwardCommandController] inactive
 
 
-2. Activate ``RRBotWithSensor`` and its position controller. Call
+2. Activate ``RRBotWithSensor`` hardware component. Use either the ros2controlcli
+
+  .. code-block:: shell
+
+    ros2 control set_hardware_component_state RRBotSystemWithSensor active
+
+  or call the service manually
 
   .. code-block:: shell
 
@@ -203,6 +209,11 @@ Tutorial steps
     target_state:
       id: 0
       label: active"
+
+  Then activate its position controller via
+
+  .. code-block:: shell
+
     ros2 control switch_controllers --activate rrbot_with_sensor_position_controller
 
   Scenario state:
@@ -248,11 +259,7 @@ Tutorial steps
 
   .. code-block:: shell
 
-    ros2 service call /controller_manager/set_hardware_component_state controller_manager_msgs/srv/SetHardwareComponentState "
-    name: FakeThreeDofBot
-    target_state:
-      id: 0
-      label: inactive"
+    ros2 control set_hardware_component_state FakeThreeDofBot inactive
     ros2 control switch_controllers --activate threedofbot_joint_state_broadcaster threedofbot_pid_gain_controller
 
   Scenario state:
@@ -326,11 +333,7 @@ Tutorial steps
 
   .. code-block:: shell
 
-    ros2 service call /controller_manager/set_hardware_component_state controller_manager_msgs/srv/SetHardwareComponentState "
-    name: FakeThreeDofBot
-    target_state:
-      id: 0
-      label: active"
+    ros2 control set_hardware_component_state FakeThreeDofBot active
     ros2 control switch_controllers --activate threedofbot_position_controller
 
   Scenario state:
@@ -380,11 +383,7 @@ Tutorial steps
   .. code-block:: shell
 
     ros2 control switch_controllers --deactivate rrbot_position_controller
-    ros2 service call /controller_manager/set_hardware_component_state controller_manager_msgs/srv/SetHardwareComponentState "
-    name: RRBotSystemPositionOnly
-    target_state:
-      id: 0
-      label: inactive"
+    ros2 control set_hardware_component_state RRBotSystemPositionOnly inactive
 
   Scenario state:
 
@@ -430,16 +429,7 @@ Tutorial steps
   .. code-block:: shell
 
     ros2 control switch_controllers --deactivate rrbot_joint_state_broadcaster joint_state_broadcaster
-    ros2 service call /controller_manager/set_hardware_component_state controller_manager_msgs/srv/SetHardwareComponentState "
-    name: RRBotSystemPositionOnly
-    target_state:
-      id: 0
-      label: unconfigured"
-    ros2 service call /controller_manager/set_hardware_component_state controller_manager_msgs/srv/SetHardwareComponentState "
-    name: RRBotSystemPositionOnly
-    target_state:
-      id: 0
-      label: finalized"
+    ros2 control set_hardware_component_state RRBotSystemPositionOnly unconfigured
     ros2 control switch_controllers --activate joint_state_broadcaster
 
   Scenario state (everything is broken during ``joint_state_broadcaster`` restart):
