@@ -5,15 +5,10 @@ controller_manager:
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
 
-    forward_position_controller:
-      type: forward_command_controller/ForwardCommandController
-
-    joint_trajectory_position_controller:
-      type: joint_trajectory_controller/JointTrajectoryController
-
 
 forward_position_controller:
   ros__parameters:
+    type: forward_command_controller/ForwardCommandController
     joints:
       - joint1
       - joint2
@@ -22,6 +17,8 @@ forward_position_controller:
 
 joint_trajectory_position_controller:
   ros__parameters:
+    type: joint_trajectory_controller/JointTrajectoryController
+
     joints:
       - joint1
       - joint2
