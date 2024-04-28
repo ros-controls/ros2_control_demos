@@ -16,9 +16,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        ROS_DISTRO: [rolling, jazzy]
     steps:
     - uses: actions/checkout@v4
       with:
         ref: master
     - name: Build the Docker image
-      run: docker build --file Dockerfile/Dockerfile --tag ros2_control_demos_rolling --build-arg ROS_DISTRO=rolling .
+      run: docker build --file Dockerfile/Dockerfile --tag ros2_control_demos_${{ matrix.ROS_DISTRO }} --build-arg ROS_DISTRO=${{ matrix.ROS_DISTRO }} .
