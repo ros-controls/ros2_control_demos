@@ -379,7 +379,7 @@ The ``on_init`` method is called immediately after the controller plugin is dyna
 
 .. code-block:: c++
 
-  using CallbackReturn = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;[]()
+  using CallbackReturn = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
 
   controller_interface::CallbackReturn on_init(){
       // declare and get parameters needed for controller initialization
