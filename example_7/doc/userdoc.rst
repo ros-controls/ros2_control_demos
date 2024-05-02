@@ -333,7 +333,7 @@ The general CMake template to make a hardware plugin available in ros2_control i
 Writing a controller
 --------------------------
 
-In ros2_control, controllers are implemented as plugins that conforms to the ``ControllerInterface`` public interface. Similar to the hardware interfaces, the controller plugins to load are specified using ROS parameters. This is normally  achieved by passing a YAML parameter file to the ``ros2_control_node``. Unlike hardware interfaces, controllers exists in a finite set of states:
+In ros2_control, controllers are implemented as plugins that conform to the ``ControllerInterface`` public interface. Similar to the hardware interfaces, the controller plugins to load are specified using ROS parameters. This is normally  achieved by passing a YAML parameter file to the ``ros2_control_node``. Unlike hardware interfaces, controllers exists in a finite set of states:
 
 1. Unconfigured
 2. Inactive
