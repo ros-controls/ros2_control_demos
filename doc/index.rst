@@ -250,7 +250,6 @@ These are some quick hints, especially for those coming from a ROS1 control back
   * *ros(1)_control* only allowed three hardware interface types: position, velocity, and effort.
     *ros2_control* allows you to create any interface type by defining a custom string. For example, you might define a ``position_in_degrees`` or a ``temperature`` interface.
     The most common (position, velocity, acceleration, effort) are already defined as constants in hardware_interface/types/hardware_interface_type_values.hpp.
-  * Joint names in <ros2_control> tags in the URDF must be compatible with the controller's configuration.
   * In ros2_control, all parameters for the driver are specified in the URDF.
     The ros2_control framework uses the **<ros2_control>** tag in the URDF.
   * Joint names in <ros2_control> tags in the URDF must be compatible with the controller's configuration.
