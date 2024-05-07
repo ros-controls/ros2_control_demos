@@ -15,4 +15,3 @@ jobs:
         ROS_DISTRO: [rolling, jazzy]
     with:
       ros_distro: ${{ matrix.ROS_DISTRO }}
-      container: ubuntu:24.04
