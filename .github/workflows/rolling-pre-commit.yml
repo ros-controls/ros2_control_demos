@@ -9,6 +9,9 @@ on:
 jobs:
   pre-commit:
     uses: ros-controls/ros2_control_ci/.github/workflows/reusable-pre-commit.yml@master
+    strategy:
+      fail-fast: false
+      matrix:
+        ROS_DISTRO: [rolling, jazzy]
     with:
-      ros_distro: rolling
-      container: ubuntu:24.04
+      ros_distro: ${{ matrix.ROS_DISTRO }}
