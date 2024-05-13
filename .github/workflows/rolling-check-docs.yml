@@ -5,6 +5,8 @@ on:
   pull_request:
     branches:
       - master
+    paths:
+      - '**.rst'
 
 jobs:
   check-docs-rolling:
