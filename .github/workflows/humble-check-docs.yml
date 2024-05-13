@@ -1,0 +1,14 @@
+name: Humble Check Docs
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - humble
+
+jobs:
+  check-docs:
+    name: Check Docs
+    uses: ros-controls/control.ros.org/.github/workflows/reusable-sphinx-check-single-version.yml@humble
+    with:
+      ROS2_CONTROL_DEMOS_PR: ${{ github.ref }}
