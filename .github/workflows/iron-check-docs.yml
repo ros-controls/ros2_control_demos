@@ -9,6 +9,6 @@ on:
 jobs:
   check-docs:
     name: Check Docs
-    uses: ros-controls/control.ros.org/.github/workflows/reusable-sphinx-check-single-version.yml@rolling
+    uses: ros-controls/control.ros.org/.github/workflows/reusable-sphinx-check-single-version.yml@iron
     with:
       ROS2_CONTROL_DEMOS_PR: ${{ github.ref }}
