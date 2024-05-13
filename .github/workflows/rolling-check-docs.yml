@@ -7,6 +7,8 @@ on:
       - master
     paths:
       - '**.rst'
+      - '.github/workflows/rolling-check-docs.yml'
+
 
 jobs:
   check-docs-rolling:
