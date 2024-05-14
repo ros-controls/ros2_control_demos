@@ -5,9 +5,29 @@ on:
   pull_request:
     branches:
       - humble
+    paths:
+      - '**.hpp'
+      - '**.cpp'
+      - '.github/workflows/humble-semi-binary-build.yml'
+      - '**/package.xml'
+      - '**/CMakeLists.txt'
+      - '**.xacro'
+      - '**.py'
+      - '**.yaml'
+      - 'ros2_control_demos.humble.repos'
   push:
     branches:
       - humble
+    paths:
+      - '**.hpp'
+      - '**.cpp'
+      - '.github/workflows/humble-semi-binary-build.yml'
+      - '**/package.xml'
+      - '**/CMakeLists.txt'
+      - '**.xacro'
+      - '**.py'
+      - '**.yaml'
+      - 'ros2_control_demos.humble.repos'
   schedule:
     # Run every morning to detect flakiness and broken dependencies
     - cron: '33 1 * * *'

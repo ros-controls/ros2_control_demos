@@ -6,9 +6,29 @@ on:
   pull_request:
     branches:
       - iron
+    paths:
+      - '**.hpp'
+      - '**.cpp'
+      - '.github/workflows/iron-binary-build.yml'
+      - '**/package.xml'
+      - '**/CMakeLists.txt'
+      - '**.xacro'
+      - '**.py'
+      - '**.yaml'
+      - 'ros2_control_demos-not-released.iron.repos'
   push:
     branches:
       - iron
+    paths:
+      - '**.hpp'
+      - '**.cpp'
+      - '.github/workflows/iron-binary-build.yml'
+      - '**/package.xml'
+      - '**/CMakeLists.txt'
+      - '**.xacro'
+      - '**.py'
+      - '**.yaml'
+      - 'ros2_control_demos-not-released.iron.repos'
   schedule:
     # Run every morning to detect flakiness and broken dependencies
     - cron: '03 1 * * *'
