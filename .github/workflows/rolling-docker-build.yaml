@@ -5,9 +5,31 @@ on:
   pull_request:
     branches:
       - master
+    paths:
+      - '**.hpp'
+      - '**.cpp'
+      - Dockerfile/**
+      - '.github/workflows/rolling-docker-build.yml'
+      - '**/package.xml'
+      - '**/CMakeLists.txt'
+      - '**.xacro'
+      - '**.py'
+      - '**.yaml'
+      - 'ros2_control_demos.rolling.repos'
   push:
     branches:
       - master
+    paths:
+      - '**.hpp'
+      - '**.cpp'
+      - Dockerfile/**
+      - '.github/workflows/rolling-docker-build.yml'
+      - '**/package.xml'
+      - '**/CMakeLists.txt'
+      - '**.xacro'
+      - '**.py'
+      - '**.yaml'
+      - 'ros2_control_demos.rolling.repos'
   schedule:
     # Run every morning to detect broken dependencies
     - cron: '50 1 * * *'
