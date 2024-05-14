@@ -1,0 +1,23 @@
+name: Rolling Check Docs
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - master
+    paths:
+      - '**.rst'
+      - '.github/workflows/rolling-check-docs.yml'
+
+
+jobs:
+  check-docs-rolling:
+    name: Check Docs
+    uses: ros-controls/control.ros.org/.github/workflows/reusable-sphinx-check-single-version.yml@rolling
+    with:
+      ROS2_CONTROL_DEMOS_PR: ${{ github.ref }}
+  check-docs-jazzy:
+    name: Check Docs
+    uses: ros-controls/control.ros.org/.github/workflows/reusable-sphinx-check-single-version.yml@jazzy
+    with:
+      ROS2_CONTROL_DEMOS_PR: ${{ github.ref }}
