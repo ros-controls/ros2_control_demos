@@ -70,6 +70,12 @@ The following examples are part of this demo repository:
 
 * Example 14: ["Modular robots with actuators not providing states and with additional sensors"](example_14)
 
+   The example shows how to implement robot hardware with actuators not providing states and with additional sensors.
+
+* Example 15: ["Using multiple controller managers"](example_15)
+
+   This example shows how to integrate multiple robots under different controller manager instances.
+
 ## Structure
 
 The repository is structured into `example_XY` folders that fully contained packages with names `ros2_control_demos_example_XY`.
