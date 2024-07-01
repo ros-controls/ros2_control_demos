@@ -121,7 +121,7 @@ Files used for this demos
 * Controllers yaml: `carlikebot_controllers.yaml <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_11/bringup/config/carlikebot_controllers.yaml>`__
 * URDF file: `carlikebot.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_11/description/urdf/carlikebot.urdf.xacro>`__
 
-  * Description: `carlikebot.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_11/description/urdf/carlikebot.urdf.xacro>`__
+  * Description: `carlikebot_description.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/ros2_control_demo_description/carlikebot/urdf/carlikebot_description.urdf.xacro>`__
   * ``ros2_control`` tag: `carlikebot.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_11/description/ros2_control/carlikebot.ros2_control.xacro>`__
 
 * RViz configuration: `carlikebot.rviz <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/ros2_control_demo_description/carlikebot/rviz/carlikebot.rviz>`__
