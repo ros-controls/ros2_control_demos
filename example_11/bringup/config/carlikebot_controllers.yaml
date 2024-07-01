@@ -5,12 +5,10 @@ controller_manager:
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
 
-    bicycle_steering_controller:
-      type: bicycle_steering_controller/BicycleSteeringController
-
 
 bicycle_steering_controller:
   ros__parameters:
+    type: bicycle_steering_controller/BicycleSteeringController
     wheelbase: 0.325
     front_wheel_radius: 0.05
     rear_wheel_radius: 0.05

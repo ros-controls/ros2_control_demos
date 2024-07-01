@@ -5,12 +5,10 @@ controller_manager:
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
 
-    r6bot_controller:
-      type: ros2_control_demo_example_7/RobotController
-
 
 r6bot_controller:
   ros__parameters:
+    type: ros2_control_demo_example_7/RobotController
     joints:
       - joint_1
       - joint_2
