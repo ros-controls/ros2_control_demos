@@ -31,7 +31,7 @@ namespace ros2_control_demo_example_7
 {
 using CallbackReturn = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
 
-class HARDWARE_INTERFACE_PUBLIC RobotSystem : public hardware_interface::SystemInterface
+class RobotSystem : public hardware_interface::SystemInterface
 {
 public:
   CallbackReturn on_init(const hardware_interface::HardwareInfo & info) override;
