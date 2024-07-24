@@ -5,15 +5,10 @@
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
 
-    forward_position_controller:
-      type: forward_command_controller/ForwardCommandController
-
-    position_trajectory_controller:
-      type: joint_trajectory_controller/JointTrajectoryController
-
 
 /rrbot_1/forward_position_controller:
   ros__parameters:
+    type: forward_command_controller/ForwardCommandController
     joints:
       - rrbot_1_joint1
       - rrbot_1_joint2
@@ -22,6 +17,7 @@
 
 /rrbot_1/position_trajectory_controller:
   ros__parameters:
+    type: joint_trajectory_controller/JointTrajectoryController
     joints:
       - rrbot_1_joint1
       - rrbot_1_joint2
