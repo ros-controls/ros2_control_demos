@@ -6,7 +6,7 @@
       type: joint_state_broadcaster/JointStateBroadcaster
 
 
-/rrbot/forward_position_controller:
+forward_position_controller:
   ros__parameters:
     type: forward_command_controller/ForwardCommandController
     joints:
@@ -15,7 +15,7 @@
     interface_name: position
 
 
-/rrbot/position_trajectory_controller:
+position_trajectory_controller:
   ros__parameters:
     type: joint_trajectory_controller/JointTrajectoryController
     joints:
