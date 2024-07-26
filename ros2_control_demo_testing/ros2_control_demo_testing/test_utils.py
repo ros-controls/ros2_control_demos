@@ -91,5 +91,6 @@ def check_if_js_published(topic, joint_names):
     msgs = wait_for_topics.received_messages(topic)
     msg = msgs[0]
     assert len(msg.name) == len(joint_names), "Wrong number of joints in message"
-    assert msg.name == joint_names, "Wrong joint names"
+    # use a set to compare the joint names, as the order might be different
+    assert set(msg.name) == set(joint_names), "Wrong joint names"
     wait_for_topics.shutdown()
