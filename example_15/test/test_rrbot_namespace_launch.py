@@ -1,4 +1,4 @@
-# Copyright (c) 2022 FZI Forschungszentrum Informatik
+# Copyright (c) 2024 AIT - Austrian Institute of Technology GmbH
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -26,16 +26,25 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-# Author: Lukas Sackewitz
+# Author: Christoph Froehlich
 
 import os
 import pytest
+import unittest
+import time
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_testing.actions import ReadyToTest
+
+# import launch_testing.markers
+from launch_testing_ros import WaitForTopics
+from controller_manager.controller_manager_services import list_controllers
+import rclpy
+from rclpy.node import Node
+from sensor_msgs.msg import JointState
 
 
 # Executes the given launch file and checks if all nodes can be started
@@ -48,7 +57,62 @@ def generate_test_description():
                 "launch/rrbot_namespace.launch.py",
             )
         ),
-        launch_arguments={"gui": "true"}.items(),
+        launch_arguments={"start_rviz": "false"}.items(),
     )
 
     return LaunchDescription([launch_include, ReadyToTest()])
+
+
+# This is our test fixture. Each method is a test case.
+# These run alongside the processes specified in generate_test_description()
+class TestFixture(unittest.TestCase):
+
+    def setUp(self):
+        rclpy.init()
+        self.node = Node("test_node")
+
+    def tearDown(self):
+        self.node.destroy_node()
+        rclpy.shutdown()
+
+    def test_node_start(self, proc_output):
+        start = time.time()
+        found = False
+        while time.time() - start < 2.0 and not found:
+            found = "robot_state_publisher" in self.node.get_node_names()
+            time.sleep(0.1)
+        assert found, "robot_state_publisher not found!"
+
+    def test_controller_running(self, proc_output):
+
+        cname = "forward_position_controller"
+
+        start = time.time()
+        found = False
+        while time.time() - start < 10.0 and not found:
+            controllers = list_controllers(self.node, "/rrbot/controller_manager", 5.0).controller
+            assert controllers, "No controllers found!"
+            for c in controllers:
+                if c.name == cname and c.state == "active":
+                    found = True
+                    break
+        assert found, f"{cname} not found!"
+
+    def test_check_if_msgs_published(self):
+        wait_for_topics = WaitForTopics([("/rrbot/joint_states", JointState)], timeout=15.0)
+        assert wait_for_topics.wait(), "Topic '/rrbot/joint_states' not found!"
+        msgs = wait_for_topics.received_messages("/rrbot/joint_states")
+        msg = msgs[0]
+        assert len(msg.name) == 2, "Wrong number of joints in message"
+        assert msg.name == ["joint1", "joint2"], "Wrong joint names"
+        wait_for_topics.shutdown()
+
+
+# TODO(anyone): enable this if shutdown of ros2_control_node does not fail anymore
+# @launch_testing.post_shutdown_test()
+# # These tests are run after the processes in generate_test_description() have shutdown.
+# class TestDescriptionCraneShutdown(unittest.TestCase):
+
+#     def test_exit_codes(self, proc_info):
+#         """Check if the processes exited normally."""
+#         launch_testing.asserts.assertExitCodes(proc_info)
