@@ -67,6 +67,7 @@ if(BUILD_TESTING)
 
   ament_add_pytest_test(example_8_urdf_xacro test/test_urdf_xacro.py)
   ament_add_pytest_test(view_example_8_launch test/test_view_robot_launch.py)
+  ament_add_pytest_test(run_example_8_launch test/test_rrbot_transmissions_system_position_only_launch.py)
 endif()
 
 ## EXPORTS
