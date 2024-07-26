@@ -39,7 +39,7 @@ from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_testing.actions import ReadyToTest
 
-# import launch_testing.markers
+import launch_testing
 import rclpy
 from rclpy.node import Node
 from ros2_control_demo_testing.test_utils import check_controllers_running, check_if_js_published
