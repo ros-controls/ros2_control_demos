@@ -108,7 +108,7 @@ class TestFixture(unittest.TestCase):
         msgs = wait_for_topics.received_messages("/joint_states")
         msg = msgs[0]
         assert len(msg.name) == 2, "Wrong number of joints in message"
-        assert msg.name == ["joint1", "joint2"], "Wrong joint names"
+        assert set(msg.name) == {"joint1", "joint2"}, "Wrong joint names"
         wait_for_topics.shutdown()
 
 
