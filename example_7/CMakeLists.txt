@@ -5,6 +5,9 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "(GNU|Clang)")
   add_compile_options(-Wall -Wextra)
 endif()
 
+# set the same behavior for windows as it is on linux
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+
 # find dependencies
 set(HW_IF_INCLUDE_DEPENDS
   pluginlib
@@ -36,7 +39,6 @@ foreach(Dependency IN ITEMS ${CONTROLLER_INCLUDE_DEPENDS})
   find_package(${Dependency} REQUIRED)
 endforeach()
 
-
 ## COMPILE
 add_executable(send_trajectory reference_generator/send_trajectory.cpp)
 
@@ -63,10 +65,6 @@ ament_target_dependencies(
   ${HW_IF_INCLUDE_DEPENDS}
   ${CONTROLLER_INCLUDE_DEPENDS}
 )
-
-# Causes the visibility macros to use dllexport rather than dllimport,
-# which is appropriate when building the dll but not consuming it.
-target_compile_definitions(${PROJECT_NAME} PRIVATE "ROS2_CONTROL_DEMO_EXAMPLE_7_BUILDING_DLL")
 
 # Export hardware plugins
 pluginlib_export_plugin_description_file(hardware_interface ros2_control_demo_example_7.xml)
