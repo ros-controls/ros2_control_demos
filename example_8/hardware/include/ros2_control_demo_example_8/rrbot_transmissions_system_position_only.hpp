@@ -28,7 +28,6 @@
 #include "rclcpp/logger.hpp"
 #include "rclcpp/macros.hpp"
 #include "rclcpp_lifecycle/state.hpp"
-#include "ros2_control_demo_example_8/visibility_control.h"
 #include "transmission_interface/transmission.hpp"
 
 namespace ros2_control_demo_example_8
@@ -36,33 +35,25 @@ namespace ros2_control_demo_example_8
 class RRBotTransmissionsSystemPositionOnlyHardware : public hardware_interface::SystemInterface
 {
 public:
-  ROS2_CONTROL_DEMO_EXAMPLE_8_PUBLIC
   hardware_interface::CallbackReturn on_init(
     const hardware_interface::HardwareInfo & info) override;
 
-  ROS2_CONTROL_DEMO_EXAMPLE_8_PUBLIC
   hardware_interface::CallbackReturn on_configure(
     const rclcpp_lifecycle::State & previous_state) override;
 
-  ROS2_CONTROL_DEMO_EXAMPLE_8_PUBLIC
   std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
 
-  ROS2_CONTROL_DEMO_EXAMPLE_8_PUBLIC
   std::vector<hardware_interface::CommandInterface> export_command_interfaces() override;
 
-  ROS2_CONTROL_DEMO_EXAMPLE_8_PUBLIC
   hardware_interface::CallbackReturn on_activate(
     const rclcpp_lifecycle::State & previous_state) override;
 
-  ROS2_CONTROL_DEMO_EXAMPLE_8_PUBLIC
   hardware_interface::CallbackReturn on_deactivate(
     const rclcpp_lifecycle::State & previous_state) override;
 
-  ROS2_CONTROL_DEMO_EXAMPLE_8_PUBLIC
   hardware_interface::return_type read(
     const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
-  ROS2_CONTROL_DEMO_EXAMPLE_8_PUBLIC
   hardware_interface::return_type write(
     const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
