@@ -28,6 +28,7 @@ set(CONTROLLER_INCLUDE_DEPENDS
 )
 
 # find dependencies
+find_package(backward_ros REQUIRED)
 find_package(ament_cmake REQUIRED)
 foreach(Dependency IN ITEMS ${HW_IF_INCLUDE_DEPENDS})
   find_package(${Dependency} REQUIRED)
