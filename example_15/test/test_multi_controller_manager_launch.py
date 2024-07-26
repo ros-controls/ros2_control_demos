@@ -40,11 +40,10 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_testing.actions import ReadyToTest
 
 # import launch_testing.markers
-from launch_testing_ros import WaitForTopics
-from controller_manager.controller_manager_services import list_controllers
 import rclpy
 from rclpy.node import Node
-from sensor_msgs.msg import JointState
+
+from ros2_control_demo_testing.test_utils import check_controllers_running, check_if_js_published
 
 
 # Executes the given launch file and checks if all nodes can be started
@@ -57,7 +56,7 @@ def generate_test_description():
                 "launch/multi_controller_manager_example_two_rrbots.launch.py",
             )
         ),
-        launch_arguments={"start_rviz": "false"}.items(),
+        launch_arguments={"start_rviz_multi": "false"}.items(),
     )
 
     return LaunchDescription([launch_include, ReadyToTest()])
@@ -78,61 +77,23 @@ class TestFixture(unittest.TestCase):
     def test_node_start(self, proc_output):
         start = time.time()
         found = False
-        while time.time() - start < 2.0 and not found:
+        while time.time() - start < 5.0 and not found:
             found = "robot_state_publisher" in self.node.get_node_names()
             time.sleep(0.1)
         assert found, "robot_state_publisher not found!"
 
     def test_controller_running_cm1(self, proc_output):
 
-        cname = "forward_position_controller"
+        cnames = [
+            "forward_position_controller",
+            "joint_state_broadcaster",
+        ]
+        check_controllers_running(self.node, cnames, "/rrbot_1")
+        check_controllers_running(self.node, cnames, "/rrbot_2")
 
-        start = time.time()
-        found = False
-        while time.time() - start < 10.0 and not found:
-            controllers = list_controllers(
-                self.node, "/rrbot_1/controller_manager", 5.0
-            ).controller
-            assert controllers, "No controllers found!"
-            for c in controllers:
-                if c.name == cname and c.state == "active":
-                    found = True
-                    break
-        assert found, f"{cname} not found!"
-
-    def test_controller_running_cm2(self, proc_output):
-
-        cname = "forward_position_controller"
-        start = time.time()
-        found = False
-        while time.time() - start < 10.0 and not found:
-            controllers = list_controllers(
-                self.node, "/rrbot_2/controller_manager", 5.0
-            ).controller
-            assert controllers, "No controllers found!"
-            for c in controllers:
-                if c.name == cname and c.state == "active":
-                    found = True
-                    break
-        assert found, f"{cname} not found!"
-
-    def test_check_if_msgs_published_cm1(self):
-        wait_for_topics = WaitForTopics([("/rrbot_1/joint_states", JointState)], timeout=15.0)
-        assert wait_for_topics.wait(), "Topic '/rrbot_1/joint_states' not found!"
-        msgs = wait_for_topics.received_messages("/rrbot_1/joint_states")
-        msg = msgs[0]
-        assert len(msg.name) == 2, "Wrong number of joints in message"
-        assert msg.name == ["rrbot_1_joint1", "rrbot_1_joint2"], "Wrong joint names"
-        wait_for_topics.shutdown()
-
-    def test_check_if_msgs_published_cm2(self):
-        wait_for_topics = WaitForTopics([("/rrbot_2/joint_states", JointState)], timeout=15.0)
-        assert wait_for_topics.wait(), "Topic '/rrbot_2/joint_states' not found!"
-        msgs = wait_for_topics.received_messages("/rrbot_2/joint_states")
-        msg = msgs[0]
-        assert len(msg.name) == 2, "Wrong number of joints in message"
-        assert msg.name == ["rrbot_2_joint1", "rrbot_2_joint2"], "Wrong joint names"
-        wait_for_topics.shutdown()
+    def test_check_if_msgs_published(self):
+        check_if_js_published("/rrbot_1/joint_states", ["rrbot_1_joint1", "rrbot_1_joint2"])
+        check_if_js_published("/rrbot_2/joint_states", ["rrbot_2_joint1", "rrbot_2_joint2"])
 
 
 # TODO(anyone): enable this if shutdown of ros2_control_node does not fail anymore

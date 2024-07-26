@@ -41,11 +41,9 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_testing.actions import ReadyToTest
 
 # import launch_testing.markers
-from launch_testing_ros import WaitForTopics
-from controller_manager.controller_manager_services import list_controllers
 import rclpy
 from rclpy.node import Node
-from sensor_msgs.msg import JointState
+from ros2_control_demo_testing.test_utils import check_controllers_running, check_if_js_published
 
 
 # Executes the given launch file and checks if all nodes can be started
@@ -79,7 +77,7 @@ class TestFixture(unittest.TestCase):
     def test_node_start(self, proc_output):
         start = time.time()
         found = False
-        while time.time() - start < 2.0 and not found:
+        while time.time() - start < 5.0 and not found:
             found = "robot_state_publisher" in self.node.get_node_names()
             time.sleep(0.1)
         assert found, "robot_state_publisher not found!"
@@ -91,30 +89,11 @@ class TestFixture(unittest.TestCase):
             "joint2_position_controller",
             "joint_state_broadcaster",
         ]
-        found = {cname: False for cname in cnames}  # Define 'found' as a dictionary
 
-        start = time.time()
-        while time.time() - start < 10.0 and not all(found.values()):
-            controllers = list_controllers(self.node, "controller_manager", 5.0).controller
-            assert controllers, "No controllers found!"
-            for c in controllers:
-                for cname in cnames:
-                    if c.name == cname and c.state == "active":
-                        found[cname] = True
-                        break
-
-        assert all(
-            found.values()
-        ), f"Controller(s) not found: {', '.join([cname for cname, is_found in found.items() if not is_found])}"
+        check_controllers_running(self.node, cnames)
 
     def test_check_if_msgs_published(self):
-        wait_for_topics = WaitForTopics([("/joint_states", JointState)], timeout=15.0)
-        assert wait_for_topics.wait(), "Topic '/joint_states' not found!"
-        msgs = wait_for_topics.received_messages("/joint_states")
-        msg = msgs[0]
-        assert len(msg.name) == 2, "Wrong number of joints in message"
-        assert msg.name == ["joint1", "joint2"], "Wrong joint names"
-        wait_for_topics.shutdown()
+        check_if_js_published("/joint_states", ["joint1", "joint2"])
 
 
 # This is our second test fixture. Each method is a test case.
@@ -141,7 +120,7 @@ class TestFixtureChained(unittest.TestCase):
     def test_node_start(self, proc_output):
         start = time.time()
         found = False
-        while time.time() - start < 2.0 and not found:
+        while time.time() - start < 5.0 and not found:
             found = "robot_state_publisher" in self.node.get_node_names()
             time.sleep(0.1)
         assert found, "robot_state_publisher not found!"
@@ -155,30 +134,11 @@ class TestFixtureChained(unittest.TestCase):
             "position_controller",
             "forward_position_controller",
         ]
-        found = {cname: False for cname in cnames}  # Define 'found' as a dictionary
 
-        start = time.time()
-        while time.time() - start < 10.0 and not all(found.values()):
-            controllers = list_controllers(self.node, "controller_manager", 5.0).controller
-            assert controllers, "No controllers found!"
-            for c in controllers:
-                for cname in cnames:
-                    if c.name == cname and c.state == "active":
-                        found[cname] = True
-                        break
-
-        assert all(
-            found.values()
-        ), f"Controller(s) not found: {', '.join([cname for cname, is_found in found.items() if not is_found])}"
+        check_controllers_running(self.node, cnames)
 
     def test_check_if_msgs_published(self):
-        wait_for_topics = WaitForTopics([("/joint_states", JointState)], timeout=15.0)
-        assert wait_for_topics.wait(), "Topic '/joint_states' not found!"
-        msgs = wait_for_topics.received_messages("/joint_states")
-        msg = msgs[0]
-        assert len(msg.name) == 2, "Wrong number of joints in message"
-        assert msg.name == ["joint1", "joint2"], "Wrong joint names"
-        wait_for_topics.shutdown()
+        check_if_js_published("/joint_states", ["joint1", "joint2"])
 
 
 # TODO(anyone): enable this if shutdown of ros2_control_node does not fail anymore

@@ -26,7 +26,6 @@ install(
 )
 
 if(BUILD_TESTING)
-  find_package(ament_cmake_gtest REQUIRED)
   find_package(ament_cmake_pytest REQUIRED)
 
   ament_add_pytest_test(test_rrbot_namespace_launch test/test_rrbot_namespace_launch.py)
