@@ -64,7 +64,11 @@ install(TARGETS ros2_control_demo_example_14
 )
 
 if(BUILD_TESTING)
-  find_package(ament_cmake_gtest REQUIRED)
+  find_package(ament_cmake_pytest REQUIRED)
+
+  ament_add_pytest_test(example_14_urdf_xacro test/test_urdf_xacro.py)
+  ament_add_pytest_test(view_example_14_launch test/test_view_robot_launch.py)
+  ament_add_pytest_test(run_example_14_launch test/test_rrbot_modular_actuators_without_feedback_sensors_for_position_feedback_launch.py)
 endif()
 
 ## EXPORTS
