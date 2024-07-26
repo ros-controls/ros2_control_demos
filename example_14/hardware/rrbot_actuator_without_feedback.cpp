@@ -19,8 +19,10 @@
 #include "ros2_control_demo_example_14/rrbot_actuator_without_feedback.hpp"
 
 #include <netdb.h>
+#include <sys/socket.h>
 #include <chrono>
 #include <cmath>
+#include <cstring>
 #include <limits>
 #include <memory>
 #include <vector>
@@ -94,7 +96,8 @@ hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_init(
   if (connect(sock_, (struct sockaddr *)&address_, sizeof(address_)) < 0)
   {
     RCLCPP_FATAL(
-      rclcpp::get_logger("RRBotActuatorWithoutFeedback"), "Connection over socket failed.");
+      rclcpp::get_logger("RRBotActuatorWithoutFeedback"), "Connection over socket failed: %s",
+      strerror(errno));  // Print the error message
     return hardware_interface::CallbackReturn::ERROR;
   }
   RCLCPP_INFO(rclcpp::get_logger("RRBotActuatorWithoutFeedback"), "Connected to socket");
