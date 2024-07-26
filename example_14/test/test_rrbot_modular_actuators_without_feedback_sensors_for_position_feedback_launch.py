@@ -95,6 +95,7 @@ class TestFixture(unittest.TestCase):
 
 
 # TODO(anyone): enable this if shutdown of ros2_control_node does not fail anymore
+# see https://github.com/ros-controls/ros2_control_demos/issues/542
 # @launch_testing.post_shutdown_test()
 # # These tests are run after the processes in generate_test_description() have shutdown.
 # class TestDescriptionCraneShutdown(unittest.TestCase):
