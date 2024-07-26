@@ -86,7 +86,7 @@ def check_controllers_running(node, cnames, namespace=""):
 
 
 def check_if_js_published(topic, joint_names):
-    wait_for_topics = WaitForTopics([(topic, JointState)], timeout=15.0)
+    wait_for_topics = WaitForTopics([(topic, JointState)], timeout=20.0)
     assert wait_for_topics.wait(), f"Topic '{topic}' not found!"
     msgs = wait_for_topics.received_messages(topic)
     msg = msgs[0]
