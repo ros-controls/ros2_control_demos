@@ -57,7 +57,7 @@ def generate_test_description():
                 "launch/rrbot_system_with_sensor.launch.py",
             )
         ),
-        launch_arguments={"gui": "true"}.items(),
+        launch_arguments={"gui": "False"}.items(),
     )
 
     return LaunchDescription([launch_include, ReadyToTest()])
