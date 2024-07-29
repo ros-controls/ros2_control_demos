@@ -35,6 +35,16 @@ from sensor_msgs.msg import JointState
 from controller_manager.controller_manager_services import list_controllers
 
 
+def check_node_running(node, node_name, timeout=5.0):
+
+    start = time.time()
+    found = False
+    while time.time() - start < timeout and not found:
+        found = node_name in node.get_node_names()
+        time.sleep(0.1)
+    assert found, f"{node_name} not found!"
+
+
 def check_controllers_running(node, cnames, namespace=""):
 
     # wait for controller to be loaded before we call the CM services

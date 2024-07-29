@@ -31,7 +31,6 @@
 import os
 import pytest
 import unittest
-import time
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
@@ -42,7 +41,11 @@ from launch_testing.actions import ReadyToTest
 import launch_testing
 import rclpy
 from rclpy.node import Node
-from ros2_control_demo_testing.test_utils import check_controllers_running, check_if_js_published
+from ros2_control_demo_testing.test_utils import (
+    check_controllers_running,
+    check_if_js_published,
+    check_node_running,
+)
 
 
 # This function specifies the processes to be run for our test
@@ -79,12 +82,7 @@ class TestFixture(unittest.TestCase):
         rclpy.shutdown()
 
     def test_node_start(self, proc_output):
-        start = time.time()
-        found = False
-        while time.time() - start < 5.0 and not found:
-            found = "robot_state_publisher" in self.node.get_node_names()
-            time.sleep(0.1)
-        assert found, "robot_state_publisher not found!"
+        check_node_running(self.node, "robot_state_publisher")
 
     def test_controller_running(self, proc_output):
 
