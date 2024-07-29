@@ -90,17 +90,48 @@ hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_init(
     server->h_length);
   address_.sin_port = htons(socket_port_);
 
+  const int max_retries = 5;
+  const int initial_delay_ms = 1000;  // Initial delay of 1 second
+
   RCLCPP_INFO(
     rclcpp::get_logger("RRBotActuatorWithoutFeedback"), "Trying to connect to port %d.",
     socket_port_);
-  if (connect(sock_, (struct sockaddr *)&address_, sizeof(address_)) < 0)
+
+  int retries = 0;
+  int delay_ms = initial_delay_ms;
+  bool connected = false;
+
+  while (retries < max_retries)
+  {
+    if (connect(sock_, (struct sockaddr *)&address_, sizeof(address_)) == 0)
+    {
+      connected = true;
+      break;
+    }
+
+    RCLCPP_WARN(
+      rclcpp::get_logger("RRBotActuatorWithoutFeedback"),
+      "Connection attempt %d failed: %s. Retrying in %d ms...", retries + 1, strerror(errno),
+      delay_ms);
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(delay_ms));
+    delay_ms *= 2;  // Exponential backoff
+    retries++;
+  }
+
+  if (!connected)
   {
     RCLCPP_FATAL(
-      rclcpp::get_logger("RRBotActuatorWithoutFeedback"), "Connection over socket failed: %s",
-      strerror(errno));  // Print the error message
+      rclcpp::get_logger("RRBotActuatorWithoutFeedback"),
+      "Connection over socket failed after %d attempts: %s", retries, strerror(errno));
     return hardware_interface::CallbackReturn::ERROR;
   }
-  RCLCPP_INFO(rclcpp::get_logger("RRBotActuatorWithoutFeedback"), "Connected to socket");
+  else
+  {
+    RCLCPP_INFO(
+      rclcpp::get_logger("RRBotActuatorWithoutFeedback"), "Successfully connected to port %d.",
+      socket_port_);
+  }
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   return hardware_interface::CallbackReturn::SUCCESS;
