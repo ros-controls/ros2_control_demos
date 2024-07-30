@@ -14,6 +14,7 @@
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
+from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, ThisLaunchFileDir
 
@@ -51,6 +52,16 @@ def generate_launch_description():
             description="Robot controller to start.",
         )
     )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "start_rviz_multi",
+            default_value="true",
+            description="Start RViz2 automatically with this launch file.",
+        )
+    )
+
+    # Initialize Arguments
+    start_rviz_lc = LaunchConfiguration("start_rviz_multi")
 
     # Initialize Arguments
     use_mock_hardware = LaunchConfiguration("use_mock_hardware")
@@ -134,12 +145,13 @@ def generate_launch_description():
         [FindPackageShare("ros2_control_demo_example_15"), "rviz", "multi_controller_manager.rviz"]
     )
 
-    rviz_node = Node(
+    rviz_node_multi = Node(
         package="rviz2",
         executable="rviz2",
-        name="rviz2",
+        name="rviz2_multi",
         output="log",
         arguments=["-d", rviz_config_file],
+        condition=IfCondition(start_rviz_lc),
     )
 
     included_launch_files = [
@@ -150,7 +162,7 @@ def generate_launch_description():
     nodes_to_start = [
         rrbot_1_position_trajectory_controller_spawner,
         rrbot_2_position_trajectory_controller_spawner,
-        rviz_node,
+        rviz_node_multi,
     ]
 
     return LaunchDescription(declared_arguments + included_launch_files + nodes_to_start)

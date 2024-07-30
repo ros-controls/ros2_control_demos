@@ -17,6 +17,7 @@ set(THIS_PACKAGE_INCLUDE_DEPENDS
 )
 
 # find dependencies
+find_package(backward_ros REQUIRED)
 find_package(ament_cmake REQUIRED)
 foreach(Dependency IN ITEMS ${THIS_PACKAGE_INCLUDE_DEPENDS})
   find_package(${Dependency} REQUIRED)
@@ -66,6 +67,7 @@ if(BUILD_TESTING)
 
   ament_add_pytest_test(example_1_urdf_xacro test/test_urdf_xacro.py)
   ament_add_pytest_test(view_example_1_launch test/test_view_robot_launch.py)
+  ament_add_pytest_test(run_example_1_launch test/test_rrbot_launch.py)
 endif()
 
 

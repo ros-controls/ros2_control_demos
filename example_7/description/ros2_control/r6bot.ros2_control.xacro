@@ -11,8 +11,8 @@
 
       <joint name="joint_1">
         <command_interface name="position">
-          <param name="min">{-2*pi}</param>
-          <param name="max">{2*pi}</param>
+          <param name="min">${-2*pi}</param>
+          <param name="max">${2*pi}</param>
         </command_interface>
         <command_interface name="velocity">
           <param name="min">-3.15</param>
@@ -26,8 +26,8 @@
 
       <joint name="joint_2">
         <command_interface name="position">
-          <param name="min">{-2*pi}</param>
-          <param name="max">{2*pi}</param>
+          <param name="min">${-2*pi}</param>
+          <param name="max">${2*pi}</param>
         </command_interface>
         <command_interface name="velocity">
           <param name="min">-3.15</param>
@@ -41,8 +41,8 @@
 
       <joint name="joint_3">
         <command_interface name="position">
-          <param name="min">{-pi}</param>
-          <param name="max">{pi}</param>
+          <param name="min">${-pi}</param>
+          <param name="max">${pi}</param>
         </command_interface>
         <command_interface name="velocity">
           <param name="min">-3.15</param>
@@ -56,8 +56,8 @@
 
       <joint name="joint_4">
         <command_interface name="position">
-          <param name="min">{-2*pi}</param>
-          <param name="max">{2*pi}</param>
+          <param name="min">${-2*pi}</param>
+          <param name="max">${2*pi}</param>
         </command_interface>
         <command_interface name="velocity">
           <param name="min">-3.2</param>
@@ -71,8 +71,8 @@
 
       <joint name="joint_5">
         <command_interface name="position">
-          <param name="min">{-2*pi}</param>
-          <param name="max">{2*pi}</param>
+          <param name="min">${-2*pi}</param>
+          <param name="max">${2*pi}</param>
         </command_interface>
         <command_interface name="velocity">
           <param name="min">-3.2</param>
@@ -86,8 +86,8 @@
 
       <joint name="joint_6">
         <command_interface name="position">
-          <param name="min">{-2*pi}</param>
-          <param name="max">{2*pi}</param>
+          <param name="min">${-2*pi}</param>
+          <param name="max">${2*pi}</param>
         </command_interface>
         <command_interface name="velocity">
           <param name="min">-3.2</param>
