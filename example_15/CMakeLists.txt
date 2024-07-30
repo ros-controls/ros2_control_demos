@@ -26,11 +26,11 @@ install(
 )
 
 if(BUILD_TESTING)
-  find_package(ament_cmake_gtest REQUIRED)
   find_package(ament_cmake_pytest REQUIRED)
 
-  ament_add_pytest_test(test_rrbot_namespace_launch test/test_rrbot_namespace_launch.py)
-  ament_add_pytest_test(test_multi_controller_manager_launch test/test_multi_controller_manager_launch.py)
+  # TODO(christophfroehlich) deactivated because of bug in spawner
+  # ament_add_pytest_test(test_rrbot_namespace_launch test/test_rrbot_namespace_launch.py)
+  # ament_add_pytest_test(test_multi_controller_manager_launch test/test_multi_controller_manager_launch.py)
 
 endif()
 
