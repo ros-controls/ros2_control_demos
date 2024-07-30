@@ -20,7 +20,6 @@
 #define ROS2_CONTROL_DEMO_EXAMPLE_14__RRBOT_ACTUATOR_WITHOUT_FEEDBACK_HPP_
 
 #include <netinet/in.h>
-#include <sys/socket.h>
 #include <memory>
 #include <string>
 #include <vector>

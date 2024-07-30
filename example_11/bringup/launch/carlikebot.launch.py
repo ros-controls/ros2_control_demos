@@ -128,11 +128,12 @@ def generate_launch_description():
         )
     )
 
-    # Delay start of robot_controller after `joint_state_broadcaster`
-    delay_robot_controller_spawner_after_joint_state_broadcaster_spawner = RegisterEventHandler(
+    # Delay start of joint_state_broadcaster after `robot_controller`
+    # TODO(anyone): This is a workaround for flaky tests. Remove when fixed.
+    delay_joint_state_broadcaster_after_robot_controller_spawner = RegisterEventHandler(
         event_handler=OnProcessExit(
-            target_action=joint_state_broadcaster_spawner,
-            on_exit=[robot_bicycle_controller_spawner],
+            target_action=robot_bicycle_controller_spawner,
+            on_exit=[joint_state_broadcaster_spawner],
         )
     )
 
@@ -140,9 +141,9 @@ def generate_launch_description():
         control_node,
         control_node_remapped,
         robot_state_pub_bicycle_node,
-        joint_state_broadcaster_spawner,
+        robot_bicycle_controller_spawner,
+        delay_joint_state_broadcaster_after_robot_controller_spawner,
         delay_rviz_after_joint_state_broadcaster_spawner,
-        delay_robot_controller_spawner_after_joint_state_broadcaster_spawner,
     ]
 
     return LaunchDescription(declared_arguments + nodes)
