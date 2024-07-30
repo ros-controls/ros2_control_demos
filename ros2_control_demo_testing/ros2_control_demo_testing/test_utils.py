@@ -68,7 +68,7 @@ def check_controllers_running(node, cnames, namespace=""):
         time.sleep(0.1)
     assert all(
         found.values()
-    ), f"Controller node(s) not found: {', '.join(["ns: " + namespace_api + ", ctrl:" + cname for cname, is_found in found.items() if not is_found])}, but seeing {node.get_node_names_and_namespaces()}"
+    ), f"Controller node(s) not found: {', '.join(['ns: ' + namespace_api + ', ctrl:' + cname for cname, is_found in found.items() if not is_found])}, but seeing {node.get_node_names_and_namespaces()}"
 
     found = {cname: False for cname in cnames}  # Define 'found' as a dictionary
     start = time.time()
