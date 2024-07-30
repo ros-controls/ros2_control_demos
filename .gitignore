@@ -1,6 +1,2 @@
-.kdev4/
-
-
-*~
-*.kate-swp
-*.kdev4
+.ccache
+.work
