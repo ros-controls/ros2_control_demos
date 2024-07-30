@@ -99,23 +99,26 @@ def generate_launch_description():
     joint_state_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["joint_state_broadcaster", "-c", "/rrbot/controller_manager"],
+        namespace="rrbot",
+        arguments=["joint_state_broadcaster"],
     )
 
     robot_forward_position_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["forward_position_controller", "-c", "/rrbot/controller_manager"],
+        namespace="rrbot",
+        arguments=["forward_position_controller", "--param-file", robot_controllers],
     )
 
     robot_position_trajectory_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
+        namespace="rrbot",
         arguments=[
             "position_trajectory_controller",
-            "-c",
-            "/rrbot/controller_manager",
             "--inactive",
+            "--param-file",
+            robot_controllers,
         ],
     )
 

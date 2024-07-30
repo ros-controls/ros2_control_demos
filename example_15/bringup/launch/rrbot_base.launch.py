@@ -209,7 +209,13 @@ def generate_launch_description():
         package="controller_manager",
         executable="spawner",
         namespace=namespace,
-        arguments=[robot_controller, "-c", controller_manager_name],
+        arguments=[
+            robot_controller,
+            "-c",
+            controller_manager_name,
+            "--param-file",
+            robot_controllers,
+        ],
     )
 
     # Delay rviz start after `joint_state_broadcaster`

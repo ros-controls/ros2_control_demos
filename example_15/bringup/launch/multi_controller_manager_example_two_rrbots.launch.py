@@ -90,11 +90,18 @@ def generate_launch_description():
     rrbot_1_position_trajectory_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
+        namespace="rrbot_1",
         arguments=[
             "position_trajectory_controller",
-            "-c",
-            "/rrbot_1/controller_manager",
             "--inactive",
+            "--param-file",
+            PathJoinSubstitution(
+                [
+                    FindPackageShare("ros2_control_demo_example_15"),
+                    "config",
+                    "multi_controller_manager_rrbot_1_controllers.yaml",
+                ]
+            ),
         ],
     )
 
@@ -119,11 +126,18 @@ def generate_launch_description():
     rrbot_2_position_trajectory_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
+        namespace="rrbot_2",
         arguments=[
             "position_trajectory_controller",
-            "-c",
-            "/rrbot_2/controller_manager",
             "--inactive",
+            "--param-file",
+            PathJoinSubstitution(
+                [
+                    FindPackageShare("ros2_control_demo_example_15"),
+                    "config",
+                    "multi_controller_manager_rrbot_2_controllers.yaml",
+                ]
+            ),
         ],
     )
 
