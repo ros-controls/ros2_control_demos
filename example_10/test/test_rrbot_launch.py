@@ -38,7 +38,6 @@ from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_testing.actions import ReadyToTest
 
-import launch_testing
 import rclpy
 from rclpy.node import Node
 from ros2_control_demo_testing.test_utils import (
@@ -50,11 +49,8 @@ from ros2_control_demo_testing.test_utils import (
 
 # This function specifies the processes to be run for our test
 # The ReadyToTest action waits for 15 second by default for the processes to
-# start, if processes take more time an error is thrown. We use decorator here
-# to provide timeout duration of 20 second so that processes that take longer than
-# 15 seconds can start up.
+# start, if processes take more time an error is thrown.
 @pytest.mark.launch_test
-@launch_testing.ready_to_test_action_timeout(20)
 def generate_test_description():
     launch_include = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
