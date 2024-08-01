@@ -114,26 +114,28 @@ Tutorial steps
 
 .. include:: ../../doc/run_from_docker.rst
 
-1. After starting the example there should be the following scene:
+1. After starting the example with
 
-   .. code-block:: shell
+  .. code-block:: shell
 
    ros2 launch ros2_control_demo_example_13 three_robots.launch.py
-    
-    - right robot is moving (RRBotSystemPositionOnly - using auto-start)
 
-      - All interfaces are available and position controller is started and receives commands
-      - all controllers running
+  there should be the following scene:
 
-    - left robot is standing upright (RRBotWithSensor - using auto-configure)
+  - right robot is moving (RRBotSystemPositionOnly - using auto-start)
 
-      - only state interfaces are available therefore it can visualized, but not moved
-      - only position command controller is not running
+    - All interfaces are available and position controller is started and receives commands
+    - all controllers running
 
-    - middle robot is "broken" (FakeThreeDofBot - it is only initialized)
+  - left robot is standing upright (RRBotWithSensor - using auto-configure)
 
-      - no interfaces are available
-      - all controllers inactive
+    - only state interfaces are available therefore it can visualized, but not moved
+    - only position command controller is not running
+
+  - middle robot is "broken" (FakeThreeDofBot - it is only initialized)
+
+    - no interfaces are available
+    - all controllers inactive
 
   Hardware status:
 
