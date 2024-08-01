@@ -5,6 +5,9 @@
 Example 13: Multi-robot system with lifecycle management
 ==========================================================
 
+This example shows how to include multiple robots in a single controller manager instance.
+Additionally, hardware lifecycle management is demonstrated.
+
 Hardware and interfaces
 -------------------------
 
@@ -68,7 +71,9 @@ Hardware and interfaces
 Available controllers
 -------------------------
 
-- ``joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]``
+- Global
+
+  - ``joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]``
 
 - RRBotSystemPositionOnly
 
