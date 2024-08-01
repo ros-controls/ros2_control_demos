@@ -77,13 +77,6 @@ def generate_launch_description():
         package="controller_manager",
         executable="ros2_control_node",
         parameters=[robot_description, robot_controllers],
-        remappings=[
-            ("/joint_state_broadcaster/joint_states", "joint_states"),
-        ],
-        output={
-            "stdout": "screen",
-            "stderr": "screen",
-        },
     )
     robot_state_pub_node = Node(
         package="robot_state_publisher",
