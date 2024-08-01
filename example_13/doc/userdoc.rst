@@ -126,60 +126,61 @@ Tutorial steps
       - no interfaces are available
       - all controllers inactive
 
-  Hardware status: (``ros2 control list_hardware_components``)
+  Hardware status:
 
-   .. code-block:: shell
+  .. code-block:: shell
 
-     Hardware Component 1
-        name: FakeThreeDofBot
-        type: system
-        plugin name: mock_components/GenericSystem
-        state: id=1 label=unconfigured
-        command interfaces
-                threedofbot_joint1/position [unavailable] [unclaimed]
-                threedofbot_joint1/pid_gain [unavailable] [unclaimed]
-                threedofbot_joint2/position [unavailable] [unclaimed]
-                threedofbot_joint2/pid_gain [unavailable] [unclaimed]
-                threedofbot_joint3/position [unavailable] [unclaimed]
-                threedofbot_joint3/pid_gain [unavailable] [unclaimed]
-     Hardware Component 2
-             name: RRBotSystemWithSensor
-             type: system
-             plugin name: ros2_control_demo_hardware/RRBotSystemWithSensorHardware
-             state: id=2 label=inactive
-             command interfaces
-                     rrbot_with_sensor_joint1/position [available] [unclaimed]
-                     rrbot_with_sensor_joint2/position [available] [unclaimed]
-     Hardware Component 3
-             name: ExternalRRBotFTSensor
-             type: sensor
-             plugin name: ros2_control_demo_hardware/ExternalRRBotForceTorqueSensorHardware
-             state: id=3 label=active
-             command interfaces
-     Hardware Component 4
-             name: RRBotSystemPositionOnly
-             type: system
-             plugin name: ros2_control_demo_hardware/RRBotSystemPositionOnlyHardware
-             state: id=3 label=active
-             command interfaces
-                     rrbot_joint1/position [available] [claimed]
-                     rrbot_joint2/position [available] [claimed]
+    $ ros2 control list_hardware_components
+    Hardware Component 1
+      name: FakeThreeDofBot
+      type: system
+      plugin name: mock_components/GenericSystem
+      state: id=1 label=unconfigured
+      command interfaces
+              threedofbot_joint1/position [unavailable] [unclaimed]
+              threedofbot_joint1/pid_gain [unavailable] [unclaimed]
+              threedofbot_joint2/position [unavailable] [unclaimed]
+              threedofbot_joint2/pid_gain [unavailable] [unclaimed]
+              threedofbot_joint3/position [unavailable] [unclaimed]
+              threedofbot_joint3/pid_gain [unavailable] [unclaimed]
+    Hardware Component 2
+            name: RRBotSystemWithSensor
+            type: system
+            plugin name: ros2_control_demo_hardware/RRBotSystemWithSensorHardware
+            state: id=2 label=inactive
+            command interfaces
+                    rrbot_with_sensor_joint1/position [available] [unclaimed]
+                    rrbot_with_sensor_joint2/position [available] [unclaimed]
+    Hardware Component 3
+            name: ExternalRRBotFTSensor
+            type: sensor
+            plugin name: ros2_control_demo_hardware/ExternalRRBotForceTorqueSensorHardware
+            state: id=3 label=active
+            command interfaces
+    Hardware Component 4
+            name: RRBotSystemPositionOnly
+            type: system
+            plugin name: ros2_control_demo_hardware/RRBotSystemPositionOnlyHardware
+            state: id=3 label=active
+            command interfaces
+                    rrbot_joint1/position [available] [claimed]
+                    rrbot_joint2/position [available] [claimed]
 
   Controllers status:
 
-   .. code-block:: shell
+  .. code-block:: shell
 
-      $ ros2 control list_controllers
-      joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
-      rrbot_external_fts_broadcaster[force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster] active
-      rrbot_joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
-      rrbot_position_controller[forward_command_controller/ForwardCommandController] active
-      rrbot_with_sensor_fts_broadcaster[force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster] active
-      rrbot_with_sensor_joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
-      rrbot_with_sensor_position_controller[forward_command_controller/ForwardCommandController] inactive
-      threedofbot_joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] inactive
-      threedofbot_pid_gain_controller[forward_command_controller/ForwardCommandController] inactive
-      threedofbot_position_controller[forward_command_controller/ForwardCommandController] inactive
+    $ ros2 control list_controllers
+    joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+    rrbot_external_fts_broadcaster[force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster] active
+    rrbot_joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+    rrbot_position_controller[forward_command_controller/ForwardCommandController] active
+    rrbot_with_sensor_fts_broadcaster[force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster] active
+    rrbot_with_sensor_joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+    rrbot_with_sensor_position_controller[forward_command_controller/ForwardCommandController] inactive
+    threedofbot_joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] inactive
+    threedofbot_pid_gain_controller[forward_command_controller/ForwardCommandController] inactive
+    threedofbot_position_controller[forward_command_controller/ForwardCommandController] inactive
 
 
 2. Activate ``RRBotWithSensor`` and its position controller. Call
@@ -199,9 +200,23 @@ Tutorial steps
   - left robot is moving
   - middle robot is "broken"
 
-  Hardware status: ``RRBotSystemWithSensor`` is in state active
+  Hardware status: ``RRBotSystemWithSensor`` is now in active state
 
-  Controllers status: ``rrbot_with_sensor_position_controller`` is now active:
+  .. code-block:: shell
+
+    $ ros2 control list_hardware_components
+    ...
+    Hardware Component 2
+        name: RRBotSystemWithSensor
+        type: system
+        plugin name: ros2_control_demo_example_4/RRBotSystemWithSensorHardware
+        state: id=3 label=active
+        command interfaces
+                rrbot_with_sensor_joint1/position [available] [claimed]
+                rrbot_with_sensor_joint2/position [available] [claimed]
+    ...
+
+  Controllers status: ``rrbot_with_sensor_position_controller`` is now in active state:
 
   .. code-block:: shell
 
@@ -233,9 +248,26 @@ Tutorial steps
 
   - right robot is moving
   - left robot is moving
-  - middle robot is still "broken"
+  - middle robot is standing still
 
   Hardware status: ``FakeThreeDofBot`` is in inactive state.
+
+  .. code-block:: shell
+
+    $ ros2 control list_hardware_components
+    Hardware Component 1
+          name: FakeThreeDofBot
+          type: system
+          plugin name: mock_components/GenericSystem
+          state: id=2 label=inactive
+          command interfaces
+                  threedofbot_joint1/position [available] [unclaimed]
+                  threedofbot_joint1/pid_gain [available] [claimed]
+                  threedofbot_joint2/position [available] [unclaimed]
+                  threedofbot_joint2/pid_gain [available] [claimed]
+                  threedofbot_joint3/position [available] [unclaimed]
+                  threedofbot_joint3/pid_gain [available] [claimed]
+    ...
 
   Controllers status, ``threedofbot_joint_state_broadcaster`` and ``threedofbot_pid_gain_controller`` are in active state now:
 
@@ -279,7 +311,7 @@ Tutorial steps
   - left robot is moving
   - middle robot is now still "standing"
 
-5. Activate ``FakeThreeDofBot`` and its joint state broadcaster and non-movement command interfaces. Call
+5. Activate ``FakeThreeDofBot`` and its controller. Call
 
   .. code-block:: shell
 
@@ -297,6 +329,23 @@ Tutorial steps
   - middle robot is moving
 
   Hardware status: ``FakeThreeDofBot`` is in active state.
+
+  .. code-block:: shell
+
+    $ ros2 control list_hardware_components
+    Hardware Component 1
+        name: FakeThreeDofBot
+        type: system
+        plugin name: mock_components/GenericSystem
+        state: id=3 label=active
+        command interfaces
+                threedofbot_joint1/position [available] [claimed]
+                threedofbot_joint1/pid_gain [available] [claimed]
+                threedofbot_joint2/position [available] [claimed]
+                threedofbot_joint2/pid_gain [available] [claimed]
+                threedofbot_joint3/position [available] [claimed]
+                threedofbot_joint3/pid_gain [available] [claimed]
+    ...
 
   Controllers status (all active now):
 
@@ -334,6 +383,20 @@ Tutorial steps
 
   Hardware status: ``RRBotSystemPositionOnly`` is in inactive state.
 
+  .. code-block:: shell
+
+    $ ros2 control list_hardware_components
+    ...
+    Hardware Component 4
+        name: RRBotSystemPositionOnly
+        type: system
+        plugin name: ros2_control_demo_example_5/RRBotSystemPositionOnlyHardware
+        state: id=2 label=inactive
+        command interfaces
+                rrbot_joint1/position [available] [unclaimed]
+                rrbot_joint2/position [available] [unclaimed]
+    ...
+
   Controllers status: ``rrbot_position_controller`` is now in inactive state
 
   .. code-block:: shell
@@ -370,7 +433,7 @@ Tutorial steps
 
   Scenario state (everything is broken during ``joint_state_broadcaster`` restart):
 
-  - right robot is "broken"
+  - right robot is standing still.
   - left robot is moving
   - middle robot is moving
 
