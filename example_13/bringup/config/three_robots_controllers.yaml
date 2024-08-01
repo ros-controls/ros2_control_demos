@@ -65,7 +65,7 @@ rrbot_position_controller:
 rrbot_external_fts_broadcaster:
   ros__parameters:
     sensor_name: rrbot_tcp_fts_sensor
-    frame_id: tool_link
+    frame_id: rrbot_tool_link
 
 
 # RRBot with sensor controllers
@@ -88,8 +88,7 @@ rrbot_with_sensor_fts_broadcaster:
   ros__parameters:
     interface_names.force.x: rrbot_with_sensor_tcp_fts_sensor/force.x
     interface_names.torque.z: rrbot_with_sensor_tcp_fts_sensor/torque.z
-    frame_id: tool_link
-
+    frame_id: rrbot_with_sensor_tool_link
 
 # ThreeDofBot controllers
 threedofbot_joint_state_broadcaster:
