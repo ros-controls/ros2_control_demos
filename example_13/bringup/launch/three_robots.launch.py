@@ -17,6 +17,7 @@
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
+from launch.conditions import IfCondition
 from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
 
 from launch_ros.actions import Node
@@ -25,16 +26,26 @@ from launch_ros.substitutions import FindPackageShare
 
 def generate_launch_description():
     # Declare arguments
-    declared_arguments = [
+    declared_arguments = []
+    declared_arguments.append(
         DeclareLaunchArgument(
             "slowdown",
             default_value="50.0",
             description="Slowdown factor of the RRbot.",
         )
-    ]
+    )
+    # Declare arguments
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "gui",
+            default_value="true",
+            description="Start RViz2 automatically with this launch file.",
+        )
+    )
 
     # Initialize Arguments
     slowdown = LaunchConfiguration("slowdown")
+    gui = LaunchConfiguration("gui")
 
     # Get URDF via xacro
     robot_description_content = Command(
@@ -90,6 +101,7 @@ def generate_launch_description():
         name="rviz2",
         output="log",
         arguments=["-d", rviz_config_file],
+        condition=IfCondition(gui),
     )
 
     # Separate robot state publishers for each robot
@@ -98,47 +110,45 @@ def generate_launch_description():
     joint_state_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager"],
+        arguments=["joint_state_broadcaster"],
     )
 
     # RRBot controllers
     rrbot_joint_state_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["rrbot_joint_state_broadcaster", "-c", "/controller_manager"],
+        arguments=["rrbot_joint_state_broadcaster"],
     )
     rrbot_position_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["rrbot_position_controller", "-c", "/controller_manager"],
+        arguments=["rrbot_position_controller"],
     )
     # External FTS broadcaster
     rrbot_external_fts_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["rrbot_external_fts_broadcaster", "-c", "/controller_manager"],
+        arguments=["rrbot_external_fts_broadcaster"],
     )
 
     # RRBot controllers
     rrbot_with_sensor_joint_state_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["rrbot_with_sensor_joint_state_broadcaster", "-c", "/controller_manager"],
+        arguments=["rrbot_with_sensor_joint_state_broadcaster"],
     )
     rrbot_with_sensor_position_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
         arguments=[
             "rrbot_with_sensor_position_controller",
-            "-c",
-            "/controller_manager",
             "--inactive",
         ],
     )
     rrbot_with_sensor_fts_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["rrbot_with_sensor_fts_broadcaster", "-c", "/controller_manager"],
+        arguments=["rrbot_with_sensor_fts_broadcaster"],
     )
 
     # ThreeDofBot controllers
@@ -155,12 +165,12 @@ def generate_launch_description():
     threedofbot_position_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["threedofbot_position_controller", "-c", "/controller_manager", "--inactive"],
+        arguments=["threedofbot_position_controller", "--inactive"],
     )
     threedofbot_pid_gain_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["threedofbot_pid_gain_controller", "-c", "/controller_manager", "--inactive"],
+        arguments=["threedofbot_pid_gain_controller", "--inactive"],
     )
 
     # Command publishers
