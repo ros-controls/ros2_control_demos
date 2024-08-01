@@ -5,12 +5,6 @@
 Example 13: Multi-robot system with lifecycle management
 ==========================================================
 
-- Launch file: [three_robots.launch.py](ros2_control_demo_bringup/launch/three_robots.launch.py)
-- Controllers: [three_robots_controllers.yaml](ros2_control_demo_bringup/config/three_robots_controllers.yaml)
-- URDF: [three_robots.urdf.xacro](ros2_control_demo_bringup/config/three_robots.urdf.xacro)
-- ros2_control URDF: [three_robots.ros2_control.xacro](ros2_control_demo_description/rrbot_description/ros2_control/three_robots.ros2_control.xacro)
-
-
 Hardware and interfaces
 -------------------------
 
@@ -457,3 +451,19 @@ Tutorial steps
     threedofbot_joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
     threedofbot_pid_gain_controller[forward_command_controller/ForwardCommandController] active
     threedofbot_position_controller[forward_command_controller/ForwardCommandController] active
+
+Files used for this demos
+-------------------------
+
+- Launch file: `three_robots.launch.py <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_13/bringup/launch/three_robots.launch.py>`__
+- Controllers yaml: `three_robots_controllers.yaml <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_13/bringup/config/three_robots_controllers.yaml>`__
+- URDF file: `three_robots.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_13/description/urdf/three_robots.urdf.xacro>`__
+
+  + Description: `threedofbot_description.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/ros2_control_demo_description/r3bot/urdf/threedofbot_description.urdf.xacro>`__
+  + ``ros2_control`` tag: `three_robots.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_13/description/ros2_control/three_robots.ros2_control.xacro>`__
+- RViz configuration: `three_robots.rviz <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_13/description/rviz/three_robots.rviz>`__
+
+Controllers from this demo
+--------------------------
+- ``Joint State Broadcaster`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/{REPOS_FILE_BRANCH}/joint_state_broadcaster>`__): `doc <https://control.ros.org/{REPOS_FILE_BRANCH}/doc/ros2_controllers/joint_state_broadcaster/doc/userdoc.html>`__
+- ``Forward Command Controller`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/{REPOS_FILE_BRANCH}/forward_command_controller>`__): `doc <https://control.ros.org/{REPOS_FILE_BRANCH}/doc/ros2_controllers/forward_command_controller/doc/userdoc.html>`__
