@@ -104,23 +104,24 @@ class TestFixture(unittest.TestCase):
 
         # --- activate second robot with its controllers ---
         # Command to activate the second robot with its controllers
-        command = [
-            "ros2",
-            "control",
-            "set_hardware_component_state",
-            "RRBotSystemWithSensor",
-            "active",
-        ]
-        # Execute the command
-        subprocess.run(command)
-        command = [
-            "ros2",
-            "control",
-            "switch_controllers",
-            "--activate",
-            "rrbot_with_sensor_position_controller",
-        ]
-        subprocess.run(command)
+        subprocess.run(
+            [
+                "ros2",
+                "control",
+                "set_hardware_component_state",
+                "RRBotSystemWithSensor",
+                "active",
+            ]
+        )
+        subprocess.run(
+            [
+                "ros2",
+                "control",
+                "switch_controllers",
+                "--activate",
+                "rrbot_with_sensor_position_controller",
+            ]
+        )
         cnames = [
             "joint_state_broadcaster",
             "rrbot_external_fts_broadcaster",
@@ -139,6 +140,201 @@ class TestFixture(unittest.TestCase):
                 "rrbot_joint1",
                 "rrbot_with_sensor_joint2",
                 "rrbot_joint2",
+            ],
+        )
+
+        # --- configure FakeThreeDofBot its controllers ---
+        subprocess.run(
+            [
+                "ros2",
+                "control",
+                "set_hardware_component_state",
+                "FakeThreeDofBot",
+                "inactive",
+            ]
+        )
+        subprocess.run(
+            [
+                "ros2",
+                "control",
+                "switch_controllers",
+                "--activate",
+                "threedofbot_joint_state_broadcaster",
+                "threedofbot_pid_gain_controller",
+            ]
+        )
+        cnames = [
+            "joint_state_broadcaster",
+            "rrbot_external_fts_broadcaster",
+            "rrbot_joint_state_broadcaster",
+            "rrbot_position_controller",
+            "rrbot_with_sensor_joint_state_broadcaster",
+            "rrbot_with_sensor_fts_broadcaster",
+            "rrbot_with_sensor_position_controller",
+            "threedofbot_joint_state_broadcaster",
+            "threedofbot_pid_gain_controller",
+        ]
+        check_controllers_running(self.node, cnames)
+        # still the same joint_states
+        check_if_js_published(
+            "/joint_states",
+            [
+                "rrbot_with_sensor_joint1",
+                "rrbot_joint1",
+                "rrbot_with_sensor_joint2",
+                "rrbot_joint2",
+            ],
+        )
+
+        # --- restart global joint state broadcaster ---
+        subprocess.run(
+            [
+                "ros2",
+                "control",
+                "switch_controllers",
+                "--deactivate",
+                "joint_state_broadcaster",
+            ]
+        )
+        subprocess.run(
+            [
+                "ros2",
+                "control",
+                "switch_controllers",
+                "--activate",
+                "joint_state_broadcaster",
+            ]
+        )
+        # now the joint_states of threedofbot and rrbot_with_sensor are broadcasted, too.
+        check_if_js_published(
+            "/joint_states",
+            [
+                "rrbot_with_sensor_joint1",
+                "rrbot_joint1",
+                "rrbot_with_sensor_joint2",
+                "rrbot_joint2",
+                "threedofbot_joint1",
+                "threedofbot_joint2",
+                "threedofbot_joint3",
+            ],
+        )
+
+        # --- activate FakeThreeDofBot and its controllers ---
+        subprocess.run(
+            [
+                "ros2",
+                "control",
+                "set_hardware_component_state",
+                "FakeThreeDofBot",
+                "active",
+            ]
+        )
+        subprocess.run(
+            [
+                "ros2",
+                "control",
+                "switch_controllers",
+                "--activate",
+                "threedofbot_position_controller",
+            ]
+        )
+        cnames = [
+            "joint_state_broadcaster",
+            "rrbot_external_fts_broadcaster",
+            "rrbot_joint_state_broadcaster",
+            "rrbot_position_controller",
+            "rrbot_with_sensor_joint_state_broadcaster",
+            "rrbot_with_sensor_fts_broadcaster",
+            "rrbot_with_sensor_position_controller",
+            "threedofbot_joint_state_broadcaster",
+            "threedofbot_pid_gain_controller",
+            "threedofbot_position_controller",
+        ]
+        check_controllers_running(self.node, cnames)
+
+        # --- deactivate RRBotSystemPositionOnly and its controllers ---
+        subprocess.run(
+            [
+                "ros2",
+                "control",
+                "switch_controllers",
+                "--deactivate",
+                "rrbot_position_controller",
+            ]
+        )
+        subprocess.run(
+            [
+                "ros2",
+                "control",
+                "set_hardware_component_state",
+                "RRBotSystemPositionOnly",
+                "inactive",
+            ]
+        )
+        cnames = [
+            "joint_state_broadcaster",
+            "rrbot_external_fts_broadcaster",
+            "rrbot_joint_state_broadcaster",
+            "rrbot_with_sensor_joint_state_broadcaster",
+            "rrbot_with_sensor_fts_broadcaster",
+            "rrbot_with_sensor_position_controller",
+            "threedofbot_joint_state_broadcaster",
+            "threedofbot_pid_gain_controller",
+            "threedofbot_position_controller",
+        ]
+        check_controllers_running(self.node, cnames)
+
+        # --- Set RRBotSystemPositionOnly in unconfigured state, and deactivate its joint state broadcaster. Also restart global joint state broadcaster.  ---
+        subprocess.run(
+            [
+                "ros2",
+                "control",
+                "switch_controllers",
+                "--deactivate",
+                "rrbot_joint_state_broadcaster",
+                "joint_state_broadcaster",
+            ]
+        )
+        subprocess.run(
+            [
+                "ros2",
+                "control",
+                "set_hardware_component_state",
+                "RRBotSystemPositionOnly",
+                "unconfigured",
+            ]
+        )
+        subprocess.run(
+            [
+                "ros2",
+                "control",
+                "switch_controllers",
+                "--activate",
+                "joint_state_broadcaster",
+            ]
+        )
+        cnames = [
+            "joint_state_broadcaster",
+            "rrbot_external_fts_broadcaster",
+            "rrbot_with_sensor_joint_state_broadcaster",
+            "rrbot_with_sensor_fts_broadcaster",
+            "rrbot_with_sensor_position_controller",
+            "threedofbot_joint_state_broadcaster",
+            "threedofbot_pid_gain_controller",
+            "threedofbot_position_controller",
+        ]
+        check_controllers_running(self.node, cnames)
+        # still all joint_states are published, even if the hardware is in unconfigured state
+        check_if_js_published(
+            "/joint_states",
+            [
+                "rrbot_with_sensor_joint1",
+                "rrbot_joint1",
+                "rrbot_with_sensor_joint2",
+                "rrbot_joint2",
+                "threedofbot_joint1",
+                "threedofbot_joint2",
+                "threedofbot_joint3",
             ],
         )
 
