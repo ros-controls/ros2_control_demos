@@ -16,8 +16,8 @@ install(
 install(
   DIRECTORY carlikebot/urdf carlikebot/rviz
   DESTINATION share/${PROJECT_NAME}/carlikebot
-  )
-  
+)
+
 install(
   DIRECTORY r3bot/urdf
   DESTINATION share/${PROJECT_NAME}/r3bot
