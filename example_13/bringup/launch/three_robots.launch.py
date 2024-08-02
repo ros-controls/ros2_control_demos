@@ -117,25 +117,25 @@ def generate_launch_description():
     rrbot_joint_state_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["rrbot_joint_state_broadcaster"],
+        arguments=["rrbot_joint_state_broadcaster", "--param-file", robot_controllers],
     )
     rrbot_position_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["rrbot_position_controller"],
+        arguments=["rrbot_position_controller", "--param-file", robot_controllers],
     )
     # External FTS broadcaster
     rrbot_external_fts_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["rrbot_external_fts_broadcaster"],
+        arguments=["rrbot_external_fts_broadcaster", "--param-file", robot_controllers],
     )
 
     # RRBot controllers
     rrbot_with_sensor_joint_state_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["rrbot_with_sensor_joint_state_broadcaster"],
+        arguments=["rrbot_with_sensor_joint_state_broadcaster", "--param-file", robot_controllers],
     )
     rrbot_with_sensor_position_controller_spawner = Node(
         package="controller_manager",
@@ -143,12 +143,14 @@ def generate_launch_description():
         arguments=[
             "rrbot_with_sensor_position_controller",
             "--inactive",
+            "--param-file",
+            robot_controllers,
         ],
     )
     rrbot_with_sensor_fts_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["rrbot_with_sensor_fts_broadcaster"],
+        arguments=["rrbot_with_sensor_fts_broadcaster", "--param-file", robot_controllers],
     )
 
     # ThreeDofBot controllers
@@ -157,20 +159,30 @@ def generate_launch_description():
         executable="spawner",
         arguments=[
             "threedofbot_joint_state_broadcaster",
-            "-c",
-            "/controller_manager",
             "--inactive",
+            "--param-file",
+            robot_controllers,
         ],
     )
     threedofbot_position_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["threedofbot_position_controller", "--inactive"],
+        arguments=[
+            "threedofbot_position_controller",
+            "--inactive",
+            "--param-file",
+            robot_controllers,
+        ],
     )
     threedofbot_pid_gain_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["threedofbot_pid_gain_controller", "--inactive"],
+        arguments=[
+            "threedofbot_pid_gain_controller",
+            "--inactive",
+            "--param-file",
+            robot_controllers,
+        ],
     )
 
     # Command publishers

@@ -79,6 +79,9 @@ class TestFixture(unittest.TestCase):
 
     def test_node_start(self, proc_output):
         check_node_running(self.node, "robot_state_publisher")
+        check_node_running(self.node, "rrbot_position_command_publisher")
+        check_node_running(self.node, "rrbot_with_sensor_position_command_publisher")
+        check_node_running(self.node, "threedofbot_position_command_publisher")
 
     def test_behavior(self, proc_output):
 
