@@ -9,6 +9,14 @@ endif()
 set(THIS_PACKAGE_INCLUDE_DEPENDS
 )
 
+# Specify the required version of ros2_control
+find_package(ros2_control 4.0.0)
+# Handle the case where the required version is not found
+if(NOT ros2_control_FOUND)
+  message(FATAL_ERROR "ros2_control version 4.0.0 or higher is required. "
+  "Are you using the correct branch of the ros2_control_demos repository?")
+endif()
+
 # find dependencies
 find_package(ament_cmake REQUIRED)
 foreach(Dependency IN ITEMS ${THIS_PACKAGE_INCLUDE_DEPENDS})
