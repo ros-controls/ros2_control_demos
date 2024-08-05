@@ -208,8 +208,9 @@ Tutorial steps
 
    .. code-block:: shell
 
-    [RRBotSystemPositionOnlyHardware]: Got command 0.50000 for joint 0!
-    [RRBotSystemPositionOnlyHardware]: Got command 0.50000 for joint 1!
+    [ros2_control_node-1] [INFO] [1721763082.437870177] [controller_manager.resource_manager.hardware_component.system.RRBot]: Writing commands:
+    [ros2_control_node-1]   0.50 for joint 'joint1'
+    [ros2_control_node-1]   0.50 for joint 'joint2'
 
    If you echo the ``/joint_states`` or ``/dynamic_joint_states`` topics you should now get similar values, namely the simulated states of the robot
 

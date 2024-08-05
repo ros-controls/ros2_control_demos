@@ -104,8 +104,9 @@ Tutorial steps
 
    .. code-block:: shell
 
-    [DiffBotSystemHardware]: Got command 43.33333 for 'left_wheel_joint'!
-    [DiffBotSystemHardware]: Got command 50.00000 for 'right_wheel_joint'!
+    [ros2_control_node-1] [INFO] [1721762311.808415917] [controller_manager.resource_manager.hardware_component.system.DiffBot]: Writing commands:
+    [ros2_control_node-1]   command 43.33333 for 'left_wheel_joint'!
+    [ros2_control_node-1]   command 50.00000 for 'right_wheel_joint'!
 
 6. Let's introspect the ros2_control hardware component. Calling
 
