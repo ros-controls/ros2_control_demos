@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<!-- Multi-robot example -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="multi_robot_example">
+  <xacro:arg name="prefix" default="" />
+  <xacro:arg name="use_sim" default="false" />
+
+  <!-- Enable setting arguments from the launch file -->
+  <xacro:arg name="slowdown" default="2.0" />
+
+  <!-- Import RRBot macro -->
+  <xacro:include filename="$(find ros2_control_demo_description)/rrbot/urdf/rrbot_description.urdf.xacro" />
+
+  <!-- Import ThreeDofbot macro -->
+  <xacro:include filename="$(find ros2_control_demo_description)/r3bot/urdf/threedofbot_description.urdf.xacro" />
+
+  <!-- Import Rviz colors -->
+  <xacro:include filename="$(find ros2_control_demo_description)/rrbot/urdf/rrbot.materials.xacro" />
+
+  <!-- Import RRBot ros2_control description -->
+  <xacro:include filename="$(find ros2_control_demo_example_5)/ros2_control/rrbot_system_position_only.ros2_control.xacro" />
+
+  <!-- Import RRBot external Force Torque Sensor description -->
+  <xacro:include filename="$(find ros2_control_demo_example_5)/ros2_control/external_rrbot_force_torque_sensor.ros2_control.xacro" />
+
+  <!-- Import RRBot with force-torque sensor ros2_control description -->
+  <xacro:include filename="$(find ros2_control_demo_example_4)/ros2_control/rrbot_system_with_sensor.ros2_control.xacro" />
+
+  <!-- Import TreeDofbot ros2_control description -->
+  <xacro:include filename="$(find ros2_control_demo_example_13)/ros2_control/threedofbot.ros2_control.xacro" />
+
+  <!-- Used for fixing robot -->
+  <link name="world"/>
+
+  <xacro:rrbot parent="world" prefix="rrbot_">
+    <origin xyz="1 0 0" rpy="0 0 0" />
+  </xacro:rrbot>
+
+  <xacro:rrbot_system_position_only
+    name="RRBotSystemPositionOnly" prefix="rrbot_"
+    use_mock_hardware="false"
+    mock_sensor_commands="false"
+    slowdown="$(arg slowdown)" />
+
+  <xacro:external_rrbot_force_torque_sensor
+    name="ExternalRRBotFTSensor" prefix="rrbot_"
+    use_mock_hardware="false"
+    mock_sensor_commands="false" />
+
+  <xacro:rrbot parent="world" prefix="rrbot_with_sensor_">
+    <origin xyz="-1 0 0" rpy="0 0 0" />
+  </xacro:rrbot>
+
+  <xacro:rrbot_system_with_sensor
+    name="RRBotSystemWithSensor" prefix="rrbot_with_sensor_"
+    use_mock_hardware="false"
+    mock_sensor_commands="false"
+    slowdown="$(arg slowdown)" />
+
+  <xacro:threedofbot parent="world" prefix="threedofbot_">
+    <origin xyz="0 1 0" rpy="0 0 0" />
+  </xacro:threedofbot>
+
+  <xacro:threedofbot_fake_hardware
+    name="FakeThreeDofBot" prefix="threedofbot_"/>
+
+</robot>

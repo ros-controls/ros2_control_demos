@@ -1,0 +1,104 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 100  # Hz
+
+    hardware_components_initial_state:
+      unconfigured:
+      # Decide which hardware component will be only loaded
+        - FakeThreeDofBot
+      inactive:
+        # Decide which hardware component will start configured
+        - RRBotSystemWithSensor
+      # not listed hardware component should be started immediately
+
+    # Global controllers
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+# global joint_state_broadcaster
+# joint_state_broadcaster:
+#   ros__parameters:
+    # nothing to configure
+
+# RRBot controllers
+rrbot_joint_state_broadcaster:
+  ros__parameters:
+    type: joint_state_broadcaster/JointStateBroadcaster
+    use_local_topics: True
+    joints:
+      - rrbot_joint1
+      - rrbot_joint2
+    interfaces:
+      - position
+
+rrbot_position_controller:
+  ros__parameters:
+    type: forward_command_controller/ForwardCommandController
+    joints:
+      - rrbot_joint1
+      - rrbot_joint2
+    interface_name: position
+
+rrbot_external_fts_broadcaster:
+  ros__parameters:
+    type: force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster
+    sensor_name: rrbot_tcp_fts_sensor
+    frame_id: rrbot_tool_link
+
+
+# RRBot with sensor controllers
+rrbot_with_sensor_joint_state_broadcaster:
+  ros__parameters:
+    type: joint_state_broadcaster/JointStateBroadcaster
+    use_local_topics: True
+    joints:
+      - rrbot_with_sensor_joint1
+      - rrbot_with_sensor_joint2
+    interfaces:
+      - position
+
+rrbot_with_sensor_position_controller:
+  ros__parameters:
+    type: forward_command_controller/ForwardCommandController
+    joints:
+      - rrbot_with_sensor_joint1
+      - rrbot_with_sensor_joint2
+    interface_name: position
+
+rrbot_with_sensor_fts_broadcaster:
+  ros__parameters:
+    type: force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster
+    interface_names.force.x: rrbot_with_sensor_tcp_fts_sensor/force.x
+    interface_names.torque.z: rrbot_with_sensor_tcp_fts_sensor/torque.z
+    frame_id: rrbot_with_sensor_tool_link
+
+# ThreeDofBot controllers
+threedofbot_joint_state_broadcaster:
+  ros__parameters:
+    type: joint_state_broadcaster/JointStateBroadcaster
+    use_local_topics: True
+    joints:
+      - threedofbot_joint1
+      - threedofbot_joint2
+      - threedofbot_joint3
+    interfaces:
+      - position
+      - pid_gain
+
+threedofbot_position_controller:
+  ros__parameters:
+    type: forward_command_controller/ForwardCommandController
+    joints:
+      - threedofbot_joint1
+      - threedofbot_joint2
+      - threedofbot_joint3
+    interface_name: position
+
+threedofbot_pid_gain_controller:
+  ros__parameters:
+    type: forward_command_controller/ForwardCommandController
+    joints:
+      - threedofbot_joint1
+      - threedofbot_joint2
+      - threedofbot_joint3
+    interface_name: pid_gain
