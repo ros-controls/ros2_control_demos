@@ -65,10 +65,6 @@ def generate_launch_description():
         parameters=[robot_controllers],
         remappings=[
             ("~/robot_description", "/robot_description"),
-            (
-                "/forward_position_controller/commands",
-                "/position_commands",
-            ),
         ],
         output="both",
     )
