@@ -63,16 +63,9 @@ def generate_launch_description():
         package="controller_manager",
         executable="ros2_control_node",
         parameters=[robot_controllers],
-<<<<<<< HEAD
         remappings=[
             ("~/robot_description", "/robot_description"),
-            (
-                "/forward_position_controller/commands",
-                "/position_commands",
-            ),
         ],
-=======
->>>>>>> 71a86bd (Fix topic remappings (#565))
         output="both",
     )
     robot_state_pub_node = Node(
