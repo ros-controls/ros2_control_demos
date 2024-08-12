@@ -71,7 +71,8 @@ def generate_launch_description():
         parameters=[robot_description, robot_controllers],
         remappings=[
             (
-                "/forward_position_controller/commands",
+                # we use the remapping from a relative name to FQN /position_commands
+                "forward_position_controller/commands",
                 "/position_commands",
             ),
         ],

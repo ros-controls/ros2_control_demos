@@ -76,7 +76,11 @@ def generate_launch_description():
         parameters=[robot_controllers],
         output="both",
         remappings=[
+<<<<<<< HEAD
             ("~/robot_description", "/robot_description"),
+=======
+            ("/diffbot_base_controller/cmd_vel", "/cmd_vel"),
+>>>>>>> 71a86bd (Fix topic remappings (#565))
         ],
     )
     robot_state_pub_node = Node(
@@ -84,9 +88,6 @@ def generate_launch_description():
         executable="robot_state_publisher",
         output="both",
         parameters=[robot_description],
-        remappings=[
-            ("/diff_drive_controller/cmd_vel_unstamped", "/cmd_vel"),
-        ],
     )
     rviz_node = Node(
         package="rviz2",
