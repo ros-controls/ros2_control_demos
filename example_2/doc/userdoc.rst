@@ -88,7 +88,7 @@ Tutorial steps
 
    .. code-block:: shell
 
-    ros2 topic pub --rate 30 /cmd_vel geometry_msgs/msg/TwistStamped "
+    ros2 topic pub --rate 10 /cmd_vel geometry_msgs/msg/TwistStamped "
     twist:
       linear:
         x: 0.7
