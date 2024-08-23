@@ -77,9 +77,6 @@ def generate_launch_description():
         executable="ros2_control_node",
         parameters=[robot_controllers],
         output="both",
-        remappings=[
-            ("/bicycle_steering_controller/tf_odometry", "/tf"),
-        ],
         condition=IfCondition(remap_odometry_tf),
     )
     control_node = Node(
@@ -114,7 +111,13 @@ def generate_launch_description():
     robot_bicycle_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["bicycle_steering_controller", "--param-file", robot_controllers],
+        arguments=[
+            "bicycle_steering_controller",
+            "--param-file",
+            robot_controllers,
+            "--controller-ros-args",
+            "-r /bicycle_steering_controller/tf_odometry:=/tf",
+        ],
     )
 
     # Delay rviz start after `joint_state_broadcaster`
