@@ -75,15 +75,15 @@ def generate_launch_description():
         executable="ros2_control_node",
         parameters=[robot_controllers],
         output="both",
+        remappings=[
+            ("/diffbot_base_controller/cmd_vel", "/cmd_vel"),
+        ],
     )
     robot_state_pub_node = Node(
         package="robot_state_publisher",
         executable="robot_state_publisher",
         output="both",
         parameters=[robot_description],
-        remappings=[
-            ("/diff_drive_controller/cmd_vel_unstamped", "/cmd_vel"),
-        ],
     )
     rviz_node = Node(
         package="rviz2",
