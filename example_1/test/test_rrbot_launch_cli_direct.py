@@ -84,7 +84,7 @@ class TestFixtureCliDirect(unittest.TestCase):
             cname,
             os.path.join(
                 get_package_share_directory("ros2_control_demo_example_1"),
-                "config/rrbot_controllers.yaml",
+                "config/rrbot_jtc.yaml",
             ),
         ]
         subprocess.run(command, check=True)
