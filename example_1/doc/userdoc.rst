@@ -241,7 +241,7 @@ Tutorial steps
 
         .. code-block:: shell
 
-          ros2 control load_controller joint_trajectory_position_controller
+          ros2 control load_controller joint_trajectory_position_controller $(ros2 pkg prefix ros2_control_demo_example_1 --share)/config/rrbot_controllers.yaml
 
       .. group-tab:: Docker
 
@@ -249,7 +249,7 @@ Tutorial steps
 
         .. code-block:: shell
 
-          ros2 control load_controller joint_trajectory_position_controller
+          ros2 control load_controller joint_trajectory_position_controller $(ros2 pkg prefix ros2_control_demo_example_1 --share)/config/rrbot_controllers.yaml
 
    what should return ``Successfully loaded controller joint_trajectory_position_controller``. Check the status with
 
@@ -310,7 +310,7 @@ Tutorial steps
 
         .. code-block:: shell
 
-          ros2 control load_controller joint_trajectory_position_controller --set-state inactive
+          ros2 control load_controller --set-state inactive joint_trajectory_position_controller $(ros2 pkg prefix ros2_control_demo_example_1 --share)/config/rrbot_controllers.yaml
 
       .. group-tab:: Docker
 
@@ -318,7 +318,7 @@ Tutorial steps
 
         .. code-block:: shell
 
-          ros2 control load_controller joint_trajectory_position_controller --set-state inactive
+          ros2 control load_controller --set-state inactive joint_trajectory_position_controller $(ros2 pkg prefix ros2_control_demo_example_1 --share)/config/rrbot_controllers.yaml
 
    You should get the result ``Successfully loaded controller joint_trajectory_position_controller into state inactive``.
 
