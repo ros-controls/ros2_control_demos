@@ -9,8 +9,8 @@ repositories:
     version: master
   ros2_control:
     type: git
-    url: https://github.com/ros-controls/ros2_control.git
-    version: master
+    url: https://github.com/pal-robotics-forks/ros2_control.git
+    version: update/ros2controlcli
   ros2_controllers:
     type: git
     url: https://github.com/ros-controls/ros2_controllers.git
