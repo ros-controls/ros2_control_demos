@@ -42,11 +42,7 @@ from launch_testing.actions import ReadyToTest
 # import launch_testing.markers
 import rclpy
 from rclpy.node import Node
-from ros2_control_demo_testing.test_utils import (
-    check_controllers_running,
-    check_if_js_published,
-    check_node_running,
-)
+from ros2_control_demo_testing.test_utils import check_controllers_running
 
 
 # Executes the given launch file and checks if all nodes can be started
@@ -65,32 +61,7 @@ def generate_test_description():
     return LaunchDescription([launch_include, ReadyToTest()])
 
 
-# This is our test fixture. Each method is a test case.
-# These run alongside the processes specified in generate_test_description()
-class TestFixture(unittest.TestCase):
-
-    def setUp(self):
-        rclpy.init()
-        self.node = Node("test_node")
-
-    def tearDown(self):
-        self.node.destroy_node()
-        rclpy.shutdown()
-
-    def test_node_start(self, proc_output):
-        check_node_running(self.node, "robot_state_publisher")
-
-    def test_controller_running(self, proc_output):
-
-        cnames = ["forward_position_controller", "joint_state_broadcaster"]
-
-        check_controllers_running(self.node, cnames)
-
-    def test_check_if_msgs_published(self):
-        check_if_js_published("/joint_states", ["joint1", "joint2"])
-
-
-class TestFixtureCLI(unittest.TestCase):
+class TestFixtureCliDirect(unittest.TestCase):
 
     def setUp(self):
         rclpy.init()
@@ -108,6 +79,8 @@ class TestFixtureCLI(unittest.TestCase):
             "ros2",
             "control",
             "load_controller",
+            "--set-state",
+            "inactive",
             cname,
             os.path.join(
                 get_package_share_directory("ros2_control_demo_example_1"),
@@ -115,23 +88,18 @@ class TestFixtureCLI(unittest.TestCase):
             ),
         ]
         subprocess.run(command, check=True)
-        check_controllers_running(self.node, [cname], state="unconfigured")
-        check_controllers_running(self.node, ["forward_position_controller"], state="active")
-
-        command = ["ros2", "control", "set_controller_state", cname, "inactive"]
-        subprocess.run(command, check=True)
         check_controllers_running(self.node, [cname], state="inactive")
         check_controllers_running(self.node, ["forward_position_controller"], state="active")
 
         command = [
             "ros2",
             "control",
-            "set_controller_state",
+            "switch_controllers",
+            "--activate",
+            cname,
+            "--deactivate",
             "forward_position_controller",
-            "inactive",
         ]
-        subprocess.run(command, check=True)
-        command = ["ros2", "control", "set_controller_state", cname, "active"]
         subprocess.run(command, check=True)
         check_controllers_running(self.node, ["forward_position_controller"], state="inactive")
         check_controllers_running(self.node, [cname], state="active")
