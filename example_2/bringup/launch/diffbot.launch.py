@@ -66,6 +66,14 @@ def generate_launch_description():
             "diffbot_controllers.yaml",
         ]
     )
+
+    controller_config = PathJoinSubstitution(
+        [
+            FindPackageShare("ros2_control_demo_example_2"),
+            "config",
+            "controller_config.yaml",
+        ]
+    )
     rviz_config_file = PathJoinSubstitution(
         [FindPackageShare("ros2_control_demo_description"), "diffbot/rviz", "diffbot.rviz"]
     )
@@ -74,6 +82,7 @@ def generate_launch_description():
         package="controller_manager",
         executable="ros2_control_node",
         parameters=[robot_controllers],
+        name="controller_manager",
         output="both",
         remappings=[
             ("/diffbot_base_controller/cmd_vel", "/cmd_vel"),
@@ -103,7 +112,7 @@ def generate_launch_description():
     robot_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["diffbot_base_controller", "--param-file", robot_controllers],
+        arguments=["diffbot_base_controller", "--param-file", controller_config, "--controller-ros-args", '--ros-args -r /diffbot_base_controller/cmd_vel:=/cmd_vel'],
     )
 
     # Delay rviz start after `joint_state_broadcaster`

@@ -90,13 +90,6 @@ def generate_launch_description():
         executable="spawner",
         arguments=["joint_state_broadcaster"],
     )
-
-    robot_controller_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["forward_position_controller", "--param-file", robot_controllers],
-    )
-
     # Delay rviz start after `joint_state_broadcaster`
     delay_rviz_after_joint_state_broadcaster_spawner = RegisterEventHandler(
         event_handler=OnProcessExit(
@@ -104,22 +97,11 @@ def generate_launch_description():
             on_exit=[rviz_node],
         )
     )
-
-    # Delay start of joint_state_broadcaster after `robot_controller`
-    # TODO(anyone): This is a workaround for flaky tests. Remove when fixed.
-    delay_joint_state_broadcaster_after_robot_controller_spawner = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=robot_controller_spawner,
-            on_exit=[joint_state_broadcaster_spawner],
-        )
-    )
-
     nodes = [
         control_node,
         robot_state_pub_node,
-        robot_controller_spawner,
+        joint_state_broadcaster_spawner,
         delay_rviz_after_joint_state_broadcaster_spawner,
-        delay_joint_state_broadcaster_after_robot_controller_spawner,
     ]
 
     return LaunchDescription(declared_arguments + nodes)
