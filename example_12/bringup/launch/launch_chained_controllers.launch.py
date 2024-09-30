@@ -16,21 +16,31 @@
 from launch import LaunchDescription
 from launch.actions import RegisterEventHandler
 from launch.event_handlers import OnProcessExit
+from launch.substitutions import PathJoinSubstitution
 from launch_ros.actions import Node
+from launch_ros.substitutions import FindPackageShare
 
 
 def generate_launch_description():
 
+    robot_controllers = PathJoinSubstitution(
+        [
+            FindPackageShare("ros2_control_demo_example_12"),
+            "config",
+            "rrbot_chained_controllers.yaml",
+        ]
+    )
+
     position_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["position_controller", "--controller-manager", "/controller_manager"],
+        arguments=["position_controller", "--param-file", robot_controllers],
     )
 
     forward_position_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["forward_position_controller", "--controller-manager", "/controller_manager"],
+        arguments=["forward_position_controller", "--param-file", robot_controllers],
     )
 
     # Delay start of forward_position_controller_spawner after `position_controller_spawner`

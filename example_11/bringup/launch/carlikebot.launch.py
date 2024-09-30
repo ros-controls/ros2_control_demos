@@ -108,13 +108,13 @@ def generate_launch_description():
     joint_state_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager"],
+        arguments=["joint_state_broadcaster"],
     )
 
     robot_bicycle_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["bicycle_steering_controller", "--controller-manager", "/controller_manager"],
+        arguments=["bicycle_steering_controller", "--param-file", robot_controllers],
     )
 
     # Delay rviz start after `joint_state_broadcaster`

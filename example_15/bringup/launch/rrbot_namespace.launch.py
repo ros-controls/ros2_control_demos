@@ -71,7 +71,8 @@ def generate_launch_description():
         parameters=[robot_description, robot_controllers],
         remappings=[
             (
-                "/forward_position_controller/commands",
+                # we use the remapping from a relative name to FQN /position_commands
+                "forward_position_controller/commands",
                 "/position_commands",
             ),
         ],
@@ -99,23 +100,26 @@ def generate_launch_description():
     joint_state_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["joint_state_broadcaster", "-c", "/rrbot/controller_manager"],
+        namespace="rrbot",
+        arguments=["joint_state_broadcaster"],
     )
 
     robot_forward_position_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["forward_position_controller", "-c", "/rrbot/controller_manager"],
+        namespace="rrbot",
+        arguments=["forward_position_controller", "--param-file", robot_controllers],
     )
 
     robot_position_trajectory_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
+        namespace="rrbot",
         arguments=[
             "position_trajectory_controller",
-            "-c",
-            "/rrbot/controller_manager",
             "--inactive",
+            "--param-file",
+            robot_controllers,
         ],
     )
 
@@ -127,33 +131,13 @@ def generate_launch_description():
         )
     )
 
-    # Delay start of robot_controller after `joint_state_broadcaster`
-    delay_robot_forward_position_controller_spawner_after_joint_state_broadcaster_spawner = (
-        RegisterEventHandler(
-            event_handler=OnProcessExit(
-                target_action=joint_state_broadcaster_spawner,
-                on_exit=[robot_forward_position_controller_spawner],
-            )
-        )
-    )
-
-    # Delay start of robot_controller after `joint_state_broadcaster`
-    delay_robot_position_trajectory_controller_spawner_after_joint_state_broadcaster_spawner = (
-        RegisterEventHandler(
-            event_handler=OnProcessExit(
-                target_action=joint_state_broadcaster_spawner,
-                on_exit=[robot_position_trajectory_controller_spawner],
-            )
-        )
-    )
-
     nodes = [
         control_node,
         robot_state_pub_node,
         joint_state_broadcaster_spawner,
         delay_rviz_after_joint_state_broadcaster_spawner,
-        delay_robot_forward_position_controller_spawner_after_joint_state_broadcaster_spawner,
-        delay_robot_position_trajectory_controller_spawner_after_joint_state_broadcaster_spawner,
+        robot_forward_position_controller_spawner,
+        robot_position_trajectory_controller_spawner,
     ]
 
     return LaunchDescription(declared_arguments + nodes)
