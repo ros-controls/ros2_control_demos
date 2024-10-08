@@ -119,12 +119,10 @@ Tutorial steps
 
    .. code-block:: shell
 
-    [RRBotModularJoint]: Writing...please wait...
-    [RRBotModularJoint]: Got command 0.50000 for joint 'joint1'!
-    [RRBotModularJoint]: Joints successfully written!
-    [RRBotModularJoint]: Writing...please wait...
-    [RRBotModularJoint]: Got command 0.50000 for joint 'joint2'!
-    [RRBotModularJoint]: Joints successfully written!
+    [ros2_control_node-1] [INFO] [1721764663.304187517] [controller_manager.resource_manager.hardware_component.actuator.RRBotModularJoint1]: Writing commands:
+    [ros2_control_node-1]   0.50 for joint 'joint1'
+    [ros2_control_node-1] [INFO] [1721764663.304196897] [controller_manager.resource_manager.hardware_component.actuator.RRBotModularJoint2]: Writing commands:
+    [ros2_control_node-1]   0.50 for joint 'joint2'
 
 
 Files used for this demos
