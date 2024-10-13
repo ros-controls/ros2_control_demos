@@ -266,7 +266,7 @@ hardware_interface::return_type RRBotSensorPositionFeedback::read(
   ss << "Got measured velocity " << measured_velocity << std::endl;
   ss << "Got state " << hw_joint_state_ << " for joint '" << info_.joints[0].name << "'"
      << std::endl;
-  RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500, ss.str().c_str());
+  RCLCPP_INFO(get_logger(), ss.str().c_str());
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   return hardware_interface::return_type::OK;

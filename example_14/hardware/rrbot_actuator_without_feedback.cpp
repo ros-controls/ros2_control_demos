@@ -219,7 +219,7 @@ hardware_interface::return_type ros2_control_demo_example_14::RRBotActuatorWitho
   std::ostringstream data;
   data << hw_joint_command_;
   ss << "Sending data command: " << data.str() << std::endl;
-  RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500, ss.str().c_str());
+  RCLCPP_INFO(get_logger(), ss.str().c_str());
 
   // Simulate sending commands to the hardware
   send(sock_, data.str().c_str(), strlen(data.str().c_str()), 0);
