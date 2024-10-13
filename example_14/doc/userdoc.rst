@@ -124,18 +124,22 @@ Tutorial steps
 
    .. code-block:: shell
 
-    [ros2_control_node-1] [INFO] [1721766743.716253088] [controller_manager.resource_manager.hardware_component.actuator.RRBotModularJoint1]: Writing...
-    [ros2_control_node-1] [INFO] [1721766743.716266749] [controller_manager.resource_manager.hardware_component.actuator.RRBotModularJoint1]: Writing command: 5.000000
-    [ros2_control_node-1] [INFO] [1721766743.716286822] [controller_manager.resource_manager.hardware_component.actuator.RRBotModularJoint1]: Sending data command: 5
-    [ros2_control_node-1] [INFO] [1721766743.716253088] [controller_manager.resource_manager.hardware_component.actuator.RRBotModularJoint2]: Writing...
-    [ros2_control_node-1] [INFO] [1721766743.716266749] [controller_manager.resource_manager.hardware_component.actuator.RRBotModularJoint2]: Writing command: 5.000000
-    [ros2_control_node-1] [INFO] [1721766743.716286822] [controller_manager.resource_manager.hardware_component.actuator.RRBotModularJoint2]: Sending data command: 5
-    [ros2_control_node-1] [INFO] [1721766742.706166134] [controller_manager.resource_manager.hardware_component.sensor.RRBotModularPositionSensorJoint1]: Reading...
-    [ros2_control_node-1] [INFO] [1721766742.706232033] [controller_manager.resource_manager.hardware_component.sensor.RRBotModularPositionSensorJoint1]: Got measured velocity 5.00000
-    [ros2_control_node-1] [INFO] [1721766742.706250200] [controller_manager.resource_manager.hardware_component.sensor.RRBotModularPositionSensorJoint1]: Got state 0.25300 for joint 'joint1'!
-    [ros2_control_node-1] [INFO] [1721766742.706166134] [controller_manager.resource_manager.hardware_component.sensor.RRBotModularPositionSensorJoint1]: Reading...
-    [ros2_control_node-1] [INFO] [1721766742.706232033] [controller_manager.resource_manager.hardware_component.sensor.RRBotModularPositionSensorJoint2]: Got measured velocity 5.00000
-    [ros2_control_node-1] [INFO] [1721766742.706250200] [controller_manager.resource_manager.hardware_component.sensor.RRBotModularPositionSensorJoint2]: Got state 0.25300 for joint 'joint2'!
+    [ros2_control_node-1] [INFO] [1728858168.276013464] [controller_manager.resource_manager.hardware_component.actuator.RRBotModularJoint1]: Writing...
+    [ros2_control_node-1] Writing command: 5.00
+    [ros2_control_node-1] Sending data command: 5
+    [ros2_control_node-1]
+    [ros2_control_node-1] [INFO] [1728858168.775863217] [controller_manager.resource_manager.hardware_component.sensor.RRBotModularPositionSensorJoint2]: Reading...
+    [ros2_control_node-1] Got measured velocity 5.00
+    [ros2_control_node-1] Got state 0.29 for joint 'joint2'
+    [ros2_control_node-1]
+    [ros2_control_node-1] [INFO] [1728858168.776052116] [controller_manager.resource_manager.hardware_component.actuator.RRBotModularJoint2]: Writing...
+    [ros2_control_node-1] Writing command: 5.00
+    [ros2_control_node-1] Sending data command: 5
+    [ros2_control_node-1]
+    [ros2_control_node-1] [INFO] [1728858169.275878132] [controller_manager.resource_manager.hardware_component.sensor.RRBotModularPositionSensorJoint1]: Reading...
+    [ros2_control_node-1] Got measured velocity 5.00
+    [ros2_control_node-1] Got state 0.34 for joint 'joint1'
+    [ros2_control_node-1]
 
 
 Files used for this demos

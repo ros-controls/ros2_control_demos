@@ -23,8 +23,10 @@
 #include <chrono>
 #include <cmath>
 #include <cstring>
+#include <iomanip>
 #include <limits>
 #include <memory>
+#include <sstream>
 #include <vector>
 
 #include "hardware_interface/actuator_interface.hpp"
@@ -209,14 +211,17 @@ hardware_interface::return_type ros2_control_demo_example_14::RRBotActuatorWitho
   const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
   // START: This part here is for exemplary purposes - Please do not copy to your production code
-  RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500, "Writing...");
-  RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500, "Writing command: %f", hw_joint_command_);
+  std::stringstream ss;
+  ss << "Writing..." << std::endl;
+  ss << std::fixed << std::setprecision(2) << std::endl;
+  ss << "Writing command: " << hw_joint_command_ << std::endl;
 
-  // Simulate sending commands to the hardware
   std::ostringstream data;
   data << hw_joint_command_;
-  RCLCPP_INFO_THROTTLE(
-    get_logger(), *get_clock(), 500, "Sending data command: %s", data.str().c_str());
+  ss << "Sending data command: " << data.str() << std::endl;
+  RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500, ss.str().c_str());
+
+  // Simulate sending commands to the hardware
   send(sock_, data.str().c_str(), strlen(data.str().c_str()), 0);
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 

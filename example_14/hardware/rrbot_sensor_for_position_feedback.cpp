@@ -23,8 +23,10 @@
 #include <chrono>
 #include <cmath>
 #include <cstring>
+#include <iomanip>
 #include <limits>
 #include <memory>
+#include <sstream>
 #include <thread>
 #include <vector>
 
@@ -249,7 +251,8 @@ hardware_interface::return_type RRBotSensorPositionFeedback::read(
   last_timestamp_ = current_timestamp;
 
   // START: This part here is for exemplary purposes - Please do not copy to your production code
-  RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500, "Reading...");
+  std::stringstream ss;
+  ss << "Reading..." << std::endl;
 
   // Simulate RRBot's movement
   measured_velocity = *(rt_incomming_data_ptr_.readFromRT());
@@ -257,12 +260,13 @@ hardware_interface::return_type RRBotSensorPositionFeedback::read(
   {
     last_measured_velocity_ = measured_velocity;
   }
-  RCLCPP_INFO_THROTTLE(
-    get_logger(), *get_clock(), 500, "Got measured velocity %.5f", measured_velocity);
   hw_joint_state_ += (last_measured_velocity_ * duration.seconds()) / hw_slowdown_;
-  RCLCPP_INFO_THROTTLE(
-    get_logger(), *get_clock(), 500, "Got state %.5f for joint '%s'!", hw_joint_state_,
-    info_.joints[0].name.c_str());
+
+  ss << std::fixed << std::setprecision(2) << std::endl;
+  ss << "Got measured velocity " << measured_velocity << std::endl;
+  ss << "Got state " << hw_joint_state_ << " for joint '" << info_.joints[0].name << "'"
+     << std::endl;
+  RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500, ss.str().c_str());
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   return hardware_interface::return_type::OK;
