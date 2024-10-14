@@ -16,8 +16,10 @@
 
 #include <chrono>
 #include <cmath>
+#include <iomanip>
 #include <limits>
 #include <memory>
+#include <sstream>
 #include <vector>
 
 #include "hardware_interface/types/hardware_interface_type_values.hpp"
@@ -44,26 +46,24 @@ hardware_interface::CallbackReturn RRBotSystemWithGPIOHardware::on_init(
     if (joint.command_interfaces.size() != 1)
     {
       RCLCPP_FATAL(
-        rclcpp::get_logger("RRBotSystemWithGPIOHardware"),
-        "Joint '%s' has %zu command interfaces found. 1 expected.", joint.name.c_str(),
-        joint.command_interfaces.size());
+        get_logger(), "Joint '%s' has %zu command interfaces found. 1 expected.",
+        joint.name.c_str(), joint.command_interfaces.size());
       return hardware_interface::CallbackReturn::ERROR;
     }
 
     if (joint.command_interfaces[0].name != hardware_interface::HW_IF_POSITION)
     {
       RCLCPP_FATAL(
-        rclcpp::get_logger("RRBotSystemWithGPIOHardware"),
-        "Joint '%s' have %s command interfaces found. '%s' expected.", joint.name.c_str(),
-        joint.command_interfaces[0].name.c_str(), hardware_interface::HW_IF_POSITION);
+        get_logger(), "Joint '%s' have %s command interfaces found. '%s' expected.",
+        joint.name.c_str(), joint.command_interfaces[0].name.c_str(),
+        hardware_interface::HW_IF_POSITION);
       return hardware_interface::CallbackReturn::ERROR;
     }
 
     if (joint.state_interfaces.size() != 1)
     {
       RCLCPP_FATAL(
-        rclcpp::get_logger("RRBotSystemWithGPIOHardware"),
-        "Joint '%s' has %zu state interface. 1 expected.", joint.name.c_str(),
+        get_logger(), "Joint '%s' has %zu state interface. 1 expected.", joint.name.c_str(),
         joint.state_interfaces.size());
       return hardware_interface::CallbackReturn::ERROR;
     }
@@ -71,8 +71,7 @@ hardware_interface::CallbackReturn RRBotSystemWithGPIOHardware::on_init(
     if (joint.state_interfaces[0].name != hardware_interface::HW_IF_POSITION)
     {
       RCLCPP_FATAL(
-        rclcpp::get_logger("RRBotSystemWithGPIOHardware"),
-        "Joint '%s' have %s state interface. '%s' expected.", joint.name.c_str(),
+        get_logger(), "Joint '%s' have %s state interface. '%s' expected.", joint.name.c_str(),
         joint.state_interfaces[0].name.c_str(), hardware_interface::HW_IF_POSITION);
       return hardware_interface::CallbackReturn::ERROR;
     }
@@ -82,9 +81,8 @@ hardware_interface::CallbackReturn RRBotSystemWithGPIOHardware::on_init(
   if (info_.gpios.size() != 2)
   {
     RCLCPP_FATAL(
-      rclcpp::get_logger("RRBotSystemWithGPIOHardware"),
-      "RRBotSystemWithGPIOHardware has '%ld' GPIO components, '%d' expected.", info_.gpios.size(),
-      2);
+      get_logger(), "RRBotSystemWithGPIOHardware has '%ld' GPIO components, '%d' expected.",
+      info_.gpios.size(), 2);
     return hardware_interface::CallbackReturn::ERROR;
   }
   // with exactly 1 command interface
@@ -93,8 +91,7 @@ hardware_interface::CallbackReturn RRBotSystemWithGPIOHardware::on_init(
     if (info_.gpios[i].command_interfaces.size() != 1)
     {
       RCLCPP_FATAL(
-        rclcpp::get_logger("RRBotSystemWithGPIOHardware"),
-        "GPIO component %s has '%ld' command interfaces, '%d' expected.",
+        get_logger(), "GPIO component %s has '%ld' command interfaces, '%d' expected.",
         info_.gpios[i].name.c_str(), info_.gpios[i].command_interfaces.size(), 1);
       return hardware_interface::CallbackReturn::ERROR;
     }
@@ -103,17 +100,15 @@ hardware_interface::CallbackReturn RRBotSystemWithGPIOHardware::on_init(
   if (info_.gpios[0].state_interfaces.size() != 3)
   {
     RCLCPP_FATAL(
-      rclcpp::get_logger("RRBotSystemWithGPIOHardware"),
-      "GPIO component %s has '%ld' state interfaces, '%d' expected.", info_.gpios[0].name.c_str(),
-      info_.gpios[0].state_interfaces.size(), 3);
+      get_logger(), "GPIO component %s has '%ld' state interfaces, '%d' expected.",
+      info_.gpios[0].name.c_str(), info_.gpios[0].state_interfaces.size(), 3);
     return hardware_interface::CallbackReturn::ERROR;
   }
   if (info_.gpios[1].state_interfaces.size() != 1)
   {
     RCLCPP_FATAL(
-      rclcpp::get_logger("RRBotSystemWithGPIOHardware"),
-      "GPIO component %s has '%ld' state interfaces, '%d' expected.", info_.gpios[0].name.c_str(),
-      info_.gpios[0].state_interfaces.size(), 1);
+      get_logger(), "GPIO component %s has '%ld' state interfaces, '%d' expected.",
+      info_.gpios[0].name.c_str(), info_.gpios[0].state_interfaces.size(), 1);
     return hardware_interface::CallbackReturn::ERROR;
   }
 
@@ -124,7 +119,7 @@ hardware_interface::CallbackReturn RRBotSystemWithGPIOHardware::on_configure(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
-  RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithGPIOHardware"), "Configuring ...please wait...");
+  RCLCPP_INFO(get_logger(), "Configuring ...please wait...");
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   // reset values always when configuring hardware
@@ -133,7 +128,7 @@ hardware_interface::CallbackReturn RRBotSystemWithGPIOHardware::on_configure(
   std::fill(hw_gpio_in_.begin(), hw_gpio_in_.end(), 0);
   std::fill(hw_gpio_out_.begin(), hw_gpio_out_.end(), 0);
 
-  RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithGPIOHardware"), "Successfully configured!");
+  RCLCPP_INFO(get_logger(), "Successfully configured!");
 
   return hardware_interface::CallbackReturn::SUCCESS;
 }
@@ -148,7 +143,7 @@ RRBotSystemWithGPIOHardware::export_state_interfaces()
       info_.joints[i].name, hardware_interface::HW_IF_POSITION, &hw_states_[i]));
   }
 
-  RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithGPIOHardware"), "State interfaces:");
+  RCLCPP_INFO(get_logger(), "State interfaces:");
   hw_gpio_in_.resize(4);
   size_t ct = 0;
   for (size_t i = 0; i < info_.gpios.size(); i++)
@@ -158,8 +153,7 @@ RRBotSystemWithGPIOHardware::export_state_interfaces()
       state_interfaces.emplace_back(hardware_interface::StateInterface(
         info_.gpios.at(i).name, state_if.name, &hw_gpio_in_[ct++]));
       RCLCPP_INFO(
-        rclcpp::get_logger("RRBotSystemWithGPIOHardware"), "Added %s/%s",
-        info_.gpios.at(i).name.c_str(), state_if.name.c_str());
+        get_logger(), "Added %s/%s", info_.gpios.at(i).name.c_str(), state_if.name.c_str());
     }
   }
 
@@ -175,7 +169,7 @@ RRBotSystemWithGPIOHardware::export_command_interfaces()
     command_interfaces.emplace_back(hardware_interface::CommandInterface(
       info_.joints[i].name, hardware_interface::HW_IF_POSITION, &hw_commands_[i]));
   }
-  RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithGPIOHardware"), "Command interfaces:");
+  RCLCPP_INFO(get_logger(), "Command interfaces:");
   hw_gpio_out_.resize(2);
   size_t ct = 0;
   for (size_t i = 0; i < info_.gpios.size(); i++)
@@ -185,8 +179,7 @@ RRBotSystemWithGPIOHardware::export_command_interfaces()
       command_interfaces.emplace_back(hardware_interface::CommandInterface(
         info_.gpios.at(i).name, command_if.name, &hw_gpio_out_[ct++]));
       RCLCPP_INFO(
-        rclcpp::get_logger("RRBotSystemWithGPIOHardware"), "Added %s/%s",
-        info_.gpios.at(i).name.c_str(), command_if.name.c_str());
+        get_logger(), "Added %s/%s", info_.gpios.at(i).name.c_str(), command_if.name.c_str());
     }
   }
 
@@ -197,7 +190,7 @@ hardware_interface::CallbackReturn RRBotSystemWithGPIOHardware::on_activate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
-  RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithGPIOHardware"), "Activating ...please wait...");
+  RCLCPP_INFO(get_logger(), "Activating ...please wait...");
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   // command and state should be equal when starting
@@ -206,7 +199,7 @@ hardware_interface::CallbackReturn RRBotSystemWithGPIOHardware::on_activate(
     hw_commands_[i] = hw_states_[i];
   }
 
-  RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithGPIOHardware"), "Successfully activated!");
+  RCLCPP_INFO(get_logger(), "Successfully activated!");
 
   return hardware_interface::CallbackReturn::SUCCESS;
 }
@@ -215,7 +208,7 @@ hardware_interface::CallbackReturn RRBotSystemWithGPIOHardware::on_deactivate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
-  RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithGPIOHardware"), "Successfully deactivated!");
+  RCLCPP_INFO(get_logger(), "Successfully deactivated!");
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   return hardware_interface::CallbackReturn::SUCCESS;
@@ -225,7 +218,8 @@ hardware_interface::return_type RRBotSystemWithGPIOHardware::read(
   const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
-  RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithGPIOHardware"), "Reading...");
+  std::stringstream ss;
+  ss << "Reading states:";
 
   for (uint i = 0; i < hw_states_.size(); i++)
   {
@@ -244,11 +238,10 @@ hardware_interface::return_type RRBotSystemWithGPIOHardware::read(
 
   for (uint i = 0; i < hw_gpio_in_.size(); i++)
   {
-    RCLCPP_INFO(
-      rclcpp::get_logger("RRBotSystemWithGPIOHardware"), "Read %.1f from GP input %d!",
-      hw_gpio_in_[i], i);
+    ss << std::fixed << std::setprecision(2) << std::endl
+       << "\t" << hw_gpio_in_[i] << " from GPIO input '" << static_cast<int>(i) << "'";
   }
-  RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithGPIOHardware"), "GPIOs successfully read!");
+  RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500, "%s", ss.str().c_str());
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   return hardware_interface::return_type::OK;
@@ -258,15 +251,15 @@ hardware_interface::return_type RRBotSystemWithGPIOHardware::write(
   const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
-  RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithGPIOHardware"), "Writing...");
+  std::stringstream ss;
+  ss << "Writing commands:";
 
   for (uint i = 0; i < hw_gpio_out_.size(); i++)
   {
-    RCLCPP_INFO(
-      rclcpp::get_logger("RRBotSystemWithGPIOHardware"), "Got command %.1f for GP output %d!",
-      hw_gpio_out_[i], i);
+    ss << std::fixed << std::setprecision(2) << std::endl
+       << "\t" << hw_gpio_out_[i] << " for GPIO output '" << static_cast<int>(i) << "'";
   }
-  RCLCPP_INFO(rclcpp::get_logger("RRBotSystemWithGPIOHardware"), "GPIOs successfully written!");
+  RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500, "%s", ss.str().c_str());
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   return hardware_interface::return_type::OK;
