@@ -213,7 +213,7 @@ hardware_interface::return_type ros2_control_demo_example_14::RRBotActuatorWitho
   // START: This part here is for exemplary purposes - Please do not copy to your production code
   std::stringstream ss;
   ss << "Writing..." << std::endl;
-  ss << std::fixed << std::setprecision(2) << std::endl;
+  ss << std::fixed << std::setprecision(2);
   ss << "Writing command: " << hw_joint_command_ << std::endl;
 
   std::ostringstream data;

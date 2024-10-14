@@ -262,7 +262,7 @@ hardware_interface::return_type RRBotSensorPositionFeedback::read(
   }
   hw_joint_state_ += (last_measured_velocity_ * duration.seconds()) / hw_slowdown_;
 
-  ss << std::fixed << std::setprecision(2) << std::endl;
+  ss << std::fixed << std::setprecision(2);
   ss << "Got measured velocity " << measured_velocity << std::endl;
   ss << "Got state " << hw_joint_state_ << " for joint '" << info_.joints[0].name << "'"
      << std::endl;
