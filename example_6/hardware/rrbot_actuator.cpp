@@ -164,7 +164,7 @@ hardware_interface::return_type RRBotModularJoint::read(
   ss << std::fixed << std::setprecision(2) << std::endl
      << "\t" << hw_joint_state_ << " for joint '" << info_.joints[0].name.c_str() << "'";
 
-  RCLCPP_INFO(get_logger(), "%s", ss.str().c_str());
+  RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500, "%s", ss.str().c_str());
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   return hardware_interface::return_type::OK;
@@ -181,7 +181,7 @@ hardware_interface::return_type ros2_control_demo_example_6::RRBotModularJoint::
   ss << std::fixed << std::setprecision(2) << std::endl
      << "\t" << hw_joint_command_ << " for joint '" << info_.joints[0].name.c_str() << "'";
 
-  RCLCPP_INFO(get_logger(), "%s", ss.str().c_str());
+  RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500, "%s", ss.str().c_str());
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   return hardware_interface::return_type::OK;
