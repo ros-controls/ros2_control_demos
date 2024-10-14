@@ -127,8 +127,9 @@ Tutorial steps
 
    .. code-block:: shell
 
-    [RRBotSystemPositionOnlyHardware]: Got command 0.50000 for joint 0!
-    [RRBotSystemPositionOnlyHardware]: Got command 0.50000 for joint 1!
+    [ros2_control_node-1] [INFO] [1721764191.201301188] [controller_manager.resource_manager.hardware_component.system.RRBotSystemPositionOnly]: Writing commands:
+    [ros2_control_node-1]   0.50 for joint 'joint1'
+    [ros2_control_node-1]   0.50 for joint 'joint2'
 
 6. Access wrench data from 2D FTS via
 
