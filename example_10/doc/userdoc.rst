@@ -88,8 +88,9 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
 
    .. code-block:: shell
 
-    [RRBotSystemWithGPIOHardware]: Got command 0.5 for GP output 0!
-    [RRBotSystemWithGPIOHardware]: Got command 0.7 for GP output 1!
+    [ros2_control_node-1] [INFO] [1721765648.271058850] [controller_manager.resource_manager.hardware_component.system.RRBot]: Writing commands:
+    [ros2_control_node-1]   0.50 for GPIO output '0'
+    [ros2_control_node-1]   0.70 for GPIO output '1'
 
 7. Let's introspect the ros2_control hardware component. Calling
 
