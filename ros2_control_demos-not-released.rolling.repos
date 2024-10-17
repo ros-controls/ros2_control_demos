@@ -1,5 +1,1 @@
 repositories:
-  ros2_control:
-    type: git
-    url: https://github.com/pal-robotics-forks/ros2_control.git
-    version: support/wilcard_entries/param_files
