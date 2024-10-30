@@ -80,8 +80,7 @@ Scenario: Using multiple controller managers on the same machine
 
 * Launch file: `multi_controller_manager_example_two_rrbots.launch.py <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_15/bringup/launch/multi_controller_manager_example_two_rrbots.launch.py>`__
 * Controllers yaml:
-  - `multi_controller_manager_rrbot_1_controllers.yaml <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_15/bringup/config/multi_controller_manager_rrbot_1_controllers.yaml>`__
-  - `multi_controller_manager_rrbot_2_controllers.yaml <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_15/bringup/config/multi_controller_manager_rrbot_2_controllers.yaml>`__
+  - `multi_controller_manager_generic_controllers.yaml <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_15/bringup/config/multi_controller_manager_generic_controllers.yaml>`__
 * URDF file: `rrbot.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_15/description/urdf/rrbot.urdf.xacro>`__
 
   * Description: `rrbot_description.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/ros2_control_demo_description/rrbot/urdf/rrbot_description.urdf.xacro>`__
