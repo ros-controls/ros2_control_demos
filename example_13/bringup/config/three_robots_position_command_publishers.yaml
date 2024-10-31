@@ -1,0 +1,37 @@
+rrbot_position_command_publisher:
+  ros__parameters:
+
+    publish_topic: "/rrbot_position_controller/commands"
+    wait_sec_between_publish: 5
+
+    goal_names: ["pos1", "pos2", "pos3", "pos4"]
+    pos1: [0.785, 0.785]
+    pos2: [0.0, 0.0]
+    pos3: [-0.785, -0.785]
+    pos4: [0.0, 0.0]
+
+
+rrbot_with_sensor_position_command_publisher:
+  ros__parameters:
+
+    publish_topic: "/rrbot_with_sensor_position_controller/commands"
+    wait_sec_between_publish: 4
+
+    goal_names: ["pos1", "pos2", "pos3", "pos4"]
+    pos1: [0.785, 0.785]
+    pos2: [0.0, 0.0]
+    pos3: [-0.785, -0.785]
+    pos4: [0.0, 0.0]
+
+
+threedofbot_position_command_publisher:
+  ros__parameters:
+
+    publish_topic: "/threedofbot_position_controller/commands"
+    wait_sec_between_publish: 3
+
+    goal_names: ["pos1", "pos2", "pos3", "pos4"]
+    pos1: [0.785, 0.785, 0.785]
+    pos2: [0.0, 0.0, 0.0]
+    pos3: [-0.785, -0.785, -0.785]
+    pos4: [0.0, 0.0, 0.0]
