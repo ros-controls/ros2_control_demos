@@ -19,9 +19,9 @@ rrbot_with_sensor_position_command_publisher:
 
     goal_names: ["pos1", "pos2", "pos3", "pos4"]
     pos1: [0.785, 0.785]
-    pos2: [0, 0]
+    pos2: [0.0, 0.0]
     pos3: [-0.785, -0.785]
-    pos4: [0, 0]
+    pos4: [0.0, 0.0]
 
 
 threedofbot_position_command_publisher:
@@ -32,6 +32,6 @@ threedofbot_position_command_publisher:
 
     goal_names: ["pos1", "pos2", "pos3", "pos4"]
     pos1: [0.785, 0.785, 0.785]
-    pos2: [0, 0, 0]
+    pos2: [0.0, 0.0, 0.0]
     pos3: [-0.785, -0.785, -0.785]
-    pos4: [0, 0, 0]
+    pos4: [0.0, 0.0, 0.0]
