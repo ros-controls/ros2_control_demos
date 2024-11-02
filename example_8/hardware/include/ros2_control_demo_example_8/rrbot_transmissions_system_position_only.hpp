@@ -57,6 +57,18 @@ public:
   hardware_interface::return_type write(
     const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
+  /// Get the logger of the SystemInterface.
+  /**
+   * \return logger of the SystemInterface.
+   */
+  rclcpp::Logger get_logger() const { return *logger_; }
+
+  /// Get the clock of the SystemInterface.
+  /**
+   * \return clock of the SystemInterface.
+   */
+  rclcpp::Clock::SharedPtr get_clock() const { return clock_; }
+
 private:
   // parameters for the RRBot simulation
   double actuator_slowdown_;
@@ -77,6 +89,10 @@ private:
   };
   std::vector<InterfaceData> joint_interfaces_;
   std::vector<InterfaceData> actuator_interfaces_;
+
+  // Objects for logging
+  std::shared_ptr<rclcpp::Logger> logger_;
+  rclcpp::Clock::SharedPtr clock_;
 };
 
 }  // namespace ros2_control_demo_example_8

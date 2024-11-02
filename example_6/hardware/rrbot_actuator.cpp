@@ -41,6 +41,10 @@ hardware_interface::CallbackReturn RRBotModularJoint::on_init(
   {
     return hardware_interface::CallbackReturn::ERROR;
   }
+  logger_ = std::make_shared<rclcpp::Logger>(rclcpp::get_logger(
+    "controller_manager.resource_manager.hardware_component.actuator.RRBotModularJoint"));
+  clock_ = std::make_shared<rclcpp::Clock>(rclcpp::Clock());
+
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   hw_start_sec_ = stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
   hw_stop_sec_ = stod(info_.hardware_parameters["example_param_hw_stop_duration_sec"]);
@@ -162,7 +166,7 @@ hardware_interface::return_type RRBotModularJoint::read(
   hw_joint_state_ = hw_joint_state_ + (hw_joint_command_ - hw_joint_state_) / hw_slowdown_;
 
   ss << std::fixed << std::setprecision(2) << std::endl
-     << "\t" << hw_joint_state_ << " for joint '" << info_.joints[0].name.c_str() << "'";
+     << "\t" << hw_joint_state_ << " for joint '" << info_.joints[0].name << "'";
 
   RCLCPP_INFO(get_logger(), "%s", ss.str().c_str());
   // END: This part here is for exemplary purposes - Please do not copy to your production code
@@ -179,7 +183,7 @@ hardware_interface::return_type ros2_control_demo_example_6::RRBotModularJoint::
 
   // Simulate sending commands to the hardware
   ss << std::fixed << std::setprecision(2) << std::endl
-     << "\t" << hw_joint_command_ << " for joint '" << info_.joints[0].name.c_str() << "'";
+     << "\t" << hw_joint_command_ << " for joint '" << info_.joints[0].name << "'";
 
   RCLCPP_INFO(get_logger(), "%s", ss.str().c_str());
   // END: This part here is for exemplary purposes - Please do not copy to your production code

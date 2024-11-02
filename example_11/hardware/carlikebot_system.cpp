@@ -37,6 +37,9 @@ hardware_interface::CallbackReturn CarlikeBotSystemHardware::on_init(
   {
     return hardware_interface::CallbackReturn::ERROR;
   }
+  logger_ = std::make_shared<rclcpp::Logger>(
+    rclcpp::get_logger("controller_manager.resource_manager.hardware_component.system.CarlikeBot"));
+  clock_ = std::make_shared<rclcpp::Clock>(rclcpp::Clock());
 
   // Check if the number of joints is correct based on the mode of operation
   if (info_.joints.size() != 2)

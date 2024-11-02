@@ -40,6 +40,9 @@ hardware_interface::CallbackReturn RRBotSystemWithSensorHardware::on_init(
   {
     return hardware_interface::CallbackReturn::ERROR;
   }
+  logger_ = std::make_shared<rclcpp::Logger>(rclcpp::get_logger(
+    "controller_manager.resource_manager.hardware_component.system.RRBotSystemWithSensor"));
+  clock_ = std::make_shared<rclcpp::Clock>(rclcpp::Clock());
 
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   hw_start_sec_ = stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
@@ -212,7 +215,7 @@ hardware_interface::return_type RRBotSystemWithSensorHardware::read(
     hw_joint_states_[i] += (hw_joint_commands_[i] - hw_joint_states_[i]) / hw_slowdown_;
 
     ss << std::fixed << std::setprecision(2) << std::endl
-       << "\t" << hw_joint_states_[i] << " for joint '" << info_.joints[i].name.c_str() << "'";
+       << "\t" << hw_joint_states_[i] << " for joint '" << info_.joints[i].name << "'";
   }
   RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500, "%s", ss.str().c_str());
 
@@ -246,7 +249,7 @@ hardware_interface::return_type ros2_control_demo_example_4::RRBotSystemWithSens
   {
     // Simulate sending commands to the hardware
     ss << std::fixed << std::setprecision(2) << std::endl
-       << "\t" << hw_joint_commands_[i] << " for joint '" << info_.joints[i].name.c_str() << "'";
+       << "\t" << hw_joint_commands_[i] << " for joint '" << info_.joints[i].name << "'";
   }
   RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500, "%s", ss.str().c_str());
   // END: This part here is for exemplary purposes - Please do not copy to your production code

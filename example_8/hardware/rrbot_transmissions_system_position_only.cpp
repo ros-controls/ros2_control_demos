@@ -24,7 +24,6 @@
 
 #include "hardware_interface/lexical_casts.hpp"
 #include "hardware_interface/types/hardware_interface_type_values.hpp"
-#include "rclcpp/clock.hpp"
 #include "rclcpp/logging.hpp"
 #include "transmission_interface/simple_transmission_loader.hpp"
 #include "transmission_interface/transmission.hpp"
@@ -38,6 +37,11 @@ constexpr double kNaN = std::numeric_limits<double>::quiet_NaN();
 hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware::on_init(
   const hardware_interface::HardwareInfo & info)
 {
+  logger_ = std::make_shared<rclcpp::Logger>(
+    rclcpp::get_logger("controller_manager.resource_manager.hardware_component.system."
+                       "RRBotTransmissionsSystemPositionOnly"));
+  clock_ = std::make_shared<rclcpp::Clock>(rclcpp::Clock());
+
   RCLCPP_INFO(get_logger(), "Initializing...");
 
   if (

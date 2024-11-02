@@ -119,9 +119,9 @@ Tutorial steps
 
    .. code-block:: shell
 
-    [ros2_control_node-1] [INFO] [1721764663.304187517] [controller_manager.resource_manager.hardware_component.actuator.RRBotModularJoint1]: Writing commands:
+    [ros2_control_node-1] [INFO] [1721764663.304187517] [controller_manager.resource_manager.hardware_component.actuator.RRBotModularJoint]: Writing commands:
     [ros2_control_node-1]   0.50 for joint 'joint1'
-    [ros2_control_node-1] [INFO] [1721764663.304196897] [controller_manager.resource_manager.hardware_component.actuator.RRBotModularJoint2]: Writing commands:
+    [ros2_control_node-1] [INFO] [1721764663.304196897] [controller_manager.resource_manager.hardware_component.actuator.RRBotModularJoint]: Writing commands:
     [ros2_control_node-1]   0.50 for joint 'joint2'
 
 

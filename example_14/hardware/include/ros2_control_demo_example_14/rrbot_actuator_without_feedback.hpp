@@ -29,6 +29,8 @@
 #include "hardware_interface/hardware_info.hpp"
 #include "hardware_interface/system_interface.hpp"
 #include "hardware_interface/types/hardware_interface_return_values.hpp"
+#include "rclcpp/clock.hpp"
+#include "rclcpp/logger.hpp"
 #include "rclcpp/macros.hpp"
 
 namespace ros2_control_demo_example_14
@@ -60,10 +62,26 @@ public:
   hardware_interface::return_type write(
     const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
+  /// Get the logger of the ActuatorInterface.
+  /**
+   * \return logger of the ActuatorInterface.
+   */
+  rclcpp::Logger get_logger() const { return *logger_; }
+
+  /// Get the clock of the ActuatorInterface.
+  /**
+   * \return clock of the ActuatorInterface.
+   */
+  rclcpp::Clock::SharedPtr get_clock() const { return clock_; }
+
 private:
   // Parameters for the RRBot simulation
   double hw_start_sec_;
   double hw_stop_sec_;
+
+  // Objects for logging
+  std::shared_ptr<rclcpp::Logger> logger_;
+  rclcpp::Clock::SharedPtr clock_;
 
   // Store the command for the simulated robot
   double hw_joint_command_;

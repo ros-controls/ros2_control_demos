@@ -46,6 +46,11 @@ hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_init(
   {
     return hardware_interface::CallbackReturn::ERROR;
   }
+  logger_ = std::make_shared<rclcpp::Logger>(
+    rclcpp::get_logger("controller_manager.resource_manager.hardware_component.sensor."
+                       "RRBotModularPositionSensorJoint"));
+  clock_ = std::make_shared<rclcpp::Clock>(rclcpp::Clock());
+
   // START: This part here is for exemplary purposes - Please do not copy to your production code
   hw_start_sec_ =
     hardware_interface::stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
@@ -74,8 +79,6 @@ hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_init(
       joint.state_interfaces[0].name.c_str(), hardware_interface::HW_IF_POSITION);
     return hardware_interface::CallbackReturn::ERROR;
   }
-
-  clock_ = rclcpp::Clock();
 
   // START: This part here is for exemplary purposes - Please do not copy to your production code
   // Initialize objects for fake mechanical connection
@@ -201,7 +204,7 @@ hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_configure(
   last_measured_velocity_ = 0;
 
   // In general after a hardware is configured it can be read
-  last_timestamp_ = clock_.now();
+  last_timestamp_ = get_clock()->now();
 
   RCLCPP_INFO(get_logger(), "Configuration successful.");
   return hardware_interface::CallbackReturn::SUCCESS;
@@ -246,7 +249,7 @@ hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_deactivate(
 hardware_interface::return_type RRBotSensorPositionFeedback::read(
   const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
-  current_timestamp = clock_.now();
+  current_timestamp = get_clock()->now();
   rclcpp::Duration duration = current_timestamp - last_timestamp_;
   last_timestamp_ = current_timestamp;
 

@@ -45,6 +45,10 @@ hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_init(
   {
     return hardware_interface::CallbackReturn::ERROR;
   }
+  logger_ = std::make_shared<rclcpp::Logger>(rclcpp::get_logger(
+    "controller_manager.resource_manager.hardware_component.actuator.RRBotModularJoint"));
+  clock_ = std::make_shared<rclcpp::Clock>(rclcpp::Clock());
+
   // START: This part here is for exemplary purposes - Please do not copy to your production code
   hw_start_sec_ =
     hardware_interface::stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
@@ -216,7 +220,8 @@ hardware_interface::return_type ros2_control_demo_example_14::RRBotActuatorWitho
     std::stringstream ss;
     ss << "Writing..." << std::endl;
     ss << std::fixed << std::setprecision(2);
-    ss << "Writing command: " << hw_joint_command_ << std::endl;
+    ss << "Writing command: " << hw_joint_command_ << " for joint '" << info_.joints[0].name << "'"
+       << std::endl;
 
     std::ostringstream data;
     data << hw_joint_command_;

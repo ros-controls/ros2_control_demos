@@ -40,6 +40,9 @@ hardware_interface::CallbackReturn ExternalRRBotForceTorqueSensorHardware::on_in
   {
     return hardware_interface::CallbackReturn::ERROR;
   }
+  logger_ = std::make_shared<rclcpp::Logger>(rclcpp::get_logger(
+    "controller_manager.resource_manager.hardware_component.sensor.ExternalRRBotFTSensor"));
+  clock_ = std::make_shared<rclcpp::Clock>(rclcpp::Clock());
 
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   hw_start_sec_ = stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);

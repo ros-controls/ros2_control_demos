@@ -36,6 +36,9 @@ hardware_interface::CallbackReturn RRBotSystemWithGPIOHardware::on_init(
   {
     return hardware_interface::CallbackReturn::ERROR;
   }
+  logger_ = std::make_shared<rclcpp::Logger>(
+    rclcpp::get_logger("controller_manager.resource_manager.hardware_component.system.RRBot"));
+  clock_ = std::make_shared<rclcpp::Clock>(rclcpp::Clock());
 
   hw_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   hw_commands_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
