@@ -212,22 +212,30 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
 
   .. code-block:: shell
 
-    ros2 topic echo /gpio_controller/inputs
+    ros2 topic echo /gpio_controller/gpio_states
 
   again and you should see that - unless commands are received - the values of the state interfaces are now ``nan`` except for the vacuum interface.
 
   .. code-block:: shell
 
-    interface_names:
-    - flange_analog_IOs/analog_output1
-    - flange_analog_IOs/analog_input1
-    - flange_analog_IOs/analog_input2
-    - flange_vacuum/vacuum
-    values:
-    - .nan
-    - .nan
-    - .nan
-    - 1.0
+    header:
+    stamp:
+      sec: 1730671266
+      nanosec: 27650570
+    frame_id: ''
+    joint_names:
+    - flange_analog_IOs
+    - flange_vacuum
+    interface_values:
+    - interface_names:
+      - analog_output1
+      values:
+      - .nan
+    - interface_names:
+      - vacuum
+      values:
+      - 1.0
+    ---
 
   This is, because for the vacuum interface an initial value of ``1.0`` is set in the URDF file.
 
@@ -240,13 +248,7 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
         </state_interface>
       </gpio>
 
-  Call again
-
-  .. code-block:: shell
-
-    ros2 topic pub /gpio_controller/commands std_msgs/msg/Float64MultiArray "{data: [0.5,0.7]}"
-
-  and you will see that the GPIO command interfaces will be mirrored to their respective state interfaces.
+  Send again topics to ``/gpio_controller/commands`` and you will see that the GPIO command interfaces will be mirrored to their respective state interfaces.
 
 Files used for this demos
 -------------------------
