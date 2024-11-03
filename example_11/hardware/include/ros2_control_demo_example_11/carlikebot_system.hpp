@@ -63,9 +63,8 @@ public:
   hardware_interface::CallbackReturn on_init(
     const hardware_interface::HardwareInfo & info) override;
 
-  std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
-
-  std::vector<hardware_interface::CommandInterface> export_command_interfaces() override;
+  hardware_interface::CallbackReturn on_configure(
+    const rclcpp_lifecycle::State & previous_state) override;
 
   hardware_interface::CallbackReturn on_activate(
     const rclcpp_lifecycle::State & previous_state) override;
@@ -84,9 +83,9 @@ private:
   double hw_start_sec_;
   double hw_stop_sec_;
 
-  // std::vector<std::tuple<std::string, double, double>>
-  //   hw_interfaces_;  // name of joint, state, command
-  std::map<std::string, Joint> hw_interfaces_;
+  // joint names
+  std::string steering_joint_;
+  std::string traction_joint_;
 };
 
 }  // namespace ros2_control_demo_example_11
