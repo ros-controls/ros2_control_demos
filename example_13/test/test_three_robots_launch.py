@@ -332,9 +332,7 @@ class TestFixture(unittest.TestCase):
             "/joint_states",
             [
                 "rrbot_with_sensor_joint1",
-                "rrbot_joint1",
                 "rrbot_with_sensor_joint2",
-                "rrbot_joint2",
                 "threedofbot_joint1",
                 "threedofbot_joint2",
                 "threedofbot_joint3",
