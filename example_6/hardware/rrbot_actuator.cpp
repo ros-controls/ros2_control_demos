@@ -47,9 +47,6 @@ hardware_interface::CallbackReturn RRBotModularJoint::on_init(
   hw_slowdown_ = stod(info_.hardware_parameters["example_param_hw_slowdown"]);
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
-  hw_joint_state_ = std::numeric_limits<double>::quiet_NaN();
-  hw_joint_command_ = std::numeric_limits<double>::quiet_NaN();
-
   const hardware_interface::ComponentInfo & joint = info_.joints[0];
   // RRBotModularJoint has exactly one state and command interface on each joint
   if (joint.command_interfaces.size() != 1)
@@ -88,24 +85,31 @@ hardware_interface::CallbackReturn RRBotModularJoint::on_init(
   return hardware_interface::CallbackReturn::SUCCESS;
 }
 
-std::vector<hardware_interface::StateInterface> RRBotModularJoint::export_state_interfaces()
+hardware_interface::CallbackReturn RRBotModularJoint::on_configure(
+  const rclcpp_lifecycle::State & /*previous_state*/)
 {
-  std::vector<hardware_interface::StateInterface> state_interfaces;
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
+  RCLCPP_INFO(get_logger(), "Configuring ...please wait...");
 
-  state_interfaces.emplace_back(hardware_interface::StateInterface(
-    info_.joints[0].name, hardware_interface::HW_IF_POSITION, &hw_joint_state_));
+  for (int i = 0; i < hw_start_sec_; i++)
+  {
+    rclcpp::sleep_for(std::chrono::seconds(1));
+    RCLCPP_INFO(get_logger(), "%.1f seconds left...", hw_start_sec_ - i);
+  }
+  // END: This part here is for exemplary purposes - Please do not copy to your production code
 
-  return state_interfaces;
-}
+  // reset values always when configuring hardware
+  for (const auto & [name, descr] : joint_state_interfaces_)
+  {
+    set_state(name, 0.0);
+  }
+  for (const auto & [name, descr] : joint_command_interfaces_)
+  {
+    set_command(name, 0.0);
+  }
+  RCLCPP_INFO(get_logger(), "Successfully configured!");
 
-std::vector<hardware_interface::CommandInterface> RRBotModularJoint::export_command_interfaces()
-{
-  std::vector<hardware_interface::CommandInterface> command_interfaces;
-
-  command_interfaces.emplace_back(hardware_interface::CommandInterface(
-    info_.joints[0].name, hardware_interface::HW_IF_POSITION, &hw_joint_command_));
-
-  return command_interfaces;
+  return hardware_interface::CallbackReturn::SUCCESS;
 }
 
 hardware_interface::CallbackReturn RRBotModularJoint::on_activate(
@@ -121,11 +125,10 @@ hardware_interface::CallbackReturn RRBotModularJoint::on_activate(
   }
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
-  // set some default values for joints
-  if (std::isnan(hw_joint_state_))
+  // command and state should be equal when starting
+  for (const auto & [name, descr] : joint_state_interfaces_)
   {
-    hw_joint_state_ = 0;
-    hw_joint_command_ = 0;
+    set_command(name, get_state(name));
   }
 
   RCLCPP_INFO(get_logger(), "Successfully activated!");
@@ -159,10 +162,16 @@ hardware_interface::return_type RRBotModularJoint::read(
   ss << "Reading states:";
 
   // Simulate RRBot's movement
-  hw_joint_state_ = hw_joint_state_ + (hw_joint_command_ - hw_joint_state_) / hw_slowdown_;
+  ss << "Reading states:";
 
-  ss << std::fixed << std::setprecision(2) << std::endl
-     << "\t" << hw_joint_state_ << " for joint '" << info_.joints[0].name.c_str() << "'";
+  for (const auto & [name, descr] : joint_state_interfaces_)
+  {
+    // Simulate RRBot's movement
+    auto new_value = get_state(name) + (get_command(name) - get_state(name)) / hw_slowdown_;
+    set_state(name, new_value);
+    ss << std::fixed << std::setprecision(2) << std::endl
+       << "\t" << get_state(name) << " for joint '" << name << "'";
+  }
 
   RCLCPP_INFO(get_logger(), "%s", ss.str().c_str());
   // END: This part here is for exemplary purposes - Please do not copy to your production code
@@ -177,10 +186,12 @@ hardware_interface::return_type ros2_control_demo_example_6::RRBotModularJoint::
   std::stringstream ss;
   ss << "Writing commands:";
 
-  // Simulate sending commands to the hardware
-  ss << std::fixed << std::setprecision(2) << std::endl
-     << "\t" << hw_joint_command_ << " for joint '" << info_.joints[0].name.c_str() << "'";
-
+  for (const auto & [name, descr] : joint_command_interfaces_)
+  {
+    // Simulate sending commands to the hardware
+    ss << std::fixed << std::setprecision(2) << std::endl
+       << "\t" << get_command(name) << " for joint '" << name << "'";
+  }
   RCLCPP_INFO(get_logger(), "%s", ss.str().c_str());
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
