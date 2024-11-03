@@ -140,7 +140,30 @@ Tutorial steps
       [RRBotSystemMultiInterfaceHardware]: Got pos: 0.78500, vel: 0.00000, acc: 0.00000 for joint 0!
       [RRBotSystemMultiInterfaceHardware]: Got pos: 0.78500, vel: 0.00000, acc: 0.00000 for joint 1!
 
-6. To demonstrate illegal controller configuration, use one of the following launch file arguments:
+6. Now you can also switch controllers during runtime, which also changes the command mode automatically. First, you have to load the new controller, for example the ``forward_position_controller`` if you haven't changed the launch file argument.
+
+  .. code-block:: shell
+
+    ros2 control load_controller forward_position_controller $(ros2 pkg prefix ros2_control_demo_example_3 --share)/config/rrbot_multi_interface_forward_controllers.yaml
+    ros2 control set_controller_state forward_position_controller inactive
+
+  Then you can switch controllers using the following command:
+
+  .. code-block:: shell
+
+    ros2 control switch_controllers --deactivate forward_velocity_controller --activate forward_position_controller
+
+  Observe the output of the following CLI commands, and see how the command interfaces are claimed by the new controller.
+
+  .. code-block:: shell
+
+    ros2 control list_controllers
+    ros2 control list_hardware_interfaces
+
+  Try now to send commands to the new controller, as described in the previous step.
+
+
+7. To demonstrate illegal controller configuration, use one of the following launch file arguments:
 
    * ``robot_controller:=forward_illegal1_controller`` or
    * ``robot_controller:=forward_illegal2_controller``
