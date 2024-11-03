@@ -142,7 +142,7 @@ Tutorial steps
       [ros2_control_node-1]   pos: 0.67, vel: 5.00, acc: 0.00 for joint 0
       [ros2_control_node-1]   pos: 0.67, vel: 5.00, acc: 0.00 for joint 1
 
-6. Now you can try to switch controllers during runtime, which also changes the command mode automatically. First, you have to load the new controller, for example the ``forward_position_controller`` if you haven't changed the launch file argument.
+6. Now you can also switch controllers during runtime, which also changes the command mode automatically. First, you have to load the new controller, for example the ``forward_position_controller`` if you haven't changed the launch file argument.
 
   .. code-block:: shell
 
