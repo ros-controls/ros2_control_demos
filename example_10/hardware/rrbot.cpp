@@ -108,7 +108,7 @@ hardware_interface::CallbackReturn RRBotSystemWithGPIOHardware::on_init(
   {
     RCLCPP_FATAL(
       get_logger(), "GPIO component %s has '%ld' state interfaces, '%d' expected.",
-      info_.gpios[0].name.c_str(), info_.gpios[0].state_interfaces.size(), 1);
+      info_.gpios[1].name.c_str(), info_.gpios[1].state_interfaces.size(), 1);
     return hardware_interface::CallbackReturn::ERROR;
   }
 
