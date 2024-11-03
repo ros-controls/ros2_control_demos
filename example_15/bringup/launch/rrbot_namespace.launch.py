@@ -69,13 +69,6 @@ def generate_launch_description():
         executable="ros2_control_node",
         namespace="/rrbot",
         parameters=[robot_description, robot_controllers],
-        remappings=[
-            (
-                # we use the remapping from a relative name to FQN /position_commands
-                "forward_position_controller/commands",
-                "/position_commands",
-            ),
-        ],
         output={
             "stdout": "screen",
             "stderr": "screen",
@@ -108,7 +101,14 @@ def generate_launch_description():
         package="controller_manager",
         executable="spawner",
         namespace="rrbot",
-        arguments=["forward_position_controller", "--param-file", robot_controllers],
+        arguments=[
+            "forward_position_controller",
+            "--param-file",
+            robot_controllers,
+            # we use the remapping from a relative name to FQN /position_commands
+            "--controller-ros-args",
+            "-r forward_position_controller/commands:=/position_commands",
+        ],
     )
 
     robot_position_trajectory_controller_spawner = Node(
