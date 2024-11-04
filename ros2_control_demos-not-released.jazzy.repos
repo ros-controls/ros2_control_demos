@@ -1,5 +1,5 @@
 repositories:
   ros2_controllers:
     type: git
-    url: https://github.com/Wiktor-99/ros2_controllers.git
+    url: https://github.com/ros-controls/ros2_controllers.git
     version: gpio_controllers
