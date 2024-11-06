@@ -109,14 +109,14 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
 
     ros2 topic echo /gpio_controller/gpio_states
 
-   which shows the current state of the configured command interfaces GPIOs, read back from the hardware.
+   which shows the values of the state_interfaces of the configured GPIOs
 
    .. code-block:: shell
 
     header:
       stamp:
-        sec: 1730669337
-        nanosec: 374547404
+        sec: 1730927120
+        nanosec: 419368389
       frame_id: ''
     joint_names:
     - flange_analog_IOs
@@ -124,8 +124,12 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
     interface_values:
     - interface_names:
       - analog_output1
+      - analog_input1
+      - analog_input2
       values:
       - 0.0
+      - 1144726400.0
+      - 1620422656.0
     - interface_names:
       - vacuum
       values:
@@ -219,23 +223,26 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
   .. code-block:: shell
 
     header:
-    stamp:
-      sec: 1730671266
-      nanosec: 27650570
-    frame_id: ''
+      stamp:
+        sec: 1730927217
+        nanosec: 659647869
+      frame_id: ''
     joint_names:
     - flange_analog_IOs
     - flange_vacuum
     interface_values:
     - interface_names:
       - analog_output1
+      - analog_input1
+      - analog_input2
       values:
+      - .nan
+      - .nan
       - .nan
     - interface_names:
       - vacuum
       values:
       - 1.0
-    ---
 
   This is, because for the vacuum interface an initial value of ``1.0`` is set in the URDF file.
 
