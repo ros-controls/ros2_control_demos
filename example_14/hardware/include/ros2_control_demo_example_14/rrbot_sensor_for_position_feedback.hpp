@@ -31,6 +31,7 @@
 #include "hardware_interface/system_interface.hpp"
 #include "hardware_interface/types/hardware_interface_return_values.hpp"
 #include "rclcpp/clock.hpp"
+#include "rclcpp/logger.hpp"
 #include "rclcpp/macros.hpp"
 #include "rclcpp/time.hpp"
 #include "realtime_tools/realtime_buffer.h"
@@ -62,11 +63,27 @@ public:
   hardware_interface::return_type read(
     const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
+  /// Get the logger of the SensorInterface.
+  /**
+   * \return logger of the SensorInterface.
+   */
+  rclcpp::Logger get_logger() const { return *logger_; }
+
+  /// Get the clock of the SensorInterface.
+  /**
+   * \return clock of the SensorInterface.
+   */
+  rclcpp::Clock::SharedPtr get_clock() const { return clock_; }
+
 private:
   // Parameters for the RRBot simulation
   double hw_start_sec_;
   double hw_stop_sec_;
   double hw_slowdown_;
+
+  // Objects for logging
+  std::shared_ptr<rclcpp::Logger> logger_;
+  rclcpp::Clock::SharedPtr clock_;
 
   // Store the command for the simulated robot
   double measured_velocity;  // Local variable, but avoid initialization on each read
@@ -74,7 +91,6 @@ private:
   double hw_joint_state_;
 
   // Timestamps to calculate position for velocity
-  rclcpp::Clock clock_;
   rclcpp::Time last_timestamp_;
   rclcpp::Time current_timestamp;  // Local variable, but avoid initialization on each read
 

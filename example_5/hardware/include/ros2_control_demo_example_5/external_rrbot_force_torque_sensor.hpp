@@ -27,6 +27,8 @@
 #include "hardware_interface/hardware_info.hpp"
 #include "hardware_interface/sensor_interface.hpp"
 #include "hardware_interface/types/hardware_interface_return_values.hpp"
+#include "rclcpp/clock.hpp"
+#include "rclcpp/logger.hpp"
 #include "rclcpp/macros.hpp"
 
 namespace ros2_control_demo_example_5
@@ -50,11 +52,27 @@ public:
   hardware_interface::return_type read(
     const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
+  /// Get the logger of the SensorInterface.
+  /**
+   * \return logger of the SensorInterface.
+   */
+  rclcpp::Logger get_logger() const { return *logger_; }
+
+  /// Get the clock of the SensorInterface.
+  /**
+   * \return clock of the SensorInterface.
+   */
+  rclcpp::Clock::SharedPtr get_clock() const { return clock_; }
+
 private:
   // Parameters for the RRBot simulation
   double hw_start_sec_;
   double hw_stop_sec_;
   double hw_sensor_change_;
+
+  // Objects for logging
+  std::shared_ptr<rclcpp::Logger> logger_;
+  rclcpp::Clock::SharedPtr clock_;
 
   // Store the sensor states for the simulated robot
   std::vector<double> hw_sensor_states_;
