@@ -135,10 +135,12 @@ Tutorial steps
 
    .. code-block:: shell
 
-      [RRBotSystemMultiInterfaceHardware]: Got the commands pos: 0.78500, vel: 0.00000, acc: 0.00000 for joint 0, control_lvl:1
-      [RRBotSystemMultiInterfaceHardware]: Got the commands pos: 0.78500, vel: 0.00000, acc: 0.00000 for joint 1, control_lvl:1
-      [RRBotSystemMultiInterfaceHardware]: Got pos: 0.78500, vel: 0.00000, acc: 0.00000 for joint 0!
-      [RRBotSystemMultiInterfaceHardware]: Got pos: 0.78500, vel: 0.00000, acc: 0.00000 for joint 1!
+      [ros2_control_node-1] [INFO] [1728857332.160329225] [controller_manager.resource_manager.hardware_component.system.RRBotSystemMultiInterface]: Writing commands:
+      [ros2_control_node-1]   command pos: 0.00, vel: 5.00, acc: 0.00 for joint 0, control lvl: 2
+      [ros2_control_node-1]   command pos: 0.00, vel: 5.00, acc: 0.00 for joint 1, control lvl: 2
+      [ros2_control_node-1] [INFO] [1728857332.320242591] [controller_manager.resource_manager.hardware_component.system.RRBotSystemMultiInterface]: Reading states:
+      [ros2_control_node-1]   pos: 0.67, vel: 5.00, acc: 0.00 for joint 0
+      [ros2_control_node-1]   pos: 0.67, vel: 5.00, acc: 0.00 for joint 1
 
 6. Now you can also switch controllers during runtime, which also changes the command mode automatically. First, you have to load the new controller, for example the ``forward_position_controller`` if you haven't changed the launch file argument.
 

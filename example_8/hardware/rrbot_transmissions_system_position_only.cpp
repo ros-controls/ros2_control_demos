@@ -24,7 +24,6 @@
 
 #include "hardware_interface/lexical_casts.hpp"
 #include "hardware_interface/types/hardware_interface_type_values.hpp"
-#include "rclcpp/clock.hpp"
 #include "rclcpp/logging.hpp"
 #include "transmission_interface/simple_transmission_loader.hpp"
 #include "transmission_interface/transmission.hpp"
@@ -38,12 +37,12 @@ constexpr double kNaN = std::numeric_limits<double>::quiet_NaN();
 hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware::on_init(
   const hardware_interface::HardwareInfo & info)
 {
-  logger_ = std::make_unique<rclcpp::Logger>(
-    rclcpp::get_logger("RRBotTransmissionsSystemPositionOnlyHardware"));
+  logger_ = std::make_shared<rclcpp::Logger>(
+    rclcpp::get_logger("controller_manager.resource_manager.hardware_component.system."
+                       "RRBotTransmissionsSystemPositionOnly"));
+  clock_ = std::make_shared<rclcpp::Clock>(rclcpp::Clock());
 
-  clock_ = std::make_unique<rclcpp::Clock>();
-
-  RCLCPP_INFO(*logger_, "Initializing...");
+  RCLCPP_INFO(get_logger(), "Initializing...");
 
   if (
     hardware_interface::SystemInterface::on_init(info) !=
@@ -75,7 +74,7 @@ hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware:
     if (transmission_info.type != "transmission_interface/SimpleTransmission")
     {
       RCLCPP_FATAL(
-        *logger_, "Transmission '%s' of type '%s' not supported in this demo",
+        get_logger(), "Transmission '%s' of type '%s' not supported in this demo",
         transmission_info.name.c_str(), transmission_info.type.c_str());
       return hardware_interface::CallbackReturn::ERROR;
     }
@@ -88,7 +87,7 @@ hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware:
     catch (const transmission_interface::TransmissionInterfaceException & exc)
     {
       RCLCPP_FATAL(
-        *logger_, "Error while loading %s: %s", transmission_info.name.c_str(), exc.what());
+        get_logger(), "Error while loading %s: %s", transmission_info.name.c_str(), exc.what());
       return hardware_interface::CallbackReturn::ERROR;
     }
 
@@ -102,7 +101,7 @@ hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware:
             joint_info.command_interfaces[0] == hardware_interface::HW_IF_POSITION))
       {
         RCLCPP_FATAL(
-          *logger_, "Invalid transmission joint '%s' configuration for this demo",
+          get_logger(), "Invalid transmission joint '%s' configuration for this demo",
           joint_info.name.c_str());
         return hardware_interface::CallbackReturn::ERROR;
       }
@@ -139,14 +138,14 @@ hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware:
     catch (const transmission_interface::TransmissionInterfaceException & exc)
     {
       RCLCPP_FATAL(
-        *logger_, "Error while configuring %s: %s", transmission_info.name.c_str(), exc.what());
+        get_logger(), "Error while configuring %s: %s", transmission_info.name.c_str(), exc.what());
       return hardware_interface::CallbackReturn::ERROR;
     }
 
     transmissions_.push_back(transmission);
   }
 
-  RCLCPP_INFO(*logger_, "Initialization successful");
+  RCLCPP_INFO(get_logger(), "Initialization successful");
 
   return hardware_interface::CallbackReturn::SUCCESS;
 }
@@ -154,7 +153,7 @@ hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware:
 hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware::on_configure(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
-  RCLCPP_INFO(*logger_, "Configuring...");
+  RCLCPP_INFO(get_logger(), "Configuring...");
 
   auto reset_interfaces = [](std::vector<InterfaceData> & interfaces)
   {
@@ -169,7 +168,7 @@ hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware:
   reset_interfaces(joint_interfaces_);
   reset_interfaces(actuator_interfaces_);
 
-  RCLCPP_INFO(*logger_, "Configuration successful");
+  RCLCPP_INFO(get_logger(), "Configuration successful");
 
   return hardware_interface::CallbackReturn::SUCCESS;
 }
@@ -211,8 +210,8 @@ RRBotTransmissionsSystemPositionOnlyHardware::export_command_interfaces()
 hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware::on_activate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
-  RCLCPP_INFO(*logger_, "Activating...");
-  RCLCPP_INFO(*logger_, "Activation successful");
+  RCLCPP_INFO(get_logger(), "Activating...");
+  RCLCPP_INFO(get_logger(), "Activation successful");
 
   return hardware_interface::CallbackReturn::SUCCESS;
 }
@@ -220,8 +219,8 @@ hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware:
 hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware::on_deactivate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
-  RCLCPP_INFO(*logger_, "Deactivating...");
-  RCLCPP_INFO(*logger_, "Deactivation successful");
+  RCLCPP_INFO(get_logger(), "Deactivating...");
+  RCLCPP_INFO(get_logger(), "Deactivation successful");
 
   return hardware_interface::CallbackReturn::SUCCESS;
 }
@@ -266,7 +265,7 @@ hardware_interface::return_type RRBotTransmissionsSystemPositionOnlyHardware::re
        << transmission_info.name << "(R=" << reduction << ") <-- " << actuator_interface->name_
        << ": " << actuator_interface->state_;
   }
-  RCLCPP_INFO_THROTTLE(*logger_, *clock_, 1000, "%s", ss.str().c_str());
+  RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500, "%s", ss.str().c_str());
 
   return hardware_interface::return_type::OK;
 }
@@ -321,7 +320,7 @@ hardware_interface::return_type RRBotTransmissionsSystemPositionOnlyHardware::wr
        << transmission_info.name << "(R=" << reduction << ") --> " << actuator_interface->name_
        << ": " << actuator_interface->command_;
   }
-  RCLCPP_INFO_THROTTLE(*logger_, *clock_, 1000, "%s", ss.str().c_str());
+  RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500, "%s", ss.str().c_str());
 
   return hardware_interface::return_type::OK;
 }
