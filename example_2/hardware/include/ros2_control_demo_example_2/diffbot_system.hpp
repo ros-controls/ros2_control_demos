@@ -25,6 +25,7 @@
 #include "hardware_interface/types/hardware_interface_return_values.hpp"
 #include "rclcpp/clock.hpp"
 #include "rclcpp/duration.hpp"
+#include "rclcpp/logger.hpp"
 #include "rclcpp/macros.hpp"
 #include "rclcpp/time.hpp"
 #include "rclcpp_lifecycle/node_interfaces/lifecycle_node_interface.hpp"
@@ -56,10 +57,26 @@ public:
   hardware_interface::return_type write(
     const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
+  /// Get the logger of the SystemInterface.
+  /**
+   * \return logger of the SystemInterface.
+   */
+  rclcpp::Logger get_logger() const { return *logger_; }
+
+  /// Get the clock of the SystemInterface.
+  /**
+   * \return clock of the SystemInterface.
+   */
+  rclcpp::Clock::SharedPtr get_clock() const { return clock_; }
+
 private:
   // Parameters for the DiffBot simulation
   double hw_start_sec_;
   double hw_stop_sec_;
+
+  // Objects for logging
+  std::shared_ptr<rclcpp::Logger> logger_;
+  rclcpp::Clock::SharedPtr clock_;
 
   // Store the command for the simulated robot
   std::vector<double> hw_commands_;

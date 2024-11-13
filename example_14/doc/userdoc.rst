@@ -124,20 +124,22 @@ Tutorial steps
 
    .. code-block:: shell
 
-    [RRBotActuatorWithoutFeedback]: Writing command: 5.000000
-    [RRBotActuatorWithoutFeedback]: Sending data command: 5
-    [RRBotActuatorWithoutFeedback]: Joints successfully written!
-    [RRBotActuatorWithoutFeedback]: Writing command: 5.000000
-    [RRBotActuatorWithoutFeedback]: Sending data command: 5
-    [RRBotActuatorWithoutFeedback]: Joints successfully written!
-    [RRBotSensorPositionFeedback]: Reading...
-    [RRBotSensorPositionFeedback]: Got measured velocity 5.00000
-    [RRBotSensorPositionFeedback]: Got state 0.25300 for joint 'joint1'!
-    [RRBotSensorPositionFeedback]: Joints successfully read!
-    [RRBotSensorPositionFeedback]: Reading...
-    [RRBotSensorPositionFeedback]: Got measured velocity 5.00000
-    [RRBotSensorPositionFeedback]: Got state 0.25300 for joint 'joint2'!
-    [RRBotSensorPositionFeedback]: Joints successfully read!
+    [ros2_control_node-1] [INFO] [1728858168.276013464] [controller_manager.resource_manager.hardware_component.actuator.RRBotModularJoint]: Writing...
+    [ros2_control_node-1] Writing command: 5.00 for joint 'joint1'
+    [ros2_control_node-1] Sending data command: 5
+    [ros2_control_node-1]
+    [ros2_control_node-1] [INFO] [1728858168.776052116] [controller_manager.resource_manager.hardware_component.actuator.RRBotModularJoint]: Writing...
+    [ros2_control_node-1] Writing command: 5.00 for joint 'joint2'
+    [ros2_control_node-1] Sending data command: 5
+    [ros2_control_node-1]
+    [ros2_control_node-1] [INFO] [1728858169.275878132] [controller_manager.resource_manager.hardware_component.sensor.RRBotModularPositionSensorJoint]: Reading...
+    [ros2_control_node-1] Got measured velocity 5.00
+    [ros2_control_node-1] Got state 0.34 for joint 'joint1'
+    [ros2_control_node-1]
+    [ros2_control_node-1] [INFO] [1728858169.775863217] [controller_manager.resource_manager.hardware_component.sensor.RRBotModularPositionSensorJoint]: Reading...
+    [ros2_control_node-1] Got measured velocity 5.00
+    [ros2_control_node-1] Got state 0.29 for joint 'joint2'
+    [ros2_control_node-1]
 
 
 Files used for this demos
