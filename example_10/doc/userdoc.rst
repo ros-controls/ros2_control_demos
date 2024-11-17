@@ -115,10 +115,10 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
 
     header:
       stamp:
-        sec: 1730927120
-        nanosec: 419368389
+        sec: 1731875120
+        nanosec: 2015630
       frame_id: ''
-    joint_names:
+    interface_groups:
     - flange_analog_IOs
     - flange_vacuum
     interface_values:
@@ -128,23 +128,24 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
       - analog_input2
       values:
       - 0.0
-      - 1144726400.0
-      - 1620422656.0
+      - 991951680.0
+      - 1467646976.0
     - interface_names:
       - vacuum
       values:
       - 0.0
+    ---
 
 
 6. Now you can send commands to the *gpio_controller* using ROS 2 CLI interface. You can set a single interface or all at once in one message:
 
    .. code-block:: shell
 
-    ros2 topic pub /gpio_controller/commands control_msgs/msg/DynamicJointState "{joint_names: [flange_analog_IOs], interface_values: [{interface_names: [analog_output1], values: [0.5]}]}"
+    ros2 topic pub /gpio_controller/commands control_msgs/msg/DynamicInterfaceGroupValues "{interface_groups: [flange_analog_IOs], interface_values: [{interface_names: [analog_output1], values: [0.5]}]}"
 
-    ros2 topic pub /gpio_controller/commands control_msgs/msg/DynamicJointState "{joint_names: [flange_vacuum], interface_values: [{interface_names: [vacuum], values: [0.27]}]}"
+    ros2 topic pub /gpio_controller/commands control_msgs/msg/DynamicInterfaceGroupValues "{interface_groups: [flange_vacuum], interface_values: [{interface_names: [vacuum], values: [0.27]}]}"
 
-    ros2 topic pub /gpio_controller/commands control_msgs/msg/DynamicJointState "{joint_names: [flange_vacuum, flange_analog_IOs], interface_values: [{interface_names: [vacuum], values: [0.27]}, {interface_names: [analog_output1], values: [0.5]} ]}"
+    ros2 topic pub /gpio_controller/commands control_msgs/msg/DynamicInterfaceGroupValues "{interface_groups: [flange_vacuum, flange_analog_IOs], interface_values: [{interface_names: [vacuum], values: [0.27]}, {interface_names: [analog_output1], values: [0.5]} ]}"
 
    You should see a change in the ``/gpio_controller/gpio_states`` topic and a different output in the terminal where launch file is started, e.g.
 
@@ -224,10 +225,10 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
 
     header:
       stamp:
-        sec: 1730927217
-        nanosec: 659647869
+        sec: 1731875298
+        nanosec: 783713170
       frame_id: ''
-    joint_names:
+    interface_groups:
     - flange_analog_IOs
     - flange_vacuum
     interface_values:
@@ -243,6 +244,7 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
       - vacuum
       values:
       - 1.0
+    ---
 
   This is, because for the vacuum interface an initial value of ``1.0`` is set in the URDF file.
 
