@@ -462,7 +462,10 @@ Files used for this demos
 - URDF file: `three_robots.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_13/description/urdf/three_robots.urdf.xacro>`__
 
   + Description: `threedofbot_description.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/ros2_control_demo_description/r3bot/urdf/threedofbot_description.urdf.xacro>`__
-  + ``ros2_control`` tag: `three_robots.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_13/description/ros2_control/three_robots.ros2_control.xacro>`__
+  + ``ros2_control`` tag:
+    + `threedofbot.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_13/description/ros2_control/threedofbot.ros2_control.xacro>`__
+    + `rrbot_system_position_only.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_5/description/ros2_control/rrbot_system_position_only.ros2_control.xacro>`__
+    + `rrbot_system_with_sensor.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_4/description/ros2_control/rrbot_system_with_sensor.ros2_control.xacro>`__
 - RViz configuration: `three_robots.rviz <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_13/description/rviz/three_robots.rviz>`__
 
 Controllers from this demo
