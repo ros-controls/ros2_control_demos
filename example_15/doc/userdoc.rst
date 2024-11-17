@@ -12,21 +12,6 @@ This example shows how to integrate multiple robots under different controller m
 Scenario: Using ros2_control within a local namespace
 -----------------------------------------------------
 
-* Launch file: `rrbot_namespace.launch.py <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_15/bringup/launch/rrbot_namespace.launch.py>`__
-* Controllers yaml: `rrbot_namespace_controllers.yaml <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_15/bringup/config/rrbot_namespace_controllers.yaml>`__
-* URDF file: `rrbot.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_15/description/urdf/rrbot.urdf.xacro>`__
-
-  * Description: `rrbot_description.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/ros2_control_demo_description/rrbot/urdf/rrbot_description.urdf.xacro>`__
-  * ``ros2_control`` tag: `rrbot.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_15/description/ros2_control/rrbot.ros2_control.xacro>`__
-
-* RViz configuration: `rrbot.rviz <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/ros2_control_demo_description/rrbot/rviz/rrbot.rviz>`__
-* Test nodes goals configuration:
-
-  + `rrbot_forward_position_publisher <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_15/bringup/config/rrbot_forward_position_publisher.yaml>`__
-  + `rrbot_joint_trajectory_publisher <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_15/bringup/config/rrbot_joint_trajectory_publisher.yaml>`__
-
-* Hardware interface plugin: `rrbot.cpp <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_15/hardware/rrbot.cpp>`__
-
 .. note::
 
   When running ``ros2 control`` CLI commands you have to use additional parameter with exact controller manager node name, i.e., ``-c /rrbot/controller_manager``.
@@ -75,24 +60,26 @@ Commanding the robot using ``JointTrajectoryController`` (name: ``/rrbot/positio
 
   ros2 launch ros2_control_demo_example_15 test_joint_trajectory_controller.launch.py publisher_config:=rrbot_namespace_joint_trajectory_publisher.yaml
 
-Scenario: Using multiple controller managers on the same machine
-----------------------------------------------------------------
+Files used for this demo:
 
-* Launch file: `multi_controller_manager_example_two_rrbots.launch.py <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_15/bringup/launch/multi_controller_manager_example_two_rrbots.launch.py>`__
-* Controllers yaml:
-  - `multi_controller_manager_generic_controllers.yaml <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_15/bringup/config/multi_controller_manager_generic_controllers.yaml>`__
-* URDF file: `rrbot.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_15/description/urdf/rrbot.urdf.xacro>`__
+* Launch file: `rrbot_namespace.launch.py <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_15/bringup/launch/rrbot_namespace.launch.py>`__
+* Controllers yaml: `rrbot_namespace_controllers.yaml <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_15/bringup/config/rrbot_namespace_controllers.yaml>`__
+* URDF file: `rrbot.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_1/description/urdf/rrbot.urdf.xacro>`__
 
   * Description: `rrbot_description.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/ros2_control_demo_description/rrbot/urdf/rrbot_description.urdf.xacro>`__
-  * ``ros2_control`` tag: `rrbot.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_15/description/ros2_control/rrbot.ros2_control.xacro>`__
+  * ``ros2_control`` tag: `rrbot.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_1/description/ros2_control/rrbot.ros2_control.xacro>`__
 
 * RViz configuration: `rrbot.rviz <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/ros2_control_demo_description/rrbot/rviz/rrbot.rviz>`__
 * Test nodes goals configuration:
 
-  + `rrbot_forward_position_publisher <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_15/bringup/config/rrbot_forward_position_publisher.yaml>`__
-  + `rrbot_joint_trajectory_publisher <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_15/bringup/config/rrbot_joint_trajectory_publisher.yaml>`__
+  + `rrbot_forward_position_publisher <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_15/bringup/config/rrbot_namespace_forward_position_publisher.yaml>`__
+  + `rrbot_joint_trajectory_publisher <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_15/bringup/config/rrbot_namespace_joint_trajectory_publisher.yaml>`__
 
-* Hardware interface plugin: `rrbot.cpp <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_15/hardware/rrbot.cpp>`__
+* Hardware interface plugin: `rrbot.cpp <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_1/hardware/rrbot.cpp>`__
+
+
+Scenario: Using multiple controller managers on the same machine
+----------------------------------------------------------------
 
 
 .. note::
@@ -167,6 +154,26 @@ Commanding the robots using the now activated ``position_trajectory_controller``
 .. code-block:: shell
 
   ros2 launch ros2_control_demo_example_15 test_multi_controller_manager_joint_trajectory_controller.launch.py
+
+
+Files used for this demo:
+
+* Launch file: `multi_controller_manager_example_two_rrbots.launch.py <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_15/bringup/launch/multi_controller_manager_example_two_rrbots.launch.py>`__
+* Controllers yaml:
+  - `multi_controller_manager_rrbot_generic_controllers.yaml <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_15/bringup/config/multi_controller_manager_rrbot_generic_controllers.yaml>`__
+* URDF file: `rrbot.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_1/description/urdf/rrbot.urdf.xacro>`__
+
+  * Description: `rrbot_description.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/ros2_control_demo_description/rrbot/urdf/rrbot_description.urdf.xacro>`__
+  * ``ros2_control`` tag: `rrbot.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_1/description/ros2_control/rrbot.ros2_control.xacro>`__
+
+* RViz configuration: `rrbot.rviz <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/ros2_control_demo_description/rrbot/rviz/rrbot.rviz>`__
+* Test nodes goals configuration:
+
+  + `rrbot_forward_position_publisher <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_15/bringup/config/multi_controller_manager_forward_position_publisher.yaml>`__
+  + `rrbot_joint_trajectory_publisher <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_15/bringup/config/multi_controller_manager_joint_trajectory_publisher.yaml>`__
+
+* Hardware interface plugin: `rrbot.cpp <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_1/hardware/rrbot.cpp>`__
+
 
 Controllers from this demo
 --------------------------
