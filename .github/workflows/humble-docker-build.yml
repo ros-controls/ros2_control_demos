@@ -5,9 +5,31 @@ on:
   pull_request:
     branches:
       - humble
+    paths:
+      - '**.hpp'
+      - '**.cpp'
+      - Dockerfile/**
+      - '.github/workflows/humble-docker-build.yml'
+      - '**/package.xml'
+      - '**/CMakeLists.txt'
+      - '**.xacro'
+      - '**.py'
+      - '**.yaml'
+      - 'ros2_control_demos.humble.repos'
   push:
     branches:
       - humble
+    paths:
+      - '**.hpp'
+      - '**.cpp'
+      - Dockerfile/**
+      - '.github/workflows/humble-docker-build.yml'
+      - '**/package.xml'
+      - '**/CMakeLists.txt'
+      - '**.xacro'
+      - '**.py'
+      - '**.yaml'
+      - 'ros2_control_demos.humble.repos'
   schedule:
     # Run every morning to detect broken dependencies
     - cron: '40 1 * * *'
