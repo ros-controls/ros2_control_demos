@@ -31,7 +31,7 @@
       <joint name="joint2">
         <state_interface name="position"/>
       </joint>
-      </ros2_control>
+    </ros2_control>
 
     <ros2_control name="RRBotModularJoint1" type="actuator">
       <hardware>
