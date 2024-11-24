@@ -74,12 +74,7 @@ hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_init(
   }
 
   clock_ = rclcpp::Clock();
-  return hardware_interface::CallbackReturn::SUCCESS;
-}
 
-hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_configure(
-  const rclcpp_lifecycle::State & /*previous_state*/)
-{
   // START: This part here is for exemplary purposes - Please do not copy to your production code
   // Initialize objects for fake mechanical connection
   obj_socket_ = socket(AF_INET, SOCK_STREAM, 0);
@@ -169,6 +164,12 @@ hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_configure(
     });
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
+  return hardware_interface::CallbackReturn::SUCCESS;
+}
+
+hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_configure(
+  const rclcpp_lifecycle::State & /*previous_state*/)
+{
   // set some default values for joints
   // reset values always when configuring hardware
   for (const auto & [name, descr] : sensor_state_interfaces_)

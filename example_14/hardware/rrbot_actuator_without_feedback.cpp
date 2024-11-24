@@ -72,12 +72,6 @@ hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_init(
     return hardware_interface::CallbackReturn::ERROR;
   }
 
-  return hardware_interface::CallbackReturn::SUCCESS;
-}
-
-hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_configure(
-  const rclcpp_lifecycle::State & /*previous_state*/)
-{
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(get_logger(), "Configuring ...please wait...");
 
@@ -135,7 +129,12 @@ hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_configure(
     RCLCPP_INFO(get_logger(), "Successfully connected to port %d.", socket_port_);
   }
   // END: This part here is for exemplary purposes - Please do not copy to your production code
+  return hardware_interface::CallbackReturn::SUCCESS;
+}
 
+hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_configure(
+  const rclcpp_lifecycle::State & /*previous_state*/)
+{
   // reset values always when configuring hardware
   for (const auto & [name, descr] : joint_command_interfaces_)
   {
