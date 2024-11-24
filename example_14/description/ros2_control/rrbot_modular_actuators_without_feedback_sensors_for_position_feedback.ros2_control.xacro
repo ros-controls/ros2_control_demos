@@ -5,7 +5,7 @@
     params="name prefix use_sim:=^|false slowdown:=2.0">
 
     <!-- NOTE generally is the order of hardware definition not relevant. But in this case the
-    sensors are listening on socket to which the actuators are connecting. Therefore, the sensors
+    sensors are listening on sockets to which the actuators are connecting. Therefore, the sensors
     has to be initialized and started first. -->
 
     <ros2_control name="RRBotModularPositionSensorJoint1" type="sensor">

@@ -55,8 +55,6 @@ hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_init(
   socket_port_ = std::stoi(info_.hardware_parameters["example_param_socket_port"]);
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
-  hw_joint_state_ = std::numeric_limits<double>::quiet_NaN();
-
   const hardware_interface::ComponentInfo & joint = info_.joints[0];
   // RRBotSensorPositionFeedback has exactly one state interface and one joint
   if (joint.state_interfaces.size() != 1)
@@ -76,7 +74,12 @@ hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_init(
   }
 
   clock_ = rclcpp::Clock();
+  return hardware_interface::CallbackReturn::SUCCESS;
+}
 
+hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_configure(
+  const rclcpp_lifecycle::State & /*previous_state*/)
+{
   // START: This part here is for exemplary purposes - Please do not copy to your production code
   // Initialize objects for fake mechanical connection
   obj_socket_ = socket(AF_INET, SOCK_STREAM, 0);
@@ -166,6 +169,18 @@ hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_init(
     });
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
+  // set some default values for joints
+  // reset values always when configuring hardware
+  for (const auto & [name, descr] : sensor_state_interfaces_)
+  {
+    set_state(name, 0.0);
+  }
+  last_measured_velocity_ = 0;
+
+  // In general after a hardware is configured it can be read
+  last_timestamp_ = clock_.now();
+
+  RCLCPP_INFO(get_logger(), "Configuration successful.");
   return hardware_interface::CallbackReturn::SUCCESS;
 }
 
@@ -176,34 +191,6 @@ hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_shutdown(
   shutdown(sock_, SHUT_RDWR);        // shutdown socket
   shutdown(obj_socket_, SHUT_RDWR);  // shutdown socket
 
-  return hardware_interface::CallbackReturn::SUCCESS;
-}
-
-std::vector<hardware_interface::StateInterface>
-RRBotSensorPositionFeedback::export_state_interfaces()
-{
-  std::vector<hardware_interface::StateInterface> state_interfaces;
-
-  state_interfaces.emplace_back(hardware_interface::StateInterface(
-    info_.joints[0].name, hardware_interface::HW_IF_POSITION, &hw_joint_state_));
-
-  return state_interfaces;
-}
-
-hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_configure(
-  const rclcpp_lifecycle::State & /*previous_state*/)
-{
-  // set some default values for joints
-  if (std::isnan(hw_joint_state_))
-  {
-    hw_joint_state_ = 0;
-  }
-  last_measured_velocity_ = 0;
-
-  // In general after a hardware is configured it can be read
-  last_timestamp_ = clock_.now();
-
-  RCLCPP_INFO(get_logger(), "Configuration successful.");
   return hardware_interface::CallbackReturn::SUCCESS;
 }
 
@@ -254,17 +241,21 @@ hardware_interface::return_type RRBotSensorPositionFeedback::read(
   std::stringstream ss;
   ss << "Reading..." << std::endl;
 
-  // Simulate RRBot's movement
+  // Sensor reading
   measured_velocity = *(rt_incomming_data_ptr_.readFromRT());
   if (!std::isnan(measured_velocity))
   {
     last_measured_velocity_ = measured_velocity;
   }
-  hw_joint_state_ += (last_measured_velocity_ * duration.seconds()) / hw_slowdown_;
+
+  // integrate velocity to position
+  auto name = info_.joints[0].name + "/" + hardware_interface::HW_IF_POSITION;
+  auto new_value = get_state(name) + (last_measured_velocity_ * duration.seconds()) / hw_slowdown_;
+  set_state(name, new_value);
 
   ss << std::fixed << std::setprecision(2);
   ss << "Got measured velocity " << measured_velocity << std::endl;
-  ss << "Got state " << hw_joint_state_ << " for joint '" << info_.joints[0].name << "'"
+  ss << "Got state(position) " << new_value << " for joint '" << info_.joints[0].name << "'"
      << std::endl;
   RCLCPP_INFO(get_logger(), ss.str().c_str());
   // END: This part here is for exemplary purposes - Please do not copy to your production code

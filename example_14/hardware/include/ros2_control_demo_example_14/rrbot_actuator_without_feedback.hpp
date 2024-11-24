@@ -41,9 +41,8 @@ public:
   hardware_interface::CallbackReturn on_init(
     const hardware_interface::HardwareInfo & info) override;
 
-  std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
-
-  std::vector<hardware_interface::CommandInterface> export_command_interfaces() override;
+  hardware_interface::CallbackReturn on_configure(
+    const rclcpp_lifecycle::State & previous_state) override;
 
   hardware_interface::CallbackReturn on_activate(
     const rclcpp_lifecycle::State & previous_state) override;
@@ -64,9 +63,6 @@ private:
   // Parameters for the RRBot simulation
   double hw_start_sec_;
   double hw_stop_sec_;
-
-  // Store the command for the simulated robot
-  double hw_joint_command_;
 
   // Fake "mechanical connection" between actuator and sensor using sockets
   struct sockaddr_in address_;

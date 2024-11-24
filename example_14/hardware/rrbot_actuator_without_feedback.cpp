@@ -53,8 +53,6 @@ hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_init(
   socket_port_ = std::stoi(info_.hardware_parameters["example_param_socket_port"]);
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
-  hw_joint_command_ = std::numeric_limits<double>::quiet_NaN();
-
   const hardware_interface::ComponentInfo & joint = info_.joints[0];
   // RRBotActuatorWithoutFeedback has exactly one command interface and one joint
   if (joint.command_interfaces.size() != 1)
@@ -74,7 +72,15 @@ hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_init(
     return hardware_interface::CallbackReturn::ERROR;
   }
 
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  return hardware_interface::CallbackReturn::SUCCESS;
+}
+
+hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_configure(
+  const rclcpp_lifecycle::State & /*previous_state*/)
+{
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
+  RCLCPP_INFO(get_logger(), "Configuring ...please wait...");
+
   // Initialize objects for fake mechanical connection
   sock_ = socket(AF_INET, SOCK_STREAM, 0);
   if (sock_ < 0)
@@ -130,6 +136,12 @@ hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_init(
   }
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
+  // reset values always when configuring hardware
+  for (const auto & [name, descr] : joint_command_interfaces_)
+  {
+    set_command(name, 0.0);
+  }
+
   return hardware_interface::CallbackReturn::SUCCESS;
 }
 
@@ -139,24 +151,6 @@ hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_shutdown(
   shutdown(sock_, SHUT_RDWR);  // shutdown socket
 
   return hardware_interface::CallbackReturn::SUCCESS;
-}
-
-std::vector<hardware_interface::StateInterface>
-RRBotActuatorWithoutFeedback::export_state_interfaces()
-{
-  std::vector<hardware_interface::StateInterface> state_interfaces;
-  return state_interfaces;
-}
-
-std::vector<hardware_interface::CommandInterface>
-RRBotActuatorWithoutFeedback::export_command_interfaces()
-{
-  std::vector<hardware_interface::CommandInterface> command_interfaces;
-
-  command_interfaces.emplace_back(hardware_interface::CommandInterface(
-    info_.joints[0].name, hardware_interface::HW_IF_VELOCITY, &hw_joint_command_));
-
-  return command_interfaces;
 }
 
 hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_activate(
@@ -173,9 +167,9 @@ hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_activate(
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   // set some default values for joints
-  if (std::isnan(hw_joint_command_))
+  for (const auto & [name, descr] : joint_command_interfaces_)
   {
-    hw_joint_command_ = 0;
+    set_command(name, 0.0);
   }
 
   RCLCPP_INFO(get_logger(), "Successfully activated!");
@@ -212,12 +206,15 @@ hardware_interface::return_type ros2_control_demo_example_14::RRBotActuatorWitho
 {
   // START: This part here is for exemplary purposes - Please do not copy to your production code
   std::stringstream ss;
+  std::ostringstream data;
+
   ss << "Writing..." << std::endl;
   ss << std::fixed << std::setprecision(2);
-  ss << "Writing command: " << hw_joint_command_ << std::endl;
 
-  std::ostringstream data;
-  data << hw_joint_command_;
+  auto name = info_.joints[0].name + "/" + hardware_interface::HW_IF_VELOCITY;
+  ss << "Writing command: " << get_command(name) << std::endl;
+
+  data << get_command(name);
   ss << "Sending data command: " << data.str() << std::endl;
   RCLCPP_INFO(get_logger(), ss.str().c_str());
 
