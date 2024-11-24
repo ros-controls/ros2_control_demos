@@ -170,6 +170,8 @@ hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_init(
 hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_configure(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
+  RCLCPP_INFO(get_logger(), "Configuring ...please wait...");
+
   // set some default values for joints
   // reset values always when configuring hardware
   for (const auto & [name, descr] : sensor_state_interfaces_)

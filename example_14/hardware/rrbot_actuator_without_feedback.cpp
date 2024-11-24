@@ -73,8 +73,6 @@ hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_init(
   }
 
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
-  RCLCPP_INFO(get_logger(), "Configuring ...please wait...");
-
   // Initialize objects for fake mechanical connection
   sock_ = socket(AF_INET, SOCK_STREAM, 0);
   if (sock_ < 0)
@@ -135,6 +133,8 @@ hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_init(
 hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_configure(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
+  RCLCPP_INFO(get_logger(), "Configuring ...please wait...");
+
   // reset values always when configuring hardware
   for (const auto & [name, descr] : joint_command_interfaces_)
   {
