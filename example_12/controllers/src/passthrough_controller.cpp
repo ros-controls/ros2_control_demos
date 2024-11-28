@@ -85,6 +85,11 @@ controller_interface::CallbackReturn PassthroughController::on_configure(
   reference_interfaces_.resize(
     reference_interface_names_.size(), std::numeric_limits<double>::quiet_NaN());
 
+  for (size_t i = 0; i < reference_interface_names_.size(); i++)
+  {
+    REGISTER_DEFAULT_INTROSPECTION(reference_interface_names_[i], &reference_interfaces_[i]);
+  }
+
   return controller_interface::CallbackReturn::SUCCESS;
 }
 
