@@ -183,9 +183,8 @@ hardware_interface::return_type DiffBotSystemHardware::read(
       set_state(name, get_state(name) + period.seconds() * velo);
 
       ss << std::endl
-         << "\t"
-            "position "
-         << get_state(name) << " and velocity " << velo << " for '" << name << "'!";
+         << "\t position " << get_state(name) << " and velocity " << velo << " for '" << name
+         << "'!";
     }
   }
   RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500, "%s", ss.str().c_str());
