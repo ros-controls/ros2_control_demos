@@ -43,10 +43,6 @@ public:
   hardware_interface::CallbackReturn on_configure(
     const rclcpp_lifecycle::State & previous_state) override;
 
-  std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
-
-  std::vector<hardware_interface::CommandInterface> export_command_interfaces() override;
-
   hardware_interface::CallbackReturn on_activate(
     const rclcpp_lifecycle::State & previous_state) override;
 
@@ -65,11 +61,6 @@ private:
   double hw_stop_sec_;
   double hw_slowdown_;
   double hw_sensor_change_;
-
-  // Store the command for the simulated robot
-  std::vector<double> hw_joint_commands_;
-  std::vector<double> hw_joint_states_;
-  std::vector<double> hw_sensor_states_;
 };
 
 }  // namespace ros2_control_demo_example_4

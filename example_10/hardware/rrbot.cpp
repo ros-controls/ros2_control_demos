@@ -37,9 +37,6 @@ hardware_interface::CallbackReturn RRBotSystemWithGPIOHardware::on_init(
     return hardware_interface::CallbackReturn::ERROR;
   }
 
-  hw_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
-  hw_commands_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
-
   for (const hardware_interface::ComponentInfo & joint : info_.joints)
   {
     // RRBotSystemPositionOnly has exactly one state and command interface on each joint
@@ -123,67 +120,25 @@ hardware_interface::CallbackReturn RRBotSystemWithGPIOHardware::on_configure(
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   // reset values always when configuring hardware
-  std::fill(hw_states_.begin(), hw_states_.end(), 0);
-  std::fill(hw_commands_.begin(), hw_commands_.end(), 0);
-  std::fill(hw_gpio_in_.begin(), hw_gpio_in_.end(), 0);
-  std::fill(hw_gpio_out_.begin(), hw_gpio_out_.end(), 0);
-
+  for (const auto & [name, descr] : joint_state_interfaces_)
+  {
+    set_state(name, 0.0);
+  }
+  for (const auto & [name, descr] : joint_command_interfaces_)
+  {
+    set_command(name, 0.0);
+  }
+  for (const auto & [name, descr] : gpio_state_interfaces_)
+  {
+    set_state(name, 0.0);
+  }
+  for (const auto & [name, descr] : gpio_command_interfaces_)
+  {
+    set_command(name, 0.0);
+  }
   RCLCPP_INFO(get_logger(), "Successfully configured!");
 
   return hardware_interface::CallbackReturn::SUCCESS;
-}
-
-std::vector<hardware_interface::StateInterface>
-RRBotSystemWithGPIOHardware::export_state_interfaces()
-{
-  std::vector<hardware_interface::StateInterface> state_interfaces;
-  for (uint i = 0; i < info_.joints.size(); i++)
-  {
-    state_interfaces.emplace_back(hardware_interface::StateInterface(
-      info_.joints[i].name, hardware_interface::HW_IF_POSITION, &hw_states_[i]));
-  }
-
-  RCLCPP_INFO(get_logger(), "State interfaces:");
-  hw_gpio_in_.resize(4);
-  size_t ct = 0;
-  for (size_t i = 0; i < info_.gpios.size(); i++)
-  {
-    for (auto state_if : info_.gpios.at(i).state_interfaces)
-    {
-      state_interfaces.emplace_back(hardware_interface::StateInterface(
-        info_.gpios.at(i).name, state_if.name, &hw_gpio_in_[ct++]));
-      RCLCPP_INFO(
-        get_logger(), "Added %s/%s", info_.gpios.at(i).name.c_str(), state_if.name.c_str());
-    }
-  }
-
-  return state_interfaces;
-}
-
-std::vector<hardware_interface::CommandInterface>
-RRBotSystemWithGPIOHardware::export_command_interfaces()
-{
-  std::vector<hardware_interface::CommandInterface> command_interfaces;
-  for (uint i = 0; i < info_.joints.size(); i++)
-  {
-    command_interfaces.emplace_back(hardware_interface::CommandInterface(
-      info_.joints[i].name, hardware_interface::HW_IF_POSITION, &hw_commands_[i]));
-  }
-  RCLCPP_INFO(get_logger(), "Command interfaces:");
-  hw_gpio_out_.resize(2);
-  size_t ct = 0;
-  for (size_t i = 0; i < info_.gpios.size(); i++)
-  {
-    for (auto command_if : info_.gpios.at(i).command_interfaces)
-    {
-      command_interfaces.emplace_back(hardware_interface::CommandInterface(
-        info_.gpios.at(i).name, command_if.name, &hw_gpio_out_[ct++]));
-      RCLCPP_INFO(
-        get_logger(), "Added %s/%s", info_.gpios.at(i).name.c_str(), command_if.name.c_str());
-    }
-  }
-
-  return command_interfaces;
 }
 
 hardware_interface::CallbackReturn RRBotSystemWithGPIOHardware::on_activate(
@@ -194,9 +149,13 @@ hardware_interface::CallbackReturn RRBotSystemWithGPIOHardware::on_activate(
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   // command and state should be equal when starting
-  for (uint i = 0; i < hw_states_.size(); i++)
+  for (const auto & [name, descr] : joint_state_interfaces_)
   {
-    hw_commands_[i] = hw_states_[i];
+    set_command(name, get_state(name));
+  }
+  for (const auto & [name, descr] : gpio_command_interfaces_)
+  {
+    set_command(name, get_state(name));
   }
 
   RCLCPP_INFO(get_logger(), "Successfully activated!");
@@ -221,25 +180,33 @@ hardware_interface::return_type RRBotSystemWithGPIOHardware::read(
   std::stringstream ss;
   ss << "Reading states:";
 
-  for (uint i = 0; i < hw_states_.size(); i++)
+  for (const auto & [name, descr] : joint_state_interfaces_)
   {
     // Simulate RRBot's movement
-    hw_states_[i] = hw_states_[i] + (hw_commands_[i] - hw_states_[i]);
+    auto new_value = get_state(name) + (get_command(name) - get_state(name)) / hw_slowdown_;
+    set_state(name, new_value);
   }
 
-  // mirror GPIOs back
-  hw_gpio_in_[0] = hw_gpio_out_[0];
-  hw_gpio_in_[3] = hw_gpio_out_[1];
-  // random inputs
-  unsigned int seed = time(NULL) + 1;
-  hw_gpio_in_[1] = static_cast<float>(rand_r(&seed));
-  seed = time(NULL) + 2;
-  hw_gpio_in_[2] = static_cast<float>(rand_r(&seed));
+  for (const auto & [name, descr] : gpio_command_interfaces_)
+  {
+    // mirror GPIOs back
+    set_state(name, get_command(name));
+  }
 
-  for (uint i = 0; i < hw_gpio_in_.size(); i++)
+  // random inputs analog_input1 and analog_input2
+  unsigned int seed = time(NULL) + 1;
+  set_state(
+    info_.gpios[0].name + "/" + info_.gpios[0].state_interfaces[1].name,
+    static_cast<float>(rand_r(&seed)));
+  seed = time(NULL) + 2;
+  set_state(
+    info_.gpios[0].name + "/" + info_.gpios[0].state_interfaces[2].name,
+    static_cast<float>(rand_r(&seed)));
+
+  for (const auto & [name, descr] : gpio_state_interfaces_)
   {
     ss << std::fixed << std::setprecision(2) << std::endl
-       << "\t" << hw_gpio_in_[i] << " from GPIO input '" << static_cast<int>(i) << "'";
+       << "\t" << get_state(name) << " from GPIO input '" << name << "'";
   }
   RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500, "%s", ss.str().c_str());
   // END: This part here is for exemplary purposes - Please do not copy to your production code
@@ -254,10 +221,11 @@ hardware_interface::return_type RRBotSystemWithGPIOHardware::write(
   std::stringstream ss;
   ss << "Writing commands:";
 
-  for (uint i = 0; i < hw_gpio_out_.size(); i++)
+  for (const auto & [name, descr] : gpio_command_interfaces_)
   {
+    // Simulate sending commands to the hardware
     ss << std::fixed << std::setprecision(2) << std::endl
-       << "\t" << hw_gpio_out_[i] << " for GPIO output '" << static_cast<int>(i) << "'";
+       << "\t" << get_command(name) << " for GPIO output '" << name << "'";
   }
   RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500, "%s", ss.str().c_str());
   // END: This part here is for exemplary purposes - Please do not copy to your production code
