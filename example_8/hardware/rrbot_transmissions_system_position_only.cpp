@@ -246,7 +246,7 @@ hardware_interface::return_type RRBotTransmissionsSystemPositionOnlyHardware::re
   }
   RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500, "%s", ss.str().c_str());
 
-  // update internal storage from ressource_manager
+  // update internal storage from resource_manager
   std::for_each(
     joint_interfaces_.begin(), joint_interfaces_.end(),
     [this](auto & joint_interface)
@@ -261,7 +261,7 @@ hardware_interface::return_type RRBotTransmissionsSystemPositionOnlyHardware::re
 hardware_interface::return_type RRBotTransmissionsSystemPositionOnlyHardware::write(
   const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
-  // update internal storage from ressource_manager
+  // update internal storage from resource_manager
   std::for_each(
     joint_interfaces_.begin(), joint_interfaces_.end(),
     [this](auto & joint_interface)
