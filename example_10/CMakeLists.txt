@@ -16,7 +16,6 @@ set(THIS_PACKAGE_INCLUDE_DEPENDS
   pluginlib
   rclcpp
   rclcpp_lifecycle
-  controller_interface
 )
 
 # Specify the required version of ros2_control
@@ -39,12 +38,10 @@ add_library(
   ros2_control_demo_example_10
   SHARED
   hardware/rrbot.cpp
-  controllers/gpio_controller.cpp
 )
 target_compile_features(ros2_control_demo_example_10 PUBLIC cxx_std_17)
 target_include_directories(ros2_control_demo_example_10 PUBLIC
 $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/hardware/include>
-$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/controllers/include>
 $<INSTALL_INTERFACE:include/ros2_control_demo_example_10>
 )
 ament_target_dependencies(
@@ -54,16 +51,10 @@ ament_target_dependencies(
 
 # Export hardware plugins
 pluginlib_export_plugin_description_file(hardware_interface ros2_control_demo_example_10.xml)
-# Export controllers
-pluginlib_export_plugin_description_file(controller_interface ros2_control_demo_example_10.xml)
 
 # INSTALL
 install(
   DIRECTORY hardware/include/
-  DESTINATION include/ros2_control_demo_example_10
-)
-install(
-  DIRECTORY controllers/include/
   DESTINATION include/ros2_control_demo_example_10
 )
 install(
