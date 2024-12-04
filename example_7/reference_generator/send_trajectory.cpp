@@ -97,9 +97,7 @@ int main(int argc, char ** argv)
   }
 
   // send zero velocities in the end
-  std::memset(
-    trajectory_point_msg.velocities.data(), 0.0,
-    trajectory_point_msg.velocities.size() * sizeof(double));
+  std::fill(trajectory_point_msg.velocities.begin(), trajectory_point_msg.velocities.end(), 0.0);
   trajectory_point_msg.time_from_start.sec = trajectory_len / loop_rate;
   trajectory_point_msg.time_from_start.nanosec = static_cast<int>(
     1E9 / loop_rate *
