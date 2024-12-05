@@ -87,7 +87,7 @@ controller_interface::CallbackReturn PassthroughController::on_configure(
 
   for (size_t i = 0; i < reference_interface_names_.size(); i++)
   {
-    REGISTER_DEFAULT_INTROSPECTION(reference_interface_names_[i], &reference_interfaces_[i]);
+    REGISTER_ROS2_CONTROL_INTROSPECTION(reference_interface_names_[i], &reference_interfaces_[i]);
   }
 
   return controller_interface::CallbackReturn::SUCCESS;
