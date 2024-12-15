@@ -106,7 +106,7 @@ def generate_launch_description():
     )
 
     # global broadcaster and initially active controllers from RRBot
-    ctrl_spawner = generate_controllers_spawner_launch_description(
+    general_ctrl_spawner = generate_controllers_spawner_launch_description(
         [
             # Global joint state broadcaster
             "joint_state_broadcaster",
@@ -120,13 +120,13 @@ def generate_launch_description():
     )
 
     # RRBot with sensors controllers, initially active
-    rrbot_sensor_spawner_active = generate_controllers_spawner_launch_description(
+    rrbot_sensor_ctrl_spawner_active = generate_controllers_spawner_launch_description(
         ["rrbot_with_sensor_joint_state_broadcaster", "rrbot_with_sensor_fts_broadcaster"],
         controller_params_files=[robot_controllers],
     )
 
     # RRBot with sensors controllers, initially inactive
-    rrbot_sensor_spawner_inactive = generate_controllers_spawner_launch_description(
+    rrbot_sensor_ctrl_spawner_inactive = generate_controllers_spawner_launch_description(
         [
             "rrbot_with_sensor_position_controller",
         ],
@@ -135,7 +135,7 @@ def generate_launch_description():
     )
 
     # ThreeDofBot controllers, initially inactive
-    threedofbot_spawner = generate_controllers_spawner_launch_description(
+    threedofbot_ctrl_spawner = generate_controllers_spawner_launch_description(
         [
             "threedofbot_joint_state_broadcaster",
             "threedofbot_position_controller",
@@ -169,10 +169,10 @@ def generate_launch_description():
         control_node,
         robot_state_pub_node,
         rviz_node,
-        ctrl_spawner,
-        rrbot_sensor_spawner_active,
-        rrbot_sensor_spawner_inactive,
-        threedofbot_spawner,
+        general_ctrl_spawner,
+        rrbot_sensor_ctrl_spawner_active,
+        rrbot_sensor_ctrl_spawner_inactive,
+        threedofbot_ctrl_spawner,
         rrbot_position_command_publisher,
         rrbot_with_sensor_position_command_publisher,
         threedofbot_position_command_publisher,
