@@ -29,7 +29,6 @@
 # Author: Christoph Froehlich
 
 import os
-import pytest
 import unittest
 import subprocess
 
@@ -48,8 +47,7 @@ from ros2_control_demo_testing.test_utils import (
 )
 
 
-# Executes the given launch file and checks if all nodes can be started
-@pytest.mark.rostest
+# Executes the given launch file
 def generate_test_description():
     launch_include = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
