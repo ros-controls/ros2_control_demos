@@ -41,7 +41,6 @@ from launch_testing.actions import ReadyToTest
 
 # import launch_testing.markers
 import rclpy
-from rclpy.node import Node
 from ros2_control_demo_testing.test_utils import check_controllers_running
 
 
@@ -62,14 +61,19 @@ def generate_test_description():
 
 
 class TestFixtureCliDirect(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        rclpy.init()
+
+    @classmethod
+    def tearDownClass(cls):
+        rclpy.shutdown()
 
     def setUp(self):
-        rclpy.init()
-        self.node = Node("test_node")
+        self.node = rclpy.create_node("test_node")
 
     def tearDown(self):
         self.node.destroy_node()
-        rclpy.shutdown()
 
     def test_main(self, proc_output):
 
