@@ -1,38 +1,38 @@
-name: Build Iron Dockerfile
+name: Build Humble Dockerfile
 # description: builds the dockerfile contained within the repo
 
 on:
   pull_request:
     branches:
-      - iron
+      - humble
     paths:
       - '**.hpp'
       - '**.cpp'
       - Dockerfile/**
-      - '.github/workflows/iron-docker-build.yml'
+      - '.github/workflows/humble-docker-build.yml'
       - '**/package.xml'
       - '**/CMakeLists.txt'
       - '**.xacro'
       - '**.py'
       - '**.yaml'
-      - 'ros2_control_demos.iron.repos'
+      - 'ros2_control_demos.humble.repos'
   push:
     branches:
-      - iron
+      - humble
     paths:
       - '**.hpp'
       - '**.cpp'
       - Dockerfile/**
-      - '.github/workflows/iron-docker-build.yml'
+      - '.github/workflows/humble-docker-build.yml'
       - '**/package.xml'
       - '**/CMakeLists.txt'
       - '**.xacro'
       - '**.py'
       - '**.yaml'
-      - 'ros2_control_demos.iron.repos'
+      - 'ros2_control_demos.humble.repos'
   schedule:
     # Run every morning to detect broken dependencies
-    - cron: '50 1 * * *'
+    - cron: '40 1 * * *'
 
 
 jobs:
@@ -41,6 +41,6 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
-        ref: iron
+        ref: humble
     - name: Build the Docker image
-      run: docker build --file Dockerfile/Dockerfile --tag ros2_control_demos_iron --build-arg ROS_DISTRO=iron .
+      run: docker build --file Dockerfile/Dockerfile --tag ros2_control_demos_humble --build-arg ROS_DISTRO=humble .

@@ -76,7 +76,7 @@ def generate_launch_description():
             "description_package": "ros2_control_demo_example_1",
             "description_file": "rrbot.urdf.xacro",
             "runtime_config_package": "ros2_control_demo_example_15",
-            "controllers_file": "multi_controller_manager_rrbot_1_controllers.yaml",
+            "controllers_file": "multi_controller_manager_rrbot_generic_controllers.yaml",
             "prefix": "rrbot_1_",
             "use_mock_hardware": use_mock_hardware,
             "mock_sensor_commands": mock_sensor_commands,
@@ -99,7 +99,7 @@ def generate_launch_description():
                 [
                     FindPackageShare("ros2_control_demo_example_15"),
                     "config",
-                    "multi_controller_manager_rrbot_1_controllers.yaml",
+                    "multi_controller_manager_rrbot_generic_controllers.yaml",
                 ]
             ),
         ],
@@ -112,7 +112,7 @@ def generate_launch_description():
             "description_package": "ros2_control_demo_example_5",
             "description_file": "rrbot_system_with_external_sensor.urdf.xacro",
             "runtime_config_package": "ros2_control_demo_example_15",
-            "controllers_file": "multi_controller_manager_rrbot_2_controllers.yaml",
+            "controllers_file": "multi_controller_manager_rrbot_generic_controllers.yaml",
             "prefix": "rrbot_2_",
             "use_mock_hardware": use_mock_hardware,
             "mock_sensor_commands": mock_sensor_commands,
@@ -135,7 +135,7 @@ def generate_launch_description():
                 [
                     FindPackageShare("ros2_control_demo_example_15"),
                     "config",
-                    "multi_controller_manager_rrbot_2_controllers.yaml",
+                    "multi_controller_manager_rrbot_generic_controllers.yaml",
                 ]
             ),
         ],

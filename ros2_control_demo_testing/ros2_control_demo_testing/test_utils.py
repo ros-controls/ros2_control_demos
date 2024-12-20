@@ -45,7 +45,7 @@ def check_node_running(node, node_name, timeout=5.0):
     assert found, f"{node_name} not found!"
 
 
-def check_controllers_running(node, cnames, namespace=""):
+def check_controllers_running(node, cnames, namespace="", state="active"):
 
     # wait for controller to be loaded before we call the CM services
     found = {cname: False for cname in cnames}  # Define 'found' as a dictionary
@@ -85,14 +85,14 @@ def check_controllers_running(node, cnames, namespace=""):
         assert controllers, "No controllers found!"
         for c in controllers:
             for cname in cnames:
-                if c.name == cname and c.state == "active":
+                if c.name == cname and c.state == state:
                     found[cname] = True
                     break
         time.sleep(0.1)
 
     assert all(
         found.values()
-    ), f"Controller(s) not found or not active: {', '.join([cname for cname, is_found in found.items() if not is_found])}"
+    ), f"Controller(s) not found or not {state}: {', '.join([cname for cname, is_found in found.items() if not is_found])}"
 
 
 def check_if_js_published(topic, joint_names):

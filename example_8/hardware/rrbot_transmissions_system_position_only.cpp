@@ -38,12 +38,7 @@ constexpr double kNaN = std::numeric_limits<double>::quiet_NaN();
 hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware::on_init(
   const hardware_interface::HardwareInfo & info)
 {
-  logger_ = std::make_unique<rclcpp::Logger>(
-    rclcpp::get_logger("RRBotTransmissionsSystemPositionOnlyHardware"));
-
-  clock_ = std::make_unique<rclcpp::Clock>();
-
-  RCLCPP_INFO(*logger_, "Initializing...");
+  RCLCPP_INFO(get_logger(), "Initializing...");
 
   if (
     hardware_interface::SystemInterface::on_init(info) !=
@@ -75,7 +70,7 @@ hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware:
     if (transmission_info.type != "transmission_interface/SimpleTransmission")
     {
       RCLCPP_FATAL(
-        *logger_, "Transmission '%s' of type '%s' not supported in this demo",
+        get_logger(), "Transmission '%s' of type '%s' not supported in this demo",
         transmission_info.name.c_str(), transmission_info.type.c_str());
       return hardware_interface::CallbackReturn::ERROR;
     }
@@ -88,7 +83,7 @@ hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware:
     catch (const transmission_interface::TransmissionInterfaceException & exc)
     {
       RCLCPP_FATAL(
-        *logger_, "Error while loading %s: %s", transmission_info.name.c_str(), exc.what());
+        get_logger(), "Error while loading %s: %s", transmission_info.name.c_str(), exc.what());
       return hardware_interface::CallbackReturn::ERROR;
     }
 
@@ -102,7 +97,7 @@ hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware:
             joint_info.command_interfaces[0] == hardware_interface::HW_IF_POSITION))
       {
         RCLCPP_FATAL(
-          *logger_, "Invalid transmission joint '%s' configuration for this demo",
+          get_logger(), "Invalid transmission joint '%s' configuration for this demo",
           joint_info.name.c_str());
         return hardware_interface::CallbackReturn::ERROR;
       }
@@ -139,14 +134,14 @@ hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware:
     catch (const transmission_interface::TransmissionInterfaceException & exc)
     {
       RCLCPP_FATAL(
-        *logger_, "Error while configuring %s: %s", transmission_info.name.c_str(), exc.what());
+        get_logger(), "Error while configuring %s: %s", transmission_info.name.c_str(), exc.what());
       return hardware_interface::CallbackReturn::ERROR;
     }
 
     transmissions_.push_back(transmission);
   }
 
-  RCLCPP_INFO(*logger_, "Initialization successful");
+  RCLCPP_INFO(get_logger(), "Initialization successful");
 
   return hardware_interface::CallbackReturn::SUCCESS;
 }
@@ -154,7 +149,7 @@ hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware:
 hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware::on_configure(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
-  RCLCPP_INFO(*logger_, "Configuring...");
+  RCLCPP_INFO(get_logger(), "Configuring...");
 
   auto reset_interfaces = [](std::vector<InterfaceData> & interfaces)
   {
@@ -169,50 +164,33 @@ hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware:
   reset_interfaces(joint_interfaces_);
   reset_interfaces(actuator_interfaces_);
 
-  RCLCPP_INFO(*logger_, "Configuration successful");
+  // reset values always when configuring hardware
+  for (const auto & [name, descr] : joint_state_interfaces_)
+  {
+    set_state(name, 0.0);
+  }
+  for (const auto & [name, descr] : joint_command_interfaces_)
+  {
+    set_command(name, 0.0);
+  }
+
+  RCLCPP_INFO(get_logger(), "Configuration successful");
 
   return hardware_interface::CallbackReturn::SUCCESS;
-}
-
-std::vector<hardware_interface::StateInterface>
-RRBotTransmissionsSystemPositionOnlyHardware::export_state_interfaces()
-{
-  std::vector<hardware_interface::StateInterface> state_interfaces;
-  for (const auto & joint : info_.joints)
-  {
-    /// @pre all joint interfaces exist, checked in on_init()
-    auto joint_interface = std::find_if(
-      joint_interfaces_.begin(), joint_interfaces_.end(),
-      [&](const InterfaceData & interface) { return interface.name_ == joint.name; });
-
-    state_interfaces.emplace_back(hardware_interface::StateInterface(
-      joint.name, hardware_interface::HW_IF_POSITION, &joint_interface->state_));
-  }
-  return state_interfaces;
-}
-
-std::vector<hardware_interface::CommandInterface>
-RRBotTransmissionsSystemPositionOnlyHardware::export_command_interfaces()
-{
-  std::vector<hardware_interface::CommandInterface> command_interfaces;
-  for (const auto & joint : info_.joints)
-  {
-    /// @pre all joint interfaces exist, checked in on_init()
-    auto joint_interface = std::find_if(
-      joint_interfaces_.begin(), joint_interfaces_.end(),
-      [&](const InterfaceData & interface) { return interface.name_ == joint.name; });
-
-    command_interfaces.emplace_back(hardware_interface::CommandInterface(
-      joint.name, hardware_interface::HW_IF_POSITION, &joint_interface->command_));
-  }
-  return command_interfaces;
 }
 
 hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware::on_activate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
-  RCLCPP_INFO(*logger_, "Activating...");
-  RCLCPP_INFO(*logger_, "Activation successful");
+  RCLCPP_INFO(get_logger(), "Activating...");
+
+  // command and state should be equal when starting
+  for (const auto & [name, descr] : joint_state_interfaces_)
+  {
+    set_command(name, get_state(name));
+  }
+
+  RCLCPP_INFO(get_logger(), "Activation successful");
 
   return hardware_interface::CallbackReturn::SUCCESS;
 }
@@ -220,8 +198,8 @@ hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware:
 hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware::on_deactivate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
-  RCLCPP_INFO(*logger_, "Deactivating...");
-  RCLCPP_INFO(*logger_, "Deactivation successful");
+  RCLCPP_INFO(get_logger(), "Deactivating...");
+  RCLCPP_INFO(get_logger(), "Deactivation successful");
 
   return hardware_interface::CallbackReturn::SUCCESS;
 }
@@ -266,7 +244,16 @@ hardware_interface::return_type RRBotTransmissionsSystemPositionOnlyHardware::re
        << transmission_info.name << "(R=" << reduction << ") <-- " << actuator_interface->name_
        << ": " << actuator_interface->state_;
   }
-  RCLCPP_INFO_THROTTLE(*logger_, *clock_, 1000, "%s", ss.str().c_str());
+  RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500, "%s", ss.str().c_str());
+
+  // update internal storage from resource_manager
+  std::for_each(
+    joint_interfaces_.begin(), joint_interfaces_.end(),
+    [this](auto & joint_interface)
+    {
+      set_state(
+        joint_interface.name_ + "/" + hardware_interface::HW_IF_POSITION, joint_interface.state_);
+    });
 
   return hardware_interface::return_type::OK;
 }
@@ -274,6 +261,15 @@ hardware_interface::return_type RRBotTransmissionsSystemPositionOnlyHardware::re
 hardware_interface::return_type RRBotTransmissionsSystemPositionOnlyHardware::write(
   const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
+  // update internal storage from resource_manager
+  std::for_each(
+    joint_interfaces_.begin(), joint_interfaces_.end(),
+    [this](auto & joint_interface)
+    {
+      joint_interface.command_ =
+        get_command(joint_interface.name_ + "/" + hardware_interface::HW_IF_POSITION);
+    });
+
   // joint: command -> transmission
   std::for_each(
     joint_interfaces_.begin(), joint_interfaces_.end(), [](auto & joint_interface)
@@ -321,7 +317,7 @@ hardware_interface::return_type RRBotTransmissionsSystemPositionOnlyHardware::wr
        << transmission_info.name << "(R=" << reduction << ") --> " << actuator_interface->name_
        << ": " << actuator_interface->command_;
   }
-  RCLCPP_INFO_THROTTLE(*logger_, *clock_, 1000, "%s", ss.str().c_str());
+  RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500, "%s", ss.str().c_str());
 
   return hardware_interface::return_type::OK;
 }
