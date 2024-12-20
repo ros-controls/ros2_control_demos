@@ -106,7 +106,7 @@ def generate_launch_description():
             "--param-file",
             robot_controllers,
             "--controller-ros-args",
-            "'--ros-args -r forward_position_controller/commands:=/position_commands'",
+            "--ros-args -r forward_position_controller/commands:=/position_commands",
         ],
     )
 

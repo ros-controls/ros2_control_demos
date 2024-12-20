@@ -115,7 +115,7 @@ def generate_launch_description():
             "--param-file",
             robot_controllers,
             "--controller-ros-args",
-            "'--ros-args -r /bicycle_steering_controller/tf_odometry:=/tf'",
+            "--ros-args -r /bicycle_steering_controller/tf_odometry:=/tf",
         ],
     )
 
