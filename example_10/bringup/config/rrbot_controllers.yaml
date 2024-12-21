@@ -16,12 +16,14 @@ forward_position_controller:
 
 gpio_controller:
   ros__parameters:
-    type: ros2_control_demo_example_10/GPIOController
-    inputs:
-     - flange_analog_IOs/analog_output1
-     - flange_analog_IOs/analog_input1
-     - flange_analog_IOs/analog_input2
-     - flange_vacuum/vacuum
-    outputs:
-     - flange_analog_IOs/analog_output1
-     - flange_vacuum/vacuum
+    type: gpio_controllers/GpioCommandController
+    gpios:
+      - flange_analog_IOs
+      - flange_vacuum
+    command_interfaces:
+      flange_analog_IOs:
+        - interfaces:
+          - analog_output1
+      flange_vacuum:
+        - interfaces:
+          - vacuum
