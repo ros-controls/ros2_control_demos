@@ -207,7 +207,7 @@ There are more methods that can be implemented for lifecycle changes, but they a
   using CallbackReturn = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
   #include "hardware_interface/types/hardware_interface_return_values.hpp"
 
-  class HARDWARE_INTERFACE_PUBLIC RobotSystem : public hardware_interface::SystemInterface {
+  class RobotSystem : public hardware_interface::SystemInterface {
       public:
       CallbackReturn on_init(const hardware_interface::HardwareInfo &info) override;
       CallbackReturn on_configure(const rclcpp_lifecycle::State & previous_state) override;
