@@ -206,7 +206,7 @@ The hardware plugin for the tutorial robot is a class called ``RobotSystem`` tha
   using CallbackReturn = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
   #include "hardware_interface/types/hardware_interface_return_values.hpp"
 
-  class HARDWARE_INTERFACE_PUBLIC RobotSystem : public hardware_interface::SystemInterface {
+  class RobotSystem : public hardware_interface::SystemInterface {
       public:
       CallbackReturn on_init(const hardware_interface::HardwareInfo &info) override;
       std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
