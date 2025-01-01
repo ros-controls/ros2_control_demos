@@ -84,11 +84,6 @@ hardware_interface::CallbackReturn RRBotSystemPositionOnlyHardware::on_init(
   REGISTER_ROS2_CONTROL_INTROSPECTION("hw_start_sec", &hw_start_sec_);
   REGISTER_ROS2_CONTROL_INTROSPECTION("hw_stop_sec", &hw_stop_sec_);
   REGISTER_ROS2_CONTROL_INTROSPECTION("hw_slowdown", &hw_slowdown_);
-  for (size_t i = 0; i < info_.joints.size(); ++i)
-  {
-    REGISTER_ROS2_CONTROL_INTROSPECTION(info_.joints[i].name + ".hw_state", &hw_states_[i]);
-    REGISTER_ROS2_CONTROL_INTROSPECTION(info_.joints[i].name + ".hw_command", &hw_commands_[i]);
-  }
 
   return hardware_interface::CallbackReturn::SUCCESS;
 }

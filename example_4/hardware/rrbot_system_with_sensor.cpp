@@ -89,17 +89,6 @@ hardware_interface::CallbackReturn RRBotSystemWithSensorHardware::on_init(
   REGISTER_ROS2_CONTROL_INTROSPECTION("hw_stop_sec", &hw_stop_sec_);
   REGISTER_ROS2_CONTROL_INTROSPECTION("hw_slowdown", &hw_slowdown_);
   REGISTER_ROS2_CONTROL_INTROSPECTION("hw_sensor_change", &hw_sensor_change_);
-  for (size_t i = 0; i < info_.joints.size(); ++i)
-  {
-    REGISTER_ROS2_CONTROL_INTROSPECTION(info_.joints[i].name + ".hw_state", &hw_joint_states_[i]);
-    REGISTER_ROS2_CONTROL_INTROSPECTION(info_.joints[i].name + ".hw_command", &hw_joint_commands_[i]);
-  }
-  for (size_t i = 0; i < info_.sensors[0].state_interfaces.size(); ++i)
-  {
-    REGISTER_ROS2_CONTROL_INTROSPECTION(
-      info_.sensors[0].name + "." + info_.sensors[0].state_interfaces[i].name,
-      &hw_sensor_states_[i]);
-  }
 
   return hardware_interface::CallbackReturn::SUCCESS;
 }
