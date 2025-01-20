@@ -41,7 +41,7 @@ from launch_testing.actions import ReadyToTest
 
 # import launch_testing.markers
 import rclpy
-from ros2_control_demo_testing.test_utils import check_controllers_running
+from controller_manager.test_utils import check_controllers_running
 
 
 # Executes the given launch file and checks if all nodes can be started
