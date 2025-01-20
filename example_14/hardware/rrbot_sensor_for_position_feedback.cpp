@@ -253,7 +253,8 @@ hardware_interface::return_type RRBotSensorPositionFeedback::read(
 
   // integrate velocity to position
   const auto name = info_.joints[0].name + "/" + hardware_interface::HW_IF_POSITION;
-  const auto new_value = get_state(name) + (last_measured_velocity_ * duration.seconds()) / hw_slowdown_;
+  const auto new_value =
+    get_state(name) + (last_measured_velocity_ * duration.seconds()) / hw_slowdown_;
   set_state(name, new_value);
 
   ss << std::fixed << std::setprecision(2);
