@@ -60,7 +60,7 @@ def generate_test_description():
                 "launch/carlikebot.launch.py",
             )
         ),
-        launch_arguments={"gui": "false"}.items(),
+        launch_arguments={"gui": "false", "remap_odometry_tf": "true"}.items(),
     )
 
     return LaunchDescription([launch_include, ReadyToTest()])
@@ -102,10 +102,11 @@ class TestFixture(unittest.TestCase):
         )
 
     def test_remapped_topic(self):
-        # test if the remapping of the odometry topic is disabled
+        # we don't want to implement a tf lookup here
+        # so just check if the unmapped topic is not published
         old_topic = "/bicycle_steering_controller/tf_odometry"
         wait_for_topics = WaitForTopics([(old_topic, TFMessage)])
-        assert wait_for_topics.wait(), f"Topic '{old_topic}' not found!"
+        assert not wait_for_topics.wait(), f"Topic '{old_topic}' found, but should be remapped!"
         wait_for_topics.shutdown()
 
 
