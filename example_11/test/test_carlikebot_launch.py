@@ -107,6 +107,7 @@ class TestFixture(unittest.TestCase):
         old_topic = "/bicycle_steering_controller/tf_odometry"
         wait_for_topics = WaitForTopics([(old_topic, TFMessage)])
         assert not wait_for_topics.wait(), f"Topic '{old_topic}' found, but should be remapped!"
+        wait_for_topics.shutdown()
 
 
 # TODO(anyone): enable this if shutdown of ros2_control_node does not fail anymore
