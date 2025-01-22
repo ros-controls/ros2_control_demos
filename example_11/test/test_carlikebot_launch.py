@@ -98,6 +98,17 @@ class TestFixture(unittest.TestCase):
             ],
         )
 
+<<<<<<< HEAD
+=======
+    def test_remapped_topic(self):
+        # we don't want to implement a tf lookup here
+        # so just check if the unmapped topic is not published
+        old_topic = "/bicycle_steering_controller/tf_odometry"
+        wait_for_topics = WaitForTopics([(old_topic, TFMessage)])
+        assert not wait_for_topics.wait(), f"Topic '{old_topic}' found, but should be remapped!"
+        wait_for_topics.shutdown()
+
+>>>>>>> d6383fc (Add missing shutdown (#695))
 
 # TODO(anyone): enable this if shutdown of ros2_control_node does not fail anymore
 # @launch_testing.post_shutdown_test()
