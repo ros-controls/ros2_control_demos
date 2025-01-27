@@ -211,7 +211,7 @@ Terminal 2:
 
   source /opt/ros/${ROS_DISTRO}/setup.bash
   cd ~/ros2_ws
-  rviz2 -d src/ros2_control_demos/example_1/description/rviz/rrbot.rviz
+  rviz2 -d src/ros2_control_demos/ros2_control_demo_description/rrbot/rviz/rrbot.rviz
 
 Now, you can see the robot moving by changing the values of the joints by moving the sliders around in the ``joint_state_publisher_gui``.
 
@@ -234,7 +234,7 @@ Then on your local machine, you can run rviz2 with the config file specified:
 
   cd ~/ros2_ws
   source /opt/ros/${ROS_DISTRO}/setup.sh
-  rviz2 -d src/ros2_control_demos/example_1/description/rviz/rrbot.rviz
+  rviz2 -d src/ros2_control_demos/ros2_control_demo_description/rrbot/rviz/rrbot.rviz
 
 You can also run other commands or launch files from the docker, e.g.
 
