@@ -41,7 +41,7 @@ from launch_testing.actions import ReadyToTest
 
 # import launch_testing.markers
 import rclpy
-from ros2_control_demo_testing.test_utils import (
+from controller_manager.test_utils import (
     check_controllers_running,
     check_if_js_published,
     check_node_running,

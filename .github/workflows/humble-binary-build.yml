@@ -15,6 +15,7 @@ on:
       - '**.py'
       - '**.yaml'
       - 'ros2_control_demos-not-released.humble.repos'
+      - '**.xml'
   push:
     branches:
       - humble
@@ -28,6 +29,7 @@ on:
       - '**.py'
       - '**.yaml'
       - 'ros2_control_demos-not-released.humble.repos'
+      - '**.xml'
   schedule:
     # Run every morning to detect flakiness and broken dependencies
     - cron: '03 1 * * *'
