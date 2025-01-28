@@ -71,21 +71,11 @@ def generate_launch_description():
         ]
     )
 
-    # the steering controller libraries by default publish odometry on a separate topic than /tf
-    control_node_remapped = Node(
-        package="controller_manager",
-        executable="ros2_control_node",
-        parameters=[robot_controllers],
-        output="both",
-        condition=IfCondition(remap_odometry_tf),
-    )
     control_node = Node(
         package="controller_manager",
         executable="ros2_control_node",
         parameters=[robot_controllers],
         output="both",
-        remappings=[],
-        condition=UnlessCondition(remap_odometry_tf),
     )
     robot_state_pub_bicycle_node = Node(
         package="robot_state_publisher",
@@ -108,7 +98,8 @@ def generate_launch_description():
         arguments=["joint_state_broadcaster"],
     )
 
-    robot_bicycle_controller_spawner = Node(
+    # the steering controller libraries by default publish odometry on a separate topic than /tf
+    robot_bicycle_controller_spawner_remapped = Node(
         package="controller_manager",
         executable="spawner",
         arguments=[
@@ -118,6 +109,14 @@ def generate_launch_description():
             "--controller-ros-args",
             "-r /bicycle_steering_controller/tf_odometry:=/tf",
         ],
+        condition=IfCondition(remap_odometry_tf),
+    )
+
+    robot_bicycle_controller_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["bicycle_steering_controller", "--param-file", robot_controllers],
+        condition=UnlessCondition(remap_odometry_tf),
     )
 
     # Delay rviz start after `joint_state_broadcaster`
@@ -130,6 +129,12 @@ def generate_launch_description():
 
     # Delay start of joint_state_broadcaster after `robot_controller`
     # TODO(anyone): This is a workaround for flaky tests. Remove when fixed.
+    delay_joint_state_broadcaster_after_robot_controller_spawner_remapped = RegisterEventHandler(
+        event_handler=OnProcessExit(
+            target_action=robot_bicycle_controller_spawner_remapped,
+            on_exit=[joint_state_broadcaster_spawner],
+        )
+    )
     delay_joint_state_broadcaster_after_robot_controller_spawner = RegisterEventHandler(
         event_handler=OnProcessExit(
             target_action=robot_bicycle_controller_spawner,
@@ -139,9 +144,10 @@ def generate_launch_description():
 
     nodes = [
         control_node,
-        control_node_remapped,
         robot_state_pub_bicycle_node,
+        robot_bicycle_controller_spawner_remapped,
         robot_bicycle_controller_spawner,
+        delay_joint_state_broadcaster_after_robot_controller_spawner_remapped,
         delay_joint_state_broadcaster_after_robot_controller_spawner,
         delay_rviz_after_joint_state_broadcaster_spawner,
     ]
