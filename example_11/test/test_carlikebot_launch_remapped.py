@@ -37,6 +37,7 @@ from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_testing.actions import ReadyToTest
+from launch_testing_ros import WaitForTopics
 
 # import launch_testing.markers
 import rclpy
@@ -46,6 +47,8 @@ from controller_manager.test_utils import (
     check_node_running,
 )
 
+from tf2_msgs.msg import TFMessage
+
 
 # Executes the given launch file and checks if all nodes can be started
 @pytest.mark.rostest
@@ -53,11 +56,11 @@ def generate_test_description():
     launch_include = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(
-                get_package_share_directory("ros2_control_demo_example_5"),
-                "launch/rrbot_system_with_external_sensor.launch.py",
+                get_package_share_directory("ros2_control_demo_example_11"),
+                "launch/carlikebot.launch.py",
             )
         ),
-        launch_arguments={"gui": "false"}.items(),
+        launch_arguments={"gui": "false", "remap_odometry_tf": "true"}.items(),
     )
 
     return LaunchDescription([launch_include, ReadyToTest()])
@@ -85,12 +88,26 @@ class TestFixture(unittest.TestCase):
 
     def test_controller_running(self, proc_output):
 
-        cnames = ["forward_position_controller", "fts_broadcaster", "joint_state_broadcaster"]
+        cnames = ["bicycle_steering_controller", "joint_state_broadcaster"]
 
         check_controllers_running(self.node, cnames)
 
     def test_check_if_msgs_published(self):
-        check_if_js_published("/joint_states", ["joint1", "joint2"])
+        check_if_js_published(
+            "/joint_states",
+            [
+                "virtual_front_wheel_joint",
+                "virtual_rear_wheel_joint",
+            ],
+        )
+
+    def test_remapped_topic(self):
+        # we don't want to implement a tf lookup here
+        # so just check if the unmapped topic is not published
+        old_topic = "/bicycle_steering_controller/tf_odometry"
+        wait_for_topics = WaitForTopics([(old_topic, TFMessage)])
+        assert not wait_for_topics.wait(), f"Topic '{old_topic}' found, but should be remapped!"
+        wait_for_topics.shutdown()
 
 
 # TODO(anyone): enable this if shutdown of ros2_control_node does not fail anymore
