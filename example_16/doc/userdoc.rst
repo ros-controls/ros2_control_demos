@@ -8,10 +8,7 @@ DiffBot with Chained Controllers
 
 *DiffBot*, or ''Differential Mobile Robot'', is a simple mobile base with differential drive. The robot is basically a box moving according to differential drive kinematics.
 
-*example_16* is based of *example_2* which the hardware interface plugin is implemented having only one interface. This example demonstrates using a chaininged diff_drive_controller and pid_controller for each wheel to control the robot. The controllers are chained together to control the robot's velocity.
-
-* The communication is done using proprietary API to communicate with the robot control box.
-* Data for all joints is exchanged at once.
+*example_16* is based on *example_2*. This example demonstrates using a chained diff_drive_controller and pid_controller for each wheel to control the robot. The controllers are chained together to control the robot's twist.
 
 The *DiffBot* URDF files can be found in ``description/urdf`` folder.
 
