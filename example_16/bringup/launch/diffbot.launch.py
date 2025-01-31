@@ -97,16 +97,15 @@ def generate_launch_description():
         arguments=["joint_state_broadcaster"],
     )
 
-    pid_controller_left_wheel_joint_spawner = Node(
+    pid_controllers_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["pid_controller_left_wheel_joint", "--param-file", robot_controllers],
-    )
-
-    pid_controller_right_wheel_joint_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["pid_controller_right_wheel_joint", "--param-file", robot_controllers],
+        arguments=[
+            "pid_controller_left_wheel_joint",
+            "pid_controller_right_wheel_joint",
+            "--param-file",
+            robot_controllers,
+        ],
     )
 
     robot_base_controller_spawner = Node(
@@ -132,7 +131,7 @@ def generate_launch_description():
 
     delay_robot_base_after_pid_controller_spawner = RegisterEventHandler(
         event_handler=OnProcessExit(
-            target_action=pid_controller_right_wheel_joint_spawner,
+            target_action=pid_controllers_spawner,
             on_exit=[robot_base_controller_spawner],
         )
     )
@@ -149,8 +148,7 @@ def generate_launch_description():
     nodes = [
         control_node,
         robot_state_pub_node,
-        pid_controller_left_wheel_joint_spawner,
-        pid_controller_right_wheel_joint_spawner,
+        pid_controllers_spawner,
         delay_robot_base_after_pid_controller_spawner,
         delay_rviz_after_joint_state_broadcaster_spawner,
         delay_joint_state_broadcaster_after_robot_base_controller_spawner,
