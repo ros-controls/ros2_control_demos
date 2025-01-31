@@ -27,7 +27,6 @@ pid_controller_left_wheel_joint:
     command_interface: velocity
 
     reference_and_state_interfaces:
-      - position
       - velocity
 
     gains:
@@ -43,7 +42,6 @@ pid_controller_right_wheel_joint:
     command_interface: velocity
 
     reference_and_state_interfaces:
-      - position
       - velocity
 
     gains:
@@ -59,6 +57,9 @@ diffbot_base_controller:
     wheel_separation: 0.10
     #wheels_per_side: 1  # actually 2, but both are controlled by 1 signal
     wheel_radius: 0.015
+
+    # we have velocity feedback
+    position_feedback: false
 
     wheel_separation_multiplier: 1.0
     left_wheel_radius_multiplier: 1.0
