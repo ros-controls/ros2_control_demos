@@ -16,6 +16,7 @@ on:
       - '**.py'
       - '**.yaml'
       - 'ros2_control_demos-not-released.rolling.repos'
+      - '**.xml'
   push:
     branches:
       - master
@@ -29,6 +30,7 @@ on:
       - '**.py'
       - '**.yaml'
       - 'ros2_control_demos-not-released.rolling.repos'
+      - '**.xml'
   schedule:
     # Run every morning to detect flakiness and broken dependencies
     - cron: '03 1 * * *'

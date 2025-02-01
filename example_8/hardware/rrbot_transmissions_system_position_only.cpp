@@ -164,49 +164,32 @@ hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware:
   reset_interfaces(joint_interfaces_);
   reset_interfaces(actuator_interfaces_);
 
+  // reset values always when configuring hardware
+  for (const auto & [name, descr] : joint_state_interfaces_)
+  {
+    set_state(name, 0.0);
+  }
+  for (const auto & [name, descr] : joint_command_interfaces_)
+  {
+    set_command(name, 0.0);
+  }
+
   RCLCPP_INFO(get_logger(), "Configuration successful");
 
   return hardware_interface::CallbackReturn::SUCCESS;
-}
-
-std::vector<hardware_interface::StateInterface>
-RRBotTransmissionsSystemPositionOnlyHardware::export_state_interfaces()
-{
-  std::vector<hardware_interface::StateInterface> state_interfaces;
-  for (const auto & joint : info_.joints)
-  {
-    /// @pre all joint interfaces exist, checked in on_init()
-    auto joint_interface = std::find_if(
-      joint_interfaces_.begin(), joint_interfaces_.end(),
-      [&](const InterfaceData & interface) { return interface.name_ == joint.name; });
-
-    state_interfaces.emplace_back(hardware_interface::StateInterface(
-      joint.name, hardware_interface::HW_IF_POSITION, &joint_interface->state_));
-  }
-  return state_interfaces;
-}
-
-std::vector<hardware_interface::CommandInterface>
-RRBotTransmissionsSystemPositionOnlyHardware::export_command_interfaces()
-{
-  std::vector<hardware_interface::CommandInterface> command_interfaces;
-  for (const auto & joint : info_.joints)
-  {
-    /// @pre all joint interfaces exist, checked in on_init()
-    auto joint_interface = std::find_if(
-      joint_interfaces_.begin(), joint_interfaces_.end(),
-      [&](const InterfaceData & interface) { return interface.name_ == joint.name; });
-
-    command_interfaces.emplace_back(hardware_interface::CommandInterface(
-      joint.name, hardware_interface::HW_IF_POSITION, &joint_interface->command_));
-  }
-  return command_interfaces;
 }
 
 hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware::on_activate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
   RCLCPP_INFO(get_logger(), "Activating...");
+
+  // command and state should be equal when starting
+  for (const auto & [name, descr] : joint_state_interfaces_)
+  {
+    set_command(name, get_state(name));
+  }
+
   RCLCPP_INFO(get_logger(), "Activation successful");
 
   return hardware_interface::CallbackReturn::SUCCESS;
@@ -263,12 +246,30 @@ hardware_interface::return_type RRBotTransmissionsSystemPositionOnlyHardware::re
   }
   RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500, "%s", ss.str().c_str());
 
+  // update internal storage from resource_manager
+  std::for_each(
+    joint_interfaces_.begin(), joint_interfaces_.end(),
+    [this](auto & joint_interface)
+    {
+      set_state(
+        joint_interface.name_ + "/" + hardware_interface::HW_IF_POSITION, joint_interface.state_);
+    });
+
   return hardware_interface::return_type::OK;
 }
 
 hardware_interface::return_type RRBotTransmissionsSystemPositionOnlyHardware::write(
   const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
+  // update internal storage from resource_manager
+  std::for_each(
+    joint_interfaces_.begin(), joint_interfaces_.end(),
+    [this](auto & joint_interface)
+    {
+      joint_interface.command_ =
+        get_command(joint_interface.name_ + "/" + hardware_interface::HW_IF_POSITION);
+    });
+
   // joint: command -> transmission
   std::for_each(
     joint_interfaces_.begin(), joint_interfaces_.end(), [](auto & joint_interface)

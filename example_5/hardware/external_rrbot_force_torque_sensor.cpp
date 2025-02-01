@@ -47,25 +47,7 @@ hardware_interface::CallbackReturn ExternalRRBotForceTorqueSensorHardware::on_in
   hw_sensor_change_ = stod(info_.hardware_parameters["example_param_max_sensor_change"]);
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
-  hw_sensor_states_.resize(
-    info_.sensors[0].state_interfaces.size(), std::numeric_limits<double>::quiet_NaN());
-
   return hardware_interface::CallbackReturn::SUCCESS;
-}
-
-std::vector<hardware_interface::StateInterface>
-ExternalRRBotForceTorqueSensorHardware::export_state_interfaces()
-{
-  std::vector<hardware_interface::StateInterface> state_interfaces;
-
-  // export sensor state interface
-  for (uint i = 0; i < info_.sensors[0].state_interfaces.size(); i++)
-  {
-    state_interfaces.emplace_back(hardware_interface::StateInterface(
-      info_.sensors[0].name, info_.sensors[0].state_interfaces[i].name, &hw_sensor_states_[i]));
-  }
-
-  return state_interfaces;
 }
 
 hardware_interface::CallbackReturn ExternalRRBotForceTorqueSensorHardware::on_activate(
@@ -109,18 +91,16 @@ hardware_interface::return_type ExternalRRBotForceTorqueSensorHardware::read(
 {
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   std::stringstream ss;
-  ss << "Reading states:";
-
-  for (uint i = 0; i < hw_sensor_states_.size(); i++)
+  ss << "Reading states from sensors:" << std::fixed << std::setprecision(2);
+  size_t i = 0;
+  for (const auto & [name, descr] : sensor_state_interfaces_)
   {
     // Simulate RRBot's sensor data
-    unsigned int seed = time(NULL) + i;
-    hw_sensor_states_[i] =
-      static_cast<float>(rand_r(&seed)) / (static_cast<float>(RAND_MAX / hw_sensor_change_));
+    unsigned int seed = time(NULL) + i++;
+    set_state(
+      name, static_cast<float>(rand_r(&seed)) / (static_cast<float>(RAND_MAX / hw_sensor_change_)));
 
-    ss << std::fixed << std::setprecision(2) << std::endl
-       << "\t" << hw_sensor_states_[i] << " for sensor '"
-       << info_.sensors[0].state_interfaces[i].name.c_str() << "'";
+    ss << std::endl << "\t" << get_state(name) << " for sensor '" << name << "'";
   }
   RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500, "%s", ss.str().c_str());
   // END: This part here is for exemplary purposes - Please do not copy to your production code

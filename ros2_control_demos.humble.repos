@@ -6,7 +6,7 @@ repositories:
   realtime_tools:
     type: git
     url: https://github.com/ros-controls/realtime_tools.git
-    version: master
+    version: humble
   ros2_control:
     type: git
     url: https://github.com/ros-controls/ros2_control.git
@@ -18,4 +18,8 @@ repositories:
   gazebo_ros2_control:
     type: git
     url: https://github.com/ros-controls/gazebo_ros2_control.git
+    version: humble
+  control_toolbox:
+    type: git
+    url: https://github.com/ros-controls/control_toolbox.git
     version: humble

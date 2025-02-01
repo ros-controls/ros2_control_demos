@@ -22,6 +22,7 @@ from launch.substitutions import Command, FindExecutable, LaunchConfiguration, P
 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
+from controller_manager.launch_utils import generate_controllers_spawner_launch_description
 
 
 def generate_launch_description():
@@ -87,7 +88,7 @@ def generate_launch_description():
     control_node = Node(
         package="controller_manager",
         executable="ros2_control_node",
-        parameters=[robot_description, robot_controllers],
+        parameters=[robot_controllers],
     )
     robot_state_pub_node = Node(
         package="robot_state_publisher",
@@ -104,85 +105,44 @@ def generate_launch_description():
         condition=IfCondition(gui),
     )
 
-    # Separate robot state publishers for each robot
-
-    # Global joint state broadcaster
-    joint_state_broadcaster_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["joint_state_broadcaster"],
+    # global broadcaster and initially active controllers from RRBot
+    general_ctrl_spawner = generate_controllers_spawner_launch_description(
+        [
+            # Global joint state broadcaster
+            "joint_state_broadcaster",
+            # RRBot controllers
+            "rrbot_joint_state_broadcaster",
+            "rrbot_position_controller",
+            # External FTS broadcaster
+            "rrbot_external_fts_broadcaster",
+        ],
+        controller_params_files=[robot_controllers],
     )
 
-    # RRBot controllers
-    rrbot_joint_state_broadcaster_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["rrbot_joint_state_broadcaster", "--param-file", robot_controllers],
-    )
-    rrbot_position_controller_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["rrbot_position_controller", "--param-file", robot_controllers],
-    )
-    # External FTS broadcaster
-    rrbot_external_fts_broadcaster_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["rrbot_external_fts_broadcaster", "--param-file", robot_controllers],
+    # RRBot with sensors controllers, initially active
+    rrbot_sensor_ctrl_spawner_active = generate_controllers_spawner_launch_description(
+        ["rrbot_with_sensor_joint_state_broadcaster", "rrbot_with_sensor_fts_broadcaster"],
+        controller_params_files=[robot_controllers],
     )
 
-    # RRBot controllers
-    rrbot_with_sensor_joint_state_broadcaster_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["rrbot_with_sensor_joint_state_broadcaster", "--param-file", robot_controllers],
-    )
-    rrbot_with_sensor_position_controller_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=[
+    # RRBot with sensors controllers, initially inactive
+    rrbot_sensor_ctrl_spawner_inactive = generate_controllers_spawner_launch_description(
+        [
             "rrbot_with_sensor_position_controller",
-            "--inactive",
-            "--param-file",
-            robot_controllers,
         ],
-    )
-    rrbot_with_sensor_fts_broadcaster_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["rrbot_with_sensor_fts_broadcaster", "--param-file", robot_controllers],
+        controller_params_files=[robot_controllers],
+        extra_spawner_args=["--inactive"],
     )
 
-    # ThreeDofBot controllers
-    threedofbot_joint_state_broadcaster_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=[
+    # ThreeDofBot controllers, initially inactive
+    threedofbot_ctrl_spawner = generate_controllers_spawner_launch_description(
+        [
             "threedofbot_joint_state_broadcaster",
-            "--inactive",
-            "--param-file",
-            robot_controllers,
-        ],
-    )
-    threedofbot_position_controller_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=[
             "threedofbot_position_controller",
-            "--inactive",
-            "--param-file",
-            robot_controllers,
-        ],
-    )
-    threedofbot_pid_gain_controller_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=[
             "threedofbot_pid_gain_controller",
-            "--inactive",
-            "--param-file",
-            robot_controllers,
         ],
+        controller_params_files=[robot_controllers],
+        extra_spawner_args=["--inactive"],
     )
 
     # Command publishers
@@ -209,16 +169,10 @@ def generate_launch_description():
         control_node,
         robot_state_pub_node,
         rviz_node,
-        joint_state_broadcaster_spawner,
-        rrbot_joint_state_broadcaster_spawner,
-        rrbot_position_controller_spawner,
-        rrbot_external_fts_broadcaster_spawner,
-        rrbot_with_sensor_joint_state_broadcaster_spawner,
-        rrbot_with_sensor_position_controller_spawner,
-        rrbot_with_sensor_fts_broadcaster_spawner,
-        threedofbot_joint_state_broadcaster_spawner,
-        threedofbot_position_controller_spawner,
-        threedofbot_pid_gain_controller_spawner,
+        general_ctrl_spawner,
+        rrbot_sensor_ctrl_spawner_active,
+        rrbot_sensor_ctrl_spawner_inactive,
+        threedofbot_ctrl_spawner,
         rrbot_position_command_publisher,
         rrbot_with_sensor_position_command_publisher,
         threedofbot_position_command_publisher,
