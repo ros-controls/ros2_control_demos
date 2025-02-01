@@ -38,6 +38,7 @@ from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_testing.actions import ReadyToTest
 
+import launch_testing.markers
 import rclpy
 from controller_manager.test_utils import (
     check_controllers_running,
