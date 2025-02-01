@@ -92,12 +92,12 @@ Tutorial steps
 
    .. code-block:: shell
 
-    [RRBotTransmissionsSystemPositionOnlyHardware]: Command data:
-      joint1: 0.5 --> transmission1(R=2) --> actuator1: 1
-       joint2: 0.5 --> transmission2(R=4) --> actuator2: 2
-    [RRBotTransmissionsSystemPositionOnlyHardware]: State data:
-       joint1: 0.383253 <-- transmission1(R=2) <-- actuator1: 0.766505
-       joint2: 0.383253 <-- transmission2(R=4) <-- actuator2: 1.53301
+    [ros2_control_node-1] [INFO] [1728857106.562714002] [controller_manager.resource_manager.hardware_component.system.RRBotTransmissionsSystemPositionOnly]: Command data:
+    [ros2_control_node-1]   joint1: 0.5 --> transmission1(R=2) --> actuator1: 1
+    [ros2_control_node-1]   joint2: 0.5 --> transmission2(R=4) --> actuator2: 2
+    [ros2_control_node-1] [INFO] [1728857106.762624114] [controller_manager.resource_manager.hardware_component.system.RRBotTransmissionsSystemPositionOnly]: State data:
+    [ros2_control_node-1]   joint1: 0.166196 <-- transmission1(R=2) <-- actuator1: 0.332392
+    [ros2_control_node-1]   joint2: 0.166196 <-- transmission2(R=4) <-- actuator2: 0.664784
 
 
 Files used for this demos

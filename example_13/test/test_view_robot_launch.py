@@ -1,4 +1,4 @@
-# Copyright (c) 2024 AIT - Austrian Institute of Technology GmbH
+# Copyright (c) 2022 FZI Forschungszentrum Informatik
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -26,28 +26,29 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-# Author: Christoph Froehlich
+# Author: Lukas Sackewitz
 
-from setuptools import find_packages, setup
+import os
+import pytest
 
-package_name = "ros2_control_demo_testing"
+from ament_index_python.packages import get_package_share_directory
+from launch import LaunchDescription
+from launch.actions import IncludeLaunchDescription
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch_testing.actions import ReadyToTest
 
-setup(
-    name=package_name,
-    version="0.0.0",
-    packages=find_packages(exclude=["test"]),
-    data_files=[
-        ("share/ament_index/resource_index/packages", ["resource/" + package_name]),
-        ("share/" + package_name, ["package.xml"]),
-    ],
-    install_requires=["setuptools"],
-    zip_safe=True,
-    maintainer="Christoph Froehlich",
-    maintainer_email="christoph.froehlich@ait.ac.at",
-    description="Utilities for launch testing",
-    license="Apache-2.0",
-    tests_require=["pytest"],
-    entry_points={
-        "console_scripts": [],
-    },
-)
+
+# Executes the given launch file and checks if all nodes can be started
+@pytest.mark.rostest
+def generate_test_description():
+    launch_include = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(
+                get_package_share_directory("ros2_control_demo_example_13"),
+                "launch/three_robots.launch.py",
+            )
+        ),
+        launch_arguments={"gui": "true"}.items(),
+    )
+
+    return LaunchDescription([launch_include, ReadyToTest()])

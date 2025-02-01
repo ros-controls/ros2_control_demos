@@ -41,10 +41,6 @@ public:
   hardware_interface::CallbackReturn on_configure(
     const rclcpp_lifecycle::State & previous_state) override;
 
-  std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
-
-  std::vector<hardware_interface::CommandInterface> export_command_interfaces() override;
-
   hardware_interface::CallbackReturn on_activate(
     const rclcpp_lifecycle::State & previous_state) override;
 
@@ -58,9 +54,6 @@ public:
     const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
 private:
-  std::unique_ptr<rclcpp::Logger> logger_;
-  std::unique_ptr<rclcpp::Clock> clock_;
-
   // parameters for the RRBot simulation
   double actuator_slowdown_;
 

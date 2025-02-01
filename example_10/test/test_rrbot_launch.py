@@ -38,10 +38,8 @@ from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_testing.actions import ReadyToTest
 
-import launch_testing
 import rclpy
-from rclpy.node import Node
-from ros2_control_demo_testing.test_utils import (
+from controller_manager.test_utils import (
     check_controllers_running,
     check_if_js_published,
     check_node_running,
@@ -50,11 +48,8 @@ from ros2_control_demo_testing.test_utils import (
 
 # This function specifies the processes to be run for our test
 # The ReadyToTest action waits for 15 second by default for the processes to
-# start, if processes take more time an error is thrown. We use decorator here
-# to provide timeout duration of 20 second so that processes that take longer than
-# 15 seconds can start up.
+# start, if processes take more time an error is thrown.
 @pytest.mark.launch_test
-@launch_testing.ready_to_test_action_timeout(20)
 def generate_test_description():
     launch_include = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -72,14 +67,19 @@ def generate_test_description():
 # This is our test fixture. Each method is a test case.
 # These run alongside the processes specified in generate_test_description()
 class TestFixture(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        rclpy.init()
+
+    @classmethod
+    def tearDownClass(cls):
+        rclpy.shutdown()
 
     def setUp(self):
-        rclpy.init()
-        self.node = Node("test_node")
+        self.node = rclpy.create_node("test_node")
 
     def tearDown(self):
         self.node.destroy_node()
-        rclpy.shutdown()
 
     def test_node_start(self, proc_output):
         check_node_running(self.node, "robot_state_publisher")

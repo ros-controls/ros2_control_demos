@@ -33,7 +33,7 @@
 #include "rclcpp/clock.hpp"
 #include "rclcpp/macros.hpp"
 #include "rclcpp/time.hpp"
-#include "realtime_tools/realtime_buffer.h"
+#include "realtime_tools/realtime_buffer.hpp"
 
 namespace ros2_control_demo_example_14
 {
@@ -44,8 +44,6 @@ public:
 
   hardware_interface::CallbackReturn on_init(
     const hardware_interface::HardwareInfo & info) override;
-
-  std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
 
   hardware_interface::CallbackReturn on_configure(
     const rclcpp_lifecycle::State & previous_state) override;
@@ -71,7 +69,6 @@ private:
   // Store the command for the simulated robot
   double measured_velocity;  // Local variable, but avoid initialization on each read
   double last_measured_velocity_;
-  double hw_joint_state_;
 
   // Timestamps to calculate position for velocity
   rclcpp::Clock clock_;

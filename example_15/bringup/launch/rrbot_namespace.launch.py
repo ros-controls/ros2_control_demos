@@ -69,12 +69,6 @@ def generate_launch_description():
         executable="ros2_control_node",
         namespace="/rrbot",
         parameters=[robot_description, robot_controllers],
-        remappings=[
-            (
-                "/forward_position_controller/commands",
-                "/position_commands",
-            ),
-        ],
         output={
             "stdout": "screen",
             "stderr": "screen",
@@ -99,23 +93,33 @@ def generate_launch_description():
     joint_state_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["joint_state_broadcaster", "-c", "/rrbot/controller_manager"],
+        namespace="rrbot",
+        arguments=["joint_state_broadcaster"],
     )
 
     robot_forward_position_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["forward_position_controller", "-c", "/rrbot/controller_manager"],
+        namespace="rrbot",
+        arguments=[
+            "forward_position_controller",
+            "--param-file",
+            robot_controllers,
+            # we use the remapping from a relative name to FQN /position_commands
+            "--controller-ros-args",
+            "-r forward_position_controller/commands:=/position_commands",
+        ],
     )
 
     robot_position_trajectory_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
+        namespace="rrbot",
         arguments=[
             "position_trajectory_controller",
-            "-c",
-            "/rrbot/controller_manager",
             "--inactive",
+            "--param-file",
+            robot_controllers,
         ],
     )
 
@@ -127,32 +131,13 @@ def generate_launch_description():
         )
     )
 
-    # Delay start of joint_state_broadcaster after `robot_controller`
-    # TODO(anyone): This is a workaround for flaky tests. Remove when fixed.
-    delay_joint_state_broadcaster_after_robot_controller_spawner = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=robot_forward_position_controller_spawner,
-            on_exit=[joint_state_broadcaster_spawner],
-        )
-    )
-
-    # Delay start of robot_controller after `joint_state_broadcaster`
-    delay_robot_position_trajectory_controller_spawner_after_joint_state_broadcaster_spawner = (
-        RegisterEventHandler(
-            event_handler=OnProcessExit(
-                target_action=joint_state_broadcaster_spawner,
-                on_exit=[robot_position_trajectory_controller_spawner],
-            )
-        )
-    )
-
     nodes = [
         control_node,
         robot_state_pub_node,
         delay_rviz_after_joint_state_broadcaster_spawner,
         robot_forward_position_controller_spawner,
-        delay_joint_state_broadcaster_after_robot_controller_spawner,
-        delay_robot_position_trajectory_controller_spawner_after_joint_state_broadcaster_spawner,
+        joint_state_broadcaster_spawner,
+        robot_position_trajectory_controller_spawner,
     ]
 
     return LaunchDescription(declared_arguments + nodes)

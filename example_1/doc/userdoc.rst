@@ -208,8 +208,9 @@ Tutorial steps
 
    .. code-block:: shell
 
-    [RRBotSystemPositionOnlyHardware]: Got command 0.50000 for joint 0!
-    [RRBotSystemPositionOnlyHardware]: Got command 0.50000 for joint 1!
+    [ros2_control_node-1] [INFO] [1721763082.437870177] [controller_manager.resource_manager.hardware_component.system.RRBot]: Writing commands:
+    [ros2_control_node-1]   0.50 for joint 'joint2/position'
+    [ros2_control_node-1]   0.50 for joint 'joint1/position'
 
    If you echo the ``/joint_states`` or ``/dynamic_joint_states`` topics you should now get similar values, namely the simulated states of the robot
 
@@ -241,7 +242,7 @@ Tutorial steps
 
         .. code-block:: shell
 
-          ros2 control load_controller joint_trajectory_position_controller
+          ros2 control load_controller joint_trajectory_position_controller $(ros2 pkg prefix ros2_control_demo_example_1 --share)/config/rrbot_jtc.yaml
 
       .. group-tab:: Docker
 
@@ -249,7 +250,7 @@ Tutorial steps
 
         .. code-block:: shell
 
-          ros2 control load_controller joint_trajectory_position_controller
+          ros2 control load_controller joint_trajectory_position_controller $(ros2 pkg prefix ros2_control_demo_example_1 --share)/config/rrbot_jtc.yaml
 
    what should return ``Successfully loaded controller joint_trajectory_position_controller``. Check the status with
 
@@ -297,11 +298,6 @@ Tutorial steps
 
    what should give ``Successfully configured joint_trajectory_position_controller``.
 
-   .. note::
-
-     The parameters are already set in `rrbot_controllers.yaml <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_1/bringup/config/rrbot_controllers.yaml>`__
-     but the controller was not loaded from the `launch file rrbot.launch.py <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_1/bringup/launch/rrbot.launch.py>`__ before.
-
    As an alternative, you can load the controller directly in ``inactive``-state by means of the option for ``load_controller`` with
 
    .. tabs::
@@ -310,7 +306,7 @@ Tutorial steps
 
         .. code-block:: shell
 
-          ros2 control load_controller joint_trajectory_position_controller --set-state inactive
+          ros2 control load_controller --set-state inactive joint_trajectory_position_controller $(ros2 pkg prefix ros2_control_demo_example_1 --share)/config/rrbot_jtc.yaml
 
       .. group-tab:: Docker
 
@@ -318,7 +314,7 @@ Tutorial steps
 
         .. code-block:: shell
 
-          ros2 control load_controller joint_trajectory_position_controller --set-state inactive
+          ros2 control load_controller --set-state inactive joint_trajectory_position_controller $(ros2 pkg prefix ros2_control_demo_example_1 --share)/config/rrbot_jtc.yaml
 
    You should get the result ``Successfully loaded controller joint_trajectory_position_controller into state inactive``.
 
@@ -436,7 +432,11 @@ Files used for this demos
 -------------------------
 
 * Launch file: `rrbot.launch.py <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_1/bringup/launch/rrbot.launch.py>`__
-* Controllers yaml: `rrbot_controllers.yaml <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_1/bringup/config/rrbot_controllers.yaml>`__
+* Controllers yaml:
+
+  * `rrbot_controllers.yaml <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_1/bringup/config/rrbot_controllers.yaml>`__
+  * `rrbot_jtc.yaml <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_1/bringup/config/rrbot_jtc.yaml>`__
+
 * URDF file: `rrbot.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_1/description/urdf/rrbot.urdf.xacro>`__
 
   * Description: `rrbot_description.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/ros2_control_demo_description/rrbot/urdf/rrbot_description.urdf.xacro>`__

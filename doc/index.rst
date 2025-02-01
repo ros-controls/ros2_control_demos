@@ -76,7 +76,8 @@ Example 11: "CarlikeBot"
 Example 12: "Controller chaining"
    The example shows a simple chainable controller and its integration to form a controller chain to control the joints of *RRBot*.
 
-Example 13: "Multi-robot example (tba.)"
+Example 13: "Multi-robot system with hardware lifecycle management"
+   This example shows how to handle multiple robots in a single controller manager instance.
 
 Example 14: "Modular robots with actuators not providing states and with additional sensors"
    The example shows how to implement robot hardware with actuators not providing states and with additional sensors.
@@ -210,7 +211,7 @@ Terminal 2:
 
   source /opt/ros/${ROS_DISTRO}/setup.bash
   cd ~/ros2_ws
-  rviz2 -d src/ros2_control_demos/example_1/description/rviz/rrbot.rviz
+  rviz2 -d src/ros2_control_demos/ros2_control_demo_description/rrbot/rviz/rrbot.rviz
 
 Now, you can see the robot moving by changing the values of the joints by moving the sliders around in the ``joint_state_publisher_gui``.
 
@@ -233,7 +234,7 @@ Then on your local machine, you can run rviz2 with the config file specified:
 
   cd ~/ros2_ws
   source /opt/ros/${ROS_DISTRO}/setup.sh
-  rviz2 -d src/ros2_control_demos/example_1/description/rviz/rrbot.rviz
+  rviz2 -d src/ros2_control_demos/ros2_control_demo_description/rrbot/rviz/rrbot.rviz
 
 You can also run other commands or launch files from the docker, e.g.
 
@@ -276,5 +277,6 @@ Examples
    Example 10: Industrial robot with GPIO interfaces <../example_10/doc/userdoc.rst>
    Example 11: CarlikeBot <../example_11/doc/userdoc.rst>
    Example 12: Controller chaining <../example_12/doc/userdoc.rst>
+   Example 13: Multiple robots <../example_13/doc/userdoc.rst>
    Example 14: Modular robots with actuators not providing states <../example_14/doc/userdoc.rst>
    Example 15: Using multiple controller managers <../example_15/doc/userdoc.rst>

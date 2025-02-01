@@ -15,6 +15,7 @@ on:
       - '**.py'
       - '**.yaml'
       - 'ros2_control_demos.humble.repos'
+      - '**.xml'
   push:
     branches:
       - humble
@@ -28,6 +29,7 @@ on:
       - '**.py'
       - '**.yaml'
       - 'ros2_control_demos.humble.repos'
+      - '**.xml'
   schedule:
     # Run every morning to detect flakiness and broken dependencies
     - cron: '33 1 * * *'
@@ -39,7 +41,7 @@ jobs:
       fail-fast: false
       matrix:
         ROS_DISTRO: [humble]
-        ROS_REPO: [main, testing]
+        ROS_REPO: [testing]
     with:
       ros_distro: ${{ matrix.ROS_DISTRO }}
       ros_repo: ${{ matrix.ROS_REPO }}
