@@ -1,4 +1,4 @@
-# Copyright 2021 Stogl Robotics Consulting UG (haftungsbeschränkt)
+# Copyright 2025 ros2_control Development Team
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -77,7 +77,7 @@ def generate_launch_description():
         ]
     )
     robot_description = {"robot_description": robot_description_content}
-
+    
     rviz_config_file = PathJoinSubstitution(
         [FindPackageShare(description_package), "diffbot/rviz", "diffbot_view.rviz"]
     )
@@ -93,12 +93,14 @@ def generate_launch_description():
         output="both",
         parameters=[robot_description],
     )
+    
+    # start rviz2 with intial fixed frame id as base_link
     rviz_node = Node(
         package="rviz2",
         executable="rviz2",
         name="rviz2",
         output="log",
-        arguments=["-d", rviz_config_file],
+        arguments=["-d", rviz_config_file, "-f", "base_link"],
         condition=IfCondition(gui),
     )
 

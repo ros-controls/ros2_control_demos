@@ -1,4 +1,4 @@
-# Copyright 2020 ros2_control Development Team
+# Copyright 2025 ros2_control Development Team
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,11 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+#
+# Author: Julia Jia
+
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, RegisterEventHandler
-from launch.conditions import IfCondition
+from launch.conditions import IfCondition, UnlessCondition
 from launch.event_handlers import OnProcessExit
-from launch.substitutions import Command, FindExecutable, PathJoinSubstitution, LaunchConfiguration
+from launch.substitutions import Command, FindExecutable, PathJoinSubstitution, LaunchConfiguration, TextSubstitution
 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
@@ -28,7 +31,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "gui",
-            default_value="false",
+            default_value="true",
             description="Start RViz2 automatically with this launch file.",
         )
     )
@@ -39,10 +42,18 @@ def generate_launch_description():
             description="Start robot with mock hardware mirroring command to its states.",
         )
     )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "fixed_frame_id",
+            default_value="odom",
+            description="Fixed frame id of the robot.",
+        )
+    )
 
     # Initialize Arguments
     gui = LaunchConfiguration("gui")
     use_mock_hardware = LaunchConfiguration("use_mock_hardware")
+    fixed_frame_id = LaunchConfiguration("fixed_frame_id")
 
     # Get URDF via xacro
     robot_description_content = Command(
@@ -82,12 +93,13 @@ def generate_launch_description():
         output="both",
         parameters=[robot_description],
     )
+
     rviz_node = Node(
         package="rviz2",
         executable="rviz2",
         name="rviz2",
         output="log",
-        arguments=["-d", rviz_config_file],
+        arguments=["-d", rviz_config_file, "-f", fixed_frame_id],
         condition=IfCondition(gui),
     )
 
@@ -107,17 +119,21 @@ def generate_launch_description():
             robot_controllers,
         ],
     )
-
+    
+    # start the base controller in inactive mode
     robot_base_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
         arguments=[
             "diffbot_base_controller",
-            # "forward_velocity_controller",
             "--param-file",
             robot_controllers,
             "--controller-ros-args",
             "-r /diffbot_base_controller/cmd_vel:=/cmd_vel",
+            # "--inactive",
+            "--ros-args",
+            "--log-level",
+            "debug",
         ],
     )
 
@@ -136,7 +152,7 @@ def generate_launch_description():
         )
     )
 
-    # Delay start of joint_state_broadcaster after `robot_controller`
+    # Delay start of joint_state_broadcaster after `robot_base_controller`
     # TODO(anyone): This is a workaround for flaky tests. Remove when fixed.
     delay_joint_state_broadcaster_after_robot_base_controller_spawner = RegisterEventHandler(
         event_handler=OnProcessExit(

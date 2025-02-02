@@ -8,18 +8,33 @@ DiffBot with Chained Controllers
 
 *DiffBot*, or ''Differential Mobile Robot'', is a simple mobile base with differential drive. The robot is basically a box moving according to differential drive kinematics.
 
-*example_16* is based on *example_2*. This example demonstrates using a chained diff_drive_controller and pid_controller for each wheel to control the robot. The controllers are chained together to control the robot's twist.
+*example_16* extends *example_2* by demonstrating controller chaining. It shows how to chain a diff_drive_controller with two pid_controllers (one for each wheel) to achieve coordinated robot motion. The pid_controllers directly control wheel velocities, while the diff_drive_controller converts desired robot twist into wheel velocity commands.
 
 The *DiffBot* URDF files can be found in ``description/urdf`` folder.
 
 .. include:: ../../doc/run_from_docker.rst
 
+Inspired by the scenario outlined in `ROS2 controller manager chaining documentation <https://github.com/ros-controls/ros2_control/blob/master/controller_manager/doc/controller_chaining.rst?plain=1>`__. 
+We'll implement a segament of the scenario and cover the chain of 'diff_drive_controller' with two PID controllers. Along with the process, we call out the pattern of contructing virtual interfaces in terms of controllers with details on what is happening behind the scenes. 
 
+Two flows are demonstrated: activation/execution flow and deactivation flow.
+
+In the activation and execution flow, we follow these steps:
+
+  1. First, we activate only the PID controllers to verify proper motor velocity control. The PID controllers accept commands through topics and provide virtual interfaces for chaining.
+
+  2. Next, we activate the diff_drive_controller, which connects to the PID controllers' virtual interfaces. When chained, the PID controllers switch to chained mode and disable their external command topics. This allows us to verify the differential drive kinematics.
+
+  3. Upon activation, the diff_drive_controller provides odometry state interfaces.
+
+  4. Finally, we send velocity commands to test robot movement, with dynamics enabled to demonstrate the PID controllers' behavior.
+
+For the deactivation flow, controllers must be deactivated in the reverse order of their chain. When a controller is deactivated, all controllers that depend on it must also be deactivated. We demonstrate this process step by step and examine the controller states at each stage.
 
 Tutorial steps
 --------------------------
 
-1. To check that *DiffBot* description is working properly use following launch commands
+1. The first step is to check that *DiffBot* description is working properly use following launch commands
 
    .. code-block:: shell
 
@@ -37,7 +52,7 @@ Tutorial steps
 
    .. code-block:: shell
 
-    ros2 launch ros2_control_demo_example_16 diffbot.launch.py
+    ros2 launch ros2_control_demo_example_16 diffbot.launch.py inactive_mode:=true fixed_frame_id:=base_link
 
    The launch file loads and starts the robot hardware, controllers and opens *RViz*.
    In the starting terminal you will see a lot of output from the hardware implementation showing its internal states.
@@ -55,19 +70,34 @@ Tutorial steps
    You should get
 
    .. code-block:: shell
-
+   
     command interfaces
-          left_wheel_joint/velocity [available] [claimed]
-          right_wheel_joint/velocity [available] [claimed]
+        diffbot_base_controller/angular/velocity [unavailable] [unclaimed]
+        diffbot_base_controller/linear/velocity [unavailable] [unclaimed]
+        left_wheel_joint/velocity [available] [claimed]
+        pid_controller_left_wheel_joint/left_wheel_joint/velocity [available] [unclaimed]
+        pid_controller_right_wheel_joint/right_wheel_joint/velocity [available] [unclaimed]
+        right_wheel_joint/velocity [available] [claimed]
     state interfaces
-          left_wheel_joint/position
-          left_wheel_joint/velocity
-          right_wheel_joint/position
-          right_wheel_joint/velocity
+        left_wheel_joint/position
+        left_wheel_joint/velocity
+        pid_controller_left_wheel_joint/left_wheel_joint/velocity
+        pid_controller_right_wheel_joint/right_wheel_joint/velocity
+        right_wheel_joint/position
+        right_wheel_joint/velocity
 
    The ``[claimed]`` marker on command interfaces means that a controller has access to command *DiffBot*.
 
-   Furthermore, we can see that the command interface is of type ``velocity``, which is typical for a differential drive robot.
+   In this example, diff_drive_controller/DiffDriveController is chinable after controller which another controllre can reference following command interfaces. Both intrfaces are in ``unclaimed`` state, which means that no controller is using them.
+
+   .. code-block:: shell
+    command interfaces
+        diffbot_base_controller/angular/velocity [available] [unclaimed]
+        diffbot_base_controller/linear/velocity [available] [unclaimed]
+
+
+   
+   more, we can see that the command interface is of type ``velocity``, which is typical for a differential drive robot.
 
 4. Check if controllers are running
 
@@ -79,10 +109,89 @@ Tutorial steps
 
    .. code-block:: shell
 
-    diffbot_base_controller[diff_drive_controller/DiffDriveController] active
-    joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
+    joint_state_broadcaster          joint_state_broadcaster/JointStateBroadcaster  active  
+    diffbot_base_controller          diff_drive_controller/DiffDriveController      inactive
+    pid_controller_right_wheel_joint pid_controller/PidController                   active  
+    pid_controller_left_wheel_joint  pid_controller/PidController                   active  
 
-5. If everything is fine, now you can send a command to *Diff Drive Controller* using ROS 2 CLI interface:
+
+5. Activate the chained diff_drive_controller 
+
+   .. code-block:: shell
+
+    ros2 control switch_controllers --activate diffbot_base_controller
+
+   You should see the following output:
+
+   .. code-block:: shell
+
+    Successfully switched controllers
+
+6. Check the hardware interfaces as well as the controllers
+
+   .. code-block:: shell
+
+    ros2 control list_hardware_interfaces
+    ros2 control list_controllers
+
+   You should see the following output:
+
+   .. code-block:: shell
+
+    command interfaces
+      diffbot_base_controller/angular/velocity [available] [unclaimed]
+      diffbot_base_controller/linear/velocity [available] [unclaimed]
+      left_wheel_joint/velocity [available] [claimed]
+      pid_controller_left_wheel_joint/left_wheel_joint/velocity [available] [claimed]
+      pid_controller_right_wheel_joint/right_wheel_joint/velocity [available] [claimed]
+      right_wheel_joint/velocity [available] [claimed]
+    state interfaces
+      left_wheel_joint/position
+      left_wheel_joint/velocity
+      pid_controller_left_wheel_joint/left_wheel_joint/velocity
+      pid_controller_right_wheel_joint/right_wheel_joint/velocity
+      right_wheel_joint/position
+      right_wheel_joint/velocity
+
+
+  .. code-block:: shell
+
+    joint_state_broadcaster          joint_state_broadcaster/JointStateBroadcaster  active
+    diffbot_base_controller          diff_drive_controller/DiffDriveController      active
+    pid_controller_right_wheel_joint pid_controller/PidController                   active
+    pid_controller_left_wheel_joint  pid_controller/PidController                   active
+
+
+
+7. Send a command to the left wheel
+
+.. code-block:: shell
+  ros2 topic pub -1 /pid_controller_left_wheel_joint/reference control_msgs/msg/MultiDOFCommand "{
+    dof_names: ['left_wheel_joint/velocity'],
+    values: [1.0],
+    values_dot: [0.0]
+    }"
+
+
+8. Send a command to the right wheel
+
+   .. code-block:: shell
+
+    ros2 topic pub -1 /pid_controller_right_wheel_joint/reference control_msgs/msg/MultiDOFCommand "{
+      dof_names: ['right_wheel_joint/velocity'],
+      values: [1.0],
+      values_dot: [0.0]
+    }"
+
+
+7. Change the fixed frame id for rviz to odom
+
+
+    Look for "Fixed Frame" in the "Global Options" section
+  Click on the frame name
+  Type or select the new frame ID and change it to odom then click on reset button
+
+8.  If everything is fine, now you can send a command to *Diff Drive Controller* using ROS 2 CLI interface:
 
    .. code-block:: shell
 
