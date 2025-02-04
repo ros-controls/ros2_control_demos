@@ -12,8 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
-# Author: Julia Jia
 
 import os
 import pytest
@@ -72,8 +70,12 @@ class TestFixture(unittest.TestCase):
 
     def test_controller_running(self, proc_output):
         # disable this test for now, as the activation of the diffbot_base_controller fails
-        # cnames = ["diffbot_base_controller", "joint_state_broadcaster"]
-        cnames = ["joint_state_broadcaster"]
+        cnames = [
+            "pid_controller_left_wheel_joint",
+            "pid_controller_right_wheel_joint",
+            "diffbot_base_controller",
+            "joint_state_broadcaster",
+        ]
 
         check_controllers_running(self.node, cnames)
 

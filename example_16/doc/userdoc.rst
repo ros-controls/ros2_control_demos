@@ -8,142 +8,61 @@ DiffBot with Chained Controllers
 
 *DiffBot*, or ''Differential Mobile Robot'', is a simple mobile base with differential drive. The robot is basically a box moving according to differential drive kinematics.
 
-*example_16* extends *example_2* by demonstrating controller chaining. It shows how to chain a diff_drive_controller with two pid_controllers (one for each wheel) to achieve coordinated robot motion. The pid_controllers directly control wheel velocities, while the diff_drive_controller converts desired robot twist into wheel velocity commands.
+This example extends *example_2* by demonstrating controller chaining with a diff_drive_controller and two pid_controllers (one for each wheel) to achieve coordinated robot motion. If you haven't already, you can find the instructions for *example_2* in :ref:`ros2_control_demos_example_2_userdoc`. It is recommended to follow the steps given in that tutorial first before proceeding with this one.
+
+This example demonstrates controller chaining as described in the `ROS2 controller manager chaining documentation <https://github.com/ros-controls/ros2_control/blob/master/controller_manager/doc/controller_chaining.rst?plain=1>`__. The control chain flows from the diff_drive_controller through two PID controllers to the DiffBot hardware. The diff_drive_controller converts desired robot twist into wheel velocity commands, which are then processed by the PID controllers to directly control the wheel velocities. Additionally, this example shows how to enable the feedforward mode for the PID controllers.
 
 The *DiffBot* URDF files can be found in ``description/urdf`` folder.
 
 .. include:: ../../doc/run_from_docker.rst
 
-Inspired by the scenario outlined in `ROS2 controller manager chaining documentation <https://github.com/ros-controls/ros2_control/blob/master/controller_manager/doc/controller_chaining.rst?plain=1>`__. 
-We'll implement a segament of the scenario and cover the chain of 'diff_drive_controller' with two PID controllers. Along with the process, we call out the pattern of contructing virtual interfaces in terms of controllers with details on what is happening behind the scenes. 
-
-Two flows are demonstrated: activation/execution flow and deactivation flow.
-
-In the activation and execution flow, we follow these steps:
-
-  1. First, we activate only the PID controllers to verify proper motor velocity control. The PID controllers accept commands through topics and provide virtual interfaces for chaining.
-
-  2. Next, we activate the diff_drive_controller, which connects to the PID controllers' virtual interfaces. When chained, the PID controllers switch to chained mode and disable their external command topics. This allows us to verify the differential drive kinematics.
-
-  3. Upon activation, the diff_drive_controller provides odometry state interfaces.
-
-  4. Finally, we send velocity commands to test robot movement, with dynamics enabled to demonstrate the PID controllers' behavior.
-
-For the deactivation flow, controllers must be deactivated in the reverse order of their chain. When a controller is deactivated, all controllers that depend on it must also be deactivated. We demonstrate this process step by step and examine the controller states at each stage.
 
 Tutorial steps
 --------------------------
 
-1. The first step is to check that *DiffBot* description is working properly use following launch commands
+1. To start *DiffBot* example open a terminal, source your ROS2-workspace and execute its launch file with
 
    .. code-block:: shell
 
-    ros2 launch ros2_control_demo_example_16 view_robot.launch.py
-
-   .. warning::
-    Getting the following output in terminal is OK: ``Warning: Invalid frame ID "odom" passed to canTransform argument target_frame - frame does not exist``.
-    This happens because ``joint_state_publisher_gui`` node need some time to start.
-
-   .. image:: diffbot.png
-    :width: 400
-    :alt: Differential Mobile Robot
-
-2. To start *DiffBot* example open a terminal, source your ROS2-workspace and execute its launch file with
-
-   .. code-block:: shell
-
-    ros2 launch ros2_control_demo_example_16 diffbot.launch.py inactive_mode:=true fixed_frame_id:=base_link
+    ros2 launch ros2_control_demo_example_16 diffbot.launch.py
 
    The launch file loads and starts the robot hardware, controllers and opens *RViz*.
    In the starting terminal you will see a lot of output from the hardware implementation showing its internal states.
    This excessive printing is only added for demonstration. In general, printing to the terminal should be avoided as much as possible in a hardware interface implementation.
 
-   If you can see an orange box in *RViz* everything has started properly.
-   Still, to be sure, let's introspect the control system before moving *DiffBot*.
+   If you can see an orange box in *RViz* everything has started properly. Let's introspect the control system before moving *DiffBot*.
 
-3. Check if the hardware interface loaded properly, by opening another terminal and executing
-
-   .. code-block:: shell
-
-    ros2 control list_hardware_interfaces
-
-   You should get
-
-   .. code-block:: shell
-   
-    command interfaces
-        diffbot_base_controller/angular/velocity [unavailable] [unclaimed]
-        diffbot_base_controller/linear/velocity [unavailable] [unclaimed]
-        left_wheel_joint/velocity [available] [claimed]
-        pid_controller_left_wheel_joint/left_wheel_joint/velocity [available] [unclaimed]
-        pid_controller_right_wheel_joint/right_wheel_joint/velocity [available] [unclaimed]
-        right_wheel_joint/velocity [available] [claimed]
-    state interfaces
-        left_wheel_joint/position
-        left_wheel_joint/velocity
-        pid_controller_left_wheel_joint/left_wheel_joint/velocity
-        pid_controller_right_wheel_joint/right_wheel_joint/velocity
-        right_wheel_joint/position
-        right_wheel_joint/velocity
-
-   The ``[claimed]`` marker on command interfaces means that a controller has access to command *DiffBot*.
-
-   In this example, diff_drive_controller/DiffDriveController is chinable after controller which another controllre can reference following command interfaces. Both intrfaces are in ``unclaimed`` state, which means that no controller is using them.
-
-   .. code-block:: shell
-    command interfaces
-        diffbot_base_controller/angular/velocity [available] [unclaimed]
-        diffbot_base_controller/linear/velocity [available] [unclaimed]
-
-
-   
-   more, we can see that the command interface is of type ``velocity``, which is typical for a differential drive robot.
-
-4. Check if controllers are running
+2. Check controllers
 
    .. code-block:: shell
 
-    ros2 control list_controllers
+    $ ros2 control list_controllers
 
    You should get
 
    .. code-block:: shell
 
-    joint_state_broadcaster          joint_state_broadcaster/JointStateBroadcaster  active  
-    diffbot_base_controller          diff_drive_controller/DiffDriveController      inactive
-    pid_controller_right_wheel_joint pid_controller/PidController                   active  
-    pid_controller_left_wheel_joint  pid_controller/PidController                   active  
+    joint_state_broadcaster          joint_state_broadcaster/JointStateBroadcaster  active
+    diffbot_base_controller          diff_drive_controller/DiffDriveController      active
+    pid_controller_right_wheel_joint pid_controller/PidController                   active
+    pid_controller_left_wheel_joint  pid_controller/PidController                   active
 
-
-5. Activate the chained diff_drive_controller 
-
-   .. code-block:: shell
-
-    ros2 control switch_controllers --activate diffbot_base_controller
-
-   You should see the following output:
+3. Check the hardware interface loaded by opening another terminal and executing
 
    .. code-block:: shell
 
-    Successfully switched controllers
+      $ ros2 control list_hardware_interfaces
 
-6. Check the hardware interfaces as well as the controllers
+  You should get
 
-   .. code-block:: shell
-
-    ros2 control list_hardware_interfaces
-    ros2 control list_controllers
-
-   You should see the following output:
-
-   .. code-block:: shell
+  .. code-block:: shell
 
     command interfaces
-      diffbot_base_controller/angular/velocity [available] [unclaimed]
-      diffbot_base_controller/linear/velocity [available] [unclaimed]
+      diffbot_base_controller/angular/velocity [unavailable] [unclaimed]
+      diffbot_base_controller/linear/velocity [unavailable] [unclaimed]
       left_wheel_joint/velocity [available] [claimed]
-      pid_controller_left_wheel_joint/left_wheel_joint/velocity [available] [claimed]
-      pid_controller_right_wheel_joint/right_wheel_joint/velocity [available] [claimed]
+      pid_controller_left_wheel_joint/left_wheel_joint/velocity [available] [unclaimed]
+      pid_controller_right_wheel_joint/right_wheel_joint/velocity [available] [unclaimed]
       right_wheel_joint/velocity [available] [claimed]
     state interfaces
       left_wheel_joint/position
@@ -154,48 +73,35 @@ Tutorial steps
       right_wheel_joint/velocity
 
 
+  The ``[claimed]`` marker on command interfaces means that a controller has access to command *DiffBot*. There are two ``[claimed]`` interfaces from pid_controller, one for left wheel and one for right wheel. These interfaces are referenced by diff_drive_controller. By referencing them, diff_drive_controller can send commands to these interfaces. If you see these, we've successfully chained the controllers.
+
+  There are also two ``[unclaimed]`` interfaces from diff_drive_controller, one for angular velocity and one for linear velocity. These are provided by the diff_drive_controller because it is chainable. You can ignore them since we don't use them in this example.
+
+4. We specified ``feedforward_gain`` as part of ``gains`` in diffbot_chained_controllers.yaml. To actually enable feedforward mode for the pid_controller, we need to use a service provided by pid_controller. Let's enable it.
+
   .. code-block:: shell
 
-    joint_state_broadcaster          joint_state_broadcaster/JointStateBroadcaster  active
-    diffbot_base_controller          diff_drive_controller/DiffDriveController      active
-    pid_controller_right_wheel_joint pid_controller/PidController                   active
-    pid_controller_left_wheel_joint  pid_controller/PidController                   active
+    $ ros2 service call /pid_controller_left_wheel_joint/set_feedforward_control std_srvs/srv/SetBool "data: true"
+    $ ros2 service call /pid_controller_right_wheel_joint/set_feedforward_control std_srvs/srv/SetBool "data: true"
 
+  You should get
 
+  .. code-block:: shell
 
-7. Send a command to the left wheel
+    response:
+    std_srvs.srv.SetBool_Response(success=True, message='')
 
-.. code-block:: shell
-  ros2 topic pub -1 /pid_controller_left_wheel_joint/reference control_msgs/msg/MultiDOFCommand "{
-    dof_names: ['left_wheel_joint/velocity'],
-    values: [1.0],
-    values_dot: [0.0]
-    }"
+5. To see the pid_controller in action, let's subscribe to the controler_state topic, e.g. pid_controller_left_wheel_joint/controller_state topic.
 
+  .. code-block:: shell
 
-8. Send a command to the right wheel
+    $ ros2 topic echo /pid_controller_left_wheel_joint/controller_state
 
-   .. code-block:: shell
-
-    ros2 topic pub -1 /pid_controller_right_wheel_joint/reference control_msgs/msg/MultiDOFCommand "{
-      dof_names: ['right_wheel_joint/velocity'],
-      values: [1.0],
-      values_dot: [0.0]
-    }"
-
-
-7. Change the fixed frame id for rviz to odom
-
-
-    Look for "Fixed Frame" in the "Global Options" section
-  Click on the frame name
-  Type or select the new frame ID and change it to odom then click on reset button
-
-8.  If everything is fine, now you can send a command to *Diff Drive Controller* using ROS 2 CLI interface:
+6. Now we are ready to send a command to move the robot. Send a command to *Diff Drive Controller* by opening another terminal and executing
 
    .. code-block:: shell
 
-    ros2 topic pub --rate 10 /cmd_vel geometry_msgs/msg/TwistStamped "
+    $ ros2 topic pub --rate 10 /cmd_vel geometry_msgs/msg/TwistStamped "
     twist:
       linear:
         x: 0.7
@@ -206,91 +112,78 @@ Tutorial steps
         y: 0.0
         z: 1.0"
 
-   You should now see an orange box circling in *RViz*.
-   Also, you should see changing states in the terminal where launch file is started.
+  You should now see robot is moving in circles in *RViz*.
 
-   .. code-block:: shell
-
-    [ros2_control_node-1] [INFO] [1721762311.808415917] [controller_manager.resource_manager.hardware_component.system.DiffBot]: Writing commands:
-    [ros2_control_node-1]   command 43.33 for 'left_wheel_joint'!
-    [ros2_control_node-1]   command 50.00 for 'right_wheel_joint'!
-
-6. Let's introspect the ros2_control hardware component. Calling
+7. In the terminal where launch file is started, you should see the commands being sent to the wheels and how they are gradually stabilizing to the target velocity.
 
   .. code-block:: shell
 
-    ros2 control list_hardware_components
+    [ros2_control_node-1] [INFO] [1738648404.508385200] [controller_manager.resource_manager.hardware_component.system.DiffBot]: Writing commands:
+    [ros2_control_node-1] 	command 0.00 for 'right_wheel_joint/velocity'!
+    [ros2_control_node-1] 	command 0.00 for 'left_wheel_joint/velocity'!
 
-  should give you
+    [ros2_control_node-1] [INFO] [1738648405.008399450] [controller_manager.resource_manager.hardware_component.system.DiffBot]: Writing commands:
+    [ros2_control_node-1] 	command 14.55 for 'right_wheel_joint/velocity'!
+    [ros2_control_node-1] 	command 13.17 for 'left_wheel_joint/velocity'!
 
-  .. code-block:: shell
+    [ros2_control_node-1] [INFO] [1738648405.508445448] [controller_manager.resource_manager.hardware_component.system.DiffBot]: Writing commands:
+    [ros2_control_node-1] 	command 49.21 for 'right_wheel_joint/velocity'!
+    [ros2_control_node-1] 	command 44.52 for 'left_wheel_joint/velocity'!
 
-    Hardware Component 1
-            name: DiffBot
-            type: system
-            plugin name: ros2_control_demo_example_16/DiffBotSystemHardware
-            state: id=3 label=active
-            command interfaces
-                    left_wheel_joint/velocity [available] [claimed]
-                    right_wheel_joint/velocity [available] [claimed]
+    [ros2_control_node-1] [INFO] [1738648406.108246536] [controller_manager.resource_manager.hardware_component.system.DiffBot]: Writing commands:
+    [ros2_control_node-1] 	command 49.73 for 'right_wheel_joint/velocity'!
+    [ros2_control_node-1] 	command 43.11 for 'left_wheel_joint/velocity'!
 
-  This shows that the custom hardware interface plugin is loaded and running. If you work on a real
-  robot and don't have a simulator running, it is often faster to use the ``mock_components/GenericSystem``
-  hardware component instead of writing a custom one. Stop the launch file and start it again with
-  an additional parameter
+8. Let's go back to the terminal where we subscribed to the controller_state topic and see the changing states.
 
   .. code-block:: shell
 
-    ros2 launch ros2_control_demo_example_16 diffbot.launch.py use_mock_hardware:=True
+    ---
+    header:
+      stamp:
+        sec: 1738639255
+        nanosec: 743875549
+      frame_id: ''
+    dof_states:
+    - name: left_wheel_joint
+      reference: 0.0
+      feedback: 0.0
+      feedback_dot: 0.0
+      error: 0.0
+      error_dot: 0.0
+      time_step: 0.09971356
+      output: 0.0
 
-  Calling
+    ---
+    header:
+      stamp:
+        sec: 1738639255
+        nanosec: 844169802
+      frame_id: ''
+    dof_states:
+    - name: left_wheel_joint
+      reference: 6.3405774
+      feedback: 0.0
+      feedback_dot: 0.0
+      error: 6.3405774
+      error_dot: 0.0
+      time_step: 0.100294253
+      output: 7.006431313696083
 
-  .. code-block:: shell
-
-    ros2 control list_hardware_components
-
-  now should give you
-
-  .. code-block:: shell
-
-    Hardware Component 1
-        name: DiffBot
-        type: system
-        plugin name: mock_components/GenericSystem
-        state: id=3 label=active
-        command interfaces
-                left_wheel_joint/velocity [available] [claimed]
-                right_wheel_joint/velocity [available] [claimed]
-
-  You see that a different plugin was loaded. Having a look into the `diffbot.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_2/description/ros2_control/diffbot.ros2_control.xacro>`__, one can find the
-  instructions to load this plugin together with the parameter ``calculate_dynamics``.
-
-  .. code-block:: xml
-
-    <hardware>
-      <plugin>mock_components/GenericSystem</plugin>
-      <param name="calculate_dynamics">true</param>
-    </hardware>
-
-  This enables the integration of the velocity commands to the position state interface, which can be
-  checked by means of ``ros2 topic echo /joint_states``: The position values are increasing over time if the robot is moving.
-  You now can test the setup with the commands from above, it should work identically as the custom hardware component plugin.
-
-  More information on mock_components can be found in the :ref:`ros2_control documentation <mock_components_userdoc>`.
 
 Files used for this demos
 --------------------------
 
-* Launch file: `diffbot.launch.py <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_2/bringup/launch/diffbot.launch.py>`__
-* Controllers yaml: `diffbot_controllers.yaml <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_2/bringup/config/diffbot_controllers.yaml>`__
-* URDF file: `diffbot.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_2/description/urdf/diffbot.urdf.xacro>`__
+* Launch file: `diffbot.launch.py <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_16/bringup/launch/diffbot.launch.py>`__
+* Controllers yaml: `diffbot_chained_controllers.yaml <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_16/config/diffbot_chained_controllers.yaml>`__
+* URDF file: `diffbot.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_16/description/urdf/diffbot.urdf.xacro>`__
 
   * Description: `diffbot_description.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/ros2_control_demo_description/diffbot/urdf/diffbot_description.urdf.xacro>`__
-  * ``ros2_control`` tag: `diffbot.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_2/description/ros2_control/diffbot.ros2_control.xacro>`__
+  * ``ros2_control`` tag: `diffbot.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_16/description/ros2_control/diffbot.ros2_control.xacro>`__
 
 * RViz configuration: `diffbot.rviz <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/ros2_control_demo_description/diffbot/rviz/diffbot.rviz>`__
 
-* Hardware interface plugin: `diffbot_system.cpp <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_2/hardware/diffbot_system.cpp>`__
+* Hardware interface plugin: `diffbot_system.cpp <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_16/hardware/diffbot_system.cpp>`__
 
 
 Controllers from this demo
@@ -299,7 +192,3 @@ Controllers from this demo
 * ``Joint State Broadcaster`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/{REPOS_FILE_BRANCH}/joint_state_broadcaster>`__): :ref:`doc <joint_state_broadcaster_userdoc>`
 * ``Diff Drive Controller`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/{REPOS_FILE_BRANCH}/diff_drive_controller>`__): :ref:`doc <diff_drive_controller_userdoc>`
 * ``pid_controller`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/{REPOS_FILE_BRANCH}/pid_controller>`__): :ref:`doc <pid_controller_userdoc>`
-
-References
---------------------------
-https://github.com/ros-controls/roscon_advanced_workshop/blob/9-chaining-controllers/solution/controlko_bringup/config/rrbot_chained_controllers.yaml

@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.conditions import IfCondition
@@ -77,7 +78,7 @@ def generate_launch_description():
         ]
     )
     robot_description = {"robot_description": robot_description_content}
-    
+
     rviz_config_file = PathJoinSubstitution(
         [FindPackageShare(description_package), "diffbot/rviz", "diffbot_view.rviz"]
     )
@@ -93,8 +94,8 @@ def generate_launch_description():
         output="both",
         parameters=[robot_description],
     )
-    
-    # start rviz2 with intial fixed frame id as base_link
+
+    # start rviz2 with initial fixed frame id as base_link
     rviz_node = Node(
         package="rviz2",
         executable="rviz2",

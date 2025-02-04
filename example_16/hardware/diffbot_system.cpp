@@ -201,8 +201,8 @@ hardware_interface::return_type ros2_control_demo_example_16 ::DiffBotSystemHard
   ss << "Writing commands:";
   for (const auto & [name, descr] : joint_command_interfaces_)
   {
-    // Simulate sending commands to the hardware
-    set_state(name, get_command(name));
+    // Simulate sending commands to the hardware with a slow down factor
+    set_state(name, get_command(name) * 0.8);
 
     ss << std::fixed << std::setprecision(2) << std::endl
        << "\t" << "command " << get_command(name) << " for '" << name << "'!";

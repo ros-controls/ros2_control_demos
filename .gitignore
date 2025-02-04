@@ -1,2 +1,4 @@
 .ccache
 .work
+/.vscode
+*.pyc

@@ -12,14 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
-# Author: Julia Jia
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, RegisterEventHandler
-from launch.conditions import IfCondition, UnlessCondition
+from launch.conditions import IfCondition
 from launch.event_handlers import OnProcessExit
-from launch.substitutions import Command, FindExecutable, PathJoinSubstitution, LaunchConfiguration, TextSubstitution
+from launch.substitutions import (
+    Command,
+    FindExecutable,
+    PathJoinSubstitution,
+    LaunchConfiguration,
+)
 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
@@ -119,7 +122,7 @@ def generate_launch_description():
             robot_controllers,
         ],
     )
-    
+
     # start the base controller in inactive mode
     robot_base_controller_spawner = Node(
         package="controller_manager",

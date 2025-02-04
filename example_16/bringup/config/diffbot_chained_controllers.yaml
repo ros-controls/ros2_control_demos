@@ -30,8 +30,8 @@ pid_controller_left_wheel_joint:
       - velocity
 
     gains:
-      left_wheel_joint: {"p": 1.0, "i": 0.5, "d": 0.2, "i_clamp_min": -2.0, "i_clamp_max": 2.0, "antiwindup": true}
-
+      # control the velocity, no d term
+      left_wheel_joint: {"p": 0.15, "i": 0.05, "d": 0.0, "i_clamp_min": -2.0, "i_clamp_max": 2.0, "antiwindup": true, "feedforward_gain": 0.95}
 
 pid_controller_right_wheel_joint:
   ros__parameters:
@@ -45,8 +45,8 @@ pid_controller_right_wheel_joint:
       - velocity
 
     gains:
-      right_wheel_joint: {"p": 1.0, "i": 0.5, "d": 0.2, "i_clamp_min": -2.0, "i_clamp_max": 2.0, "antiwindup": true}
-
+      # control the velocity, no d term
+      right_wheel_joint: {"p": 0.15, "i": 0.05, "d": 0.0, "i_clamp_min": -2.0, "i_clamp_max": 2.0, "antiwindup": true, "feedforward_gain": 0.95}
 
 diffbot_base_controller:
   ros__parameters:
