@@ -123,7 +123,6 @@ def generate_launch_description():
         ],
     )
 
-    # start the base controller in inactive mode
     robot_base_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
@@ -133,10 +132,6 @@ def generate_launch_description():
             robot_controllers,
             "--controller-ros-args",
             "-r /diffbot_base_controller/cmd_vel:=/cmd_vel",
-            # "--inactive",
-            "--ros-args",
-            "--log-level",
-            "debug",
         ],
     )
 
