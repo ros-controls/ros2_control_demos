@@ -81,7 +81,7 @@ Tutorial steps
 
   .. code-block:: shell
 
-    ros2 service call /pid_controller_left_wheel_joint/set_feedforward_control std_srvs/srv/SetBool "data: true" \
+    ros2 service call /pid_controller_left_wheel_joint/set_feedforward_control std_srvs/srv/SetBool "data: true" && \
     ros2 service call /pid_controller_right_wheel_joint/set_feedforward_control std_srvs/srv/SetBool "data: true"
 
   You should get
