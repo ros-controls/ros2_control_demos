@@ -36,7 +36,7 @@ Tutorial steps
 
    .. code-block:: shell
 
-    $ ros2 control list_controllers
+    ros2 control list_controllers
 
    You should get
 
@@ -51,7 +51,7 @@ Tutorial steps
 
    .. code-block:: shell
 
-      $ ros2 control list_hardware_interfaces
+    ros2 control list_hardware_interfaces
 
   You should get
 
@@ -81,8 +81,8 @@ Tutorial steps
 
   .. code-block:: shell
 
-    $ ros2 service call /pid_controller_left_wheel_joint/set_feedforward_control std_srvs/srv/SetBool "data: true"
-    $ ros2 service call /pid_controller_right_wheel_joint/set_feedforward_control std_srvs/srv/SetBool "data: true"
+    ros2 service call /pid_controller_left_wheel_joint/set_feedforward_control std_srvs/srv/SetBool "data: true" \
+    ros2 service call /pid_controller_right_wheel_joint/set_feedforward_control std_srvs/srv/SetBool "data: true"
 
   You should get
 
@@ -95,13 +95,13 @@ Tutorial steps
 
   .. code-block:: shell
 
-    $ ros2 topic echo /pid_controller_left_wheel_joint/controller_state
+    ros2 topic echo /pid_controller_left_wheel_joint/controller_state
 
 6. Now we are ready to send a command to move the robot. Send a command to *Diff Drive Controller* by opening another terminal and executing
 
    .. code-block:: shell
 
-    $ ros2 topic pub --rate 10 /cmd_vel geometry_msgs/msg/TwistStamped "
+    ros2 topic pub --rate 10 /cmd_vel geometry_msgs/msg/TwistStamped "
     twist:
       linear:
         x: 0.7
