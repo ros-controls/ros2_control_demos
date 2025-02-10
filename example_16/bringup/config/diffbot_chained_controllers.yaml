@@ -14,9 +14,6 @@ controller_manager:
     diffbot_base_controller:
       type: diff_drive_controller/DiffDriveController
 
-    forward_velocity_controller_for_debug:
-      type: forward_command_controller/ForwardCommandController
-
 
 pid_controller_left_wheel_joint:
   ros__parameters:
@@ -92,10 +89,3 @@ diffbot_base_controller:
     angular.z.min_acceleration: -1.0
     angular.z.max_jerk: .NAN
     angular.z.min_jerk: .NAN
-
-forward_velocity_controller_for_debug:
-  ros__parameters:
-    joints:
-      - pid_controller_left_wheel_joint/left_wheel_joint
-      - pid_controller_right_wheel_joint/right_wheel_joint
-    interface_name: velocity

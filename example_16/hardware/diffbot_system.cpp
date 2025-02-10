@@ -176,7 +176,6 @@ hardware_interface::return_type DiffBotSystemHardware::read(
   {
     if (descr.get_interface_name() == hardware_interface::HW_IF_POSITION)
     {
-      // Simulate DiffBot wheels's movement as a first-order system
       // Update the joint status: this is a revolute joint without any limit.
       // Simply integrates
       auto velo = get_command(descr.get_prefix_name() + "/" + hardware_interface::HW_IF_VELOCITY);
@@ -202,6 +201,7 @@ hardware_interface::return_type ros2_control_demo_example_16 ::DiffBotSystemHard
   for (const auto & [name, descr] : joint_command_interfaces_)
   {
     // Simulate sending commands to the hardware with a slow down factor
+    // to show-case the PID action
     set_state(name, get_command(name) * 0.8);
 
     ss << std::fixed << std::setprecision(2) << std::endl

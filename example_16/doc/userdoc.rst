@@ -6,11 +6,9 @@
 DiffBot with Chained Controllers
 ********************************
 
-*DiffBot*, or ''Differential Mobile Robot'', is a simple mobile base with differential drive. The robot is basically a box moving according to differential drive kinematics.
+This example shows how to create chained controllers using diff_drive_controller and pid_controllers to control a differential drive robot. It extends *example_2*. If you haven't already, you can find the instructions for *example_2* in :ref:`ros2_control_demos_example_2_userdoc`. It is recommended to follow the steps given in that tutorial first before proceeding with this one.
 
-This example extends *example_2* by demonstrating controller chaining with a diff_drive_controller and two pid_controllers (one for each wheel) to achieve coordinated robot motion. If you haven't already, you can find the instructions for *example_2* in :ref:`ros2_control_demos_example_2_userdoc`. It is recommended to follow the steps given in that tutorial first before proceeding with this one.
-
-This example demonstrates controller chaining as described in the `ROS2 controller manager chaining documentation <https://github.com/ros-controls/ros2_control/blob/master/controller_manager/doc/controller_chaining.rst?plain=1>`__. The control chain flows from the diff_drive_controller through two PID controllers to the DiffBot hardware. The diff_drive_controller converts desired robot twist into wheel velocity commands, which are then processed by the PID controllers to directly control the wheel velocities. Additionally, this example shows how to enable the feedforward mode for the PID controllers.
+This example demonstrates controller chaining as described in :ref:`controller_chaining`. The control chain flows from the diff_drive_controller through two PID controllers to the DiffBot hardware. The diff_drive_controller converts desired robot twist into wheel velocity commands, which are then processed by the PID controllers to directly control the wheel velocities. Additionally, this example shows how to enable the feedforward mode for the PID controllers.
 
 The *DiffBot* URDF files can be found in ``description/urdf`` folder.
 

@@ -69,7 +69,6 @@ class TestFixture(unittest.TestCase):
         check_node_running(self.node, "robot_state_publisher")
 
     def test_controller_running(self, proc_output):
-        # disable this test for now, as the activation of the diffbot_base_controller fails
         cnames = [
             "pid_controller_left_wheel_joint",
             "pid_controller_right_wheel_joint",
