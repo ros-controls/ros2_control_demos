@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="diffbot_ros2_control" params="name prefix use_mock_hardware">
+
+    <ros2_control name="${name}" type="system">
+      <xacro:unless value="${use_mock_hardware}">
+        <hardware>
+          <plugin>ros2_control_demo_example_2/DiffBotSystemHardware</plugin>
+          <param name="example_param_hw_start_duration_sec">0</param>
+          <param name="example_param_hw_stop_duration_sec">3.0</param>
+        </hardware>
+      </xacro:unless>
+      <xacro:if value="${use_mock_hardware}">
+        <hardware>
+          <plugin>mock_components/GenericSystem</plugin>
+          <param name="calculate_dynamics">true</param>
+        </hardware>
+      </xacro:if>
+      <joint name="${prefix}left_wheel_joint">
+        <command_interface name="velocity"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
+      <joint name="${prefix}right_wheel_joint">
+        <command_interface name="velocity"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
+    </ros2_control>
+
+  </xacro:macro>
+
+</robot>

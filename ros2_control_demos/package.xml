@@ -1,18 +1,20 @@
 <?xml version="1.0"?>
 <package format="3">
-  <name>uwrt_ros2_control</name>
-  <version>0.1.0</version>
-  <description>Metapackage for `ros2_control` packages</description>
+  <name>ros2_control_demos</name>
+  <version>0.0.0</version>
+  <description>Metapackage for `ros2_control` demos packages</description>
 
-  <author email="y29lin@uwaterloo.ca">Yuchen Lin</author>
+  <author email="denis@stogl.de">Denis Štogl</author>
 
-  <maintainer email="y29lin@uwaterloo.ca">Yuchen Lin</maintainer>
+  <maintainer email="denis@stogl.de">Denis Štogl</maintainer>
+  <maintainer email="bence.magyar.robotics@gmail.com">Bence Magyar</maintainer>
+  <maintainer email="christoph.froehlich@ait.ac.at">Christoph Froehlich</maintainer>
 
   <license>Apache-2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
-  <exec_depend>drivetrain</exec_depend>
+  <exec_depend>ros2_control_demo_example_2</exec_depend>
 
   <export>
     <build_type>ament_cmake</build_type>
