@@ -1,3 +1,14 @@
+# Todo:
+write a sub for decoding the message published
+
+## command for setup:
+''' bash
+docker build . -t ros2_control_demos -f Dockerfile/Dockerfile
+
+docker run -it --rm --name ros2_control_demos --net host ros2_control_demos ros2 launch ros2_control_demo_example_2 diffbot.launch.py
+'''
+
+
 # ros2_control Demos
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
