@@ -1,34 +1,18 @@
 <?xml version="1.0"?>
 <package format="3">
-  <name>ros2_control_demos</name>
-  <version>0.0.0</version>
-  <description>Metapackage for `ros2_control` demos packages</description>
+  <name>uwrt_ros2_control</name>
+  <version>0.1.0</version>
+  <description>Metapackage for `ros2_control` packages</description>
 
-  <author email="denis@stogl.de">Denis Štogl</author>
+  <author email="y29lin@uwaterloo.ca">Yuchen Lin</author>
 
-  <maintainer email="denis@stogl.de">Denis Štogl</maintainer>
-  <maintainer email="bence.magyar.robotics@gmail.com">Bence Magyar</maintainer>
-  <maintainer email="christoph.froehlich@ait.ac.at">Christoph Froehlich</maintainer>
+  <maintainer email="y29lin@uwaterloo.ca">Yuchen Lin</maintainer>
 
   <license>Apache-2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
-  <exec_depend>ros2_control_demo_example_1</exec_depend>
-  <exec_depend>ros2_control_demo_example_2</exec_depend>
-  <exec_depend>ros2_control_demo_example_3</exec_depend>
-  <exec_depend>ros2_control_demo_example_4</exec_depend>
-  <exec_depend>ros2_control_demo_example_5</exec_depend>
-  <exec_depend>ros2_control_demo_example_6</exec_depend>
-  <exec_depend>ros2_control_demo_example_7</exec_depend>
-  <exec_depend>ros2_control_demo_example_8</exec_depend>
-  <exec_depend>ros2_control_demo_example_9</exec_depend>
-  <exec_depend>ros2_control_demo_example_10</exec_depend>
-  <exec_depend>ros2_control_demo_example_11</exec_depend>
-  <exec_depend>ros2_control_demo_example_12</exec_depend>
-  <exec_depend>ros2_control_demo_example_13</exec_depend>
-  <exec_depend>ros2_control_demo_example_14</exec_depend>
-  <exec_depend>ros2_control_demo_example_15</exec_depend>
+  <exec_depend>drivetrain</exec_depend>
 
   <export>
     <build_type>ament_cmake</build_type>

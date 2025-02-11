@@ -1,9 +1,0 @@
-<library path="ros2_control_demo_example_6">
-  <class name="ros2_control_demo_example_6/RRBotModularJoint"
-         type="ros2_control_demo_example_6::RRBotModularJoint"
-         base_class_type="hardware_interface::ActuatorInterface">
-    <description>
-      The ros2_control robot with 2 separate actuators which can be controlled by 2 different endpoints.
-    </description>
-  </class>
-</library>
