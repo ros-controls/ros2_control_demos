@@ -282,3 +282,4 @@ Examples
    Example 13: Multiple robots <../example_13/doc/userdoc.rst>
    Example 14: Modular robots with actuators not providing states <../example_14/doc/userdoc.rst>
    Example 15: Using multiple controller managers <../example_15/doc/userdoc.rst>
+   Example 16: DiffBot with chained controllers <../example_16/doc/userdoc.rst>
