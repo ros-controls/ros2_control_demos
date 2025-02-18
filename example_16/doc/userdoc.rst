@@ -10,6 +10,8 @@ This example shows how to create chained controllers using diff_drive_controller
 
 This example demonstrates controller chaining as described in :ref:`controller_chaining`. The control chain flows from the diff_drive_controller through two PID controllers to the DiffBot hardware. The diff_drive_controller converts desired robot twist into wheel velocity commands, which are then processed by the PID controllers to directly control the wheel velocities. Additionally, this example shows how to enable the feedforward mode for the PID controllers.
 
+Furthermore, this example shows how to use plotjuggler to visualize the controller states.
+
 The *DiffBot* URDF files can be found in ``description/urdf`` folder.
 
 .. include:: ../../doc/run_from_docker.rst
@@ -24,11 +26,11 @@ Tutorial steps
 
     ros2 launch ros2_control_demo_example_16 diffbot.launch.py
 
-   The launch file loads and starts the robot hardware, controllers and opens *RViz*.
-   In the starting terminal you will see a lot of output from the hardware implementation showing its internal states.
-   This excessive printing is only added for demonstration. In general, printing to the terminal should be avoided as much as possible in a hardware interface implementation.
+  The launch file loads and starts the robot hardware, controllers and opens *RViz*.
+  In the starting terminal you will see a lot of output from the hardware implementation showing its internal states.
+  This excessive printing is only added for demonstration. In general, printing to the terminal should be avoided as much as possible in a hardware interface implementation.
 
-   If you can see an orange box in *RViz* everything has started properly. Let's introspect the control system before moving *DiffBot*.
+  If you can see an orange box in *RViz* everything has started properly. Let's introspect the control system before moving *DiffBot*.
 
 2. Check controllers
 
@@ -36,7 +38,7 @@ Tutorial steps
 
     ros2 control list_controllers
 
-   You should get
+  You should get
 
    .. code-block:: shell
 
@@ -112,25 +114,24 @@ Tutorial steps
 
   You should now see robot is moving in circles in *RViz*.
 
-7. In the terminal where launch file is started, you should see the commands being sent to the wheels and how they are gradually stabilizing to the target velocity.
+7. In the terminal where launch file is started, you should see the commands being sent to the wheels and how they are gradually stabilizing to the target velocity similar to following output.
 
   .. code-block:: shell
 
-    [ros2_control_node-1] [INFO] [1738648404.508385200] [controller_manager.resource_manager.hardware_component.system.DiffBot]: Writing commands:
-    [ros2_control_node-1] 	command 0.00 for 'right_wheel_joint/velocity'!
-    [ros2_control_node-1] 	command 0.00 for 'left_wheel_joint/velocity'!
+    [ros2_control_node-1] [WARN] [1739860498.298085087] [diffbot_base_controller]: Received TwistStamped with zero timestamp, setting it to current time, this message will only be shown once
+    [ros2_control_node-1] [INFO] [1739860498.634431841] [controller_manager.resource_manager.hardware_component.system.DiffBot]: Reading states:
+    [ros2_control_node-1] 	 position 5.78 and velocity 27.52 for 'right_wheel_joint/position'!
+    [ros2_control_node-1] 	 position 5.23 and velocity 24.90 for 'left_wheel_joint/position'!
+    [ros2_control_node-1] [INFO] [1739860498.634800954] [controller_manager.resource_manager.hardware_component.system.DiffBot]: Writing commands:
+    [ros2_control_node-1] 	command 35.55 for 'right_wheel_joint/velocity'!
+    [ros2_control_node-1] 	command 32.16 for 'left_wheel_joint/velocity'!
+    [ros2_control_node-1] [INFO] [1739860499.234393780] [controller_manager.resource_manager.hardware_component.system.DiffBot]: Reading states:
+    [ros2_control_node-1] 	 position 36.99 and velocity 60.61 for 'right_wheel_joint/position'!
+    [ros2_control_node-1] 	 position 33.19 and velocity 53.17 for 'left_wheel_joint/position'!
+    [ros2_control_node-1] [INFO] [1739860499.234812092] [controller_manager.resource_manager.hardware_component.system.DiffBot]: Writing commands:
+    [ros2_control_node-1] 	command 60.53 for 'right_wheel_joint/velocity'!
+    [ros2_control_node-1] 	command 52.27 for 'left_wheel_joint/velocity'!
 
-    [ros2_control_node-1] [INFO] [1738648405.008399450] [controller_manager.resource_manager.hardware_component.system.DiffBot]: Writing commands:
-    [ros2_control_node-1] 	command 14.55 for 'right_wheel_joint/velocity'!
-    [ros2_control_node-1] 	command 13.17 for 'left_wheel_joint/velocity'!
-
-    [ros2_control_node-1] [INFO] [1738648405.508445448] [controller_manager.resource_manager.hardware_component.system.DiffBot]: Writing commands:
-    [ros2_control_node-1] 	command 49.21 for 'right_wheel_joint/velocity'!
-    [ros2_control_node-1] 	command 44.52 for 'left_wheel_joint/velocity'!
-
-    [ros2_control_node-1] [INFO] [1738648406.108246536] [controller_manager.resource_manager.hardware_component.system.DiffBot]: Writing commands:
-    [ros2_control_node-1] 	command 49.73 for 'right_wheel_joint/velocity'!
-    [ros2_control_node-1] 	command 43.11 for 'left_wheel_joint/velocity'!
 
 8. Let's go back to the terminal where we subscribed to the controller_state topic and see the changing states.
 
@@ -139,37 +140,87 @@ Tutorial steps
     ---
     header:
       stamp:
-        sec: 1738639255
-        nanosec: 743875549
+        sec: 1739860821
+        nanosec: 314185285
       frame_id: ''
     dof_states:
     - name: left_wheel_joint
-      reference: 0.0
-      feedback: 0.0
+      reference: 18.967273133333336
+      feedback: 13.294059091678035
       feedback_dot: 0.0
-      error: 0.0
+      error: 5.673214041655301
       error_dot: 0.0
-      time_step: 0.09971356
-      output: 0.0
-
+      time_step: 0.100077098
+      output: 24.857442270936623
     ---
     header:
       stamp:
-        sec: 1738639255
-        nanosec: 844169802
+        sec: 1739860821
+        nanosec: 414126639
       frame_id: ''
     dof_states:
     - name: left_wheel_joint
-      reference: 6.3405774
-      feedback: 0.0
+      reference: 25.296198783333335
+      feedback: 19.8859538167493
       feedback_dot: 0.0
-      error: 6.3405774
+      error: 5.410244966584035
       error_dot: 0.0
-      time_step: 0.100294253
-      output: 7.006431313696083
+      time_step: 0.099941354
+      output: 32.090205119481226
 
 
-Files used for this demos
+Visualize the convergence of DiffBot's wheel velocities and commands
+---------------------------------------------------------------------
+
+In the section below, we will use *plotjuggler* to observe the convergence of DiffBot's wheel velocities and commands from PID controllers.
+
+*plotjuggler* is an open-source data visualization tool and widely embraced by ROS2 community. If you don't have it installed, you can find the instructions from `plotjuggler website <https://github.com/facontidavide/PlotJuggler>`__.
+
+
+Before we proceed, we stop all previous steps from terminal and start from the beginning.
+
+1. To start *DiffBot* example open a terminal, source your ROS2-workspace and execute its launch file with
+
+   .. code-block:: shell
+
+    ros2 launch ros2_control_demo_example_16 diffbot.launch.py
+
+Like before, if you can see an orange box in *RViz*, everything has started properly.
+
+2. To start the plotjuggler with a provided layout file, open another terminal and execute
+
+   .. code-block:: shell
+
+    ros2 launch ros2_control_demo_example_16 plotjuggler.launch.py
+
+After this, you will see a few dialogs popping up. For example:
+
+   .. code-block:: shell
+
+    Start the previously used streaming plugin?
+
+    ROS2 Topic Subscriber
+
+Click 'Yes' for the first dialog and 'OK" to the follow two dialogs, then you will see the plotjuggler window.
+
+3. To enable feedforward mode and published a command to move the robot, instead of doing these manually, we will use the demo_test.launch.py. Open another terminal and execute
+
+   .. code-block:: shell
+
+    ros2 launch ros2_control_demo_example_16 demo_test.launch.py
+
+4. From the plotjuggler, you can see the controllers' states and commands being plotted, similar to following figure. From the figure, the DiffBot's wheel velocities and commands from PID controllers are converged to the target velocity fairly quickly.
+
+  .. image:: /images/example_16/plotjuggler_controller_states.png
+    :align: center
+    :alt: Visualization via Plotjuggler
+
+  TODO: add png here.
+
+5. Change the ``gains`` in the ``diffbot_chained_controllers.yaml`` file with different p, i, d values, repeat above steps to see the effect of feedforward mode.
+
+
+Files used for this demo
 --------------------------
 
 * Launch file: `diffbot.launch.py <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_16/bringup/launch/diffbot.launch.py>`__

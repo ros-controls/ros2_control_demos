@@ -28,7 +28,7 @@ pid_controller_left_wheel_joint:
 
     gains:
       # control the velocity, no d term
-      left_wheel_joint: {"p": 0.15, "i": 0.05, "d": 0.0, "i_clamp_min": -2.0, "i_clamp_max": 2.0, "antiwindup": true, "feedforward_gain": 0.95}
+      left_wheel_joint: {"p": 0.5, "i": 2.5, "d": 0.0, "i_clamp_min": -20.0, "i_clamp_max": 20.0, "antiwindup": true, "feedforward_gain": 0.95}
 
 pid_controller_right_wheel_joint:
   ros__parameters:
@@ -43,7 +43,7 @@ pid_controller_right_wheel_joint:
 
     gains:
       # control the velocity, no d term
-      right_wheel_joint: {"p": 0.15, "i": 0.05, "d": 0.0, "i_clamp_min": -2.0, "i_clamp_max": 2.0, "antiwindup": true, "feedforward_gain": 0.95}
+      right_wheel_joint: {"p": 0.5, "i": 2.5, "d": 0.0, "i_clamp_min": -20.0, "i_clamp_max": 20.0, "antiwindup": true, "feedforward_gain": 0.95}
 
 diffbot_base_controller:
   ros__parameters:
@@ -72,7 +72,8 @@ diffbot_base_controller:
     enable_odom_tf: true
 
     cmd_vel_timeout: 0.5
-    #publish_limited_velocity: true
+    # set publish_limited_velocity to true for visualization
+    publish_limited_velocity: true
     #velocity_rolling_window_size: 10
 
     # Velocity and acceleration limits
