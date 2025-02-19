@@ -18,11 +18,23 @@ from launch.substitutions import PathJoinSubstitution
 from launch_ros.substitutions import FindPackageShare
 from launch.actions import ExecuteProcess
 
+
 def generate_launch_description():
 
-    return LaunchDescription([
-        ExecuteProcess(
-            cmd=['python3', PathJoinSubstitution([FindPackageShare("ros2_control_demo_example_16"), "launch", "demo_test_helper.py"])],
-            output='screen'
-        )
-    ])
+    return LaunchDescription(
+        [
+            ExecuteProcess(
+                cmd=[
+                    "python3",
+                    PathJoinSubstitution(
+                        [
+                            FindPackageShare("ros2_control_demo_example_16"),
+                            "launch",
+                            "demo_test_helper.py",
+                        ]
+                    ),
+                ],
+                output="screen",
+            )
+        ]
+    )

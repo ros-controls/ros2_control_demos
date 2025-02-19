@@ -187,11 +187,12 @@ Before we proceed, we stop all previous steps from terminal and start from the b
 
 Like before, if you can see an orange box in *RViz*, everything has started properly.
 
-2. To start the plotjuggler with a provided layout file, open another terminal and execute
+2. To start the plotjuggler with a provided layout file(plotjuggler.xml), open another terminal and run following command.
 
    .. code-block:: shell
 
-    ros2 launch ros2_control_demo_example_16 plotjuggler.launch.py
+    # replace {PARENT_DIR_OF_LAYOUT_FILE} with actual parent directory of the layout file
+    ros2 run plotjuggler plotjuggler --layout {PARENT_DIR_OF_LAYOUT_FILE}/plotjuggler.xml
 
 After this, you will see a few dialogs popping up. For example:
 
@@ -211,9 +212,9 @@ Click 'Yes' for the first dialog and 'OK" to the follow two dialogs, then you wi
 
 4. From the plotjuggler, you can see the controllers' states and commands being plotted, similar to following figure. From the figure, the DiffBot's wheel velocities and commands from PID controllers are converged to the target velocity fairly quickly.
 
-  .. image:: /images/example_16/plotjuggler_controller_states.png
-    :align: center
-    :alt: Visualization via Plotjuggler
+  .. image:: diffbot_velocities.png
+    :width: 400
+    :alt: Plotjuggler visualization of Diffbot velocities and commands
 
   TODO: add png here.
 
@@ -234,6 +235,10 @@ Files used for this demo
 
 * Hardware interface plugin: `diffbot_system.cpp <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_16/hardware/diffbot_system.cpp>`__
 
+* Demo helper utility:
+
+  + demo test helper node: `demo_test_helper.py <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_16/bringup/launch/demo_test_helper.py>`__
+  + demo test launch file: `demo_test.launch.py <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_16/bringup/launch/demo_test.launch.py>`__
 
 Controllers from this demo
 --------------------------

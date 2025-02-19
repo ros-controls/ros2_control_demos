@@ -21,17 +21,25 @@ from std_srvs.srv import SetBool
 
 class DiffbotChainedControllersTest(Node):
     def __init__(self):
-        super().__init__('diffbot_chained_controllers_demo_helper_node')
+        super().__init__("diffbot_chained_controllers_demo_helper_node")
         # Enable feedforward control via service call
-        self.client_left_ = self.create_client(SetBool, '/pid_controller_left_wheel_joint/set_feedforward_control')
-        self.client_right_ = self.create_client(SetBool, '/pid_controller_right_wheel_joint/set_feedforward_control')
-        self.publisher_ = self.create_publisher(TwistStamped, '/cmd_vel', 10)
-      
+        self.client_left_ = self.create_client(
+            SetBool, "/pid_controller_left_wheel_joint/set_feedforward_control"
+        )
+        self.client_right_ = self.create_client(
+            SetBool, "/pid_controller_right_wheel_joint/set_feedforward_control"
+        )
+        self.publisher_ = self.create_publisher(TwistStamped, "/cmd_vel", 10)
+
     def set_feedforward_control(self):
-        while not self.client_left_.wait_for_service(timeout_sec=1.0):    
-            self.get_logger().info('Waiting for left feedforward control service to be available...')
+        while not self.client_left_.wait_for_service(timeout_sec=1.0):
+            self.get_logger().info(
+                "Waiting for left feedforward control service to be available..."
+            )
         while not self.client_right_.wait_for_service(timeout_sec=1.0):
-            self.get_logger().info('Waiting for right feedforward control service to be available...')
+            self.get_logger().info(
+                "Waiting for right feedforward control service to be available..."
+            )
 
         request_left = SetBool.Request()
         request_left.data = True
@@ -39,15 +47,15 @@ class DiffbotChainedControllersTest(Node):
 
         request_right = SetBool.Request()
         request_right.data = True
-        future_right = self.client_right_ .call_async(request_right)
+        future_right = self.client_right_.call_async(request_right)
 
         rclpy.spin_until_future_complete(self, future_left)
         rclpy.spin_until_future_complete(self, future_right)
 
-        self.get_logger().info('Enabled feedforward control for both wheels.')
+        self.get_logger().info("Enabled feedforward control for both wheels.")
 
     def publish_cmd_vel(self, delay=0.1):
-       
+
         twist_msg = TwistStamped()
         twist_msg.twist.linear.x = 0.7
         twist_msg.twist.linear.y = 0.0
@@ -62,9 +70,9 @@ class DiffbotChainedControllersTest(Node):
             time.sleep(delay)
 
 
-if __name__ == '__main__':
-    rclpy.init()   
-    test_node    = DiffbotChainedControllersTest()
+if __name__ == "__main__":
+    rclpy.init()
+    test_node = DiffbotChainedControllersTest()
     test_node.set_feedforward_control()
     test_node.publish_cmd_vel(delay=0.1)
     rclpy.spin(test_node)
