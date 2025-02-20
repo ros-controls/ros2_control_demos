@@ -201,7 +201,7 @@ After this, you will see a few dialogs popping up. For example:
 
     ROS2 Topic Subscriber
 
-Click 'Yes' for the first dialog and 'OK" to the follow two dialogs, then you will see the plotjuggler window.
+Click 'Yes' for the first dialog and 'OK" to the following two dialogs, then you will see the plotjuggler window.
 
 3. To enable feedforward mode and published a command to move the robot, instead of doing these manually, we will use the demo_test.launch.py. Open another terminal and execute
 
