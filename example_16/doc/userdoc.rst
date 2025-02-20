@@ -214,9 +214,7 @@ Click 'Yes' for the first dialog and 'OK" to the follow two dialogs, then you wi
 
   .. image:: diffbot_velocities.png
     :width: 400
-    :alt: Plotjuggler visualization of Diffbot velocities and commands
-
-  TODO: add png here.
+    :alt: Plotjuggler visualization of DiffBot velocities and commands
 
 5. Change the ``gains`` in the ``diffbot_chained_controllers.yaml`` file with different p, i, d values, repeat above steps to see the effect of feedforward mode.
 
