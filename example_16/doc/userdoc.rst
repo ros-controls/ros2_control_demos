@@ -191,8 +191,7 @@ Like before, if you can see an orange box in *RViz*, everything has started prop
 
    .. code-block:: shell
 
-    # replace {PARENT_DIR_OF_LAYOUT_FILE} with actual parent directory of the layout file
-    ros2 run plotjuggler plotjuggler --layout {PARENT_DIR_OF_LAYOUT_FILE}/plotjuggler.xml
+    ros2 run plotjuggler plotjuggler --layout $(ros2 pkg prefix ros2_control_demo_example_16 --share)/config/plotjuggler.xml
 
 After this, you will see a few dialogs popping up. For example:
 
