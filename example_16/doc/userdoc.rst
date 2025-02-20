@@ -215,7 +215,11 @@ Click 'Yes' for the first dialog and 'OK" to the following two dialogs, then you
     :width: 400
     :alt: Plotjuggler visualization of DiffBot velocities and commands
 
-5. Change the ``gains`` in the ``diffbot_chained_controllers.yaml`` file with different p, i, d values, repeat above steps to see the effect of feedforward mode.
+5. Change the ``gains`` in the ``diffbot_chained_controllers.yaml`` file with some different values, repeat above steps and observe its effect to the pid_controller commands. For example, to change the ``feedforward_gain`` of the right wheel to 0.50, you can use the following command:
+
+   .. code-block:: shell
+
+    ros2 param set /pid_controller_right_wheel_joint gains.right_wheel_joint.feedforward_gain 0.50
 
 
 Files used for this demo
