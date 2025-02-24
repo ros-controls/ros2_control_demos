@@ -30,6 +30,7 @@
 
 import os
 import unittest
+import psutil
 import subprocess
 
 from ament_index_python.packages import get_package_share_directory
@@ -349,3 +350,10 @@ class TestDescriptionCraneShutdown(unittest.TestCase):
     def test_exit_codes(self, proc_info):
         """Check if the processes exited normally."""
         launch_testing.asserts.assertExitCodes(proc_info)
+
+    def test_process_running(self):
+        for proc in psutil.process_iter():
+            # check whether the process name matches
+            if "ros2_control_node" in proc.name():
+                print("ros2_control_node found")
+                proc.kill()
