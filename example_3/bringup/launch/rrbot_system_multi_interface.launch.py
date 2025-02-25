@@ -119,6 +119,8 @@ def generate_launch_description():
     control_node = Node(
         package="controller_manager",
         executable="ros2_control_node",
+        # TODO(Christoph Froehlich): Remove once https://github.com/ros-controls/ros2_control_demos/issues/717 is fixed
+        exec_name="ros2_control_node_ex_3",
         parameters=[robot_controllers],
         output="both",
     )
