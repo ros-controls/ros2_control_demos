@@ -39,7 +39,6 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_testing.actions import ReadyToTest
 
 import launch_testing.markers
-import psutil
 import rclpy
 from controller_manager.test_utils import (
     check_controllers_running,
@@ -69,15 +68,6 @@ def generate_test_description():
 class TestFixture(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        # TODO(Christoph Froehlich): Remove once https://github.com/ros-controls/ros2_control_demos/issues/717 is fixed
-        def check_ros2_processes():
-            print("Already running ros2 processes:")
-            for proc in psutil.process_iter(["pid", "name", "cmdline"]):
-                if any("ros2" in cmd for cmd in proc.info["cmdline"]):
-                    print(f"ros2 process: {proc.info} found")
-            print("End check_ros2_processes")
-
-        check_ros2_processes()
         rclpy.init()
 
     @classmethod

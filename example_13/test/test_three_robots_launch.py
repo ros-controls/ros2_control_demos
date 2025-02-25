@@ -351,7 +351,6 @@ class TestDescriptionCraneShutdown(unittest.TestCase):
         """Check if the processes exited normally."""
         launch_testing.asserts.assertExitCodes(proc_info)
 
-    # TODO(Christoph Froehlich): Remove once https://github.com/ros-controls/ros2_control_demos/issues/717 is fixed
     def test_process_running(self):
         for proc in psutil.process_iter():
             # check whether the process name matches
