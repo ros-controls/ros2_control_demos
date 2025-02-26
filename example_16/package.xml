@@ -8,10 +8,11 @@
   <maintainer email="denis.stogl@stoglrobotics.de">Dr.-Ing. Denis Štogl</maintainer>
   <maintainer email="bence.magyar.robotics@gmail.com">Bence Magyar</maintainer>
   <maintainer email="christoph.froehlich@ait.ac.at">Christoph Froehlich</maintainer>
-
-  <author email="denis.stogl@stoglrobotics.de">Dr.-Ing. Denis Štogl</author>
+  <maintainer email="sai.kishor@pal-robotics.com">Sai Kishor Kothakota</maintainer>
 
   <license>Apache-2.0</license>
+
+  <author email="juliajster@gmail.com">Julia Jia</author>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
