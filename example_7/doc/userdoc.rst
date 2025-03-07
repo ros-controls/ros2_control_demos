@@ -346,7 +346,7 @@ The controller plugin for the tutorial robot is a class called ``RobotController
 9. ``on_shutdown``
 
 Note:
-These overrides are optional and only the ``on_configure``,``on_activate`` and ``on_deactivate`` have been used in this example.
+These overrides are optional and only the ``on_configure``, ``on_activate`` and ``on_deactivate`` have been used in this example.
 
 
 
