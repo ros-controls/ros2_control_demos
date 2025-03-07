@@ -344,17 +344,21 @@ Certain interface methods are called during transitions between these states. Du
 
 The following code blocks will explain the requirements for writing a new controller.
 
-The controller plugin for the tutorial robot is a class called ``RobotController`` that inherits from  ``controller_interface::ControllerInterface``. The ``RobotController`` must implement nine public methods. The last six are `managed node <https://design.ros2.org/articles/node_lifecycle.html>`__  transitions callbacks.
+The controller plugin for the tutorial robot is a class called ``RobotController`` that inherits from  ``controller_interface::ControllerInterface``. The ``RobotController`` must implement the following public methods:
 
 1. ``command_interface_configuration``
 2. ``state_interface_configuration``
 3. ``update``
-4. ``on_configure``
-5. ``on_activate``
-6. ``on_deactivate``
-7. ``on_cleanup``
-8. ``on_error``
-9. ``on_shutdown``
+
+The following methods are `managed node <https://design.ros2.org/articles/node_lifecycle.html>`__  transitions callbacks. These overrides are optional and only the ``on_configure``, ``on_activate`` and ``on_deactivate`` have been used in this example.
+The ``on_cleanup`` and ``on_shutdown`` methods are called when the controller's lifecycle node transitions to the shutdown state. They should handle memory deallocation and general cleanup. The ``on_error`` method is invoked if the managed node encounters a failure during a state transition.
+
+1. ``on_configure``
+2. ``on_activate``
+3. ``on_deactivate``
+4. ``on_cleanup``
+5. ``on_error``
+6. ``on_shutdown``
 
 
 .. code-block:: c++
@@ -368,9 +372,6 @@ The controller plugin for the tutorial robot is a class called ``RobotController
       controller_interface::CallbackReturn on_configure(const rclcpp_lifecycle::State &previous_state) override;
       controller_interface::CallbackReturn on_activate(const rclcpp_lifecycle::State &previous_state) override;
       controller_interface::CallbackReturn on_deactivate(const rclcpp_lifecycle::State &previous_state) override;
-      controller_interface::CallbackReturn on_cleanup(const rclcpp_lifecycle::State &previous_state) override;
-      controller_interface::CallbackReturn on_error(const rclcpp_lifecycle::State &previous_state) override;
-      controller_interface::CallbackReturn on_shutdown(const rclcpp_lifecycle::State &previous_state) override;
   // private members
   // ...
   }
@@ -451,36 +452,6 @@ The ``on_deactivate`` is called when a controller stops running. It is important
       // The controller should be properly shutdown during this
       // ...
       return CallbackReturn::SUCCESS;
-  }
-
-The ``on_cleanup`` and ``on_shutdown`` are called when the controller's lifecycle node is transitioning to shutting down. Freeing any allocated memory and general cleanup should be done in these methods.
-
-.. code-block:: c++
-
-  controller_interface::CallbackReturn on_cleanup(const rclcpp_lifecycle::State &previous_state){
-    // Callback function for cleanup transition
-    // ...
-    return CallbackReturn::SUCCESS;
-  }
-
-
-.. code-block:: c++
-
-  controller_interface::CallbackReturn on_shutdown(const rclcpp_lifecycle::State &previous_state){
-    // Callback function for shutdown transition
-    // ...
-    return CallbackReturn::SUCCESS;
-  }
-
-
-The ``on_error`` method is called if the managed node fails a state transition. This should generally never happen.
-
-.. code-block:: c++
-
-  controller_interface::CallbackReturn on_error(const rclcpp_lifecycle::State &previous_state){
-    // Callback function for erroneous transition
-    // ...
-    return CallbackReturn::SUCCESS;
   }
 
 
