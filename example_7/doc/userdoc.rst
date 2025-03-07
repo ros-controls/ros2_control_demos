@@ -333,7 +333,7 @@ Certain interface methods are called during transitions between these states. Du
 
 The following code blocks will explain the requirements for writing a new controller.
 
-The controller plugin for the tutorial robot is a class called ``RobotController`` that inherits from  ``controller_interface::ControllerInterface``. The ``RobotController`` must implement nine public methods. The last six are `managed node <https://design.ros2.org/articles/node_lifecycle.html>`__  transitions callbacks. However there are additional optional overrides.
+The controller plugin for the tutorial robot is a class called ``RobotController`` that inherits from  ``controller_interface::ControllerInterface``. The ``RobotController`` must implement the following public methods:
 
 1. ``command_interface_configuration``
 2. ``state_interface_configuration``
