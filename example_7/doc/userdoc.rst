@@ -338,16 +338,15 @@ The controller plugin for the tutorial robot is a class called ``RobotController
 1. ``command_interface_configuration``
 2. ``state_interface_configuration``
 3. ``update``
-4. ``on_configure``
-5. ``on_activate``
-6. ``on_deactivate``
-7. ``on_cleanup``
-8. ``on_error``
-9. ``on_shutdown``
 
-Note:
-These overrides are optional and only the ``on_configure``, ``on_activate`` and ``on_deactivate`` have been used in this example.
+The following methods are `managed node <https://design.ros2.org/articles/node_lifecycle.html>`__  transitions callbacks. These overrides are optional and only the ``on_configure``, ``on_activate`` and ``on_deactivate`` have been used in this example.The ``on_cleanup`` and ``on_shutdown`` methods are called when the controller's lifecycle node transitions to the shutdown state. They should handle memory deallocation and general cleanup.The ``on_error`` method is invoked if the managed node encounters a failure during a state transition.
 
+1. ``on_configure``
+2. ``on_activate``
+3. ``on_deactivate``
+4. ``on_cleanup``
+5. ``on_error``
+6. ``on_shutdown``
 
 
 .. code-block:: c++
