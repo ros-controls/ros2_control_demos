@@ -181,21 +181,6 @@ controller_interface::CallbackReturn RobotController::on_deactivate(const rclcpp
   return CallbackReturn::SUCCESS;
 }
 
-controller_interface::CallbackReturn RobotController::on_cleanup(const rclcpp_lifecycle::State &)
-{
-  return CallbackReturn::SUCCESS;
-}
-
-controller_interface::CallbackReturn RobotController::on_error(const rclcpp_lifecycle::State &)
-{
-  return CallbackReturn::SUCCESS;
-}
-
-controller_interface::CallbackReturn RobotController::on_shutdown(const rclcpp_lifecycle::State &)
-{
-  return CallbackReturn::SUCCESS;
-}
-
 }  // namespace ros2_control_demo_example_7
 
 #include "pluginlib/class_list_macros.hpp"
