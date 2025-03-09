@@ -428,6 +428,50 @@ Tutorial steps
 
    You can adjust the goals in `rrbot_joint_trajectory_publisher <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_1/bringup/config/rrbot_joint_trajectory_publisher.yaml>`__.
 
+7. Alternatively, you can use the rqt_joint_trajectory_controller GUI to control the robot. First, load and switch to the Joint Trajectory Controller with a single command:
+
+   .. tabs::
+
+      .. group-tab:: Local
+
+        .. code-block:: shell
+
+          ros2 control load_controller joint_trajectory_position_controller --set-state inactive && ros2 control switch_controllers --activate joint_trajectory_position_controller --deactivate forward_position_controller
+
+      .. group-tab:: Docker
+
+        (from the docker terminal, see above)
+
+        .. code-block:: shell
+
+          ros2 control load_controller joint_trajectory_position_controller --set-state inactive && ros2 control switch_controllers --activate joint_trajectory_position_controller --deactivate forward_position_controller
+
+   Then, launch the rqt_joint_trajectory_controller GUI:
+
+   .. tabs::
+
+      .. group-tab:: Local
+
+        .. code-block:: shell
+
+          ros2 run rqt_joint_trajectory_controller rqt_joint_trajectory_controller
+
+      .. group-tab:: Docker
+
+        (from the docker terminal, see above)
+
+        .. code-block:: shell
+
+          ros2 run rqt_joint_trajectory_controller rqt_joint_trajectory_controller
+
+   This will open a graphical interface that allows you to:
+   - Select the controller from a dropdown menu
+   - Set target positions for each joint using sliders
+   - Control the execution time of trajectories
+   - Send the trajectory commands to the robot
+
+   The rqt_joint_trajectory_controller provides an intuitive way to test different joint positions without having to manually construct trajectory messages.
+
 Files used for this demos
 -------------------------
 
