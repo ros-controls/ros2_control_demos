@@ -465,6 +465,7 @@ Tutorial steps
           ros2 run rqt_joint_trajectory_controller rqt_joint_trajectory_controller
 
    This will open a graphical interface that allows you to:
+   
    - Select the controller from a dropdown menu
    - Set target positions for each joint using sliders
    - Control the execution time of trajectories
