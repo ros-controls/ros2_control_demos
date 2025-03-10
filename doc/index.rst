@@ -121,9 +121,9 @@ Download the ``ros2_control_demos`` repository and install its dependencies with
   cd ~/ros2_ws/src
   git clone https://github.com/ros-controls/ros2_control_demos -b {REPOS_FILE_BRANCH}
   cd ~/ros2_ws/
-  rosdep update --rosdistro=$ROS_DISTRO
   sudo apt-get update
-  sudo rosdep install --from-paths ./ -i -y --rosdistro ${ROS_DISTRO}
+  rosdep update --rosdistro=$ROS_DISTRO
+  rosdep install --from-paths ./ -i -y --rosdistro ${ROS_DISTRO}
 
 Now you can build the repository (source your ROS 2 installation first)
 
