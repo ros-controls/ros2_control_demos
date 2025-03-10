@@ -436,7 +436,7 @@ Tutorial steps
 
         .. code-block:: shell
 
-          ros2 control load_controller joint_trajectory_position_controller --set-state inactive && ros2 control switch_controllers --activate joint_trajectory_position_controller --deactivate forward_position_controller
+          ros2 control load_controller joint_trajectory_position_controller $(ros2 pkg prefix ros2_control_demo_example_1 --share)/config/rrbot_jtc.yaml --set-state inactive && ros2 control switch_controllers --activate joint_trajectory_position_controller --deactivate forward_position_controller
 
       .. group-tab:: Docker
 
