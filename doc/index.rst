@@ -85,6 +85,8 @@ Example 14: "Modular robots with actuators not providing states and with additio
 Example 15: "Using multiple controller managers"
    This example shows how to integrate multiple robots under different controller manager instances.
 
+Example 16: "DiffBot with chained controllers"
+   This example shows how to create chained controllers using diff_drive_controller and pid_controllers to control a differential drive robot.
 
 .. _ros2_control_demos_install:
 
@@ -280,3 +282,4 @@ Examples
    Example 13: Multiple robots <../example_13/doc/userdoc.rst>
    Example 14: Modular robots with actuators not providing states <../example_14/doc/userdoc.rst>
    Example 15: Using multiple controller managers <../example_15/doc/userdoc.rst>
+   Example 16: DiffBot with chained controllers <../example_16/doc/userdoc.rst>
