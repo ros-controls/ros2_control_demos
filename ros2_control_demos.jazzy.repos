@@ -2,7 +2,7 @@ repositories:
   control_msgs:
     type: git
     url: https://github.com/ros-controls/control_msgs.git
-    version: master
+    version: jazzy
   realtime_tools:
     type: git
     url: https://github.com/ros-controls/realtime_tools.git
@@ -22,4 +22,4 @@ repositories:
   control_toolbox:
     type: git
     url: https://github.com/ros-controls/control_toolbox.git
-    version: ros2-master
+    version: jazzy
