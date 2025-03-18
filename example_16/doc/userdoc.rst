@@ -8,7 +8,7 @@ DiffBot with Chained Controllers
 
 This example shows how to create chained controllers using diff_drive_controller and pid_controllers to control a differential drive robot. It extends *example_2*. If you haven't already, you can find the instructions for *example_2* in :ref:`ros2_control_demos_example_2_userdoc`. It is recommended to follow the steps given in that tutorial first before proceeding with this one.
 
-This example demonstrates controller chaining as described in `controller_chaining <https://github.com/ros-controls/ros2_control/tree/{REPOS_FILE_BRANCH}/controller_manager/doc/controller_chaining.rst>`__. The control chain flows from the diff_drive_controller through two PID controllers to the DiffBot hardware. The diff_drive_controller converts desired robot twist into wheel velocity commands, which are then processed by the PID controllers to directly control the wheel velocities. Additionally, this example shows how to enable the feedforward mode for the PID controllers.
+This example demonstrates controller chaining as described in :ref:`controller_chaining`. The control chain flows from the diff_drive_controller through two PID controllers to the DiffBot hardware. The diff_drive_controller converts desired robot twist into wheel velocity commands, which are then processed by the PID controllers to directly control the wheel velocities. Additionally, this example shows how to enable the feedforward mode for the PID controllers.
 
 Furthermore, this example shows how to use plotjuggler to visualize the controller states.
 
@@ -185,7 +185,7 @@ Before we proceed, we stop all previous steps from terminal and start from the b
 
     ros2 launch ros2_control_demo_example_16 diffbot.launch.py
 
-Like before, if you can see an orange box in *RViz*, everything has started properly.
+  Like before, if you can see an orange box in *RViz*, everything has started properly.
 
 2. To start the plotjuggler with a provided layout file(plotjuggler.xml), open another terminal and run following command.
 
@@ -193,7 +193,7 @@ Like before, if you can see an orange box in *RViz*, everything has started prop
 
     ros2 run plotjuggler plotjuggler --layout $(ros2 pkg prefix ros2_control_demo_example_16 --share)/config/plotjuggler.xml
 
-After this, you will see a few dialogs popping up. For example:
+  After this, you will see a few dialogs popping up. For example:
 
   .. code-block:: shell
 
@@ -201,7 +201,7 @@ After this, you will see a few dialogs popping up. For example:
 
     ROS2 Topic Subscriber
 
-Click 'Yes' for the first dialog and 'OK" to the following two dialogs, then you will see the plotjuggler window.
+  Click 'Yes' for the first dialog and 'OK" to the following two dialogs, then you will see the plotjuggler window.
 
 3. To enable feedforward mode and published a command to move the robot, instead of doing these manually, we will use the demo_test.launch.py. Open another terminal and execute
 
