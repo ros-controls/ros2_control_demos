@@ -30,4 +30,4 @@ RUN cd /home/ros2_ws/ \
 COPY Dockerfile/entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 
-CMD ros2 launch ros2_control_demo_example_1 rrbot.launch.py start_rviz:=false
+CMD ros2 launch ros2_control_demo_example_1 rrbot.launch.py gui:=false
