@@ -149,6 +149,13 @@ Build from source
     rosdep update --rosdistro=$ROS_DISTRO
     sudo apt-get update
 
+  If you want to install the development version of ros2_control having the latest feature, use this repos file instead
+
+  .. code-block:: shell
+
+    vcs import src --input https://raw.githubusercontent.com/ros-controls/ros2_control_ci/master/ros_controls.rolling-on-$ROS_DISTRO.repos
+
+
 * Install dependencies:
 
   .. code-block:: shell
