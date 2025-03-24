@@ -244,6 +244,12 @@ You can also run other commands or launch files from the docker, e.g.
 
   docker run -it --rm --name ros2_control_demos --net host ros2_control_demos ros2 launch ros2_control_demo_example_2 diffbot.launch.py
 
+or launch a second terminal inside the docker container by
+
+.. code-block:: shell
+
+  docker exec -it ros2_control_demos bash
+
 =====================
 Quick Hints
 =====================
