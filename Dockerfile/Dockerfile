@@ -27,7 +27,7 @@ RUN cd /home/ros2_ws/src \
 
 RUN cd /home/ros2_ws/ \
   && . /opt/ros/${ROS_DISTRO}/setup.sh \
-  && colcon build --symlink-install --packages-up-to ros2_control_demos
+  && colcon build --cmake-args -DBUILD_TESTING=OFF --symlink-install --packages-up-to ros2_control_demos
 
 COPY Dockerfile/entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
