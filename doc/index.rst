@@ -149,6 +149,13 @@ Build from source
     rosdep update --rosdistro=$ROS_DISTRO
     sudo apt-get update
 
+  If you want to install the development version of ros2_control having the latest feature, use this repos file instead
+
+  .. code-block:: shell
+
+    vcs import src --input https://raw.githubusercontent.com/ros-controls/ros2_control_ci/master/ros_controls.rolling-on-$ROS_DISTRO.repos
+
+
 * Install dependencies:
 
   .. code-block:: shell
@@ -243,6 +250,12 @@ You can also run other commands or launch files from the docker, e.g.
 .. code-block:: shell
 
   docker run -it --rm --name ros2_control_demos --net host ros2_control_demos ros2 launch ros2_control_demo_example_2 diffbot.launch.py
+
+or launch a second terminal inside the docker container by
+
+.. code-block:: shell
+
+  docker exec -it ros2_control_demos bash
 
 =====================
 Quick Hints
