@@ -92,11 +92,11 @@ hardware_interface::return_type ExternalRRBotForceTorqueSensorHardware::read(
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   std::stringstream ss;
   ss << "Reading states from sensors:" << std::fixed << std::setprecision(2);
-  size_t i = 0;
+  unsigned int i = 0;
   for (const auto & [name, descr] : sensor_state_interfaces_)
   {
     // Simulate RRBot's sensor data
-    unsigned int seed = time(NULL) + i++;
+    unsigned int seed = static_cast<unsigned int>(time(NULL)) + i++;
     set_state(
       name, static_cast<float>(rand_r(&seed)) / (static_cast<float>(RAND_MAX / hw_sensor_change_)));
 
