@@ -83,7 +83,7 @@ private:
 
   // Fake "mechanical connection" between actuator and sensor using sockets
   struct sockaddr_in address_;
-  int socket_port_;
+  uint16_t socket_port_;
   int address_length_;
   int obj_socket_;
   int sockoptval_ = 1;
