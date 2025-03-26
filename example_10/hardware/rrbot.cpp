@@ -198,7 +198,7 @@ hardware_interface::return_type RRBotSystemWithGPIOHardware::read(
   set_state(
     info_.gpios[0].name + "/" + info_.gpios[0].state_interfaces[1].name,
     static_cast<float>(rand_r(&seed)));
-  seed = time(NULL) + 2;
+  seed = static_cast<unsigned int>(time(NULL)) + 2;
   set_state(
     info_.gpios[0].name + "/" + info_.gpios[0].state_interfaces[2].name,
     static_cast<float>(rand_r(&seed)));
