@@ -15,6 +15,7 @@
   <author email="jordan.palacios@pal-robotics.com">Jordan Palacios</author>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
+  <build_depend>ros2_control_cmake</build_depend>
 
   <depend>backward_ros</depend>
   <depend>hardware_interface</depend>

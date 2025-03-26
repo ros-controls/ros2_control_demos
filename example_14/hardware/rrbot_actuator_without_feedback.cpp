@@ -50,7 +50,8 @@ hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_init(
     hardware_interface::stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
   hw_stop_sec_ =
     hardware_interface::stod(info_.hardware_parameters["example_param_hw_stop_duration_sec"]);
-  socket_port_ = std::stoi(info_.hardware_parameters["example_param_socket_port"]);
+  socket_port_ =
+    static_cast<uint16_t>(std::stoi(info_.hardware_parameters["example_param_socket_port"]));
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   const hardware_interface::ComponentInfo & joint = info_.joints[0];
