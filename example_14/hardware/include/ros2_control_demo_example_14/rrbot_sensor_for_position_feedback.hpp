@@ -40,7 +40,7 @@ namespace ros2_control_demo_example_14
 class RRBotSensorPositionFeedback : public hardware_interface::SensorInterface
 {
 public:
-  RCLCPP_SHARED_PTR_DEFINITIONS(RRBotSensorPositionFeedback);
+  RCLCPP_SHARED_PTR_DEFINITIONS(RRBotSensorPositionFeedback)
 
   hardware_interface::CallbackReturn on_init(
     const hardware_interface::HardwareInfo & info) override;

@@ -36,7 +36,7 @@ namespace ros2_control_demo_example_14
 class RRBotActuatorWithoutFeedback : public hardware_interface::ActuatorInterface
 {
 public:
-  RCLCPP_SHARED_PTR_DEFINITIONS(RRBotActuatorWithoutFeedback);
+  RCLCPP_SHARED_PTR_DEFINITIONS(RRBotActuatorWithoutFeedback)
 
   hardware_interface::CallbackReturn on_init(
     const hardware_interface::HardwareInfo & info) override;

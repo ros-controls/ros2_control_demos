@@ -32,7 +32,7 @@ namespace ros2_control_demo_example_10
 class RRBotSystemWithGPIOHardware : public hardware_interface::SystemInterface
 {
 public:
-  RCLCPP_SHARED_PTR_DEFINITIONS(RRBotSystemWithGPIOHardware);
+  RCLCPP_SHARED_PTR_DEFINITIONS(RRBotSystemWithGPIOHardware)
 
   hardware_interface::CallbackReturn on_init(
     const hardware_interface::HardwareInfo & info) override;

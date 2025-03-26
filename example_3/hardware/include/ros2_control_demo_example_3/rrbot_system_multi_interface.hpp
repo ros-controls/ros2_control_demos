@@ -37,7 +37,7 @@ namespace ros2_control_demo_example_3
 class RRBotSystemMultiInterfaceHardware : public hardware_interface::SystemInterface
 {
 public:
-  RCLCPP_SHARED_PTR_DEFINITIONS(RRBotSystemMultiInterfaceHardware);
+  RCLCPP_SHARED_PTR_DEFINITIONS(RRBotSystemMultiInterfaceHardware)
 
   hardware_interface::CallbackReturn on_init(
     const hardware_interface::HardwareInfo & info) override;
