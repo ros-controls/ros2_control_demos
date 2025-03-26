@@ -48,7 +48,7 @@ int main(int argc, char ** argv)
 
   trajectory_msgs::msg::JointTrajectory trajectory_msg;
   trajectory_msg.header.stamp = node->now();
-  for (size_t i = 0; i < chain.getNrOfSegments(); i++)
+  for (unsigned int i = 0; i < chain.getNrOfSegments(); i++)
   {
     auto joint = chain.getSegment(i).getJoint();
     if (joint.getType() != KDL::Joint::Fixed)
@@ -63,7 +63,7 @@ int main(int argc, char ** argv)
 
   double total_time = 3.0;
   int trajectory_len = 200;
-  int loop_rate = trajectory_len / total_time;
+  int loop_rate = static_cast<int>(std::round(trajectory_len / total_time));
   double dt = 1.0 / loop_rate;
 
   for (int i = 0; i < trajectory_len; i++)
