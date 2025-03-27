@@ -36,11 +36,34 @@ def generate_launch_description():
     # Initialize Arguments
     gui = LaunchConfiguration("gui")
 
+    # gazebo
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            [PathJoinSubstitution([FindPackageShare("gazebo_ros"), "launch", "gazebo.launch.py"])]
+            [FindPackageShare("ros_gz_sim"), "/launch/gz_sim.launch.py"]
         ),
-        launch_arguments={"verbose": "false"}.items(),
+        launch_arguments={"gz_args": " -r -v 3 empty.sdf"}.items(),
+    )
+
+    # Gazebo bridge
+    gazebo_bridge = Node(
+        package="ros_gz_bridge",
+        executable="parameter_bridge",
+        arguments=["/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock"],
+        output="screen",
+    )
+
+    gz_spawn_entity = Node(
+        package="ros_gz_sim",
+        executable="create",
+        output="screen",
+        arguments=[
+            "-topic",
+            "/robot_description",
+            "-name",
+            "rrbot_system_position",
+            "-allow_renaming",
+            "true",
+        ],
     )
 
     # Get URDF via xacro
@@ -52,7 +75,7 @@ def generate_launch_description():
                 [FindPackageShare("ros2_control_demo_example_9"), "urdf", "rrbot.urdf.xacro"]
             ),
             " ",
-            "use_gazebo_classic:=true",
+            "use_gazebo:=true",
         ]
     )
     robot_description = {"robot_description": robot_description_content}
@@ -65,13 +88,6 @@ def generate_launch_description():
         executable="robot_state_publisher",
         output="screen",
         parameters=[robot_description],
-    )
-
-    spawn_entity = Node(
-        package="gazebo_ros",
-        executable="spawn_entity.py",
-        arguments=["-topic", "robot_description", "-entity", "rrbot_system_position"],
-        output="screen",
     )
 
     joint_state_broadcaster_spawner = Node(
@@ -96,8 +112,9 @@ def generate_launch_description():
 
     nodes = [
         gazebo,
+        gazebo_bridge,
         node_robot_state_publisher,
-        spawn_entity,
+        gz_spawn_entity,
         joint_state_broadcaster_spawner,
         robot_controller_spawner,
         rviz_node,
