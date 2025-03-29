@@ -62,15 +62,6 @@ public:
   controller_interface::CallbackReturn on_deactivate(
     const rclcpp_lifecycle::State & previous_state) override;
 
-  controller_interface::CallbackReturn on_cleanup(
-    const rclcpp_lifecycle::State & previous_state) override;
-
-  controller_interface::CallbackReturn on_error(
-    const rclcpp_lifecycle::State & previous_state) override;
-
-  controller_interface::CallbackReturn on_shutdown(
-    const rclcpp_lifecycle::State & previous_state) override;
-
 protected:
   std::vector<std::string> joint_names_;
   std::vector<std::string> command_interface_types_;

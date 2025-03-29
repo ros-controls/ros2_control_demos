@@ -34,7 +34,7 @@ namespace ros2_control_demo_example_5
 class ExternalRRBotForceTorqueSensorHardware : public hardware_interface::SensorInterface
 {
 public:
-  RCLCPP_SHARED_PTR_DEFINITIONS(ExternalRRBotForceTorqueSensorHardware);
+  RCLCPP_SHARED_PTR_DEFINITIONS(ExternalRRBotForceTorqueSensorHardware)
 
   hardware_interface::CallbackReturn on_init(
     const hardware_interface::HardwareInfo & info) override;

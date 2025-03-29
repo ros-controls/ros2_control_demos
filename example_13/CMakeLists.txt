@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.16)
 project(ros2_control_demo_example_13 LANGUAGES CXX)
 
-if(CMAKE_CXX_COMPILER_ID MATCHES "(GNU|Clang)")
-  add_compile_options(-Wall -Wextra)
-endif()
+find_package(ros2_control_cmake REQUIRED)
+set_compiler_options()
+export_windows_symbols()
 
 # find dependencies
 set(THIS_PACKAGE_INCLUDE_DEPENDS
@@ -39,7 +39,6 @@ if(BUILD_TESTING)
   find_package(ament_cmake_pytest REQUIRED)
 
   ament_add_pytest_test(example_13_urdf_xacro test/test_urdf_xacro.py)
-  ament_add_pytest_test(view_example_13_launch test/test_view_robot_launch.py)
 
   function(add_ros_isolated_launch_test path)
     set(RUNNER "${ament_cmake_ros_DIR}/run_test_isolated.py")

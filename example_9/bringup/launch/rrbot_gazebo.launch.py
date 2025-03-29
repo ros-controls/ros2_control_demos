@@ -44,6 +44,14 @@ def generate_launch_description():
         launch_arguments={"gz_args": " -r -v 3 empty.sdf"}.items(),
     )
 
+    # Gazebo bridge
+    gazebo_bridge = Node(
+        package="ros_gz_bridge",
+        executable="parameter_bridge",
+        arguments=["/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock"],
+        output="screen",
+    )
+
     gz_spawn_entity = Node(
         package="ros_gz_sim",
         executable="create",
@@ -113,6 +121,7 @@ def generate_launch_description():
 
     nodes = [
         gazebo,
+        gazebo_bridge,
         node_robot_state_publisher,
         gz_spawn_entity,
         joint_state_broadcaster_spawner,
