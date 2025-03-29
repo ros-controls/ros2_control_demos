@@ -58,7 +58,7 @@ def generate_test_description():
                 "launch/rrbot_gazebo.launch.py",
             )
         ),
-        launch_arguments={"gui": "false", "gz_args": "--headless-rendering -s"}.items(),
+        launch_arguments={"gui": "false"}.items(),
     )
 
     return LaunchDescription([launch_include, ReadyToTest()])

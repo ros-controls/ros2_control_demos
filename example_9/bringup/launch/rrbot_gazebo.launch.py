@@ -14,7 +14,7 @@
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
-from launch.conditions import IfCondition
+from launch.conditions import IfCondition, UnlessCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import Command, FindExecutable, PathJoinSubstitution, LaunchConfiguration
 from launch_ros.actions import Node
@@ -28,28 +28,28 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "gui",
-            default_value="false",
+            default_value="true",
             description="Start RViz2 automatically with this launch file.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "gz_args",
-            default_value="",
-            description="Pass more arguments to gz_sim.",
         )
     )
 
     # Initialize Arguments
     gui = LaunchConfiguration("gui")
-    gz_args = LaunchConfiguration("gz_args", default="")
 
     # gazebo
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             [FindPackageShare("ros_gz_sim"), "/launch/gz_sim.launch.py"]
         ),
-        launch_arguments=[("gz_args", [gz_args, " -r -v 3 empty.sdf"])],
+        launch_arguments=[("gz_args", " -r -v 3 empty.sdf")],
+        condition=IfCondition(gui),
+    )
+    gazebo_headless = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            [FindPackageShare("ros_gz_sim"), "/launch/gz_sim.launch.py"]
+        ),
+        launch_arguments=[("gz_args", ["--headless-rendering -s -r -v 3 empty.sdf"])],
+        condition=UnlessCondition(gui),
     )
 
     # Gazebo bridge
@@ -129,6 +129,7 @@ def generate_launch_description():
 
     nodes = [
         gazebo,
+        gazebo_headless,
         gazebo_bridge,
         node_robot_state_publisher,
         gz_spawn_entity,
