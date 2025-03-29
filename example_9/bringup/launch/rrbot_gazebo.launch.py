@@ -32,16 +32,24 @@ def generate_launch_description():
             description="Start RViz2 automatically with this launch file.",
         )
     )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "gz_args",
+            default_value="",
+            description="Pass more arguments to gz_sim.",
+        )
+    )
 
     # Initialize Arguments
     gui = LaunchConfiguration("gui")
+    gz_args = LaunchConfiguration("gz_args", default="")
 
     # gazebo
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             [FindPackageShare("ros_gz_sim"), "/launch/gz_sim.launch.py"]
         ),
-        launch_arguments={"gz_args": " -r -v 3 empty.sdf"}.items(),
+        launch_arguments=[("gz_args", [gz_args, " -r -v 3 empty.sdf"])],
     )
 
     # Gazebo bridge
