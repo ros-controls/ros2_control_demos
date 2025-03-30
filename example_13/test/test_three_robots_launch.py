@@ -95,8 +95,15 @@ class TestFixture(unittest.TestCase):
             "rrbot_with_sensor_joint_state_broadcaster",
             "rrbot_with_sensor_fts_broadcaster",
         ]
+        check_controllers_running(self.node, cnames, "", "active")
+        cnames = [
+            "rrbot_with_sensor_position_controller",
+            "threedofbot_joint_state_broadcaster",
+            "threedofbot_position_controller",
+            "threedofbot_pid_gain_controller",
+        ]
+        check_controllers_running(self.node, cnames, "", "inactive")
 
-        check_controllers_running(self.node, cnames)
         check_if_js_published(
             "/joint_states",
             [

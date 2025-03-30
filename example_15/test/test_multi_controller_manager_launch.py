@@ -83,14 +83,20 @@ class TestFixture(unittest.TestCase):
     def test_node_start(self, proc_output):
         check_node_running(self.node, "robot_state_publisher")
 
-    def test_controller_running_cm1(self, proc_output):
+    def test_controller_running(self, proc_output):
 
         cnames = [
             "forward_position_controller",
             "joint_state_broadcaster",
         ]
-        check_controllers_running(self.node, cnames, "/rrbot_1")
-        check_controllers_running(self.node, cnames, "/rrbot_2")
+        check_controllers_running(self.node, cnames, "/rrbot_1", "active")
+        check_controllers_running(self.node, cnames, "/rrbot_2", "active")
+
+        cnames = [
+            "position_trajectory_controller",
+        ]
+        check_controllers_running(self.node, cnames, "/rrbot_1", "inactive")
+        check_controllers_running(self.node, cnames, "/rrbot_2", "inactive")
 
     def test_check_if_msgs_published(self):
         check_if_js_published("/rrbot_1/joint_states", ["rrbot_1_joint1", "rrbot_1_joint2"])
