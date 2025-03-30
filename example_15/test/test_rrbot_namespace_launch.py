@@ -89,8 +89,11 @@ class TestFixture(unittest.TestCase):
             "forward_position_controller",
             "joint_state_broadcaster",
         ]
+        check_controllers_running(self.node, cnames, "/rrbot", "active")
 
-        check_controllers_running(self.node, cnames, "/rrbot")
+        check_controllers_running(
+            self.node, ["position_trajectory_controller"], "/rrbot", "inactive"
+        )
 
     def test_check_if_msgs_published(self):
         check_if_js_published("/rrbot/joint_states", ["joint1", "joint2"])
