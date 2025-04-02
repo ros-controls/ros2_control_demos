@@ -157,8 +157,9 @@ RRBotActuatorWithoutFeedback::export_command_interfaces()
 {
   std::vector<hardware_interface::CommandInterface> command_interfaces;
 
-  command_interfaces.emplace_back(hardware_interface::CommandInterface(
-    info_.joints[0].name, hardware_interface::HW_IF_VELOCITY, &hw_joint_command_));
+  command_interfaces.emplace_back(
+    hardware_interface::CommandInterface(
+      info_.joints[0].name, hardware_interface::HW_IF_VELOCITY, &hw_joint_command_));
 
   return command_interfaces;
 }

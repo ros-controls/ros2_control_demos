@@ -142,8 +142,9 @@ RRBotSystemWithGPIOHardware::export_state_interfaces()
   std::vector<hardware_interface::StateInterface> state_interfaces;
   for (uint i = 0; i < info_.joints.size(); i++)
   {
-    state_interfaces.emplace_back(hardware_interface::StateInterface(
-      info_.joints[i].name, hardware_interface::HW_IF_POSITION, &hw_states_[i]));
+    state_interfaces.emplace_back(
+      hardware_interface::StateInterface(
+        info_.joints[i].name, hardware_interface::HW_IF_POSITION, &hw_states_[i]));
   }
 
   RCLCPP_INFO(get_logger(), "State interfaces:");
@@ -153,8 +154,9 @@ RRBotSystemWithGPIOHardware::export_state_interfaces()
   {
     for (auto state_if : info_.gpios.at(i).state_interfaces)
     {
-      state_interfaces.emplace_back(hardware_interface::StateInterface(
-        info_.gpios.at(i).name, state_if.name, &hw_gpio_in_[ct++]));
+      state_interfaces.emplace_back(
+        hardware_interface::StateInterface(
+          info_.gpios.at(i).name, state_if.name, &hw_gpio_in_[ct++]));
       RCLCPP_INFO(
         get_logger(), "Added %s/%s", info_.gpios.at(i).name.c_str(), state_if.name.c_str());
     }
@@ -169,8 +171,9 @@ RRBotSystemWithGPIOHardware::export_command_interfaces()
   std::vector<hardware_interface::CommandInterface> command_interfaces;
   for (uint i = 0; i < info_.joints.size(); i++)
   {
-    command_interfaces.emplace_back(hardware_interface::CommandInterface(
-      info_.joints[i].name, hardware_interface::HW_IF_POSITION, &hw_commands_[i]));
+    command_interfaces.emplace_back(
+      hardware_interface::CommandInterface(
+        info_.joints[i].name, hardware_interface::HW_IF_POSITION, &hw_commands_[i]));
   }
   RCLCPP_INFO(get_logger(), "Command interfaces:");
   hw_gpio_out_.resize(2);
@@ -179,8 +182,9 @@ RRBotSystemWithGPIOHardware::export_command_interfaces()
   {
     for (auto command_if : info_.gpios.at(i).command_interfaces)
     {
-      command_interfaces.emplace_back(hardware_interface::CommandInterface(
-        info_.gpios.at(i).name, command_if.name, &hw_gpio_out_[ct++]));
+      command_interfaces.emplace_back(
+        hardware_interface::CommandInterface(
+          info_.gpios.at(i).name, command_if.name, &hw_gpio_out_[ct++]));
       RCLCPP_INFO(
         get_logger(), "Added %s/%s", info_.gpios.at(i).name.c_str(), command_if.name.c_str());
     }

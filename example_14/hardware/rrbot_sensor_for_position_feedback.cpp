@@ -46,9 +46,9 @@ hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_init(
   {
     return hardware_interface::CallbackReturn::ERROR;
   }
-  logger_ = std::make_shared<rclcpp::Logger>(
-    rclcpp::get_logger("controller_manager.resource_manager.hardware_component.sensor."
-                       "RRBotModularPositionSensorJoint"));
+  logger_ = std::make_shared<rclcpp::Logger>(rclcpp::get_logger(
+    "controller_manager.resource_manager.hardware_component.sensor."
+    "RRBotModularPositionSensorJoint"));
   clock_ = std::make_shared<rclcpp::Clock>(rclcpp::Clock());
 
   // START: This part here is for exemplary purposes - Please do not copy to your production code
@@ -187,8 +187,9 @@ RRBotSensorPositionFeedback::export_state_interfaces()
 {
   std::vector<hardware_interface::StateInterface> state_interfaces;
 
-  state_interfaces.emplace_back(hardware_interface::StateInterface(
-    info_.joints[0].name, hardware_interface::HW_IF_POSITION, &hw_joint_state_));
+  state_interfaces.emplace_back(
+    hardware_interface::StateInterface(
+      info_.joints[0].name, hardware_interface::HW_IF_POSITION, &hw_joint_state_));
 
   return state_interfaces;
 }
