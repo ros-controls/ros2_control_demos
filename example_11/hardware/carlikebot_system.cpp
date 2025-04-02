@@ -159,13 +159,16 @@ std::vector<hardware_interface::StateInterface> CarlikeBotSystemHardware::export
 
   for (auto & joint : hw_interfaces_)
   {
-    state_interfaces.emplace_back(hardware_interface::StateInterface(
-      joint.second.joint_name, hardware_interface::HW_IF_POSITION, &joint.second.state.position));
+    state_interfaces.emplace_back(
+      hardware_interface::StateInterface(
+        joint.second.joint_name, hardware_interface::HW_IF_POSITION, &joint.second.state.position));
 
     if (joint.first == "traction")
     {
-      state_interfaces.emplace_back(hardware_interface::StateInterface(
-        joint.second.joint_name, hardware_interface::HW_IF_VELOCITY, &joint.second.state.velocity));
+      state_interfaces.emplace_back(
+        hardware_interface::StateInterface(
+          joint.second.joint_name, hardware_interface::HW_IF_VELOCITY,
+          &joint.second.state.velocity));
     }
   }
 
@@ -188,15 +191,17 @@ CarlikeBotSystemHardware::export_command_interfaces()
   {
     if (joint.first == "steering")
     {
-      command_interfaces.emplace_back(hardware_interface::CommandInterface(
-        joint.second.joint_name, hardware_interface::HW_IF_POSITION,
-        &joint.second.command.position));
+      command_interfaces.emplace_back(
+        hardware_interface::CommandInterface(
+          joint.second.joint_name, hardware_interface::HW_IF_POSITION,
+          &joint.second.command.position));
     }
     else if (joint.first == "traction")
     {
-      command_interfaces.emplace_back(hardware_interface::CommandInterface(
-        joint.second.joint_name, hardware_interface::HW_IF_VELOCITY,
-        &joint.second.command.velocity));
+      command_interfaces.emplace_back(
+        hardware_interface::CommandInterface(
+          joint.second.joint_name, hardware_interface::HW_IF_VELOCITY,
+          &joint.second.command.velocity));
     }
   }
 

@@ -96,8 +96,9 @@ std::vector<hardware_interface::StateInterface> RRBotModularJoint::export_state_
 {
   std::vector<hardware_interface::StateInterface> state_interfaces;
 
-  state_interfaces.emplace_back(hardware_interface::StateInterface(
-    info_.joints[0].name, hardware_interface::HW_IF_POSITION, &hw_joint_state_));
+  state_interfaces.emplace_back(
+    hardware_interface::StateInterface(
+      info_.joints[0].name, hardware_interface::HW_IF_POSITION, &hw_joint_state_));
 
   return state_interfaces;
 }
@@ -106,8 +107,9 @@ std::vector<hardware_interface::CommandInterface> RRBotModularJoint::export_comm
 {
   std::vector<hardware_interface::CommandInterface> command_interfaces;
 
-  command_interfaces.emplace_back(hardware_interface::CommandInterface(
-    info_.joints[0].name, hardware_interface::HW_IF_POSITION, &hw_joint_command_));
+  command_interfaces.emplace_back(
+    hardware_interface::CommandInterface(
+      info_.joints[0].name, hardware_interface::HW_IF_POSITION, &hw_joint_command_));
 
   return command_interfaces;
 }

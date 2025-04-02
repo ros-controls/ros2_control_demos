@@ -37,9 +37,9 @@ constexpr double kNaN = std::numeric_limits<double>::quiet_NaN();
 hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware::on_init(
   const hardware_interface::HardwareInfo & info)
 {
-  logger_ = std::make_shared<rclcpp::Logger>(
-    rclcpp::get_logger("controller_manager.resource_manager.hardware_component.system."
-                       "RRBotTransmissionsSystemPositionOnly"));
+  logger_ = std::make_shared<rclcpp::Logger>(rclcpp::get_logger(
+    "controller_manager.resource_manager.hardware_component.system."
+    "RRBotTransmissionsSystemPositionOnly"));
   clock_ = std::make_shared<rclcpp::Clock>(rclcpp::Clock());
 
   RCLCPP_INFO(get_logger(), "Initializing...");
@@ -184,8 +184,9 @@ RRBotTransmissionsSystemPositionOnlyHardware::export_state_interfaces()
       joint_interfaces_.begin(), joint_interfaces_.end(),
       [&](const InterfaceData & interface) { return interface.name_ == joint.name; });
 
-    state_interfaces.emplace_back(hardware_interface::StateInterface(
-      joint.name, hardware_interface::HW_IF_POSITION, &joint_interface->state_));
+    state_interfaces.emplace_back(
+      hardware_interface::StateInterface(
+        joint.name, hardware_interface::HW_IF_POSITION, &joint_interface->state_));
   }
   return state_interfaces;
 }
@@ -201,8 +202,9 @@ RRBotTransmissionsSystemPositionOnlyHardware::export_command_interfaces()
       joint_interfaces_.begin(), joint_interfaces_.end(),
       [&](const InterfaceData & interface) { return interface.name_ == joint.name; });
 
-    command_interfaces.emplace_back(hardware_interface::CommandInterface(
-      joint.name, hardware_interface::HW_IF_POSITION, &joint_interface->command_));
+    command_interfaces.emplace_back(
+      hardware_interface::CommandInterface(
+        joint.name, hardware_interface::HW_IF_POSITION, &joint_interface->command_));
   }
   return command_interfaces;
 }
