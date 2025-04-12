@@ -7,10 +7,13 @@ It consists of simple implementations that demonstrate different concepts. Choos
 
 If you want to have rather step by step manual how to do things with `ros2_control` checkout the [ros-control/roscon2022_workshop](https://github.com/ros-controls/roscon2022_workshop) repository.
 
+## Contributing
+As an open-source project, we welcome each contributor, regardless of their background and experience. Pick a [PR](https://github.com/ros-controls/ros2_control_demos/pulls) and review it, or [create your own](https://github.com/ros-controls/ros2_control_demos/contribute)!
+If you are new to the project, please read the [contributing guide](https://control.ros.org/rolling/doc/contributing/contributing.html) for more information on how to get started. We are happy to help you with your first contribution.
+
 ## Getting Started
 
 Follow the steps provided in the [documentation](https://control.ros.org/master/doc/ros2_control_demos/doc/index.html#installation) to install ros2_control_demos.
-
 
 ## Content
 
@@ -118,18 +121,5 @@ ROS 2 Distro | Branch | Build status | Documentation
 **Jazzy** | [`master`](https://github.com/ros-controls/ros2_control_demos/tree/master) | [![Rolling Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-binary-build.yml/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-binary-build.yml?branch=master) <br> [![Rolling Semi-Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-semi-binary-build.yml/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-semi-binary-build.yml?branch=master) <br> | [Documentation](https://control.ros.org/master/index.html) <br> [API Reference](https://control.ros.org/jazzy/doc/api/index.html)
 **Humble** | [`humble`](https://github.com/ros-controls/ros2_control_demos/tree/humble) | [![Humble Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/humble-binary-build.yml/badge.svg?branch=humble)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/humble-binary-build.yml?branch=humble) <br> [![Humble Semi-Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/humble-semi-binary-build.yml/badge.svg?branch=humble)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/humble-semi-binary-build.yml?branch=humble) <br> | [Documentation](https://control.ros.org/humble/index.html) <br>[API Reference](https://control.ros.org/humble/doc/api/index.html)
 
-
-### Explanation of different build types
-
-**NOTE**: There are three build stages checking current and future compatibility of the package.
-
-1. Binary builds - against released packages (main and testing) in ROS distributions. Shows that direct local build is possible.
-
-   Uses repos file: `src/$NAME$/$NAME$-not-released.<ros-distro>.repos`
-
-1. Semi-binary builds - against released core ROS packages (main and testing), but the immediate dependencies are pulled from source.
-   Shows that local build with dependencies is possible and if fails there we can expect that after the next package sync we will not be able to build.
-
-   Uses repos file: `src/$NAME$/$NAME$.repos`
-
-1. Source build - also core ROS packages are build from source. It shows potential issues in the mid future.
+## Acknowledgements
+The project has received major contributions from companies and institutions [listed on control.ros.org](https://control.ros.org/rolling/doc/acknowledgements/acknowledgements.html)
