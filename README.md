@@ -119,4 +119,3 @@ ROS 2 Distro | Branch | Build status | Documentation
 
 ## Acknowledgements
 The project has received major contributions from companies and institutions [listed on control.ros.org](https://control.ros.org/rolling/doc/acknowledgements/acknowledgements.html)
-
