@@ -49,7 +49,7 @@
     action_monitor_rate: 20.0 # Defaults to 20
 
     allow_partial_joints_goal: false # Defaults to false
-
+    interpolate_from_desired_state: true
     allow_integration_in_goal_trajectories: true
     constraints:
       stopped_velocity_tolerance: 0.01 # Defaults to 0.01
