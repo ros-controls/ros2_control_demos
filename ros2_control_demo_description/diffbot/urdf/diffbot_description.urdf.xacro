@@ -49,7 +49,7 @@
       <origin xyz="0 -${base_width/2} ${z_offset}" rpy="0 0 0"/>
       <axis xyz="0 1 0"/>
       <dynamics damping="0.2"/>
-      <limit effort="100" velocity="1.0"/>
+      <limit effort="100" velocity="60.0"/>
     </joint>
 
     <!-- left wheel Link -->
@@ -85,7 +85,7 @@
       <origin xyz="0 ${base_width/2} ${z_offset}" rpy="0 0 0"/>
       <axis xyz="0 1 0"/>
       <dynamics damping="0.2"/>
-      <limit effort="100" velocity="1.0"/>
+      <limit effort="100" velocity="60.0"/>
     </joint>
 
     <!-- right wheel Link -->

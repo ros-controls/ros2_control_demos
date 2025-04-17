@@ -1,0 +1,85 @@
+controller_manager:
+  ros__parameters:
+    use_sim_time: True  # remove on real robots
+    update_rate: 100  # Hz
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    wheel_pids:
+      type: pid_controller/PidController
+
+    diffbot_base_controller:
+      type: diff_drive_controller/DiffDriveController
+
+joint_state_broadcaster:
+  ros__parameters:
+    use_sim_time: True  # remove on real robots
+    update_rate: 100  # Hz
+
+wheel_pids:
+  ros__parameters:
+    use_sim_time: True  # remove on real robots
+    update_rate: 100  # Hz
+
+    dof_names:
+      - left_wheel_joint
+      - right_wheel_joint
+
+    command_interface: effort
+
+    reference_and_state_interfaces:
+      - velocity
+      - effort
+
+    gains:
+      # control the velocity through effort
+      left_wheel_joint: {"p": 0.1, "i": 1.0, "d": 0.0, "i_clamp_min": -20.0, "i_clamp_max": 20.0, "antiwindup": true, "feedforward_gain": 0.95}
+      right_wheel_joint: {"p": 0.1, "i": 1.0, "d": 0.0, "i_clamp_min": -20.0, "i_clamp_max": 20.0, "antiwindup": true, "feedforward_gain": 0.95}
+
+diffbot_base_controller:
+  ros__parameters:
+    use_sim_time: True  # remove on real robots
+    update_rate: 100  # Hz
+
+    left_wheel_names: ["wheel_pids/left_wheel_joint"]
+    right_wheel_names: ["wheel_pids/right_wheel_joint"]
+
+    wheel_separation: 0.10
+    wheel_radius: 0.015
+
+    # we have velocity feedback
+    position_feedback: false
+
+    publish_rate: 50.0
+    odom_frame_id: odom
+    base_frame_id: base_link
+    pose_covariance_diagonal : [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
+    twist_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
+
+    open_loop: false
+    enable_odom_tf: true
+
+    cmd_vel_timeout: 0.5
+    publish_limited_velocity: true
+
+    # Velocity and acceleration limits
+    # Whenever a min_* is unspecified, default to -max_*
+    linear.x.has_velocity_limits: true
+    linear.x.has_acceleration_limits: true
+    linear.x.has_jerk_limits: false
+    linear.x.max_velocity: 1.0
+    linear.x.min_velocity: -1.0
+    linear.x.max_acceleration: 1.0
+    linear.x.max_jerk: .NAN
+    linear.x.min_jerk: .NAN
+
+    angular.z.has_velocity_limits: true
+    angular.z.has_acceleration_limits: true
+    angular.z.has_jerk_limits: false
+    angular.z.max_velocity: 1.0
+    angular.z.min_velocity: -1.0
+    angular.z.max_acceleration: 1.0
+    angular.z.min_acceleration: -1.0
+    angular.z.max_jerk: .NAN
+    angular.z.min_jerk: .NAN
