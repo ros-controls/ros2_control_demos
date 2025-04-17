@@ -175,7 +175,7 @@ hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_configure(
 
   // set some default values for joints
   // reset values always when configuring hardware
-  for (const auto & [name, descr] : sensor_state_interfaces_)
+  for (const auto & [name, descr] : joint_state_interfaces_)
   {
     set_state(name, 0.0);
   }
