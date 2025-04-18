@@ -184,7 +184,8 @@ hardware_interface::return_type RRBotSystemWithSensorHardware::read(
     // Simulate RRBot's sensor data
     unsigned int seed = static_cast<unsigned int>(time(NULL)) + i++;
     set_state(
-      name, static_cast<float>(rand_r(&seed)) / (static_cast<float>(RAND_MAX / hw_sensor_change_)));
+      name,
+      static_cast<double>(rand_r(&seed)) / (static_cast<double>(RAND_MAX / hw_sensor_change_)));
 
     ss << std::endl << "\t" << get_state(name) << " for sensor '" << name << "'";
   }
