@@ -228,11 +228,11 @@ hardware_interface::return_type RRBotTransmissionsSystemPositionOnlyHardware::re
   for (const auto & transmission_info : info_.transmissions)
   {
     // again, this only for simple transmissions, we know there is only one joint
-    const auto joint_interface = std::find_if(
+    const auto joint_interface_is_transmission = std::find_if(
       joint_interfaces_.cbegin(), joint_interfaces_.cend(), [&](const auto & joint_interface)
       { return joint_interface.name_ == transmission_info.joints[0].name; });
 
-    const auto actuator_interface = std::find_if(
+    const auto actuator_interface_is_transmission = std::find_if(
       actuator_interfaces_.cbegin(), actuator_interfaces_.cend(),
       [&](const auto & actuator_interface)
       { return actuator_interface.name_ == transmission_info.actuators[0].name; });
@@ -240,9 +240,10 @@ hardware_interface::return_type RRBotTransmissionsSystemPositionOnlyHardware::re
     const auto & reduction = transmission_info.joints[0].mechanical_reduction;
 
     ss << std::endl
-       << "\t" << joint_interface->name_ << ": " << joint_interface->state_ << " <-- "
-       << transmission_info.name << "(R=" << reduction << ") <-- " << actuator_interface->name_
-       << ": " << actuator_interface->state_;
+       << "\t" << joint_interface_is_transmission->name_ << ": "
+       << joint_interface_is_transmission->state_ << " <-- " << transmission_info.name
+       << "(R=" << reduction << ") <-- " << actuator_interface_is_transmission->name_ << ": "
+       << actuator_interface_is_transmission->state_;
   }
   RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500, "%s", ss.str().c_str());
 
@@ -301,11 +302,11 @@ hardware_interface::return_type RRBotTransmissionsSystemPositionOnlyHardware::wr
   for (const auto & transmission_info : info_.transmissions)
   {
     // again, this only for simple transmissions, we know there is only one joint
-    const auto joint_interface = std::find_if(
+    const auto joint_interface_is_transmission = std::find_if(
       joint_interfaces_.cbegin(), joint_interfaces_.cend(), [&](const auto & joint_interface)
       { return joint_interface.name_ == transmission_info.joints[0].name; });
 
-    const auto actuator_interface = std::find_if(
+    const auto actuator_interface_is_transmission = std::find_if(
       actuator_interfaces_.cbegin(), actuator_interfaces_.cend(),
       [&](const auto & actuator_interface)
       { return actuator_interface.name_ == transmission_info.actuators[0].name; });
@@ -313,9 +314,10 @@ hardware_interface::return_type RRBotTransmissionsSystemPositionOnlyHardware::wr
     const auto & reduction = transmission_info.joints[0].mechanical_reduction;
 
     ss << std::endl
-       << "\t" << joint_interface->name_ << ": " << joint_interface->command_ << " --> "
-       << transmission_info.name << "(R=" << reduction << ") --> " << actuator_interface->name_
-       << ": " << actuator_interface->command_;
+       << "\t" << joint_interface_is_transmission->name_ << ": "
+       << joint_interface_is_transmission->command_ << " --> " << transmission_info.name
+       << "(R=" << reduction << ") --> " << actuator_interface_is_transmission->name_ << ": "
+       << actuator_interface_is_transmission->command_;
   }
   RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500, "%s", ss.str().c_str());
 

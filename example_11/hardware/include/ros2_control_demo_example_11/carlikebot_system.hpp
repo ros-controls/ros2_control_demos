@@ -58,7 +58,7 @@ struct Joint
 class CarlikeBotSystemHardware : public hardware_interface::SystemInterface
 {
 public:
-  RCLCPP_SHARED_PTR_DEFINITIONS(CarlikeBotSystemHardware);
+  RCLCPP_SHARED_PTR_DEFINITIONS(CarlikeBotSystemHardware)
 
   hardware_interface::CallbackReturn on_init(
     const hardware_interface::HardwareInfo & info) override;

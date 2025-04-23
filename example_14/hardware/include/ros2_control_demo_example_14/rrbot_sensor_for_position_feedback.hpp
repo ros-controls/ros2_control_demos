@@ -40,7 +40,7 @@ namespace ros2_control_demo_example_14
 class RRBotSensorPositionFeedback : public hardware_interface::SensorInterface
 {
 public:
-  RCLCPP_SHARED_PTR_DEFINITIONS(RRBotSensorPositionFeedback);
+  RCLCPP_SHARED_PTR_DEFINITIONS(RRBotSensorPositionFeedback)
 
   hardware_interface::CallbackReturn on_init(
     const hardware_interface::HardwareInfo & info) override;
@@ -83,7 +83,7 @@ private:
 
   // Fake "mechanical connection" between actuator and sensor using sockets
   struct sockaddr_in address_;
-  int socket_port_;
+  uint16_t socket_port_;
   int address_length_;
   int obj_socket_;
   int sockoptval_ = 1;

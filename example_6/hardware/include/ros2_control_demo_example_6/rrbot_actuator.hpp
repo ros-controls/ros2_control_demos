@@ -35,7 +35,7 @@ namespace ros2_control_demo_example_6
 class RRBotModularJoint : public hardware_interface::ActuatorInterface
 {
 public:
-  RCLCPP_SHARED_PTR_DEFINITIONS(RRBotModularJoint);
+  RCLCPP_SHARED_PTR_DEFINITIONS(RRBotModularJoint)
 
   hardware_interface::CallbackReturn on_init(
     const hardware_interface::HardwareInfo & info) override;

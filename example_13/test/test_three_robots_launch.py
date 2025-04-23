@@ -38,7 +38,7 @@ from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_testing.actions import ReadyToTest
 
-# import launch_testing.markers
+import launch_testing.markers
 import rclpy
 from controller_manager.test_utils import (
     check_controllers_running,
@@ -56,7 +56,7 @@ def generate_test_description():
                 "launch/three_robots.launch.py",
             )
         ),
-        launch_arguments={"gui": "false"}.items(),
+        launch_arguments={"gui": "false", "sigterm_timeout": "10"}.items(),
     )
 
     return LaunchDescription([launch_include, ReadyToTest()])
@@ -95,8 +95,15 @@ class TestFixture(unittest.TestCase):
             "rrbot_with_sensor_joint_state_broadcaster",
             "rrbot_with_sensor_fts_broadcaster",
         ]
+        check_controllers_running(self.node, cnames, "", "active")
+        cnames = [
+            "rrbot_with_sensor_position_controller",
+            "threedofbot_joint_state_broadcaster",
+            "threedofbot_position_controller",
+            "threedofbot_pid_gain_controller",
+        ]
+        check_controllers_running(self.node, cnames, "", "inactive")
 
-        check_controllers_running(self.node, cnames)
         check_if_js_published(
             "/joint_states",
             [
@@ -342,11 +349,10 @@ class TestFixture(unittest.TestCase):
         )
 
 
-# TODO(anyone): enable this if shutdown of ros2_control_node does not fail anymore
-# @launch_testing.post_shutdown_test()
-# # These tests are run after the processes in generate_test_description() have shutdown.
-# class TestDescriptionCraneShutdown(unittest.TestCase):
+@launch_testing.post_shutdown_test()
+# These tests are run after the processes in generate_test_description() have shutdown.
+class TestDescriptionCraneShutdown(unittest.TestCase):
 
-#     def test_exit_codes(self, proc_info):
-#         """Check if the processes exited normally."""
-#         launch_testing.asserts.assertExitCodes(proc_info)
+    def test_exit_codes(self, proc_info):
+        """Check if the processes exited normally."""
+        launch_testing.asserts.assertExitCodes(proc_info)

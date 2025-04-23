@@ -85,6 +85,8 @@ Example 14: "Modular robots with actuators not providing states and with additio
 Example 15: "Using multiple controller managers"
    This example shows how to integrate multiple robots under different controller manager instances.
 
+Example 16: "DiffBot with chained controllers"
+   This example shows how to create chained controllers using diff_drive_controller and pid_controllers to control a differential drive robot.
 
 .. _ros2_control_demos_install:
 
@@ -119,9 +121,9 @@ Download the ``ros2_control_demos`` repository and install its dependencies with
   cd ~/ros2_ws/src
   git clone https://github.com/ros-controls/ros2_control_demos -b {REPOS_FILE_BRANCH}
   cd ~/ros2_ws/
-  rosdep update --rosdistro=$ROS_DISTRO
   sudo apt-get update
-  sudo rosdep install --from-paths ./ -i -y --rosdistro ${ROS_DISTRO}
+  rosdep update --rosdistro=$ROS_DISTRO
+  rosdep install --from-paths ./ -i -y --rosdistro ${ROS_DISTRO}
 
 Now you can build the repository (source your ROS 2 installation first)
 
@@ -146,6 +148,13 @@ Build from source
     vcs import src < src/ros2_control_demos/ros2_control_demos.$ROS_DISTRO.repos
     rosdep update --rosdistro=$ROS_DISTRO
     sudo apt-get update
+
+  If you want to install the development version of ros2_control having the latest feature, use this repos file instead
+
+  .. code-block:: shell
+
+    vcs import src --input https://raw.githubusercontent.com/ros-controls/ros2_control_ci/master/ros_controls.rolling-on-$ROS_DISTRO.repos
+
 
 * Install dependencies:
 
@@ -242,6 +251,12 @@ You can also run other commands or launch files from the docker, e.g.
 
   docker run -it --rm --name ros2_control_demos --net host ros2_control_demos ros2 launch ros2_control_demo_example_2 diffbot.launch.py
 
+or launch a second terminal inside the docker container by
+
+.. code-block:: shell
+
+  docker exec -it ros2_control_demos bash
+
 =====================
 Quick Hints
 =====================
@@ -280,3 +295,4 @@ Examples
    Example 13: Multiple robots <../example_13/doc/userdoc.rst>
    Example 14: Modular robots with actuators not providing states <../example_14/doc/userdoc.rst>
    Example 15: Using multiple controller managers <../example_15/doc/userdoc.rst>
+   Example 16: DiffBot with chained controllers <../example_16/doc/userdoc.rst>

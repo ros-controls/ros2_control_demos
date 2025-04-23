@@ -36,7 +36,7 @@ namespace ros2_control_demo_example_14
 class RRBotActuatorWithoutFeedback : public hardware_interface::ActuatorInterface
 {
 public:
-  RCLCPP_SHARED_PTR_DEFINITIONS(RRBotActuatorWithoutFeedback);
+  RCLCPP_SHARED_PTR_DEFINITIONS(RRBotActuatorWithoutFeedback)
 
   hardware_interface::CallbackReturn on_init(
     const hardware_interface::HardwareInfo & info) override;
@@ -66,7 +66,7 @@ private:
 
   // Fake "mechanical connection" between actuator and sensor using sockets
   struct sockaddr_in address_;
-  int socket_port_;
+  uint16_t socket_port_;
   int sockoptval_ = 1;
   int sock_;
 };

@@ -38,7 +38,7 @@ from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_testing.actions import ReadyToTest
 
-# import launch_testing.markers
+import launch_testing.markers
 import rclpy
 from controller_manager.test_utils import (
     check_controllers_running,
@@ -89,18 +89,20 @@ class TestFixture(unittest.TestCase):
             "forward_position_controller",
             "joint_state_broadcaster",
         ]
+        check_controllers_running(self.node, cnames, "/rrbot", "active")
 
-        check_controllers_running(self.node, cnames, "/rrbot")
+        check_controllers_running(
+            self.node, ["position_trajectory_controller"], "/rrbot", "inactive"
+        )
 
     def test_check_if_msgs_published(self):
         check_if_js_published("/rrbot/joint_states", ["joint1", "joint2"])
 
 
-# TODO(anyone): enable this if shutdown of ros2_control_node does not fail anymore
-# @launch_testing.post_shutdown_test()
-# # These tests are run after the processes in generate_test_description() have shutdown.
-# class TestDescriptionCraneShutdown(unittest.TestCase):
+@launch_testing.post_shutdown_test()
+# These tests are run after the processes in generate_test_description() have shutdown.
+class TestDescriptionCraneShutdown(unittest.TestCase):
 
-#     def test_exit_codes(self, proc_info):
-#         """Check if the processes exited normally."""
-#         launch_testing.asserts.assertExitCodes(proc_info)
+    def test_exit_codes(self, proc_info):
+        """Check if the processes exited normally."""
+        launch_testing.asserts.assertExitCodes(proc_info)
