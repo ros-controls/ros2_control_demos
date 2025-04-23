@@ -174,7 +174,7 @@
       <child link="${prefix}virtual_front_wheel"/>
       <origin xyz="${wheelbase/2} 0 -${base_height/2}" rpy="0 0 ${PI/2}"/>
       <axis xyz="0 0 1"/>
-      <limit lower="-0.4" upper="0.4" effort="100.0" velocity="0.0"/>
+      <limit lower="-0.4" upper="0.4" effort="100.0" velocity="10.0"/>
       <dynamics damping="0.2"/>
     </joint>
 
@@ -213,7 +213,7 @@
       <child link="${prefix}front_right_wheel" />
       <origin xyz="${wheelbase/2} ${base_width/2} -${base_height/2}" rpy="0 0 ${PI/2}"/>
       <axis xyz="0 0 1"/>
-      <limit lower="-0.4" upper="0.4" effort="100.0" velocity="0.0"/>
+      <limit lower="-0.4" upper="0.4" effort="100.0" velocity="10.0"/>
       <dynamics damping="0.2"/>
       <mimic joint="${prefix}virtual_front_wheel_joint" multiplier="1.0" offset="0.0"/>
     </joint>
@@ -253,7 +253,7 @@
       <child link="${prefix}front_left_wheel" />
       <origin xyz="${wheelbase/2} -${base_width/2} -${base_height/2}" rpy="0 0 ${PI/2}"/>
       <axis xyz="0 0 1"/>
-      <limit lower="-0.4" upper="0.4" effort="100.0" velocity="0.0"/>
+      <limit lower="-0.4" upper="0.4" effort="100.0" velocity="10.0"/>
       <dynamics damping="0.2"/>
       <mimic joint="${prefix}virtual_front_wheel_joint" multiplier="1.0" offset="0.0"/>
     </joint>
