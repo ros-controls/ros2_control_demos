@@ -111,6 +111,23 @@ def generate_launch_description():
         )
     )
 
+    extra_jsb_spawners = []
+    jsb_generic_yaml = PathJoinSubstitution(
+        [
+            FindPackageShare("ros2_control_demo_example_12"),
+            "config",
+            "jsb.yaml",
+        ]
+    )
+    for i in range(30):
+        extra_jsb_spawners.append(
+            Node(
+                package="controller_manager",
+                executable="spawner",
+                arguments=[f"joint_state_broadcaster_{i}", "--param-file", jsb_generic_yaml],
+            )
+        )
+
     # Delay start of joint_state_broadcaster after `robot_controller`
     # TODO(anyone): This is a workaround for flaky tests. Remove when fixed.
     delay_joint_state_broadcaster_after_robot_controller_spawner = RegisterEventHandler(
@@ -129,4 +146,4 @@ def generate_launch_description():
         delay_joint_state_broadcaster_after_robot_controller_spawner,
     ]
 
-    return LaunchDescription(declared_arguments + nodes)
+    return LaunchDescription(declared_arguments + nodes + extra_jsb_spawners)

@@ -1,0 +1,3 @@
+/**:
+  ros__parameters:
+    type: joint_state_broadcaster/JointStateBroadcaster
