@@ -52,7 +52,8 @@ hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_init(
   hw_stop_sec_ =
     hardware_interface::stod(info_.hardware_parameters["example_param_hw_stop_duration_sec"]);
   hw_slowdown_ = hardware_interface::stod(info_.hardware_parameters["example_param_hw_slowdown"]);
-  socket_port_ = std::stoi(info_.hardware_parameters["example_param_socket_port"]);
+  socket_port_ =
+    static_cast<uint16_t>(std::stoi(info_.hardware_parameters["example_param_socket_port"]));
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   const hardware_interface::ComponentInfo & joint = info_.joints[0];
@@ -174,7 +175,7 @@ hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_configure(
 
   // set some default values for joints
   // reset values always when configuring hardware
-  for (const auto & [name, descr] : sensor_state_interfaces_)
+  for (const auto & [name, descr] : joint_state_interfaces_)
   {
     set_state(name, 0.0);
   }

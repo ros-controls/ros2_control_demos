@@ -84,7 +84,6 @@ class TestFixture(unittest.TestCase):
         check_node_running(self.node, "robot_state_publisher")
 
     def test_controller_running(self, proc_output):
-
         cnames = ["forward_position_controller", "joint_state_broadcaster"]
 
         check_controllers_running(self.node, cnames)
