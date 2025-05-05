@@ -19,11 +19,17 @@ set(THIS_PACKAGE_INCLUDE_DEPENDS
 # find dependencies
 find_package(backward_ros REQUIRED)
 find_package(ament_cmake REQUIRED)
+find_package(mavros_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
 foreach(Dependency IN ITEMS ${THIS_PACKAGE_INCLUDE_DEPENDS})
   find_package(${Dependency} REQUIRED)
 endforeach()
 
 ## COMPILE
+add_executable(mavlink_subscriber_node
+  hardware/mavlink_subscriber_node.cpp
+)
+
 add_library(
   ros2_control_demo_example_2
   SHARED
@@ -33,10 +39,18 @@ target_compile_features(ros2_control_demo_example_2 PUBLIC cxx_std_17)
 target_include_directories(ros2_control_demo_example_2 PUBLIC
 $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/hardware/include>
 $<INSTALL_INTERFACE:include/ros2_control_demo_example_2>
+${mavros_msgs_INCLUDE_DIRS}
 )
 ament_target_dependencies(
   ros2_control_demo_example_2 PUBLIC
   ${THIS_PACKAGE_INCLUDE_DEPENDS}
+  mavros_msgs
+  geometry_msgs
+  rclcpp
+)
+ament_target_dependencies(mavlink_subscriber_node
+  rclcpp
+  geometry_msgs
 )
 
 # Export hardware plugins
@@ -54,6 +68,12 @@ install(
 install(
   DIRECTORY bringup/launch bringup/config
   DESTINATION share/ros2_control_demo_example_2
+)
+
+
+
+install(TARGETS mavlink_subscriber_node
+  DESTINATION lib/${PROJECT_NAME}
 )
 install(TARGETS ros2_control_demo_example_2
   EXPORT export_ros2_control_demo_example_2

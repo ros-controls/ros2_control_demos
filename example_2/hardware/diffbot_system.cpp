@@ -27,7 +27,17 @@
 
 #include "hardware_interface/lexical_casts.hpp"
 #include "hardware_interface/types/hardware_interface_type_values.hpp"
+
+#include <mavros_msgs/msg/position_target.hpp>
+#include "mavros_msgs/srv/command_bool.hpp"
+#include "mavros_msgs/srv/set_mode.hpp"
+#include "geometry_msgs/msg/pose_stamped.hpp"
+// #include "mavros/mavros_router.hpp"
+// #include "mavros/mavros_uas.hpp"
+
 #include "rclcpp/rclcpp.hpp"
+
+
 
 namespace ros2_control_demo_example_2
 {

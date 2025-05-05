@@ -107,6 +107,21 @@ def generate_launch_description():
         arguments=["diffbot_base_controller", "--controller-manager", "/controller_manager"],
     )
 
+    mavros_node = Node(
+        package="mavros",
+        executable='mavros_node',
+        name='mavros',
+        output='screen',
+        parameters=[{
+            'fcu_url': 'serial:///dev/ttyUSB0:57600',
+            'gcs_url': '',
+            'target_system_id': 1,
+            'target_component_id': 1,
+            'system_id': 1,
+            'component_id': 1,
+        }],
+    )
+
     # Delay rviz start after `joint_state_broadcaster`
     delay_rviz_after_joint_state_broadcaster_spawner = RegisterEventHandler(
         event_handler=OnProcessExit(
@@ -123,6 +138,7 @@ def generate_launch_description():
             on_exit=[joint_state_broadcaster_spawner],
         )
     )
+
 
     nodes = [
         control_node,

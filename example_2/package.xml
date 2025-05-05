@@ -21,6 +21,9 @@
   <depend>pluginlib</depend>
   <depend>rclcpp</depend>
   <depend>rclcpp_lifecycle</depend>
+  <depend>mavros_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <!-- <depend>diagnostic_msgs</depend> -->
 
   <exec_depend>controller_manager</exec_depend>
   <exec_depend>diff_drive_controller</exec_depend>
