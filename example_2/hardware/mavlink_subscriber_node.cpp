@@ -388,6 +388,20 @@ private:
 
 int main(int argc, char ** argv)
 {
+
+  std::string device = "/dev/ttyUSB0";
+  unsigned int baudrate = 115200;
+  uint8_t sysid = 1;
+  uint8_t compid = 1;
+
+  auto serial = std::make_shared<mavconn::MAVConnSerial>(sysid, compid, device, baudrate, false);
+  
+  // if (serial->is_connected()) {
+  //   RCLCPP_INFO(this->get_logger(), "Serial connection successful.");
+  // } else {
+  //     RCLCPP_ERROR(this->get_logger(), "Failed to connect to the serial port.");
+  // }
+
   rclcpp::init(argc, argv);
   
   auto node = std::make_shared<MavLinkSubscriberNode>();
