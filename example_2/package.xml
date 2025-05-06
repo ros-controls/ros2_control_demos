@@ -23,6 +23,8 @@
   <depend>rclcpp_lifecycle</depend>
   <depend>mavros_msgs</depend>
   <depend>geometry_msgs</depend>
+  <depend>libmavconn</depend>
+
   <!-- <depend>diagnostic_msgs</depend> -->
 
   <exec_depend>controller_manager</exec_depend>

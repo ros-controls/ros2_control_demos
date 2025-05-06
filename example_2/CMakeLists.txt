@@ -23,6 +23,11 @@ find_package(mavros_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(mavros REQUIRED)
 
+
+find_package(mavros_msgs REQUIRED)
+find_package(libmavconn REQUIRED)
+
+
 foreach(Dependency IN ITEMS ${THIS_PACKAGE_INCLUDE_DEPENDS})
   find_package(${Dependency} REQUIRED)
 endforeach()
@@ -69,6 +74,8 @@ ament_target_dependencies(mavlink_subscriber_node
   rclcpp
   geometry_msgs
   mavros
+  mavros_msgs
+  libmavconn
 )
 
 # Export hardware plugins
