@@ -87,6 +87,9 @@
 #include "rclcpp/rclcpp.hpp"
 #include "geometry_msgs/msg/twist.hpp"
 
+using mavlink::mavlink_message_t;
+
+
 namespace mavconn
 {
 
@@ -401,7 +404,18 @@ int main(int argc, char ** argv)
   auto serial = std::make_shared<mavconn::MAVConnSerial>(sysid, compid, device, baudrate, false);
   
   if (serial->is_open()) {
-    RCLCPP_INFO(node->get_logger(), "Serial connection successful.");
+
+    RCLCPP_INFO(node->get_logger(), "Serial connection opened.");
+    
+    mavlink_message_t mavlink_msg;
+
+    mavlink_msg.magic = MAVLINK_STX;
+    mavlink_msg.len = 8;
+    mavlink_msg.seq = 8;
+    mavlink_msg.sysid = 1;
+    mavlink_msg.compid = 2;
+    mavlink_msg.msgid = 4;
+
   } 
   // else {
   //     RCLCPP_ERROR(node->get_logger(), "Failed to connect to the serial port.");
