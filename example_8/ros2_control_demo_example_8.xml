@@ -1,9 +1,0 @@
-<library path="ros2_control_demo_example_8">
-  <class name="ros2_control_demo_example_8/RRBotTransmissionsSystemPositionOnlyHardware"
-         type="ros2_control_demo_example_8::RRBotTransmissionsSystemPositionOnlyHardware"
-         base_class_type="hardware_interface::SystemInterface">
-    <description>
-      The ros2_control minimal robot protocol with transmissions.
-    </description>
-  </class>
-</library>

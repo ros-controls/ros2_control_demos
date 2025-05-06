@@ -1,8 +1,20 @@
 // This ROS2 node subscribes to the /cmd_vel topic and processes incoming Twist messages to control the movement
 // of Asterius Mk2. It is designed to work with the hardware interface.
 
+#include <string>
+#include <memory>
+#include <vector>
+
 #include "rclcpp/rclcpp.hpp"
 #include "geometry_msgs/msg/twist.hpp"
+
+extern "C" {
+  #include <mavlink/v2.0/common/mavlink.h>
+}
+// #include "mavros/mavros_router.hpp"
+// #include "mavros/mavros_uas.hpp"
+// #include "include/ros2_control_demo_example_2/mavlink_subscriber_node.hpp"
+// #include "include/libmavconn/interface.hpp"
 
 class MavLinkSubscriberNode : public rclcpp::Node {
 public:
@@ -25,6 +37,7 @@ private:
 int main(int argc, char ** argv)
 {
   rclcpp::init(argc, argv);
+
   rclcpp::spin(std::make_shared<MavLinkSubscriberNode>());
   rclcpp::shutdown();
   return 0;
