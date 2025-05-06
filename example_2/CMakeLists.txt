@@ -37,6 +37,8 @@ add_executable(mavlink_subscriber_node
   hardware/mavlink_subscriber_node.cpp
 )
 
+add_executable(pwm_command_node hardware/pwm_command_node.cpp)
+
 add_library(
   ros2_control_demo_example_2
   SHARED
@@ -79,6 +81,14 @@ ament_target_dependencies(mavlink_subscriber_node
   libmavconn
 )
 
+ament_target_dependencies(pwm_command_node
+  rclcpp
+  geometry_msgs
+  mavros
+  mavros_msgs
+  libmavconn
+)
+
 # Export hardware plugins
 pluginlib_export_plugin_description_file(hardware_interface ros2_control_demo_example_2.xml)
 
@@ -98,6 +108,10 @@ install(
 
 
 install(TARGETS mavlink_subscriber_node
+  DESTINATION lib/${PROJECT_NAME}
+)
+install(TARGETS
+  pwm_command_node
   DESTINATION lib/${PROJECT_NAME}
 )
 install(TARGETS ros2_control_demo_example_2

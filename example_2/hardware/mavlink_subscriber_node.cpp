@@ -87,6 +87,7 @@
 #include "rclcpp/rclcpp.hpp"
 #include "geometry_msgs/msg/twist.hpp"
 
+#include "mavros_msgs/srv/command_long.hpp"  // Use this directly
 
 
 using mavlink::mavlink_message_t;
