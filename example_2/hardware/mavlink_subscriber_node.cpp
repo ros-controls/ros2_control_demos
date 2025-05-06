@@ -87,7 +87,18 @@
 #include "rclcpp/rclcpp.hpp"
 #include "geometry_msgs/msg/twist.hpp"
 
+
+
 using mavlink::mavlink_message_t;
+
+
+// In common.h
+#define MAV_TYPE_GENERIC 0
+#define MAV_AUTOPILOT_GENERIC 0
+#define MAV_MODE_FLAG_SAFETY_ARMED 128
+#define MAV_STATE_ACTIVE 3
+
+
 
 
 namespace mavconn
@@ -286,7 +297,12 @@ void MAVConnSerial::send_message(const mavlink::Message & message, const uint8_t
   io_service.post(std::bind(&MAVConnSerial::do_write, shared_from_this(), true));
 }
 
-void MAVConnSerial::do_read(void)
+void MAVConnSerial::do_read(void)// In common.h
+#define MAV_TYPE_GENERIC 0
+#define MAV_AUTOPILOT_GENERIC 0
+#define MAV_MODE_FLAG_SAFETY_ARMED 128
+#define MAV_STATE_ACTIVE 3
+
 {
   auto sthis = shared_from_this();
   serial_dev.async_read_some(
@@ -396,7 +412,7 @@ int main(int argc, char ** argv)
   auto node = std::make_shared<MavLinkSubscriberNode>();
   RCLCPP_INFO(node->get_logger(), "Test init");
   
-  std::string device = "/dev/ttyACM1";
+  std::string device = "/dev/ttyV0";
   unsigned int baudrate = 115200;
   uint8_t sysid = 1;
   uint8_t compid = 1;
@@ -409,12 +425,39 @@ int main(int argc, char ** argv)
     
     mavlink_message_t mavlink_msg;
 
+    // Set the MAVLink magic number (start byte for MAVLink messages)
     mavlink_msg.magic = MAVLINK_STX;
+
+    // Define message length (the length of the payload)
     mavlink_msg.len = 8;
+
+    // Set sequence number for the message
     mavlink_msg.seq = 8;
+
+    // Set system ID and component ID
     mavlink_msg.sysid = 1;
     mavlink_msg.compid = 2;
-    mavlink_msg.msgid = 4;
+
+    // Set the message ID (this will depend on the message you're sending)
+    mavlink_msg.msgid = 0;
+
+    // Define the payload for the HEARTBEAT message
+    uint8_t type = MAV_TYPE_GENERIC;  // Vehicle type (e.g., generic)
+    uint8_t autopilot = MAV_AUTOPILOT_GENERIC;  // Autopilot type (e.g., generic autopilot)
+    uint8_t base_mode = MAV_MODE_FLAG_SAFETY_ARMED;  // Base mode (armed/disarmed)
+    uint8_t custom_mode = 0;  // Custom mode (typically 0, unless defined otherwise)
+    uint8_t system_status = MAV_STATE_ACTIVE;  // System status (e.g., active)
+
+    mavlink_msg.payload64[0] = type;
+    mavlink_msg.payload64[1] = autopilot;
+    mavlink_msg.payload64[2] = base_mode;
+    mavlink_msg.payload64[3] = custom_mode;
+    mavlink_msg.payload64[4] = system_status;
+    mavlink_msg.payload64[5] = 0;  // Padding (unused byte)
+    mavlink_msg.payload64[6] = 0;  // Padding (unused byte)
+    mavlink_msg.payload64[7] = 0;  // Padding (unused byte)
+
+    serial->send_message(&mavlink_msg);
 
   } 
   // else {
