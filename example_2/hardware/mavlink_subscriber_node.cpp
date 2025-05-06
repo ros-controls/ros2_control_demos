@@ -393,7 +393,7 @@ int main(int argc, char ** argv)
   auto node = std::make_shared<MavLinkSubscriberNode>();
   RCLCPP_INFO(node->get_logger(), "Test init");
   
-  std::string device = "/dev/ttyUSB0";
+  std::string device = "/dev/ttyACM1";
   unsigned int baudrate = 115200;
   uint8_t sysid = 1;
   uint8_t compid = 1;
