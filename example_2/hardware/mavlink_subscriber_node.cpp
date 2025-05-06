@@ -388,7 +388,11 @@ private:
 
 int main(int argc, char ** argv)
 {
-
+  rclcpp::init(argc, argv);
+  
+  auto node = std::make_shared<MavLinkSubscriberNode>();
+  RCLCPP_INFO(node->get_logger(), "Test init");
+  
   std::string device = "/dev/ttyUSB0";
   unsigned int baudrate = 115200;
   uint8_t sysid = 1;
@@ -396,18 +400,16 @@ int main(int argc, char ** argv)
 
   auto serial = std::make_shared<mavconn::MAVConnSerial>(sysid, compid, device, baudrate, false);
   
-  // if (serial->is_connected()) {
-  //   RCLCPP_INFO(this->get_logger(), "Serial connection successful.");
-  // } else {
-  //     RCLCPP_ERROR(this->get_logger(), "Failed to connect to the serial port.");
+  if (serial->is_open()) {
+    RCLCPP_INFO(node->get_logger(), "Serial connection successful.");
+  } 
+  // else {
+  //     RCLCPP_ERROR(node->get_logger(), "Failed to connect to the serial port.");
   // }
 
-  rclcpp::init(argc, argv);
   
-  auto node = std::make_shared<MavLinkSubscriberNode>();
 
   // Use the logger of the node instance
-  RCLCPP_INFO(node->get_logger(), "Test init");
 
   rclcpp::spin(node);  // Spin the node
   rclcpp::shutdown();
