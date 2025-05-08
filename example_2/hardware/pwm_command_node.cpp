@@ -60,6 +60,7 @@
 #include "rclcpp/rclcpp.hpp"
 #include "geometry_msgs/msg/twist.hpp"
 #include "mavros_msgs/srv/param_set_v2.hpp"
+// #include "mavros_msgs/msg/override_rc_in.hpp
 
 using namespace std::chrono_literals;
 
@@ -93,6 +94,7 @@ private:
                 msg->linear.x, trim_servo1, msg->angular.z, trim_servo2);
 
     set_param("SERVO1_TRIM", trim_servo1);
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     set_param("SERVO2_TRIM", trim_servo2);
   }
 
