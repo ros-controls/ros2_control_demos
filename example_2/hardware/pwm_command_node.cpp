@@ -84,7 +84,7 @@ public:
 private:
   void cmd_vel_callback(const geometry_msgs::msg::Twist::SharedPtr msg) {
     double trim_servo1 = 1500.0 + msg->linear.x * 100.0;  // Mapping for linear.x
-    double trim_servo2 = 1500.0 + msg->angular.z * 100.0; // Mapping for angular.z
+    double trim_servo2 = 1500.0 + msg->linear.x * 100.0; // Mapping for angular.z
 
     trim_servo1 = std::clamp(trim_servo1, 1000.0, 2000.0);
     trim_servo2 = std::clamp(trim_servo2, 1000.0, 2000.0);
