@@ -141,10 +141,11 @@ void interpolate_trajectory_point(
   double traj_len = static_cast<double>(traj_msg.points.size());
   auto last_time = traj_msg.points.back().time_from_start;
   double total_time = last_time.sec + last_time.nanosec * 1E-9;
+  double cur_time_sec = cur_time.seconds();
 
-  size_t ind = static_cast<size_t>(cur_time.seconds() * (traj_len / total_time));
+  size_t ind = static_cast<size_t>(cur_time_sec * (traj_len / total_time));
   ind = std::min(ind, static_cast<size_t>(traj_len) - 2);
-  double delta = cur_time.seconds() - static_cast<double>(ind) * (total_time / traj_len);
+  double delta = std::min(cur_time_sec - static_cast<double>(ind) * (total_time / traj_len), 1.0);
   interpolate_point(traj_msg.points[ind], traj_msg.points[ind + 1], point_interp, delta);
 }
 
