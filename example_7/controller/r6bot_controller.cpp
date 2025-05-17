@@ -145,6 +145,14 @@ void interpolate_trajectory_point(
   double cur_time_sec = cur_time.seconds();
   reached_end = (cur_time_sec >= total_time);
 
+  // If we reached the end of the trajectory, set the velocities to zero.
+  if (reached_end)
+  {
+    point_interp.positions = traj_msg.points.back().positions;
+    std::fill(point_interp.velocities.begin(), point_interp.velocities.end(), 0.0);
+    return;
+  }
+
   size_t ind =
     static_cast<size_t>(cur_time_sec * (traj_len / total_time));  // Assumes evenly spaced points.
   ind = std::min(ind, static_cast<size_t>(traj_len) - 2);
@@ -167,12 +175,11 @@ controller_interface::return_type RobotController::update(
     bool reached_end;
     interpolate_trajectory_point(*trajectory_msg_, time - start_time_, point_interp_, reached_end);
 
-    // If we have reached the end of the trajectory, reset it and set velocities to zero.
+    // If we have reached the end of the trajectory, reset it..
     if (reached_end)
     {
       RCLCPP_INFO(get_node()->get_logger(), "Trajectory execution complete.");
       trajectory_msg_.reset();
-      std::fill(point_interp_.velocities.begin(), point_interp_.velocities.end(), 0.0);
     }
 
     for (size_t i = 0; i < joint_position_command_interface_.size(); i++)
