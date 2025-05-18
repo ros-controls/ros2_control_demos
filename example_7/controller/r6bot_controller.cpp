@@ -184,17 +184,11 @@ controller_interface::return_type RobotController::update(
 
     for (size_t i = 0; i < joint_position_command_interface_.size(); i++)
     {
-      if (!joint_position_command_interface_[i].get().set_value(point_interp_.positions[i]))
-      {
-        RCLCPP_ERROR(get_node()->get_logger(), "Failed to set position value for index %ld", i);
-      }
+      joint_position_command_interface_[i].get().set_value(point_interp_.positions[i]);
     }
     for (size_t i = 0; i < joint_velocity_command_interface_.size(); i++)
     {
-      if (!joint_velocity_command_interface_[i].get().set_value(point_interp_.velocities[i]))
-      {
-        RCLCPP_ERROR(get_node()->get_logger(), "Failed to set velocity value for index %ld", i);
-      }
+      joint_velocity_command_interface_[i].get().set_value(point_interp_.velocities[i]);
     }
   }
 
