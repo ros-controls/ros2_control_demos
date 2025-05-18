@@ -48,7 +48,7 @@ int main(int argc, char ** argv)
 
   trajectory_msgs::msg::JointTrajectory trajectory_msg;
   trajectory_msg.header.stamp = node->now();
-  for (size_t i = 0; i < chain.getNrOfSegments(); i++)
+  for (unsigned int i = 0; i < chain.getNrOfSegments(); i++)
   {
     auto joint = chain.getSegment(i).getJoint();
     if (joint.getType() != KDL::Joint::Fixed)
@@ -63,15 +63,14 @@ int main(int argc, char ** argv)
 
   double total_time = 3.0;
   int trajectory_len = 200;
-  int loop_rate = trajectory_len / total_time;
-  double dt = 1.0 / loop_rate;
+  double dt = total_time / static_cast<double>(trajectory_len - 1);
 
   for (int i = 0; i < trajectory_len; i++)
   {
     // set endpoint twist
-    double t = i;
-    twist.vel.x(2 * 0.3 * cos(2 * M_PI * t / trajectory_len));
-    twist.vel.y(-0.3 * sin(2 * M_PI * t / trajectory_len));
+    double t = i / (static_cast<double>(trajectory_len - 1));
+    twist.vel.x(2 * 0.3 * cos(2 * M_PI * t));
+    twist.vel.y(-0.3 * sin(2 * M_PI * t));
 
     // convert cart to joint velocities
     ik_vel_solver_->CartToJnt(joint_positions, twist, joint_velocities);
@@ -88,13 +87,17 @@ int main(int argc, char ** argv)
     joint_positions.data += joint_velocities.data * dt;
 
     // set timing information
-    trajectory_point_msg.time_from_start.sec = i / loop_rate;
-    trajectory_point_msg.time_from_start.nanosec = static_cast<int>(
-      1E9 / loop_rate *
-      static_cast<double>(t - loop_rate * (i / loop_rate)));  // implicit integer division
-
+    double time_point = total_time * t;
+    double time_point_sec = std::floor(time_point);
+    trajectory_point_msg.time_from_start.sec = static_cast<int>(time_point_sec);
+    trajectory_point_msg.time_from_start.nanosec =
+      static_cast<int>((time_point - time_point_sec) * 1E9);
     trajectory_msg.points.push_back(trajectory_point_msg);
   }
+
+  // send zero velocities in the end
+  auto & last_point_msg = trajectory_msg.points.back();
+  std::fill(last_point_msg.velocities.begin(), last_point_msg.velocities.end(), 0.0);
 
   pub->publish(trajectory_msg);
   while (rclcpp::ok())

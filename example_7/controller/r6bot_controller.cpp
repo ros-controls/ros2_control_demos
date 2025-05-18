@@ -84,6 +84,7 @@ controller_interface::CallbackReturn RobotController::on_configure(const rclcpp_
   auto callback =
     [this](const std::shared_ptr<trajectory_msgs::msg::JointTrajectory> traj_msg) -> void
   {
+    RCLCPP_INFO(get_node()->get_logger(), "Received new trajectory.");
     traj_msg_external_point_ptr_.writeFromNonRT(traj_msg);
     new_msg_ = true;
   };
@@ -136,15 +137,26 @@ void interpolate_point(
 
 void interpolate_trajectory_point(
   const trajectory_msgs::msg::JointTrajectory & traj_msg, const rclcpp::Duration & cur_time,
-  trajectory_msgs::msg::JointTrajectoryPoint & point_interp)
+  trajectory_msgs::msg::JointTrajectoryPoint & point_interp, bool & reached_end)
 {
-  double traj_len = traj_msg.points.size();
-  auto last_time = traj_msg.points[traj_len - 1].time_from_start;
+  double traj_len = static_cast<double>(traj_msg.points.size());
+  auto last_time = traj_msg.points.back().time_from_start;
   double total_time = last_time.sec + last_time.nanosec * 1E-9;
+  double cur_time_sec = cur_time.seconds();
+  reached_end = (cur_time_sec >= total_time);
 
-  size_t ind = cur_time.seconds() * (traj_len / total_time);
-  ind = std::min(static_cast<double>(ind), traj_len - 2);
-  double delta = cur_time.seconds() - ind * (total_time / traj_len);
+  // If we reached the end of the trajectory, set the velocities to zero.
+  if (reached_end)
+  {
+    point_interp.positions = traj_msg.points.back().positions;
+    std::fill(point_interp.velocities.begin(), point_interp.velocities.end(), 0.0);
+    return;
+  }
+
+  size_t ind =
+    static_cast<size_t>(cur_time_sec * (traj_len / total_time));  // Assumes evenly spaced points.
+  ind = std::min(ind, static_cast<size_t>(traj_len) - 2);
+  double delta = std::min(cur_time_sec - static_cast<double>(ind) * (total_time / traj_len), 1.0);
   interpolate_point(traj_msg.points[ind], traj_msg.points[ind + 1], point_interp, delta);
 }
 
@@ -160,7 +172,16 @@ controller_interface::return_type RobotController::update(
 
   if (trajectory_msg_ != nullptr)
   {
-    interpolate_trajectory_point(*trajectory_msg_, time - start_time_, point_interp_);
+    bool reached_end;
+    interpolate_trajectory_point(*trajectory_msg_, time - start_time_, point_interp_, reached_end);
+
+    // If we have reached the end of the trajectory, reset it..
+    if (reached_end)
+    {
+      RCLCPP_INFO(get_node()->get_logger(), "Trajectory execution complete.");
+      trajectory_msg_.reset();
+    }
+
     for (size_t i = 0; i < joint_position_command_interface_.size(); i++)
     {
       joint_position_command_interface_[i].get().set_value(point_interp_.positions[i]);
