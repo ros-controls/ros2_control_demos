@@ -138,13 +138,13 @@ void interpolate_trajectory_point(
   const trajectory_msgs::msg::JointTrajectory & traj_msg, const rclcpp::Duration & cur_time,
   trajectory_msgs::msg::JointTrajectoryPoint & point_interp)
 {
-  double traj_len = traj_msg.points.size();
-  auto last_time = traj_msg.points[traj_len - 1].time_from_start;
+  double traj_len = static_cast<double>(traj_msg.points.size());
+  auto last_time = traj_msg.points.back().time_from_start;
   double total_time = last_time.sec + last_time.nanosec * 1E-9;
 
-  size_t ind = cur_time.seconds() * (traj_len / total_time);
-  ind = std::min(static_cast<double>(ind), traj_len - 2);
-  double delta = cur_time.seconds() - ind * (total_time / traj_len);
+  size_t ind = static_cast<size_t>(cur_time.seconds() * (traj_len / total_time));
+  ind = std::min(ind, static_cast<size_t>(traj_len) - 2);
+  double delta = cur_time.seconds() - static_cast<double>(ind) * (total_time / traj_len);
   interpolate_point(traj_msg.points[ind], traj_msg.points[ind + 1], point_interp, delta);
 }
 
