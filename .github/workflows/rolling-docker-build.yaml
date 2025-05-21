@@ -41,7 +41,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ROS_DISTRO: [rolling, jazzy]
+        ROS_DISTRO: [rolling, kilted, jazzy]
     steps:
     - uses: actions/checkout@v4
       with:
