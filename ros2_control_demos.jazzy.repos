@@ -10,11 +10,11 @@ repositories:
   ros2_control:
     type: git
     url: https://github.com/ros-controls/ros2_control.git
-    version: master
+    version: jazzy
   ros2_controllers:
     type: git
     url: https://github.com/ros-controls/ros2_controllers.git
-    version: master
+    version: jazzy
   gz_ros2_control:
     type: git
     url: https://github.com/ros-controls/gz_ros2_control.git
@@ -23,3 +23,14 @@ repositories:
     type: git
     url: https://github.com/ros-controls/control_toolbox.git
     version: jazzy
+<<<<<<< HEAD
+=======
+  ros2_control_cmake:
+    type: git
+    url: https://github.com/ros-controls/ros2_control_cmake.git
+    version: master
+  kinematics_interface:
+    type: git
+    url: https://github.com/ros-controls/kinematics_interface.git
+    version: jazzy
+>>>>>>> 5677534 (Add kilted info and update workflows (#809))
