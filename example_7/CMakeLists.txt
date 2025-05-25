@@ -8,7 +8,6 @@ export_windows_symbols()
 # find dependencies
 set(HW_IF_INCLUDE_DEPENDS
   pluginlib
-  rcpputils
   hardware_interface
 )
 set(REF_GEN_INCLUDE_DEPENDS
@@ -18,7 +17,6 @@ set(REF_GEN_INCLUDE_DEPENDS
 )
 set(CONTROLLER_INCLUDE_DEPENDS
   pluginlib
-  rcpputils
   controller_interface
   realtime_tools
   trajectory_msgs
@@ -72,7 +70,6 @@ target_link_libraries(ros2_control_demo_example_7 PUBLIC
   controller_interface::controller_interface
   hardware_interface::hardware_interface
   pluginlib::pluginlib
-  rcpputils::rcpputils
   realtime_tools::realtime_tools
 )
 

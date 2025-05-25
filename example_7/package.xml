@@ -25,7 +25,6 @@
   <depend>pluginlib</depend>
   <depend>rclcpp_lifecycle</depend>
   <depend>rclcpp</depend>
-  <depend>rcpputils</depend>
   <depend>realtime_tools</depend>
   <depend>trajectory_msgs</depend>
 
