@@ -32,7 +32,7 @@ on:
       - '**.xml'
   schedule:
     # Run every morning to detect flakiness and broken dependencies
-    - cron: '03 1 * * *'
+    - cron: '03 1 * * MON-FRI'
 
 jobs:
   binary:
