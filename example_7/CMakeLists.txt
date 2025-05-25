@@ -48,9 +48,10 @@ endforeach()
 ## COMPILE
 add_executable(send_trajectory reference_generator/send_trajectory.cpp)
 
-ament_target_dependencies(
-  send_trajectory PUBLIC
-  ${REF_GEN_INCLUDE_DEPENDS}
+target_link_libraries(send_trajectory PUBLIC
+  ${trajectory_msgs_TARGETS}
+  kdl_parser::kdl_parser
+  rclcpp::rclcpp
 )
 
 add_library(
@@ -66,10 +67,13 @@ $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/hardware/include>
 $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/controller/include>
 $<INSTALL_INTERFACE:include/ros2_control_demo_example_7>
 )
-ament_target_dependencies(
-  ros2_control_demo_example_7 PUBLIC
-  ${HW_IF_INCLUDE_DEPENDS}
-  ${CONTROLLER_INCLUDE_DEPENDS}
+target_link_libraries(ros2_control_demo_example_7 PUBLIC
+  ${trajectory_msgs_TARGETS}
+  controller_interface::controller_interface
+  hardware_interface::hardware_interface
+  pluginlib::pluginlib
+  rcpputils::rcpputils
+  realtime_tools::realtime_tools
 )
 
 # Export hardware plugins

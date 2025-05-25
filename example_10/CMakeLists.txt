@@ -41,9 +41,13 @@ target_include_directories(ros2_control_demo_example_10 PUBLIC
 $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/hardware/include>
 $<INSTALL_INTERFACE:include/ros2_control_demo_example_10>
 )
-ament_target_dependencies(
-  ros2_control_demo_example_10 PUBLIC
-  ${THIS_PACKAGE_INCLUDE_DEPENDS}
+target_link_libraries(ros2_control_demo_example_10 PUBLIC
+  ${control_msgs_TARGETS}
+  ${std_msgs_TARGETS}
+  hardware_interface::hardware_interface
+  pluginlib::pluginlib
+  rclcpp::rclcpp
+  rclcpp_lifecycle::rclcpp_lifecycle
 )
 
 # Export hardware plugins
