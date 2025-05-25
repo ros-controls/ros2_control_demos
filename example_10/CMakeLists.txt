@@ -8,8 +8,6 @@ export_windows_symbols()
 # find dependencies
 set(THIS_PACKAGE_INCLUDE_DEPENDS
   hardware_interface
-  control_msgs
-  std_msgs
   pluginlib
   rclcpp
   rclcpp_lifecycle
@@ -42,8 +40,6 @@ $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/hardware/include>
 $<INSTALL_INTERFACE:include/ros2_control_demo_example_10>
 )
 target_link_libraries(ros2_control_demo_example_10 PUBLIC
-  ${control_msgs_TARGETS}
-  ${std_msgs_TARGETS}
   hardware_interface::hardware_interface
   pluginlib::pluginlib
   rclcpp::rclcpp
