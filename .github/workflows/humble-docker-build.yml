@@ -32,7 +32,7 @@ on:
       - 'ros2_control_demos.humble.repos'
   schedule:
     # Run every morning to detect broken dependencies
-    - cron: '40 1 * * *'
+    - cron: '40 1 * * MON-FRI'
 
 
 jobs:
