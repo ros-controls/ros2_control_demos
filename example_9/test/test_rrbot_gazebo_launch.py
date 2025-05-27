@@ -100,7 +100,7 @@ class TestFixture(unittest.TestCase):
 # deactivating because gazebo returns -15 and does not stop properly
 # @launch_testing.post_shutdown_test()
 # # These tests are run after the processes in generate_test_description() have shutdown.
-# class TestDescriptionCraneShutdown(unittest.TestCase):
+# class TestShutdown(unittest.TestCase):
 
 #     def test_exit_codes(self, proc_info):
 #         """Check if the processes exited normally."""
