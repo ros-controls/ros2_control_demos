@@ -102,9 +102,8 @@ Tutorial steps
   .. code-block:: shell
 
     ros2 topic pub --rate 10 /cmd_vel geometry_msgs/msg/TwistStamped "
-      header: 
+      header:
         stamp: now
-        frame_id: 'base_link'
       twist:
         linear:
           x: 0.7
