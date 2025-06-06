@@ -81,11 +81,10 @@ controller_interface::InterfaceConfiguration RobotController::state_interface_co
 
 controller_interface::CallbackReturn RobotController::on_configure(const rclcpp_lifecycle::State &)
 {
-  auto callback =
-    [this](const std::shared_ptr<trajectory_msgs::msg::JointTrajectory> traj_msg) -> void
+  auto callback = [this](const trajectory_msgs::msg::JointTrajectory traj_msg) -> void
   {
     RCLCPP_INFO(get_node()->get_logger(), "Received new trajectory.");
-    traj_msg_external_point_ptr_.writeFromNonRT(traj_msg);
+    traj_msg_external_.set(traj_msg);
     new_msg_ = true;
   };
 
@@ -165,21 +164,25 @@ controller_interface::return_type RobotController::update(
 {
   if (new_msg_)
   {
-    trajectory_msg_ = *traj_msg_external_point_ptr_.readFromRT();
-    start_time_ = time;
-    new_msg_ = false;
+    auto trajectory_msg_op = traj_msg_external_.try_get();
+    if (trajectory_msg_op.has_value())
+    {
+      trajectory_msg_ = trajectory_msg_op.value();
+      start_time_ = time;
+      new_msg_ = false;
+    }
   }
 
-  if (trajectory_msg_ != nullptr)
+  if (!trajectory_msg_.points.empty())
   {
     bool reached_end;
-    interpolate_trajectory_point(*trajectory_msg_, time - start_time_, point_interp_, reached_end);
+    interpolate_trajectory_point(trajectory_msg_, time - start_time_, point_interp_, reached_end);
 
     // If we have reached the end of the trajectory, reset it..
     if (reached_end)
     {
       RCLCPP_INFO(get_node()->get_logger(), "Trajectory execution complete.");
-      trajectory_msg_.reset();
+      trajectory_msg_.points.clear();
     }
 
     for (size_t i = 0; i < joint_position_command_interface_.size(); i++)
