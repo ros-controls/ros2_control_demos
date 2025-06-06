@@ -56,15 +56,17 @@ class DiffbotChainedControllersTest(Node):
 
     def publish_cmd_vel(self, delay=0.1):
 
-        twist_msg = TwistStamped()
-        twist_msg.twist.linear.x = 0.7
-        twist_msg.twist.linear.y = 0.0
-        twist_msg.twist.linear.z = 0.0
-        twist_msg.twist.angular.x = 0.0
-        twist_msg.twist.angular.y = 0.0
-        twist_msg.twist.angular.z = 1.0
-
         while rclpy.ok():
+            twist_msg = TwistStamped()
+            twist_msg.header.stamp.sec = int(time.time())
+            twist_msg.header.stamp.nanosec = int((time.time() % 1) * 1e9)
+            twist_msg.header.frame_id = "base_link"
+            twist_msg.twist.linear.x = 0.7
+            twist_msg.twist.linear.y = 0.0
+            twist_msg.twist.linear.z = 0.0
+            twist_msg.twist.angular.x = 0.0
+            twist_msg.twist.angular.y = 0.0
+            twist_msg.twist.angular.z = 1.0
             self.get_logger().info(f"Publishing twist message to cmd_vel: {twist_msg}")
             self.publisher_.publish(twist_msg)
             time.sleep(delay)

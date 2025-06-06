@@ -102,15 +102,18 @@ Tutorial steps
   .. code-block:: shell
 
     ros2 topic pub --rate 10 /cmd_vel geometry_msgs/msg/TwistStamped "
-    twist:
-      linear:
-        x: 0.7
-        y: 0.0
-        z: 0.0
-      angular:
-        x: 0.0
-        y: 0.0
-        z: 1.0"
+      header: 
+        stamp: now
+        frame_id: 'base_link'
+      twist:
+        linear:
+          x: 0.7
+          y: 0.0
+          z: 0.0
+        angular:
+          x: 0.0
+          y: 0.0
+          z: 1.0"
 
   You should now see robot is moving in circles in *RViz*.
 
@@ -118,7 +121,6 @@ Tutorial steps
 
   .. code-block:: shell
 
-    [ros2_control_node-1] [WARN] [1739860498.298085087] [diffbot_base_controller]: Received TwistStamped with zero timestamp, setting it to current time, this message will only be shown once
     [ros2_control_node-1] [INFO] [1739860498.634431841] [controller_manager.resource_manager.hardware_component.system.DiffBot]: Reading states:
     [ros2_control_node-1] 	 position 5.78 and velocity 27.52 for 'right_wheel_joint/position'!
     [ros2_control_node-1] 	 position 5.23 and velocity 24.90 for 'left_wheel_joint/position'!

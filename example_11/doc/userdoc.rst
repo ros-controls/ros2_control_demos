@@ -96,6 +96,9 @@ Tutorial steps
    .. code-block:: shell
 
     ros2 topic pub --rate 30 /bicycle_steering_controller/reference geometry_msgs/msg/TwistStamped "
+      header: 
+        stamp: now
+        frame_id: 'base_link'
       twist:
         linear:
           x: 1.0
