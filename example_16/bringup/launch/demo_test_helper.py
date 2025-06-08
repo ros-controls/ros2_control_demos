@@ -17,7 +17,6 @@ import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import TwistStamped
 from std_srvs.srv import SetBool
-from rclpy.time import Time
 
 
 class DiffbotChainedControllersTest(Node):
@@ -57,7 +56,6 @@ class DiffbotChainedControllersTest(Node):
 
     def publish_cmd_vel(self, delay=0.1):
         twist_msg = TwistStamped()
-        twist_msg.header.stamp = Time().to_msg()
         twist_msg.twist.linear.x = 0.7
         twist_msg.twist.linear.y = 0.0
         twist_msg.twist.linear.z = 0.0
@@ -66,6 +64,7 @@ class DiffbotChainedControllersTest(Node):
         twist_msg.twist.angular.z = 1.0
 
         while rclpy.ok():
+            twist_msg.header.stamp = self.get_clock().now().to_msg()
             self.get_logger().info(f"Publishing twist message to cmd_vel: {twist_msg}")
             self.publisher_.publish(twist_msg)
             time.sleep(delay)
