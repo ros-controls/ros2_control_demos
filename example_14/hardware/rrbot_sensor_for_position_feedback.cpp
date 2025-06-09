@@ -38,10 +38,10 @@
 namespace ros2_control_demo_example_14
 {
 hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_init(
-  const hardware_interface::HardwareInfo & info)
+  const hardware_interface::HardwareInfo & info, rclcpp::Executor::WeakPtr executor)
 {
   if (
-    hardware_interface::SensorInterface::on_init(info) !=
+    hardware_interface::SensorInterface::on_init(info, executor) !=
     hardware_interface::CallbackReturn::SUCCESS)
   {
     return hardware_interface::CallbackReturn::ERROR;
