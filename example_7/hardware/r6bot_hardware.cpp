@@ -20,7 +20,8 @@
 
 namespace ros2_control_demo_example_7
 {
-CallbackReturn RobotSystem::on_init(const hardware_interface::HardwareInfo & info, rclcpp::Executor::WeakPtr executor)
+CallbackReturn RobotSystem::on_init(
+  const hardware_interface::HardwareInfo & info, rclcpp::Executor::WeakPtr executor)
 {
   if (hardware_interface::SystemInterface::on_init(info, executor) != CallbackReturn::SUCCESS)
   {
