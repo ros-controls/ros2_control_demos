@@ -9,18 +9,19 @@ controller_manager:
 bicycle_steering_controller:
   ros__parameters:
     type: bicycle_steering_controller/BicycleSteeringController
+
+    traction_joints_names: ['virtual_rear_wheel_joint']
+    steering_joints_names: ['virtual_front_wheel_joint']
     wheelbase: 0.325
-    front_wheel_radius: 0.05
-    rear_wheel_radius: 0.05
-    front_steering: true
+    traction_wheel_radius: 0.05
+
     reference_timeout: 2.0
-    rear_wheels_names: ['virtual_rear_wheel_joint']
-    front_wheels_names: ['virtual_front_wheel_joint']
+
     open_loop: false
+    position_feedback: false
     velocity_rolling_window_size: 10
     base_frame_id: base_link
     odom_frame_id: odom
     enable_odom_tf: true
     twist_covariance_diagonal: [0.0, 7.0, 14.0, 21.0, 28.0, 35.0]
     pose_covariance_diagonal: [0.0, 7.0, 14.0, 21.0, 28.0, 35.0]
-    position_feedback: false
