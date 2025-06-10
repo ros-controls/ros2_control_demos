@@ -89,15 +89,16 @@ Tutorial steps
    .. code-block:: shell
 
     ros2 topic pub --rate 10 /cmd_vel geometry_msgs/msg/TwistStamped "
-    twist:
-      linear:
-        x: 0.7
-        y: 0.0
-        z: 0.0
-      angular:
-        x: 0.0
-        y: 0.0
-        z: 1.0"
+      header: auto
+      twist:
+        linear:
+          x: 0.7
+          y: 0.0
+          z: 0.0
+        angular:
+          x: 0.0
+          y: 0.0
+          z: 1.0"
 
    You should now see an orange box circling in *RViz*.
    Also, you should see changing states in the terminal where launch file is started.
