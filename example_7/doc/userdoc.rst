@@ -222,7 +222,7 @@ The ``on_init`` method is called once during ros2_control initialization if the 
 .. code-block:: c++
 
   CallbackReturn RobotSystem::on_init(const hardware_interface::HardwareInfo &info) {
-      if (hardware_interface::SystemInterface::on_init(info) != CallbackReturn::SUCCESS) {
+      if (hardware_interface::SystemInterface::on_init(info, executor) != CallbackReturn::SUCCESS) {
           return CallbackReturn::ERROR;
       }
       // setup communication with robot hardware

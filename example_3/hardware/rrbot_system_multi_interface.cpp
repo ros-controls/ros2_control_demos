@@ -29,10 +29,10 @@
 namespace ros2_control_demo_example_3
 {
 hardware_interface::CallbackReturn RRBotSystemMultiInterfaceHardware::on_init(
-  const hardware_interface::HardwareInfo & info)
+  const hardware_interface::HardwareInfo & info, rclcpp::Executor::WeakPtr executor)
 {
   if (
-    hardware_interface::SystemInterface::on_init(info) !=
+    hardware_interface::SystemInterface::on_init(info, executor) !=
     hardware_interface::CallbackReturn::SUCCESS)
   {
     return hardware_interface::CallbackReturn::ERROR;
