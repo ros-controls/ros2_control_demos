@@ -20,6 +20,7 @@
 #define ROS2_CONTROL_DEMO_EXAMPLE_14__RRBOT_SENSOR_FOR_POSITION_FEEDBACK_HPP_
 
 #include <netinet/in.h>
+#include <atomic>
 #include <memory>
 #include <string>
 #include <thread>
@@ -33,7 +34,6 @@
 #include "rclcpp/clock.hpp"
 #include "rclcpp/macros.hpp"
 #include "rclcpp/time.hpp"
-#include "realtime_tools/realtime_buffer.hpp"
 
 namespace ros2_control_demo_example_14
 {
@@ -67,7 +67,7 @@ private:
   double hw_slowdown_;
 
   // Store the command for the simulated robot
-  double measured_velocity;  // Local variable, but avoid initialization on each read
+  double measured_velocity_;  // Local variable, but avoid initialization on each read
   double last_measured_velocity_;
 
   // Timestamps to calculate position for velocity
@@ -76,7 +76,7 @@ private:
   rclcpp::Time current_timestamp;  // Local variable, but avoid initialization on each read
 
   // Sync incoming commands between threads
-  realtime_tools::RealtimeBuffer<double> rt_incomming_data_ptr_;
+  std::atomic<double> rt_incoming_data_;
 
   // Create timer to checking incoming data on socket
   std::thread incoming_data_thread_;

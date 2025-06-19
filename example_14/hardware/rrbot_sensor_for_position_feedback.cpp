@@ -28,7 +28,6 @@
 #include <memory>
 #include <sstream>
 #include <thread>
-#include <vector>
 
 #include "hardware_interface/lexical_casts.hpp"
 #include "hardware_interface/sensor_interface.hpp"
@@ -108,7 +107,7 @@ hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_init(
   }
 
   // Storage and Thread for incoming data
-  rt_incomming_data_ptr_.writeFromNonRT(std::numeric_limits<double>::quiet_NaN());
+  rt_incoming_data_ = std::numeric_limits<double>::quiet_NaN();
   incoming_data_thread_ = std::thread(
     [this]()
     {
@@ -150,12 +149,12 @@ hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_init(
         {
           RCLCPP_DEBUG(get_logger(), "Read form buffer sockets data: '%s'", buffer);
 
-          rt_incomming_data_ptr_.writeFromNonRT(hardware_interface::stod(buffer));
+          rt_incoming_data_ = hardware_interface::stod(buffer);
         }
         else
         {
           RCLCPP_INFO(get_logger(), "Data not yet received from socket.");
-          rt_incomming_data_ptr_.writeFromNonRT(std::numeric_limits<double>::quiet_NaN());
+          rt_incoming_data_ = std::numeric_limits<double>::quiet_NaN();
         }
 
         bzero(buffer, reading_size_bytes);
@@ -246,10 +245,10 @@ hardware_interface::return_type RRBotSensorPositionFeedback::read(
   ss << "Reading..." << std::endl;
 
   // Sensor reading
-  measured_velocity = *(rt_incomming_data_ptr_.readFromRT());
-  if (!std::isnan(measured_velocity))
+  measured_velocity_ = rt_incoming_data_;
+  if (!std::isnan(measured_velocity_))
   {
-    last_measured_velocity_ = measured_velocity;
+    last_measured_velocity_ = measured_velocity_;
   }
 
   // integrate velocity to position
@@ -259,7 +258,7 @@ hardware_interface::return_type RRBotSensorPositionFeedback::read(
   set_state(name, new_value);
 
   ss << std::fixed << std::setprecision(2);
-  ss << "Got measured velocity " << measured_velocity << std::endl;
+  ss << "Got measured velocity " << measured_velocity_ << std::endl;
   ss << "Got state(position) " << new_value << " for joint '" << info_.joints[0].name << "'"
      << std::endl;
   RCLCPP_INFO(get_logger(), ss.str().c_str());
