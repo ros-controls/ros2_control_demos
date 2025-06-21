@@ -77,27 +77,15 @@ Tutorial steps
 
   There are also two ``[unclaimed]`` interfaces from diff_drive_controller, one for angular velocity and one for linear velocity. These are provided by the diff_drive_controller because it is chainable. You can ignore them since we don't use them in this example.
 
-4. We specified ``feedforward_gain`` as part of ``gains`` in diffbot_chained_controllers.yaml. To actually enable feedforward mode for the pid_controller, we need to use a service provided by pid_controller. Let's enable it.
 
-  .. code-block:: shell
 
-    ros2 service call /pid_controller_left_wheel_joint/set_feedforward_control std_srvs/srv/SetBool "data: true" && \
-    ros2 service call /pid_controller_right_wheel_joint/set_feedforward_control std_srvs/srv/SetBool "data: true"
-
-  You should get
-
-  .. code-block:: shell
-
-    response:
-    std_srvs.srv.SetBool_Response(success=True, message='')
-
-5. To see the pid_controller in action, let's subscribe to the controler_state topic, e.g. pid_controller_left_wheel_joint/controller_state topic.
+4. To see the pid_controller in action, let's subscribe to the controler_state topic, e.g. pid_controller_left_wheel_joint/controller_state topic.
 
   .. code-block:: shell
 
     ros2 topic echo /pid_controller_left_wheel_joint/controller_state
 
-6. Now we are ready to send a command to move the robot. Send a command to *Diff Drive Controller* by opening another terminal and executing
+5. Now we are ready to send a command to move the robot. Send a command to *Diff Drive Controller* by opening another terminal and executing
 
   .. code-block:: shell
 
@@ -115,7 +103,7 @@ Tutorial steps
 
   You should now see robot is moving in circles in *RViz*.
 
-7. In the terminal where launch file is started, you should see the commands being sent to the wheels and how they are gradually stabilizing to the target velocity similar to following output.
+6. In the terminal where launch file is started, you should see the commands being sent to the wheels and how they are gradually stabilizing to the target velocity similar to following output.
 
   .. code-block:: shell
 
@@ -133,7 +121,7 @@ Tutorial steps
     [ros2_control_node-1] 	command 52.27 for 'left_wheel_joint/velocity'!
 
 
-8. Let's go back to the terminal where we subscribed to the controller_state topic and see the changing states.
+7. Let's go back to the terminal where we subscribed to the controller_state topic and see the changing states.
 
   .. code-block:: shell
 
