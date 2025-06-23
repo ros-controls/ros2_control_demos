@@ -77,8 +77,6 @@ Tutorial steps
 
   There are also two ``[unclaimed]`` interfaces from diff_drive_controller, one for angular velocity and one for linear velocity. These are provided by the diff_drive_controller because it is chainable. You can ignore them since we don't use them in this example.
 
-
-
 4. To see the pid_controller in action, let's subscribe to the controller_state topic, e.g. pid_controller_left_wheel_joint/controller_state topic.
 
   .. code-block:: shell
