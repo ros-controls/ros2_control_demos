@@ -79,7 +79,7 @@ Tutorial steps
 
 
 
-4. To see the pid_controller in action, let's subscribe to the controler_state topic, e.g. pid_controller_left_wheel_joint/controller_state topic.
+4. To see the pid_controller in action, let's subscribe to the controller_state topic, e.g. pid_controller_left_wheel_joint/controller_state topic.
 
   .. code-block:: shell
 

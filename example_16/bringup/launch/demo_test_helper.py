@@ -16,26 +16,12 @@ import time
 import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import TwistStamped
-from std_srvs.srv import SetBool
 
 
 class DiffbotChainedControllersTest(Node):
     def __init__(self):
         super().__init__("diffbot_chained_controllers_demo_helper_node")
         self.publisher_ = self.create_publisher(TwistStamped, "/cmd_vel", 10)
-
-        request_left = SetBool.Request()
-        request_left.data = True
-        future_left = self.client_left_.call_async(request_left)
-
-        request_right = SetBool.Request()
-        request_right.data = True
-        future_right = self.client_right_.call_async(request_right)
-
-        rclpy.spin_until_future_complete(self, future_left)
-        rclpy.spin_until_future_complete(self, future_right)
-
-        self.get_logger().info("Enabled feedforward control for both wheels.")
 
     def publish_cmd_vel(self, delay=0.1):
         twist_msg = TwistStamped()
