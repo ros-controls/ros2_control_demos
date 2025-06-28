@@ -45,8 +45,6 @@ hardware_interface::CallbackReturn RRBotSystemPositionOnlyHardware::on_init(
   if (auto locked_executor = executor_.lock())
   {
     std::string node_name = info_.name + "_status_publisher";
-    std::replace(node_name.begin(), node_name.end(), '/', '_');
-
     status_node_ = std::make_shared<rclcpp::Node>(node_name);
 
     status_publisher_ =
