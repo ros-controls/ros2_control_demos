@@ -8,7 +8,6 @@ export_windows_symbols()
 # find dependencies
 set(HW_IF_INCLUDE_DEPENDS
   pluginlib
-  rcpputils
   hardware_interface
 )
 set(REF_GEN_INCLUDE_DEPENDS
@@ -18,7 +17,6 @@ set(REF_GEN_INCLUDE_DEPENDS
 )
 set(CONTROLLER_INCLUDE_DEPENDS
   pluginlib
-  rcpputils
   controller_interface
   realtime_tools
   trajectory_msgs
@@ -48,9 +46,10 @@ endforeach()
 ## COMPILE
 add_executable(send_trajectory reference_generator/send_trajectory.cpp)
 
-ament_target_dependencies(
-  send_trajectory PUBLIC
-  ${REF_GEN_INCLUDE_DEPENDS}
+target_link_libraries(send_trajectory PUBLIC
+  ${trajectory_msgs_TARGETS}
+  kdl_parser::kdl_parser
+  rclcpp::rclcpp
 )
 
 add_library(
@@ -66,10 +65,12 @@ $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/hardware/include>
 $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/controller/include>
 $<INSTALL_INTERFACE:include/ros2_control_demo_example_7>
 )
-ament_target_dependencies(
-  ros2_control_demo_example_7 PUBLIC
-  ${HW_IF_INCLUDE_DEPENDS}
-  ${CONTROLLER_INCLUDE_DEPENDS}
+target_link_libraries(ros2_control_demo_example_7 PUBLIC
+  ${trajectory_msgs_TARGETS}
+  controller_interface::controller_interface
+  hardware_interface::hardware_interface
+  pluginlib::pluginlib
+  realtime_tools::realtime_tools
 )
 
 # Export hardware plugins
