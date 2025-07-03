@@ -27,6 +27,11 @@ jobs:
     uses: ros-controls/control.ros.org/.github/workflows/reusable-sphinx-check-single-version.yml@rolling
     with:
       ROS2_CONTROL_DEMOS_PR: ${{ github.ref }}
+  check-docs-kilted:
+    name: Check Docs
+    uses: ros-controls/control.ros.org/.github/workflows/reusable-sphinx-check-single-version.yml@kilted
+    with:
+      ROS2_CONTROL_DEMOS_PR: ${{ github.ref }}
   check-docs-jazzy:
     name: Check Docs
     uses: ros-controls/control.ros.org/.github/workflows/reusable-sphinx-check-single-version.yml@jazzy
