@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:macro name="diffbot_gazebo" params="prefix">
+
+    <!-- ros_control plugin -->
+    <gazebo>
+      <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+        <parameters>$(find ros2_control_demo_example_17)/config/diffbot_chained_controllers.yaml</parameters>
+      </plugin>
+    </gazebo>
+
+    <!-- Link1 -->
+    <gazebo reference="${prefix}base_link">
+      <material>
+        <script>
+          <uri>file://media/materials/scripts/gazebo.material</uri>
+          <name>Gazebo/Orange</name>
+        </script>
+      </material>
+    </gazebo>
+
+    <!-- Link2 -->
+    <gazebo reference="${prefix}left_wheel">
+      <mu1>1.0</mu1>
+      <mu2>1.0</mu2>
+      <material>
+        <script>
+          <uri>file://media/materials/scripts/gazebo.material</uri>
+          <name>Gazebo/Black</name>
+        </script>
+      </material>
+    </gazebo>
+
+    <!-- Link3 -->
+    <gazebo reference="${prefix}right_wheel">
+:q!
+
+
+
+      <mu1>1.0</mu1>
+      <mu2>1.0</mu2>
+      <material>
+        <script>
+          <uri>file://media/materials/scripts/gazebo.material</uri>
+          <name>Gazebo/Black</name>
+        </script>
+      </material>
+    </gazebo>
+
+    <!-- Link4 -->
+    <gazebo reference="${prefix}caster_frontal_wheel">
+      <mu1>0.0</mu1>
+      <mu2>0.0</mu2>
+      <material>
+        <script>
+          <uri>file://media/materials/scripts/gazebo.material</uri>
+          <name>Gazebo/White</name>
+        </script>
+      </material>
+    </gazebo>
+
+    <!-- Link5 -->
+    <gazebo reference="${prefix}caster_rear_wheel">
+      <mu1>0.0</mu1>
+      <mu2>0.0</mu2>
+      <material>
+        <script>
+          <uri>file://media/materials/scripts/gazebo.material</uri>
+          <name>Gazebo/White</name>
+        </script>
+      </material>
+    </gazebo>
+
+  </xacro:macro>
+
+</robot>
