@@ -223,6 +223,12 @@ hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_cleanup(
   return hardware_interface::CallbackReturn::SUCCESS;
 }
 
+hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_shutdown(
+  const rclcpp_lifecycle::State & previous_state)
+{
+  return on_cleanup(previous_state);
+}
+
 hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_activate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
