@@ -6,7 +6,7 @@
 
     <!-- NOTE generally is the order of hardware definition not relevant. But in this case the
     sensors are listening on sockets to which the actuators are connecting. Therefore, the sensors
-    has to be initialized and configured first. Note: configuration will be done in reverse order. -->
+    has to be initialized and configured first. Configuration will be done in reverse order. -->
 
     <ros2_control name="RRBotModularJoint1" type="actuator">
       <hardware>
