@@ -202,7 +202,7 @@ hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_configure(
   return hardware_interface::CallbackReturn::SUCCESS;
 }
 
-hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_shutdown(
+hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_cleanup(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
   // To stop the thread

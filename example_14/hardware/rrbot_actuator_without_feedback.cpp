@@ -148,7 +148,7 @@ hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_configure(
   return hardware_interface::CallbackReturn::SUCCESS;
 }
 
-hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_shutdown(
+hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_cleanup(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
   shutdown(sock_, SHUT_RDWR);  // shutdown socket
