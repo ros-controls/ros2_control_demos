@@ -189,19 +189,13 @@ Before we proceed, we stop all previous steps from terminal and start from the b
 
   Click 'Yes' for the first dialog and 'OK" to the following two dialogs, then you will see the plotjuggler window.
 
-3. To enable feedforward mode and published a command to move the robot, instead of doing these manually, we will use the demo_test.launch.py. Open another terminal and execute
-
-  .. code-block:: shell
-
-    ros2 launch ros2_control_demo_example_16 demo_test.launch.py
-
-4. From the plotjuggler, you can see the controllers' states and commands being plotted, similar to following figure. From the figure, the DiffBot's wheel velocities and commands from PID controllers are converged to the target velocity fairly quickly.
+3. From the plotjuggler, you can see the controllers' states and commands being plotted, similar to following figure. From the figure, the DiffBot's wheel velocities and commands from PID controllers are converged to the target velocity fairly quickly.
 
   .. image:: diffbot_velocities.png
     :width: 400
     :alt: Plotjuggler visualization of DiffBot velocities and commands
 
-5. Change the ``gains`` in the ``diffbot_chained_controllers.yaml`` file with some different values, repeat above steps and observe its effect to the pid_controller commands. For example, to change the ``feedforward_gain`` of the right wheel to 0.50, you can use the following command:
+4. Change the ``gains`` in the ``diffbot_chained_controllers.yaml`` file with some different values, repeat above steps and observe its effect to the pid_controller commands. For example, to change the ``feedforward_gain`` of the right wheel to 0.50, you can use the following command:
 
   .. code-block:: shell
 
@@ -221,11 +215,6 @@ Files used for this demo
 * RViz configuration: `diffbot.rviz <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/ros2_control_demo_description/diffbot/rviz/diffbot.rviz>`__
 
 * Hardware interface plugin: `diffbot_system.cpp <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_16/hardware/diffbot_system.cpp>`__
-
-* Demo helper utility:
-
-  + demo test helper node: `demo_test_helper.py <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_16/bringup/launch/demo_test_helper.py>`__
-  + demo test launch file: `demo_test.launch.py <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_16/bringup/launch/demo_test.launch.py>`__
 
 Controllers from this demo
 --------------------------
