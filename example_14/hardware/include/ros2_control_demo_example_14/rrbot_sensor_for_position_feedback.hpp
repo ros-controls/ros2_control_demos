@@ -20,6 +20,7 @@
 #define ROS2_CONTROL_DEMO_EXAMPLE_14__RRBOT_SENSOR_FOR_POSITION_FEEDBACK_HPP_
 
 #include <netinet/in.h>
+#include <atomic>
 #include <memory>
 #include <mutex>
 #include <string>
