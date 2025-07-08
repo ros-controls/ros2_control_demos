@@ -21,6 +21,7 @@
 
 #include <netinet/in.h>
 #include <memory>
+#include <mutex>
 #include <string>
 #include <thread>
 #include <vector>
@@ -55,6 +56,9 @@ public:
     const rclcpp_lifecycle::State & previous_state) override;
 
   hardware_interface::CallbackReturn on_deactivate(
+    const rclcpp_lifecycle::State & previous_state) override;
+
+  hardware_interface::CallbackReturn on_cleanup(
     const rclcpp_lifecycle::State & previous_state) override;
 
   hardware_interface::CallbackReturn on_shutdown(
@@ -95,10 +99,17 @@ private:
   rclcpp::Time current_timestamp;  // Local variable, but avoid initialization on each read
 
   // Sync incoming commands between threads
+<<<<<<< HEAD
   realtime_tools::RealtimeBuffer<double> rt_incomming_data_ptr_;
+=======
+  std::atomic<double> rt_incoming_data_;
+  std::atomic<bool> receive_data_;
+>>>>>>> 65a8fbc (Fix thread stopping of example_14 (#850))
 
   // Create timer to checking incoming data on socket
   std::thread incoming_data_thread_;
+  std::mutex mtx;
+  std::condition_variable cv;
 
   // Fake "mechanical connection" between actuator and sensor using sockets
   struct sockaddr_in address_;
