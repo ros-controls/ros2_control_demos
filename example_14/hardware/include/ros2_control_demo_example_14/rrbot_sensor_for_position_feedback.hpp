@@ -20,7 +20,9 @@
 #define ROS2_CONTROL_DEMO_EXAMPLE_14__RRBOT_SENSOR_FOR_POSITION_FEEDBACK_HPP_
 
 #include <netinet/in.h>
+#include <atomic>
 #include <memory>
+#include <mutex>
 #include <string>
 #include <thread>
 #include <vector>
@@ -55,6 +57,9 @@ public:
     const rclcpp_lifecycle::State & previous_state) override;
 
   hardware_interface::CallbackReturn on_deactivate(
+    const rclcpp_lifecycle::State & previous_state) override;
+
+  hardware_interface::CallbackReturn on_cleanup(
     const rclcpp_lifecycle::State & previous_state) override;
 
   hardware_interface::CallbackReturn on_shutdown(
@@ -96,9 +101,12 @@ private:
 
   // Sync incoming commands between threads
   realtime_tools::RealtimeBuffer<double> rt_incomming_data_ptr_;
+  std::atomic<bool> receive_data_;
 
   // Create timer to checking incoming data on socket
   std::thread incoming_data_thread_;
+  std::mutex mtx;
+  std::condition_variable cv;
 
   // Fake "mechanical connection" between actuator and sensor using sockets
   struct sockaddr_in address_;

@@ -113,6 +113,7 @@ hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_init(
 
   // Storage and Thread for incoming data
   rt_incomming_data_ptr_.writeFromNonRT(std::numeric_limits<double>::quiet_NaN());
+  receive_data_ = true;
   incoming_data_thread_ = std::thread(
     [this]()
     {
@@ -150,20 +151,32 @@ hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_init(
       RCLCPP_INFO(get_logger(), "Receiving data");
       while (rclcpp::ok())
       {
+        {
+          std::unique_lock<std::mutex> lock(mtx);
+          bool should_stop = cv.wait_for(
+            lock, std::chrono::nanoseconds(1000000000 / incoming_data_read_rate),
+            [this]() { return !receive_data_.load(); });
+
+          if (should_stop)
+          {
+            break;
+          }
+        }
+
         if (recv(sock_, buffer, reading_size_bytes, 0) > 0)
         {
-          RCLCPP_DEBUG(get_logger(), "Read form buffer sockets data: '%s'", buffer);
+          RCLCPP_DEBUG(get_logger(), "Read from buffer sockets data: '%s'", buffer);
 
           rt_incomming_data_ptr_.writeFromNonRT(hardware_interface::stod(buffer));
         }
         else
         {
-          RCLCPP_INFO(get_logger(), "Data not yet received from socket.");
+          RCLCPP_INFO_THROTTLE(
+            get_logger(), *this->get_clock(), 500, "Data not yet received from socket.");
           rt_incomming_data_ptr_.writeFromNonRT(std::numeric_limits<double>::quiet_NaN());
         }
 
         bzero(buffer, reading_size_bytes);
-        std::this_thread::sleep_for(std::chrono::nanoseconds(1000000000 / incoming_data_read_rate));
       }
       return hardware_interface::CallbackReturn::SUCCESS;
     });
@@ -172,14 +185,31 @@ hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_init(
   return hardware_interface::CallbackReturn::SUCCESS;
 }
 
-hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_shutdown(
+hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_cleanup(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
-  incoming_data_thread_.join();      // stop reading thread
-  shutdown(sock_, SHUT_RDWR);        // shutdown socket
-  shutdown(obj_socket_, SHUT_RDWR);  // shutdown socket
+  // To stop the thread
+  {
+    std::lock_guard<std::mutex> lock(mtx);
+    receive_data_ = false;
+    shutdown(sock_, SHUT_RDWR);        // shutdown socket
+    shutdown(obj_socket_, SHUT_RDWR);  // shutdown socket
+  }
+  cv.notify_all();
+
+  // stop reading thread
+  if (incoming_data_thread_.joinable())
+  {
+    incoming_data_thread_.join();
+  }
 
   return hardware_interface::CallbackReturn::SUCCESS;
+}
+
+hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_shutdown(
+  const rclcpp_lifecycle::State & previous_state)
+{
+  return on_cleanup(previous_state);
 }
 
 std::vector<hardware_interface::StateInterface>
