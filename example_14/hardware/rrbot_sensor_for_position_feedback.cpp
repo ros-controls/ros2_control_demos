@@ -111,25 +111,9 @@ hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_init(
     return hardware_interface::CallbackReturn::ERROR;
   }
 
-<<<<<<< HEAD
   // Storage and Thread for incoming data
   rt_incomming_data_ptr_.writeFromNonRT(std::numeric_limits<double>::quiet_NaN());
-=======
-  // Storage for incoming data
-  rt_incoming_data_ = std::numeric_limits<double>::quiet_NaN();
-
-  return hardware_interface::CallbackReturn::SUCCESS;
-}
-
-hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_configure(
-  const rclcpp_lifecycle::State & /*previous_state*/)
-{
-  RCLCPP_INFO(get_logger(), "Configuring ...please wait...");
-
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
-  // Thread for incoming data
   receive_data_ = true;
->>>>>>> 65a8fbc (Fix thread stopping of example_14 (#850))
   incoming_data_thread_ = std::thread(
     [this]()
     {
@@ -181,25 +165,15 @@ hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_configure(
 
         if (recv(sock_, buffer, reading_size_bytes, 0) > 0)
         {
-<<<<<<< HEAD
-          RCLCPP_DEBUG(get_logger(), "Read form buffer sockets data: '%s'", buffer);
+          RCLCPP_DEBUG(get_logger(), "Read from buffer sockets data: '%s'", buffer);
 
           rt_incomming_data_ptr_.writeFromNonRT(hardware_interface::stod(buffer));
         }
         else
         {
-          RCLCPP_INFO(get_logger(), "Data not yet received from socket.");
-          rt_incomming_data_ptr_.writeFromNonRT(std::numeric_limits<double>::quiet_NaN());
-=======
-          RCLCPP_DEBUG(get_logger(), "Read from buffer sockets data: '%s'", buffer);
-          rt_incoming_data_ = hardware_interface::stod(buffer);
-        }
-        else
-        {
           RCLCPP_INFO_THROTTLE(
             get_logger(), *this->get_clock(), 500, "Data not yet received from socket.");
-          rt_incoming_data_ = std::numeric_limits<double>::quiet_NaN();
->>>>>>> 65a8fbc (Fix thread stopping of example_14 (#850))
+          rt_incomming_data_ptr_.writeFromNonRT(std::numeric_limits<double>::quiet_NaN());
         }
 
         bzero(buffer, reading_size_bytes);
@@ -208,29 +182,10 @@ hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_configure(
     });
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
-<<<<<<< HEAD
-  return hardware_interface::CallbackReturn::SUCCESS;
-}
-
-hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_shutdown(
-=======
-  // set some default values for joints
-  // reset values always when configuring hardware
-  for (const auto & [name, descr] : joint_state_interfaces_)
-  {
-    set_state(name, 0.0);
-  }
-  last_measured_velocity_ = 0;
-
-  // In general after a hardware is configured it can be read
-  last_timestamp_ = clock_.now();
-
-  RCLCPP_INFO(get_logger(), "Configuration successful.");
   return hardware_interface::CallbackReturn::SUCCESS;
 }
 
 hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_cleanup(
->>>>>>> 65a8fbc (Fix thread stopping of example_14 (#850))
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
   // To stop the thread
@@ -251,7 +206,12 @@ hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_cleanup(
   return hardware_interface::CallbackReturn::SUCCESS;
 }
 
-<<<<<<< HEAD
+hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_shutdown(
+  const rclcpp_lifecycle::State & previous_state)
+{
+  return on_cleanup(previous_state);
+}
+
 std::vector<hardware_interface::StateInterface>
 RRBotSensorPositionFeedback::export_state_interfaces()
 {
@@ -279,12 +239,6 @@ hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_configure(
 
   RCLCPP_INFO(get_logger(), "Configuration successful.");
   return hardware_interface::CallbackReturn::SUCCESS;
-=======
-hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_shutdown(
-  const rclcpp_lifecycle::State & previous_state)
-{
-  return on_cleanup(previous_state);
->>>>>>> 65a8fbc (Fix thread stopping of example_14 (#850))
 }
 
 hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_activate(

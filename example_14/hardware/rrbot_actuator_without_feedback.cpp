@@ -143,15 +143,6 @@ hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_configure(
     RCLCPP_INFO(get_logger(), "Successfully connected to port %d.", socket_port_);
   }
   // END: This part here is for exemplary purposes - Please do not copy to your production code
-<<<<<<< HEAD
-=======
-
-  // reset values always when configuring hardware
-  for (const auto & [name, descr] : joint_command_interfaces_)
-  {
-    set_command(name, 0.0);
-  }
->>>>>>> 65a8fbc (Fix thread stopping of example_14 (#850))
 
   return hardware_interface::CallbackReturn::SUCCESS;
 }
@@ -164,7 +155,12 @@ hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_cleanup(
   return hardware_interface::CallbackReturn::SUCCESS;
 }
 
-<<<<<<< HEAD
+hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_shutdown(
+  const rclcpp_lifecycle::State & previous_state)
+{
+  return on_cleanup(previous_state);
+}
+
 std::vector<hardware_interface::StateInterface>
 RRBotActuatorWithoutFeedback::export_state_interfaces()
 {
@@ -182,12 +178,6 @@ RRBotActuatorWithoutFeedback::export_command_interfaces()
       info_.joints[0].name, hardware_interface::HW_IF_VELOCITY, &hw_joint_command_));
 
   return command_interfaces;
-=======
-hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_shutdown(
-  const rclcpp_lifecycle::State & previous_state)
-{
-  return on_cleanup(previous_state);
->>>>>>> 65a8fbc (Fix thread stopping of example_14 (#850))
 }
 
 hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_activate(
