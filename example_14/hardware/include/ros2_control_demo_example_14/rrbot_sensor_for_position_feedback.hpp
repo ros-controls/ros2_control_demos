@@ -22,6 +22,7 @@
 #include <netinet/in.h>
 #include <atomic>
 #include <memory>
+#include <mutex>
 #include <string>
 #include <thread>
 #include <vector>
@@ -54,6 +55,9 @@ public:
   hardware_interface::CallbackReturn on_deactivate(
     const rclcpp_lifecycle::State & previous_state) override;
 
+  hardware_interface::CallbackReturn on_cleanup(
+    const rclcpp_lifecycle::State & previous_state) override;
+
   hardware_interface::CallbackReturn on_shutdown(
     const rclcpp_lifecycle::State & previous_state) override;
 
@@ -77,9 +81,12 @@ private:
 
   // Sync incoming commands between threads
   std::atomic<double> rt_incoming_data_;
+  std::atomic<bool> receive_data_;
 
   // Create timer to checking incoming data on socket
   std::thread incoming_data_thread_;
+  std::mutex mtx;
+  std::condition_variable cv;
 
   // Fake "mechanical connection" between actuator and sensor using sockets
   struct sockaddr_in address_;
