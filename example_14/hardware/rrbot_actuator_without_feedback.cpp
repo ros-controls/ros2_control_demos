@@ -89,7 +89,17 @@ hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_init(
     reinterpret_cast<char *>(server->h_addr), reinterpret_cast<char *>(&address_.sin_addr.s_addr),
     server->h_length);
   address_.sin_port = htons(socket_port_);
+  // END: This part here is for exemplary purposes - Please do not copy to your production code
 
+  return hardware_interface::CallbackReturn::SUCCESS;
+}
+
+hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_configure(
+  const rclcpp_lifecycle::State & /*previous_state*/)
+{
+  RCLCPP_INFO(get_logger(), "Configuring ...please wait...");
+
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   const int max_retries = 5;
   const int initial_delay_ms = 1000;  // Initial delay of 1 second
 
@@ -128,13 +138,6 @@ hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_init(
     RCLCPP_INFO(get_logger(), "Successfully connected to port %d.", socket_port_);
   }
   // END: This part here is for exemplary purposes - Please do not copy to your production code
-  return hardware_interface::CallbackReturn::SUCCESS;
-}
-
-hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_configure(
-  const rclcpp_lifecycle::State & /*previous_state*/)
-{
-  RCLCPP_INFO(get_logger(), "Configuring ...please wait...");
 
   // reset values always when configuring hardware
   for (const auto & [name, descr] : joint_command_interfaces_)
@@ -145,12 +148,18 @@ hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_configure(
   return hardware_interface::CallbackReturn::SUCCESS;
 }
 
-hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_shutdown(
+hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_cleanup(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
   shutdown(sock_, SHUT_RDWR);  // shutdown socket
 
   return hardware_interface::CallbackReturn::SUCCESS;
+}
+
+hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_shutdown(
+  const rclcpp_lifecycle::State & previous_state)
+{
+  return on_cleanup(previous_state);
 }
 
 hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_activate(
