@@ -120,19 +120,44 @@ The key steps implemented in the ``rrbot.cpp`` hardware interface are:
 
 The ``HardwareComponentInterface`` base class provides a ``get_node()`` method, which returns a ``shared_ptr`` to an ``rclcpp::Node``. This node is already configured and spun by the ``ControllerManager``, making it the easiest way to perform ROS communications.
 
+The following example shows how to use this node to publish standard diagnostic messages.
+
 .. code-block:: cpp
 
   // Get Default Node added to executor
   auto default_node = get_node();
   if (default_node)
   {
-    default_status_publisher_ = default_node->create_publisher<std_msgs::msg::String>(
-      "rrbot_default_status", 10);
+    // Create a publisher for diagnostic messages
+    default_status_publisher_ =
+      default_node->create_publisher<diagnostic_msgs::msg::DiagnosticArray>("/diagnostics", 10);
 
-    // ... create a wall timer to publish messages periodically ...
+    // Create a timer to periodically publish the diagnostics
+    auto default_timer_callback = [this]() -> void
+    {
+      if (default_status_publisher_)
+      {
+        // Create the top-level message
+        auto diagnostic_msg = std::make_unique<diagnostic_msgs::msg::DiagnosticArray>();
+        diagnostic_msg->header.stamp = get_node()->now();
+        diagnostic_msg->status.resize(1);
+
+        // Populate the status for this hardware component
+        diagnostic_msg->status[0].level = diagnostic_msgs::msg::DiagnosticStatus::OK;
+        diagnostic_msg->status[0].name = this->get_name();
+        diagnostic_msg->status[0].message = "Hardware is OK";
+
+        // Publish the message
+        default_status_publisher_->publish(std::move(diagnostic_msg));
+      }
+    };
+
     using namespace std::chrono_literals;
-    default_status_timer_ = default_node->create_wall_timer(2.5s, [this](){ /* ... */ });
+    default_status_timer_ = default_node->create_wall_timer(2.5s, default_timer_callback);
   }
+
+.. note::
+   It is standard practice to publish diagnostic arrays to the ``/diagnostics`` topic so they can be monitored by tools like ``rqt_robot_monitor``. The ``status.name`` field is used to differentiate between different components.
 
 **2. Creating a Custom Node with the Executor (Advanced Method)**
 
@@ -167,7 +192,7 @@ For cases where a separate node identity is required, a hardware component can c
       locked_executor->add_node(custom_status_node_->get_node_base_interface());
 
 
-4.  **Publishing Diagnostics**: A publisher and a periodic wall timer are created on the new custom node. The timer's callback periodically publishes a status message, demonstrating that the node is alive and running alongside the main control loop.
+4.  **Publishing Status Messages**: A publisher and a periodic wall timer are created on the new custom node. The timer's callback periodically publishes a status message, demonstrating that the node is alive and running alongside the main control loop.
 
     .. code-block:: cpp
 

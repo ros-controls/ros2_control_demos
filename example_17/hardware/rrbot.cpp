@@ -43,17 +43,23 @@ hardware_interface::CallbackReturn RRBotSystemPositionOnlyHardware::on_init(
   if (default_node)
   {
     default_status_publisher_ =
-      default_node->create_publisher<std_msgs::msg::String>("rrbot_default_status", 10);
-
+      default_node->create_publisher<diagnostic_msgs::msg::DiagnosticArray>(
+        "/rrbot_diagnostics", 10);
     auto default_timer_callback = [this]() -> void
     {
-      auto node = get_node();
-      if (node && default_status_publisher_)
+      if (default_status_publisher_)
       {
-        std_msgs::msg::String msg;
-        msg.data = "RRBot '" + info_.name + "' default node is alive at " +
-                   std::to_string(node->now().seconds());
-        default_status_publisher_->publish(std::move(msg));
+        auto diagnostic_msg = std::make_unique<diagnostic_msgs::msg::DiagnosticArray>();
+        diagnostic_msg->header.staamp = get_node()->now();
+        diagnostic_msg->status.resize(1);
+
+        // Populate the status
+        diagnostic_msg->status[0].level = diagnostic_msgs::msg::DiagnosticStatus::OK;
+        diagnostic_msg->status[0].name = this->get_name();
+        diagnostic_msg->status[0].message = "Hardware is OK";
+
+        // Publish the message
+        default_status_publisher_->publish(std::move(diagnostic_msg));
       }
     };
     using namespace std::chrono_literals;
