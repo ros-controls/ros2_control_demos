@@ -38,37 +38,55 @@ hardware_interface::CallbackReturn RRBotSystemPositionOnlyHardware::on_init(
     return hardware_interface::CallbackReturn::ERROR;
   }
 
+  // Get Default Node added to executor
+  auto default_node = get_node();
+  if (default_node)
+  {
+    default_status_publisher_ =
+      default_node->create_publisher<std_msgs::msg::String>("rrbot_default_status", 10);
+
+    auto default_timer_callback = [this]() -> void
+    {
+      auto node = get_node();
+      if (node && default_status_publisher_)
+      {
+        std_msgs::msg::String msg;
+        msg.data = "RRBot '" + info_.name + "' default node is alive at " +
+                   std::to_string(node->now().seconds());
+        default_status_publisher_->publish(std::move(msg));
+      }
+    };
+    using namespace std::chrono_literals;
+    default_status_timer_ = default_node->create_wall_timer(2.5s, default_timer_callback);
+  }
+
   // Get Weak Pointer to Executor from HardwareComponentInterfaceParams
   executor_ = params.executor;
 
   // Ensure that the executor is available before creating the custom status node
   if (auto locked_executor = executor_.lock())
   {
-    std::string node_name = info_.name + "_status_publisher";
-    status_node_ = std::make_shared<rclcpp::Node>(node_name);
+    std::string node_name = info_.name + "_custom_node";
+    custom_status_node_ = std::make_shared<rclcpp::Node>(node_name);
 
-    status_publisher_ =
-      status_node_->create_publisher<std_msgs::msg::String>("rrbot_internal_status", 10);
+    custom_status_publisher_ =
+      custom_status_node_->create_publisher<std_msgs::msg::String>("rrbot_custom_status", 10);
 
-    auto timer_callback = [this]() -> void
+    auto custom_timer_callback = [this]() -> void
     {
-      if (status_publisher_)
+      if (custom_status_publisher_)
       {
         std_msgs::msg::String msg;
-        msg.data =
-          "RRBot '" + info_.name + "' is alive at " + std::to_string(status_node_->now().seconds());
-        status_publisher_->publish(std::move(msg));
+        msg.data = "RRBot '" + info_.name + "' custom node is alive at " +
+                   std::to_string(custom_status_node_->now().seconds());
+        custom_status_publisher_->publish(std::move(msg));
       }
     };
 
     using namespace std::chrono_literals;
-    status_timer_ = status_node_->create_wall_timer(2s, timer_callback);
+    custom_status_timer_ = custom_status_node_->create_wall_timer(2s, custom_timer_callback);
 
-    locked_executor->add_node(status_node_->get_node_base_interface());
-  }
-  else
-  {
-    return hardware_interface::CallbackReturn::ERROR;
+    locked_executor->add_node(custom_status_node_->get_node_base_interface());
   }
 
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code

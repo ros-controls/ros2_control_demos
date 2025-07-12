@@ -60,10 +60,14 @@ private:
   double hw_stop_sec_;
   double hw_slowdown_;
 
+  rclcpp::Node::SharedPtr default_status_node_;
+  rclcpp::Publisher<std_msgs::msg::String>::SharedPtr default_status_publisher_;
+  rclcpp::TimerBase::SharedPtr default_status_timer_;
+
   rclcpp::Executor::WeakPtr executor_;
-  rclcpp::Node::SharedPtr status_node_;
-  rclcpp::Publisher<std_msgs::msg::String>::SharedPtr status_publisher_;
-  rclcpp::TimerBase::SharedPtr status_timer_;
+  rclcpp::Node::SharedPtr custom_status_node_;
+  rclcpp::Publisher<std_msgs::msg::String>::SharedPtr custom_status_publisher_;
+  rclcpp::TimerBase::SharedPtr custom_status_timer_;
 };
 
 }  // namespace ros2_control_demo_example_17
