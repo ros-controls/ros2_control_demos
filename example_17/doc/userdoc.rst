@@ -5,9 +5,9 @@
 Example 17: RRBot with Hardware Component that publishes diagnostics
 =====================================================================
 
-This example shows how to publish diagnostics from a hardware component using the Executor passed from Controller Manager.
+This example shows how to publish diagnostics from a hardware component using the Executor passed from Controller Manager. It also demonstrates the use of a default node provided to the hardware component.
 
-It is essentially the same as Example 1, but with a modified hardware interface plugin that uses the aforementioned Executor and adds its own ROS 2 node to publish diagnostics.
+It is essentially the same as Example 1, but with a modified hardware interface plugin that uses the aforementioned Executor to add its own custom ROS 2 node, and also uses a default node to publish diagnostics.
 
 See the :ref:`Implementation Details of the Diagnostic Publisher <diagnostic_publisher_implementation>` for more information.
 
@@ -26,18 +26,25 @@ Tutorial steps
 Follow the same basic steps as in Example 1. You can find the details here:
 :ref:`Example 1: RRBot System Position Only <ros2_control_demos_example_1_userdoc>`.
 
-This tutorial differs by including a hardware interface that publishes diagnostics.
+This tutorial differs by including a hardware interface that publishes diagnostics from two different nodes: a "default" node and a "custom" node.
 
-A custom ROS 2 node is created inside the hardware interface to publish status messages. This node is added to the executor provided by the controller manager.
+1.  A **default node** is automatically provided to the hardware component. This is the simplest way to publish status messages.
+2.  A **custom ROS 2 node** is created inside the hardware interface and added to the executor provided by the controller manager. This is useful for more complex scenarios or when a separate node identity is needed.
 
-The node:
+The nodes:
 
-- Is named ``<hardware_name>_status_publisher``, where slashes are replaced by underscores.
-- Publishes on the topic ``/rrbot_internal_status``.
-- Uses message type ``std_msgs/msg/String``.
-- Sends a message every 2 seconds indicating the robot is alive.
+- Default node:
+  - Is named after the hardware component (e.g., ``/RRBot``).
+  - Publishes on the topic ``/rrbot_default_status``.
+  - Uses message type ``std_msgs/msg/String``.
+  - Sends a message every 2.5 seconds.
+- Custom node:
+  - Is named ``<hardware_name>_custom_node`` (e.g., ``/rrbot_custom_node``).
+  - Publishes on the topic ``/rrbot_custom_status``.
+  - Uses message type ``std_msgs/msg/String``.
+  - Sends a message every 2 seconds.
 
-To check that the node is running and diagnostics are published correctly:
+To check that the nodes are running and diagnostics are published correctly:
 
 .. tabs::
 
@@ -49,16 +56,23 @@ To check that the node is running and diagnostics are published correctly:
          ros2 node list
 
          # You should see something like:
-         # /rrbot_status_publisher
+         # /RRBot
+         # /controller_manager
+         # /RRBot_custom_node
+         # /robot_state_publisher
 
-         # List topics and confirm diagnostics topic is available
+         # List topics and confirm diagnostics topics are available
          ros2 topic list
 
-         # Confirm message type of the diagnostics topic
-         ros2 topic info /rrbot_internal_status
+         # Confirm message type of the diagnostics topics
+         ros2 topic info /rrbot_default_status
+         ros2 topic info /rrbot_custom_status
 
-         # Echo the messages published by the diagnostics node
-         ros2 topic echo /rrbot_internal_status
+         # Echo the messages published by the default node
+         ros2 topic echo /rrbot_default_status
+
+         # Echo the messages published by the custom node
+         ros2 topic echo /rrbot_custom_status
 
    .. group-tab:: Docker
 
@@ -74,27 +88,55 @@ To check that the node is running and diagnostics are published correctly:
 
          ros2 node list
          ros2 topic list
-         ros2 topic info /rrbot_internal_status
-         ros2 topic echo /rrbot_internal_status
+         ros2 topic info /rrbot_default_status
+         ros2 topic info /rrbot_custom_status
+         ros2 topic echo /rrbot_default_status
+         ros2 topic echo /rrbot_custom_status
 
-The echoed message should look similar to:
+The echoed messages should look similar to:
 
 .. code-block:: shell
 
-   data: "RRBot 'RRBot' is alive at 1751087597.146549"
+   # From /rrbot_default_status
+   data: "RRBot 'RRBot' default node is alive at 1751087599.646549"
+   ---
+   # From /rrbot_custom_status
+   data: "RRBot 'RRBot' custom node is alive at 1751087597.146549"
 
 .. note::
 
-   The diagnostics node and its timer are created only if the executor is successfully passed to the hardware component. If you don't see the topic or node, ensure the hardware plugin is correctly implemented and that the controller manager is providing an executor.
+   The custom diagnostics node and its timer are created only if the executor is successfully passed to the hardware component. If you don't see the topic or node, ensure the hardware plugin is correctly implemented and that the controller manager is providing an executor.
 
 .. _diagnostic_publisher_implementation:
 
 Implementation Details of the Diagnostic Publisher
 --------------------------------------------------
 
-This example builds upon the standard ``RRBot`` hardware interface by demonstrating the suggested way for a hardware component to run its own ROS 2 node for tasks like publishing diagnostics. This is achieved by leveraging the executor that is managed by the ``ControllerManager``.
+This example builds upon the standard ``RRBot`` hardware interface by demonstrating the suggested ways for a hardware component to run its own ROS 2 nodes for tasks like publishing diagnostics. Two methods are shown: using a pre-existing "default" node and creating a new "custom" node that is added to the ``ControllerManager``'s executor.
 
 The key steps implemented in the ``rrbot.cpp`` hardware interface are:
+
+**1. Using the Default Node (Recommended Method)**
+
+The ``HardwareComponentInterface`` base class provides a ``get_node()`` method, which returns a ``shared_ptr`` to an ``rclcpp::Node``. This node is already configured and spun by the ``ControllerManager``, making it the easiest way to perform ROS communications.
+
+.. code-block:: cpp
+
+  // Get Default Node added to executor
+  auto default_node = get_node();
+  if (default_node)
+  {
+    default_status_publisher_ = default_node->create_publisher<std_msgs::msg::String>(
+      "rrbot_default_status", 10);
+
+    // ... create a wall timer to publish messages periodically ...
+    using namespace std::chrono_literals;
+    default_status_timer_ = default_node->create_wall_timer(2.5s, [this](){ /* ... */ });
+  }
+
+**2. Creating a Custom Node with the Executor (Advanced Method)**
+
+For cases where a separate node identity is required, a hardware component can create its own node and add it to the ``ControllerManager``'s executor.
 
 1.  **Receiving the Executor Reference**: The ``on_init`` method of the hardware interface is implemented with an updated signature that accepts ``HardwareComponentInterfaceParams``. This struct contains a weak pointer to the ``ControllerManager``'s executor.
 
@@ -103,7 +145,7 @@ The key steps implemented in the ``rrbot.cpp`` hardware interface are:
       // Get Weak Pointer to Executor from HardwareComponentInterfaceParams
       executor_ = params.executor;
 
-2.  **Safely Accessing the Executor**: Before using the executor, its ``weak_ptr`` must be "locked" into a ``shared_ptr``. This is a crucial safety check to ensure the executor is still valid. The C++17 ``if-initializer`` syntax provides a clean and standard way to do this.
+2.  **Safely Accessing the Executor**: Before using the executor, its ``weak_ptr`` must be "locked" into a ``shared_ptr``. This is a crucial safety check to ensure the executor is still valid.
 
     .. code-block:: cpp
 
@@ -116,24 +158,24 @@ The key steps implemented in the ``rrbot.cpp`` hardware interface are:
         return hardware_interface::CallbackReturn::ERROR;
       }
 
-3.  **Creating and Adding a Node**: Inside the locked scope, a standard ``rclcpp::Node`` is created. This new node is then added to the ``ControllerManager``'s executor. This allows the node's callbacks (e.g., for timers or subscriptions) to be processed by the same multi-threaded executor that handles the ``ControllerManager``'s services.
+3.  **Creating and Adding a Node**: Inside the locked scope, a standard ``rclcpp::Node`` is created. This new node is then added to the ``ControllerManager``'s executor. This allows the node's callbacks (e.g., for timers or subscriptions) to be processed by the same multi-threaded executor.
 
     .. code-block:: cpp
 
       // Inside the `if (auto locked_executor = ...)` block
-      status_node_ = std::make_shared<rclcpp::Node>(info_.name + "_status_publisher");
-      locked_executor->add_node(status_node_->get_node_base_interface());
+      custom_status_node_ = std::make_shared<rclcpp::Node>(info_.name + "_custom_node");
+      locked_executor->add_node(custom_status_node_->get_node_base_interface());
 
 
-4.  **Publishing Diagnostics**: A publisher and a periodic wall timer are created on the new node. The timer's callback periodically publishes a simple status message, demonstrating that the hardware component's internal node is alive and running alongside the main control loop.
+4.  **Publishing Diagnostics**: A publisher and a periodic wall timer are created on the new custom node. The timer's callback periodically publishes a status message, demonstrating that the node is alive and running alongside the main control loop.
 
     .. code-block:: cpp
 
       // Inside the `if (auto locked_executor = ...)` block
-      status_publisher_ =
-        status_node_->create_publisher<std_msgs::msg::String>("rrbot_internal_status", 10);
+      custom_status_publisher_ =
+        custom_status_node_->create_publisher<std_msgs::msg::String>("rrbot_custom_status", 10);
 
-      status_timer_ = status_node_->create_wall_timer(
+      custom_status_timer_ = custom_status_node_->create_wall_timer(
         2s, [this](){ /* ... lambda to publish message ... */ });
 
 This pattern is the recommended approach for hardware components that need to perform their own ROS communications without interfering with the real-time control loop.
@@ -154,7 +196,7 @@ Files used for this demos
 
 * RViz configuration: `rrbot.rviz <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/ros2_control_demo_description/rrbot/rviz/rrbot.rviz>`__
 
-* Hardware interface plugin: `rrbot.cpp <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_1/hardware/rrbot.cpp>`__
+* Hardware interface plugin: `rrbot.cpp <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_17/hardware/rrbot.cpp>`__
 
 
 Controllers from this demo
