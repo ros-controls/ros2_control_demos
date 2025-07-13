@@ -19,6 +19,7 @@
 #include <string>
 #include <vector>
 
+#include "diagnostic_msgs/msg/diagnostic_array.hpp"
 #include "hardware_interface/handle.hpp"
 #include "hardware_interface/hardware_info.hpp"
 #include "hardware_interface/system_interface.hpp"
@@ -61,7 +62,7 @@ private:
   double hw_slowdown_;
 
   rclcpp::Node::SharedPtr default_status_node_;
-  rclcpp::Publisher<std_msgs::msg::String>::SharedPtr default_status_publisher_;
+  rclcpp::Publisher<diagnostic_msgs::msg::DiagnosticArray>::SharedPtr default_status_publisher_;
   rclcpp::TimerBase::SharedPtr default_status_timer_;
 
   rclcpp::Executor::WeakPtr executor_;

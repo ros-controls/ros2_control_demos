@@ -23,6 +23,7 @@
 #include <string>
 #include <vector>
 
+#include "diagnostic_msgs/msg/diagnostic_array.hpp"
 #include "hardware_interface/types/hardware_interface_type_values.hpp"
 #include "rclcpp/rclcpp.hpp"
 
@@ -38,59 +39,19 @@ hardware_interface::CallbackReturn RRBotSystemPositionOnlyHardware::on_init(
     return hardware_interface::CallbackReturn::ERROR;
   }
 
-  // Get Default Node added to executor
-  auto default_node = get_node();
-  if (default_node)
-  {
-    default_status_publisher_ =
-      default_node->create_publisher<diagnostic_msgs::msg::DiagnosticArray>(
-        "/rrbot_diagnostics", 10);
-    auto default_timer_callback = [this]() -> void
-    {
-      if (default_status_publisher_)
-      {
-        auto diagnostic_msg = std::make_unique<diagnostic_msgs::msg::DiagnosticArray>();
-        diagnostic_msg->header.staamp = get_node()->now();
-        diagnostic_msg->status.resize(1);
-
-        // Populate the status
-        diagnostic_msg->status[0].level = diagnostic_msgs::msg::DiagnosticStatus::OK;
-        diagnostic_msg->status[0].name = this->get_name();
-        diagnostic_msg->status[0].message = "Hardware is OK";
-
-        // Publish the message
-        default_status_publisher_->publish(std::move(diagnostic_msg));
-      }
-    };
-    using namespace std::chrono_literals;
-    default_status_timer_ = default_node->create_wall_timer(2.5s, default_timer_callback);
-  }
-
   // Get Weak Pointer to Executor from HardwareComponentInterfaceParams
   executor_ = params.executor;
 
   // Ensure that the executor is available before creating the custom status node
   if (auto locked_executor = executor_.lock())
   {
-    std::string node_name = info_.name + "_custom_node";
+    std::string name_lower = info_.name;
+    std::transform(
+      name_lower.begin(), name_lower.end(), name_lower.begin(),
+      [](unsigned char c) { return std::tolower(c); });
+
+    std::string node_name = name_lower + "_custom_node";
     custom_status_node_ = std::make_shared<rclcpp::Node>(node_name);
-
-    custom_status_publisher_ =
-      custom_status_node_->create_publisher<std_msgs::msg::String>("rrbot_custom_status", 10);
-
-    auto custom_timer_callback = [this]() -> void
-    {
-      if (custom_status_publisher_)
-      {
-        std_msgs::msg::String msg;
-        msg.data = "RRBot '" + info_.name + "' custom node is alive at " +
-                   std::to_string(custom_status_node_->now().seconds());
-        custom_status_publisher_->publish(std::move(msg));
-      }
-    };
-
-    using namespace std::chrono_literals;
-    custom_status_timer_ = custom_status_node_->create_wall_timer(2s, custom_timer_callback);
 
     locked_executor->add_node(custom_status_node_->get_node_base_interface());
   }
@@ -165,6 +126,52 @@ hardware_interface::CallbackReturn RRBotSystemPositionOnlyHardware::on_configure
     set_command(name, 0.0);
   }
   RCLCPP_INFO(get_logger(), "Successfully configured!");
+
+  // Get Default Node added to executor
+  if (get_node())
+  {
+    default_status_publisher_ =
+      get_node()->create_publisher<diagnostic_msgs::msg::DiagnosticArray>("/diagnostics", 10);
+    auto default_timer_callback = [this]() -> void
+    {
+      if (default_status_publisher_)
+      {
+        auto diagnostic_msg = std::make_unique<diagnostic_msgs::msg::DiagnosticArray>();
+        diagnostic_msg->header.stamp = get_node()->now();
+        diagnostic_msg->status.resize(1);
+
+        // Populate the status
+        diagnostic_msg->status[0].level = diagnostic_msgs::msg::DiagnosticStatus::OK;
+        diagnostic_msg->status[0].name = this->get_name();
+        diagnostic_msg->status[0].message = "Hardware is OK";
+
+        // Publish the message
+        default_status_publisher_->publish(std::move(diagnostic_msg));
+      }
+    };
+    using namespace std::chrono_literals;
+    default_status_timer_ = get_node()->create_wall_timer(2.5s, default_timer_callback);
+  }
+
+  if (custom_status_node_)
+  {
+    custom_status_publisher_ =
+      custom_status_node_->create_publisher<std_msgs::msg::String>("rrbot_custom_status", 10);
+
+    auto custom_timer_callback = [this]() -> void
+    {
+      if (custom_status_publisher_)
+      {
+        std_msgs::msg::String msg;
+        msg.data = "RRBot '" + info_.name + "' custom node is alive at " +
+                   std::to_string(custom_status_node_->now().seconds());
+        custom_status_publisher_->publish(std::move(msg));
+      }
+    };
+
+    using namespace std::chrono_literals;
+    custom_status_timer_ = custom_status_node_->create_wall_timer(2s, custom_timer_callback);
+  }
 
   return hardware_interface::CallbackReturn::SUCCESS;
 }
