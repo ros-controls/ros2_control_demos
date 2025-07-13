@@ -28,15 +28,15 @@ Follow the same basic steps as in Example 1. You can find the details here:
 
 This tutorial differs by including a hardware interface that publishes diagnostics from two different nodes: a "default" node and a "custom" node.
 
-1.  A **default node** is automatically provided to the hardware component. This is the simplest way to publish status messages.
-2.  A **custom ROS 2 node** is created inside the hardware interface and added to the executor provided by the controller manager. This is useful for more complex scenarios or when a separate node identity is needed.
+1.  A **default node** is automatically provided to the hardware component. This node will publish standard ROS 2 diagnostic messages.
+2.  A **custom ROS 2 node** is created inside the hardware interface and added to the executor. This node will publish a simpler ``std_msgs/msg/String`` status message.
 
 The nodes:
 
 - Default node:
-  - Is named after the hardware component (e.g., ``/RRBot``).
-  - Publishes on the topic ``/rrbot_default_status``.
-  - Uses message type ``std_msgs/msg/String``.
+  - Is named after the hardware component (e.g., ``/RRBotSystemPositionOnlyHardware``).
+  - Publishes on the topic ``/diagnostics``.
+  - Uses message type ``diagnostic_msgs/msg/DiagnosticArray``.
   - Sends a message every 2.5 seconds.
 - Custom node:
   - Is named ``<hardware_name>_custom_node`` (e.g., ``/rrbot_custom_node``).
@@ -56,20 +56,24 @@ To check that the nodes are running and diagnostics are published correctly:
          ros2 node list
 
          # You should see something like:
-         # /RRBot
+         # /rrbot           (the default node)
+         # /rrbot_custom_node (the custom node)
          # /controller_manager
-         # /RRBot_custom_node
          # /robot_state_publisher
 
          # List topics and confirm diagnostics topics are available
          ros2 topic list
 
-         # Confirm message type of the diagnostics topics
-         ros2 topic info /rrbot_default_status
-         ros2 topic info /rrbot_custom_status
+         # Confirm message type of the diagnostics topic
+         ros2 topic info /diagnostics
+         # Should show: diagnostic_msgs/msg/DiagnosticArray
 
-         # Echo the messages published by the default node
-         ros2 topic echo /rrbot_default_status
+         # Confirm message type of the custom status topic
+         ros2 topic info /rrbot_custom_status
+         # Should show: std_msgs/msg/String
+
+         # Echo the raw messages published by the default node
+         ros2 topic echo /diagnostics
 
          # Echo the messages published by the custom node
          ros2 topic echo /rrbot_custom_status
@@ -87,21 +91,33 @@ To check that the nodes are running and diagnostics are published correctly:
       .. code-block:: shell
 
          ros2 node list
-         ros2 topic list
-         ros2 topic info /rrbot_default_status
+         ros2 topic info /diagnostics
          ros2 topic info /rrbot_custom_status
-         ros2 topic echo /rrbot_default_status
+         ros2 topic echo /diagnostics
          ros2 topic echo /rrbot_custom_status
 
 The echoed messages should look similar to:
 
+.. code-block:: yaml
+
+   # From /diagnostics (showing the default node's output)
+   header:
+     stamp:
+       sec: 1678886401
+       nanosec: 123456789
+   status:
+   - level: 0
+     name: "RRBot"
+     message: "Hardware is OK"
+     hardware_id: ""
+     values: []
+   ---
+
 .. code-block:: shell
 
-   # From /rrbot_default_status
-   data: "RRBot 'RRBot' default node is alive at 1751087599.646549"
+   # From /rrbot_custom_status (showing the custom node's output)
+   data: RRBot 'RRBot' custom node is alive at 1751087597.146549
    ---
-   # From /rrbot_custom_status
-   data: "RRBot 'RRBot' custom node is alive at 1751087597.146549"
 
 .. note::
 
