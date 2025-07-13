@@ -18,6 +18,7 @@
   <build_depend>ros2_control_cmake</build_depend>
 
   <depend>backward_ros</depend>
+  <depend>diagnostic_updater</depend>
   <depend>hardware_interface</depend>
   <depend>pluginlib</depend>
   <depend>rclcpp</depend>

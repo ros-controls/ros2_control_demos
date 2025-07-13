@@ -11,6 +11,7 @@ set(THIS_PACKAGE_INCLUDE_DEPENDS
   pluginlib
   rclcpp
   rclcpp_lifecycle
+  diagnostic_updater
 )
 
 # Specify the required version of ros2_control
@@ -44,6 +45,7 @@ target_link_libraries(ros2_control_demo_example_17 PUBLIC
   pluginlib::pluginlib
   rclcpp::rclcpp
   rclcpp_lifecycle::rclcpp_lifecycle
+  diagnostic_updater::diagnostic_updater
 )
 
 # Export hardware plugins
