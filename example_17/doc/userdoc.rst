@@ -5,9 +5,11 @@
 Example 17: RRBot with Hardware Component that publishes diagnostics
 =====================================================================
 
-This example shows how to publish diagnostics from a hardware component using the Executor passed from Controller Manager. It also demonstrates the use of a default node provided to the hardware component.
+This example shows how to publish diagnostics from a hardware component using ROS 2 features available within the ``ros2_control`` framework.
 
-It is essentially the same as Example 1, but with a modified hardware interface plugin that uses the aforementioned Executor to add its own custom ROS 2 node, and also uses a default node to publish diagnostics.
+It is essentially the same as Example 1, but with a modified hardware interface plugin that demonstrates two methods for publishing status information:
+1.  Using the standard ``diagnostic_updater`` on the default node to publish to the ``/diagnostics`` topic. This is the recommended approach for hardware status reporting.
+2.  Using the Controller Manager's Executor to add a custom ROS 2 node for publishing to a separate, non-standard topic.
 
 See the :ref:`Implementation Details of the Diagnostic Publisher <diagnostic_publisher_implementation>` for more information.
 
@@ -26,18 +28,17 @@ Tutorial steps
 Follow the same basic steps as in Example 1. You can find the details here:
 :ref:`Example 1: RRBot System Position Only <ros2_control_demos_example_1_userdoc>`.
 
-This tutorial differs by including a hardware interface that publishes diagnostics from two different nodes: a "default" node and a "custom" node.
+This tutorial differs by including a hardware interface that publishes diagnostics using two different mechanisms:
 
-1.  A **default node** is automatically provided to the hardware component. This node will publish standard ROS 2 diagnostic messages.
-2.  A **custom ROS 2 node** is created inside the hardware interface and added to the executor. This node will publish a simpler ``std_msgs/msg/String`` status message.
+1.  A **default node** is automatically provided to the hardware component. We use the standard ``diagnostic_updater`` library on this node to publish structured diagnostic data.
+2.  A **custom ROS 2 node** is created inside the hardware interface and added to the executor provided by the controller manager. This demonstrates a more manual approach useful for non-diagnostic topics.
 
-The nodes:
+The nodes and topics:
 
-- Default node:
-  - Is named after the hardware component (e.g., ``/RRBotSystemPositionOnlyHardware``).
-  - Publishes on the topic ``/diagnostics``.
+- Default node (via ``diagnostic_updater``):
+  - Is named after the hardware component (e.g., ``/RRBot``).
+  - Publishes periodically to the standard ``/diagnostics`` topic.
   - Uses message type ``diagnostic_msgs/msg/DiagnosticArray``.
-  - Sends a message every 2.5 seconds.
 - Custom node:
   - Is named ``<hardware_name>_custom_node`` (e.g., ``/rrbot_custom_node``).
   - Publishes on the topic ``/rrbot_custom_status``.
@@ -128,56 +129,43 @@ The echoed messages should look similar to:
 Implementation Details of the Diagnostic Publisher
 --------------------------------------------------
 
-This example builds upon the standard ``RRBot`` hardware interface by demonstrating the suggested ways for a hardware component to run its own ROS 2 nodes for tasks like publishing diagnostics. Two methods are shown: using a pre-existing "default" node and creating a new "custom" node that is added to the ``ControllerManager``'s executor.
+This example demonstrates the two recommended ways for a hardware component to perform ROS 2 communications: using the standard ``diagnostic_updater`` on the default node, and creating a separate custom node added to the Controller Manager's executor.
 
-The key steps implemented in the ``rrbot.cpp`` hardware interface are:
+**1. Using the ``diagnostic_updater`` with the Default Node (Standard Method)**
 
-**1. Using the Default Node (Recommended Method)**
+The ``diagnostic_updater`` library is the standard ROS 2 tool for publishing diagnostics. It automatically handles timer creation and publishing to the ``/diagnostics`` topic, making it the preferred method. The ``HardwareComponentInterface`` provides a ``get_node()`` method to access the default node, which is passed to the updater.
 
-The ``HardwareComponentInterface`` base class provides a ``get_node()`` method, which returns a ``shared_ptr`` to an ``rclcpp::Node``. This node is already configured and spun by the ``ControllerManager``, making it the easiest way to perform ROS communications.
-
-The following example shows how to use this node to publish standard diagnostic messages.
+The key steps are:
+1.  **Create an Updater**: Instantiate ``diagnostic_updater::Updater``, passing it the default node. The updater internally creates a publisher to ``/diagnostics`` and a periodic timer (default 1 Hz).
+2.  **Set Hardware ID**: Set a unique identifier for the hardware component.
+3.  **Add a Diagnostic Task**: Add a function that will be called periodically by the updater's internal timer. This function populates a ``DiagnosticStatusWrapper`` with the current status of the hardware.
 
 .. code-block:: cpp
 
-  // Get Default Node added to executor
-  auto default_node = get_node();
-  if (default_node)
+  #include "diagnostic_updater/diagnostic_updater.hpp"
+
+  if (get_node())
   {
-    // Create a publisher for diagnostic messages
-    default_status_publisher_ =
-      default_node->create_publisher<diagnostic_msgs::msg::DiagnosticArray>("/diagnostics", 10);
+    updater_ = std::make_shared<diagnostic_updater::Updater>(get_node());
+    updater_->setHardwareID(info_.name);
 
-    // Create a timer to periodically publish the diagnostics
-    auto default_timer_callback = [this]() -> void
-    {
-      if (default_status_publisher_)
-      {
-        // Create the top-level message
-        auto diagnostic_msg = std::make_unique<diagnostic_msgs::msg::DiagnosticArray>();
-        diagnostic_msg->header.stamp = get_node()->now();
-        diagnostic_msg->status.resize(1);
-
-        // Populate the status for this hardware component
-        diagnostic_msg->status[0].level = diagnostic_msgs::msg::DiagnosticStatus::OK;
-        diagnostic_msg->status[0].name = this->get_name();
-        diagnostic_msg->status[0].message = "Hardware is OK";
-
-        // Publish the message
-        default_status_publisher_->publish(std::move(diagnostic_msg));
-      }
-    };
-
-    using namespace std::chrono_literals;
-    default_status_timer_ = default_node->create_wall_timer(2.5s, default_timer_callback);
+    updater_->add(
+      info_.name + " Status", this, &RRBotSystemPositionOnlyHardware::produce_diagnostics);
   }
 
-.. note::
-   It is standard practice to publish diagnostic arrays to the ``/diagnostics`` topic so they can be monitored by tools like ``rqt_robot_monitor``. The ``status.name`` field is used to differentiate between different components.
+  void RRBotSystemPositionOnlyHardware::produce_diagnostics(
+    diagnostic_updater::DiagnosticStatusWrapper & stat)
+  {
+    // Add status summary
+    stat.summary(diagnostic_msgs::msg::DiagnosticStatus::OK, "Hardware is OK");
+    // Optionally add key-value pairs
+    // stat.add("voltage", "24.1V");
+  }
+
 
 **2. Creating a Custom Node with the Executor (Advanced Method)**
 
-For cases where a separate node identity is required, a hardware component can create its own node and add it to the ``ControllerManager``'s executor.
+For non-diagnostic topics or when a separate node identity is required, a hardware component can create its own node and add it to the Controller Manager's executor.
 
 1.  **Receiving the Executor Reference**: The ``on_init`` method of the hardware interface is implemented with an updated signature that accepts ``HardwareComponentInterfaceParams``. This struct contains a weak pointer to the ``ControllerManager``'s executor.
 
