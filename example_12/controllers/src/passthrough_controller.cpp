@@ -108,22 +108,6 @@ controller_interface::CallbackReturn PassthroughController::on_configure(
 controller_interface::CallbackReturn PassthroughController::on_activate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
-  //  check if we have all resources defined in the "points" parameter
-  //  also verify that we *only* have the resources defined in the "points" parameter
-  // ATTENTION(destogl): Shouldn't we use ordered interface all the time?
-  std::vector<std::reference_wrapper<hardware_interface::LoanedCommandInterface>>
-    ordered_interfaces;
-  if (
-    !controller_interface::get_ordered_interfaces(
-      command_interfaces_, command_interface_names_, std::string(""), ordered_interfaces) ||
-    command_interface_names_.size() != ordered_interfaces.size())
-  {
-    RCLCPP_ERROR(
-      this->get_node()->get_logger(), "Expected %zu command interfaces, got %zu",
-      command_interface_names_.size(), ordered_interfaces.size());
-    return controller_interface::CallbackReturn::ERROR;
-  }
-
   // reset command buffer if a command came through callback when controller was inactive
   reset_controller_reference_msg(command_);
   rt_buffer_.try_set(command_);
