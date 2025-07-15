@@ -23,7 +23,7 @@
 #include <string>
 #include <vector>
 
-#include "diagnostic_msgs/msg/diagnostic_array.hpp"
+#include "diagnostic_updater/diagnostic_updater.hpp"
 #include "hardware_interface/types/hardware_interface_type_values.hpp"
 #include "rclcpp/rclcpp.hpp"
 
@@ -103,6 +103,12 @@ hardware_interface::CallbackReturn RRBotSystemPositionOnlyHardware::on_init(
   return hardware_interface::CallbackReturn::SUCCESS;
 }
 
+void RRBotSystemPositionOnlyHardware::produce_diagnostics(
+  diagnostic_updater::DiagnosticStatusWrapper & stat)
+{
+  stat.summary(diagnostic_msgs::msg::DiagnosticStatus::OK, "Hardware is OK");
+}
+
 hardware_interface::CallbackReturn RRBotSystemPositionOnlyHardware::on_configure(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
@@ -130,27 +136,17 @@ hardware_interface::CallbackReturn RRBotSystemPositionOnlyHardware::on_configure
   // Get Default Node added to executor
   if (get_node())
   {
-    default_status_publisher_ =
-      get_node()->create_publisher<diagnostic_msgs::msg::DiagnosticArray>("/diagnostics", 10);
-    auto default_timer_callback = [this]() -> void
-    {
-      if (default_status_publisher_)
-      {
-        auto diagnostic_msg = std::make_unique<diagnostic_msgs::msg::DiagnosticArray>();
-        diagnostic_msg->header.stamp = get_node()->now();
-        diagnostic_msg->status.resize(1);
+    updater_ = std::make_shared<diagnostic_updater::Updater>(get_node());
+    updater_->setHardwareID(info_.name);
 
-        // Populate the status
-        diagnostic_msg->status[0].level = diagnostic_msgs::msg::DiagnosticStatus::OK;
-        diagnostic_msg->status[0].name = this->get_name();
-        diagnostic_msg->status[0].message = "Hardware is OK";
-
-        // Publish the message
-        default_status_publisher_->publish(std::move(diagnostic_msg));
-      }
-    };
-    using namespace std::chrono_literals;
-    default_status_timer_ = get_node()->create_wall_timer(2.5s, default_timer_callback);
+    updater_->add(
+      info_.name + " Status", this, &RRBotSystemPositionOnlyHardware::produce_diagnostics);
+  }
+  else
+  {
+    RCLCPP_WARN(
+      rclcpp::get_logger("RRBotSystemPositionOnlyHardware"),
+      "Default node is not available. Standard diagnostics will not be published.");
   }
 
   if (custom_status_node_)
