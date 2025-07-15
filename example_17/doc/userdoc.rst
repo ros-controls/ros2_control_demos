@@ -207,6 +207,22 @@ For non-diagnostic topics or when a separate node identity is required, a hardwa
       custom_status_timer_ = custom_status_node_->create_wall_timer(
         2s, [this](){ /* ... lambda to publish message ... */ });
 
+**3. (Extra)Using the Default Node, but with a Custom Publisher**
+
+This is not implemented in the example, but is also a viable option.
+
+.. code-block:: cpp
+
+    // Get Default Node added to executor
+    auto default_node = get_node();
+    if (default_node)
+    {
+        default_status_publisher_ = default_node->create_publisher<std_msgs::msg::String>("rrbot_default_status", 10);
+        using namespace std::chrono_literals;
+        default_status_timer_ = default_node->create_wall_timer(2.5s, [this](){ /* ... */ });
+    }
+
+
 This pattern is the recommended approach for hardware components that need to perform their own ROS communications without interfering with the real-time control loop.
 
 Files used for this demos
