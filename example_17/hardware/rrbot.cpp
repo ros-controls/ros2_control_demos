@@ -39,6 +39,9 @@ hardware_interface::CallbackReturn RRBotSystemPositionOnlyHardware::on_init(
     return hardware_interface::CallbackReturn::ERROR;
   }
 
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
+  hw_start_sec_ = stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
+
   // Get Weak Pointer to Executor from HardwareComponentInterfaceParams
   executor_ = params.executor;
 
@@ -55,9 +58,6 @@ hardware_interface::CallbackReturn RRBotSystemPositionOnlyHardware::on_init(
 
     locked_executor->add_node(custom_status_node_->get_node_base_interface());
   }
-
-  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
-  hw_start_sec_ = stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
   hw_stop_sec_ = stod(info_.hardware_parameters["example_param_hw_stop_duration_sec"]);
   hw_slowdown_ = stod(info_.hardware_parameters["example_param_hw_slowdown"]);
   RCLCPP_INFO(get_logger(), "Robot hardware_component update_rate is %dHz", info_.rw_rate);
