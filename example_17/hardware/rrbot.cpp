@@ -40,10 +40,10 @@ hardware_interface::CallbackReturn RRBotSystemPositionOnlyHardware::on_init(
   }
 
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
-  hw_start_sec_ = stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
-  hw_stop_sec_ = stod(info_.hardware_parameters["example_param_hw_stop_duration_sec"]);
-  hw_slowdown_ = stod(info_.hardware_parameters["example_param_hw_slowdown"]);
-  RCLCPP_INFO(get_logger(), "Robot hardware_component update_rate is %dHz", info_.rw_rate);
+  hw_start_sec_ = stod(get_hardware_info().hardware_parameters["example_param_hw_start_duration_sec"]);
+  hw_stop_sec_ = stod(get_hardware_info().hardware_parameters["example_param_hw_stop_duration_sec"]);
+  hw_slowdown_ = stod(get_hardware_info().hardware_parameters["example_param_hw_slowdown"]);
+  RCLCPP_INFO(get_logger(), "Robot hardware_component update_rate is %dHz", get_hardware_info().rw_rate);
 
   // Get Weak Pointer to Executor from HardwareComponentInterfaceParams
   executor_ = params.executor;
@@ -51,7 +51,7 @@ hardware_interface::CallbackReturn RRBotSystemPositionOnlyHardware::on_init(
   // Ensure that the executor is available before creating the custom status node
   if (auto locked_executor = executor_.lock())
   {
-    std::string name_lower = info_.name;
+    std::string name_lower = get_hardware_info().name;
     std::transform(
       name_lower.begin(), name_lower.end(), name_lower.begin(),
       [](unsigned char c) { return std::tolower(c); });
@@ -63,7 +63,7 @@ hardware_interface::CallbackReturn RRBotSystemPositionOnlyHardware::on_init(
   }
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
-  for (const hardware_interface::ComponentInfo & joint : info_.joints)
+  for (const hardware_interface::ComponentInfo & joint : get_hardware_info().joints)
   {
     // RRBotSystemPositionOnly has exactly one state and command interface on each joint
     if (joint.command_interfaces.size() != 1)
@@ -137,10 +137,10 @@ hardware_interface::CallbackReturn RRBotSystemPositionOnlyHardware::on_configure
   if (get_node())
   {
     updater_ = std::make_shared<diagnostic_updater::Updater>(get_node());
-    updater_->setHardwareID(info_.name);
+    updater_->setHardwareID(get_hardware_info().name);
 
     updater_->add(
-      info_.name + " Status", this, &RRBotSystemPositionOnlyHardware::produce_diagnostics);
+      get_hardware_info().name + "_Status", this, &RRBotSystemPositionOnlyHardware::produce_diagnostics);
   }
   else
   {
@@ -159,7 +159,7 @@ hardware_interface::CallbackReturn RRBotSystemPositionOnlyHardware::on_configure
       if (custom_status_publisher_)
       {
         std_msgs::msg::String msg;
-        msg.data = "RRBot '" + info_.name + "' custom node is alive at " +
+        msg.data = "RRBot '" + get_hardware_info().name + "' custom node is alive at " +
                    std::to_string(custom_status_node_->now().seconds());
         custom_status_publisher_->publish(std::move(msg));
       }

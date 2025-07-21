@@ -147,10 +147,10 @@ The key steps are:
   if (get_node())
   {
     updater_ = std::make_shared<diagnostic_updater::Updater>(get_node());
-    updater_->setHardwareID(info_.name);
+    updater_->setHardwareID(get_hardware_info().name);
 
     updater_->add(
-      info_.name + " Status", this, &RRBotSystemPositionOnlyHardware::produce_diagnostics);
+      get_hardware_info().name + " Status", this, &RRBotSystemPositionOnlyHardware::produce_diagnostics);
   }
 
   void RRBotSystemPositionOnlyHardware::produce_diagnostics(
@@ -169,14 +169,14 @@ For non-diagnostic topics or when a separate node identity is required, a hardwa
 
 1.  **Receiving the Executor Reference**: The ``on_init`` method of the hardware interface is implemented with an updated signature that accepts ``HardwareComponentInterfaceParams``. This struct contains a weak pointer to the ``ControllerManager``'s executor.
 
-    .. code-block:: cpp
+.. code-block:: cpp
 
       // Get Weak Pointer to Executor from HardwareComponentInterfaceParams
       executor_ = params.executor;
 
 2.  **Safely Accessing the Executor**: Before using the executor, its ``weak_ptr`` must be "locked" into a ``shared_ptr``. This is a crucial safety check to ensure the executor is still valid.
 
-    .. code-block:: cpp
+.. code-block:: cpp
 
       if (auto locked_executor = executor_.lock())
       {
@@ -189,10 +189,10 @@ For non-diagnostic topics or when a separate node identity is required, a hardwa
 
 3.  **Creating and Adding a Node**: Inside the locked scope, a standard ``rclcpp::Node`` is created. This new node is then added to the ``ControllerManager``'s executor. This allows the node's callbacks (e.g., for timers or subscriptions) to be processed by the same multi-threaded executor.
 
-    .. code-block:: cpp
+.. code-block:: cpp
 
       // Inside the `if (auto locked_executor = ...)` block
-      custom_status_node_ = std::make_shared<rclcpp::Node>(info_.name + "_custom_node");
+      custom_status_node_ = std::make_shared<rclcpp::Node>(get_hardware_info().name + "_custom_node");
       locked_executor->add_node(custom_status_node_->get_node_base_interface());
 
 
