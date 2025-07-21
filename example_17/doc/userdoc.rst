@@ -198,7 +198,7 @@ For non-diagnostic topics or when a separate node identity is required, a hardwa
 
 4.  **Publishing Status Messages**: A publisher and a periodic wall timer are created on the new custom node. The timer's callback periodically publishes a status message, demonstrating that the node is alive and running alongside the main control loop.
 
-    .. code-block:: cpp
+.. code-block:: cpp
 
       // Inside the `if (auto locked_executor = ...)` block
       custom_status_publisher_ =
