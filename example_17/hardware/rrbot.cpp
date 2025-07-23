@@ -40,10 +40,13 @@ hardware_interface::CallbackReturn RRBotSystemPositionOnlyHardware::on_init(
   }
 
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
-  hw_start_sec_ = stod(get_hardware_info().hardware_parameters["example_param_hw_start_duration_sec"]);
-  hw_stop_sec_ = stod(get_hardware_info().hardware_parameters["example_param_hw_stop_duration_sec"]);
+  hw_start_sec_ =
+    stod(get_hardware_info().hardware_parameters["example_param_hw_start_duration_sec"]);
+  hw_stop_sec_ =
+    stod(get_hardware_info().hardware_parameters["example_param_hw_stop_duration_sec"]);
   hw_slowdown_ = stod(get_hardware_info().hardware_parameters["example_param_hw_slowdown"]);
-  RCLCPP_INFO(get_logger(), "Robot hardware_component update_rate is %dHz", get_hardware_info().rw_rate);
+  RCLCPP_INFO(
+    get_logger(), "Robot hardware_component update_rate is %dHz", get_hardware_info().rw_rate);
 
   // Get Weak Pointer to Executor from HardwareComponentInterfaceParams
   executor_ = params.executor;
@@ -140,7 +143,8 @@ hardware_interface::CallbackReturn RRBotSystemPositionOnlyHardware::on_configure
     updater_->setHardwareID(get_hardware_info().name);
 
     updater_->add(
-      get_hardware_info().name + "_Status", this, &RRBotSystemPositionOnlyHardware::produce_diagnostics);
+      get_hardware_info().name + "_Status", this,
+      &RRBotSystemPositionOnlyHardware::produce_diagnostics);
   }
   else
   {
