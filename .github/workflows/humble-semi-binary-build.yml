@@ -32,18 +32,13 @@ on:
       - '**.xml'
   schedule:
     # Run every morning to detect flakiness and broken dependencies
-    - cron: '33 1 * * *'
+    - cron: '33 1 * * MON-FRI'
 
 jobs:
   semi_binary:
     uses: ros-controls/ros2_control_ci/.github/workflows/reusable-industrial-ci-with-cache.yml@master
-    strategy:
-      fail-fast: false
-      matrix:
-        ROS_DISTRO: [humble]
-        ROS_REPO: [testing]
     with:
-      ros_distro: ${{ matrix.ROS_DISTRO }}
-      ros_repo: ${{ matrix.ROS_REPO }}
-      upstream_workspace: ros2_control_demos.${{ matrix.ROS_DISTRO }}.repos
+      ros_distro: humble
+      ros_repo: testing
+      upstream_workspace: ros2_control_demos.humble.repos
       ref_for_scheduled_build: humble

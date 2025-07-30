@@ -11,7 +11,6 @@ set(THIS_PACKAGE_INCLUDE_DEPENDS
   pluginlib
   rclcpp
   rclcpp_lifecycle
-  control_msgs
   generate_parameter_library
   controller_interface
   parameter_traits
@@ -45,9 +44,11 @@ target_include_directories(ros2_control_demo_example_12 PUBLIC
 $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/hardware/include>
 $<INSTALL_INTERFACE:include/ros2_control_demo_example_12>
 )
-ament_target_dependencies(
-  ros2_control_demo_example_12 PUBLIC
-  ${THIS_PACKAGE_INCLUDE_DEPENDS}
+target_link_libraries(ros2_control_demo_example_12 PUBLIC
+  hardware_interface::hardware_interface
+  pluginlib::pluginlib
+  rclcpp::rclcpp
+  rclcpp_lifecycle::rclcpp_lifecycle
 )
 
 # Export hardware plugins
@@ -65,9 +66,15 @@ target_include_directories(passthrough_controller PUBLIC
 $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/controllers/include>
 $<INSTALL_INTERFACE:include/passthrough_controller>
 )
-target_link_libraries(passthrough_controller PUBLIC passthrough_controller_parameters)
-ament_target_dependencies(passthrough_controller PUBLIC ${THIS_PACKAGE_INCLUDE_DEPENDS})
-
+target_link_libraries(passthrough_controller PUBLIC
+  passthrough_controller_parameters
+  ${std_msgs_TARGETS}
+  controller_interface::controller_interface
+  pluginlib::pluginlib
+  rclcpp::rclcpp
+  rclcpp_lifecycle::rclcpp_lifecycle
+  realtime_tools::realtime_tools
+)
 pluginlib_export_plugin_description_file(controller_interface passthrough_controller.xml)
 
 

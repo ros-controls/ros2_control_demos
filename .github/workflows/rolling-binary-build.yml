@@ -33,7 +33,7 @@ on:
       - '**.xml'
   schedule:
     # Run every morning to detect flakiness and broken dependencies
-    - cron: '03 1 * * *'
+    - cron: '03 1 * * MON-FRI'
 
 jobs:
   binary:
@@ -41,7 +41,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ROS_DISTRO: [rolling, jazzy]
+        ROS_DISTRO: [rolling, kilted, jazzy]
         ROS_REPO: [main, testing]
     with:
       ros_distro: ${{ matrix.ROS_DISTRO }}
