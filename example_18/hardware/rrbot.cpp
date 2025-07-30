@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "ros2_control_demo_example_17/rrbot.hpp"
+#include "ros2_control_demo_example_18/rrbot.hpp"
 
 #include <chrono>
 #include <cmath>
@@ -27,7 +27,7 @@
 #include "hardware_interface/types/hardware_interface_type_values.hpp"
 #include "rclcpp/rclcpp.hpp"
 
-namespace ros2_control_demo_example_17
+namespace ros2_control_demo_example_18
 {
 hardware_interface::CallbackReturn RRBotSystemPositionOnlyHardware::on_init(
   const hardware_interface::HardwareComponentInterfaceParams & params)
@@ -258,10 +258,10 @@ hardware_interface::return_type RRBotSystemPositionOnlyHardware::write(
   return hardware_interface::return_type::OK;
 }
 
-}  // namespace ros2_control_demo_example_17
+}  // namespace ros2_control_demo_example_18
 
 #include "pluginlib/class_list_macros.hpp"
 
 PLUGINLIB_EXPORT_CLASS(
-  ros2_control_demo_example_17::RRBotSystemPositionOnlyHardware,
+  ros2_control_demo_example_18::RRBotSystemPositionOnlyHardware,
   hardware_interface::SystemInterface)

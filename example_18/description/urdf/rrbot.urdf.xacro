@@ -14,7 +14,7 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_desc
   <xacro:include filename="$(find ros2_control_demo_description)/rrbot/urdf/rrbot.materials.xacro" />
 
   <!-- Import RRBot ros2_control description -->
-  <xacro:include filename="$(find ros2_control_demo_example_17)/ros2_control/rrbot.ros2_control.xacro" />
+  <xacro:include filename="$(find ros2_control_demo_example_18)/ros2_control/rrbot.ros2_control.xacro" />
 
   <!-- Used for fixing robot -->
   <link name="world"/>
