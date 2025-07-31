@@ -22,9 +22,9 @@ def generate_launch_description():
 
     position_goals = PathJoinSubstitution(
         [
-            FindPackageShare("ros2_control_demo_example_18"),
+            FindPackageShare("ros2_control_demo_example_17"),
             "config",
-            "rrbot_joint_trajectory_publisher.yaml",
+            "rrbot_forward_position_publisher.yaml",
         ]
     )
 
@@ -32,8 +32,8 @@ def generate_launch_description():
         [
             Node(
                 package="ros2_controllers_test_nodes",
-                executable="publisher_joint_trajectory_controller",
-                name="publisher_joint_trajectory_controller",
+                executable="publisher_forward_position_controller",
+                name="publisher_forward_position_controller",
                 parameters=[position_goals],
                 output="both",
             )

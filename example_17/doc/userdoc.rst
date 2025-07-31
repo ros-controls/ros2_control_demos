@@ -1,8 +1,8 @@
-:github_url: https://github.com/ros-controls/ros2_control_demos/blob/{REPOS_FILE_BRANCH}/example_18/doc/userdoc.rst
+:github_url: https://github.com/ros-controls/ros2_control_demos/blob/{REPOS_FILE_BRANCH}/example_17/doc/userdoc.rst
 
-.. _ros2_control_demos_example_18_userdoc:
+.. _ros2_control_demos_example_17_userdoc:
 
-Example 18: RRBot with Hardware Component that publishes diagnostics
+Example 17: RRBot with Hardware Component that publishes diagnostics
 =====================================================================
 
 This example shows how to publish diagnostics from a hardware component using ROS 2 features available within the ``ros2_control`` framework.
@@ -13,7 +13,7 @@ It is essentially the same as Example 1, but with a modified hardware interface 
 
 See the :ref:`Implementation Details of the Diagnostic Publisher <diagnostic_publisher_implementation>` for more information.
 
-For *example_18*, the hardware interface plugin is implemented having only one interface.
+For *example_17*, the hardware interface plugin is implemented having only one interface.
 
 * The communication is done using proprietary API to communicate with the robot control box.
 * Data for all joints is exchanged at once.
@@ -241,7 +241,7 @@ Files used for this demos
 
 * RViz configuration: `rrbot.rviz <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/ros2_control_demo_description/rrbot/rviz/rrbot.rviz>`__
 
-* Hardware interface plugin: `rrbot.cpp <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_18/hardware/rrbot.cpp>`__
+* Hardware interface plugin: `rrbot.cpp <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_17/hardware/rrbot.cpp>`__
 
 
 Controllers from this demo

@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef ROS2_CONTROL_DEMO_EXAMPLE_18__RRBOT_HPP_
-#define ROS2_CONTROL_DEMO_EXAMPLE_18__RRBOT_HPP_
+#ifndef ROS2_CONTROL_DEMO_EXAMPLE_17__RRBOT_HPP_
+#define ROS2_CONTROL_DEMO_EXAMPLE_17__RRBOT_HPP_
 
 #include <memory>
 #include <string>
@@ -30,7 +30,7 @@
 #include "rclcpp_lifecycle/state.hpp"
 #include "std_msgs/msg/string.hpp"
 
-namespace ros2_control_demo_example_18
+namespace ros2_control_demo_example_17
 {
 class RRBotSystemPositionOnlyHardware : public hardware_interface::SystemInterface
 {
@@ -70,6 +70,6 @@ private:
   rclcpp::TimerBase::SharedPtr custom_status_timer_;
 };
 
-}  // namespace ros2_control_demo_example_18
+}  // namespace ros2_control_demo_example_17
 
-#endif  // ROS2_CONTROL_DEMO_EXAMPLE_18__RRBOT_HPP_
+#endif  // ROS2_CONTROL_DEMO_EXAMPLE_17__RRBOT_HPP_

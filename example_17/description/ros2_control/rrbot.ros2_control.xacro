@@ -5,7 +5,7 @@
 
     <ros2_control name="${name}" type="system">
       <hardware>
-        <plugin>ros2_control_demo_example_18/RRBotSystemPositionOnlyHardware</plugin>
+        <plugin>ros2_control_demo_example_17/RRBotSystemPositionOnlyHardware</plugin>
         <param name="example_param_hw_start_duration_sec">0</param>
         <param name="example_param_hw_stop_duration_sec">3.0</param>
         <param name="example_param_hw_slowdown">100</param>
