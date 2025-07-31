@@ -172,7 +172,6 @@ class TestFixture(unittest.TestCase):
                 "switch_controllers",
                 "--activate",
                 "threedofbot_joint_state_broadcaster",
-                "threedofbot_pid_gain_controller",
             ]
         )
         cnames = [
@@ -184,7 +183,6 @@ class TestFixture(unittest.TestCase):
             "rrbot_with_sensor_fts_broadcaster",
             "rrbot_with_sensor_position_controller",
             "threedofbot_joint_state_broadcaster",
-            "threedofbot_pid_gain_controller",
         ]
         check_controllers_running(self.node, cnames)
         # still the same joint_states
@@ -248,6 +246,7 @@ class TestFixture(unittest.TestCase):
                 "switch_controllers",
                 "--activate",
                 "threedofbot_position_controller",
+                "threedofbot_pid_gain_controller",
             ]
         )
         cnames = [
