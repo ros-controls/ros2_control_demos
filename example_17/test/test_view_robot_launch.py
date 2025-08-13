@@ -34,7 +34,7 @@ import pytest
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription
-from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.launch_description_sources import AnyLaunchDescriptionSource
 from launch_testing.actions import ReadyToTest
 
 
@@ -42,10 +42,10 @@ from launch_testing.actions import ReadyToTest
 @pytest.mark.rostest
 def generate_test_description():
     launch_include = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
+        AnyLaunchDescriptionSource(
             os.path.join(
                 get_package_share_directory("ros2_control_demo_example_17"),
-                "launch/view_robot.launch.py",
+                "launch/view_robot.launch.xml",
             )
         ),
         launch_arguments={"gui": "true"}.items(),
