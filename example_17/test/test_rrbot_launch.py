@@ -36,7 +36,7 @@ import subprocess
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription
-from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.launch_description_sources import AnyLaunchDescriptionSource
 from launch_testing.actions import ReadyToTest
 
 import launch_testing.markers
@@ -52,10 +52,10 @@ from controller_manager.test_utils import (
 @pytest.mark.rostest
 def generate_test_description():
     launch_include = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
+        AnyLaunchDescriptionSource(
             os.path.join(
                 get_package_share_directory("ros2_control_demo_example_17"),
-                "launch/rrbot.launch.py",
+                "launch/rrbot.launch.xml",
             )
         ),
         launch_arguments={"gui": "False"}.items(),
