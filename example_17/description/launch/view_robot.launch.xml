@@ -1,0 +1,46 @@
+<launch>
+    <!-- Declare arguments -->
+    <arg name="description_package"
+         default="ros2_control_demo_description"
+         description="Description package with robot URDF/xacro files. Usually the argument is not set, it enables use of a custom description." />
+
+    <arg name="description_file"
+         default="rrbot.urdf.xacro"
+         description="URDF/XACRO description file with the robot." />
+
+    <arg name="gui"
+         default="true"
+         description="Start Rviz2 and Joint State Publisher gui automatically with this launch file." />
+
+    <arg name="prefix"
+         default=""
+         description="Prefix of the joint names, useful for multi-robot setup. If changed than also joint names in the controllers' configuration have to be updated." />
+
+    <!-- Get URDF via xacro -->
+    <let name="robot_description"
+         value="$(command 'xacro $(find-pkg-share ros2_control_demo_example_17)/urdf/$(var description_file) prefix:=$(var prefix)')" />
+
+    <!-- RViz config file path -->
+    <let name="rviz_config_file"
+         value="$(find-pkg-share $(var description_package))/rrbot/rviz/rrbot.rviz" />
+
+    <!-- Joint State Publisher GUI Node -->
+    <node pkg="joint_state_publisher_gui"
+          exec="joint_state_publisher_gui"
+          if="$(var gui)" />
+
+    <!-- Robot State Publisher Node -->
+    <node pkg="robot_state_publisher"
+          exec="robot_state_publisher"
+          output="both">
+        <param name="robot_description" value="$(var robot_description)" />
+    </node>
+
+    <!-- RViz2 Node -->
+    <node pkg="rviz2"
+          exec="rviz2"
+          name="rviz2"
+          output="log"
+          args="-d $(var rviz_config_file)"
+          if="$(var gui)" />
+</launch>
