@@ -83,6 +83,10 @@ The following examples are part of this demo repository:
 
    This example shows how to create chained controllers using diff_drive_controller and two pid_controllers to control a differential drive robot.
 
+* Example 17: ["RRBot with Hardware Component that publishes diagnostics"](example_17)
+
+   This example shows how to publish diagnostics from a hardware component using the Executor passed from Controller Manager.
+
 ## Structure
 
 The repository is structured into `example_XY` folders that fully contained packages with names `ros2_control_demos_example_XY`.
