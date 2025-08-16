@@ -5,7 +5,7 @@ name: Jazzy Binary Build
 on:
   pull_request:
     branches:
-      - master
+      - jazzy
     paths:
       - '**.hpp'
       - '**.cpp'
@@ -19,7 +19,7 @@ on:
       - '**.xml'
   push:
     branches:
-      - master
+      - jazzy
     paths:
       - '**.hpp'
       - '**.cpp'
@@ -46,4 +46,4 @@ jobs:
       ros_distro: jazzy
       ros_repo: ${{ matrix.ROS_REPO }}
       upstream_workspace: ros2_control_demos-not-released.jazzy.repos
-      ref_for_scheduled_build: master
+      ref_for_scheduled_build: jazzy
