@@ -176,6 +176,52 @@ hardware_interface::CallbackReturn RRBotSystemPositionOnlyHardware::on_configure
   return hardware_interface::CallbackReturn::SUCCESS;
 }
 
+hardware_interface::CallbackReturn
+RRBotSystemPositionOnlyHardware::configure_hardware_status_message(
+  control_msgs::msg::HardwareStatus & msg_template)
+{
+  RCLCPP_INFO(get_logger(), "Configuring hardware status message for RRBot.");
+  msg_template.hardware_id = get_hardware_info().name;
+  msg_template.hardware_device_states.resize(get_hardware_info().joints.size());
+
+  for (size_t i = 0; i < get_hardware_info().joints.size(); ++i)
+  {
+    auto & device_status = msg_template.hardware_device_states[i];
+    const auto & joint = get_hardware_info().joints[i];
+    device_status.device_id = joint.name;
+    device_status.hardware_status.resize(1);
+  }
+
+  return hardware_interface::CallbackReturn::SUCCESS;
+}
+
+hardware_interface::return_type RRBotSystemPositionOnlyHardware::update_hardware_status_message(
+  control_msgs::msg::HardwareStatus & msg)
+{
+  for (size_t i = 0; i < get_hardware_info().joints.size(); ++i)
+  {
+    auto & hardware_status = msg.hardware_device_states[i].hardware_status[0];
+    double position = get_state(get_hardware_info().joints[i].name + "/position");
+    if (std::abs(position) > 0.8)
+    {
+      hardware_status.health_status = control_msgs::msg::GenericHardwareState::HEALTH_WARNING;
+    }
+    else
+    {
+      hardware_status.health_status = control_msgs::msg::GenericHardwareState::HEALTH_OK;
+    }
+    hardware_status.operational_mode = control_msgs::msg::GenericHardwareState::MODE_AUTO;
+    hardware_status.power_state = control_msgs::msg::GenericHardwareState::POWER_ON;
+    hardware_status.state_details.clear();
+    diagnostic_msgs::msg::KeyValue detail;
+    detail.key = "position_state";
+    detail.value = std::to_string(position);
+    hardware_status.state_details.push_back(detail);
+  }
+
+  return hardware_interface::return_type::OK;
+}
+
 hardware_interface::CallbackReturn RRBotSystemPositionOnlyHardware::on_activate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
