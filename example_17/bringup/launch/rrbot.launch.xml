@@ -1,0 +1,90 @@
+<!--
+  Copyright 2025 ros2_control Development Team
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<launch>
+
+  <!--
+    Declare a launch argument 'gui'.
+    This is equivalent to `DeclareLaunchArgument` in Python.
+    It allows you to pass an argument from the command line, e.g., `gui:=false`.
+  -->
+  <arg name="gui" default="true" description="Start RViz2 automatically with this launch file."/>
+
+  <!--
+    Define variables using the 'let' tag for clarity and reuse.
+    This is similar to defining variables in your Python launch file.
+  -->
+
+  <!-- Get URDF via xacro -->
+  <let name="robot_description_content"
+       value="$(command '$(find-exec xacro) $(find-pkg-share ros2_control_demo_example_17)/urdf/rrbot.urdf.xacro')"/>
+
+  <!-- Path to controller configurations -->
+  <let name="robot_controllers"
+       value="$(find-pkg-share ros2_control_demo_example_17)/config/rrbot_controllers.yaml"/>
+
+  <!-- Path to RViz configuration -->
+  <let name="rviz_config_file"
+       value="$(find-pkg-share ros2_control_demo_description)/rrbot/rviz/rrbot.rviz"/>
+
+  <!--
+    Define the nodes to be launched.
+    This is equivalent to the `Node` action in Python.
+  -->
+
+  <!-- Controller Manager Node -->
+  <node pkg="controller_manager" exec="ros2_control_node" output="both">
+    <param name="robot_description" value="$(var robot_description_content)"/>
+    <param from="$(var robot_controllers)"/>
+  </node>
+
+  <!-- Robot State Publisher Node -->
+  <node pkg="robot_state_publisher" exec="robot_state_publisher" output="both">
+    <param name="robot_description" value="$(var robot_description_content)"/>
+  </node>
+
+  <!--
+    Robot Controller Spawner
+    This spawner is launched immediately. The spawner executable has its own
+    internal logic to wait for the controller_manager to be available.
+  -->
+  <node pkg="controller_manager" exec="spawner"
+        args="forward_position_controller --param-file $(var robot_controllers)"
+        name="robot_controller_spawner"/>
+
+  <!--
+    Joint State Broadcaster Spawner
+    This spawner is launched after a 1.5-second delay. This <timer> tag is a
+    workaround to approximate the sequential execution from the Python launch file's
+    OnProcessExit handler. It helps ensure the main controller is spawned first.
+  -->
+  <timer period="1.5">
+    <node pkg="controller_manager" exec="spawner"
+          args="joint_state_broadcaster"
+          name="joint_state_broadcaster_spawner"/>
+  </timer>
+
+  <!--
+    RViz2 Node
+    RViz is launched after a 3.0-second delay to give time for the robot state
+    to be published. It is also conditional on the 'gui' argument.
+  -->
+  <timer period="3.0">
+    <node pkg="rviz2" exec="rviz2" name="rviz2" output="log"
+          args="-d $(var rviz_config_file)"
+          if="$(var gui)"/>
+  </timer>
+
+</launch>
