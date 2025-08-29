@@ -1,50 +1,46 @@
-name: Build Rolling Dockerfile
+name: Build Jazzy Dockerfile
 # description: builds the dockerfile contained within the repo
 
 on:
   pull_request:
     branches:
-      - master
+      - jazzy
     paths:
       - '**.hpp'
       - '**.cpp'
       - Dockerfile/**
-      - '.github/workflows/rolling-docker-build.yml'
+      - '.github/workflows/jazzy-docker-build.yml'
       - '**/package.xml'
       - '**/CMakeLists.txt'
       - '**.xacro'
       - '**.py'
       - '**.yaml'
-      - 'ros2_control_demos.rolling.repos'
+      - 'ros2_control_demos.jazzy.repos'
   push:
     branches:
-      - master
+      - jazzy
     paths:
       - '**.hpp'
       - '**.cpp'
       - Dockerfile/**
-      - '.github/workflows/rolling-docker-build.yml'
+      - '.github/workflows/jazzy-docker-build.yml'
       - '**/package.xml'
       - '**/CMakeLists.txt'
       - '**.xacro'
       - '**.py'
       - '**.yaml'
-      - 'ros2_control_demos.rolling.repos'
+      - 'ros2_control_demos.jazzy.repos'
   schedule:
     # Run every morning to detect broken dependencies
-    - cron: '50 1 * * MON-FRI'
+    - cron: '40 1 * * MON-FRI'
 
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        ROS_DISTRO: [rolling, kilted]
     steps:
     - uses: actions/checkout@v5
       with:
-        ref: master
+        ref: jazzy
     - name: Build the Docker image
-      run: docker build --file Dockerfile/Dockerfile --tag ros2_control_demos_${{ matrix.ROS_DISTRO }} --build-arg ROS_DISTRO=${{ matrix.ROS_DISTRO }} .
+      run: docker build --file Dockerfile/Dockerfile --tag ros2_control_demos_jazzy --build-arg ROS_DISTRO=jazzy .
