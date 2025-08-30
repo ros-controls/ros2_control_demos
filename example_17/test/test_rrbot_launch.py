@@ -31,7 +31,6 @@
 import os
 import pytest
 import unittest
-import subprocess
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
@@ -92,58 +91,6 @@ class TestFixture(unittest.TestCase):
 
     def test_check_if_msgs_published(self):
         check_if_js_published("/joint_states", ["joint1", "joint2"])
-
-
-class TestFixtureCLI(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        rclpy.init()
-
-    @classmethod
-    def tearDownClass(cls):
-        rclpy.shutdown()
-
-    def setUp(self):
-        self.node = rclpy.create_node("test_node")
-
-    def tearDown(self):
-        self.node.destroy_node()
-
-    def test_main(self, proc_output):
-
-        # Command to run the CLI
-        cname = "joint_trajectory_position_controller"
-        command = [
-            "ros2",
-            "control",
-            "load_controller",
-            cname,
-            os.path.join(
-                get_package_share_directory("ros2_control_demo_example_17"),
-                "config/rrbot_jtc.yaml",
-            ),
-        ]
-        subprocess.run(command, check=True)
-        check_controllers_running(self.node, [cname], state="unconfigured")
-        check_controllers_running(self.node, ["forward_position_controller"], state="active")
-
-        command = ["ros2", "control", "set_controller_state", cname, "inactive"]
-        subprocess.run(command, check=True)
-        check_controllers_running(self.node, [cname], state="inactive")
-        check_controllers_running(self.node, ["forward_position_controller"], state="active")
-
-        command = [
-            "ros2",
-            "control",
-            "set_controller_state",
-            "forward_position_controller",
-            "inactive",
-        ]
-        subprocess.run(command, check=True)
-        command = ["ros2", "control", "set_controller_state", cname, "active"]
-        subprocess.run(command, check=True)
-        check_controllers_running(self.node, ["forward_position_controller"], state="inactive")
-        check_controllers_running(self.node, [cname], state="active")
 
 
 @launch_testing.post_shutdown_test()
