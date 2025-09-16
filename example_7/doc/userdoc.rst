@@ -432,12 +432,11 @@ The ``update`` method is part of the main control loop. Since the method is part
     return controller_interface::return_type::OK;
   }
 
-The ``on_deactivate`` is called when a controller stops running. It is important to release the claimed command interface in this method, so other controllers can use them if needed. This is down with the ``release_interfaces`` function.
+The ``on_deactivate`` is called when a controller stops running. In our case it is empty:
 
 .. code-block:: c++
 
   controller_interface::CallbackReturn on_deactivate(const rclcpp_lifecycle::State &previous_state){
-      release_interfaces();
       // The controller should be properly shutdown during this
       // ...
       return CallbackReturn::SUCCESS;
