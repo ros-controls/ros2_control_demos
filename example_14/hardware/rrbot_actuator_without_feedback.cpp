@@ -92,7 +92,7 @@ hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_init(
   address_.sin_family = AF_INET;
   bcopy(
     reinterpret_cast<char *>(server->h_addr), reinterpret_cast<char *>(&address_.sin_addr.s_addr),
-    server->h_length);
+    static_cast<size_t>(server->h_length));
   address_.sin_port = htons(socket_port_);
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
@@ -240,10 +240,26 @@ hardware_interface::return_type ros2_control_demo_example_14::RRBotActuatorWitho
     ss << "Writing command: " << hw_joint_command_ << " for joint '" << info_.joints[0].name << "'"
        << std::endl;
 
+<<<<<<< HEAD
     std::ostringstream data;
     data << hw_joint_command_;
     ss << "Sending data command: " << data.str() << std::endl;
     RCLCPP_INFO(get_logger(), ss.str().c_str());
+=======
+  ss << "Writing..." << std::endl;
+  ss << std::fixed << std::setprecision(2);
+
+  auto name = info_.joints[0].name + "/" + hardware_interface::HW_IF_VELOCITY;
+  ss << "Writing command: " << get_command(name) << std::endl;
+
+  data << get_command(name);
+  ss << "Sending data command: " << data.str() << std::endl;
+  RCLCPP_INFO(get_logger(), "%s", ss.str().c_str());
+
+  // Simulate sending commands to the hardware
+  send(sock_, data.str().c_str(), strlen(data.str().c_str()), 0);
+  // END: This part here is for exemplary purposes - Please do not copy to your production code
+>>>>>>> a2aced0 (Fix compiler warnings (#909))
 
     // Simulate sending commands to the hardware
     send(sock_, data.str().c_str(), strlen(data.str().c_str()), 0);

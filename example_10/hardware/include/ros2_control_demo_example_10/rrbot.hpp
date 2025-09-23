@@ -71,6 +71,7 @@ public:
   rclcpp::Clock::SharedPtr get_clock() const { return clock_; }
 
 private:
+<<<<<<< HEAD
   // Objects for logging
   std::shared_ptr<rclcpp::Logger> logger_;
   rclcpp::Clock::SharedPtr clock_;
@@ -80,6 +81,10 @@ private:
   std::vector<double> hw_states_;
   std::vector<double> hw_gpio_in_;
   std::vector<double> hw_gpio_out_;
+=======
+  // Parameters for the RRBot simulation
+  double hw_slowdown_;
+>>>>>>> a2aced0 (Fix compiler warnings (#909))
 };
 
 }  // namespace ros2_control_demo_example_10

@@ -94,8 +94,12 @@ private:
 
   // Fake "mechanical connection" between actuator and sensor using sockets
   struct sockaddr_in address_;
+<<<<<<< HEAD
   int socket_port_;
   int sockoptval_ = 1;
+=======
+  uint16_t socket_port_;
+>>>>>>> a2aced0 (Fix compiler warnings (#909))
   int sock_;
 };
 
