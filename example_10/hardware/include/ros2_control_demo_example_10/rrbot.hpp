@@ -54,8 +54,6 @@ public:
 
 private:
   // Parameters for the RRBot simulation
-  double hw_start_sec_;
-  double hw_stop_sec_;
   double hw_slowdown_;
 };
 
