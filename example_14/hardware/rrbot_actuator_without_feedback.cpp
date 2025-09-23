@@ -225,7 +225,7 @@ hardware_interface::return_type ros2_control_demo_example_14::RRBotActuatorWitho
 
   data << get_command(name);
   ss << "Sending data command: " << data.str() << std::endl;
-  RCLCPP_INFO(get_logger(), ss.str().c_str());
+  RCLCPP_INFO(get_logger(), "%s", ss.str().c_str());
 
   // Simulate sending commands to the hardware
   send(sock_, data.str().c_str(), strlen(data.str().c_str()), 0);
