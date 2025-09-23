@@ -83,7 +83,7 @@ hardware_interface::CallbackReturn RRBotSystemWithGPIOHardware::on_init(
     return hardware_interface::CallbackReturn::ERROR;
   }
   // with exactly 1 command interface
-  for (int i = 0; i < 2; i++)
+  for (size_t i = 0; i < 2; i++)
   {
     if (info_.gpios[i].command_interfaces.size() != 1)
     {
