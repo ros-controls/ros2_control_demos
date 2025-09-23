@@ -87,7 +87,7 @@ hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_init(
   address_.sin_family = AF_INET;
   bcopy(
     reinterpret_cast<char *>(server->h_addr), reinterpret_cast<char *>(&address_.sin_addr.s_addr),
-    server->h_length);
+    static_cast<size_t>(server->h_length));
   address_.sin_port = htons(socket_port_);
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
