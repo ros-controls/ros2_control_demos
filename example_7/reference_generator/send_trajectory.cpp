@@ -100,6 +100,7 @@ int main(int argc, char ** argv)
   std::fill(last_point_msg.velocities.begin(), last_point_msg.velocities.end(), 0.0);
 
   pub->publish(trajectory_msg);
+  RCLCPP_INFO(node->get_logger(), "Trajectory sent with %lu points", trajectory_msg.points.size());
   while (rclcpp::ok())
   {
   }
