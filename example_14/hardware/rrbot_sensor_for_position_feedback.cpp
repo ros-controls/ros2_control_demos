@@ -37,10 +37,10 @@
 namespace ros2_control_demo_example_14
 {
 hardware_interface::CallbackReturn RRBotSensorPositionFeedback::on_init(
-  const hardware_interface::HardwareInfo & info)
+  const hardware_interface::HardwareComponentInterfaceParams & params)
 {
   if (
-    hardware_interface::SensorInterface::on_init(info) !=
+    hardware_interface::SensorInterface::on_init(params) !=
     hardware_interface::CallbackReturn::SUCCESS)
   {
     return hardware_interface::CallbackReturn::ERROR;
@@ -293,7 +293,7 @@ hardware_interface::return_type RRBotSensorPositionFeedback::read(
   ss << "Got measured velocity " << measured_velocity_ << std::endl;
   ss << "Got state(position) " << new_value << " for joint '" << info_.joints[0].name << "'"
      << std::endl;
-  RCLCPP_INFO(get_logger(), ss.str().c_str());
+  RCLCPP_INFO(get_logger(), "%s", ss.str().c_str());
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   return hardware_interface::return_type::OK;

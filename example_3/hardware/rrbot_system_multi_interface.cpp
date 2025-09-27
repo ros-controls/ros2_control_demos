@@ -29,10 +29,10 @@
 namespace ros2_control_demo_example_3
 {
 hardware_interface::CallbackReturn RRBotSystemMultiInterfaceHardware::on_init(
-  const hardware_interface::HardwareInfo & info)
+  const hardware_interface::HardwareComponentInterfaceParams & params)
 {
   if (
-    hardware_interface::SystemInterface::on_init(info) !=
+    hardware_interface::SystemInterface::on_init(params) !=
     hardware_interface::CallbackReturn::SUCCESS)
   {
     return hardware_interface::CallbackReturn::ERROR;
@@ -241,7 +241,8 @@ hardware_interface::return_type RRBotSystemMultiInterfaceHardware::read(
     switch (control_level_[i])
     {
       case integration_level_t::UNDEFINED:
-        RCLCPP_INFO(get_logger(), "Nothing is using the hardware interface!");
+        RCLCPP_INFO_THROTTLE(
+          get_logger(), *get_clock(), 1000, "Nothing is using the hardware interface!");
         return hardware_interface::return_type::OK;
         break;
       case integration_level_t::POSITION:

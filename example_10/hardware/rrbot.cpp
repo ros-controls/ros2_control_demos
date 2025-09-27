@@ -28,10 +28,10 @@
 namespace ros2_control_demo_example_10
 {
 hardware_interface::CallbackReturn RRBotSystemWithGPIOHardware::on_init(
-  const hardware_interface::HardwareInfo & info)
+  const hardware_interface::HardwareComponentInterfaceParams & params)
 {
   if (
-    hardware_interface::SystemInterface::on_init(info) !=
+    hardware_interface::SystemInterface::on_init(params) !=
     hardware_interface::CallbackReturn::SUCCESS)
   {
     return hardware_interface::CallbackReturn::ERROR;
@@ -83,7 +83,7 @@ hardware_interface::CallbackReturn RRBotSystemWithGPIOHardware::on_init(
     return hardware_interface::CallbackReturn::ERROR;
   }
   // with exactly 1 command interface
-  for (int i = 0; i < 2; i++)
+  for (size_t i = 0; i < 2; i++)
   {
     if (info_.gpios[i].command_interfaces.size() != 1)
     {

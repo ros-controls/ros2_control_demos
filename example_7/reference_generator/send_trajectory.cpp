@@ -91,7 +91,7 @@ int main(int argc, char ** argv)
     double time_point_sec = std::floor(time_point);
     trajectory_point_msg.time_from_start.sec = static_cast<int>(time_point_sec);
     trajectory_point_msg.time_from_start.nanosec =
-      static_cast<int>((time_point - time_point_sec) * 1E9);
+      static_cast<uint32_t>((time_point - time_point_sec) * 1E9);
     trajectory_msg.points.push_back(trajectory_point_msg);
   }
 
