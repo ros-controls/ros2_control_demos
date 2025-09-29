@@ -501,3 +501,14 @@ Controllers from this demo
   * ``Joint State Broadcaster`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/{REPOS_FILE_BRANCH}/joint_state_broadcaster>`__): :ref:`doc <joint_state_broadcaster_userdoc>`
   * ``Forward Command Controller`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/{REPOS_FILE_BRANCH}/forward_command_controller>`__): :ref:`doc <forward_command_controller_userdoc>`
   * ``Joint Trajectory Controller`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/{REPOS_FILE_BRANCH}/joint_trajectory_controller>`__): :ref:`doc <joint_trajectory_controller_userdoc>`
+
+
+
+Additional Resources for this demo
+----------------------------------
+* `UML Class Diagram of example_1 <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_1/doc/ros2_control_demo_example_1.svg>`__  a visual representation of the RRBot hardware interface architecture.
+
+* `Summary Explanation of example_1 <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_1/doc/summary_explanation_example_1.md>`__  a step-by-step explanation of the demo’s architecture and component interaction.
+
+
+
