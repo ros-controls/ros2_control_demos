@@ -34,8 +34,15 @@
   <exec_depend>xacro</exec_depend>
 
   <test_depend>ament_cmake_pytest</test_depend>
+<<<<<<< HEAD
   <test_depend>controller_manager</test_depend>
   <test_depend>launch_testing_ros</test_depend>
+=======
+  <test_depend>ament_cmake_ros</test_depend>
+  <test_depend>launch_testing_ament_cmake</test_depend>
+  <test_depend>launch_testing</test_depend>
+  <test_depend>launch</test_depend>
+>>>>>>> 8a3eb93 (Update CMakeLists.txt to use add_ros_isolated_launch_test (#926))
   <test_depend>liburdfdom-tools</test_depend>
   <test_depend>xacro</test_depend>
 
