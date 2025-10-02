@@ -55,7 +55,7 @@ public:
   hardware_interface::return_type write(
     const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
-  hardware_interface::CallbackReturn configure_hardware_status_message(
+  hardware_interface::CallbackReturn init_hardware_status_message(
     control_msgs::msg::HardwareStatus & msg_template) override;
 
   hardware_interface::return_type update_hardware_status_message(
