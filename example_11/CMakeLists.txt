@@ -64,11 +64,18 @@ install(TARGETS ros2_control_demo_example_11
 
 if(BUILD_TESTING)
   find_package(ament_cmake_pytest REQUIRED)
-
   ament_add_pytest_test(example_11_urdf_xacro test/test_urdf_xacro.py)
-  ament_add_pytest_test(view_example_11_launch test/test_view_robot_launch.py)
-  ament_add_pytest_test(run_example_11_launch test/test_carlikebot_launch.py)
-  ament_add_pytest_test(run_example_11_launch_remapped test/test_carlikebot_launch_remapped.py)
+
+  # Integration (launch) tests
+  find_package(ament_cmake_ros REQUIRED)
+  find_package(launch_testing_ament_cmake REQUIRED)
+  function(add_ros_isolated_launch_test path)
+    set(RUNNER "${ament_cmake_ros_DIR}/run_test_isolated.py")
+    add_launch_test("${path}" RUNNER "${RUNNER}" ${ARGN})
+  endfunction()
+  add_ros_isolated_launch_test(test/test_view_robot_launch.py)
+  add_ros_isolated_launch_test(test/test_carlikebot_launch.py)
+  add_ros_isolated_launch_test(test/test_carlikebot_launch_remapped.py)
 endif()
 
 ## EXPORTS
