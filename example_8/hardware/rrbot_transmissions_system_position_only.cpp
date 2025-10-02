@@ -36,12 +36,12 @@ namespace ros2_control_demo_example_8
 constexpr double kNaN = std::numeric_limits<double>::quiet_NaN();
 
 hardware_interface::CallbackReturn RRBotTransmissionsSystemPositionOnlyHardware::on_init(
-  const hardware_interface::HardwareInfo & info)
+  const hardware_interface::HardwareComponentInterfaceParams & params)
 {
   RCLCPP_INFO(get_logger(), "Initializing...");
 
   if (
-    hardware_interface::SystemInterface::on_init(info) !=
+    hardware_interface::SystemInterface::on_init(params) !=
     hardware_interface::CallbackReturn::SUCCESS)
   {
     return hardware_interface::CallbackReturn::ERROR;

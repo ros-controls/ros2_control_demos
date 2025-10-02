@@ -39,7 +39,7 @@ public:
   RCLCPP_SHARED_PTR_DEFINITIONS(RRBotActuatorWithoutFeedback)
 
   hardware_interface::CallbackReturn on_init(
-    const hardware_interface::HardwareInfo & info) override;
+    const hardware_interface::HardwareComponentInterfaceParams & params) override;
 
   hardware_interface::CallbackReturn on_configure(
     const rclcpp_lifecycle::State & previous_state) override;
@@ -70,7 +70,6 @@ private:
   // Fake "mechanical connection" between actuator and sensor using sockets
   struct sockaddr_in address_;
   uint16_t socket_port_;
-  int sockoptval_ = 1;
   int sock_;
 };
 
