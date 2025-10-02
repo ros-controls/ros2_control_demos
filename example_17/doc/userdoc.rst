@@ -200,16 +200,16 @@ Implementation Details of the Hardware Status Publisher
 
    The ``ros2_control`` framework provides a built-in, real-time safe mechanism for publishing standardized hardware status via the ``control_msgs/msg/HardwareStatus`` message. This is the simplest and most robust way to provide detailed status messages. It is enabled by implementing two virtual methods in your hardware component.
 
-   a. **Override configure_hardware_status_message**: This non-realtime method is called once during initialization. You must override it to define the **static structure** of your status message. This includes setting the ``hardware_id``, resizing the ``hardware_device_states`` vector, and for each device, resizing its specific status vectors (e.g., ``generic_hardware_status``) and populating static fields like ``device_id``.
+   a. **Override init_hardware_status_message**: This non-realtime method is called once during initialization. You must override it to define the **static structure** of your status message. This includes setting the ``hardware_id``, resizing the ``hardware_device_states`` vector, and for each device, resizing its specific status vectors (e.g., ``generic_hardware_status``) and populating static fields like ``device_id``.
 
       .. code-block:: cpp
 
          // In rrbot.hpp, add the override declaration:
-         hardware_interface::CallbackReturn configure_hardware_status_message(
+         hardware_interface::CallbackReturn init_hardware_status_message(
            control_msgs::msg::HardwareStatus & msg_template) override;
 
          // In rrbot.cpp
-         hardware_interface::CallbackReturn RRBotSystemPositionOnlyHardware::configure_hardware_status_message(
+         hardware_interface::CallbackReturn RRBotSystemPositionOnlyHardware::init_hardware_status_message(
            control_msgs::msg::HardwareStatus & msg)
          {
            msg.hardware_id = get_hardware_info().name;
