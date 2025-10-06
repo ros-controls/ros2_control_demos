@@ -3,7 +3,7 @@ name: Jazzy Binary Build
 # description: 'Build & test all dependencies from released (binary) packages.'
 
 on:
-  pull_request:
+  pull_request: &event
     branches:
       - jazzy
     paths:
@@ -17,20 +17,7 @@ on:
       - '**.yaml'
       - 'ros2_control_demos-not-released.jazzy.repos'
       - '**.xml'
-  push:
-    branches:
-      - jazzy
-    paths:
-      - '**.hpp'
-      - '**.cpp'
-      - '.github/workflows/jazzy-binary-build.yml'
-      - '**/package.xml'
-      - '**/CMakeLists.txt'
-      - '**.xacro'
-      - '**.py'
-      - '**.yaml'
-      - 'ros2_control_demos-not-released.jazzy.repos'
-      - '**.xml'
+  push: *event
   schedule:
     # Run every morning to detect flakiness and broken dependencies
     - cron: '03 1 * * MON-FRI'
