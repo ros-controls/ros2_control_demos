@@ -2,7 +2,7 @@ name: Build Jazzy Dockerfile
 # description: builds the dockerfile contained within the repo
 
 on:
-  pull_request:
+  pull_request: &event
     branches:
       - jazzy
     paths:
@@ -16,20 +16,7 @@ on:
       - '**.py'
       - '**.yaml'
       - 'ros2_control_demos.jazzy.repos'
-  push:
-    branches:
-      - jazzy
-    paths:
-      - '**.hpp'
-      - '**.cpp'
-      - Dockerfile/**
-      - '.github/workflows/jazzy-docker-build.yml'
-      - '**/package.xml'
-      - '**/CMakeLists.txt'
-      - '**.xacro'
-      - '**.py'
-      - '**.yaml'
-      - 'ros2_control_demos.jazzy.repos'
+  push: *event
   schedule:
     # Run every morning to detect broken dependencies
     - cron: '40 1 * * MON-FRI'

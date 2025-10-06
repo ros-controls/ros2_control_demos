@@ -2,7 +2,7 @@ name: Build Humble Dockerfile
 # description: builds the dockerfile contained within the repo
 
 on:
-  pull_request:
+  pull_request: &event
     branches:
       - humble
     paths:
@@ -16,20 +16,7 @@ on:
       - '**.py'
       - '**.yaml'
       - 'ros2_control_demos.humble.repos'
-  push:
-    branches:
-      - humble
-    paths:
-      - '**.hpp'
-      - '**.cpp'
-      - Dockerfile/**
-      - '.github/workflows/humble-docker-build.yml'
-      - '**/package.xml'
-      - '**/CMakeLists.txt'
-      - '**.xacro'
-      - '**.py'
-      - '**.yaml'
-      - 'ros2_control_demos.humble.repos'
+  push: *event
   schedule:
     # Run every morning to detect broken dependencies
     - cron: '40 1 * * MON-FRI'
