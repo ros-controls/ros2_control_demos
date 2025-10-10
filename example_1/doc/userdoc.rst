@@ -25,6 +25,11 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
 RRBot Architecture Overview
 ---------------------------
 
+.. image:: ros2_control_demo_example_1.png
+   :width: 600
+   :align: center
+   :alt: ROS 2 Control Demo Example 1 Architecture Overview
+
 This section provides an overview of how **ROS2 Control** components interact in *Example 1 (RRBot System Position Only)*. It summarizes the relationship between the hardware interface, controllers, and the robot’s URDF.
 
 A custom hardware interface ``RRBotSystemPositionOnlyHardware`` is implemented in:
