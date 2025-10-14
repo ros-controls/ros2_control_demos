@@ -176,8 +176,7 @@ hardware_interface::CallbackReturn RRBotSystemPositionOnlyHardware::on_configure
   return hardware_interface::CallbackReturn::SUCCESS;
 }
 
-hardware_interface::CallbackReturn
-RRBotSystemPositionOnlyHardware::init_hardware_status_message(
+hardware_interface::CallbackReturn RRBotSystemPositionOnlyHardware::init_hardware_status_message(
   control_msgs::msg::HardwareStatus & msg_template)
 {
   RCLCPP_INFO(get_logger(), "Configuring hardware status message for RRBot.");
