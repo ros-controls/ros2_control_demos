@@ -2,7 +2,7 @@ name: Jazzy Semi-Binary Build
 # description: 'Build & test that compiles the main dependencies from source.'
 
 on:
-  pull_request:
+  pull_request: &event
     branches:
       - jazzy
     paths:
@@ -16,20 +16,7 @@ on:
       - '**.yaml'
       - 'ros2_control_demos.jazzy.repos'
       - '**.xml'
-  push:
-    branches:
-      - jazzy
-    paths:
-      - '**.hpp'
-      - '**.cpp'
-      - '.github/workflows/jazzy-semi-binary-build.yml'
-      - '**/package.xml'
-      - '**/CMakeLists.txt'
-      - '**.xacro'
-      - '**.py'
-      - '**.yaml'
-      - 'ros2_control_demos.jazzy.repos'
-      - '**.xml'
+  push: *event
   schedule:
     # Run every morning to detect flakiness and broken dependencies
     - cron: '33 1 * * MON-FRI'
