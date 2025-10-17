@@ -255,14 +255,14 @@ Implementation Details of the Hardware Status Publisher
            return hardware_interface::return_type::OK;
          }
 
-   c. **Enable in URDF**: To activate the publisher, add the ``status_publish_rate`` parameter to your ``<hardware>`` tag in the URDF. Setting it to 0.0 disabled the feature.
+   c. **Enable in URDF**: To activate the publisher, add the ``status_publish_rate`` parameter to your ``<hardware>`` tag in the URDF. Setting it to 0 disabled the feature.
 
       .. code-block:: xml
 
          <ros2_control name="RRBotSystemPositionOnly" type="system">
            <hardware>
              <plugin>ros2_control_demo_example_17/RRBotSystemPositionOnlyHardware</plugin>
-             <param name="status_publish_rate">20.0</param> <!-- Defaults to 0.0 Hz -->
+             <param name="status_publish_rate">20</param> <!-- Defaults to 0 Hz -->
            </hardware>
            ...
          </ros2_control>
