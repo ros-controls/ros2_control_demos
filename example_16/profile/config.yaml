@@ -1,0 +1,6 @@
+base_controller:
+    controllers_list : ["pid_controller_right_wheel_joint",
+                        "pid_controller_left_wheel_joint",
+                        "diffbot_base_controller"]
+    metadata:
+        description: "A profile to set the diffbot chained controllers"
