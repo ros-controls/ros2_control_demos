@@ -59,7 +59,7 @@ install(
   DESTINATION share/ros2_control_demo_example_16
 )
 install(
-  DIRECTORY bringup/launch bringup/config
+  DIRECTORY bringup/launch bringup/config profile
   DESTINATION share/ros2_control_demo_example_16
 )
 install(TARGETS ros2_control_demo_example_16
@@ -68,6 +68,8 @@ install(TARGETS ros2_control_demo_example_16
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin
 )
+
+ament_index_register_resource(ros2_control_profile CONTENT_FILE profile/config.yaml)
 
 if(BUILD_TESTING)
   find_package(ament_cmake_pytest REQUIRED)
