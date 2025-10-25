@@ -37,7 +37,7 @@ This tutorial differs by including a hardware interface that publishes diagnosti
 
 as well as
 
-1.  A  **default publisher** is automatically created through steps detailed in :ref:`Implementation Details of the Hardware Status Publisher <hardware_status_publisher_implementation>`.
+3.  A  **default publisher** is automatically created through steps detailed in :ref:`Implementation Details of the Hardware Status Publisher <hardware_status_publisher_implementation>`.
 
 The nodes and topics:
 
