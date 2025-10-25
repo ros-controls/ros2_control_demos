@@ -42,6 +42,7 @@ as well as
 The nodes and topics:
 
 - Default node (via ``diagnostic_updater``):
+
   - Is named after the hardware component (e.g., ``/RRBot``).
   - Publishes periodically to the standard ``/diagnostics`` topic.
   - Uses message type ``diagnostic_msgs/msg/DiagnosticArray``.
