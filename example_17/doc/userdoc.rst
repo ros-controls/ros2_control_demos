@@ -7,11 +7,13 @@ Example 17: RRBot with Hardware Component that publishes diagnostics and status 
 
 This example shows how to publish diagnostics and status messages from a hardware component using ROS 2 features available within the ``ros2_control`` framework.
 
-It is essentially the same as Example 1, but with a modified hardware interface plugin that demonstrates two methods for publishing status information:
+It is essentially the same as Example 1, but with a modified hardware interface plugin that demonstrates three methods for publishing status information:
 
-1.  Using the standard ``diagnostic_updater`` on the default node to publish to the ``/diagnostics`` topic. This is the recommended approach for hardware status reporting.
+1.  Using the standard ``diagnostic_updater`` on the default node to publish to the ``/diagnostics`` topic.
 2.  Using the Controller Manager's Executor to add a custom ROS 2 node for publishing to a separate, non-standard topic.
-3.  Using the framework managed default publisher, which published with a ``HardwareStatus`` message, this is the recommended way to approach standard hardware status reporting
+3.  Using the framework managed default publisher, which publishes with a ``HardwareStatus`` message, this is the recommended way when you want to publish structured messages.
+
+Note: Structured messages mentioned above are in reference to `hardware_status roadmap <https://github.com/ros-controls/roadmap/blob/master/design_drafts/hardware_status.md>`__
 
 See :ref:`Implementation Details of the Diagnostic Publisher <diagnostic_publisher_implementation>` and :ref:`Implementation Details of the Hardware Status Publisher <hardware_status_publisher_implementation>` for more information.
 
