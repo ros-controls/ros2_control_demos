@@ -199,7 +199,13 @@ hardware_interface::return_type RRBotSystemPositionOnlyHardware::update_hardware
 {
   for (size_t i = 0; i < get_hardware_info().joints.size(); ++i)
   {
-    auto & hardware_status = msg.hardware_device_states[i].hardware_status[0];
+    auto & device_state = msg.hardware_device_states[i];
+    device_state.header.stamp =
+      rclcpp::Clock().now();  // if the hardware is itself reporting time, you should use that here
+    device_state.header.frame_id =
+      get_hardware_info().joints[i].name;  // assuming your joint name is same as frame id
+
+    auto & hardware_status = device_state.hardware_status[0];
     double position = get_state(get_hardware_info().joints[i].name + "/position");
     if (std::abs(position) > 0.8)
     {
