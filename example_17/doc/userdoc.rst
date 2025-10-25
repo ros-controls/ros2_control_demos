@@ -51,7 +51,9 @@ The nodes and topics:
   - Publishes on the topic ``/rrbot_custom_status``.
   - Uses message type ``std_msgs/msg/String``.
   - Sends a message every 2 seconds.
+
 - Default Publisher:
+
   - Publishes on the topic ``/rrbot/hardware_status``.
   - Uses message type ``control_msgs/msg/HardwareStatus``.
   - Sends a message at rate specified by ``status_publish_rate`` parameter in ros2_control tag.
