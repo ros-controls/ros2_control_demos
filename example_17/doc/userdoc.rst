@@ -46,7 +46,9 @@ The nodes and topics:
   - Is named after the hardware component (e.g., ``/RRBot``).
   - Publishes periodically to the standard ``/diagnostics`` topic.
   - Uses message type ``diagnostic_msgs/msg/DiagnosticArray``.
+
 - Custom node:
+
   - Is named ``<hardware_name>_custom_node`` (e.g., ``/rrbot_custom_node``).
   - Publishes on the topic ``/rrbot_custom_status``.
   - Uses message type ``std_msgs/msg/String``.
@@ -285,6 +287,7 @@ This example demonstrates the two recommended ways for a hardware component to p
 The ``diagnostic_updater`` library is the standard ROS 2 tool for publishing diagnostics. It automatically handles timer creation and publishing to the ``/diagnostics`` topic, making it the preferred method. The ``HardwareComponentInterface`` provides a ``get_node()`` method to access the default node, which is passed to the updater.
 
 The key steps are:
+
 1.  **Create an Updater**: Instantiate ``diagnostic_updater::Updater``, passing it the default node. The updater internally creates a publisher to ``/diagnostics`` and a periodic timer (default 1 Hz).
 2.  **Set Hardware ID**: Set a unique identifier for the hardware component.
 3.  **Add a Diagnostic Task**: Add a function that will be called periodically by the updater's internal timer. This function populates a ``DiagnosticStatusWrapper`` with the current status of the hardware.
