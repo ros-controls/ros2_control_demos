@@ -149,16 +149,16 @@ The echoed messages should look similar to:
    # From /rrbot/hardware_status (showing the default publisher's output)
     header:
       stamp:
-        sec: 168700
-        nanosec: 87768976
+        sec: 1007
+        nanosec: 560488417
       frame_id: ''
     hardware_id: RRBot
     hardware_device_states:
     - header:
         stamp:
-          sec: 0
-          nanosec: 0
-        frame_id: ''
+          sec: 1761387923
+          nanosec: 368924291
+        frame_id: joint1
       device_id: joint1
       hardware_status:
       - health_status: 1
@@ -177,9 +177,9 @@ The echoed messages should look similar to:
       vda5050_states: []
     - header:
         stamp:
-          sec: 0
-          nanosec: 0
-        frame_id: ''
+          sec: 1761387923
+          nanosec: 368970350
+        frame_id: joint2
       device_id: joint2
       hardware_status:
       - health_status: 1
