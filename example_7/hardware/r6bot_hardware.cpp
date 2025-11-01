@@ -16,8 +16,6 @@
 #include <string>
 #include <vector>
 
-#include <iostream>
-
 namespace ros2_control_demo_example_7
 {
 CallbackReturn RobotSystem::on_init(
