@@ -2,16 +2,20 @@
 
 .. _ros2_control_demos_example_17_userdoc:
 
-Example 17: RRBot with Hardware Component that publishes diagnostics
-=====================================================================
+Example 17: RRBot with Hardware Component that publishes diagnostics and status messages
+========================================================================================
 
-This example shows how to publish diagnostics from a hardware component using ROS 2 features available within the ``ros2_control`` framework.
+This example shows how to publish diagnostics and status messages from a hardware component using ROS 2 features available within the ``ros2_control`` framework.
 
-It is essentially the same as Example 1, but with a modified hardware interface plugin that demonstrates two methods for publishing status information:
-1.  Using the standard ``diagnostic_updater`` on the default node to publish to the ``/diagnostics`` topic. This is the recommended approach for hardware status reporting.
+It is essentially the same as Example 1, but with a modified hardware interface plugin that demonstrates three methods for publishing status information:
+
+1.  Using the standard ``diagnostic_updater`` on the default node to publish to the ``/diagnostics`` topic.
 2.  Using the Controller Manager's Executor to add a custom ROS 2 node for publishing to a separate, non-standard topic.
+3.  Using the framework managed default publisher, which publishes with a ``HardwareStatus`` message, this is the recommended way when you want to publish structured messages.
 
-See the :ref:`Implementation Details of the Diagnostic Publisher <diagnostic_publisher_implementation>` for more information.
+Note: Structured messages mentioned above are in reference to `hardware_status roadmap <https://github.com/ros-controls/roadmap/blob/master/design_drafts/hardware_status.md>`__
+
+See :ref:`Implementation Details of the Diagnostic Publisher <diagnostic_publisher_implementation>` and :ref:`Implementation Details of the Hardware Status Publisher <hardware_status_publisher_implementation>` for more information.
 
 For *example_17*, the hardware interface plugin is implemented having only one interface.
 
@@ -33,17 +37,30 @@ This tutorial differs by including a hardware interface that publishes diagnosti
 1.  A **default node** is automatically provided to the hardware component. We use the standard ``diagnostic_updater`` library on this node to publish structured diagnostic data.
 2.  A **custom ROS 2 node** is created inside the hardware interface and added to the executor provided by the controller manager. This demonstrates a more manual approach useful for non-diagnostic topics.
 
+as well as
+
+3.  A  **default publisher** is automatically created through steps detailed in :ref:`Implementation Details of the Hardware Status Publisher <hardware_status_publisher_implementation>`.
+
 The nodes and topics:
 
 - Default node (via ``diagnostic_updater``):
+
   - Is named after the hardware component (e.g., ``/RRBot``).
   - Publishes periodically to the standard ``/diagnostics`` topic.
   - Uses message type ``diagnostic_msgs/msg/DiagnosticArray``.
+
 - Custom node:
+
   - Is named ``<hardware_name>_custom_node`` (e.g., ``/rrbot_custom_node``).
   - Publishes on the topic ``/rrbot_custom_status``.
   - Uses message type ``std_msgs/msg/String``.
   - Sends a message every 2 seconds.
+
+- Default Publisher:
+
+  - Publishes on the topic ``/rrbot/hardware_status``.
+  - Uses message type ``control_msgs/msg/HardwareStatus``.
+  - Sends a message at rate specified by ``status_publish_rate`` parameter in ros2_control tag.
 
 To check that the nodes are running and diagnostics are published correctly:
 
@@ -73,11 +90,18 @@ To check that the nodes are running and diagnostics are published correctly:
          ros2 topic info /rrbot_custom_status
          # Should show: std_msgs/msg/String
 
+         # Confirm message type of the default publisher topic
+         ros2 topic info /rrbot/hardware_status
+         # Should show: control_msgs/msg/HardwareStatus
+
          # Echo the raw messages published by the default node
          ros2 topic echo /diagnostics
 
          # Echo the messages published by the custom node
          ros2 topic echo /rrbot_custom_status
+
+         # Echo the messages published by default publisher
+         ros2 topic echo /rrbot/hardware_status
 
    .. group-tab:: Docker
 
@@ -94,8 +118,10 @@ To check that the nodes are running and diagnostics are published correctly:
          ros2 node list
          ros2 topic info /diagnostics
          ros2 topic info /rrbot_custom_status
+         ros2 topic info /rrbot/hardware_status
          ros2 topic echo /diagnostics
          ros2 topic echo /rrbot_custom_status
+         ros2 topic echo /rrbot/hardware_status
 
 The echoed messages should look similar to:
 
@@ -112,17 +138,144 @@ The echoed messages should look similar to:
      message: "Hardware is OK"
      hardware_id: ""
      values: []
-   ---
 
 .. code-block:: shell
 
    # From /rrbot_custom_status (showing the custom node's output)
    data: RRBot 'RRBot' custom node is alive at 1751087597.146549
-   ---
+
+.. code-block:: yaml
+
+   # From /rrbot/hardware_status (showing the default publisher's output)
+    header:
+      stamp:
+        sec: 1007
+        nanosec: 560488417
+      frame_id: ''
+    hardware_id: RRBot
+    hardware_device_states:
+    - header:
+        stamp:
+          sec: 1761387923
+          nanosec: 368924291
+        frame_id: joint1
+      device_id: joint1
+      hardware_status:
+      - health_status: 1
+        error_domain: []
+        operational_mode: 2
+        power_state: 3
+        connectivity_status: 0
+        manufacturer: ''
+        model: ''
+        firmware_version: ''
+        state_details:
+        - key: position_state
+          value: '0.000000'
+      canopen_states: []
+      ethercat_states: []
+      vda5050_states: []
+    - header:
+        stamp:
+          sec: 1761387923
+          nanosec: 368970350
+        frame_id: joint2
+      device_id: joint2
+      hardware_status:
+      - health_status: 1
+        error_domain: []
+        operational_mode: 2
+        power_state: 3
+        connectivity_status: 0
+        manufacturer: ''
+        model: ''
+        firmware_version: ''
+        state_details:
+        - key: position_state
+          value: '0.000000'
+      canopen_states: []
+      ethercat_states: []
+      vda5050_states: []
 
 .. note::
 
    The custom diagnostics node and its timer are created only if the executor is successfully passed to the hardware component. If you don't see the topic or node, ensure the hardware plugin is correctly implemented and that the controller manager is providing an executor.
+.. _hardware_status_publisher_implementation:
+
+Implementation Details of the Hardware Status Publisher
+-------------------------------------------------------
+**1. Using the Framework-Managed Status Publisher (Recommended for HardwareStatus Messages)**
+
+   The ``ros2_control`` framework provides a built-in, real-time safe mechanism for publishing standardized hardware status via the ``control_msgs/msg/HardwareStatus`` message. This is the simplest and most robust way to provide detailed status messages. It is enabled by implementing two virtual methods in your hardware component.
+
+   a. **Override init_hardware_status_message**: This non-realtime method is called once during initialization. You must override it to define the **static structure** of your status message. This includes setting the ``hardware_id``, resizing the ``hardware_device_states`` vector, and for each device, resizing its specific status vectors (e.g., ``generic_hardware_status``) and populating static fields like ``device_id``.
+
+      .. code-block:: cpp
+
+         // In rrbot.hpp, add the override declaration:
+         hardware_interface::CallbackReturn init_hardware_status_message(
+           control_msgs::msg::HardwareStatus & msg_template) override;
+
+         // In rrbot.cpp
+         hardware_interface::CallbackReturn RRBotSystemPositionOnlyHardware::init_hardware_status_message(
+           control_msgs::msg::HardwareStatus & msg)
+         {
+           msg.hardware_id = get_hardware_info().name;
+           msg.hardware_device_states.resize(get_hardware_info().joints.size());
+
+           for (size_t i = 0; i < get_hardware_info().joints.size(); ++i)
+           {
+             msg.hardware_device_states[i].device_id = get_hardware_info().joints[i].name;
+             // This example uses one generic status per joint
+             msg.hardware_device_states[i].generic_hardware_status.resize(1);
+           }
+           return hardware_interface::CallbackReturn::SUCCESS;
+         }
+
+   b. **Override update_hardware_status_message**: This real-time safe method is called from the framework's internal timer. You override it to **fill in the dynamic values** of the pre-structured message, typically by copying your hardware's internal state variables (updated in your ``read()`` method) into the fields of the message.
+
+      .. code-block:: cpp
+
+         // In rrbot.hpp, add the override declaration:
+         hardware_interface::return_type update_hardware_status_message(
+           control_msgs::msg::HardwareStatus & msg) override;
+
+         // In rrbot.cpp
+         hardware_interface::return_type RRBotSystemPositionOnlyHardware::update_hardware_status_message(
+           control_msgs::msg::HardwareStatus & msg)
+         {
+           for (size_t i = 0; i < get_hardware_info().joints.size(); ++i)
+           {
+             auto & generic_status = msg.hardware_device_states[i].generic_hardware_status;
+             // Example: Map internal state to a standard status field
+             double position = get_state(get_hardware_info().joints[i].name + "/position");
+             if (std::abs(position) > 2.5) // Arbitrary warning threshold
+             {
+               generic_status.health_status = control_msgs::msg::GenericState::HEALTH_WARNING;
+             }
+             else
+             {
+               generic_status.health_status = control_msgs::msg::GenericState::HEALTH_OK;
+             }
+             generic_status.operational_mode = control_msgs::msg::GenericState::MODE_AUTO;
+             generic_status.power_state = control_msgs::msg::GenericState::POWER_ON;
+           }
+           return hardware_interface::return_type::OK;
+         }
+
+   c. **Enable in URDF**: To activate the publisher, add the ``status_publish_rate`` parameter to your ``<hardware>`` tag in the URDF. Setting it to 0.0 disabled the feature.
+
+      .. code-block:: xml
+
+         <ros2_control name="RRBotSystemPositionOnly" type="system">
+           <hardware>
+             <plugin>ros2_control_demo_example_17/RRBotSystemPositionOnlyHardware</plugin>
+             <param name="status_publish_rate">20.0</param> <!-- Defaults to 0.0 Hz -->
+           </hardware>
+           ...
+         </ros2_control>
+
+      This will create a publisher on the topic ``/rrbot/hardware_status``.
 
 .. _diagnostic_publisher_implementation:
 
@@ -136,6 +289,7 @@ This example demonstrates the two recommended ways for a hardware component to p
 The ``diagnostic_updater`` library is the standard ROS 2 tool for publishing diagnostics. It automatically handles timer creation and publishing to the ``/diagnostics`` topic, making it the preferred method. The ``HardwareComponentInterface`` provides a ``get_node()`` method to access the default node, which is passed to the updater.
 
 The key steps are:
+
 1.  **Create an Updater**: Instantiate ``diagnostic_updater::Updater``, passing it the default node. The updater internally creates a publisher to ``/diagnostics`` and a periodic timer (default 1 Hz).
 2.  **Set Hardware ID**: Set a unique identifier for the hardware component.
 3.  **Add a Diagnostic Task**: Add a function that will be called periodically by the updater's internal timer. This function populates a ``DiagnosticStatusWrapper`` with the current status of the hardware.
