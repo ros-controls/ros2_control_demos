@@ -24,65 +24,21 @@ from launch_ros.substitutions import FindPackageShare
 
 
 def generate_launch_description():
-    # Declare arguments
-    declared_arguments = []
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "gui",
-            default_value="true",
-            description="Start RViz2 automatically with this launch file.",
-        )
-    )
-
-    # Initialize Arguments
-    gui = LaunchConfiguration("gui")
-
-    # Get URDF via xacro
-    robot_description_content = Command(
-        [
-            PathJoinSubstitution([FindExecutable(name="xacro")]),
-            " ",
+    # Define Node action objects needed to be referenced by RegisterEventHandler
+    robot_controller_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=[
+            "forward_position_controller",
+            "--param-file",
             PathJoinSubstitution(
                 [
                     FindPackageShare("ros2_control_demo_example_1"),
-                    "urdf",
-                    "rrbot.urdf.xacro",
+                    "config",
+                    "rrbot_controllers.yaml",
                 ]
             ),
-        ]
-    )
-    robot_description = {"robot_description": robot_description_content}
-
-    robot_controllers = PathJoinSubstitution(
-        [
-            FindPackageShare("ros2_control_demo_example_1"),
-            "config",
-            "rrbot_controllers.yaml",
-        ]
-    )
-    rviz_config_file = PathJoinSubstitution(
-        [FindPackageShare("ros2_control_demo_description"), "rrbot/rviz", "rrbot.rviz"]
-    )
-
-    control_node = Node(
-        package="controller_manager",
-        executable="ros2_control_node",
-        parameters=[robot_controllers],
-        output="both",
-    )
-    robot_state_pub_node = Node(
-        package="robot_state_publisher",
-        executable="robot_state_publisher",
-        output="both",
-        parameters=[robot_description],
-    )
-    rviz_node = Node(
-        package="rviz2",
-        executable="rviz2",
-        name="rviz2",
-        output="log",
-        arguments=["-d", rviz_config_file],
-        condition=IfCondition(gui),
+        ],
     )
 
     joint_state_broadcaster_spawner = Node(
@@ -91,35 +47,84 @@ def generate_launch_description():
         arguments=["joint_state_broadcaster"],
     )
 
-    robot_controller_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["forward_position_controller", "--param-file", robot_controllers],
+    rviz_node = Node(
+        package="rviz2",
+        executable="rviz2",
+        name="rviz2",
+        output="log",
+        arguments=[
+            "-d",
+            PathJoinSubstitution(
+                [
+                    FindPackageShare("ros2_control_demo_description"),
+                    "rrbot/rviz",
+                    "rrbot.rviz",
+                ]
+            ),
+        ],
+        condition=IfCondition(LaunchConfiguration("gui")),
     )
 
-    # Delay rviz start after `joint_state_broadcaster`
-    delay_rviz_after_joint_state_broadcaster_spawner = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=joint_state_broadcaster_spawner,
-            on_exit=[rviz_node],
-        )
+    return LaunchDescription(
+        [
+            DeclareLaunchArgument(
+                "gui",
+                default_value="true",
+                description="Start RViz2 automatically with this launch file.",
+            ),
+            # Control node
+            Node(
+                package="controller_manager",
+                executable="ros2_control_node",
+                parameters=[
+                    PathJoinSubstitution(
+                        [
+                            FindPackageShare("ros2_control_demo_example_1"),
+                            "config",
+                            "rrbot_controllers.yaml",
+                        ]
+                    )
+                ],
+                output="both",
+            ),
+            # robot_state_publisher with robot_description from xacro
+            Node(
+                package="robot_state_publisher",
+                executable="robot_state_publisher",
+                output="both",
+                parameters=[
+                    {
+                        "robot_description": Command(
+                            [
+                                PathJoinSubstitution([FindExecutable(name="xacro")]),
+                                " ",
+                                PathJoinSubstitution(
+                                    [
+                                        FindPackageShare("ros2_control_demo_example_1"),
+                                        "urdf",
+                                        "rrbot.urdf.xacro",
+                                    ]
+                                ),
+                            ]
+                        )
+                    }
+                ],
+            ),
+            # Include the robot_controller_spawner action (starts at launch)
+            robot_controller_spawner,
+            # When robot_controller_spawner exits, start the joint_state_broadcaster
+            RegisterEventHandler(
+                event_handler=OnProcessExit(
+                    target_action=robot_controller_spawner,
+                    on_exit=[joint_state_broadcaster_spawner],
+                )
+            ),
+            # When joint_state_broadcaster_spawner exits, start RViz
+            RegisterEventHandler(
+                event_handler=OnProcessExit(
+                    target_action=joint_state_broadcaster_spawner,
+                    on_exit=[rviz_node],
+                )
+            ),
+        ]
     )
-
-    # Delay start of joint_state_broadcaster after `robot_controller`
-    # TODO(anyone): This is a workaround for flaky tests. Remove when fixed.
-    delay_joint_state_broadcaster_after_robot_controller_spawner = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=robot_controller_spawner,
-            on_exit=[joint_state_broadcaster_spawner],
-        )
-    )
-
-    nodes = [
-        control_node,
-        robot_state_pub_node,
-        robot_controller_spawner,
-        delay_rviz_after_joint_state_broadcaster_spawner,
-        delay_joint_state_broadcaster_after_robot_controller_spawner,
-    ]
-
-    return LaunchDescription(declared_arguments + nodes)
