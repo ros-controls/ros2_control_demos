@@ -17,7 +17,7 @@ from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, RegisterEventHandler
 from launch.conditions import IfCondition
 from launch.event_handlers import OnProcessExit
-from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
+from launch.substitutions import Command, LaunchConfiguration, PathJoinSubstitution
 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
@@ -39,30 +39,6 @@ def generate_launch_description():
                 ]
             ),
         ],
-    )
-
-    joint_state_broadcaster_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["joint_state_broadcaster"],
-    )
-
-    rviz_node = Node(
-        package="rviz2",
-        executable="rviz2",
-        name="rviz2",
-        output="log",
-        arguments=[
-            "-d",
-            PathJoinSubstitution(
-                [
-                    FindPackageShare("ros2_control_demo_description"),
-                    "rrbot/rviz",
-                    "rrbot.rviz",
-                ]
-            ),
-        ],
-        condition=IfCondition(LaunchConfiguration("gui")),
     )
 
     return LaunchDescription(
@@ -116,14 +92,38 @@ def generate_launch_description():
             RegisterEventHandler(
                 event_handler=OnProcessExit(
                     target_action=robot_controller_spawner,
-                    on_exit=[joint_state_broadcaster_spawner],
+                    on_exit=[
+                        joint_state_broadcaster_spawner := Node(
+                            package="controller_manager",
+                            executable="spawner",
+                            arguments=["joint_state_broadcaster"],
+                        )
+                    ],
                 )
             ),
             # When joint_state_broadcaster_spawner exits, start RViz
             RegisterEventHandler(
                 event_handler=OnProcessExit(
                     target_action=joint_state_broadcaster_spawner,
-                    on_exit=[rviz_node],
+                    on_exit=[
+                        Node(
+                            package="rviz2",
+                            executable="rviz2",
+                            name="rviz2",
+                            output="log",
+                            arguments=[
+                                "-d",
+                                PathJoinSubstitution(
+                                    [
+                                        FindPackageShare("ros2_control_demo_description"),
+                                        "rrbot/rviz",
+                                        "rrbot.rviz",
+                                    ]
+                                ),
+                            ],
+                            condition=IfCondition(LaunchConfiguration("gui")),
+                        )
+                    ],
                 )
             ),
         ]
