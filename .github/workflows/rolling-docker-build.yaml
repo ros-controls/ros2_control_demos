@@ -2,7 +2,7 @@ name: Build Rolling Dockerfile
 # description: builds the dockerfile contained within the repo
 
 on:
-  pull_request:
+  pull_request: &event
     branches:
       - master
     paths:
@@ -16,20 +16,9 @@ on:
       - '**.py'
       - '**.yaml'
       - 'ros2_control_demos.rolling.repos'
-  push:
-    branches:
-      - master
-    paths:
-      - '**.hpp'
-      - '**.cpp'
-      - Dockerfile/**
-      - '.github/workflows/rolling-docker-build.yml'
-      - '**/package.xml'
-      - '**/CMakeLists.txt'
-      - '**.xacro'
-      - '**.py'
-      - '**.yaml'
-      - 'ros2_control_demos.rolling.repos'
+      - 'ros2_control_demos.kilted.repos'
+      - '**.xml'
+  push: *event
   schedule:
     # Run every morning to detect broken dependencies
     - cron: '50 1 * * MON-FRI'
