@@ -23,8 +23,10 @@
 #include <chrono>
 #include <cmath>
 #include <cstring>
+#include <iomanip>
 #include <limits>
 #include <memory>
+#include <sstream>
 #include <vector>
 
 #include "hardware_interface/actuator_interface.hpp"
@@ -35,10 +37,10 @@
 namespace ros2_control_demo_example_14
 {
 hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_init(
-  const hardware_interface::HardwareInfo & info)
+  const hardware_interface::HardwareComponentInterfaceParams & params)
 {
   if (
-    hardware_interface::ActuatorInterface::on_init(info) !=
+    hardware_interface::ActuatorInterface::on_init(params) !=
     hardware_interface::CallbackReturn::SUCCESS)
   {
     return hardware_interface::CallbackReturn::ERROR;
@@ -48,18 +50,16 @@ hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_init(
     hardware_interface::stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
   hw_stop_sec_ =
     hardware_interface::stod(info_.hardware_parameters["example_param_hw_stop_duration_sec"]);
-  socket_port_ = std::stoi(info_.hardware_parameters["example_param_socket_port"]);
+  socket_port_ =
+    static_cast<uint16_t>(std::stoi(info_.hardware_parameters["example_param_socket_port"]));
   // END: This part here is for exemplary purposes - Please do not copy to your production code
-
-  hw_joint_command_ = std::numeric_limits<double>::quiet_NaN();
 
   const hardware_interface::ComponentInfo & joint = info_.joints[0];
   // RRBotActuatorWithoutFeedback has exactly one command interface and one joint
   if (joint.command_interfaces.size() != 1)
   {
     RCLCPP_FATAL(
-      rclcpp::get_logger("RRBotActuatorWithoutFeedback"),
-      "Joint '%s' has %zu command interfaces found. 1 expected.", joint.name.c_str(),
+      get_logger(), "Joint '%s' has %zu command interfaces found. 1 expected.", joint.name.c_str(),
       joint.command_interfaces.size());
     return hardware_interface::CallbackReturn::ERROR;
   }
@@ -67,18 +67,18 @@ hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_init(
   if (joint.command_interfaces[0].name != hardware_interface::HW_IF_VELOCITY)
   {
     RCLCPP_FATAL(
-      rclcpp::get_logger("RRBotActuatorWithoutFeedback"),
-      "Joint '%s' have %s command interfaces found. '%s' expected.", joint.name.c_str(),
-      joint.command_interfaces[0].name.c_str(), hardware_interface::HW_IF_VELOCITY);
+      get_logger(), "Joint '%s' have %s command interfaces found. '%s' expected.",
+      joint.name.c_str(), joint.command_interfaces[0].name.c_str(),
+      hardware_interface::HW_IF_VELOCITY);
     return hardware_interface::CallbackReturn::ERROR;
   }
 
-  // START: This part here is for exemplary purposes - Please do not copy to your production code
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   // Initialize objects for fake mechanical connection
   sock_ = socket(AF_INET, SOCK_STREAM, 0);
   if (sock_ < 0)
   {
-    RCLCPP_FATAL(rclcpp::get_logger("RRBotActuatorWithoutFeedback"), "Creating socket failed.");
+    RCLCPP_FATAL(get_logger(), "Creating socket failed.");
     return hardware_interface::CallbackReturn::ERROR;
   }
 
@@ -87,15 +87,23 @@ hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_init(
   address_.sin_family = AF_INET;
   bcopy(
     reinterpret_cast<char *>(server->h_addr), reinterpret_cast<char *>(&address_.sin_addr.s_addr),
-    server->h_length);
+    static_cast<size_t>(server->h_length));
   address_.sin_port = htons(socket_port_);
+  // END: This part here is for exemplary purposes - Please do not copy to your production code
 
+  return hardware_interface::CallbackReturn::SUCCESS;
+}
+
+hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_configure(
+  const rclcpp_lifecycle::State & /*previous_state*/)
+{
+  RCLCPP_INFO(get_logger(), "Configuring ...please wait...");
+
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   const int max_retries = 5;
   const int initial_delay_ms = 1000;  // Initial delay of 1 second
 
-  RCLCPP_INFO(
-    rclcpp::get_logger("RRBotActuatorWithoutFeedback"), "Trying to connect to port %d.",
-    socket_port_);
+  RCLCPP_INFO(get_logger(), "Trying to connect to port %d.", socket_port_);
 
   int retries = 0;
   int delay_ms = initial_delay_ms;
@@ -110,9 +118,8 @@ hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_init(
     }
 
     RCLCPP_WARN(
-      rclcpp::get_logger("RRBotActuatorWithoutFeedback"),
-      "Connection attempt %d failed: %s. Retrying in %d ms...", retries + 1, strerror(errno),
-      delay_ms);
+      get_logger(), "Connection attempt %d failed: %s. Retrying in %d ms...", retries + 1,
+      strerror(errno), delay_ms);
 
     std::this_thread::sleep_for(std::chrono::milliseconds(delay_ms));
     delay_ms *= 2;  // Exponential backoff
@@ -122,22 +129,26 @@ hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_init(
   if (!connected)
   {
     RCLCPP_FATAL(
-      rclcpp::get_logger("RRBotActuatorWithoutFeedback"),
-      "Connection over socket failed after %d attempts: %s", retries, strerror(errno));
+      get_logger(), "Connection over socket failed after %d attempts: %s", retries,
+      strerror(errno));
     return hardware_interface::CallbackReturn::ERROR;
   }
   else
   {
-    RCLCPP_INFO(
-      rclcpp::get_logger("RRBotActuatorWithoutFeedback"), "Successfully connected to port %d.",
-      socket_port_);
+    RCLCPP_INFO(get_logger(), "Successfully connected to port %d.", socket_port_);
   }
   // END: This part here is for exemplary purposes - Please do not copy to your production code
+
+  // reset values always when configuring hardware
+  for (const auto & [name, descr] : joint_command_interfaces_)
+  {
+    set_command(name, 0.0);
+  }
 
   return hardware_interface::CallbackReturn::SUCCESS;
 }
 
-hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_shutdown(
+hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_cleanup(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
   shutdown(sock_, SHUT_RDWR);  // shutdown socket
@@ -145,46 +156,32 @@ hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_shutdown(
   return hardware_interface::CallbackReturn::SUCCESS;
 }
 
-std::vector<hardware_interface::StateInterface>
-RRBotActuatorWithoutFeedback::export_state_interfaces()
+hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_shutdown(
+  const rclcpp_lifecycle::State & previous_state)
 {
-  std::vector<hardware_interface::StateInterface> state_interfaces;
-  return state_interfaces;
-}
-
-std::vector<hardware_interface::CommandInterface>
-RRBotActuatorWithoutFeedback::export_command_interfaces()
-{
-  std::vector<hardware_interface::CommandInterface> command_interfaces;
-
-  command_interfaces.emplace_back(hardware_interface::CommandInterface(
-    info_.joints[0].name, hardware_interface::HW_IF_VELOCITY, &hw_joint_command_));
-
-  return command_interfaces;
+  return on_cleanup(previous_state);
 }
 
 hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_activate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
   // START: This part here is for exemplary purposes - Please do not copy to your production code
-  RCLCPP_INFO(rclcpp::get_logger("RRBotActuatorWithoutFeedback"), "Activating ...please wait...");
+  RCLCPP_INFO(get_logger(), "Activating ...please wait...");
 
   for (int i = 0; i < hw_start_sec_; i++)
   {
     rclcpp::sleep_for(std::chrono::seconds(1));
-    RCLCPP_INFO(
-      rclcpp::get_logger("RRBotActuatorWithoutFeedback"), "%.1f seconds left...",
-      hw_start_sec_ - i);
+    RCLCPP_INFO(get_logger(), "%.1f seconds left...", hw_start_sec_ - i);
   }
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   // set some default values for joints
-  if (std::isnan(hw_joint_command_))
+  for (const auto & [name, descr] : joint_command_interfaces_)
   {
-    hw_joint_command_ = 0;
+    set_command(name, 0.0);
   }
 
-  RCLCPP_INFO(rclcpp::get_logger("RRBotActuatorWithoutFeedback"), "Successfully activated!");
+  RCLCPP_INFO(get_logger(), "Successfully activated!");
 
   return hardware_interface::CallbackReturn::SUCCESS;
 }
@@ -193,16 +190,15 @@ hardware_interface::CallbackReturn RRBotActuatorWithoutFeedback::on_deactivate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
   // START: This part here is for exemplary purposes - Please do not copy to your production code
-  RCLCPP_INFO(rclcpp::get_logger("RRBotActuatorWithoutFeedback"), "Deactivating ...please wait...");
+  RCLCPP_INFO(get_logger(), "Deactivating ...please wait...");
 
   for (int i = 0; i < hw_stop_sec_; i++)
   {
     rclcpp::sleep_for(std::chrono::seconds(1));
-    RCLCPP_INFO(
-      rclcpp::get_logger("RRBotActuatorWithoutFeedback"), "%.1f seconds left...", hw_stop_sec_ - i);
+    RCLCPP_INFO(get_logger(), "%.1f seconds left...", hw_stop_sec_ - i);
   }
 
-  RCLCPP_INFO(rclcpp::get_logger("RRBotActuatorWithoutFeedback"), "Successfully deactivated!");
+  RCLCPP_INFO(get_logger(), "Successfully deactivated!");
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   return hardware_interface::CallbackReturn::SUCCESS;
@@ -218,18 +214,21 @@ hardware_interface::return_type ros2_control_demo_example_14::RRBotActuatorWitho
   const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
   // START: This part here is for exemplary purposes - Please do not copy to your production code
-  RCLCPP_INFO(
-    rclcpp::get_logger("RRBotActuatorWithoutFeedback"), "Writing command: %f", hw_joint_command_);
+  std::stringstream ss;
+  std::ostringstream data;
+
+  ss << "Writing..." << std::endl;
+  ss << std::fixed << std::setprecision(2);
+
+  auto name = info_.joints[0].name + "/" + hardware_interface::HW_IF_VELOCITY;
+  ss << "Writing command: " << get_command(name) << std::endl;
+
+  data << get_command(name);
+  ss << "Sending data command: " << data.str() << std::endl;
+  RCLCPP_INFO(get_logger(), "%s", ss.str().c_str());
 
   // Simulate sending commands to the hardware
-  std::ostringstream data;
-  data << hw_joint_command_;
-  RCLCPP_INFO(
-    rclcpp::get_logger("RRBotActuatorWithoutFeedback"), "Sending data command: %s",
-    data.str().c_str());
   send(sock_, data.str().c_str(), strlen(data.str().c_str()), 0);
-
-  RCLCPP_INFO(rclcpp::get_logger("RRBotActuatorWithoutFeedback"), "Joints successfully written!");
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   return hardware_interface::return_type::OK;

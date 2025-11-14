@@ -20,7 +20,9 @@
 #define ROS2_CONTROL_DEMO_EXAMPLE_14__RRBOT_SENSOR_FOR_POSITION_FEEDBACK_HPP_
 
 #include <netinet/in.h>
+#include <atomic>
 #include <memory>
+#include <mutex>
 #include <string>
 #include <thread>
 #include <vector>
@@ -33,19 +35,16 @@
 #include "rclcpp/clock.hpp"
 #include "rclcpp/macros.hpp"
 #include "rclcpp/time.hpp"
-#include "realtime_tools/realtime_buffer.h"
 
 namespace ros2_control_demo_example_14
 {
 class RRBotSensorPositionFeedback : public hardware_interface::SensorInterface
 {
 public:
-  RCLCPP_SHARED_PTR_DEFINITIONS(RRBotSensorPositionFeedback);
+  RCLCPP_SHARED_PTR_DEFINITIONS(RRBotSensorPositionFeedback)
 
   hardware_interface::CallbackReturn on_init(
-    const hardware_interface::HardwareInfo & info) override;
-
-  std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
+    const hardware_interface::HardwareComponentInterfaceParams & params) override;
 
   hardware_interface::CallbackReturn on_configure(
     const rclcpp_lifecycle::State & previous_state) override;
@@ -54,6 +53,9 @@ public:
     const rclcpp_lifecycle::State & previous_state) override;
 
   hardware_interface::CallbackReturn on_deactivate(
+    const rclcpp_lifecycle::State & previous_state) override;
+
+  hardware_interface::CallbackReturn on_cleanup(
     const rclcpp_lifecycle::State & previous_state) override;
 
   hardware_interface::CallbackReturn on_shutdown(
@@ -69,9 +71,8 @@ private:
   double hw_slowdown_;
 
   // Store the command for the simulated robot
-  double measured_velocity;  // Local variable, but avoid initialization on each read
+  double measured_velocity_;  // Local variable, but avoid initialization on each read
   double last_measured_velocity_;
-  double hw_joint_state_;
 
   // Timestamps to calculate position for velocity
   rclcpp::Clock clock_;
@@ -79,14 +80,17 @@ private:
   rclcpp::Time current_timestamp;  // Local variable, but avoid initialization on each read
 
   // Sync incoming commands between threads
-  realtime_tools::RealtimeBuffer<double> rt_incomming_data_ptr_;
+  std::atomic<double> rt_incoming_data_;
+  std::atomic<bool> receive_data_;
 
   // Create timer to checking incoming data on socket
   std::thread incoming_data_thread_;
+  std::mutex mtx;
+  std::condition_variable cv;
 
   // Fake "mechanical connection" between actuator and sensor using sockets
   struct sockaddr_in address_;
-  int socket_port_;
+  uint16_t socket_port_;
   int address_length_;
   int obj_socket_;
   int sockoptval_ = 1;

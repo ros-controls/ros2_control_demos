@@ -55,41 +55,105 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
 
    .. code-block:: shell
 
-    joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
-    gpio_controller     [ros2_control_demo_example_10/GPIOController] active
-    forward_position_controller[forward_command_controller/ForwardCommandController] active
+    joint_state_broadcaster     joint_state_broadcaster/JointStateBroadcaster        active
+    gpio_controller             gpio_controllers/GpioCommandController               active
+    forward_position_controller forward_command_controller/ForwardCommandController  active
 
-5. If you get output from above you can subscribe to the ``/gpio_controller/inputs`` topic published by the *GPIO Controller* using ROS 2 CLI interface:
-
-   .. code-block:: shell
-
-    ros2 topic echo /gpio_controller/inputs
+5. If you get output from above you can subscribe to the ``/dynamic_joint_states`` topic published by the *joint_state_broadcaster* using ROS 2 CLI interface:
 
    .. code-block:: shell
 
-    interface_names:
-    - flange_analog_IOs/analog_output1
-    - flange_analog_IOs/analog_input1
-    - flange_analog_IOs/analog_input2
-    - flange_vacuum/vacuum
-    values:
-    - 0.0
-    - 1199574016.0
-    - 1676318848.0
-    - 0.0
+    ros2 topic echo /dynamic_joint_states --once
 
-6. Now you can send commands to the *GPIO Controller* using ROS 2 CLI interface:
+
+   This includes not only the state interfaces of the joints but also the GPIO interfaces.
 
    .. code-block:: shell
 
-    ros2 topic pub /gpio_controller/commands std_msgs/msg/Float64MultiArray "{data: [0.5,0.7]}"
+      header:
+        stamp:
+          sec: 1730670203
+          nanosec: 875008879
+        frame_id: ''
+      joint_names:
+      - joint1
+      - joint2
+      - flange_vacuum
+      - flange_analog_IOs
+      interface_values:
+      - interface_names:
+        - position
+        values:
+        - 0.0
+      - interface_names:
+        - position
+        values:
+        - 0.0
+      - interface_names:
+        - vacuum
+        values:
+        - 0.0
+      - interface_names:
+        - analog_input2
+        - analog_input1
+        - analog_output1
+        values:
+        - 92747888.0
+        - 1764536320.0
+        - 0.0
+      ---
 
-   You should see a change in the ``/gpio_controller/inputs`` topic and a different output in the terminal where launch file is started, e.g.
+   You can also subscribe to the ``/gpio_controller/gpio_states`` topic published by the *gpio_controller* using ROS 2 CLI interface:
 
    .. code-block:: shell
 
-    [RRBotSystemWithGPIOHardware]: Got command 0.5 for GP output 0!
-    [RRBotSystemWithGPIOHardware]: Got command 0.7 for GP output 1!
+    ros2 topic echo /gpio_controller/gpio_states
+
+   which shows the values of the state_interfaces of the configured GPIOs
+
+   .. code-block:: shell
+
+    header:
+      stamp:
+        sec: 1731875120
+        nanosec: 2015630
+      frame_id: ''
+    interface_groups:
+    - flange_analog_IOs
+    - flange_vacuum
+    interface_values:
+    - interface_names:
+      - analog_output1
+      - analog_input1
+      - analog_input2
+      values:
+      - 0.0
+      - 991951680.0
+      - 1467646976.0
+    - interface_names:
+      - vacuum
+      values:
+      - 0.0
+    ---
+
+
+6. Now you can send commands to the *gpio_controller* using ROS 2 CLI interface. You can set a single interface or all at once in one message:
+
+   .. code-block:: shell
+
+    ros2 topic pub /gpio_controller/commands control_msgs/msg/DynamicInterfaceGroupValues "{interface_groups: [flange_analog_IOs], interface_values: [{interface_names: [analog_output1], values: [0.5]}]}"
+
+    ros2 topic pub /gpio_controller/commands control_msgs/msg/DynamicInterfaceGroupValues "{interface_groups: [flange_vacuum], interface_values: [{interface_names: [vacuum], values: [0.27]}]}"
+
+    ros2 topic pub /gpio_controller/commands control_msgs/msg/DynamicInterfaceGroupValues "{interface_groups: [flange_vacuum, flange_analog_IOs], interface_values: [{interface_names: [vacuum], values: [0.27]}, {interface_names: [analog_output1], values: [0.5]} ]}"
+
+   You should see a change in the ``/gpio_controller/gpio_states`` topic and a different output in the terminal where launch file is started, e.g.
+
+   .. code-block:: shell
+
+    [ros2_control_node-1] [INFO] [1721765648.271058850] [controller_manager.resource_manager.hardware_component.system.RRBot]: Writing commands:
+    [ros2_control_node-1]   0.50 for GPIO output '0'
+    [ros2_control_node-1]   0.70 for GPIO output '1'
 
 7. Let's introspect the ros2_control hardware component. Calling
 
@@ -153,22 +217,34 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
 
   .. code-block:: shell
 
-    ros2 topic echo /gpio_controller/inputs
+    ros2 topic echo /gpio_controller/gpio_states
 
   again and you should see that - unless commands are received - the values of the state interfaces are now ``nan`` except for the vacuum interface.
 
   .. code-block:: shell
 
-    interface_names:
-    - flange_analog_IOs/analog_output1
-    - flange_analog_IOs/analog_input1
-    - flange_analog_IOs/analog_input2
-    - flange_vacuum/vacuum
-    values:
-    - .nan
-    - .nan
-    - .nan
-    - 1.0
+    header:
+      stamp:
+        sec: 1731875298
+        nanosec: 783713170
+      frame_id: ''
+    interface_groups:
+    - flange_analog_IOs
+    - flange_vacuum
+    interface_values:
+    - interface_names:
+      - analog_output1
+      - analog_input1
+      - analog_input2
+      values:
+      - .nan
+      - .nan
+      - .nan
+    - interface_names:
+      - vacuum
+      values:
+      - 1.0
+    ---
 
   This is, because for the vacuum interface an initial value of ``1.0`` is set in the URDF file.
 
@@ -181,13 +257,7 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
         </state_interface>
       </gpio>
 
-  Call again
-
-  .. code-block:: shell
-
-    ros2 topic pub /gpio_controller/commands std_msgs/msg/Float64MultiArray "{data: [0.5,0.7]}"
-
-  and you will see that the GPIO command interfaces will be mirrored to their respective state interfaces.
+  Send again topics to ``/gpio_controller/commands`` and you will see that the GPIO command interfaces will be mirrored to their respective state interfaces.
 
 Files used for this demos
 -------------------------
@@ -206,10 +276,9 @@ Files used for this demos
   + `rrbot.cpp <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_10/hardware/rrbot.cpp>`__
   + `generic_system.cpp <https://github.com/ros-controls/ros2_control/tree/{REPOS_FILE_BRANCH}/hardware_interface/src/mock_components/generic_system.cpp>`__
 
-- GPIO controller: `gpio_controller.cpp <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_10/controllers/gpio_controller.cpp>`__
-
 
 Controllers from this demo
 --------------------------
 - ``Joint State Broadcaster`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/{REPOS_FILE_BRANCH}/joint_state_broadcaster>`__): :ref:`doc <joint_state_broadcaster_userdoc>`
 - ``Forward Command Controller`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/{REPOS_FILE_BRANCH}/forward_command_controller>`__): :ref:`doc <forward_command_controller_userdoc>`
+- ``GPIO Command Controller`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/{REPOS_FILE_BRANCH}/gpio_controllers>`__): :ref:`doc <gpio_controllers_userdoc>`

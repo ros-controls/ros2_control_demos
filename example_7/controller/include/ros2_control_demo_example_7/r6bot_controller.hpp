@@ -15,6 +15,7 @@
 #ifndef ROS2_CONTROL_DEMO_EXAMPLE_7__R6BOT_CONTROLLER_HPP_
 #define ROS2_CONTROL_DEMO_EXAMPLE_7__R6BOT_CONTROLLER_HPP_
 
+#include <atomic>
 #include <chrono>
 #include <memory>
 #include <mutex>
@@ -33,7 +34,7 @@
 #include "rclcpp/timer.hpp"
 #include "rclcpp_lifecycle/lifecycle_publisher.hpp"
 #include "rclcpp_lifecycle/node_interfaces/lifecycle_node_interface.hpp"
-#include "realtime_tools/realtime_buffer.h"
+#include "realtime_tools/realtime_thread_safe_box.hpp"
 #include "trajectory_msgs/msg/joint_trajectory.hpp"
 #include "trajectory_msgs/msg/joint_trajectory_point.hpp"
 
@@ -42,44 +43,24 @@ namespace ros2_control_demo_example_7
 class RobotController : public controller_interface::ControllerInterface
 {
 public:
-  CONTROLLER_INTERFACE_PUBLIC
   RobotController();
 
-  CONTROLLER_INTERFACE_PUBLIC
   controller_interface::InterfaceConfiguration command_interface_configuration() const override;
 
-  CONTROLLER_INTERFACE_PUBLIC
   controller_interface::InterfaceConfiguration state_interface_configuration() const override;
 
-  CONTROLLER_INTERFACE_PUBLIC
   controller_interface::return_type update(
     const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
-  CONTROLLER_INTERFACE_PUBLIC
   controller_interface::CallbackReturn on_init() override;
 
-  CONTROLLER_INTERFACE_PUBLIC
   controller_interface::CallbackReturn on_configure(
     const rclcpp_lifecycle::State & previous_state) override;
 
-  CONTROLLER_INTERFACE_PUBLIC
   controller_interface::CallbackReturn on_activate(
     const rclcpp_lifecycle::State & previous_state) override;
 
-  CONTROLLER_INTERFACE_PUBLIC
   controller_interface::CallbackReturn on_deactivate(
-    const rclcpp_lifecycle::State & previous_state) override;
-
-  CONTROLLER_INTERFACE_PUBLIC
-  controller_interface::CallbackReturn on_cleanup(
-    const rclcpp_lifecycle::State & previous_state) override;
-
-  CONTROLLER_INTERFACE_PUBLIC
-  controller_interface::CallbackReturn on_error(
-    const rclcpp_lifecycle::State & previous_state) override;
-
-  CONTROLLER_INTERFACE_PUBLIC
-  controller_interface::CallbackReturn on_shutdown(
     const rclcpp_lifecycle::State & previous_state) override;
 
 protected:
@@ -88,11 +69,10 @@ protected:
   std::vector<std::string> state_interface_types_;
 
   rclcpp::Subscription<trajectory_msgs::msg::JointTrajectory>::SharedPtr joint_command_subscriber_;
-  realtime_tools::RealtimeBuffer<std::shared_ptr<trajectory_msgs::msg::JointTrajectory>>
-    traj_msg_external_point_ptr_;
-  bool new_msg_ = false;
+  realtime_tools::RealtimeThreadSafeBox<trajectory_msgs::msg::JointTrajectory> traj_msg_external_;
+  std::atomic<bool> new_msg_ = false;
   rclcpp::Time start_time_;
-  std::shared_ptr<trajectory_msgs::msg::JointTrajectory> trajectory_msg_;
+  trajectory_msgs::msg::JointTrajectory trajectory_msg_;
   trajectory_msgs::msg::JointTrajectoryPoint point_interp_;
 
   std::vector<std::reference_wrapper<hardware_interface::LoanedCommandInterface>>

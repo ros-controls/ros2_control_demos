@@ -5,6 +5,9 @@ on:
   pull_request:
     branches:
       - humble
+  push:
+    branches:
+      - humble
 
 jobs:
   pre-commit:

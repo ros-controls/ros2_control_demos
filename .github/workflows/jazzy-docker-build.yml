@@ -1,0 +1,33 @@
+name: Build Jazzy Dockerfile
+# description: builds the dockerfile contained within the repo
+
+on:
+  pull_request: &event
+    branches:
+      - jazzy
+    paths:
+      - '**.hpp'
+      - '**.cpp'
+      - Dockerfile/**
+      - '.github/workflows/jazzy-docker-build.yml'
+      - '**/package.xml'
+      - '**/CMakeLists.txt'
+      - '**.xacro'
+      - '**.py'
+      - '**.yaml'
+      - 'ros2_control_demos.jazzy.repos'
+  push: *event
+  schedule:
+    # Run every morning to detect broken dependencies
+    - cron: '40 1 * * MON-FRI'
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v5
+      with:
+        ref: jazzy
+    - name: Build the Docker image
+      run: docker build --file Dockerfile/Dockerfile --tag ros2_control_demos_jazzy --build-arg ROS_DISTRO=jazzy .

@@ -3,7 +3,7 @@ name: Rolling Binary Build
 # description: 'Build & test all dependencies from released (binary) packages.'
 
 on:
-  pull_request:
+  pull_request: &event
     branches:
       - master
     paths:
@@ -16,22 +16,11 @@ on:
       - '**.py'
       - '**.yaml'
       - 'ros2_control_demos-not-released.rolling.repos'
-  push:
-    branches:
-      - master
-    paths:
-      - '**.hpp'
-      - '**.cpp'
-      - '.github/workflows/rolling-binary-build.yml'
-      - '**/package.xml'
-      - '**/CMakeLists.txt'
-      - '**.xacro'
-      - '**.py'
-      - '**.yaml'
-      - 'ros2_control_demos-not-released.rolling.repos'
+      - '**.xml'
+  push: *event
   schedule:
     # Run every morning to detect flakiness and broken dependencies
-    - cron: '03 1 * * *'
+    - cron: '03 1 * * MON-FRI'
 
 jobs:
   binary:
@@ -39,7 +28,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ROS_DISTRO: [rolling, jazzy]
+        ROS_DISTRO: [rolling, kilted]
         ROS_REPO: [main, testing]
     with:
       ros_distro: ${{ matrix.ROS_DISTRO }}

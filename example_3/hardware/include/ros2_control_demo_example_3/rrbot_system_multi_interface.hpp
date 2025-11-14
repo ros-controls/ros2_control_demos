@@ -37,14 +37,13 @@ namespace ros2_control_demo_example_3
 class RRBotSystemMultiInterfaceHardware : public hardware_interface::SystemInterface
 {
 public:
-  RCLCPP_SHARED_PTR_DEFINITIONS(RRBotSystemMultiInterfaceHardware);
+  RCLCPP_SHARED_PTR_DEFINITIONS(RRBotSystemMultiInterfaceHardware)
 
   hardware_interface::CallbackReturn on_init(
-    const hardware_interface::HardwareInfo & info) override;
+    const hardware_interface::HardwareComponentInterfaceParams & params) override;
 
-  std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
-
-  std::vector<hardware_interface::CommandInterface> export_command_interfaces() override;
+  hardware_interface::CallbackReturn on_configure(
+    const rclcpp_lifecycle::State & previous_state) override;
 
   hardware_interface::return_type prepare_command_mode_switch(
     const std::vector<std::string> & start_interfaces,
@@ -67,14 +66,6 @@ private:
   double hw_start_sec_;
   double hw_stop_sec_;
   double hw_slowdown_;
-
-  // Store the commands for the simulated robot
-  std::vector<double> hw_commands_positions_;
-  std::vector<double> hw_commands_velocities_;
-  std::vector<double> hw_commands_accelerations_;
-  std::vector<double> hw_states_positions_;
-  std::vector<double> hw_states_velocities_;
-  std::vector<double> hw_states_accelerations_;
 
   // Enum defining at which control level we are
   // Dumb way of maintaining the command_interface type per joint.

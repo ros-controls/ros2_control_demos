@@ -1,17 +1,13 @@
 cmake_minimum_required(VERSION 3.16)
 project(ros2_control_demo_example_7 LANGUAGES CXX)
 
-if(CMAKE_CXX_COMPILER_ID MATCHES "(GNU|Clang)")
-  add_compile_options(-Wall -Wextra)
-endif()
-
-# set the same behavior for windows as it is on linux
-set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+find_package(ros2_control_cmake REQUIRED)
+set_compiler_options()
+export_windows_symbols()
 
 # find dependencies
 set(HW_IF_INCLUDE_DEPENDS
   pluginlib
-  rcpputils
   hardware_interface
 )
 set(REF_GEN_INCLUDE_DEPENDS
@@ -21,7 +17,6 @@ set(REF_GEN_INCLUDE_DEPENDS
 )
 set(CONTROLLER_INCLUDE_DEPENDS
   pluginlib
-  rcpputils
   controller_interface
   realtime_tools
   trajectory_msgs
@@ -51,9 +46,10 @@ endforeach()
 ## COMPILE
 add_executable(send_trajectory reference_generator/send_trajectory.cpp)
 
-ament_target_dependencies(
-  send_trajectory PUBLIC
-  ${REF_GEN_INCLUDE_DEPENDS}
+target_link_libraries(send_trajectory PUBLIC
+  ${trajectory_msgs_TARGETS}
+  kdl_parser::kdl_parser
+  rclcpp::rclcpp
 )
 
 add_library(
@@ -69,10 +65,12 @@ $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/hardware/include>
 $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/controller/include>
 $<INSTALL_INTERFACE:include/ros2_control_demo_example_7>
 )
-ament_target_dependencies(
-  ros2_control_demo_example_7 PUBLIC
-  ${HW_IF_INCLUDE_DEPENDS}
-  ${CONTROLLER_INCLUDE_DEPENDS}
+target_link_libraries(ros2_control_demo_example_7 PUBLIC
+  ${trajectory_msgs_TARGETS}
+  controller_interface::controller_interface
+  hardware_interface::hardware_interface
+  pluginlib::pluginlib
+  realtime_tools::realtime_tools
 )
 
 # Export hardware plugins
@@ -107,10 +105,17 @@ install(TARGETS ros2_control_demo_example_7
 
 if(BUILD_TESTING)
   find_package(ament_cmake_pytest REQUIRED)
-
   ament_add_pytest_test(example_7_urdf_xacro test/test_urdf_xacro.py)
-  ament_add_pytest_test(view_example_7_launch test/test_view_robot_launch.py)
-  ament_add_pytest_test(run_example_7_launch test/test_r6bot_controller_launch.py)
+
+  # Integration (launch) tests
+  find_package(ament_cmake_ros REQUIRED)
+  find_package(launch_testing_ament_cmake REQUIRED)
+  function(add_ros_isolated_launch_test path)
+    set(RUNNER "${ament_cmake_ros_DIR}/run_test_isolated.py")
+    add_launch_test("${path}" RUNNER "${RUNNER}" ${ARGN})
+  endfunction()
+  add_ros_isolated_launch_test(test/test_view_robot_launch.py)
+  add_ros_isolated_launch_test(test/test_r6bot_controller_launch.py)
 endif()
 
 ## EXPORTS

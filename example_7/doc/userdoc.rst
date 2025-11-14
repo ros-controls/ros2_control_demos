@@ -22,7 +22,7 @@ ros2_control introduces ``state_interfaces`` and ``command_interfaces`` to abstr
 
 ros2_control provides the ``ControllerInterface`` and ``HardwareInterface`` classes for robot agnostic control. During initialization, controllers request ``state_interfaces`` and ``command_interfaces`` required for operation through the ``ControllerInterface``. On the other hand, hardware drivers offer ``state_interfaces`` and ``command_interfaces`` via the ``HardwareInterface``. ros2_control ensure all requested interfaces are available before starting the controllers. The interface pattern allows vendors to write hardware specific drivers that are loaded at runtime.
 
-The main program is a realtime read, update, write loop. During the  read call, hardware drivers that conform to ``HardwareInterface`` update their offered ``state_interfaces`` with the newest values received from the hardware. During the update call, controllers calculate commands from the updated ``state_interfaces`` and writes them into its ``command_interfaces``. Finally, during to write call, the hardware drivers read values from their offer ``command_interfaces`` and send them to the hardware. The ``ros2_control`` node runs the main loop a realtime thread. The ``ros2_control`` node runs a second non-realtime thread to interact with ROS publishers, subscribers, and services.
+The main program is a realtime read, update, write loop. During the  read call, hardware drivers that conform to ``HardwareInterface`` update their offered ``state_interfaces`` with the newest values received from the hardware. During the update call, controllers calculate commands from the updated ``state_interfaces`` and writes them into its ``command_interfaces``. Finally, during to write call, the hardware drivers read values from the ``command_interfaces`` and sends them to the hardware. The ``ros2_control_node`` runs the main loop in a realtime thread. The ``ros2_control_node`` runs a second non-realtime thread to interact with ROS publishers, subscribers, and services.
 
 Writing a URDF
 --------------------------
@@ -193,31 +193,31 @@ In ros2_control, hardware system components are integrated via user defined driv
 
 The following code blocks will explain the requirements for writing a new hardware interface.
 
-The hardware plugin for the tutorial robot is a class called ``RobotSystem`` that inherits from  ``hardware_interface::SystemInterface``. The ``SystemInterface`` is one of the offered hardware interfaces designed for a complete robot system. For example, The UR5 uses this interface. The ``RobotSystem`` must implement five public methods.
+The hardware plugin for the tutorial robot is a class called ``RobotSystem`` that inherits from  ``hardware_interface::SystemInterface``. The ``SystemInterface`` is one of the offered hardware interfaces designed for a complete robot system. For example, The UR5 uses this interface. The ``RobotSystem`` must implement the following public methods.
 
 1. ``on_init``
-2. ``export_state_interfaces``
-3. ``export_command_interfaces``
-4. ``read``
-5. ``write``
+2. ``on_configure``
+3. ``read``
+4. ``write``
+
+There are more methods that can be implemented for lifecycle changes, but they are not required for the tutorial robot.
 
 .. code-block:: c++
 
   using CallbackReturn = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
   #include "hardware_interface/types/hardware_interface_return_values.hpp"
 
-  class HARDWARE_INTERFACE_PUBLIC RobotSystem : public hardware_interface::SystemInterface {
+  class RobotSystem : public hardware_interface::SystemInterface {
       public:
       CallbackReturn on_init(const hardware_interface::HardwareInfo &info) override;
-      std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
-      std::vector<hardware_interface::CommandInterface> export_command_interfaces() override;
+      CallbackReturn on_configure(const rclcpp_lifecycle::State & previous_state) override;
       return_type read(const rclcpp::Time &time, const rclcpp::Duration &period) override;
       return_type write(const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/) override;
       // private members
       // ...
   }
 
-The ``on_init`` method is called once during ros2_control initialization if the ``RobotSystem`` was specified in the URDF. In this method, communication between the robot hardware needs to be setup and memory dynamic should be allocated. Since the tutorial robot is simulated, explicit communication will not be established. Instead, vectors will be initialized that represent the state all the hardware, e.g. a vector of doubles describing joint angles, etc.
+The ``on_init`` method is called once during ros2_control initialization if the ``RobotSystem`` was specified in the URDF. In this method, communication between the robot hardware needs to be setup and memory dynamic should be allocated. Since the tutorial robot is simulated, explicit communication will not be established.
 
 .. code-block:: c++
 
@@ -232,26 +232,15 @@ The ``on_init`` method is called once during ros2_control initialization if the 
 
 Notably, the behavior of ``on_init`` is expected to vary depending on the URDF file. The ``SystemInterface::on_init(info)`` call fills out the ``info`` object with specifics from the URDF. For example, the ``info`` object has fields for joints, sensors, gpios, and more. Suppose the sensor field has a name value of ``tcp_force_torque_sensor``. Then the ``on_init`` must try to establish communication with that sensor. If it fails, then an error value is returned.
 
-Next, ``export_state_interfaces`` and ``export_command_interfaces`` methods are called in succession. The ``export_state_interfaces`` method returns a vector of ``StateInterface``, describing the ``state_interfaces`` for each joint. The ``StateInterface`` objects are read only data handles. Their constructors require an interface name, interface type, and a pointer to a double data value. For the ``RobotSystem``, the data pointers reference class member variables. This way, the data can be access from every method.
+The ``on_configure`` method is called once during ros2_control lifecycle of the ``RobotSystem``. Initial values are set for state and command interfaces that represent the state all the hardware, e.g. doubles describing joint angles, etc.
 
 .. code-block:: c++
 
-  std::vector<hardware_interface::StateInterface> RobotSystem::export_state_interfaces() {
-      std::vector<hardware_interface::StateInterface> state_interfaces;
-      // add state interfaces to ``state_interfaces`` for each joint, e.g. `info_.joints[0].state_interfaces_`, `info_.joints[1].state_interfaces_`, `info_.joints[2].state_interfaces_` ...
+  CallbackReturn RobotSystem::on_configure(
+    const rclcpp_lifecycle::State & /*previous_state*/)
+      // setup communication with robot hardware
       // ...
-      return state_interfaces;
-    }
-
-The ``export_command_interfaces`` method is nearly identical to the previous one. The difference is that a vector of ``CommandInterface`` is returned. The vector contains objects describing the ``command_interfaces`` for each joint.
-
-.. code-block:: c++
-
-  std::vector<hardware_interface::CommandInterface> RobotSystem::export_command_interfaces() {
-      std::vector<hardware_interface::CommandInterface> command_interfaces;
-      // add command interfaces to ``command_interfaces`` for each joint, e.g. `info_.joints[0].command_interfaces_`, `info_.joints[1].command_interfaces_`, `info_.joints[2].command_interfaces_` ...
-      // ...
-      return command_interfaces;
+      return CallbackReturn::SUCCESS;
   }
 
 The ``read`` method is core method in the ros2_control loop. During the main loop, ros2_control loops over all hardware components and calls the ``read`` method. It is executed on the realtime thread, hence the method must obey by realtime constraints. The ``read`` method is responsible for updating the data values of the ``state_interfaces``. Since the data value point to class member variables, those values can be filled with their corresponding sensor values, which will in turn update the values of each exported ``StateInterface`` object.
@@ -344,17 +333,21 @@ Certain interface methods are called during transitions between these states. Du
 
 The following code blocks will explain the requirements for writing a new controller.
 
-The controller plugin for the tutorial robot is a class called ``RobotController`` that inherits from  ``controller_interface::ControllerInterface``. The ``RobotController`` must implement nine public methods. The last six are `managed node <https://design.ros2.org/articles/node_lifecycle.html>`__  transitions callbacks.
+The controller plugin for the tutorial robot is a class called ``RobotController`` that inherits from  ``controller_interface::ControllerInterface``. The ``RobotController`` must implement the following public methods:
 
 1. ``command_interface_configuration``
 2. ``state_interface_configuration``
 3. ``update``
-4. ``on_configure``
-5. ``on_activate``
-6. ``on_deactivate``
-7. ``on_cleanup``
-8. ``on_error``
-9. ``on_shutdown``
+
+The following methods are `managed node <https://design.ros2.org/articles/node_lifecycle.html>`__  transitions callbacks. These overrides are optional and only the ``on_configure``, ``on_activate`` and ``on_deactivate`` have been used in this example.
+The ``on_cleanup`` and ``on_shutdown`` methods are called when the controller's lifecycle node transitions to the shutdown state. They should handle memory deallocation and general cleanup. The ``on_error`` method is invoked if the managed node encounters a failure during a state transition.
+
+1. ``on_configure``
+2. ``on_activate``
+3. ``on_deactivate``
+4. ``on_cleanup``
+5. ``on_error``
+6. ``on_shutdown``
 
 
 .. code-block:: c++
@@ -368,9 +361,6 @@ The controller plugin for the tutorial robot is a class called ``RobotController
       controller_interface::CallbackReturn on_configure(const rclcpp_lifecycle::State &previous_state) override;
       controller_interface::CallbackReturn on_activate(const rclcpp_lifecycle::State &previous_state) override;
       controller_interface::CallbackReturn on_deactivate(const rclcpp_lifecycle::State &previous_state) override;
-      controller_interface::CallbackReturn on_cleanup(const rclcpp_lifecycle::State &previous_state) override;
-      controller_interface::CallbackReturn on_error(const rclcpp_lifecycle::State &previous_state) override;
-      controller_interface::CallbackReturn on_shutdown(const rclcpp_lifecycle::State &previous_state) override;
   // private members
   // ...
   }
@@ -442,45 +432,14 @@ The ``update`` method is part of the main control loop. Since the method is part
     return controller_interface::return_type::OK;
   }
 
-The ``on_deactivate`` is called when a controller stops running. It is important to release the claimed command interface in this method, so other controllers can use them if needed. This is down with the ``release_interfaces`` function.
+The ``on_deactivate`` is called when a controller stops running. In our case it is empty:
 
 .. code-block:: c++
 
   controller_interface::CallbackReturn on_deactivate(const rclcpp_lifecycle::State &previous_state){
-      release_interfaces();
       // The controller should be properly shutdown during this
       // ...
       return CallbackReturn::SUCCESS;
-  }
-
-The ``on_cleanup`` and ``on_shutdown`` are called when the controller's lifecycle node is transitioning to shutting down. Freeing any allocated memory and general cleanup should be done in these methods.
-
-.. code-block:: c++
-
-  controller_interface::CallbackReturn on_cleanup(const rclcpp_lifecycle::State &previous_state){
-    // Callback function for cleanup transition
-    // ...
-    return CallbackReturn::SUCCESS;
-  }
-
-
-.. code-block:: c++
-
-  controller_interface::CallbackReturn on_shutdown(const rclcpp_lifecycle::State &previous_state){
-    // Callback function for shutdown transition
-    // ...
-    return CallbackReturn::SUCCESS;
-  }
-
-
-The ``on_error`` method is called if the managed node fails a state transition. This should generally never happen.
-
-.. code-block:: c++
-
-  controller_interface::CallbackReturn on_error(const rclcpp_lifecycle::State &previous_state){
-    // Callback function for erroneous transition
-    // ...
-    return CallbackReturn::SUCCESS;
   }
 
 

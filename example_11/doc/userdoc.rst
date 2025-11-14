@@ -96,6 +96,7 @@ Tutorial steps
    .. code-block:: shell
 
     ros2 topic pub --rate 30 /bicycle_steering_controller/reference geometry_msgs/msg/TwistStamped "
+      header: auto
       twist:
         linear:
           x: 1.0
@@ -111,8 +112,9 @@ Tutorial steps
 
    .. code-block:: shell
 
-      [CarlikeBotSystemHardware]: Got position command: 0.03 for joint 'virtual_front_wheel_joint'.
-      [CarlikeBotSystemHardware]: Got velocity command: 20.01 for joint 'virtual_rear_wheel_joint'.
+      [ros2_control_node-1] [INFO] [1721766165.108212153] [controller_manager.resource_manager.hardware_component.system.CarlikeBot]: Writing commands:
+      [ros2_control_node-1]   position: 0.03 for joint 'virtual_front_wheel_joint'
+      [ros2_control_node-1]   velocity: 20.00 for joint 'virtual_rear_wheel_joint'
 
 Files used for this demos
 --------------------------

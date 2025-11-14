@@ -76,7 +76,8 @@ Example 11: "CarlikeBot"
 Example 12: "Controller chaining"
    The example shows a simple chainable controller and its integration to form a controller chain to control the joints of *RRBot*.
 
-Example 13: "Multi-robot example (tba.)"
+Example 13: "Multi-robot system with hardware lifecycle management"
+   This example shows how to handle multiple robots in a single controller manager instance.
 
 Example 14: "Modular robots with actuators not providing states and with additional sensors"
    The example shows how to implement robot hardware with actuators not providing states and with additional sensors.
@@ -84,6 +85,11 @@ Example 14: "Modular robots with actuators not providing states and with additio
 Example 15: "Using multiple controller managers"
    This example shows how to integrate multiple robots under different controller manager instances.
 
+Example 16: "DiffBot with chained controllers"
+   This example shows how to create chained controllers using diff_drive_controller and pid_controllers to control a differential drive robot.
+
+Example 17: "RRBot with Hardware Component that publishes diagnostics"
+   This example shows how to publish diagnostics from a hardware component using the Executor passed from Controller Manager.
 
 .. _ros2_control_demos_install:
 
@@ -118,9 +124,9 @@ Download the ``ros2_control_demos`` repository and install its dependencies with
   cd ~/ros2_ws/src
   git clone https://github.com/ros-controls/ros2_control_demos -b {REPOS_FILE_BRANCH}
   cd ~/ros2_ws/
-  rosdep update --rosdistro=$ROS_DISTRO
   sudo apt-get update
-  sudo rosdep install --from-paths ./ -i -y --rosdistro ${ROS_DISTRO}
+  rosdep update --rosdistro=$ROS_DISTRO
+  rosdep install --from-paths ./ -i -y --rosdistro ${ROS_DISTRO}
 
 Now you can build the repository (source your ROS 2 installation first)
 
@@ -145,6 +151,13 @@ Build from source
     vcs import src < src/ros2_control_demos/ros2_control_demos.$ROS_DISTRO.repos
     rosdep update --rosdistro=$ROS_DISTRO
     sudo apt-get update
+
+  If you want to install the development version of ros2_control having the latest feature, use this repos file instead
+
+  .. code-block:: shell
+
+    vcs import src --input https://raw.githubusercontent.com/ros-controls/ros2_control_ci/master/ros_controls.rolling-on-$ROS_DISTRO.repos
+
 
 * Install dependencies:
 
@@ -210,7 +223,7 @@ Terminal 2:
 
   source /opt/ros/${ROS_DISTRO}/setup.bash
   cd ~/ros2_ws
-  rviz2 -d src/ros2_control_demos/example_1/description/rviz/rrbot.rviz
+  rviz2 -d src/ros2_control_demos/ros2_control_demo_description/rrbot/rviz/rrbot.rviz
 
 Now, you can see the robot moving by changing the values of the joints by moving the sliders around in the ``joint_state_publisher_gui``.
 
@@ -233,13 +246,19 @@ Then on your local machine, you can run rviz2 with the config file specified:
 
   cd ~/ros2_ws
   source /opt/ros/${ROS_DISTRO}/setup.sh
-  rviz2 -d src/ros2_control_demos/example_1/description/rviz/rrbot.rviz
+  rviz2 -d src/ros2_control_demos/ros2_control_demo_description/rrbot/rviz/rrbot.rviz
 
 You can also run other commands or launch files from the docker, e.g.
 
 .. code-block:: shell
 
   docker run -it --rm --name ros2_control_demos --net host ros2_control_demos ros2 launch ros2_control_demo_example_2 diffbot.launch.py
+
+or launch a second terminal inside the docker container by
+
+.. code-block:: shell
+
+  docker exec -it ros2_control_demos bash
 
 =====================
 Quick Hints
@@ -276,5 +295,8 @@ Examples
    Example 10: Industrial robot with GPIO interfaces <../example_10/doc/userdoc.rst>
    Example 11: CarlikeBot <../example_11/doc/userdoc.rst>
    Example 12: Controller chaining <../example_12/doc/userdoc.rst>
+   Example 13: Multiple robots <../example_13/doc/userdoc.rst>
    Example 14: Modular robots with actuators not providing states <../example_14/doc/userdoc.rst>
    Example 15: Using multiple controller managers <../example_15/doc/userdoc.rst>
+   Example 16: DiffBot with chained controllers <../example_16/doc/userdoc.rst>
+   Example 17: RRBot with Hardware Component that publishes diagnostics <../example_17/doc/userdoc.rst>

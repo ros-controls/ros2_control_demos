@@ -1,0 +1,56 @@
+/**/controller_manager:
+  ros__parameters:
+    update_rate: 10  # Hz
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+
+/**/forward_position_controller:
+  ros__parameters:
+    type: forward_command_controller/ForwardCommandController
+    interface_name: position
+
+/rrbot_1/forward_position_controller:
+  ros__parameters:
+    joints:
+      - rrbot_1_joint1
+      - rrbot_1_joint2
+
+/rrbot_2/forward_position_controller:
+  ros__parameters:
+    joints:
+      - rrbot_2_joint1
+      - rrbot_2_joint2
+
+/rrbot_1/position_trajectory_controller:
+  ros__parameters:
+    joints:
+      - rrbot_1_joint1
+      - rrbot_1_joint2
+
+/rrbot_2/position_trajectory_controller:
+  ros__parameters:
+    joints:
+      - rrbot_2_joint1
+      - rrbot_2_joint2
+
+/**/position_trajectory_controller:
+  ros__parameters:
+    type: joint_trajectory_controller/JointTrajectoryController
+
+    command_interfaces:
+      - position
+
+    state_interfaces:
+      - position
+
+    state_publish_rate: 200.0 # Defaults to 50
+    action_monitor_rate: 20.0 # Defaults to 20
+
+    allow_partial_joints_goal: false # Defaults to false
+    interpolate_from_desired_state: true
+    allow_integration_in_goal_trajectories: true
+    constraints:
+      stopped_velocity_tolerance: 0.01 # Defaults to 0.01
+      goal_time: 0.0 # Defaults to 0.0 (start immediately)

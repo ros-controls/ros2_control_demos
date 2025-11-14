@@ -34,12 +34,10 @@ namespace ros2_control_demo_example_5
 class ExternalRRBotForceTorqueSensorHardware : public hardware_interface::SensorInterface
 {
 public:
-  RCLCPP_SHARED_PTR_DEFINITIONS(ExternalRRBotForceTorqueSensorHardware);
+  RCLCPP_SHARED_PTR_DEFINITIONS(ExternalRRBotForceTorqueSensorHardware)
 
   hardware_interface::CallbackReturn on_init(
-    const hardware_interface::HardwareInfo & info) override;
-
-  std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
+    const hardware_interface::HardwareComponentInterfaceParams & params) override;
 
   hardware_interface::CallbackReturn on_activate(
     const rclcpp_lifecycle::State & previous_state) override;
@@ -55,9 +53,6 @@ private:
   double hw_start_sec_;
   double hw_stop_sec_;
   double hw_sensor_change_;
-
-  // Store the sensor states for the simulated robot
-  std::vector<double> hw_sensor_states_;
 };
 
 }  // namespace ros2_control_demo_example_5

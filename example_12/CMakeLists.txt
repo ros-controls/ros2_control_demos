@@ -1,12 +1,9 @@
 cmake_minimum_required(VERSION 3.16)
 project(ros2_control_demo_example_12 LANGUAGES CXX)
 
-if(CMAKE_CXX_COMPILER_ID MATCHES "(GNU|Clang)")
-  add_compile_options(-Wall -Wextra)
-endif()
-
-# set the same behavior for windows as it is on linux
-set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+find_package(ros2_control_cmake REQUIRED)
+set_compiler_options()
+export_windows_symbols()
 
 # find dependencies
 set(THIS_PACKAGE_INCLUDE_DEPENDS
@@ -14,7 +11,6 @@ set(THIS_PACKAGE_INCLUDE_DEPENDS
   pluginlib
   rclcpp
   rclcpp_lifecycle
-  control_msgs
   generate_parameter_library
   controller_interface
   parameter_traits
@@ -48,9 +44,11 @@ target_include_directories(ros2_control_demo_example_12 PUBLIC
 $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/hardware/include>
 $<INSTALL_INTERFACE:include/ros2_control_demo_example_12>
 )
-ament_target_dependencies(
-  ros2_control_demo_example_12 PUBLIC
-  ${THIS_PACKAGE_INCLUDE_DEPENDS}
+target_link_libraries(ros2_control_demo_example_12 PUBLIC
+  hardware_interface::hardware_interface
+  pluginlib::pluginlib
+  rclcpp::rclcpp
+  rclcpp_lifecycle::rclcpp_lifecycle
 )
 
 # Export hardware plugins
@@ -68,9 +66,15 @@ target_include_directories(passthrough_controller PUBLIC
 $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/controllers/include>
 $<INSTALL_INTERFACE:include/passthrough_controller>
 )
-target_link_libraries(passthrough_controller PUBLIC passthrough_controller_parameters)
-ament_target_dependencies(passthrough_controller PUBLIC ${THIS_PACKAGE_INCLUDE_DEPENDS})
-
+target_link_libraries(passthrough_controller PUBLIC
+  passthrough_controller_parameters
+  ${std_msgs_TARGETS}
+  controller_interface::controller_interface
+  pluginlib::pluginlib
+  rclcpp::rclcpp
+  rclcpp_lifecycle::rclcpp_lifecycle
+  realtime_tools::realtime_tools
+)
 pluginlib_export_plugin_description_file(controller_interface passthrough_controller.xml)
 
 
@@ -110,10 +114,17 @@ install(TARGETS
 
 if(BUILD_TESTING)
   find_package(ament_cmake_pytest REQUIRED)
-
   ament_add_pytest_test(example_12_urdf_xacro test/test_urdf_xacro.py)
-  ament_add_pytest_test(view_example_12_launch test/test_view_robot_launch.py)
-  ament_add_pytest_test(run_example_12_launch test/test_rrbot_launch.py)
+
+  # Integration (launch) tests
+  find_package(ament_cmake_ros REQUIRED)
+  find_package(launch_testing_ament_cmake REQUIRED)
+  function(add_ros_isolated_launch_test path)
+    set(RUNNER "${ament_cmake_ros_DIR}/run_test_isolated.py")
+    add_launch_test("${path}" RUNNER "${RUNNER}" ${ARGN})
+  endfunction()
+  add_ros_isolated_launch_test(test/test_view_robot_launch.py)
+  add_ros_isolated_launch_test(test/test_rrbot_launch.py)
 endif()
 
 ## EXPORTS

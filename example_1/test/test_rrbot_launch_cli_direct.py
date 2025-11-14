@@ -39,10 +39,9 @@ from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_testing.actions import ReadyToTest
 
-# import launch_testing.markers
+import launch_testing.markers
 import rclpy
-from rclpy.node import Node
-from ros2_control_demo_testing.test_utils import check_controllers_running
+from controller_manager.test_utils import check_controllers_running
 
 
 # Executes the given launch file and checks if all nodes can be started
@@ -62,14 +61,19 @@ def generate_test_description():
 
 
 class TestFixtureCliDirect(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        rclpy.init()
+
+    @classmethod
+    def tearDownClass(cls):
+        rclpy.shutdown()
 
     def setUp(self):
-        rclpy.init()
-        self.node = Node("test_node")
+        self.node = rclpy.create_node("test_node")
 
     def tearDown(self):
         self.node.destroy_node()
-        rclpy.shutdown()
 
     def test_main(self, proc_output):
 
@@ -105,11 +109,10 @@ class TestFixtureCliDirect(unittest.TestCase):
         check_controllers_running(self.node, [cname], state="active")
 
 
-# TODO(anyone): enable this if shutdown of ros2_control_node does not fail anymore
-# @launch_testing.post_shutdown_test()
-# # These tests are run after the processes in generate_test_description() have shutdown.
-# class TestDescriptionCraneShutdown(unittest.TestCase):
+@launch_testing.post_shutdown_test()
+# These tests are run after the processes in generate_test_description() have shutdown.
+class TestShutdown(unittest.TestCase):
 
-#     def test_exit_codes(self, proc_info):
-#         """Check if the processes exited normally."""
-#         launch_testing.asserts.assertExitCodes(proc_info)
+    def test_exit_codes(self, proc_info):
+        """Check if the processes exited normally."""
+        launch_testing.asserts.assertExitCodes(proc_info)

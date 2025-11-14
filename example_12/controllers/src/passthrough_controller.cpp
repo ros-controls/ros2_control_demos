@@ -13,8 +13,25 @@
 // limitations under the License.
 
 #include "passthrough_controller/passthrough_controller.hpp"
+
+#include <algorithm>
+
 #include "controller_interface/helpers.hpp"
 #include "pluginlib/class_list_macros.hpp"
+
+namespace
+{  // utility
+
+// called from RT control loop
+void reset_controller_reference_msg(passthrough_controller::DataType & msg)
+{
+  for (auto & data : msg.data)
+  {
+    data = std::numeric_limits<double>::quiet_NaN();
+  }
+}
+
+}  // namespace
 
 namespace passthrough_controller
 {
@@ -64,7 +81,7 @@ controller_interface::CallbackReturn PassthroughController::on_configure(
       // check if message is correct size, if not ignore
       if (msg->data.size() == command_interface_names_.size())
       {
-        rt_buffer_ptr_.writeFromNonRT(msg);
+        rt_buffer_.set(*msg);
       }
       else
       {
@@ -91,24 +108,9 @@ controller_interface::CallbackReturn PassthroughController::on_configure(
 controller_interface::CallbackReturn PassthroughController::on_activate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
-  //  check if we have all resources defined in the "points" parameter
-  //  also verify that we *only* have the resources defined in the "points" parameter
-  // ATTENTION(destogl): Shouldn't we use ordered interface all the time?
-  std::vector<std::reference_wrapper<hardware_interface::LoanedCommandInterface>>
-    ordered_interfaces;
-  if (
-    !controller_interface::get_ordered_interfaces(
-      command_interfaces_, command_interface_names_, std::string(""), ordered_interfaces) ||
-    command_interface_names_.size() != ordered_interfaces.size())
-  {
-    RCLCPP_ERROR(
-      this->get_node()->get_logger(), "Expected %zu command interfaces, got %zu",
-      command_interface_names_.size(), ordered_interfaces.size());
-    return controller_interface::CallbackReturn::ERROR;
-  }
-
   // reset command buffer if a command came through callback when controller was inactive
-  rt_buffer_ptr_ = realtime_tools::RealtimeBuffer<std::shared_ptr<DataType>>(nullptr);
+  reset_controller_reference_msg(command_);
+  rt_buffer_.try_set(command_);
 
   RCLCPP_INFO(this->get_node()->get_logger(), "activate successful");
 
@@ -122,8 +124,10 @@ controller_interface::CallbackReturn PassthroughController::on_activate(
 controller_interface::CallbackReturn PassthroughController::on_deactivate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
-  // reset command buffer
-  rt_buffer_ptr_ = realtime_tools::RealtimeBuffer<std::shared_ptr<DataType>>(nullptr);
+  // Try to set default value in command.
+  reset_controller_reference_msg(command_);
+  rt_buffer_.try_set(command_);
+
   return controller_interface::CallbackReturn::SUCCESS;
 }
 
@@ -150,8 +154,9 @@ PassthroughController::on_export_reference_interfaces()
 
   for (size_t i = 0; i < reference_interface_names_.size(); ++i)
   {
-    reference_interfaces.push_back(hardware_interface::CommandInterface(
-      get_node()->get_name(), reference_interface_names_[i], &reference_interfaces_[i]));
+    reference_interfaces.push_back(
+      hardware_interface::CommandInterface(
+        get_node()->get_name(), reference_interface_names_[i], &reference_interfaces_[i]));
   }
 
   return reference_interfaces;
@@ -160,19 +165,26 @@ PassthroughController::on_export_reference_interfaces()
 controller_interface::return_type PassthroughController::update_reference_from_subscribers(
   const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
-  auto joint_commands = rt_buffer_ptr_.readFromRT();
-  // message is valid
-  if (!(!joint_commands || !(*joint_commands)))
+  auto command_op = rt_buffer_.try_get();
+  if (command_op.has_value())
   {
-    if (reference_interfaces_.size() != (*joint_commands)->data.size())
+    command_ = command_op.value();
+  }
+  // message is valid
+  if (
+    !command_.data.empty() && std::all_of(
+                                command_.data.cbegin(), command_.data.cend(),
+                                [](const auto & value) { return std::isfinite(value); }))
+  {
+    if (reference_interfaces_.size() != command_.data.size())
     {
       RCLCPP_ERROR_THROTTLE(
         get_node()->get_logger(), *(get_node()->get_clock()), 1000,
         "command size (%zu) does not match number of reference interfaces (%zu)",
-        (*joint_commands)->data.size(), reference_interfaces_.size());
+        command_.data.size(), reference_interfaces_.size());
       return controller_interface::return_type::ERROR;
     }
-    reference_interfaces_ = (*joint_commands)->data;
+    reference_interfaces_ = command_.data;
   }
 
   return controller_interface::return_type::OK;

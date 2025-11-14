@@ -71,24 +71,11 @@ def generate_launch_description():
         ]
     )
 
-    # the steering controller libraries by default publish odometry on a separate topic than /tf
-    control_node_remapped = Node(
-        package="controller_manager",
-        executable="ros2_control_node",
-        parameters=[robot_controllers],
-        output="both",
-        remappings=[
-            ("/bicycle_steering_controller/tf_odometry", "/tf"),
-        ],
-        condition=IfCondition(remap_odometry_tf),
-    )
     control_node = Node(
         package="controller_manager",
         executable="ros2_control_node",
         parameters=[robot_controllers],
         output="both",
-        remappings=[],
-        condition=UnlessCondition(remap_odometry_tf),
     )
     robot_state_pub_bicycle_node = Node(
         package="robot_state_publisher",
@@ -111,10 +98,25 @@ def generate_launch_description():
         arguments=["joint_state_broadcaster"],
     )
 
+    # the steering controller libraries by default publish odometry on a separate topic than /tf
+    robot_bicycle_controller_spawner_remapped = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=[
+            "bicycle_steering_controller",
+            "--param-file",
+            robot_controllers,
+            "--controller-ros-args",
+            "-r /bicycle_steering_controller/tf_odometry:=/tf",
+        ],
+        condition=IfCondition(remap_odometry_tf),
+    )
+
     robot_bicycle_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
         arguments=["bicycle_steering_controller", "--param-file", robot_controllers],
+        condition=UnlessCondition(remap_odometry_tf),
     )
 
     # Delay rviz start after `joint_state_broadcaster`
@@ -129,13 +131,12 @@ def generate_launch_description():
     delay_robot_controller_spawner_after_joint_state_broadcaster_spawner = RegisterEventHandler(
         event_handler=OnProcessExit(
             target_action=joint_state_broadcaster_spawner,
-            on_exit=[robot_bicycle_controller_spawner],
+            on_exit=[robot_bicycle_controller_spawner_remapped],
         )
     )
 
     nodes = [
         control_node,
-        control_node_remapped,
         robot_state_pub_bicycle_node,
         joint_state_broadcaster_spawner,
         delay_rviz_after_joint_state_broadcaster_spawner,

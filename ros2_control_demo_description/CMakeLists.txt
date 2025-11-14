@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.10)
 project(ros2_control_demo_description)
 
 find_package(ament_cmake REQUIRED)
@@ -16,6 +16,11 @@ install(
 install(
   DIRECTORY carlikebot/urdf carlikebot/rviz
   DESTINATION share/${PROJECT_NAME}/carlikebot
+)
+
+install(
+  DIRECTORY r3bot/urdf
+  DESTINATION share/${PROJECT_NAME}/r3bot
 )
 
 install(

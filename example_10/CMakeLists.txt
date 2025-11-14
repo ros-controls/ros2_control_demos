@@ -1,22 +1,16 @@
 cmake_minimum_required(VERSION 3.16)
 project(ros2_control_demo_example_10 LANGUAGES CXX)
 
-if(CMAKE_CXX_COMPILER_ID MATCHES "(GNU|Clang)")
-  add_compile_options(-Wall -Wextra)
-endif()
-
-# set the same behavior for windows as it is on linux
-set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+find_package(ros2_control_cmake REQUIRED)
+set_compiler_options()
+export_windows_symbols()
 
 # find dependencies
 set(THIS_PACKAGE_INCLUDE_DEPENDS
   hardware_interface
-  control_msgs
-  std_msgs
   pluginlib
   rclcpp
   rclcpp_lifecycle
-  controller_interface
 )
 
 # Specify the required version of ros2_control
@@ -39,31 +33,25 @@ add_library(
   ros2_control_demo_example_10
   SHARED
   hardware/rrbot.cpp
-  controllers/gpio_controller.cpp
 )
 target_compile_features(ros2_control_demo_example_10 PUBLIC cxx_std_17)
 target_include_directories(ros2_control_demo_example_10 PUBLIC
 $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/hardware/include>
-$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/controllers/include>
 $<INSTALL_INTERFACE:include/ros2_control_demo_example_10>
 )
-ament_target_dependencies(
-  ros2_control_demo_example_10 PUBLIC
-  ${THIS_PACKAGE_INCLUDE_DEPENDS}
+target_link_libraries(ros2_control_demo_example_10 PUBLIC
+  hardware_interface::hardware_interface
+  pluginlib::pluginlib
+  rclcpp::rclcpp
+  rclcpp_lifecycle::rclcpp_lifecycle
 )
 
 # Export hardware plugins
 pluginlib_export_plugin_description_file(hardware_interface ros2_control_demo_example_10.xml)
-# Export controllers
-pluginlib_export_plugin_description_file(controller_interface ros2_control_demo_example_10.xml)
 
 # INSTALL
 install(
   DIRECTORY hardware/include/
-  DESTINATION include/ros2_control_demo_example_10
-)
-install(
-  DIRECTORY controllers/include/
   DESTINATION include/ros2_control_demo_example_10
 )
 install(
@@ -83,10 +71,17 @@ install(TARGETS ros2_control_demo_example_10
 
 if(BUILD_TESTING)
   find_package(ament_cmake_pytest REQUIRED)
-
   ament_add_pytest_test(example_10_urdf_xacro test/test_urdf_xacro.py)
-  ament_add_pytest_test(view_example_10_launch test/test_view_robot_launch.py)
-  ament_add_pytest_test(run_example_10_launch test/test_rrbot_launch.py)
+
+  # Integration (launch) tests
+  find_package(ament_cmake_ros REQUIRED)
+  find_package(launch_testing_ament_cmake REQUIRED)
+  function(add_ros_isolated_launch_test path)
+    set(RUNNER "${ament_cmake_ros_DIR}/run_test_isolated.py")
+    add_launch_test("${path}" RUNNER "${RUNNER}" ${ARGN})
+  endfunction()
+  add_ros_isolated_launch_test(test/test_view_robot_launch.py)
+  add_ros_isolated_launch_test(test/test_rrbot_launch.py)
 endif()
 
 ## EXPORTS

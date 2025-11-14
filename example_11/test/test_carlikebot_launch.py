@@ -37,15 +37,17 @@ from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_testing.actions import ReadyToTest
+from launch_testing_ros import WaitForTopics
 
-# import launch_testing.markers
+import launch_testing.markers
 import rclpy
-from rclpy.node import Node
-from ros2_control_demo_testing.test_utils import (
+from controller_manager.test_utils import (
     check_controllers_running,
     check_if_js_published,
     check_node_running,
 )
+
+from tf2_msgs.msg import TFMessage
 
 
 # Executes the given launch file and checks if all nodes can be started
@@ -67,14 +69,19 @@ def generate_test_description():
 # This is our test fixture. Each method is a test case.
 # These run alongside the processes specified in generate_test_description()
 class TestFixture(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        rclpy.init()
+
+    @classmethod
+    def tearDownClass(cls):
+        rclpy.shutdown()
 
     def setUp(self):
-        rclpy.init()
-        self.node = Node("test_node")
+        self.node = rclpy.create_node("test_node")
 
     def tearDown(self):
         self.node.destroy_node()
-        rclpy.shutdown()
 
     def test_node_start(self, proc_output):
         check_node_running(self.node, "robot_state_publisher")
@@ -94,12 +101,18 @@ class TestFixture(unittest.TestCase):
             ],
         )
 
+    def test_remapped_topic(self):
+        # test if the remapping of the odometry topic is disabled
+        old_topic = "/bicycle_steering_controller/tf_odometry"
+        wait_for_topics = WaitForTopics([(old_topic, TFMessage)])
+        assert wait_for_topics.wait(), f"Topic '{old_topic}' not found!"
+        wait_for_topics.shutdown()
 
-# TODO(anyone): enable this if shutdown of ros2_control_node does not fail anymore
-# @launch_testing.post_shutdown_test()
-# # These tests are run after the processes in generate_test_description() have shutdown.
-# class TestDescriptionCraneShutdown(unittest.TestCase):
 
-#     def test_exit_codes(self, proc_info):
-#         """Check if the processes exited normally."""
-#         launch_testing.asserts.assertExitCodes(proc_info)
+@launch_testing.post_shutdown_test()
+# These tests are run after the processes in generate_test_description() have shutdown.
+class TestShutdown(unittest.TestCase):
+
+    def test_exit_codes(self, proc_info):
+        """Check if the processes exited normally."""
+        launch_testing.asserts.assertExitCodes(proc_info)
