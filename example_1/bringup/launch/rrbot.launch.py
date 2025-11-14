@@ -113,13 +113,7 @@ def generate_launch_description():
                             output="log",
                             arguments=[
                                 "-d",
-                                PathJoinSubstitution(
-                                    [
-                                        FindPackageShare("ros2_control_demo_description"),
-                                        "rrbot/rviz",
-                                        "rrbot.rviz",
-                                    ]
-                                ),
+                                PathSubstitution(FindPackageShare("ros2_control_demo_description")) / "rrbot" / "rviz" / "rrbot.rviz",
                             ],
                             condition=IfCondition(LaunchConfiguration("gui")),
                         )
