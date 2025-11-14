@@ -140,7 +140,8 @@ controller_interface::return_type PassthroughController::update_and_write_comman
   {
     if (!std::isnan(reference_interfaces_[i]))
     {
-      command_interfaces_[i].set_value(reference_interfaces_[i]);
+      // Explicitly ignore return value
+      std::ignore = command_interfaces_[i].set_value(reference_interfaces_[i]);
     }
   }
 
