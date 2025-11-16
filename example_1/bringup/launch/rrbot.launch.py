@@ -17,7 +17,7 @@ from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, RegisterEventHandler
 from launch.conditions import IfCondition
 from launch.event_handlers import OnProcessExit
-from launch.substitutions import Command, LaunchConfiguration, PathJoinSubstitution
+from launch.substitutions import Command, LaunchConfiguration, PathSubstitution
 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
@@ -31,13 +31,9 @@ def generate_launch_description():
         arguments=[
             "forward_position_controller",
             "--param-file",
-            PathJoinSubstitution(
-                [
-                    FindPackageShare("ros2_control_demo_example_1"),
-                    "config",
-                    "rrbot_controllers.yaml",
-                ]
-            ),
+            PathSubstitution(FindPackageShare("ros2_control_demo_example_1"))
+            / "config"
+            / "rrbot_controllers.yaml",
         ],
     )
 
@@ -53,13 +49,9 @@ def generate_launch_description():
                 package="controller_manager",
                 executable="ros2_control_node",
                 parameters=[
-                    PathJoinSubstitution(
-                        [
-                            FindPackageShare("ros2_control_demo_example_1"),
-                            "config",
-                            "rrbot_controllers.yaml",
-                        ]
-                    )
+                    PathSubstitution(FindPackageShare("ros2_control_demo_example_1"))
+                    / "config"
+                    / "rrbot_controllers.yaml"
                 ],
                 output="both",
             ),
@@ -74,13 +66,9 @@ def generate_launch_description():
                             [
                                 "xacro",
                                 " ",
-                                PathJoinSubstitution(
-                                    [
-                                        FindPackageShare("ros2_control_demo_example_1"),
-                                        "urdf",
-                                        "rrbot.urdf.xacro",
-                                    ]
-                                ),
+                                PathSubstitution(FindPackageShare("ros2_control_demo_example_1"))
+                                / "urdf"
+                                / "rrbot.urdf.xacro",
                             ]
                         )
                     }
@@ -113,7 +101,10 @@ def generate_launch_description():
                             output="log",
                             arguments=[
                                 "-d",
-                                PathSubstitution(FindPackageShare("ros2_control_demo_description")) / "rrbot" / "rviz" / "rrbot.rviz",
+                                PathSubstitution(FindPackageShare("ros2_control_demo_description"))
+                                / "rrbot"
+                                / "rviz"
+                                / "rrbot.rviz",
                             ],
                             condition=IfCondition(LaunchConfiguration("gui")),
                         )
