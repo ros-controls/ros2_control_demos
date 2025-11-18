@@ -14,9 +14,8 @@
 
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, RegisterEventHandler
+from launch.actions import DeclareLaunchArgument
 from launch.conditions import IfCondition
-from launch.event_handlers import OnProcessExit
 from launch.substitutions import Command, LaunchConfiguration, PathSubstitution
 
 from launch_ros.actions import Node
@@ -24,19 +23,6 @@ from launch_ros.substitutions import FindPackageShare
 
 
 def generate_launch_description():
-    # Define Node action objects needed to be referenced by RegisterEventHandler
-    robot_controller_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=[
-            "forward_position_controller",
-            "--param-file",
-            PathSubstitution(FindPackageShare("ros2_control_demo_example_1"))
-            / "config"
-            / "rrbot_controllers.yaml",
-        ],
-    )
-
     return LaunchDescription(
         [
             DeclareLaunchArgument(
@@ -74,42 +60,32 @@ def generate_launch_description():
                     }
                 ],
             ),
-            # Include the robot_controller_spawner action (starts at launch)
-            robot_controller_spawner,
-            # When robot_controller_spawner exits, start the joint_state_broadcaster
-            RegisterEventHandler(
-                event_handler=OnProcessExit(
-                    target_action=robot_controller_spawner,
-                    on_exit=[
-                        joint_state_broadcaster_spawner := Node(
-                            package="controller_manager",
-                            executable="spawner",
-                            arguments=["joint_state_broadcaster"],
-                        )
-                    ],
-                )
+            Node(
+                package="rviz2",
+                executable="rviz2",
+                name="rviz2",
+                output="log",
+                arguments=[
+                    "-d",
+                    PathSubstitution(FindPackageShare("ros2_control_demo_description"))
+                    / "rrbot/rviz/rrbot.rviz",
+                ],
+                condition=IfCondition(LaunchConfiguration("gui")),
             ),
-            # When joint_state_broadcaster_spawner exits, start RViz
-            RegisterEventHandler(
-                event_handler=OnProcessExit(
-                    target_action=joint_state_broadcaster_spawner,
-                    on_exit=[
-                        Node(
-                            package="rviz2",
-                            executable="rviz2",
-                            name="rviz2",
-                            output="log",
-                            arguments=[
-                                "-d",
-                                PathSubstitution(FindPackageShare("ros2_control_demo_description"))
-                                / "rrbot"
-                                / "rviz"
-                                / "rrbot.rviz",
-                            ],
-                            condition=IfCondition(LaunchConfiguration("gui")),
-                        )
-                    ],
-                )
+            Node(
+                package="controller_manager",
+                executable="spawner",
+                arguments=["joint_state_broadcaster"],
+            ),
+            Node(
+                package="controller_manager",
+                executable="spawner",
+                parameters=[
+                    PathSubstitution(FindPackageShare("ros2_control_demo_example_1"))
+                    / "config"
+                    / "rrbot_controllers.yaml"
+                ],
+                arguments=["forward_position_controller"],
             ),
         ]
     )
