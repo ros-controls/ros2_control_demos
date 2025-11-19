@@ -80,12 +80,13 @@ def generate_launch_description():
             Node(
                 package="controller_manager",
                 executable="spawner",
-                parameters=[
+                arguments=[
+                    "forward_position_controller",
+                    "--param-file",
                     PathSubstitution(FindPackageShare("ros2_control_demo_example_1"))
                     / "config"
-                    / "rrbot_controllers.yaml"
+                    / "rrbot_controllers.yaml",
                 ],
-                arguments=["forward_position_controller"],
             ),
         ]
     )
