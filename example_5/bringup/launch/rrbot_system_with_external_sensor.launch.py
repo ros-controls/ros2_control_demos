@@ -61,6 +61,13 @@ def generate_launch_description():
             description="Start RViz2 automatically with this launch file.",
         )
     )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "use_wrench_transformer",
+            default_value="false",
+            description="Enable the wrench transformer node to transform wrench messages to different frames.",
+        )
+    )
 
     # Initialize Arguments
     prefix = LaunchConfiguration("prefix")
@@ -68,6 +75,7 @@ def generate_launch_description():
     mock_sensor_commands = LaunchConfiguration("mock_sensor_commands")
     slowdown = LaunchConfiguration("slowdown")
     gui = LaunchConfiguration("gui")
+    use_wrench_transformer = LaunchConfiguration("use_wrench_transformer")
 
     # Get URDF via xacro
     robot_description_content = Command(
@@ -102,6 +110,13 @@ def generate_launch_description():
             FindPackageShare("ros2_control_demo_example_5"),
             "config",
             "rrbot_with_external_sensor_controllers.yaml",
+        ]
+    )
+    wrench_transformer_params = PathJoinSubstitution(
+        [
+            FindPackageShare("ros2_control_demo_example_5"),
+            "config",
+            "wrench_transformer_params.yaml",
         ]
     )
     rviz_config_file = PathJoinSubstitution(
@@ -148,6 +163,16 @@ def generate_launch_description():
         arguments=["fts_broadcaster", "--param-file", robot_controllers],
     )
 
+    # add the wrench transformer node (optional)
+    wrench_transformer_node = Node(
+        package="force_torque_sensor_broadcaster",
+        executable="wrench_transformer_node",
+        name="fts_wrench_transformer",
+        parameters=[wrench_transformer_params],
+        output="both",
+        condition=IfCondition(use_wrench_transformer),
+    )
+
     # Delay rviz start after `joint_state_broadcaster`
     delay_rviz_after_joint_state_broadcaster_spawner = RegisterEventHandler(
         event_handler=OnProcessExit(
@@ -164,6 +189,15 @@ def generate_launch_description():
         )
     )
 
+    # Delay start of wrench_transformer_node after `fts_broadcaster` is spawned (optional)
+    delay_wrench_transformer_after_fts_broadcaster = RegisterEventHandler(
+        event_handler=OnProcessExit(
+            target_action=fts_broadcaster_spawner,
+            on_exit=[wrench_transformer_node],
+        ),
+        condition=IfCondition(use_wrench_transformer),
+    )
+
     nodes = [
         control_node,
         robot_state_pub_node,
@@ -171,6 +205,7 @@ def generate_launch_description():
         delay_rviz_after_joint_state_broadcaster_spawner,
         delay_robot_controller_spawner_after_joint_state_broadcaster_spawner,
         fts_broadcaster_spawner,
+        delay_wrench_transformer_after_fts_broadcaster,
     ]
 
     return LaunchDescription(declared_arguments + nodes)
