@@ -17,7 +17,6 @@ set(THIS_PACKAGE_INCLUDE_DEPENDS
   control_msgs
   generate_parameter_library
   controller_interface
-  parameter_traits
   realtime_tools
   std_msgs
 )
