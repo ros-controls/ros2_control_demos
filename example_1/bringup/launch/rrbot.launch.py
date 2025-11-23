@@ -14,43 +14,83 @@
 
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, RegisterEventHandler
+from launch.actions import DeclareLaunchArgument
 from launch.conditions import IfCondition
-from launch.event_handlers import OnProcessExit
-from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
+from launch.substitutions import Command, LaunchConfiguration, PathSubstitution
 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
 
 def generate_launch_description():
-    # Declare arguments
-    declared_arguments = []
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "gui",
-            default_value="true",
-            description="Start RViz2 automatically with this launch file.",
-        )
-    )
-
-    # Initialize Arguments
-    gui = LaunchConfiguration("gui")
-
-    # Get URDF via xacro
-    robot_description_content = Command(
+    return LaunchDescription(
         [
-            PathJoinSubstitution([FindExecutable(name="xacro")]),
-            " ",
-            PathJoinSubstitution(
-                [
-                    FindPackageShare("ros2_control_demo_example_1"),
-                    "urdf",
-                    "rrbot.urdf.xacro",
-                ]
+            DeclareLaunchArgument(
+                "gui",
+                default_value="true",
+                description="Start RViz2 automatically with this launch file.",
+            ),
+            # Control node
+            Node(
+                package="controller_manager",
+                executable="ros2_control_node",
+                parameters=[
+                    PathSubstitution(FindPackageShare("ros2_control_demo_example_1"))
+                    / "config"
+                    / "rrbot_controllers.yaml"
+                ],
+                output="both",
+            ),
+            # robot_state_publisher with robot_description from xacro
+            Node(
+                package="robot_state_publisher",
+                executable="robot_state_publisher",
+                output="both",
+                parameters=[
+                    {
+                        "robot_description": Command(
+                            [
+                                "xacro",
+                                " ",
+                                PathSubstitution(FindPackageShare("ros2_control_demo_example_1"))
+                                / "urdf"
+                                / "rrbot.urdf.xacro",
+                            ]
+                        )
+                    }
+                ],
+            ),
+            Node(
+                package="rviz2",
+                executable="rviz2",
+                name="rviz2",
+                output="log",
+                arguments=[
+                    "-d",
+                    PathSubstitution(FindPackageShare("ros2_control_demo_description"))
+                    / "rrbot/rviz/rrbot.rviz",
+                ],
+                condition=IfCondition(LaunchConfiguration("gui")),
+            ),
+            Node(
+                package="controller_manager",
+                executable="spawner",
+                arguments=["joint_state_broadcaster"],
+            ),
+            Node(
+                package="controller_manager",
+                executable="spawner",
+                arguments=[
+                    "forward_position_controller",
+                    "--param-file",
+                    PathSubstitution(FindPackageShare("ros2_control_demo_example_1"))
+                    / "config"
+                    / "rrbot_controllers.yaml",
+                ],
             ),
         ]
     )
+<<<<<<< HEAD
     robot_description = {"robot_description": robot_description_content}
 
     robot_controllers = PathJoinSubstitution(
@@ -125,3 +165,5 @@ def generate_launch_description():
     ]
 
     return LaunchDescription(declared_arguments + nodes)
+=======
+>>>>>>> dd56581 (Cleaned up launch file example_1/rrbot.launch.py (#959))
