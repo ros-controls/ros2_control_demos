@@ -39,8 +39,7 @@ def generate_launch_description():
                 package="controller_manager",
                 executable="ros2_control_node",
                 parameters=[
-                    PathSubstitution(FindPackageShare(
-                        "ros2_control_demo_example_2"))
+                    PathSubstitution(FindPackageShare("ros2_control_demo_example_2"))
                     / "config"
                     / "diffbot_controllers.yaml"
                 ],
@@ -57,8 +56,7 @@ def generate_launch_description():
                             [
                                 "xacro",
                                 " ",
-                                PathSubstitution(FindPackageShare(
-                                    "ros2_control_demo_example_2"))
+                                PathSubstitution(FindPackageShare("ros2_control_demo_example_2"))
                                 / "urdf"
                                 / "diffbot.urdf.xacro",
                                 " ",
@@ -76,8 +74,7 @@ def generate_launch_description():
                 output="log",
                 arguments=[
                     "-d",
-                    PathSubstitution(FindPackageShare(
-                        "ros2_control_demo_description"))
+                    PathSubstitution(FindPackageShare("ros2_control_demo_description"))
                     / "diffbot/rviz"
                     / "diffbot.rviz",
                 ],
@@ -94,8 +91,7 @@ def generate_launch_description():
                 arguments=[
                     "diffbot_base_controller",
                     "--param-file",
-                    PathSubstitution(FindPackageShare(
-                        "ros2_control_demo_example_2"))
+                    PathSubstitution(FindPackageShare("ros2_control_demo_example_2"))
                     / "config"
                     / "diffbot_controllers.yaml",
                     "--controller-ros-args",
