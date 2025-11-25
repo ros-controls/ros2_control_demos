@@ -14,43 +14,33 @@
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
-from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
+from launch.substitutions import LaunchConfiguration, PathSubstitution
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
 
 def generate_launch_description():
 
-    # Declare arguments
-    declared_arguments = []
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "publisher_config",
-            default_value="rrbot_forward_position_publisher.yaml",
-            description="Name of the publisher config file stored inside \
-            ros2_control_demo_bringup/config/",
-        )
-    )
-
-    # Initialize Arguments
-    publisher_config = LaunchConfiguration("publisher_config")
-
-    position_goals = PathJoinSubstitution(
-        [
-            FindPackageShare("ros2_control_demo_example_15"),
-            "config",
-            publisher_config,
-        ]
-    )
-
     return LaunchDescription(
         [
+            DeclareLaunchArgument(
+                "publisher_config",
+                default_value="rrbot_forward_position_publisher.yaml",
+                description=(
+                    "Name of the publisher config file stored inside "
+                    "ros2_control_demo_bringup/config/"
+                ),
+            ),
             Node(
                 package="ros2_controllers_test_nodes",
                 executable="publisher_forward_position_controller",
                 name="publisher_forward_position_controller",
-                parameters=[position_goals],
+                parameters=[
+                    PathSubstitution(FindPackageShare("ros2_control_demo_example_15"))
+                    / "config"
+                    / LaunchConfiguration("publisher_config")
+                ],
                 output="both",
-            )
+            ),
         ]
     )
