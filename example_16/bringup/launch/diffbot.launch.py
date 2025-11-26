@@ -14,158 +14,107 @@
 
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, RegisterEventHandler
+from launch.actions import DeclareLaunchArgument
 from launch.conditions import IfCondition
-from launch.event_handlers import OnProcessExit
-from launch.substitutions import (
-    Command,
-    FindExecutable,
-    PathJoinSubstitution,
-    LaunchConfiguration,
-)
+from launch.substitutions import Command, LaunchConfiguration, PathSubstitution
 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
 
 def generate_launch_description():
-    # Declare arguments
-    declared_arguments = []
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "gui",
-            default_value="true",
-            description="Start RViz2 automatically with this launch file.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "use_mock_hardware",
-            default_value="false",
-            description="Start robot with mock hardware mirroring command to its states.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "fixed_frame_id",
-            default_value="odom",
-            description="Fixed frame id of the robot.",
-        )
-    )
-
-    # Initialize Arguments
-    gui = LaunchConfiguration("gui")
-    use_mock_hardware = LaunchConfiguration("use_mock_hardware")
-    fixed_frame_id = LaunchConfiguration("fixed_frame_id")
-
-    # Get URDF via xacro
-    robot_description_content = Command(
+    return LaunchDescription(
         [
-            PathJoinSubstitution([FindExecutable(name="xacro")]),
-            " ",
-            PathJoinSubstitution(
-                [FindPackageShare("ros2_control_demo_example_16"), "urdf", "diffbot.urdf.xacro"]
+            DeclareLaunchArgument(
+                "gui",
+                default_value="true",
+                description="Start RViz2 automatically with this launch file.",
             ),
-            " ",
-            "use_mock_hardware:=",
-            use_mock_hardware,
+            DeclareLaunchArgument(
+                "use_mock_hardware",
+                default_value="false",
+                description="Start robot with mock hardware mirroring command to its states.",
+            ),
+            DeclareLaunchArgument(
+                "fixed_frame_id",
+                default_value="odom",
+                description="Fixed frame id of the robot.",
+            ),
+            Node(
+                package="controller_manager",
+                executable="ros2_control_node",
+                parameters=[
+                    PathSubstitution(FindPackageShare("ros2_control_demo_example_16"))
+                    / "config"
+                    / "diffbot_chained_controllers.yaml"
+                ],
+                output="both",
+            ),
+            Node(
+                package="robot_state_publisher",
+                executable="robot_state_publisher",
+                output="both",
+                parameters=[
+                    {
+                        "robot_description": Command(
+                            [
+                                "xacro",
+                                " ",
+                                PathSubstitution(FindPackageShare("ros2_control_demo_example_16"))
+                                / "urdf"
+                                / "diffbot.urdf.xacro",
+                                " ",
+                                "use_mock_hardware:=",
+                                LaunchConfiguration("use_mock_hardware"),
+                            ]
+                        )
+                    }
+                ],
+            ),
+            Node(
+                package="rviz2",
+                executable="rviz2",
+                name="rviz2",
+                output="log",
+                arguments=[
+                    "-d",
+                    PathSubstitution(FindPackageShare("ros2_control_demo_description"))
+                    / "diffbot/rviz"
+                    / "diffbot.rviz",
+                    "-f",
+                    LaunchConfiguration("fixed_frame_id"),
+                ],
+                condition=IfCondition(LaunchConfiguration("gui")),
+            ),
+            Node(
+                package="controller_manager",
+                executable="spawner",
+                arguments=["joint_state_broadcaster"],
+            ),
+            Node(
+                package="controller_manager",
+                executable="spawner",
+                arguments=[
+                    "pid_controller_left_wheel_joint",
+                    "pid_controller_right_wheel_joint",
+                    "--param-file",
+                    PathSubstitution(FindPackageShare("ros2_control_demo_example_16"))
+                    / "config"
+                    / "diffbot_chained_controllers.yaml",
+                ],
+            ),
+            Node(
+                package="controller_manager",
+                executable="spawner",
+                arguments=[
+                    "diffbot_base_controller",
+                    "--param-file",
+                    PathSubstitution(FindPackageShare("ros2_control_demo_example_16"))
+                    / "config"
+                    / "diffbot_chained_controllers.yaml",
+                    "--controller-ros-args",
+                    "-r /diffbot_base_controller/cmd_vel:=/cmd_vel",
+                ],
+            ),
         ]
     )
-    robot_description = {"robot_description": robot_description_content}
-
-    robot_controllers = PathJoinSubstitution(
-        [
-            FindPackageShare("ros2_control_demo_example_16"),
-            "config",
-            "diffbot_chained_controllers.yaml",
-        ]
-    )
-    rviz_config_file = PathJoinSubstitution(
-        [FindPackageShare("ros2_control_demo_description"), "diffbot/rviz", "diffbot.rviz"]
-    )
-
-    control_node = Node(
-        package="controller_manager",
-        executable="ros2_control_node",
-        parameters=[robot_controllers],
-        output="both",
-    )
-    robot_state_pub_node = Node(
-        package="robot_state_publisher",
-        executable="robot_state_publisher",
-        output="both",
-        parameters=[robot_description],
-    )
-
-    rviz_node = Node(
-        package="rviz2",
-        executable="rviz2",
-        name="rviz2",
-        output="log",
-        arguments=["-d", rviz_config_file, "-f", fixed_frame_id],
-        condition=IfCondition(gui),
-    )
-
-    joint_state_broadcaster_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["joint_state_broadcaster"],
-    )
-
-    pid_controllers_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=[
-            "pid_controller_left_wheel_joint",
-            "pid_controller_right_wheel_joint",
-            "--param-file",
-            robot_controllers,
-        ],
-    )
-
-    robot_base_controller_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=[
-            "diffbot_base_controller",
-            "--param-file",
-            robot_controllers,
-            "--controller-ros-args",
-            "-r /diffbot_base_controller/cmd_vel:=/cmd_vel",
-        ],
-    )
-
-    # Delay rviz start after `joint_state_broadcaster`
-    delay_rviz_after_joint_state_broadcaster_spawner = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=joint_state_broadcaster_spawner,
-            on_exit=[rviz_node],
-        )
-    )
-
-    delay_robot_base_after_pid_controller_spawner = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=pid_controllers_spawner,
-            on_exit=[robot_base_controller_spawner],
-        )
-    )
-
-    # Delay start of joint_state_broadcaster after `robot_base_controller`
-    # TODO(anyone): This is a workaround for flaky tests. Remove when fixed.
-    delay_joint_state_broadcaster_after_robot_base_controller_spawner = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=robot_base_controller_spawner,
-            on_exit=[joint_state_broadcaster_spawner],
-        )
-    )
-
-    nodes = [
-        control_node,
-        robot_state_pub_node,
-        pid_controllers_spawner,
-        delay_robot_base_after_pid_controller_spawner,
-        delay_rviz_after_joint_state_broadcaster_spawner,
-        delay_joint_state_broadcaster_after_robot_base_controller_spawner,
-    ]
-
-    return LaunchDescription(declared_arguments + nodes)
