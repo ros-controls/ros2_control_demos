@@ -160,6 +160,7 @@ def generate_launch_description():
         executable="wrench_transformer_node",
         name="fts_wrench_transformer",
         parameters=[wrench_transformer_params],
+        remappings=[("~/wrench", "/fts_broadcaster/wrench")],
         output="both",
         condition=IfCondition(use_wrench_transformer),
     )

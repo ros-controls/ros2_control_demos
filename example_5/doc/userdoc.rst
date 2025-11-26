@@ -183,20 +183,20 @@ Tutorial steps
 
    .. code-block:: shell
 
-    ros2 topic list | grep wrench_transformed
+    ros2 topic list | grep wrench
 
    You should see topics like:
 
    .. code-block:: shell
 
-    /fts_wrench_transformer/wrench_transformed_base_link
-    /fts_wrench_transformer/wrench_transformed_link1
+    /fts_wrench_transformer/base_link/wrench
+    /fts_wrench_transformer/link1/wrench
 
    View transformed wrench data in the ``base_link`` frame:
 
    .. code-block:: shell
 
-    ros2 topic echo /fts_wrench_transformer/wrench_transformed_base_link
+    ros2 topic echo /fts_wrench_transformer/base_link/wrench
 
    The transformed wrench messages will have the same structure as the original wrench, but with
    ``frame_id`` set to the target frame (e.g., ``base_link``) and the force/torque values transformed
