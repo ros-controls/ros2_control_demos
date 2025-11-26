@@ -13,7 +13,7 @@
 # limitations under the License.
 
 from launch import LaunchDescription
-from launch.substitutions import PathJoinSubstitution
+from launch.substitutions import PathSubstitution
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
@@ -28,13 +28,9 @@ def generate_launch_description():
                 namespace="rrbot_1",
                 name="publisher_joint_trajectory_controller",
                 parameters=[
-                    PathJoinSubstitution(
-                        [
-                            FindPackageShare("ros2_control_demo_example_15"),
-                            "config",
-                            "multi_controller_manager_joint_trajectory_publisher.yaml",
-                        ]
-                    )
+                    PathSubstitution(FindPackageShare("ros2_control_demo_example_15"))
+                    / "config"
+                    / "multi_controller_manager_joint_trajectory_publisher.yaml",
                 ],
                 output={
                     "stdout": "screen",
@@ -47,13 +43,9 @@ def generate_launch_description():
                 namespace="rrbot_2",
                 name="publisher_joint_trajectory_controller",
                 parameters=[
-                    PathJoinSubstitution(
-                        [
-                            FindPackageShare("ros2_control_demo_example_15"),
-                            "config",
-                            "multi_controller_manager_joint_trajectory_publisher.yaml",
-                        ]
-                    )
+                    PathSubstitution(FindPackageShare("ros2_control_demo_example_15"))
+                    / "config"
+                    / "multi_controller_manager_joint_trajectory_publisher.yaml",
                 ],
                 output={
                     "stdout": "screen",
