@@ -29,6 +29,7 @@
 # Author: Christoph Froehlich
 
 import os
+import time
 import pytest
 import unittest
 
@@ -40,6 +41,7 @@ from launch_testing.actions import ReadyToTest
 
 import launch_testing.markers
 import rclpy
+from geometry_msgs.msg import WrenchStamped
 from controller_manager.test_utils import (
     check_controllers_running,
     check_if_js_published,
@@ -95,6 +97,43 @@ class TestFixture(unittest.TestCase):
     def test_wrench_transformer_node_start(self, proc_output):
         """Test that the wrench transformer node starts when use_wrench_transformer is true."""
         check_node_running(self.node, "fts_wrench_transformer")
+
+    def test_wrench_transformer_publishes(self):
+        """Test that the wrench transformer publishes messages to transformed wrench topics."""
+        from rclpy.qos import qos_profile_sensor_data
+
+        received_messages = []
+
+        def wrench_callback(msg):
+            received_messages.append(msg)
+
+        expected_topic = "/fts_wrench_transformer/base_link/wrench"
+        expected_frame_id = "base_link"
+
+        _ = self.node.create_subscription(
+            WrenchStamped,
+            expected_topic,
+            wrench_callback,
+            qos_profile_sensor_data,
+        )
+
+        # Wait for messages to be published (up to 5 seconds)
+        timeout = 5.0
+        start_time = time.time()
+        while len(received_messages) == 0 and (time.time() - start_time) < timeout:
+            rclpy.spin_once(self.node, timeout_sec=0.1)
+
+        self.assertGreater(
+            len(received_messages),
+            0,
+            f"No messages received on {expected_topic} topic",
+        )
+        # Verify the message has the expected frame_id
+        self.assertEqual(
+            received_messages[0].header.frame_id,
+            expected_frame_id,
+            f"Wrench message frame_id should be {expected_frame_id}",
+        )
 
 
 @launch_testing.post_shutdown_test()
