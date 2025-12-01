@@ -97,16 +97,6 @@ def generate_launch_description():
                 arguments=[
                     "pid_controller_left_wheel_joint",
                     "pid_controller_right_wheel_joint",
-                    "--param-file",
-                    PathSubstitution(FindPackageShare("ros2_control_demo_example_16"))
-                    / "config"
-                    / "diffbot_chained_controllers.yaml",
-                ],
-            ),
-            Node(
-                package="controller_manager",
-                executable="spawner",
-                arguments=[
                     "diffbot_base_controller",
                     "--param-file",
                     PathSubstitution(FindPackageShare("ros2_control_demo_example_16"))
