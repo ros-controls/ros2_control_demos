@@ -13,10 +13,9 @@
 # limitations under the License.
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, RegisterEventHandler
+from launch.actions import DeclareLaunchArgument
 from launch.conditions import IfCondition
-from launch.event_handlers import OnProcessExit
-from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
+from launch.substitutions import Command, LaunchConfiguration, PathSubstitution
 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
@@ -61,6 +60,13 @@ def generate_launch_description():
             description="Start RViz2 automatically with this launch file.",
         )
     )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "use_wrench_transformer",
+            default_value="false",
+            description="Enable the wrench transformer node to transform wrench messages to different frames.",
+        )
+    )
 
     # Initialize Arguments
     prefix = LaunchConfiguration("prefix")
@@ -68,19 +74,16 @@ def generate_launch_description():
     mock_sensor_commands = LaunchConfiguration("mock_sensor_commands")
     slowdown = LaunchConfiguration("slowdown")
     gui = LaunchConfiguration("gui")
+    use_wrench_transformer = LaunchConfiguration("use_wrench_transformer")
 
     # Get URDF via xacro
     robot_description_content = Command(
         [
-            PathJoinSubstitution([FindExecutable(name="xacro")]),
+            "xacro",
             " ",
-            PathJoinSubstitution(
-                [
-                    FindPackageShare("ros2_control_demo_example_5"),
-                    "urdf",
-                    "rrbot_system_with_external_sensor.urdf.xacro",
-                ]
-            ),
+            PathSubstitution(FindPackageShare("ros2_control_demo_example_5"))
+            / "urdf"
+            / "rrbot_system_with_external_sensor.urdf.xacro",
             " ",
             "prefix:=",
             prefix,
@@ -97,15 +100,18 @@ def generate_launch_description():
     )
     robot_description = {"robot_description": robot_description_content}
 
-    robot_controllers = PathJoinSubstitution(
-        [
-            FindPackageShare("ros2_control_demo_example_5"),
-            "config",
-            "rrbot_with_external_sensor_controllers.yaml",
-        ]
+    robot_controllers = (
+        PathSubstitution(FindPackageShare("ros2_control_demo_example_5"))
+        / "config"
+        / "rrbot_with_external_sensor_controllers.yaml"
     )
-    rviz_config_file = PathJoinSubstitution(
-        [FindPackageShare("ros2_control_demo_example_5"), "rviz", "rrbot.rviz"]
+    wrench_transformer_params = (
+        PathSubstitution(FindPackageShare("ros2_control_demo_example_5"))
+        / "config"
+        / "wrench_transformer_params.yaml"
+    )
+    rviz_config_file = (
+        PathSubstitution(FindPackageShare("ros2_control_demo_example_5")) / "rviz" / "rrbot.rviz"
     )
 
     control_node = Node(
@@ -148,29 +154,26 @@ def generate_launch_description():
         arguments=["fts_broadcaster", "--param-file", robot_controllers],
     )
 
-    # Delay rviz start after `joint_state_broadcaster`
-    delay_rviz_after_joint_state_broadcaster_spawner = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=joint_state_broadcaster_spawner,
-            on_exit=[rviz_node],
-        )
+    # add the wrench transformer node (optional)
+    wrench_transformer_node = Node(
+        package="force_torque_sensor_broadcaster",
+        executable="wrench_transformer_node",
+        name="fts_wrench_transformer",
+        parameters=[wrench_transformer_params],
+        remappings=[("~/wrench", "/fts_broadcaster/wrench")],
+        output="both",
+        condition=IfCondition(use_wrench_transformer),
     )
 
-    # Delay start of robot_controller after `joint_state_broadcaster`
-    delay_robot_controller_spawner_after_joint_state_broadcaster_spawner = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=joint_state_broadcaster_spawner,
-            on_exit=[robot_controller_spawner],
-        )
+    return LaunchDescription(
+        declared_arguments
+        + [
+            control_node,
+            robot_state_pub_node,
+            rviz_node,
+            joint_state_broadcaster_spawner,
+            robot_controller_spawner,
+            fts_broadcaster_spawner,
+            wrench_transformer_node,
+        ]
     )
-
-    nodes = [
-        control_node,
-        robot_state_pub_node,
-        joint_state_broadcaster_spawner,
-        delay_rviz_after_joint_state_broadcaster_spawner,
-        delay_robot_controller_spawner_after_joint_state_broadcaster_spawner,
-        fts_broadcaster_spawner,
-    ]
-
-    return LaunchDescription(declared_arguments + nodes)
