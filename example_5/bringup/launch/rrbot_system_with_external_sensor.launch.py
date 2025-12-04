@@ -56,6 +56,11 @@ def generate_launch_description():
                 default_value="true",
                 description="Start RViz2 automatically with this launch file.",
             ),
+            DeclareLaunchArgument(
+                "use_wrench_transformer",
+                default_value="false",
+                description="Enable the wrench transformer node to transform wrench messages to different frames.",
+            ),
             # Control node
             Node(
                 package="controller_manager",
