@@ -27,7 +27,7 @@ def generate_launch_description():
                 executable="publisher_forward_position_controller",
                 name="publisher_forward_position_controller",
                 parameters=[
-                    PathSubstitution(FindPackageShare("ros2_control_demo_example_1"))
+                    PathSubstitution(FindPackageShare("ros2_control_demo_example_10"))
                     / "config"
                     / "rrbot_forward_position_publisher.yaml",
                 ],
