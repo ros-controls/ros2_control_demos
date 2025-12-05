@@ -144,5 +144,17 @@ def generate_launch_description():
                     / "rrbot_with_external_sensor_controllers.yaml",
                 ],
             ),
+             # Launch the wrench transformer node
+            Node(
+                package="force_torque_sensor_broadcaster",
+                executable="wrench_transformer_node",
+                name="fts_wrench_transformer",
+                parameters=[PathSubstitution(FindPackageShare("ros2_control_demo_example_5"))
+                    / "config"
+                    / "wrench_transformer_params.yaml"],
+                remappings=[("~/wrench", "/fts_broadcaster/wrench")],
+                output="both",
+                condition=IfCondition(LaunchConfiguration("use_wrench_transformer")),
+            ),
         ]
     )
