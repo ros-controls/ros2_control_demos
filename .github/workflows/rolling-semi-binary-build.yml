@@ -15,6 +15,7 @@ on:
       - '**.py'
       - '**.yaml'
       - 'ros2_control_demos.rolling.repos'
+      - 'ros2_control_demos.kilted.repos'
       - '**.xml'
   push: *event
   schedule:

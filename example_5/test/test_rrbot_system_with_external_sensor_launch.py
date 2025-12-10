@@ -40,6 +40,8 @@ from launch_testing.actions import ReadyToTest
 
 import launch_testing.markers
 import rclpy
+from geometry_msgs.msg import WrenchStamped
+from launch_testing_ros import WaitForTopics
 from controller_manager.test_utils import (
     check_controllers_running,
     check_if_js_published,
@@ -57,7 +59,7 @@ def generate_test_description():
                 "launch/rrbot_system_with_external_sensor.launch.py",
             )
         ),
-        launch_arguments={"gui": "false"}.items(),
+        launch_arguments={"gui": "false", "use_wrench_transformer": "true"}.items(),
     )
 
     return LaunchDescription([launch_include, ReadyToTest()])
@@ -91,6 +93,39 @@ class TestFixture(unittest.TestCase):
 
     def test_check_if_msgs_published(self):
         check_if_js_published("/joint_states", ["joint1", "joint2"])
+
+    def test_wrench_transformer_node_start(self, proc_output):
+        """Test that the wrench transformer node starts when use_wrench_transformer is true."""
+        check_node_running(self.node, "fts_wrench_transformer")
+
+    def test_wrench_transformer_publishes(self):
+        """Test that the wrench transformer publishes messages to transformed wrench topics."""
+
+        expected_topic = "/fts_wrench_transformer/base_link/wrench"
+        expected_frame_id = "base_link"
+
+        wait_for_topics = WaitForTopics(
+            [(expected_topic, WrenchStamped)],
+            timeout=5.0,
+        )
+        self.assertTrue(
+            wait_for_topics.wait(),
+            f"No messages received on {expected_topic} topic",
+        )
+
+        # Verify the message has the expected frame_id
+        received_messages = wait_for_topics.received_messages(expected_topic)
+        self.assertGreater(
+            len(received_messages),
+            0,
+            f"No messages received on {expected_topic} topic",
+        )
+        self.assertEqual(
+            received_messages[0].header.frame_id,
+            expected_frame_id,
+            f"Wrench message frame_id should be {expected_frame_id}",
+        )
+        wait_for_topics.shutdown()
 
 
 @launch_testing.post_shutdown_test()
