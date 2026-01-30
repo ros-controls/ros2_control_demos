@@ -1,0 +1,22 @@
+<launch>
+  <arg name="gui" default="true" description="Start RViz2 automatically with this launch file."/>
+  <arg name="use_mock_hardware" default="false" description="Start robot with mock hardware mirroring command to its states."/>
+
+  <let name="robot_description" value="$(command 'xacro $(find-pkg-share ros2_control_demo_example_2)/urdf/diffbot.urdf.xacro use_mock_hardware:=$(var use_mock_hardware)')"/>
+  <let name="robot_controllers" value="$(find-pkg-share ros2_control_demo_example_2)/config/diffbot_controllers.yaml"/>
+  <let name="rviz_config_file" value="$(find-pkg-share ros2_control_demo_description)/diffbot/rviz/diffbot.rviz"/>
+
+  <node pkg="controller_manager" exec="ros2_control_node" output="both" name="my_ctrl_mgr">
+    <param name="update_rate" value="10"/>
+  </node>
+
+  <node pkg="robot_state_publisher" exec="robot_state_publisher" output="both">
+    <param name="robot_description" value="$(var robot_description)"/>
+  </node>
+
+  <node pkg="rviz2" exec="rviz2" name="rviz2" output="log" args="-d $(var rviz_config_file)" if="$(var gui)"/>
+
+  <node pkg="controller_manager" exec="spawner" args="joint_state_broadcaster -c my_ctrl_mgr -p $(var robot_controllers)"/>
+
+  <node pkg="controller_manager" exec="spawner" args="diffbot_base_controller --controller-manager my_ctrl_mgr --param-file $(var robot_controllers) --controller-ros-args '-r ~/cmd_vel:=/cmd_vel'"/>
+</launch>
