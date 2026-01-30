@@ -18,6 +18,19 @@ The *DiffBot* URDF files can be found in ``description/urdf`` folder.
 
 .. include:: ../../doc/run_from_docker.rst
 
+This demo shows also how you can use custom controller manager name and simplify your configuration. Besided that provides also `.launch.xml` version of the launch file to direclty compare it with the `.launch.py` version.
+
+You can rename the ``controller_manager`` node, e.g., when want to separate the hardware management on the same machine. Check the `launch.py` to see the name set to default name and `launch.xml` to see how to set a custom name.
+
+   .. code-block:: shell
+
+    ros2 node list | grep diffbot
+
+   You should see the manager ``/my_diffbot_manager`` and the hardware node ``/diffbot`` (or similar, based on your URDF name).
+
+**Configuration Note**:
+The ``diffbot_controllers.yaml`` file demonstrates that you do not need to nest controller parameters under a ``controller_manager`` namespace. Since the spawner loads parameters directly for each controller, the YAML file can simply list the controllers at the root level. This makes the configuration more flexible and easier to reuse.
+
 Tutorial steps
 --------------------------
 
