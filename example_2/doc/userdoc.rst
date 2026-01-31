@@ -18,9 +18,9 @@ The *DiffBot* URDF files can be found in ``description/urdf`` folder.
 
 .. include:: ../../doc/run_from_docker.rst
 
-This demo shows also how you can use custom controller manager name and simplify your configuration. Besided that provides also `.launch.xml` version of the launch file to direclty compare it with the `.launch.py` version.
+This demo shows also how you can use custom controller manager name and simplify your configuration. Besided that provides also ``.launch.xml`` version of the launch file to directly compare it with the ``.launch.py`` version.
 
-You can rename the ``controller_manager`` node, e.g., when want to separate the hardware management on the same machine. Check the `launch.py` to see the name set to default name and `launch.xml` to see how to set a custom name.
+You can rename the ``controller_manager`` node, e.g., when want to separate the hardware management on the same machine. Check the ``launch.py`` to see the name set to default name and ``launch.xml`` to see how to set a custom name.
 
    .. code-block:: shell
 
