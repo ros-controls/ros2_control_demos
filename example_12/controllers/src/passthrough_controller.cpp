@@ -138,25 +138,28 @@ controller_interface::return_type PassthroughController::update_and_write_comman
 {
   for (size_t i = 0; i < command_interfaces_.size(); ++i)
   {
-    if (!std::isnan(reference_interfaces_[i]))
+    const auto ref_value = ordered_exported_reference_interfaces_[i]->get_optional<double>();
+    if (ref_value.has_value() && !std::isnan(ref_value.value()))
     {
-      command_interfaces_[i].set_value(reference_interfaces_[i]);
+      command_interfaces_[i].set_value(ref_value.value());
     }
   }
 
   return controller_interface::return_type::OK;
 }
 
-std::vector<hardware_interface::CommandInterface>
-PassthroughController::on_export_reference_interfaces()
+std::vector<hardware_interface::CommandInterface::SharedPtr>
+PassthroughController::on_export_reference_interfaces_list()
 {
-  std::vector<hardware_interface::CommandInterface> reference_interfaces;
+  std::vector<hardware_interface::CommandInterface::SharedPtr> reference_interfaces;
+  reference_interfaces.reserve(reference_interface_names_.size());
 
   for (size_t i = 0; i < reference_interface_names_.size(); ++i)
   {
-    reference_interfaces.push_back(
-      hardware_interface::CommandInterface(
-        get_node()->get_name(), reference_interface_names_[i], &reference_interfaces_[i]));
+    auto cmd_interface = std::make_shared<hardware_interface::CommandInterface>(
+      get_node()->get_name(), reference_interface_names_[i]);
+    cmd_interface->set_value(std::numeric_limits<double>::quiet_NaN());
+    reference_interfaces.push_back(cmd_interface);
   }
 
   return reference_interfaces;
