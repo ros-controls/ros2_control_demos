@@ -165,10 +165,21 @@ hardware_interface::return_type RRBotModularJoint::read(
   ss << "Reading states:";
 
   // Simulate RRBot's movement
+<<<<<<< HEAD
   hw_joint_state_ = hw_joint_state_ + (hw_joint_command_ - hw_joint_state_) / hw_slowdown_;
 
   ss << std::fixed << std::setprecision(2) << std::endl
      << "\t" << hw_joint_state_ << " for joint '" << info_.joints[0].name << "'";
+=======
+  for (const auto & [name, descr] : joint_state_interfaces_)
+  {
+    // Simulate RRBot's movement
+    auto new_value = get_state(name) + (get_command(name) - get_state(name)) / hw_slowdown_;
+    set_state(name, new_value);
+    ss << std::fixed << std::setprecision(2) << std::endl
+       << "\t" << get_state(name) << " for joint '" << name << "'";
+  }
+>>>>>>> b05c5c7 (Cleanup dublicate line (#1037))
 
   RCLCPP_INFO(get_logger(), "%s", ss.str().c_str());
   // END: This part here is for exemplary purposes - Please do not copy to your production code
