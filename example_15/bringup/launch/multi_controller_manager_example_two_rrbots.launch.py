@@ -16,153 +16,113 @@ from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, ThisLaunchFileDir
+from launch.substitutions import LaunchConfiguration, PathSubstitution, ThisLaunchFileDir
 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
 
 def generate_launch_description():
-    # Declare arguments
-    declared_arguments = []
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "use_mock_hardware",
-            default_value="false",
-            description="Start robot with fake hardware mirroring command to its states.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "mock_sensor_commands",
-            default_value="false",
-            description="Enable fake command interfaces for sensors used for simple simulations. \
-            Used only if 'use_mock_hardware' parameter is true.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "slowdown", default_value="50.0", description="Slowdown factor of the RRbot."
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "robot_controller",
-            default_value="forward_position_controller",
-            description="Robot controller to start.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "start_rviz_multi",
-            default_value="true",
-            description="Start RViz2 automatically with this launch file.",
-        )
-    )
-
-    # Initialize Arguments
-    start_rviz_lc = LaunchConfiguration("start_rviz_multi")
-
-    # Initialize Arguments
-    use_mock_hardware = LaunchConfiguration("use_mock_hardware")
-    mock_sensor_commands = LaunchConfiguration("mock_sensor_commands")
-    slowdown = LaunchConfiguration("slowdown")
-    robot_controller = LaunchConfiguration("robot_controller")
-
-    rrbot_1_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([ThisLaunchFileDir(), "/rrbot_base.launch.py"]),
-        launch_arguments={
-            "namespace": "rrbot_1",
-            "description_package": "ros2_control_demo_example_1",
-            "description_file": "rrbot.urdf.xacro",
-            "runtime_config_package": "ros2_control_demo_example_15",
-            "controllers_file": "multi_controller_manager_rrbot_generic_controllers.yaml",
-            "prefix": "rrbot_1_",
-            "use_mock_hardware": use_mock_hardware,
-            "mock_sensor_commands": mock_sensor_commands,
-            "slowdown": slowdown,
-            "controller_manager_name": "/rrbot_1/controller_manager",
-            "robot_controller": robot_controller,
-            "start_rviz": "false",
-        }.items(),
-    )
-
-    rrbot_1_position_trajectory_controller_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        namespace="rrbot_1",
-        arguments=[
-            "position_trajectory_controller",
-            "--inactive",
-            "--param-file",
-            PathJoinSubstitution(
-                [
-                    FindPackageShare("ros2_control_demo_example_15"),
-                    "config",
-                    "multi_controller_manager_rrbot_generic_controllers.yaml",
-                ]
+    return LaunchDescription(
+        [
+            DeclareLaunchArgument(
+                "use_mock_hardware",
+                default_value="false",
+                description="Start robot with fake hardware mirroring command to its states.",
             ),
-        ],
-    )
-
-    rrbot_2_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([ThisLaunchFileDir(), "/rrbot_base.launch.py"]),
-        launch_arguments={
-            "namespace": "rrbot_2",
-            "description_package": "ros2_control_demo_example_5",
-            "description_file": "rrbot_system_with_external_sensor.urdf.xacro",
-            "runtime_config_package": "ros2_control_demo_example_15",
-            "controllers_file": "multi_controller_manager_rrbot_generic_controllers.yaml",
-            "prefix": "rrbot_2_",
-            "use_mock_hardware": use_mock_hardware,
-            "mock_sensor_commands": mock_sensor_commands,
-            "slowdown": slowdown,
-            "controller_manager_name": "/rrbot_2/controller_manager",
-            "robot_controller": robot_controller,
-            "start_rviz": "false",
-        }.items(),
-    )
-
-    rrbot_2_position_trajectory_controller_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        namespace="rrbot_2",
-        arguments=[
-            "position_trajectory_controller",
-            "--inactive",
-            "--param-file",
-            PathJoinSubstitution(
-                [
-                    FindPackageShare("ros2_control_demo_example_15"),
-                    "config",
-                    "multi_controller_manager_rrbot_generic_controllers.yaml",
-                ]
+            DeclareLaunchArgument(
+                "mock_sensor_commands",
+                default_value="false",
+                description=(
+                    "Enable fake command interfaces for sensors used for simple simulations. "
+                    "Used only if 'use_mock_hardware' parameter is true."
+                ),
             ),
-        ],
+            DeclareLaunchArgument(
+                "slowdown", default_value="50.0", description="Slowdown factor of the RRbot."
+            ),
+            DeclareLaunchArgument(
+                "robot_controller",
+                default_value="forward_position_controller",
+                description="Robot controller to start.",
+            ),
+            DeclareLaunchArgument(
+                "start_rviz_multi",
+                default_value="true",
+                description="Start RViz2 automatically with this launch file.",
+            ),
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource([ThisLaunchFileDir(), "/rrbot_base.launch.py"]),
+                launch_arguments={
+                    "namespace": "rrbot_1",
+                    "description_package": "ros2_control_demo_example_1",
+                    "description_file": "rrbot.urdf.xacro",
+                    "runtime_config_package": "ros2_control_demo_example_15",
+                    "controllers_file": "multi_controller_manager_rrbot_generic_controllers.yaml",
+                    "prefix": "rrbot_1_",
+                    "use_mock_hardware": LaunchConfiguration("use_mock_hardware"),
+                    "mock_sensor_commands": LaunchConfiguration("mock_sensor_commands"),
+                    "slowdown": LaunchConfiguration("slowdown"),
+                    "controller_manager_name": "/rrbot_1/controller_manager",
+                    "robot_controller": LaunchConfiguration("robot_controller"),
+                    "start_rviz": "false",
+                }.items(),
+            ),
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource([ThisLaunchFileDir(), "/rrbot_base.launch.py"]),
+                launch_arguments={
+                    "namespace": "rrbot_2",
+                    "description_package": "ros2_control_demo_example_5",
+                    "description_file": "rrbot_system_with_external_sensor.urdf.xacro",
+                    "runtime_config_package": "ros2_control_demo_example_15",
+                    "controllers_file": "multi_controller_manager_rrbot_generic_controllers.yaml",
+                    "prefix": "rrbot_2_",
+                    "use_mock_hardware": LaunchConfiguration("use_mock_hardware"),
+                    "mock_sensor_commands": LaunchConfiguration("mock_sensor_commands"),
+                    "slowdown": LaunchConfiguration("slowdown"),
+                    "controller_manager_name": "/rrbot_2/controller_manager",
+                    "robot_controller": LaunchConfiguration("robot_controller"),
+                    "start_rviz": "false",
+                }.items(),
+            ),
+            Node(
+                package="controller_manager",
+                executable="spawner",
+                namespace="rrbot_1",
+                arguments=[
+                    "position_trajectory_controller",
+                    "--inactive",
+                    "--param-file",
+                    PathSubstitution(FindPackageShare("ros2_control_demo_example_15"))
+                    / "config"
+                    / "multi_controller_manager_rrbot_generic_controllers.yaml",
+                ],
+            ),
+            Node(
+                package="controller_manager",
+                executable="spawner",
+                namespace="rrbot_2",
+                arguments=[
+                    "position_trajectory_controller",
+                    "--inactive",
+                    "--param-file",
+                    PathSubstitution(FindPackageShare("ros2_control_demo_example_15"))
+                    / "config"
+                    / "multi_controller_manager_rrbot_generic_controllers.yaml",
+                ],
+            ),
+            Node(
+                package="rviz2",
+                executable="rviz2",
+                name="rviz2_multi",
+                output="log",
+                arguments=[
+                    "-d",
+                    PathSubstitution(FindPackageShare("ros2_control_demo_example_15"))
+                    / "rviz"
+                    / "multi_controller_manager.rviz",
+                ],
+                condition=IfCondition(LaunchConfiguration("start_rviz_multi")),
+            ),
+        ]
     )
-
-    rviz_config_file = PathJoinSubstitution(
-        [FindPackageShare("ros2_control_demo_example_15"), "rviz", "multi_controller_manager.rviz"]
-    )
-
-    rviz_node_multi = Node(
-        package="rviz2",
-        executable="rviz2",
-        name="rviz2_multi",
-        output="log",
-        arguments=["-d", rviz_config_file],
-        condition=IfCondition(start_rviz_lc),
-    )
-
-    included_launch_files = [
-        rrbot_1_launch,
-        rrbot_2_launch,
-    ]
-
-    nodes_to_start = [
-        rrbot_1_position_trajectory_controller_spawner,
-        rrbot_2_position_trajectory_controller_spawner,
-        rviz_node_multi,
-    ]
-
-    return LaunchDescription(declared_arguments + included_launch_files + nodes_to_start)
