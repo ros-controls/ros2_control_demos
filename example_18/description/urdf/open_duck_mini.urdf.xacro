@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!-- Open Duck Mini Robot -->
+<!--
+This xacro file extends the base URDF with ros2_control configuration.
+It includes the base robot description from robot.urdf
+and adds ros2_control plugin configuration (supports both MuJoCo and mock hardware).
+-->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="open-duck-mini">
+  <xacro:arg name="prefix" default="" />
+  <xacro:arg name="use_mock_hardware" default="false" />
+
+  <!-- Include the base URDF description -->
+  <!-- Note: xacro will process the URDF file and merge its content -->
+  <xacro:include filename="$(find ros2_control_demo_example_18)/description/mujoco/robot.urdf" />
+
+  <!-- Import Open Duck Mini ros2_control description -->
+  <xacro:include filename="$(find ros2_control_demo_example_18)/description/ros2_control/open_duck_mini.ros2_control.xacro" />
+  <xacro:open_duck_mini_ros2_control
+    name="OpenDuckMini" prefix="$(arg prefix)" use_mock_hardware="$(arg use_mock_hardware)"/>
+</robot>
