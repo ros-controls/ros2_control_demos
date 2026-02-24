@@ -60,13 +60,13 @@ Contact Detection (DuckMiniMujocoSystemInterface)
 
 The base MujocoSystemInterface supports only "imu" and "fts" sensor types. Contact detection is implemented in this demo's hardware wrapper.
 
-- Registration (on_init): Scans hardware_info.sensors for ``mujoco_type="contact"``. Parses ``body1_name``, ``body2_name`` (required), and optional ``contact_consumer`` ("collision" or "gait"), ``debounce_on_steps``, ``debounce_off_steps``. Body IDs resolved lazily on first read.
+- Registration (on_init): Scans hardware_info.sensors for ``mujoco_type="contact"``. Parses ``body1_name``, ``body2_name`` (required). Body IDs resolved lazily on first read.
 
-- State interfaces: Per sensor, exports ``contact_raw`` (unfiltered 0/1) and ``contact`` (filtered for gait). Xacro: ``<state_interface name="contact_raw"/>``, ``<state_interface name="contact"/>``.
+- State interfaces: Per sensor, exports ``contact_raw`` (unfiltered 0/1). Xacro: ``<state_interface name="contact_raw"/>``.
 
-- Update (read): Iterates ``mjData->contact[]``, checks for (body1, body2) or (body2, body1) match. For gait mode, debounce filter: contact=1 after ``debounce_on_steps`` consecutive raw contacts, contact=0 after ``debounce_off_steps`` consecutive no-contacts.
+- Update (read): Iterates ``mjData->contact[]``, checks for (body1, body2) or (body2, body1) match. Sets contact_raw value.
 
-- Xacro: left_foot_contact (foot_assembly, floor), right_foot_contact (foot_assembly_2, floor), both contact_consumer=gait. Optional debounce params per sensor.
+- Xacro: left_foot_contact (foot_assembly, floor), right_foot_contact (foot_assembly_2, floor).
 
 MuJoCo Model
 ~~~~~~~~~~~~
@@ -84,7 +84,7 @@ Update Rate
 Inputs
 ~~~~~~
 
-- state_interfaces_broadcaster/values: IMU (orientation, gyro, accel), joint positions/velocities, foot contacts (left_foot_contact/contact, right_foot_contact/contact) when use_contact_sensors=true.
+- state_interfaces_broadcaster/values: IMU (orientation, gyro, accel), joint positions/velocities, foot contacts (left_foot_contact/contact_raw, right_foot_contact/contact_raw) when use_contact_sensors=true.
 
 - velocity_command_topic: VelocityCommandWithHead (base_velocity + head_commands).
 
@@ -115,6 +115,11 @@ Order (ref: v2_rl_walk_mujoco.py, mujoco_infer_base.py):
 11. Imitation phase (2): cos, sin
 
 Total: 17 + 6*N (N = 14 for legs+head).
+
+Imitation phase (num_steps_in_gait_period)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The imitation phase encodes gait timing as [cos(2πi/N), sin(2πi/N)], where N is the number of control steps in one gait cycle (one left step + one right step). This value must match training; a mismatch breaks the policy (wrong step timing, instability). Typical value: 27 (period ≈ 0.54s at 50 Hz).
 
 User Command Interface
 ----------------------

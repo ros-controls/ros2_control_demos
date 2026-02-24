@@ -72,8 +72,6 @@ void DuckMiniMujocoSystemInterface::register_contact_detection()
 
     ContactDetectionData sensor_data;
     sensor_data.name = sensor_name;
-    sensor_data.contact_value = 0.0;
-    sensor_data.raw_contact_value = 0.0;
 
     if (sensor.parameters.count("body1_name") == 0 || sensor.parameters.count("body2_name") == 0)
     {
@@ -85,58 +83,6 @@ void DuckMiniMujocoSystemInterface::register_contact_detection()
 
     sensor_data.body1_name = sensor.parameters.at("body1_name");
     sensor_data.body2_name = sensor.parameters.at("body2_name");
-
-    sensor_data.body1_id = -1;
-    sensor_data.body2_id = -1;
-
-    // consumer: collision (raw) or gait (debounced)
-    auto get_param_or = [&](const std::string & key, const std::string & def) -> std::string
-    {
-      if (sensor.parameters.count(key) == 0)
-      {
-        return def;
-      }
-      return sensor.parameters.at(key);
-    };
-
-    const std::string mode_str =
-      get_param_or("contact_consumer", get_param_or("contact_mode", "collision"));
-    if (mode_str == "gait")
-    {
-      sensor_data.mode = ContactDetectionData::ConsumerMode::GAIT;
-      sensor_data.filtered_contact_state = false;
-      sensor_data.on_counter = 0;
-      sensor_data.off_counter = 0;
-
-      sensor_data.debounce_on_steps = 2;
-      sensor_data.debounce_off_steps = 2;
-    }
-    else
-    {
-      sensor_data.mode = ContactDetectionData::ConsumerMode::COLLISION;
-      sensor_data.debounce_on_steps = 1;
-      sensor_data.debounce_off_steps = 1;
-    }
-
-    auto try_parse_int_param = [&](const std::string & key, int & out_value)
-    {
-      if (sensor.parameters.count(key) == 0)
-      {
-        return;
-      }
-      try
-      {
-        out_value = std::max(1, std::stoi(sensor.parameters.at(key)));
-      }
-      catch (const std::exception &)
-      {
-        RCLCPP_WARN_STREAM(
-          get_logger(), "Contact detection '" << sensor_name << "': invalid integer for '" << key
-                                              << "': '" << sensor.parameters.at(key) << "'");
-      }
-    };
-    try_parse_int_param("debounce_on_steps", sensor_data.debounce_on_steps);
-    try_parse_int_param("debounce_off_steps", sensor_data.debounce_off_steps);
 
     contact_detection_data_.push_back(sensor_data);
     RCLCPP_DEBUG_STREAM(
@@ -161,13 +107,9 @@ DuckMiniMujocoSystemInterface::export_state_interfaces()
 
       for (const auto & state_if : sensor_info.state_interfaces)
       {
-        if (state_if.name == "contact" || state_if.name == "value")
+        if (state_if.name == "contact_raw")
         {
-          state_interfaces.emplace_back(sensor.name, state_if.name, &sensor.contact_value);
-        }
-        else if (state_if.name == "contact_raw")
-        {
-          state_interfaces.emplace_back(sensor.name, state_if.name, &sensor.raw_contact_value);
+          state_interfaces.emplace_back(sensor.name, state_if.name, &sensor.contact_raw_value);
         }
       }
       break;
@@ -318,38 +260,9 @@ void DuckMiniMujocoSystemInterface::update_contact_detection()
 
   for (auto & sensor : contact_detection_data_)
   {
-    bool raw_in_contact =
+    bool in_contact =
       raw_contact_between_bodies(mj_data, sensor.body1_id, sensor.body2_id, nullptr);
-
-    sensor.raw_contact_value = raw_in_contact ? 1.0 : 0.0;
-
-    if (sensor.mode == ContactDetectionData::ConsumerMode::COLLISION)
-    {
-      sensor.filtered_contact_state = raw_in_contact;
-    }
-    else
-    {
-      if (raw_in_contact)
-      {
-        sensor.on_counter++;
-        sensor.off_counter = 0;
-        if (!sensor.filtered_contact_state && sensor.on_counter >= sensor.debounce_on_steps)
-        {
-          sensor.filtered_contact_state = true;
-        }
-      }
-      else
-      {
-        sensor.off_counter++;
-        sensor.on_counter = 0;
-        if (sensor.filtered_contact_state && sensor.off_counter >= sensor.debounce_off_steps)
-        {
-          sensor.filtered_contact_state = false;
-        }
-      }
-    }
-
-    sensor.contact_value = sensor.filtered_contact_state ? 1.0 : 0.0;
+    sensor.contact_raw_value = in_contact ? 1.0 : 0.0;
   }
 
   if (mj_model != nullptr)

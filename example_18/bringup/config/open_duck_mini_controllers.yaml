@@ -90,9 +90,7 @@ state_interfaces_broadcaster:
       - right_ankle/velocity        # 37
       # Foot contact sensor interfaces (binary 0/1)
       - left_foot_contact/contact_raw   # 38
-      - left_foot_contact/contact       # 39
-      - right_foot_contact/contact_raw  # 40
-      - right_foot_contact/contact      # 41
+      - right_foot_contact/contact_raw  # 39
 
 
 motion_controller:

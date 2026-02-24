@@ -96,24 +96,11 @@ std::vector<float> ObservationFormatter::format(
     observation.push_back(static_cast<float>(val));
   }
 
-  format_joint_positions_relative(joint_positions, observation);
-  format_joint_velocities_scaled(joint_velocities, observation);
-  for (const auto & val : last_action_)
-  {
-    observation.push_back(static_cast<float>(val));
-  }
-  for (const auto & val : last_last_action_)
-  {
-    observation.push_back(static_cast<float>(val));
-  }
-  for (const auto & val : last_last_last_action_)
-  {
-    observation.push_back(static_cast<float>(val));
-  }
-  for (const auto & val : motor_targets_)
-  {
-    observation.push_back(static_cast<float>(val));
-  }
+  format_joint_data(joint_positions, joint_velocities, observation);
+  append_doubles_as_floats(last_action_, observation);
+  append_doubles_as_floats(last_last_action_, observation);
+  append_doubles_as_floats(last_last_last_action_, observation);
+  append_doubles_as_floats(motor_targets_, observation);
   double left_contact = left_contact_;
   double right_contact = right_contact_;
 
@@ -207,35 +194,40 @@ void ObservationFormatter::extract_interface_data(
   }
 }
 
-void ObservationFormatter::format_joint_positions_relative(
-  const std::vector<double> & joint_positions, std::vector<float> & observation)
+void ObservationFormatter::format_joint_data(
+  const std::vector<double> & joint_positions,
+  const std::vector<double> & joint_velocities,
+  std::vector<float> & observation)
 {
   if (joint_positions.size() != num_joints_)
   {
     throw std::runtime_error(
-      "Joint positions size mismatch in format_joint_positions_relative: positions=" +
-      std::to_string(joint_positions.size()) + ", expected=" + std::to_string(num_joints_));
+      "Joint positions size mismatch: positions=" + std::to_string(joint_positions.size()) +
+      ", expected=" + std::to_string(num_joints_));
   }
-  for (size_t i = 0; i < num_joints_; ++i)
-  {
-    double relative_position = joint_positions[i] - default_joint_positions_[i];
-    observation.push_back(static_cast<float>(relative_position));
-  }
-}
-
-void ObservationFormatter::format_joint_velocities_scaled(
-  const std::vector<double> & joint_velocities, std::vector<float> & observation)
-{
   if (joint_velocities.size() != num_joints_)
   {
     throw std::runtime_error(
-      "Joint velocities size mismatch in format_joint_velocities_scaled: velocities=" +
-      std::to_string(joint_velocities.size()) + ", expected=" + std::to_string(num_joints_));
+      "Joint velocities size mismatch: velocities=" + std::to_string(joint_velocities.size()) +
+      ", expected=" + std::to_string(num_joints_));
   }
   const double velocity_scale = 0.05;
   for (size_t i = 0; i < num_joints_; ++i)
   {
+    observation.push_back(static_cast<float>(joint_positions[i] - default_joint_positions_[i]));
+  }
+  for (size_t i = 0; i < num_joints_; ++i)
+  {
     observation.push_back(static_cast<float>(joint_velocities[i] * velocity_scale));
+  }
+}
+
+void ObservationFormatter::append_doubles_as_floats(
+  const std::vector<double> & src, std::vector<float> & dst)
+{
+  for (const auto & val : src)
+  {
+    dst.push_back(static_cast<float>(val));
   }
 }
 

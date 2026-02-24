@@ -20,7 +20,6 @@
 #include <chrono>
 #include <filesystem>
 #include <fstream>
-#include <map>
 #include <string>
 #include <thread>
 
@@ -34,8 +33,7 @@
 namespace
 {
 hardware_interface::ComponentInfo make_contact_sensor(
-  const std::string & name, const std::string & body1, const std::string & body2,
-  const std::map<std::string, std::string> & extra_params = {})
+  const std::string & name, const std::string & body1, const std::string & body2)
 {
   hardware_interface::ComponentInfo info;
   info.name = name;
@@ -43,13 +41,6 @@ hardware_interface::ComponentInfo make_contact_sensor(
   info.parameters["mujoco_type"] = "contact";
   info.parameters["body1_name"] = body1;
   info.parameters["body2_name"] = body2;
-  for (const auto & [k, v] : extra_params)
-  {
-    info.parameters[k] = v;
-  }
-  hardware_interface::InterfaceInfo contact_if;
-  contact_if.name = "contact";
-  info.state_interfaces.push_back(contact_if);
   hardware_interface::InterfaceInfo contact_raw_if;
   contact_raw_if.name = "contact_raw";
   info.state_interfaces.push_back(contact_raw_if);
@@ -190,9 +181,6 @@ protected:
     // Add contact detection. floor_geom is in worldbody, so it belongs to "world" (body ID 0)
     info.sensors.push_back(make_contact_sensor("box1_contact", "box1", "world"));
     info.sensors.push_back(make_contact_sensor("box2_contact", "box2", "world"));
-    info.sensors.push_back(make_contact_sensor(
-      "box1_contact_gait", "box1", "world",
-      {{"contact_consumer", "gait"}, {"debounce_on_steps", "3"}, {"debounce_off_steps", "3"}}));
 
     return info;
   }
@@ -207,9 +195,7 @@ TEST_F(ContactDetectionTest, ContactDetectionRegistration)
   std::this_thread::sleep_for(std::chrono::milliseconds(100));
   auto state_interfaces = interface_->export_state_interfaces();
 
-  const char * required[] = {"box1_contact/contact",      "box1_contact/contact_raw",
-                             "box2_contact/contact",      "box2_contact/contact_raw",
-                             "box1_contact_gait/contact", "box1_contact_gait/contact_raw"};
+  const char * required[] = {"box1_contact/contact_raw", "box2_contact/contact_raw"};
   for (const auto & name : required)
   {
     EXPECT_TRUE(has_interface(state_interfaces, name)) << name << " interface not found";
@@ -227,53 +213,16 @@ TEST_F(ContactDetectionTest, ContactDetectionWhenInContact)
   interface_->read(rclcpp::Time(), rclcpp::Duration::from_seconds(0.002));
   auto state_interfaces = interface_->export_state_interfaces();
 
-  double box1_contact, box2_contact, box1_raw, box2_raw;
-  ASSERT_TRUE(get_interface_value(state_interfaces, "box1_contact/contact", box1_contact));
+  double box1_raw, box2_raw;
   ASSERT_TRUE(get_interface_value(state_interfaces, "box1_contact/contact_raw", box1_raw));
-  ASSERT_TRUE(get_interface_value(state_interfaces, "box2_contact/contact", box2_contact));
   ASSERT_TRUE(get_interface_value(state_interfaces, "box2_contact/contact_raw", box2_raw));
 
-  EXPECT_EQ(box1_contact, box1_raw);
-  EXPECT_EQ(box2_contact, box2_raw);
-  EXPECT_GE(box1_contact, 0.0);
-  EXPECT_LE(box1_contact, 1.0);
-  EXPECT_GE(box2_contact, 0.0);
-  EXPECT_LE(box2_contact, 1.0);
-  EXPECT_EQ(box1_contact, 1.0) << "box1 should be in contact with floor after settling";
-  EXPECT_EQ(box2_contact, 1.0) << "box2 should be in contact with floor after settling";
-}
-
-TEST_F(ContactDetectionTest, GaitConsumerDebounceOn)
-{
-  rclcpp_lifecycle::State active_state(0, "active");
-  ASSERT_EQ(interface_->on_activate(active_state), hardware_interface::CallbackReturn::SUCCESS);
-  std::this_thread::sleep_for(std::chrono::seconds(1));
-
-  // debounce_on_steps=3: raw becomes 1 immediately; filtered contact needs 3 read() calls
-  auto state_interfaces = interface_->export_state_interfaces();
-  auto read_gait_values = [&](double & c, double & r)
-  {
-    ASSERT_TRUE(get_interface_value(state_interfaces, "box1_contact_gait/contact", c));
-    ASSERT_TRUE(get_interface_value(state_interfaces, "box1_contact_gait/contact_raw", r));
-  };
-
-  interface_->read(rclcpp::Time(), rclcpp::Duration::from_seconds(0.002));
-  double c1, r1;
-  read_gait_values(c1, r1);
-  EXPECT_EQ(r1, 1.0);
-  EXPECT_EQ(c1, 0.0);
-
-  interface_->read(rclcpp::Time(), rclcpp::Duration::from_seconds(0.002));
-  double c2, r2;
-  read_gait_values(c2, r2);
-  EXPECT_EQ(r2, 1.0);
-  EXPECT_EQ(c2, 0.0);
-
-  interface_->read(rclcpp::Time(), rclcpp::Duration::from_seconds(0.002));
-  double c3, r3;
-  read_gait_values(c3, r3);
-  EXPECT_EQ(r3, 1.0);
-  EXPECT_EQ(c3, 1.0);
+  EXPECT_GE(box1_raw, 0.0);
+  EXPECT_LE(box1_raw, 1.0);
+  EXPECT_GE(box2_raw, 0.0);
+  EXPECT_LE(box2_raw, 1.0);
+  EXPECT_EQ(box1_raw, 1.0) << "box1 should be in contact with floor after settling";
+  EXPECT_EQ(box2_raw, 1.0) << "box2 should be in contact with floor after settling";
 }
 
 TEST_F(ContactDetectionTest, ContactValueRange)
@@ -282,11 +231,11 @@ TEST_F(ContactDetectionTest, ContactValueRange)
   ASSERT_EQ(interface_->on_activate(active_state), hardware_interface::CallbackReturn::SUCCESS);
 
   auto state_interfaces = interface_->export_state_interfaces();
-  double box1_contact;
-  ASSERT_TRUE(get_interface_value(state_interfaces, "box1_contact/contact", box1_contact));
+  double box1_raw;
+  ASSERT_TRUE(get_interface_value(state_interfaces, "box1_contact/contact_raw", box1_raw));
 
-  EXPECT_TRUE(box1_contact == 0.0 || box1_contact == 1.0)
-    << "Contact value should be binary (0.0 or 1.0), got " << box1_contact;
+  EXPECT_TRUE(box1_raw == 0.0 || box1_raw == 1.0)
+    << "Contact value should be binary (0.0 or 1.0), got " << box1_raw;
 }
 
 TEST_F(ContactDetectionTest, InvalidBodyNameHandling)
