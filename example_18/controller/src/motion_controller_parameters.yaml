@@ -37,11 +37,6 @@ motion_controller:
     default_value: [],
     description: "Standing pose (keyframe home). If empty, initialized from sensor data."
   }
-  imu_sensor_name: {
-    type: string,
-    default_value: "imu",
-    description: "Name of the IMU sensor (matches ros2_control xacro and MuJoCo site)"
-  }
   imu_upside_down: {
     type: bool,
     default_value: false,

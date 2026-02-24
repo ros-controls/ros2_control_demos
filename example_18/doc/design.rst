@@ -15,7 +15,7 @@ Control pipeline (three stages):
 
 2. ONNX Model Inference: Runs the trained policy model to generate raw action outputs.
 
-3. Action Formatter: Processes the model outputs by scaling, clamping to joint limits, applying rate limiting, and blending with reference motions before sending commands to hardware.
+3. Action Formatter: Processes the model outputs by scaling, clamping to joint limits, and applying rate limiting before sending commands to hardware.
 
 Timing: 50 Hz (0.02s period) with simulation timestep 0.002s, yielding implicit decimation of 10 simulation steps per control update (matches reference implementation).
 
@@ -84,13 +84,11 @@ Update Rate
 Inputs
 ~~~~~~
 
-- state_interfaces_broadcaster/values: IMU (orientation, gyro, accel), joint positions/velocities, foot contacts (left_foot_contact/contact_raw, right_foot_contact/contact_raw) when use_contact_sensors=true.
+- state_interfaces_broadcaster/values: IMU (orientation, gyro, accel), joint positions/velocities, foot contacts (left_foot_contact/contact_raw, right_foot_contact/contact_raw).
 
 - velocity_command_topic: VelocityCommandWithHead (base_velocity + head_commands).
 
 - Previous action (internal).
-
-When use_contact_sensors=false, phase-based synthetic contacts (sin/cos of imitation phase) are used instead.
 
 Processing
 ~~~~~~~~~~

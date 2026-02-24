@@ -125,10 +125,6 @@ motion_controller:
     # Velocity command topic (custom message type: VelocityCommandWithHead)
     velocity_command_topic: "~/cmd_velocity_with_head"
 
-    # true = use hardware contact sensors; false = use phase-based synthetic contacts
-    use_contact_sensors: true
-    # Enable DEBUG logging of contact values
-    log_contact_sensors: false
     left_contact_sensor_name: "left_foot_contact"
     right_contact_sensor_name: "right_foot_contact"
 
@@ -137,16 +133,12 @@ motion_controller:
     max_motor_velocity: 5.24
     dof_vel_scale: 0.05   # Joint velocity scaling in observation (joint_vel * dof_vel_scale)
 
-    # Reference motion blending for stabilization (0.0=disabled, 1.0=full reference)
-    reference_motion_blend_factor: 0.0
-
     # Standing pose (keyframe "home"). Order: left leg (5), head (4), right leg (5)
     default_joint_positions: [0.002, 0.053, -0.63, 1.368, -0.784, 0.0, 0.0, 0.0, 0.0, -0.003, -0.065, 0.635, 1.379, -0.796]
 
     # Motor targets at startup (keyframe "home")
     default_actuator: [0.002, 0.053, -0.63, 1.368, -0.784, 0.0, 0.0, 0.0, 0.0, -0.003, -0.065, 0.635, 1.379, -0.796]
 
-    imu_sensor_name: "imu"
     # Set to false to not invert z-axis to match expected +9.8 m/s² for standing robot
     imu_upside_down: false
 

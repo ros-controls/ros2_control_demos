@@ -68,7 +68,6 @@ private:
   void initialize_motor_targets_from_defaults();
   size_t write_commands_to_hardware(const std::vector<double> & joint_commands);
   void apply_blend_in(std::vector<double> & joint_commands, double blend_factor);
-  void apply_reference_motion_blending(std::vector<double> & joint_commands);
   std::vector<bool> apply_rate_limiting(
     std::vector<double> & joint_commands, double control_period);
 
@@ -84,8 +83,6 @@ private:
   std::string interfaces_broadcaster_topic_;
   std::string interfaces_broadcaster_names_topic_;
   std::string velocity_command_topic_;
-  bool use_contact_sensors_{false};
-  bool log_contact_sensors_{true};
   std::string left_contact_sensor_name_{"left_foot_contact"};
   std::string right_contact_sensor_name_{"right_foot_contact"};
   std::vector<std::string> interface_names_cache_;
@@ -123,8 +120,6 @@ private:
   std::vector<double> prev_motor_targets_;
   bool prev_motor_targets_initialized_;
   bool command_received_;
-  double reference_motion_blend_factor_;
-  std::vector<double> smoothed_reference_action_;
   double phase_frequency_factor_offset_;
   double num_steps_in_gait_period_;
   double training_control_period_;

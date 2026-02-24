@@ -33,7 +33,6 @@ using controller_interface::return_type;
 namespace
 {
 constexpr int LOG_INTERVAL_CONTROL = 50;     // ~1 second at 50Hz
-constexpr int LOG_INTERVAL_CONTACT = 50;     // ~1 second at 50Hz
 constexpr int LOG_INTERVAL_CLIP = 25;        // Every 25 updates
 constexpr int LOG_INTERVAL_CMD_WRITE = 250;  // Less frequent
 }  // anonymous namespace
@@ -56,16 +55,12 @@ CallbackReturn MotionController::on_init()
     get_node()->declare_parameter<double>("action_scale", 0.3);
     get_node()->declare_parameter<std::vector<double>>(
       "default_joint_positions", std::vector<double>());
-    get_node()->declare_parameter<std::string>("imu_sensor_name", "imu_2");
-    get_node()->declare_parameter<bool>("use_contact_sensors", false);
-    get_node()->declare_parameter<bool>("log_contact_sensors", true);
     get_node()->declare_parameter<std::string>("left_contact_sensor_name", "left_foot_contact");
     get_node()->declare_parameter<std::string>("right_contact_sensor_name", "right_foot_contact");
     get_node()->declare_parameter<bool>("imu_upside_down", false);
     get_node()->declare_parameter<double>("phase_frequency_factor_offset", 0.0);
     get_node()->declare_parameter<double>("num_steps_in_gait_period", 27.0);
     get_node()->declare_parameter<double>("max_motor_velocity", 8.0);
-    get_node()->declare_parameter<double>("reference_motion_blend_factor", 0.2);
     get_node()->declare_parameter<double>("training_control_period", 0.02);
     get_node()->declare_parameter<double>("gyro_deadband", 0.15);
     get_node()->declare_parameter<int>("stabilization_delay", 50);
@@ -120,8 +115,6 @@ CallbackReturn MotionController::on_configure(const rclcpp_lifecycle::State & /*
   interfaces_broadcaster_names_topic_ =
     get_node()->get_parameter("interfaces_broadcaster_names_topic").as_string();
   velocity_command_topic_ = get_node()->get_parameter("velocity_command_topic").as_string();
-  use_contact_sensors_ = get_node()->get_parameter("use_contact_sensors").as_bool();
-  log_contact_sensors_ = get_node()->get_parameter("log_contact_sensors").as_bool();
   left_contact_sensor_name_ = get_node()->get_parameter("left_contact_sensor_name").as_string();
   right_contact_sensor_name_ = get_node()->get_parameter("right_contact_sensor_name").as_string();
 
@@ -151,21 +144,19 @@ CallbackReturn MotionController::on_configure(const rclcpp_lifecycle::State & /*
 
   update_count_ = 0;
 
-  std::string imu_sensor_name = get_node()->get_parameter("imu_sensor_name").as_string();
   bool imu_upside_down = get_node()->get_parameter("imu_upside_down").as_bool();
   phase_frequency_factor_offset_ =
     get_node()->get_parameter("phase_frequency_factor_offset").as_double();
   num_steps_in_gait_period_ =
     get_node()->get_parameter("num_steps_in_gait_period").as_double();
 
-  observation_formatter_ = std::make_unique<ObservationFormatter>(joint_names_, imu_sensor_name);
+  observation_formatter_ = std::make_unique<ObservationFormatter>(joint_names_);
   observation_formatter_->set_num_steps_in_gait_period(num_steps_in_gait_period_);
   observation_formatter_->set_imu_upside_down(imu_upside_down);
   observation_formatter_->set_gyro_deadband(gyro_deadband_);
 
   RCLCPP_DEBUG(
-    get_node()->get_logger(), "IMU: sensor='%s', upside_down=%s", imu_sensor_name.c_str(),
-    imu_upside_down ? "true" : "false");
+    get_node()->get_logger(), "IMU: upside_down=%s", imu_upside_down ? "true" : "false");
 
   double action_scale = get_node()->get_parameter("action_scale").as_double();
   action_processor_ = std::make_unique<ActionProcessor>(joint_names_, action_scale, true);
@@ -194,9 +185,6 @@ CallbackReturn MotionController::on_configure(const rclcpp_lifecycle::State & /*
   }
 
   max_motor_velocity_ = get_node()->get_parameter("max_motor_velocity").as_double();
-  reference_motion_blend_factor_ =
-    get_node()->get_parameter("reference_motion_blend_factor").as_double();
-  reference_motion_blend_factor_ = std::clamp(reference_motion_blend_factor_, 0.0, 1.0);
   training_control_period_ = get_node()->get_parameter("training_control_period").as_double();
   if (training_control_period_ <= 0.0)
   {
@@ -227,7 +215,6 @@ CallbackReturn MotionController::on_configure(const rclcpp_lifecycle::State & /*
   }
 
   command_received_ = false;
-  smoothed_reference_action_.resize(joint_names_.size(), 0.0);
 
   // Load model
   if (!load_model(model_path_))
@@ -396,28 +383,11 @@ return_type MotionController::update(const rclcpp::Time & /*time*/, const rclcpp
   double phase_freq_factor = 1.0 + phase_frequency_factor_offset_;
   observation_formatter_->update_imitation_phase(phase_freq_factor);
 
-  // Phase-based contacts by default; use_contact_sensors=true for real sensors
-  auto phase = observation_formatter_->get_imitation_phase();
-  double sin_phase = phase[1];
-  double left_contact = (sin_phase > 0.0) ? 1.0 : 0.0;
-  double right_contact = (sin_phase < 0.0) ? 1.0 : 0.0;
-
-  if (use_contact_sensors_ && left_contact_sensor.has_value() && right_contact_sensor.has_value())
-  {
-    observation_formatter_->set_feet_contacts(
-      left_contact_sensor.value(), right_contact_sensor.value());
-  }
-  else
-  {
-    observation_formatter_->set_feet_contacts(left_contact, right_contact);
-  }
-
-  if (log_contact_sensors_ && update_count_ % LOG_INTERVAL_CONTACT == 0)
-  {
-    RCLCPP_DEBUG(
-      get_node()->get_logger(), "[CONTACT] step=%zu phase=[L=%d R=%d]", update_count_ + 1,
-      static_cast<int>(left_contact), static_cast<int>(right_contact));
-  }
+  double left_contact =
+    left_contact_sensor.has_value() ? left_contact_sensor.value() : 0.0;
+  double right_contact =
+    right_contact_sensor.has_value() ? right_contact_sensor.value() : 0.0;
+  observation_formatter_->set_feet_contacts(left_contact, right_contact);
 
   observation_formatter_->set_motor_targets(motor_targets_);
   std::vector<float> model_inputs;
@@ -465,14 +435,6 @@ return_type MotionController::update(const rclcpp::Time & /*time*/, const rclcpp
       std::min(1.0, static_cast<double>(onnx_active_steps_) / static_cast<double>(blend_in_steps_));
     apply_blend_in(joint_commands, blend_factor);
     previous_action_ = model_outputs;
-    if (onnx_active_steps_ >= static_cast<size_t>(blend_in_steps_))
-    {
-      apply_reference_motion_blending(joint_commands);
-    }
-    else if (onnx_active_steps_ == 1)
-    {
-      smoothed_reference_action_ = joint_commands;
-    }
   }
 
   std::vector<double> original_joint_commands = joint_commands;
@@ -566,23 +528,6 @@ void MotionController::apply_blend_in(std::vector<double> & joint_commands, doub
   {
     joint_commands[i] =
       (1.0 - blend_factor) * default_joint_positions_[i] + blend_factor * joint_commands[i];
-  }
-}
-
-void MotionController::apply_reference_motion_blending(std::vector<double> & joint_commands)
-{
-  if (reference_motion_blend_factor_ <= 0.0)
-  {
-    return;
-  }
-
-  const double smoothing_alpha = 0.1;
-  for (size_t i = 0; i < joint_commands.size() && i < smoothed_reference_action_.size(); ++i)
-  {
-    smoothed_reference_action_[i] =
-      smoothing_alpha * joint_commands[i] + (1.0 - smoothing_alpha) * smoothed_reference_action_[i];
-    joint_commands[i] = (1.0 - reference_motion_blend_factor_) * joint_commands[i] +
-                        reference_motion_blend_factor_ * smoothed_reference_action_[i];
   }
 }
 

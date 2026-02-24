@@ -97,19 +97,10 @@ In another terminal (source your workspace first):
    ros2 control list_controllers
    python3 $(ros2 pkg prefix ros2_control_demo_example_18)/share/ros2_control_demo_example_18/launch/test_motions.py
 
-The test script publishes ``VelocityCommandWithHead`` messages (base_velocity + head_commands) to ``/motion_controller/cmd_velocity_with_head`` at 50 Hz. You should see the duck moving its feet.
+The test script publishes ``VelocityCommandWithHead`` messages (base_velocity + head_commands) to ``/motion_controller/cmd_velocity_with_head`` at 50 Hz. You should see the duck walk forward.
 
 Timing: 0.002s sim timestep in ``scene.xml``, 50 Hz controller. Each control update spans 10 simulation steps, matching the reference training setup.
 
 Current Limitations
 -------------------
-
-The robot moves its feet in place but does not walk forward. In contrast, the Python reference (direct ONNX inference in MuJoCo) walks forward successfully. This reflects a general policy transfer challenge: the ROS 2 pipeline may feed observations that differ from training (frame, sign, field order, or contact timing). Out-of-distribution data can cause in-place stepping despite correct velocity commands. The custom hardware interface adds contact detection (``use_contact_sensors: true``) to improve contact timing alignment with training.
-
-Ideas to address:
-
-- Fine-tune the policy on data collected from the ROS 2 pipeline.
-- Align observation preprocessing and simulation parameters with the training environment.
-- Use domain randomization or robust training to improve transfer.
-
-Occasionlly, the robot may fall over. This is another challenge that further model fine-tuning can help.
+Occasionally, the robot may fall over. Further model fine-tuning or domain randomization can help improve robustness.

@@ -29,8 +29,7 @@ namespace motion_controller
 class ObservationFormatter
 {
 public:
-  explicit ObservationFormatter(
-    const std::vector<std::string> & joint_names, const std::string & imu_sensor_name = "imu_2");
+  explicit ObservationFormatter(const std::vector<std::string> & joint_names);
 
   // Order: gyro(3), accel(3), commands(7), joint_pos(N), joint_vel(N), last_action*3(N),
   // motor_targets(N), feet(2), phase(2). Ref: v2_rl_walk_mujoco.py
@@ -74,7 +73,6 @@ private:
   size_t observation_dim_;  // 17 + 6*N
   std::vector<double> default_joint_positions_;
   bool default_joint_positions_set_;
-  std::string imu_sensor_name_;
   bool imu_upside_down_;
   double gyro_deadband_;
   std::vector<std::string> interface_names_;

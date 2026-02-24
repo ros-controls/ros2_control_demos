@@ -23,13 +23,11 @@
 namespace motion_controller
 {
 
-ObservationFormatter::ObservationFormatter(
-  const std::vector<std::string> & joint_names, const std::string & imu_sensor_name)
+ObservationFormatter::ObservationFormatter(const std::vector<std::string> & joint_names)
 : joint_names_(joint_names),
   num_joints_(joint_names.size()),
   default_joint_positions_(num_joints_, 0.0),
   default_joint_positions_set_(false),
-  imu_sensor_name_(imu_sensor_name),
   imu_upside_down_(false),
   gyro_deadband_(0.0),
   last_action_(num_joints_, 0.0),
