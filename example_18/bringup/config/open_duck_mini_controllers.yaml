@@ -156,6 +156,6 @@ motion_controller:
     # Mismatch causes incorrect phase/gait timing and velocity limits.
     training_control_period: 0.02
 
-    # Gait phase parameters
+    # Gait phase: must match training (PRM.nb_steps_in_period, typically 27 for period=0.54s, fps=50)
     phase_frequency_factor_offset: 0.0
-    phase_period: 100.0
+    num_sim_steps_in_gait_period: 27.0

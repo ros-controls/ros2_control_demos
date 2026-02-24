@@ -136,14 +136,13 @@
       </sensor>
 
       <!-- Contact: reads mjData->contact[] for foot-floor collision. Ref: mujoco_infer_base.py -->
+      <!-- contact_consumer=collision: contact equals contact_raw (no debouncing), matches training -->
       <sensor name="${prefix}left_foot_contact">
         <xacro:unless value="${use_mock_hardware}">
           <param name="mujoco_type">contact</param>
           <param name="body1_name">foot_assembly</param>
           <param name="body2_name">floor</param>
-          <param name="contact_consumer">gait</param>
-          <param name="debounce_on_steps">2</param>
-          <param name="debounce_off_steps">2</param>
+          <param name="contact_consumer">collision</param>
         </xacro:unless>
         <state_interface name="contact_raw"/>
         <state_interface name="contact"/>
@@ -154,9 +153,7 @@
           <param name="mujoco_type">contact</param>
           <param name="body1_name">foot_assembly_2</param>
           <param name="body2_name">floor</param>
-          <param name="contact_consumer">gait</param>
-          <param name="debounce_on_steps">2</param>
-          <param name="debounce_off_steps">2</param>
+          <param name="contact_consumer">collision</param>
         </xacro:unless>
         <state_interface name="contact_raw"/>
         <state_interface name="contact"/>
