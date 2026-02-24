@@ -62,11 +62,9 @@ private:
     std::vector<double> & joint_velocities);
 
   void format_joint_data(
-    const std::vector<double> & joint_positions,
-    const std::vector<double> & joint_velocities,
+    const std::vector<double> & joint_positions, const std::vector<double> & joint_velocities,
     std::vector<float> & observation);
-  void append_doubles_as_floats(
-    const std::vector<double> & src, std::vector<float> & dst);
+  void append_doubles_as_floats(const std::vector<double> & src, std::vector<float> & dst);
 
   std::vector<std::string> joint_names_;
   size_t num_joints_;

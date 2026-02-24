@@ -147,16 +147,14 @@ CallbackReturn MotionController::on_configure(const rclcpp_lifecycle::State & /*
   bool imu_upside_down = get_node()->get_parameter("imu_upside_down").as_bool();
   phase_frequency_factor_offset_ =
     get_node()->get_parameter("phase_frequency_factor_offset").as_double();
-  num_steps_in_gait_period_ =
-    get_node()->get_parameter("num_steps_in_gait_period").as_double();
+  num_steps_in_gait_period_ = get_node()->get_parameter("num_steps_in_gait_period").as_double();
 
   observation_formatter_ = std::make_unique<ObservationFormatter>(joint_names_);
   observation_formatter_->set_num_steps_in_gait_period(num_steps_in_gait_period_);
   observation_formatter_->set_imu_upside_down(imu_upside_down);
   observation_formatter_->set_gyro_deadband(gyro_deadband_);
 
-  RCLCPP_DEBUG(
-    get_node()->get_logger(), "IMU: upside_down=%s", imu_upside_down ? "true" : "false");
+  RCLCPP_DEBUG(get_node()->get_logger(), "IMU: upside_down=%s", imu_upside_down ? "true" : "false");
 
   double action_scale = get_node()->get_parameter("action_scale").as_double();
   action_processor_ = std::make_unique<ActionProcessor>(joint_names_, action_scale, true);
@@ -383,10 +381,8 @@ return_type MotionController::update(const rclcpp::Time & /*time*/, const rclcpp
   double phase_freq_factor = 1.0 + phase_frequency_factor_offset_;
   observation_formatter_->update_imitation_phase(phase_freq_factor);
 
-  double left_contact =
-    left_contact_sensor.has_value() ? left_contact_sensor.value() : 0.0;
-  double right_contact =
-    right_contact_sensor.has_value() ? right_contact_sensor.value() : 0.0;
+  double left_contact = left_contact_sensor.has_value() ? left_contact_sensor.value() : 0.0;
+  double right_contact = right_contact_sensor.has_value() ? right_contact_sensor.value() : 0.0;
   observation_formatter_->set_feet_contacts(left_contact, right_contact);
 
   observation_formatter_->set_motor_targets(motor_targets_);

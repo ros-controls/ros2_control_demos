@@ -193,8 +193,7 @@ void ObservationFormatter::extract_interface_data(
 }
 
 void ObservationFormatter::format_joint_data(
-  const std::vector<double> & joint_positions,
-  const std::vector<double> & joint_velocities,
+  const std::vector<double> & joint_positions, const std::vector<double> & joint_velocities,
   std::vector<float> & observation)
 {
   if (joint_positions.size() != num_joints_)
