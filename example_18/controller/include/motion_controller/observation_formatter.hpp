@@ -51,7 +51,7 @@ public:
   void update_imitation_phase(double phase_frequency_factor);
   std::vector<double> get_imitation_phase() const { return imitation_phase_; }
 
-  void set_phase_period(double nb_steps_in_period);
+  void set_num_steps_in_gait_period(double num_steps);
   void set_velocity_commands(const std::vector<double> & commands);
   void set_imu_upside_down(bool upside_down) { imu_upside_down_ = upside_down; }
   void set_gyro_deadband(double deadband) { gyro_deadband_ = deadband; }
@@ -83,7 +83,7 @@ private:
   double left_contact_;
   double right_contact_;
   double imitation_i_;
-  double phase_period_;
+  double num_steps_in_gait_period_;
   std::vector<double> imitation_phase_;
   std::vector<double> velocity_commands_;
 };

@@ -126,7 +126,7 @@ private:
   double reference_motion_blend_factor_;
   std::vector<double> smoothed_reference_action_;
   double phase_frequency_factor_offset_;
-  double phase_period_;
+  double num_steps_in_gait_period_;
   double training_control_period_;
   double gyro_deadband_;
   int stabilization_delay_;

@@ -39,7 +39,7 @@ ObservationFormatter::ObservationFormatter(
   left_contact_(0.0),
   right_contact_(0.0),
   imitation_i_(0.0),
-  phase_period_(100.0),
+  num_steps_in_gait_period_(27.0),
   imitation_phase_(2, 0.0),
   velocity_commands_(7, 0.0)
 {
@@ -266,16 +266,16 @@ void ObservationFormatter::set_feet_contacts(double left_contact, double right_c
 void ObservationFormatter::update_imitation_phase(double phase_frequency_factor)
 {
   imitation_i_ += 1.0 * phase_frequency_factor;
-  imitation_i_ = std::fmod(imitation_i_, phase_period_);
+  imitation_i_ = std::fmod(imitation_i_, num_steps_in_gait_period_);
   const double PI = 3.14159265358979323846;
-  double theta = (imitation_i_ / phase_period_) * 2.0 * PI;
+  double theta = (imitation_i_ / num_steps_in_gait_period_) * 2.0 * PI;
   imitation_phase_[0] = std::cos(theta);
   imitation_phase_[1] = std::sin(theta);
 }
 
-void ObservationFormatter::set_phase_period(double nb_steps_in_period)
+void ObservationFormatter::set_num_steps_in_gait_period(double num_steps)
 {
-  phase_period_ = nb_steps_in_period;
+  num_steps_in_gait_period_ = num_steps;
 }
 
 void ObservationFormatter::set_velocity_commands(const std::vector<double> & commands)

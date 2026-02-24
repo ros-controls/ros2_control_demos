@@ -63,7 +63,7 @@ CallbackReturn MotionController::on_init()
     get_node()->declare_parameter<std::string>("right_contact_sensor_name", "right_foot_contact");
     get_node()->declare_parameter<bool>("imu_upside_down", false);
     get_node()->declare_parameter<double>("phase_frequency_factor_offset", 0.0);
-    get_node()->declare_parameter<double>("num_sim_steps_in_gait_period", 27.0);
+    get_node()->declare_parameter<double>("num_steps_in_gait_period", 27.0);
     get_node()->declare_parameter<double>("max_motor_velocity", 8.0);
     get_node()->declare_parameter<double>("reference_motion_blend_factor", 0.2);
     get_node()->declare_parameter<double>("training_control_period", 0.02);
@@ -155,10 +155,11 @@ CallbackReturn MotionController::on_configure(const rclcpp_lifecycle::State & /*
   bool imu_upside_down = get_node()->get_parameter("imu_upside_down").as_bool();
   phase_frequency_factor_offset_ =
     get_node()->get_parameter("phase_frequency_factor_offset").as_double();
-  phase_period_ = get_node()->get_parameter("num_sim_steps_in_gait_period").as_double();
+  num_steps_in_gait_period_ =
+    get_node()->get_parameter("num_steps_in_gait_period").as_double();
 
   observation_formatter_ = std::make_unique<ObservationFormatter>(joint_names_, imu_sensor_name);
-  observation_formatter_->set_phase_period(phase_period_);
+  observation_formatter_->set_num_steps_in_gait_period(num_steps_in_gait_period_);
   observation_formatter_->set_imu_upside_down(imu_upside_down);
   observation_formatter_->set_gyro_deadband(gyro_deadband_);
 

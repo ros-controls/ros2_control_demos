@@ -53,10 +53,10 @@ motion_controller:
     default_value: 0.0,
     description: "Offset to gait phase frequency (affects walking speed)"
   }
-  num_sim_steps_in_gait_period: {
+  num_steps_in_gait_period: {
     type: double,
     default_value: 27.0,
-    description: "Number of simulation steps in one gait cycle (left+right step). Must match training."
+    description: "Number of control steps in one gait cycle (left+right step). Must match training."
   }
 
   max_motor_velocity: {
