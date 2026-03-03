@@ -44,7 +44,7 @@ def generate_test_description():
     launch_include = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(
-                get_package_share_directory("ros2_control_demo_example_12"),
+                get_package_share_directory("ros2_control_demo_example_16"),
                 "launch/view_robot.launch.py",
             )
         ),
