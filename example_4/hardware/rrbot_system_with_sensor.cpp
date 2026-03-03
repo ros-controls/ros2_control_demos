@@ -23,6 +23,7 @@
 #include <iomanip>
 #include <limits>
 #include <memory>
+#include <random>
 #include <sstream>
 #include <vector>
 
@@ -228,8 +229,9 @@ hardware_interface::return_type RRBotSystemWithSensorHardware::read(
   {
     // Simulate RRBot's sensor data
     unsigned int seed = time(NULL) + i;
-    hw_sensor_states_[i] =
-      static_cast<float>(rand_r(&seed)) / (static_cast<float>(RAND_MAX / hw_sensor_change_));
+    std::minstd_rand random_generator(seed);
+    std::uniform_real_distribution<float> distribution(0.0f, hw_sensor_change_);
+    hw_sensor_states_[i] = distribution(random_generator);
 
     ss << std::fixed << std::setprecision(2) << std::endl
        << "\t" << hw_sensor_states_[i] << " for sensor '"
