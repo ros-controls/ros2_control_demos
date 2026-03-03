@@ -19,6 +19,7 @@
 #include <iomanip>
 #include <limits>
 #include <memory>
+#include <random>
 #include <sstream>
 #include <vector>
 
@@ -239,9 +240,12 @@ hardware_interface::return_type RRBotSystemWithGPIOHardware::read(
   hw_gpio_in_[3] = hw_gpio_out_[1];
   // random inputs
   unsigned int seed = time(NULL) + 1;
-  hw_gpio_in_[1] = static_cast<float>(rand_r(&seed));
+  std::minstd_rand random_generator_1(seed);
+  std::uniform_int_distribution<unsigned int> distribution(0u, RAND_MAX);
+  hw_gpio_in_[1] = static_cast<float>(distribution(random_generator_1));
   seed = time(NULL) + 2;
-  hw_gpio_in_[2] = static_cast<float>(rand_r(&seed));
+  std::minstd_rand random_generator_2(seed);
+  hw_gpio_in_[2] = static_cast<float>(distribution(random_generator_2));
 
   for (uint i = 0; i < hw_gpio_in_.size(); i++)
   {
