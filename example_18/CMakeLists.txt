@@ -16,6 +16,7 @@ set(THIS_PACKAGE_INCLUDE_DEPENDS
   mujoco_ros2_control
   mujoco_ros2_control_msgs
   mujoco_vendor
+  onnxruntime_vendor
   nav_msgs
   pluginlib
   rclcpp
@@ -41,16 +42,14 @@ foreach(Dependency IN ITEMS ${THIS_PACKAGE_INCLUDE_DEPENDS})
   find_package(${Dependency} REQUIRED)
 endforeach()
 
-# Optional: ONNX Runtime
-find_library(ONNXRUNTIME_LIB onnxruntime PATHS /usr/local/lib /usr/lib NO_DEFAULT_PATH)
-find_path(ONNXRUNTIME_INCLUDE_DIR onnxruntime_cxx_api.h PATHS /usr/local/include /usr/include NO_DEFAULT_PATH)
-if(ONNXRUNTIME_LIB AND ONNXRUNTIME_INCLUDE_DIR)
+# Optional: ONNX Runtime via vendor package
+find_package(onnxruntime_vendor QUIET)
+if(onnxruntime_vendor_FOUND)
   set(onnxruntime_FOUND TRUE)
-  add_definitions(-DONNXRUNTIME_FOUND)
-  message(STATUS "ONNX Runtime found: ${ONNXRUNTIME_LIB}")
+  message(STATUS "ONNX Runtime found via onnxruntime_vendor.")
 else()
   set(onnxruntime_FOUND FALSE)
-  message(WARNING "ONNX Runtime not found. Install onnxruntime-dev for full functionality.")
+  message(WARNING "onnxruntime_vendor not found. ONNX Runtime features will be disabled.")
 endif()
 
 ## COMPILE
@@ -62,8 +61,11 @@ target_include_directories(observation_formatter PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/controller/include>
   $<INSTALL_INTERFACE:include/motion_controller>
 )
-target_link_libraries(observation_formatter ${control_msgs_TARGETS})
-ament_target_dependencies(observation_formatter control_msgs geometry_msgs rclcpp)
+target_link_libraries(observation_formatter
+  ${control_msgs_TARGETS}
+  ${geometry_msgs_TARGETS}
+  rclcpp::rclcpp
+)
 
 add_library(action_processor STATIC controller/src/action_processor.cpp)
 set_target_properties(action_processor PROPERTIES POSITION_INDEPENDENT_CODE ON)
@@ -84,19 +86,18 @@ target_include_directories(ros2_control_demo_example_18 PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/controller/include>
   $<INSTALL_INTERFACE:include>
 )
-ament_target_dependencies(ros2_control_demo_example_18
-  ament_index_cpp
-  control_msgs
-  geometry_msgs
-  example_18_motion_controller_msgs
-  std_msgs
-  std_srvs
-  nav_msgs
-  sensor_msgs
-  control_toolbox
-  transmission_interface
-  mujoco_ros2_control_msgs
-  mujoco_ros2_control
+target_link_libraries(ros2_control_demo_example_18
+  ament_index_cpp::ament_index_cpp
+  ${control_msgs_TARGETS}
+  ${geometry_msgs_TARGETS}
+  ${example_18_motion_controller_msgs_TARGETS}
+  ${std_msgs_TARGETS}
+  ${std_srvs_TARGETS}
+  ${nav_msgs_TARGETS}
+  ${sensor_msgs_TARGETS}
+  control_toolbox::control_toolbox
+  transmission_interface::transmission_interface
+  ${mujoco_ros2_control_msgs_TARGETS}
 )
 target_link_libraries(ros2_control_demo_example_18
   observation_formatter
@@ -109,8 +110,8 @@ target_link_libraries(ros2_control_demo_example_18
   realtime_tools::realtime_tools
 )
 if(onnxruntime_FOUND)
-  target_include_directories(ros2_control_demo_example_18 PRIVATE ${ONNXRUNTIME_INCLUDE_DIR})
-  target_link_libraries(ros2_control_demo_example_18 ${ONNXRUNTIME_LIB})
+  target_link_libraries(ros2_control_demo_example_18 onnxruntime::onnxruntime)
+  target_compile_definitions(ros2_control_demo_example_18 PRIVATE ONNXRUNTIME_FOUND)
 endif()
 
 pluginlib_export_plugin_description_file(hardware_interface ros2_control_demo_example_18.xml)
@@ -131,12 +132,28 @@ install(TARGETS observation_formatter action_processor ros2_control_demo_example
 
 if(BUILD_TESTING)
   find_package(ament_cmake_gtest REQUIRED)
+  find_package(ament_cmake_pytest REQUIRED)
+  find_package(ament_cmake_ros REQUIRED)
+  find_package(launch_testing_ament_cmake REQUIRED)
   find_package(mujoco_vendor REQUIRED)
+
+  function(add_ros_isolated_launch_test path)
+    set(RUNNER "${ament_cmake_ros_DIR}/run_test_isolated.py")
+    add_launch_test("${path}" RUNNER "${RUNNER}" ${ARGN})
+  endfunction()
+  add_ros_isolated_launch_test(test/test_example_18_mujoco_launch.py)
+  add_ros_isolated_launch_test(test/test_view_robot_launch.py)
+
+  ament_add_pytest_test(example_18_urdf_xacro test/test_urdf_xacro.py)
 
   ament_add_gtest(test_observation_formatter controller/test/test_observation_formatter.cpp)
   target_include_directories(test_observation_formatter PRIVATE ${PROJECT_SOURCE_DIR}/controller/include)
-  target_link_libraries(test_observation_formatter observation_formatter rclcpp::rclcpp ${control_msgs_TARGETS})
-  ament_target_dependencies(test_observation_formatter control_msgs geometry_msgs)
+  target_link_libraries(test_observation_formatter
+    observation_formatter
+    rclcpp::rclcpp
+    ${control_msgs_TARGETS}
+    ${geometry_msgs_TARGETS}
+  )
 
   ament_add_gtest(test_action_processor controller/test/test_action_processor.cpp)
   target_include_directories(test_action_processor PRIVATE ${PROJECT_SOURCE_DIR}/controller/include)
@@ -153,9 +170,14 @@ if(BUILD_TESTING)
 
   ament_add_gtest(test_contact_detection hardware/test/test_contact_detection.cpp)
   target_include_directories(test_contact_detection PRIVATE ${PROJECT_SOURCE_DIR}/hardware/include)
-  target_link_libraries(test_contact_detection ros2_control_demo_example_18 mujoco::mujoco)
-  ament_target_dependencies(test_contact_detection
-    rclcpp rclcpp_lifecycle hardware_interface mujoco_ros2_control example_18_motion_controller_msgs
+  target_link_libraries(test_contact_detection
+    ros2_control_demo_example_18
+    mujoco::mujoco
+    rclcpp::rclcpp
+    rclcpp_lifecycle::rclcpp_lifecycle
+    hardware_interface::hardware_interface
+    mujoco_ros2_control::mujoco_ros2_control
+    ${example_18_motion_controller_msgs_TARGETS}
   )
 endif()
 

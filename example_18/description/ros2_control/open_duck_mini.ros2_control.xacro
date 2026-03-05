@@ -4,10 +4,10 @@
   <!-- 14 DoF: left leg (0-4), head (5-8), right leg (9-13). Ref: example_config.json -->
 
   <xacro:macro name="open_duck_mini_mujoco_ros2_control" params="name prefix">
-    <xacro:open_duck_mini_ros2_control name="${name}" prefix="${prefix}" use_mock_hardware="false"/>
+    <xacro:open_duck_mini_ros2_control name="${name}" prefix="${prefix}" use_mock_hardware="false" headless="false"/>
   </xacro:macro>
 
-  <xacro:macro name="open_duck_mini_ros2_control" params="name prefix use_mock_hardware:=^|false">
+  <xacro:macro name="open_duck_mini_ros2_control" params="name prefix use_mock_hardware:=^|false headless:=^|false">
     <ros2_control name="${name}" type="system">
       <xacro:unless value="${use_mock_hardware}">
         <hardware>
@@ -16,6 +16,7 @@
           <param name="meshdir">$(find ros2_control_demo_example_18)/description/assets</param>
           <!-- External PID disabled: MuJoCo built-in actuators used -->
           <param name="override_start_position_file">$(find ros2_control_demo_example_18)/description/mujoco/start_positions.xml</param>
+          <param name="headless">${headless}</param>
         </hardware>
       </xacro:unless>
       <xacro:if value="${use_mock_hardware}">

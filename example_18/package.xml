@@ -33,6 +33,7 @@
   <depend>transmission_interface</depend>
   <depend>mujoco_ros2_control_msgs</depend>
   <depend>mujoco_ros2_control</depend>
+  <depend>onnxruntime_vendor</depend>
   <depend>mujoco_vendor</depend>
   <depend>controller_manager</depend>
   <exec_depend>state_interfaces_broadcaster</exec_depend>

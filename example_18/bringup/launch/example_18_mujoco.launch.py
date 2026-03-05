@@ -17,7 +17,8 @@
 # Authors: Julia Jia
 
 from launch import LaunchDescription
-from launch.substitutions import Command, FindExecutable, PathJoinSubstitution
+from launch.actions import DeclareLaunchArgument
+from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterFile, ParameterValue
 from launch_ros.substitutions import FindPackageShare
@@ -37,6 +38,8 @@ def generate_launch_description():
                     "open_duck_mini.urdf.xacro",
                 ]
             ),
+            " headless:=",
+            LaunchConfiguration("headless"),
         ]
     )
 
@@ -105,8 +108,15 @@ def generate_launch_description():
         output="both",
     )
 
+    headless_arg = DeclareLaunchArgument(
+        "headless",
+        default_value="false",
+        description="Run simulation without visualization window (use true for CI/headless)",
+    )
+
     return LaunchDescription(
         [
+            headless_arg,
             robot_state_publisher_node,
             control_node,
             spawn_joint_state_broadcaster,

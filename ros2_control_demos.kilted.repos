@@ -31,3 +31,16 @@ repositories:
     type: git
     url: https://github.com/ros-controls/kinematics_interface.git
     version: master
+  mujoco_ros2_control:
+    type: git
+    #TODO, update after https://github.com/ros-controls/mujoco_ros2_control/pull/135
+    url: https://github.com/Juliaj/mujoco_ros2_control.git
+    version: downstream_build_fix
+  mujoco_vendor:
+    type: git
+    url: https://github.com/pal-robotics/mujoco_vendor.git
+    version: master
+  onnxruntime_vendor:
+    type: git
+    url: https://github.com/Juliaj/onnxruntime_vendor.git
+    version: main
