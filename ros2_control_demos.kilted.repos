@@ -35,10 +35,6 @@ repositories:
     type: git
     url: https://github.com/ros-controls/mujoco_ros2_control.git
     version: main
-  mujoco_vendor:
-    type: git
-    url: https://github.com/pal-robotics/mujoco_vendor.git
-    version: master
   onnxruntime_vendor:
     type: git
     url: https://github.com/Juliaj/onnxruntime_vendor.git
