@@ -1,0 +1,151 @@
+# Copyright (C) 2025 ros2_control Development Team
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#         http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# Authors: Julia Jia
+
+controller_manager:
+  ros__parameters:
+    # Controller update rate. For sim2sim parity with training, use 50 Hz (0.02s period).
+    update_rate: 50
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+    state_interfaces_broadcaster:
+      type: state_interfaces_broadcaster/StateInterfacesBroadcaster
+    motion_controller:
+      type: motion_controller/MotionController
+
+joint_state_broadcaster:
+  ros__parameters:
+    joints:
+      - left_hip_yaw
+      - left_hip_roll
+      - left_hip_pitch
+      - left_knee
+      - left_ankle
+      - neck_pitch
+      - head_pitch
+      - head_yaw
+      - head_roll
+      - right_hip_yaw
+      - right_hip_roll
+      - right_hip_pitch
+      - right_knee
+      - right_ankle
+
+state_interfaces_broadcaster:
+  ros__parameters:
+    interfaces:
+      - imu/orientation.x          # 0
+      - imu/orientation.y          # 1
+      - imu/orientation.z          # 2
+      - imu/orientation.w          # 3
+      - imu/angular_velocity.x     # 4 (gyro)
+      - imu/angular_velocity.y     # 5 (gyro)
+      - imu/angular_velocity.z     # 6 (gyro)
+      - imu/linear_acceleration.x  # 7 (accelerometer)
+      - imu/linear_acceleration.y  # 8 (accelerometer)
+      - imu/linear_acceleration.z  # 9 (accelerometer)
+      # Joint position interfaces (indices 10 to 10+N-1)
+      # Order: left leg (5), head (4), right leg (5) = 14 joints total
+      - left_hip_yaw/position       # 10
+      - left_hip_roll/position      # 11
+      - left_hip_pitch/position     # 12
+      - left_knee/position          # 13
+      - left_ankle/position         # 14
+      - neck_pitch/position         # 15 (head joint 0)
+      - head_pitch/position         # 16 (head joint 1)
+      - head_yaw/position           # 17 (head joint 2)
+      - head_roll/position          # 18 (head joint 3)
+      - right_hip_yaw/position      # 19
+      - right_hip_roll/position     # 20
+      - right_hip_pitch/position    # 21
+      - right_knee/position         # 22
+      - right_ankle/position        # 23
+      # Joint velocity interfaces (indices 10+N to 10+2N-1), same order as position
+      - left_hip_yaw/velocity       # 24
+      - left_hip_roll/velocity      # 25
+      - left_hip_pitch/velocity     # 26
+      - left_knee/velocity          # 27
+      - left_ankle/velocity         # 28
+      - neck_pitch/velocity         # 29 (head joint 0)
+      - head_pitch/velocity         # 30 (head joint 1)
+      - head_yaw/velocity           # 31 (head joint 2)
+      - head_roll/velocity          # 32 (head joint 3)
+      - right_hip_yaw/velocity      # 33
+      - right_hip_roll/velocity     # 34
+      - right_hip_pitch/velocity    # 35
+      - right_knee/velocity         # 36
+      - right_ankle/velocity        # 37
+      # Foot contact sensor interfaces (binary 0/1)
+      - left_foot_contact/contact_raw   # 38
+      - right_foot_contact/contact_raw  # 39
+
+
+motion_controller:
+  ros__parameters:
+    joints:
+      - left_hip_yaw       # 0
+      - left_hip_roll      # 1
+      - left_hip_pitch     # 2
+      - left_knee          # 3
+      - left_ankle         # 4
+      - neck_pitch         # 5 (head joint 0)
+      - head_pitch         # 6 (head joint 1)
+      - head_yaw           # 7 (head joint 2)
+      - head_roll          # 8 (head joint 3)
+      - right_hip_yaw      # 9
+      - right_hip_roll     # 10
+      - right_hip_pitch    # 11
+      - right_knee         # 12
+      - right_ankle        # 13
+
+    # Model configuration
+    model_path: "$(find-pkg-share ros2_control_demo_example_18)/onnx_model/open_duck_mini_policy.onnx"
+
+    # Model input/output dimensions
+    model_input_size: 101   # Observation dimension
+    model_output_size: 14   # Action dimension (number of joints)
+
+    # Topics for observation formatting
+    interfaces_broadcaster_topic: "state_interfaces_broadcaster/values"
+    interfaces_broadcaster_names_topic: "state_interfaces_broadcaster/names"
+
+    # Velocity command topic (custom message type: VelocityCommandWithHead)
+    velocity_command_topic: "~/cmd_velocity_with_head"
+
+    left_contact_sensor_name: "left_foot_contact"
+    right_contact_sensor_name: "right_foot_contact"
+
+    # Action processing parameters
+    action_scale: 0.25
+    max_motor_velocity: 5.24
+    dof_vel_scale: 0.05   # Joint velocity scaling in observation (joint_vel * dof_vel_scale)
+
+    # Standing pose (keyframe "home"). Order: left leg (5), head (4), right leg (5)
+    default_joint_positions: [0.002, 0.053, -0.63, 1.368, -0.784, 0.0, 0.0, 0.0, 0.0, -0.003, -0.065, 0.635, 1.379, -0.796]
+
+    # Motor targets at startup (keyframe "home")
+    default_actuator: [0.002, 0.053, -0.63, 1.368, -0.784, 0.0, 0.0, 0.0, 0.0, -0.003, -0.065, 0.635, 1.379, -0.796]
+
+    # Set to false to not invert z-axis to match expected +9.8 m/s² for standing robot
+    imu_upside_down: false
+
+    # Must match controller_manager update_rate (e.g. 50 Hz = 0.02s).
+    # Mismatch causes incorrect phase/gait timing and velocity limits.
+    training_control_period: 0.02
+
+    # Gait phase: must match training (PRM.nb_steps_in_period, typically 27 for period=0.54s, fps=50)
+    phase_frequency_factor_offset: 0.0
+    num_steps_in_gait_period: 27.0
