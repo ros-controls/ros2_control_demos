@@ -96,20 +96,26 @@ private:
   std::vector<int64_t> input_shape_;
   std::vector<int64_t> output_shape_;
 
+  // Topic inputs (non-realtime callbacks) -> realtime update loop handoff
   rclcpp::Subscription<control_msgs::msg::Float64Values>::SharedPtr interface_data_subscriber_;
   rclcpp::Subscription<control_msgs::msg::Keys>::SharedPtr interfaces_names_subscriber_;
   rclcpp::Subscription<example_18_motion_controller_msgs::msg::VelocityCommandWithHead>::SharedPtr
     velocity_command_subscriber_;
+
   realtime_tools::RealtimeThreadSafeBox<control_msgs::msg::Float64Values> rt_interface_data_;
   realtime_tools::RealtimeThreadSafeBox<std::vector<std::string>> rt_interface_names_;
   realtime_tools::RealtimeThreadSafeBox<
     example_18_motion_controller_msgs::msg::VelocityCommandWithHead>
     rt_velocity_command_;
-  std::vector<double> previous_action_;
+
+  // Model/observation/action state
   bool model_loaded_;
-  std::vector<std::string> command_interface_names_;
   std::unique_ptr<ObservationFormatter> observation_formatter_;
   std::unique_ptr<ActionProcessor> action_processor_;
+  std::vector<double> previous_action_;
+
+  // Command interfaces and command output state
+  std::vector<std::string> command_interface_names_;
   std::vector<double> default_joint_positions_;
   bool default_joint_positions_initialized_;
   double max_motor_velocity_;
@@ -117,6 +123,8 @@ private:
   std::vector<double> prev_motor_targets_;
   bool prev_motor_targets_initialized_;
   bool command_received_;
+
+  // Gait/timing configuration and counters
   double phase_frequency_factor_offset_;
   double num_steps_in_gait_period_;
   double training_control_period_;
