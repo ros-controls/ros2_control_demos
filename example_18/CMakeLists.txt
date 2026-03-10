@@ -172,6 +172,9 @@ if(BUILD_TESTING)
     mujoco_ros2_control::mujoco_ros2_control
     ${example_18_motion_controller_msgs_TARGETS}
   )
+
+  ament_add_gtest(test_motion_controller_error_handling
+    controller/test/test_motion_controller_error_handling.cpp)
 endif()
 
 ## EXPORTS

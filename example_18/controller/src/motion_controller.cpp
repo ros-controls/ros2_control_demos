@@ -186,7 +186,7 @@ CallbackReturn MotionController::on_configure(const rclcpp_lifecycle::State & /*
   training_control_period_ = get_node()->get_parameter("training_control_period").as_double();
   if (training_control_period_ <= 0.0)
   {
-    RCLCPP_ERROR(
+    RCLCPP_WARN(
       get_node()->get_logger(),
       "Invalid training_control_period (%.6f). Must be positive. Using default 0.02s.",
       training_control_period_);
@@ -364,7 +364,14 @@ return_type MotionController::update(const rclcpp::Time & /*time*/, const rclcpp
 
     if (prev_motor_targets_initialized_ && command_interfaces_.size() == motor_targets_.size())
     {
-      write_commands_to_hardware(motor_targets_);
+      const size_t write_success_count = write_commands_to_hardware(motor_targets_);
+      if (!motor_targets_.empty() && write_success_count == 0)
+      {
+        RCLCPP_ERROR_THROTTLE(
+          get_node()->get_logger(), *get_node()->get_clock(), 5000,
+          "Failed to write to any command interface");
+        return return_type::ERROR;
+      }
     }
     return return_type::OK;
   }
@@ -424,7 +431,10 @@ return_type MotionController::update(const rclcpp::Time & /*time*/, const rclcpp
       onnx_active_steps_ = 0;
     }
 
-    model_outputs = run_model_inference(model_inputs);
+    if (!run_model_inference(model_inputs, model_outputs))
+    {
+      return return_type::ERROR;
+    }
     joint_commands = action_processor_->process(model_outputs, default_joint_positions_);
     onnx_active_steps_++;
     double blend_factor =
@@ -477,7 +487,14 @@ return_type MotionController::update(const rclcpp::Time & /*time*/, const rclcpp
   }
 
   prev_motor_targets_ = joint_commands;
-  write_commands_to_hardware(joint_commands);
+  const size_t write_success_count = write_commands_to_hardware(joint_commands);
+  if (!joint_commands.empty() && write_success_count == 0)
+  {
+    RCLCPP_ERROR_THROTTLE(
+      get_node()->get_logger(), *get_node()->get_clock(), 5000,
+      "Failed to write to any command interface");
+    return return_type::ERROR;
+  }
 
   update_count_++;
 
@@ -614,13 +631,15 @@ bool MotionController::load_model(const std::string & model_path)
   }
 }
 
-std::vector<double> MotionController::run_model_inference(const std::vector<float> & inputs)
+bool MotionController::run_model_inference(
+  const std::vector<float> & inputs, std::vector<double> & outputs)
 {
+  outputs.clear();
   if (!model_loaded_ || !onnx_session_)
   {
     RCLCPP_ERROR_THROTTLE(
       get_node()->get_logger(), *get_node()->get_clock(), 5000, "Model not loaded");
-    return std::vector<double>(joint_names_.size(), 0.0);
+    return false;
   }
 
   try
@@ -658,21 +677,21 @@ std::vector<double> MotionController::run_model_inference(const std::vector<floa
       1);
     float * float_array = output_tensors.front().GetTensorMutableData<float>();
     size_t output_size = output_tensors.front().GetTensorTypeAndShapeInfo().GetElementCount();
-    std::vector<double> outputs;
     outputs.reserve(output_size);
     for (size_t i = 0; i < output_size; ++i)
     {
       outputs.push_back(static_cast<double>(float_array[i]));
     }
 
-    return outputs;
+    return true;
   }
   catch (const std::exception & e)
   {
     RCLCPP_ERROR_THROTTLE(
       get_node()->get_logger(), *get_node()->get_clock(), 5000, "Model inference failed: %s",
       e.what());
-    return std::vector<double>(joint_names_.size(), 0.0);
+    outputs.clear();
+    return false;
   }
 }
 
@@ -743,6 +762,7 @@ void MotionController::validate_model_structure(size_t num_inputs, size_t num_ou
       "+ %zu (last_last_last_action) + %zu (motor_targets) + 2 (feet_contacts) + 2 (phase) = %zu",
       joint_names_.size(), joint_names_.size(), joint_names_.size(), joint_names_.size(),
       joint_names_.size(), joint_names_.size(), expected_input_size);
+    throw std::runtime_error("Model input size does not match observation dimension");
   }
   if (model_input_size_ > 0)
   {

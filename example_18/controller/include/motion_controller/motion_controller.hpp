@@ -60,7 +60,7 @@ public:
 
 private:
   bool load_model(const std::string & model_path);
-  std::vector<double> run_model_inference(const std::vector<float> & inputs);
+  bool run_model_inference(const std::vector<float> & inputs, std::vector<double> & outputs);
   void initialize_motor_targets_from_defaults();
   size_t write_commands_to_hardware(const std::vector<double> & joint_commands);
   void apply_blend_in(std::vector<double> & joint_commands, double blend_factor);
