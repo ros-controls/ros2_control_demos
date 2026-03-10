@@ -35,7 +35,6 @@ public:
     const std::vector<double> & model_outputs, const std::vector<double> & default_joint_positions);
 
   double get_action_scale() const { return action_scale_; }
-  bool get_use_default_offset() const { return use_default_offset_; }
 
 private:
   std::vector<std::string> joint_names_;

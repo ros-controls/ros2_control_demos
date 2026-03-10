@@ -31,29 +31,32 @@ class ObservationFormatter
 public:
   explicit ObservationFormatter(const std::vector<std::string> & joint_names);
 
+  // High-level observation API
   // Order: gyro(3), accel(3), commands(7), joint_pos(N), joint_vel(N), last_action*3(N),
   // motor_targets(N), feet(2), phase(2). Ref: v2_rl_walk_mujoco.py
   std::vector<float> format(
     const control_msgs::msg::Float64Values & interface_data,
     const geometry_msgs::msg::Twist & velocity_cmd, const std::vector<double> & previous_action);
-
   size_t get_observation_dim() const { return observation_dim_; }
 
+  // Sensor data utilities
   std::vector<double> extract_joint_positions(
     const control_msgs::msg::Float64Values & interface_data);
-
-  void set_default_joint_positions(const std::vector<double> & default_positions);
   void set_interface_names(const std::vector<std::string> & interface_names);
-  void update_action_history(const std::vector<double> & action);
-  void set_motor_targets(const std::vector<double> & motor_targets);
-  void set_feet_contacts(double left_contact, double right_contact);
-  void update_imitation_phase(double phase_frequency_factor);
-  std::vector<double> get_imitation_phase() const { return imitation_phase_; }
+  void update_feet_contacts_from_interfaces(
+    const control_msgs::msg::Float64Values & msg, const std::string & left_contact_full_name,
+    const std::string & right_contact_full_name);
 
-  void set_num_steps_in_gait_period(double num_steps);
+  // Configuration / state setters
+  void set_default_joint_positions(const std::vector<double> & default_positions);
+  void set_motor_targets(const std::vector<double> & motor_targets);
   void set_velocity_commands(const std::vector<double> & commands);
+  void update_action_history(const std::vector<double> & action);
+  void set_num_steps_in_gait_period(double num_steps);
   void set_imu_upside_down(bool upside_down) { imu_upside_down_ = upside_down; }
   void set_gyro_deadband(double deadband) { gyro_deadband_ = deadband; }
+  void update_imitation_phase(double phase_frequency_factor);
+  std::vector<double> get_imitation_phase() const { return imitation_phase_; }
 
 private:
   void extract_interface_data(

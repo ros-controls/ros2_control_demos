@@ -91,14 +91,6 @@ TEST_F(TestActionProcessor, SizeMismatch)
   EXPECT_THROW(processor.process(wrong_size_outputs, default_positions), std::invalid_argument);
 }
 
-TEST_F(TestActionProcessor, GetParameters)
-{
-  motion_controller::ActionProcessor processor(joint_names_, 0.25, true);
-
-  EXPECT_DOUBLE_EQ(processor.get_action_scale(), 0.25);
-  EXPECT_TRUE(processor.get_use_default_offset());
-}
-
 int main(int argc, char ** argv)
 {
   ::testing::InitGoogleTest(&argc, argv);

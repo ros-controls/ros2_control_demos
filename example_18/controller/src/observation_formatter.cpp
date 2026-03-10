@@ -18,6 +18,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <optional>
 #include <string>
 
 namespace motion_controller
@@ -246,10 +247,32 @@ void ObservationFormatter::set_motor_targets(const std::vector<double> & motor_t
   }
 }
 
-void ObservationFormatter::set_feet_contacts(double left_contact, double right_contact)
+void ObservationFormatter::update_feet_contacts_from_interfaces(
+  const control_msgs::msg::Float64Values & msg, const std::string & left_contact_full_name,
+  const std::string & right_contact_full_name)
 {
-  left_contact_ = left_contact;
-  right_contact_ = right_contact;
+  auto get_state_value = [&](const std::string & full_name) -> std::optional<double>
+  {
+    const size_t count = std::min(interface_names_.size(), msg.values.size());
+    if (count == 0)
+    {
+      return std::nullopt;
+    }
+    for (size_t i = 0; i < count; ++i)
+    {
+      if (interface_names_[i] == full_name)
+      {
+        return msg.values[i];
+      }
+    }
+    return std::nullopt;
+  };
+
+  const auto left_contact_sensor = get_state_value(left_contact_full_name);
+  const auto right_contact_sensor = get_state_value(right_contact_full_name);
+
+  left_contact_ = left_contact_sensor.has_value() ? left_contact_sensor.value() : 0.0;
+  right_contact_ = right_contact_sensor.has_value() ? right_contact_sensor.value() : 0.0;
 }
 
 void ObservationFormatter::update_imitation_phase(double phase_frequency_factor)

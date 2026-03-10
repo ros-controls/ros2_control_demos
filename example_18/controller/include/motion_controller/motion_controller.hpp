@@ -84,7 +84,6 @@ private:
   std::string velocity_command_topic_;
   std::string left_contact_sensor_name_{"left_foot_contact"};
   std::string right_contact_sensor_name_{"right_foot_contact"};
-  std::vector<std::string> interface_names_cache_;
 
   std::unique_ptr<Ort::Session> onnx_session_;
   std::unique_ptr<Ort::Env> onnx_env_;

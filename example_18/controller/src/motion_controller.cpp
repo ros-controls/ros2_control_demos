@@ -283,34 +283,13 @@ return_type MotionController::update(const rclcpp::Time & /*time*/, const rclcpp
   if (auto names_op = rt_interface_names_.try_get(); names_op.has_value())
   {
     observation_formatter_->set_interface_names(names_op.value());
-    interface_names_cache_ = names_op.value();
   }
-
-  auto get_state_value = [&](const std::string & full_name) -> std::optional<double>
-  {
-    if (interface_names_cache_.empty())
-    {
-      return std::nullopt;
-    }
-    for (size_t i = 0; i < interface_names_cache_.size(); ++i)
-    {
-      if (interface_names_cache_[i] == full_name)
-      {
-        if (i < interface_data.values.size())
-        {
-          return interface_data.values[i];
-        }
-        return std::nullopt;
-      }
-    }
-    return std::nullopt;
-  };
 
   const std::string left_contact_name = left_contact_sensor_name_ + "/contact_raw";
   const std::string right_contact_name = right_contact_sensor_name_ + "/contact_raw";
 
-  const auto left_contact_sensor = get_state_value(left_contact_name);
-  const auto right_contact_sensor = get_state_value(right_contact_name);
+  observation_formatter_->update_feet_contacts_from_interfaces(
+    interface_data, left_contact_name, right_contact_name);
 
   if (!default_joint_positions_initialized_)
   {
@@ -360,10 +339,6 @@ return_type MotionController::update(const rclcpp::Time & /*time*/, const rclcpp
   }
   double phase_freq_factor = 1.0 + phase_frequency_factor_offset_;
   observation_formatter_->update_imitation_phase(phase_freq_factor);
-
-  double left_contact = left_contact_sensor.has_value() ? left_contact_sensor.value() : 0.0;
-  double right_contact = right_contact_sensor.has_value() ? right_contact_sensor.value() : 0.0;
-  observation_formatter_->set_feet_contacts(left_contact, right_contact);
 
   observation_formatter_->set_motor_targets(motor_targets_);
   std::vector<float> model_inputs;
