@@ -47,6 +47,11 @@ Tutorial steps
    If you can see two orange and one yellow rectangle in in *RViz* everything has started properly.
    Still, to be sure, let's introspect the control system before moving *RRBot*.
 
+   .. note::
+
+    The launch file supports an optional ``use_wrench_transformer`` argument to enable the wrench transformer node.
+    See step 7 for details on using the wrench transformer feature.
+
 3. Check if the hardware interface loaded properly, by opening another terminal and executing
 
    .. code-block:: shell
@@ -163,11 +168,66 @@ Tutorial steps
     :width: 400
     :alt: Revolute-Revolute Manipulator Robot with wrench visualization
 
+7. Access transformed wrench data in different frames using the *Wrench Transformer Node* (optional):
+
+   The launch file can optionally start a ``wrench_transformer_node`` that transforms wrench messages
+   from the sensor frame (``tool_link``) to other target frames using TF2. This feature is disabled by default.
+
+   To enable the wrench transformer, launch with the ``use_wrench_transformer`` argument:
+
+   .. code-block:: shell
+
+    ros2 launch ros2_control_demo_example_5 rrbot_system_with_external_sensor.launch.py use_wrench_transformer:=true
+
+   Once enabled, check available transformed wrench topics:
+
+   .. code-block:: shell
+
+    ros2 topic list | grep wrench
+
+   You should see topics like:
+
+   .. code-block:: shell
+
+    /fts_wrench_transformer/base_link/wrench
+    /fts_wrench_transformer/link1/wrench
+
+   View transformed wrench data in the ``base_link`` frame:
+
+   .. code-block:: shell
+
+    ros2 topic echo /fts_wrench_transformer/base_link/wrench
+
+   The transformed wrench messages will have the same structure as the original wrench, but with
+   ``frame_id`` set to the target frame (e.g., ``base_link``) and the force/torque values transformed
+   to that coordinate frame.
+
+   .. code-block:: shell
+
+    header:
+      stamp:
+        sec: 1676444704
+        nanosec: 332221422
+      frame_id: base_link
+    wrench:
+      force:
+        x: <transformed_value>
+        y: <transformed_value>
+        z: <transformed_value>
+      torque:
+        x: <transformed_value>
+        y: <transformed_value>
+        z: <transformed_value>
+
+   The wrench transformer configuration can be customized in the parameter file:
+   `wrench_transformer_params.yaml <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_5/bringup/config/wrench_transformer_params.yaml>`__
+
 Files used for this demos
 --------------------------
 
 * Launch file: `rrbot_system_with_external_sensor.launch.py <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_5/bringup/launch/rrbot_system_with_external_sensor.launch.py>`__
 * Controllers yaml: `rrbot_with_external_sensor_controllers.yaml <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_5/bringup/config/rrbot_with_external_sensor_controllers.yaml>`__
+* Wrench transformer params: `wrench_transformer_params.yaml <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_5/bringup/config/wrench_transformer_params.yaml>`__
 * URDF: `rrbot_with_external_sensor_controllers.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/blob/{REPOS_FILE_BRANCH}/example_5/description/urdf/rrbot_system_with_external_sensor.urdf.xacro>`__
 
   * Description: `rrbot_description.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/ros2_control_demo_description/rrbot/urdf/rrbot_description.urdf.xacro>`__

@@ -19,6 +19,7 @@
 #include <iomanip>
 #include <limits>
 #include <memory>
+#include <random>
 #include <sstream>
 #include <vector>
 
@@ -28,10 +29,10 @@
 namespace ros2_control_demo_example_10
 {
 hardware_interface::CallbackReturn RRBotSystemWithGPIOHardware::on_init(
-  const hardware_interface::HardwareInfo & info)
+  const hardware_interface::HardwareComponentInterfaceParams & params)
 {
   if (
-    hardware_interface::SystemInterface::on_init(info) !=
+    hardware_interface::SystemInterface::on_init(params) !=
     hardware_interface::CallbackReturn::SUCCESS)
   {
     return hardware_interface::CallbackReturn::ERROR;
@@ -83,7 +84,7 @@ hardware_interface::CallbackReturn RRBotSystemWithGPIOHardware::on_init(
     return hardware_interface::CallbackReturn::ERROR;
   }
   // with exactly 1 command interface
-  for (int i = 0; i < 2; i++)
+  for (size_t i = 0; i < 2; i++)
   {
     if (info_.gpios[i].command_interfaces.size() != 1)
     {
@@ -195,13 +196,15 @@ hardware_interface::return_type RRBotSystemWithGPIOHardware::read(
 
   // random inputs analog_input1 and analog_input2
   unsigned int seed = static_cast<unsigned int>(time(NULL)) + 1;
+  std::minstd_rand random_generator_1(seed);
   set_state(
     info_.gpios[0].name + "/" + info_.gpios[0].state_interfaces[1].name,
-    static_cast<double>(rand_r(&seed)));
+    static_cast<double>(random_generator_1()));
   seed = static_cast<unsigned int>(time(NULL)) + 2;
+  std::minstd_rand random_generator_2(seed);
   set_state(
     info_.gpios[0].name + "/" + info_.gpios[0].state_interfaces[2].name,
-    static_cast<double>(rand_r(&seed)));
+    static_cast<double>(random_generator_2()));
 
   for (const auto & [name, descr] : gpio_state_interfaces_)
   {

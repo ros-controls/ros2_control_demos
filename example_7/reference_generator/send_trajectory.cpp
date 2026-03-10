@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#define _USE_MATH_DEFINES
+#include <cmath>
+
 #include <kdl/chainfksolverpos_recursive.hpp>
 #include <kdl/chainiksolvervel_pinv.hpp>
 #include <kdl/jntarray.hpp>
@@ -91,7 +94,7 @@ int main(int argc, char ** argv)
     double time_point_sec = std::floor(time_point);
     trajectory_point_msg.time_from_start.sec = static_cast<int>(time_point_sec);
     trajectory_point_msg.time_from_start.nanosec =
-      static_cast<int>((time_point - time_point_sec) * 1E9);
+      static_cast<uint32_t>((time_point - time_point_sec) * 1E9);
     trajectory_msg.points.push_back(trajectory_point_msg);
   }
 

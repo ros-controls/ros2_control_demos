@@ -83,6 +83,10 @@ The following examples are part of this demo repository:
 
    This example shows how to create chained controllers using diff_drive_controller and two pid_controllers to control a differential drive robot.
 
+* Example 17: ["RRBot with Hardware Component that publishes diagnostics"](example_17)
+
+   This example shows how to publish diagnostics from a hardware component using the Executor passed from Controller Manager.
+
 ## Structure
 
 The repository is structured into `example_XY` folders that fully contained packages with names `ros2_control_demos_example_XY`.
@@ -117,7 +121,7 @@ ROS 2 Distro | Branch | Build status | Documentation
 :----------: | :----: | :----------: | :-----------:
 **Rolling** | [`master`](https://github.com/ros-controls/ros2_control_demos/tree/master) | [![Rolling Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-binary-build.yml/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-binary-build.yml?branch=master) <br> [![Rolling Semi-Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-semi-binary-build.yml/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-semi-binary-build.yml?branch=master) | [Documentation](https://control.ros.org/rolling/doc/ros2_control_demos/doc/index.html)
 **Kilted** | [`master`](https://github.com/ros-controls/ros2_control_demos/tree/master) | see above | [Documentation](https://control.ros.org/kilted/doc/ros2_control_demos/doc/index.html)
-**Jazzy** | [`master`](https://github.com/ros-controls/ros2_control_demos/tree/master) | see above | [Documentation](https://control.ros.org/jazzy/doc/ros2_control_demos/doc/index.html)
+**Jazzy** | [`jazzy`](https://github.com/ros-controls/ros2_control_demos/tree/jazzy) | [![Jazzy Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/jazzy-binary-build.yml/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/jazzy-binary-build.yml?branch=master) <br> [![Jazzy Semi-Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/jazzy-semi-binary-build.yml/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/jazzy-semi-binary-build.yml?branch=master) | [Documentation](https://control.ros.org/jazzy/doc/ros2_control_demos/doc/index.html)
 **Humble** | [`humble`](https://github.com/ros-controls/ros2_control_demos/tree/humble) | [![Humble Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/humble-binary-build.yml/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/humble-binary-build.yml?branch=master) <br> [![Humble Semi-Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/humble-semi-binary-build.yml/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/humble-semi-binary-build.yml?branch=master) | [Documentation](https://control.ros.org/humble/doc/ros2_control_demos/doc/index.html)
 
 ## Acknowledgements

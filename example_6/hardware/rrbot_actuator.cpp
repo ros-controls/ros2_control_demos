@@ -33,10 +33,10 @@
 namespace ros2_control_demo_example_6
 {
 hardware_interface::CallbackReturn RRBotModularJoint::on_init(
-  const hardware_interface::HardwareInfo & info)
+  const hardware_interface::HardwareComponentInterfaceParams & params)
 {
   if (
-    hardware_interface::ActuatorInterface::on_init(info) !=
+    hardware_interface::ActuatorInterface::on_init(params) !=
     hardware_interface::CallbackReturn::SUCCESS)
   {
     return hardware_interface::CallbackReturn::ERROR;
@@ -162,8 +162,6 @@ hardware_interface::return_type RRBotModularJoint::read(
   ss << "Reading states:";
 
   // Simulate RRBot's movement
-  ss << "Reading states:";
-
   for (const auto & [name, descr] : joint_state_interfaces_)
   {
     // Simulate RRBot's movement

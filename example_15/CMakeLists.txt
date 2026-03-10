@@ -26,11 +26,15 @@ install(
 )
 
 if(BUILD_TESTING)
-  find_package(ament_cmake_pytest REQUIRED)
-
-  ament_add_pytest_test(test_rrbot_namespace_launch test/test_rrbot_namespace_launch.py)
-  ament_add_pytest_test(test_multi_controller_manager_launch test/test_multi_controller_manager_launch.py)
-
+  # Integration (launch) tests
+  find_package(ament_cmake_ros REQUIRED)
+  find_package(launch_testing_ament_cmake REQUIRED)
+  function(add_ros_isolated_launch_test path)
+    set(RUNNER "${ament_cmake_ros_DIR}/run_test_isolated.py")
+    add_launch_test("${path}" RUNNER "${RUNNER}" ${ARGN})
+  endfunction()
+  add_ros_isolated_launch_test(test/test_rrbot_namespace_launch.py)
+  add_ros_isolated_launch_test(test/test_multi_controller_manager_launch.py)
 endif()
 
 ## EXPORTS

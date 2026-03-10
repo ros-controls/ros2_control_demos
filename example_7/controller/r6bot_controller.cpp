@@ -206,8 +206,6 @@ controller_interface::return_type RobotController::update(
 
 controller_interface::CallbackReturn RobotController::on_deactivate(const rclcpp_lifecycle::State &)
 {
-  release_interfaces();
-
   return CallbackReturn::SUCCESS;
 }
 

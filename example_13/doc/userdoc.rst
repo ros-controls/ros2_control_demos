@@ -255,12 +255,12 @@ Tutorial steps
     threedofbot_position_controller[forward_command_controller/ForwardCommandController] inactive
 
 
-3. Configure ``FakeThreeDofBot`` and its joint state broadcaster and non-movement command interfaces. Call
+3. Configure ``FakeThreeDofBot`` and its joint state broadcaster. Call
 
   .. code-block:: shell
 
     ros2 control set_hardware_component_state FakeThreeDofBot inactive
-    ros2 control switch_controllers --activate threedofbot_joint_state_broadcaster threedofbot_pid_gain_controller
+    ros2 control switch_controllers --activate threedofbot_joint_state_broadcaster
 
   Scenario state:
 
@@ -280,14 +280,14 @@ Tutorial steps
           state: id=2 label=inactive
           command interfaces
                   threedofbot_joint1/position [available] [unclaimed]
-                  threedofbot_joint1/pid_gain [available] [claimed]
+                  threedofbot_joint1/pid_gain [available] [unclaimed]
                   threedofbot_joint2/position [available] [unclaimed]
-                  threedofbot_joint2/pid_gain [available] [claimed]
+                  threedofbot_joint2/pid_gain [available] [unclaimed]
                   threedofbot_joint3/position [available] [unclaimed]
-                  threedofbot_joint3/pid_gain [available] [claimed]
+                  threedofbot_joint3/pid_gain [available] [unclaimed]
     ...
 
-  Controllers status, ``threedofbot_joint_state_broadcaster`` and ``threedofbot_pid_gain_controller`` are in active state now:
+  Controllers status, ``threedofbot_joint_state_broadcaster`` is in active state now:
 
   .. code-block:: shell
 
@@ -300,7 +300,7 @@ Tutorial steps
     rrbot_with_sensor_joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
     rrbot_with_sensor_position_controller[forward_command_controller/ForwardCommandController] active
     threedofbot_joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
-    threedofbot_pid_gain_controller[forward_command_controller/ForwardCommandController] active
+    threedofbot_pid_gain_controller[forward_command_controller/ForwardCommandController] inactive
     threedofbot_position_controller[forward_command_controller/ForwardCommandController] inactive
 
 
@@ -329,12 +329,12 @@ Tutorial steps
   - left robot is moving
   - middle robot is now still "standing"
 
-5. Activate ``FakeThreeDofBot`` and its controller. Call
+5. Activate ``FakeThreeDofBot`` and its controllers. Call
 
   .. code-block:: shell
 
     ros2 control set_hardware_component_state FakeThreeDofBot active
-    ros2 control switch_controllers --activate threedofbot_position_controller
+    ros2 control switch_controllers --activate threedofbot_pid_gain_controller threedofbot_position_controller
 
   Scenario state:
 

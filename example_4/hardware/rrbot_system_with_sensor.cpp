@@ -23,6 +23,7 @@
 #include <iomanip>
 #include <limits>
 #include <memory>
+#include <random>
 #include <sstream>
 #include <vector>
 
@@ -32,10 +33,10 @@
 namespace ros2_control_demo_example_4
 {
 hardware_interface::CallbackReturn RRBotSystemWithSensorHardware::on_init(
-  const hardware_interface::HardwareInfo & info)
+  const hardware_interface::HardwareComponentInterfaceParams & params)
 {
   if (
-    hardware_interface::SystemInterface::on_init(info) !=
+    hardware_interface::SystemInterface::on_init(params) !=
     hardware_interface::CallbackReturn::SUCCESS)
   {
     return hardware_interface::CallbackReturn::ERROR;
@@ -183,9 +184,9 @@ hardware_interface::return_type RRBotSystemWithSensorHardware::read(
   {
     // Simulate RRBot's sensor data
     unsigned int seed = static_cast<unsigned int>(time(NULL)) + i++;
-    set_state(
-      name,
-      static_cast<double>(rand_r(&seed)) / (static_cast<double>(RAND_MAX / hw_sensor_change_)));
+    std::minstd_rand random_generator(seed);
+    std::uniform_real_distribution<double> distribution(0.0, hw_sensor_change_);
+    set_state(name, distribution(random_generator));
 
     ss << std::endl << "\t" << get_state(name) << " for sensor '" << name << "'";
   }
