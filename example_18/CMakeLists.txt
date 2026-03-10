@@ -15,8 +15,6 @@ set(THIS_PACKAGE_INCLUDE_DEPENDS
   hardware_interface
   mujoco_ros2_control
   mujoco_ros2_control_msgs
-  mujoco_vendor
-  onnxruntime_vendor
   nav_msgs
   pluginlib
   rclcpp
@@ -42,14 +40,12 @@ foreach(Dependency IN ITEMS ${THIS_PACKAGE_INCLUDE_DEPENDS})
   find_package(${Dependency} REQUIRED)
 endforeach()
 
-# Optional: ONNX Runtime via vendor package
+# Example 18 requires ONNX Runtime; skip building if not found
 find_package(onnxruntime_vendor QUIET)
-if(onnxruntime_vendor_FOUND)
-  set(onnxruntime_FOUND TRUE)
-  message(STATUS "ONNX Runtime found via onnxruntime_vendor.")
-else()
-  set(onnxruntime_FOUND FALSE)
-  message(WARNING "onnxruntime_vendor not found. ONNX Runtime features will be disabled.")
+if(NOT onnxruntime_vendor_FOUND)
+  message(FATAL_ERROR
+    "Example 18 cannot be built without ONNX Runtime. "
+    "Install or build onnxruntime_vendor to build this example.")
 endif()
 
 ## COMPILE
@@ -109,10 +105,7 @@ target_link_libraries(ros2_control_demo_example_18
   pluginlib::pluginlib
   realtime_tools::realtime_tools
 )
-if(onnxruntime_FOUND)
-  target_link_libraries(ros2_control_demo_example_18 onnxruntime::onnxruntime)
-  target_compile_definitions(ros2_control_demo_example_18 PRIVATE ONNXRUNTIME_FOUND)
-endif()
+target_link_libraries(ros2_control_demo_example_18 onnxruntime::onnxruntime)
 
 pluginlib_export_plugin_description_file(hardware_interface ros2_control_demo_example_18.xml)
 pluginlib_export_plugin_description_file(controller_interface ros2_control_demo_example_18.xml)
@@ -183,5 +176,5 @@ endif()
 
 ## EXPORTS
 ament_export_targets(export_ros2_control_demo_example_18 HAS_LIBRARY_TARGET)
-ament_export_dependencies(${THIS_PACKAGE_INCLUDE_DEPENDS})
+ament_export_dependencies(${THIS_PACKAGE_INCLUDE_DEPENDS} onnxruntime_vendor)
 ament_package()

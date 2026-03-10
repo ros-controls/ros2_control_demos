@@ -97,5 +97,4 @@ class TestFixture(unittest.TestCase):
 @launch_testing.post_shutdown_test()
 class TestShutdown(unittest.TestCase):
     def test_exit_codes(self, proc_info):
-        # Allow exit code 1: motion_controller spawner exits 1 when ONNX Runtime is missing
-        launch_testing.asserts.assertExitCodes(proc_info, allowable_exit_codes=[0, 1])
+        launch_testing.asserts.assertExitCodes(proc_info, allowable_exit_codes=[0])

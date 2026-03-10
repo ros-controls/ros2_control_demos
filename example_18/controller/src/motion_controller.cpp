@@ -554,7 +554,6 @@ std::vector<bool> MotionController::apply_rate_limiting(
 
 bool MotionController::load_model(const std::string & model_path)
 {
-#ifdef ONNXRUNTIME_FOUND
   try
   {
     onnx_env_ = std::make_unique<Ort::Env>(ORT_LOGGING_LEVEL_WARNING, "LocomotionController");
@@ -613,17 +612,10 @@ bool MotionController::load_model(const std::string & model_path)
     RCLCPP_ERROR(get_node()->get_logger(), "Failed to load ONNX model: %s", e.what());
     return false;
   }
-#else
-  (void)model_path;
-  RCLCPP_ERROR(
-    get_node()->get_logger(), "ONNX Runtime not found. Install onnxruntime-dev package.");
-  return false;
-#endif
 }
 
 std::vector<double> MotionController::run_model_inference(const std::vector<float> & inputs)
 {
-#ifdef ONNXRUNTIME_FOUND
   if (!model_loaded_ || !onnx_session_)
   {
     RCLCPP_ERROR_THROTTLE(
@@ -682,16 +674,8 @@ std::vector<double> MotionController::run_model_inference(const std::vector<floa
       e.what());
     return std::vector<double>(joint_names_.size(), 0.0);
   }
-#else
-  (void)inputs;
-  RCLCPP_WARN_THROTTLE(
-    get_node()->get_logger(), *get_node()->get_clock(), 5000,
-    "ONNX Runtime not available, returning zeros");
-  return std::vector<double>(joint_names_.size(), 0.0);
-#endif
 }
 
-#ifdef ONNXRUNTIME_FOUND
 std::string MotionController::format_shape_string(const std::vector<int64_t> & shape)
 {
   std::string shape_str = "[";
@@ -867,7 +851,6 @@ void MotionController::validate_model_structure(size_t num_inputs, size_t num_ou
     }
   }
 }
-#endif
 
 }  // namespace motion_controller
 

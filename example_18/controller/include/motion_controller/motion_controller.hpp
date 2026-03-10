@@ -17,6 +17,8 @@
 #ifndef MOTION_CONTROLLER__MOTION_CONTROLLER_HPP_
 #define MOTION_CONTROLLER__MOTION_CONTROLLER_HPP_
 
+#include <onnxruntime_cxx_api.h>
+
 #include <memory>
 #include <string>
 #include <vector>
@@ -31,12 +33,6 @@
 #include "rclcpp/subscription.hpp"
 #include "rclcpp_lifecycle/state.hpp"
 #include "realtime_tools/realtime_thread_safe_box.hpp"
-
-#if defined(ONNXRUNTIME_FOUND) && __has_include("onnxruntime_cxx_api.h")
-#include <onnxruntime_cxx_api.h>
-#else
-#undef ONNXRUNTIME_FOUND
-#endif
 
 namespace motion_controller
 {
@@ -71,10 +67,8 @@ private:
   std::vector<bool> apply_rate_limiting(
     std::vector<double> & joint_commands, double control_period);
 
-#ifdef ONNXRUNTIME_FOUND
   static std::string format_shape_string(const std::vector<int64_t> & shape);
   void validate_model_structure(size_t num_inputs, size_t num_outputs);
-#endif
 
   std::vector<std::string> joint_names_;
   std::string model_path_;
@@ -87,7 +81,6 @@ private:
   std::string right_contact_sensor_name_{"right_foot_contact"};
   std::vector<std::string> interface_names_cache_;
 
-#ifdef ONNXRUNTIME_FOUND
   std::unique_ptr<Ort::Session> onnx_session_;
   std::unique_ptr<Ort::Env> onnx_env_;
   std::unique_ptr<Ort::MemoryInfo> onnx_memory_info_;
@@ -97,7 +90,6 @@ private:
   std::vector<const char *> output_name_ptrs_;
   std::vector<int64_t> input_shape_;
   std::vector<int64_t> output_shape_;
-#endif
 
   rclcpp::Subscription<control_msgs::msg::Float64Values>::SharedPtr interface_data_subscriber_;
   rclcpp::Subscription<control_msgs::msg::Keys>::SharedPtr interfaces_names_subscriber_;
