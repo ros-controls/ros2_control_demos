@@ -329,12 +329,16 @@ return_type MotionController::update(const rclcpp::Time & /*time*/, const rclcpp
   }
 
   const double actual_control_period = period.seconds();
-  if (std::abs(actual_control_period - training_control_period_) > 0.001)
+  // 4 ms tolerance allows typical sim jitter and slight control-loop latency (e.g. 0.016–0.024 s at
+  // 50 Hz).
+  if (std::abs(actual_control_period - training_control_period_) > 0.004)
   {
     RCLCPP_WARN_THROTTLE(
       get_node()->get_logger(), *get_node()->get_clock(), 5000,
       "Controller update period (%.4f s) differs from training period (%.4f s). "
-      "Consider setting update_rate to %.1f Hz.",
+      "This can be caused by simulation timing jitter or control loop latency. "
+      "If this persists and is not expected, verify that controller_manager update_rate is %.1f "
+      "Hz.",
       actual_control_period, training_control_period_, 1.0 / training_control_period_);
   }
   double phase_freq_factor = 1.0 + phase_frequency_factor_offset_;
