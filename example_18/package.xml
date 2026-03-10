@@ -22,6 +22,7 @@
   <depend>geometry_msgs</depend>
   <depend>hardware_interface</depend>
   <depend>example_18_motion_controller_msgs</depend>
+  <depend>generate_parameter_library</depend>
   <depend>pluginlib</depend>
   <depend>rclcpp</depend>
   <depend>rclcpp_lifecycle</depend>

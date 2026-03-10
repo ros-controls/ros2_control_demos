@@ -12,6 +12,7 @@ set(THIS_PACKAGE_INCLUDE_DEPENDS
   controller_interface
   geometry_msgs
   example_18_motion_controller_msgs
+  generate_parameter_library
   hardware_interface
   mujoco_ros2_control
   mujoco_ros2_control_msgs
@@ -71,6 +72,10 @@ target_include_directories(action_processor PUBLIC
   $<INSTALL_INTERFACE:include/motion_controller>
 )
 
+generate_parameter_library(motion_controller_parameters
+  controller/src/motion_controller_parameters.yaml
+)
+
 # Main library (hardware + controller)
 add_library(ros2_control_demo_example_18 SHARED
   hardware/duck_mini_mujoco_system_interface.cpp
@@ -84,6 +89,7 @@ target_include_directories(ros2_control_demo_example_18 PUBLIC
 )
 target_link_libraries(ros2_control_demo_example_18
   ament_index_cpp::ament_index_cpp
+  motion_controller_parameters
   ${control_msgs_TARGETS}
   ${geometry_msgs_TARGETS}
   ${example_18_motion_controller_msgs_TARGETS}
@@ -116,7 +122,7 @@ install(DIRECTORY hardware/include/ DESTINATION include)
 install(DIRECTORY bringup/ DESTINATION share/ros2_control_demo_example_18)
 install(DIRECTORY description/ DESTINATION share/ros2_control_demo_example_18/description)
 install(DIRECTORY onnx_model/ DESTINATION share/ros2_control_demo_example_18/onnx_model)
-install(TARGETS observation_formatter action_processor ros2_control_demo_example_18
+install(TARGETS observation_formatter action_processor motion_controller_parameters ros2_control_demo_example_18
   EXPORT export_ros2_control_demo_example_18
   RUNTIME DESTINATION bin
   ARCHIVE DESTINATION lib

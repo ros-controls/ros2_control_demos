@@ -114,10 +114,6 @@ motion_controller:
     # Model configuration
     model_path: "$(find-pkg-share ros2_control_demo_example_18)/onnx_model/open_duck_mini_policy.onnx"
 
-    # Model input/output dimensions
-    model_input_size: 101   # Observation dimension
-    model_output_size: 14   # Action dimension (number of joints)
-
     # Topics for observation formatting
     interfaces_broadcaster_topic: "state_interfaces_broadcaster/values"
     interfaces_broadcaster_names_topic: "state_interfaces_broadcaster/names"

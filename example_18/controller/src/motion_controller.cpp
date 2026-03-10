@@ -41,30 +41,8 @@ CallbackReturn MotionController::on_init()
 {
   try
   {
-    // Declare parameters
-    get_node()->declare_parameter<std::vector<std::string>>("joints", std::vector<std::string>());
-    get_node()->declare_parameter<std::string>("model_path", "");
-    get_node()->declare_parameter<int>("model_input_size", 0);
-    get_node()->declare_parameter<int>("model_output_size", 0);
-    get_node()->declare_parameter<std::string>(
-      "interfaces_broadcaster_topic", "state_interfaces_broadcaster/values");
-    get_node()->declare_parameter<std::string>(
-      "interfaces_broadcaster_names_topic", "state_interfaces_broadcaster/names");
-    get_node()->declare_parameter<std::string>(
-      "velocity_command_topic", "~/cmd_velocity_with_head");
-    get_node()->declare_parameter<double>("action_scale", 0.3);
-    get_node()->declare_parameter<std::vector<double>>(
-      "default_joint_positions", std::vector<double>());
-    get_node()->declare_parameter<std::string>("left_contact_sensor_name", "left_foot_contact");
-    get_node()->declare_parameter<std::string>("right_contact_sensor_name", "right_foot_contact");
-    get_node()->declare_parameter<bool>("imu_upside_down", false);
-    get_node()->declare_parameter<double>("phase_frequency_factor_offset", 0.0);
-    get_node()->declare_parameter<double>("num_steps_in_gait_period", 27.0);
-    get_node()->declare_parameter<double>("max_motor_velocity", 8.0);
-    get_node()->declare_parameter<double>("training_control_period", 0.02);
-    get_node()->declare_parameter<double>("gyro_deadband", 0.15);
-    get_node()->declare_parameter<int>("stabilization_delay", 50);
-    get_node()->declare_parameter<int>("blend_in_steps", 200);
+    param_listener_ = std::make_shared<ParamListener>(get_node());
+    params_ = param_listener_->get_params();
   }
   catch (const std::exception & e)
   {
@@ -93,11 +71,12 @@ InterfaceConfiguration MotionController::state_interface_configuration() const
 
 CallbackReturn MotionController::on_configure(const rclcpp_lifecycle::State & /*previous_state*/)
 {
-  // Read parameters
-  joint_names_ = get_node()->get_parameter("joints").as_string_array();
+  params_ = param_listener_->get_params();
+
+  joint_names_ = params_.joints;
 
   // Get model path and expand $(find-pkg-share ...) substitution
-  std::string raw_model_path = get_node()->get_parameter("model_path").as_string();
+  std::string raw_model_path = params_.model_path;
   std::regex pkg_share_regex(R"(\$\(find-pkg-share\s+([^\)]+)\))");
   std::smatch match;
   if (std::regex_search(raw_model_path, match, pkg_share_regex))
@@ -110,13 +89,11 @@ CallbackReturn MotionController::on_configure(const rclcpp_lifecycle::State & /*
   {
     model_path_ = raw_model_path;
   }
-  interfaces_broadcaster_topic_ =
-    get_node()->get_parameter("interfaces_broadcaster_topic").as_string();
-  interfaces_broadcaster_names_topic_ =
-    get_node()->get_parameter("interfaces_broadcaster_names_topic").as_string();
-  velocity_command_topic_ = get_node()->get_parameter("velocity_command_topic").as_string();
-  left_contact_sensor_name_ = get_node()->get_parameter("left_contact_sensor_name").as_string();
-  right_contact_sensor_name_ = get_node()->get_parameter("right_contact_sensor_name").as_string();
+  interfaces_broadcaster_topic_ = params_.interfaces_broadcaster_topic;
+  interfaces_broadcaster_names_topic_ = params_.interfaces_broadcaster_names_topic;
+  velocity_command_topic_ = params_.velocity_command_topic;
+  left_contact_sensor_name_ = params_.left_contact_sensor_name;
+  right_contact_sensor_name_ = params_.right_contact_sensor_name;
 
   if (joint_names_.empty())
   {
@@ -130,8 +107,8 @@ CallbackReturn MotionController::on_configure(const rclcpp_lifecycle::State & /*
     return CallbackReturn::ERROR;
   }
 
-  model_input_size_ = static_cast<int>(get_node()->get_parameter("model_input_size").as_int());
-  model_output_size_ = static_cast<int>(get_node()->get_parameter("model_output_size").as_int());
+  model_input_size_ = static_cast<int>(params_.model_input_size);
+  model_output_size_ = static_cast<int>(params_.model_output_size);
 
   command_interface_names_.clear();
   for (const auto & joint_name : joint_names_)
@@ -144,22 +121,19 @@ CallbackReturn MotionController::on_configure(const rclcpp_lifecycle::State & /*
 
   update_count_ = 0;
 
-  bool imu_upside_down = get_node()->get_parameter("imu_upside_down").as_bool();
-  phase_frequency_factor_offset_ =
-    get_node()->get_parameter("phase_frequency_factor_offset").as_double();
-  num_steps_in_gait_period_ = get_node()->get_parameter("num_steps_in_gait_period").as_double();
+  bool imu_upside_down = params_.imu_upside_down;
+  phase_frequency_factor_offset_ = params_.phase_frequency_factor_offset;
+  num_steps_in_gait_period_ = params_.num_steps_in_gait_period;
 
   observation_formatter_ = std::make_unique<ObservationFormatter>(joint_names_);
   observation_formatter_->set_num_steps_in_gait_period(num_steps_in_gait_period_);
   observation_formatter_->set_imu_upside_down(imu_upside_down);
-  observation_formatter_->set_gyro_deadband(gyro_deadband_);
+  observation_formatter_->set_gyro_deadband(params_.gyro_deadband);
 
   RCLCPP_DEBUG(get_node()->get_logger(), "IMU: upside_down=%s", imu_upside_down ? "true" : "false");
 
-  double action_scale = get_node()->get_parameter("action_scale").as_double();
-  action_processor_ = std::make_unique<ActionProcessor>(joint_names_, action_scale, true);
-  std::vector<double> param_default_positions =
-    get_node()->get_parameter("default_joint_positions").as_double_array();
+  action_processor_ = std::make_unique<ActionProcessor>(joint_names_, params_.action_scale, true);
+  std::vector<double> param_default_positions = params_.default_joint_positions;
 
   default_joint_positions_.resize(joint_names_.size(), 0.0);
   if (param_default_positions.size() == joint_names_.size())
@@ -182,8 +156,8 @@ CallbackReturn MotionController::on_configure(const rclcpp_lifecycle::State & /*
       param_default_positions.size(), joint_names_.size());
   }
 
-  max_motor_velocity_ = get_node()->get_parameter("max_motor_velocity").as_double();
-  training_control_period_ = get_node()->get_parameter("training_control_period").as_double();
+  max_motor_velocity_ = params_.max_motor_velocity;
+  training_control_period_ = params_.training_control_period;
   if (training_control_period_ <= 0.0)
   {
     RCLCPP_WARN(
@@ -193,10 +167,9 @@ CallbackReturn MotionController::on_configure(const rclcpp_lifecycle::State & /*
     training_control_period_ = 0.02;
   }
 
-  gyro_deadband_ = get_node()->get_parameter("gyro_deadband").as_double();
-  stabilization_delay_ =
-    static_cast<int>(get_node()->get_parameter("stabilization_delay").as_int());
-  blend_in_steps_ = static_cast<int>(get_node()->get_parameter("blend_in_steps").as_int());
+  gyro_deadband_ = params_.gyro_deadband;
+  stabilization_delay_ = static_cast<int>(params_.stabilization_delay);
+  blend_in_steps_ = static_cast<int>(params_.blend_in_steps);
   stabilization_steps_ = 0;
   onnx_active_steps_ = 0;
 
@@ -608,6 +581,10 @@ bool MotionController::load_model(const std::string & model_path)
       }
     }
 
+    RCLCPP_INFO(
+      get_node()->get_logger(), "ONNX IO shapes (from model metadata): input=%s output=%s",
+      format_shape_string(input_shape_).c_str(), format_shape_string(output_shape_).c_str());
+
     validate_model_structure(num_inputs, num_outputs);
     input_name_ptrs_.clear();
     for (const auto & name : input_names_)
@@ -677,6 +654,9 @@ bool MotionController::run_model_inference(
       1);
     float * float_array = output_tensors.front().GetTensorMutableData<float>();
     size_t output_size = output_tensors.front().GetTensorTypeAndShapeInfo().GetElementCount();
+    RCLCPP_INFO_ONCE(
+      get_node()->get_logger(), "ONNX runtime IO sizes: input_size=%zu output_size=%zu", input_size,
+      output_size);
     outputs.reserve(output_size);
     for (size_t i = 0; i < output_size; ++i)
     {

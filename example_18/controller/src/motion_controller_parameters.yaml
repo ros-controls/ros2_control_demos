@@ -15,16 +15,42 @@ motion_controller:
     },
     read_only: true
   }
-
+  model_input_size: {
+    type: int,
+    default_value: 0,
+    description: "Expected ONNX model input size (0 = infer from model)",
+  }
+  model_output_size: {
+    type: int,
+    default_value: 0,
+    description: "Expected ONNX model output size (0 = infer from model)",
+  }
   interfaces_broadcaster_topic: {
     type: string,
     default_value: "state_interfaces_broadcaster/values",
     description: "Topic name from state_interfaces_broadcaster"
   }
+  interfaces_broadcaster_names_topic: {
+    type: string,
+    default_value: "state_interfaces_broadcaster/names",
+    description: "Topic for state interface names from state_interfaces_broadcaster"
+  }
+
   velocity_command_topic: {
     type: string,
     default_value: "~/cmd_velocity_with_head",
     description: "Topic for velocity commands (VelocityCommandWithHead: base_velocity + head joint commands)"
+  }
+
+  left_contact_sensor_name: {
+    type: string,
+    default_value: "left_foot_contact",
+    description: "Sensor name for left foot contact"
+  }
+  right_contact_sensor_name: {
+    type: string,
+    default_value: "right_foot_contact",
+    description: "Sensor name for right foot contact"
   }
 
   action_scale: {
@@ -58,6 +84,11 @@ motion_controller:
     type: double,
     default_value: 5.24,
     description: "Maximum motor velocity in rad/s"
+  }
+  training_control_period: {
+    type: double,
+    default_value: 0.02,
+    description: "Control period used during training (s)"
   }
   gyro_deadband: {
     type: double,
