@@ -30,6 +30,9 @@
 
 import os
 import pytest
+import psutil
+import subprocess
+import time
 import unittest
 
 from ament_index_python.packages import get_package_share_directory
@@ -39,12 +42,12 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_testing.actions import ReadyToTest
 
 import launch_testing.markers
-import rclpy
 from controller_manager.test_utils import (
     check_controllers_running,
     check_if_js_published,
     check_node_running,
 )
+import rclpy
 
 
 # Executes the given launch file and checks if all nodes can be started
@@ -93,6 +96,30 @@ class TestFixture(unittest.TestCase):
         check_if_js_published(
             "/joint_states", ["joint_1", "joint_2", "joint_3", "joint_4", "joint_5", "joint_6"]
         )
+
+    def test_check_if_trajectory_published(self, proc_output):
+
+        topic = "/r6bot_controller/joint_trajectory"
+
+        command = [
+            "ros2",
+            "launch",
+            "ros2_control_demo_example_7",
+            "send_trajectory.launch.py",
+        ]
+        subprocess.Popen(command)  # the process won't finish
+        time.sleep(1)
+        pubs = self.node.get_publishers_info_by_topic(topic)
+        assert len(pubs) > 0, f"No publisher for topic '{topic}' not found!"
+
+        # message will be published only once, so WaitForTopics is not suitable here.
+        # let's just check if the controller received and processed the message
+        proc_output.assertWaitFor("Trajectory execution complete", timeout=10, stream="stderr")
+
+        for proc in psutil.process_iter():
+            if "send_trajectory" in proc.name():
+                proc.kill()
+                print(f"Process {proc.name()} killed")
 
 
 @launch_testing.post_shutdown_test()
