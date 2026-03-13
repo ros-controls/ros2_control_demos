@@ -14,9 +14,8 @@
 
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, RegisterEventHandler
+from launch.actions import DeclareLaunchArgument
 from launch.conditions import IfCondition
-from launch.event_handlers import OnProcessExit
 from launch.substitutions import (
     Command,
     FindExecutable,
@@ -73,13 +72,6 @@ def generate_launch_description():
     )
     robot_description = {"robot_description": robot_description_content}
 
-    robot_controllers = PathJoinSubstitution(
-        [
-            FindPackageShare("ros2_control_demo_example_16"),
-            "config",
-            "diffbot_chained_controllers.yaml",
-        ]
-    )
     rviz_config_file = PathJoinSubstitution(
         [FindPackageShare("ros2_control_demo_description"), "diffbot/rviz", "diffbot.rviz"]
     )
@@ -87,7 +79,15 @@ def generate_launch_description():
     control_node = Node(
         package="controller_manager",
         executable="ros2_control_node",
-        parameters=[robot_controllers],
+        parameters=[
+            PathJoinSubstitution(
+                [
+                    FindPackageShare("ros2_control_demo_example_16"),
+                    "config",
+                    "diffbot_cm.yaml",
+                ]
+            )
+        ],
         output="both",
     )
     robot_state_pub_node = Node(
@@ -106,66 +106,68 @@ def generate_launch_description():
         condition=IfCondition(gui),
     )
 
-    joint_state_broadcaster_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["joint_state_broadcaster"],
-    )
-
-    pid_controllers_spawner = Node(
+    controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
         arguments=[
-            "pid_controller_left_wheel_joint",
+            "--controller",
+            "joint_state_broadcaster",
+            "--param-file",
+            [
+                PathJoinSubstitution(
+                    [
+                        FindPackageShare("ros2_control_demo_example_16"),
+                        "config",
+                        "diffbot_cm.yaml",
+                    ]
+                )
+            ],
+            "--controller",
             "pid_controller_right_wheel_joint",
             "--param-file",
-            robot_controllers,
-        ],
-    )
-
-    robot_base_controller_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=[
+            [
+                PathJoinSubstitution(
+                    [
+                        FindPackageShare("ros2_control_demo_example_16"),
+                        "config",
+                        "pid_controllers.yaml",
+                    ]
+                )
+            ],
+            "--controller",
+            "pid_controller_left_wheel_joint",
+            "--param-file",
+            [
+                PathJoinSubstitution(
+                    [
+                        FindPackageShare("ros2_control_demo_example_16"),
+                        "config",
+                        "pid_controllers.yaml",
+                    ]
+                )
+            ],
+            "--controller",
             "diffbot_base_controller",
             "--param-file",
-            robot_controllers,
+            [
+                PathJoinSubstitution(
+                    [
+                        FindPackageShare("ros2_control_demo_example_16"),
+                        "config",
+                        "diff_drive_controller.yaml",
+                    ]
+                )
+            ],
             "--controller-ros-args",
             "-r /diffbot_base_controller/cmd_vel:=/cmd_vel",
         ],
     )
 
-    # Delay rviz start after `joint_state_broadcaster`
-    delay_rviz_after_joint_state_broadcaster_spawner = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=joint_state_broadcaster_spawner,
-            on_exit=[rviz_node],
-        )
-    )
-
-    delay_robot_base_after_pid_controller_spawner = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=pid_controllers_spawner,
-            on_exit=[robot_base_controller_spawner],
-        )
-    )
-
-    # Delay start of joint_state_broadcaster after `robot_base_controller`
-    # TODO(anyone): This is a workaround for flaky tests. Remove when fixed.
-    delay_joint_state_broadcaster_after_robot_base_controller_spawner = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=robot_base_controller_spawner,
-            on_exit=[joint_state_broadcaster_spawner],
-        )
-    )
-
     nodes = [
         control_node,
         robot_state_pub_node,
-        pid_controllers_spawner,
-        delay_robot_base_after_pid_controller_spawner,
-        delay_rviz_after_joint_state_broadcaster_spawner,
-        delay_joint_state_broadcaster_after_robot_base_controller_spawner,
+        controller_spawner,
+        rviz_node,
     ]
 
     return LaunchDescription(declared_arguments + nodes)
