@@ -524,9 +524,11 @@ Finally, open a new  terminal and run the following command.
 
 You should see the tutorial robot making a circular motion in RViz.
 
-.. figure:: resources/trajectory.gif
-  :align: center
-  :width: 100%
-  :alt: trajectory
+.. only:: html
+
+   .. figure:: resources/trajectory.gif
+      :align: center
+      :width: 100%
+      :alt: trajectory
 
   Trajectory following example.
