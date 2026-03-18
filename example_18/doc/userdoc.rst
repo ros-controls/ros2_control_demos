@@ -1,3 +1,7 @@
+:github_url: https://github.com/ros-controls/ros2_control_demos/blob/{REPOS_FILE_BRANCH}/example_18/doc/userdoc.rst
+
+.. _ros2_control_demos_example_18_userdoc:
+
 ros2_control_demo_example_18
 ================================
 
@@ -10,7 +14,13 @@ You need: mujoco_ros2_control, ONNX Runtime, a trained ONNX model, and ROS 2 (te
 Robot description
 ------------------
 
-The demo uses URDF, MuJoCo XML models, and ros2_control configuration from ``description/``. Meshes come from Open_Duck_Mini; the MuJoCo model (open_duck_mini_v2.xml, scene.xml) is adapted from Open_Duck_Playground with BAM-tuned actuator parameters. The custom hardware interface adds foot contact detection via ``mjData->contact[]``. See `description/README.md <../description/README.md>`_ for sources, structure, and modifications.
+The demo uses URDF, MuJoCo XML models, and ros2_control configuration from ``description/``.
+
+* The meshes come from `Open_Duck_Mini <https://github.com/apirrone/Open_Duck_Mini/tree/v2/mini_bdx/robots/open_duck_mini_v2>`__.
+* The MuJoCo model (open_duck_mini_v2.xml, scene.xml) is adapted from * Open_Duck_Playground with BAM-tuned actuator parameters.
+A custom hardware interface adds foot contact detection via ``mjData->contact[]``.
+
+See `description/README.md <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_18/description/README.md>`_ for sources, structure, and modifications.
 
 Prerequisites
 -------------
@@ -50,11 +60,13 @@ If the library is not found after install:
 Model and workspace
 ~~~~~~~~~~~~~~~~~~~
 
-Place your ONNX model in ``onnx_model/`` or set ``model_path`` in ``bringup/config/open_duck_mini_controllers.yaml``. Default: ``onnx_model/open_duck_mini_policy.onnx``. Source your ROS 2 workspace before running.
+The ONNX model from ``model_path`` in ``bringup/config/open_duck_mini_controllers.yaml`` (Default: ``onnx_model/open_duck_mini_policy.onnx``) will be used. There are several options:
 
-You can use a baseline model from `Open_Duck_Mini <https://github.com/apirrone/Open_Duck_Mini>`_ (e.g. ``BEST_WALK_ONNX_2.onnx``). The bundled model was trained via `Open_Duck_Playground <https://github.com/apirrone/Open_Duck_Playground>`_ for MuJoCo-to-MuJoCo+ros2_control transfer. we have validated the model trained in MuJoCo via Python reference (direct ONNX inference in MuJoCo) walks forward successfully.
-
-If you want to create your own: clone `Open_Duck_Playground <https://github.com/apirrone/Open_Duck_Playground>`_, run ``uv run playground/open_duck_mini_v2/runner.py``. The ``policy_params_fn`` in ``playground/common/runner.py`` exports ONNX at each checkpoint.
+* ``onnx_model/open_duck_mini_policy.onnx``: The bundled model was trained via `Open_Duck_Playground <https://github.com/apirrone/Open_Duck_Playground>`_ for MuJoCo-to-MuJoCo+ros2_control transfer. we have validated the model trained in MuJoCo via Python reference (direct ONNX inference in MuJoCo) walks forward successfully.
+* A custom policy. Place your ONNX model in ``onnx_model/``, then build and source your ROS 2 workspace before running.
+ 
+   * You can use a baseline model from `Open_Duck_Mini <https://github.com/apirrone/Open_Duck_Mini>`_ (e.g. ``BEST_WALK_ONNX_2.onnx``).
+   * If you want to create your own: clone `Open_Duck_Playground <https://github.com/apirrone/Open_Duck_Playground>`_, run ``uv run playground/open_duck_mini_v2/runner.py``. The ``policy_params_fn`` in ``playground/common/runner.py`` exports ONNX at each checkpoint.
 
 Build
 -----
