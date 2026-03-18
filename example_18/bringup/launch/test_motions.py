@@ -165,6 +165,7 @@ class DriveForward(Node):
             )
 
         self.get_logger().info("Stopping (2.0s zero cmd)")
+        # Send zero velocity for 2s to bring the robot to a stop.
         self._publish_for(2.0, self._make_cmd(), log_every_n=0)
 
 

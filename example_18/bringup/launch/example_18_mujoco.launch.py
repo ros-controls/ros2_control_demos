@@ -47,15 +47,14 @@ def generate_launch_description():
         "robot_description": ParameterValue(value=robot_description_content, value_type=str)
     }
 
-    controller_parameters = ParameterFile(
-        PathJoinSubstitution(
-            [
-                FindPackageShare("ros2_control_demo_example_18"),
-                "config",
-                "open_duck_mini_controllers.yaml",
-            ]
-        ),
+    controller_config_path = PathJoinSubstitution(
+        [
+            FindPackageShare("ros2_control_demo_example_18"),
+            "config",
+            "open_duck_mini_controllers.yaml",
+        ]
     )
+    controller_parameters = ParameterFile(controller_config_path)
 
     # Publishes TF from joint states; simulation model from MuJoCo
     robot_state_publisher_node = Node(
@@ -84,6 +83,8 @@ def generate_launch_description():
         name="spawn_joint_state_broadcaster",
         arguments=[
             "joint_state_broadcaster",
+            "--param-file",
+            controller_config_path,
         ],
         output="both",
     )
@@ -94,6 +95,8 @@ def generate_launch_description():
         name="spawn_state_interfaces_broadcaster",
         arguments=[
             "state_interfaces_broadcaster",
+            "--param-file",
+            controller_config_path,
         ],
         output="both",
     )
@@ -104,6 +107,8 @@ def generate_launch_description():
         name="spawn_motion_controller",
         arguments=[
             "motion_controller",
+            "--param-file",
+            controller_config_path,
         ],
         output="both",
     )
