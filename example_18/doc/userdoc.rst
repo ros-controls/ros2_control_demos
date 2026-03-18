@@ -32,7 +32,7 @@ Prerequisites
 Dependencies
 ~~~~~~~~~~~~
 
-This demo requires `mujoco_ros2_control <https://github.com/ros-controls/mujoco_ros2_control>`_ and a custom hardware interface (``DuckMiniMujocoSystemInterface``) that adds foot contact detection. It also depends on ``example_18_motion_controller_msgs`` (provides ``VelocityCommandWithHead``). Follow the mujoco_ros2_control installation instructions for your ROS 2 distro.
+This demo requires `mujoco_ros2_control <https://github.com/ros-controls/mujoco_ros2_control>`_ and a custom hardware interface (``DuckMiniMujocoSystemInterface``) that adds foot contact detection. Follow the mujoco_ros2_control installation instructions for your ROS 2 distro.
 
 ONNX Runtime
 ~~~~~~~~~~~~
@@ -85,12 +85,12 @@ Build
    colcon build --symlink-install --packages-select mujoco_ros2_control
    source install/setup.bash
 
-2. Build example_18_motion_controller_msgs and example_18:
+2. Build example_18:
 
 .. code-block:: bash
 
    cd ~/ros2_ws
-   colcon build --symlink-install --packages-select example_18_motion_controller_msgs ros2_control_demo_example_18
+   colcon build --symlink-install --packages-select ros2_control_demo_example_18
    source install/setup.bash
 
 3. (Optional) Verify the URDF in RViz:

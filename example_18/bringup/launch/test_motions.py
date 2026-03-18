@@ -27,7 +27,7 @@ Notes:
 
 import rclpy
 from rclpy.node import Node
-from example_18_motion_controller_msgs.msg import VelocityCommandWithHead
+from ros2_control_demo_example_18.msg import VelocityCommandWithHead
 import time
 
 

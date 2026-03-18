@@ -205,11 +205,10 @@ CallbackReturn MotionController::on_configure(const rclcpp_lifecycle::State & /*
     [this](const control_msgs::msg::Keys::SharedPtr msg) { rt_interface_names_.set(msg->keys); });
 
   velocity_command_subscriber_ =
-    get_node()
-      ->create_subscription<example_18_motion_controller_msgs::msg::VelocityCommandWithHead>(
-        velocity_command_topic_, rclcpp::SystemDefaultsQoS(),
-        [this](const example_18_motion_controller_msgs::msg::VelocityCommandWithHead::SharedPtr msg)
-        { rt_velocity_command_.set(*msg); });
+    get_node()->create_subscription<ros2_control_demo_example_18::msg::VelocityCommandWithHead>(
+      velocity_command_topic_, rclcpp::SystemDefaultsQoS(),
+      [this](const ros2_control_demo_example_18::msg::VelocityCommandWithHead::SharedPtr msg)
+      { rt_velocity_command_.set(*msg); });
 
   RCLCPP_DEBUG(get_node()->get_logger(), "Configure complete");
   return CallbackReturn::SUCCESS;
@@ -251,7 +250,7 @@ return_type MotionController::update(const rclcpp::Time & /*time*/, const rclcpp
   control_msgs::msg::Float64Values interface_data = interface_data_op.value();
 
   auto velocity_cmd_op = rt_velocity_command_.try_get();
-  example_18_motion_controller_msgs::msg::VelocityCommandWithHead velocity_cmd;
+  ros2_control_demo_example_18::msg::VelocityCommandWithHead velocity_cmd;
   if (velocity_cmd_op.has_value())
   {
     velocity_cmd = velocity_cmd_op.value();

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(ros2_control_demo_example_18 LANGUAGES CXX)
+project(ros2_control_demo_example_18 LANGUAGES C CXX)
 
 find_package(ros2_control_cmake REQUIRED)
 set_compiler_options()
@@ -11,7 +11,6 @@ set(THIS_PACKAGE_INCLUDE_DEPENDS
   control_msgs
   controller_interface
   geometry_msgs
-  example_18_motion_controller_msgs
   generate_parameter_library
   hardware_interface
   mujoco_ros2_control
@@ -37,9 +36,15 @@ endif()
 
 find_package(backward_ros REQUIRED)
 find_package(ament_cmake REQUIRED)
+find_package(rosidl_default_generators REQUIRED)
 foreach(Dependency IN ITEMS ${THIS_PACKAGE_INCLUDE_DEPENDS})
   find_package(${Dependency} REQUIRED)
 endforeach()
+
+rosidl_generate_interfaces(${PROJECT_NAME}
+  "msg/VelocityCommandWithHead.msg"
+  DEPENDENCIES geometry_msgs
+)
 
 # Example 18 requires ONNX Runtime; skip building if not found
 find_package(onnxruntime_vendor QUIET)
@@ -77,22 +82,25 @@ generate_parameter_library(motion_controller_parameters
 )
 
 # Main library (hardware + controller)
-add_library(ros2_control_demo_example_18 SHARED
+add_library(${PROJECT_NAME}_lib SHARED
   hardware/duck_mini_mujoco_system_interface.cpp
   controller/src/motion_controller.cpp
 )
-target_compile_features(ros2_control_demo_example_18 PUBLIC cxx_std_17)
-target_include_directories(ros2_control_demo_example_18 PUBLIC
+set_target_properties(${PROJECT_NAME}_lib PROPERTIES OUTPUT_NAME ${PROJECT_NAME})
+target_compile_features(${PROJECT_NAME}_lib PUBLIC cxx_std_17)
+target_include_directories(${PROJECT_NAME}_lib PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/hardware/include>
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/controller/include>
   $<INSTALL_INTERFACE:include>
 )
-target_link_libraries(ros2_control_demo_example_18
+rosidl_get_typesupport_target(cpp_typesupport_target ${PROJECT_NAME} "rosidl_typesupport_cpp")
+
+target_link_libraries(${PROJECT_NAME}_lib
   ament_index_cpp::ament_index_cpp
   motion_controller_parameters
   ${control_msgs_TARGETS}
   ${geometry_msgs_TARGETS}
-  ${example_18_motion_controller_msgs_TARGETS}
+  ${cpp_typesupport_target}
   ${std_msgs_TARGETS}
   ${std_srvs_TARGETS}
   ${nav_msgs_TARGETS}
@@ -101,17 +109,17 @@ target_link_libraries(ros2_control_demo_example_18
   transmission_interface::transmission_interface
   ${mujoco_ros2_control_msgs_TARGETS}
 )
-target_link_libraries(ros2_control_demo_example_18
+
+target_link_libraries(${PROJECT_NAME}_lib
   observation_formatter
   action_processor
-  ${control_msgs_TARGETS}
   mujoco_ros2_control::mujoco_ros2_control
   hardware_interface::hardware_interface
   controller_interface::controller_interface
   pluginlib::pluginlib
   realtime_tools::realtime_tools
 )
-target_link_libraries(ros2_control_demo_example_18 onnxruntime::onnxruntime)
+target_link_libraries(${PROJECT_NAME}_lib onnxruntime::onnxruntime)
 
 pluginlib_export_plugin_description_file(hardware_interface ros2_control_demo_example_18.xml)
 pluginlib_export_plugin_description_file(controller_interface ros2_control_demo_example_18.xml)
@@ -122,7 +130,7 @@ install(DIRECTORY hardware/include/ DESTINATION include)
 install(DIRECTORY bringup/ DESTINATION share/ros2_control_demo_example_18)
 install(DIRECTORY description/ DESTINATION share/ros2_control_demo_example_18/description)
 install(DIRECTORY onnx_model/ DESTINATION share/ros2_control_demo_example_18/onnx_model)
-install(TARGETS observation_formatter action_processor motion_controller_parameters ros2_control_demo_example_18
+install(TARGETS observation_formatter action_processor motion_controller_parameters ${PROJECT_NAME}_lib
   EXPORT export_ros2_control_demo_example_18
   RUNTIME DESTINATION bin
   ARCHIVE DESTINATION lib
@@ -170,13 +178,12 @@ if(BUILD_TESTING)
   ament_add_gtest(test_contact_detection hardware/test/test_contact_detection.cpp)
   target_include_directories(test_contact_detection PRIVATE ${PROJECT_SOURCE_DIR}/hardware/include)
   target_link_libraries(test_contact_detection
-    ros2_control_demo_example_18
+    ${PROJECT_NAME}_lib
     mujoco::mujoco
     rclcpp::rclcpp
     rclcpp_lifecycle::rclcpp_lifecycle
     hardware_interface::hardware_interface
     mujoco_ros2_control::mujoco_ros2_control
-    ${example_18_motion_controller_msgs_TARGETS}
   )
 
   ament_add_gtest(test_motion_controller_error_handling
@@ -185,5 +192,5 @@ endif()
 
 ## EXPORTS
 ament_export_targets(export_ros2_control_demo_example_18 HAS_LIBRARY_TARGET)
-ament_export_dependencies(${THIS_PACKAGE_INCLUDE_DEPENDS} onnxruntime_vendor)
+ament_export_dependencies(${THIS_PACKAGE_INCLUDE_DEPENDS} rosidl_default_runtime onnxruntime_vendor)
 ament_package()

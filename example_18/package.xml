@@ -15,13 +15,13 @@
   <author email="juliajster@gmail.com">Julia Jia</author>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
+  <buildtool_depend>rosidl_default_generators</buildtool_depend>
   <build_depend>ros2_control_cmake</build_depend>
 
   <depend>backward_ros</depend>
   <depend>control_msgs</depend>
   <depend>geometry_msgs</depend>
   <depend>hardware_interface</depend>
-  <depend>example_18_motion_controller_msgs</depend>
   <depend>generate_parameter_library</depend>
   <depend>pluginlib</depend>
   <depend>rclcpp</depend>
@@ -49,6 +49,7 @@
   <exec_depend>rqt_joint_trajectory_controller</exec_depend>
   <exec_depend>rviz2</exec_depend>
   <exec_depend>xacro</exec_depend>
+  <exec_depend>rosidl_default_runtime</exec_depend>
 
   <test_depend>ament_cmake_gtest</test_depend>
   <test_depend>ament_cmake_pytest</test_depend>
@@ -58,6 +59,8 @@
   <test_depend>launch</test_depend>
   <test_depend>liburdfdom-tools</test_depend>
   <test_depend>rclpy</test_depend>
+
+  <member_of_group>rosidl_interface_packages</member_of_group>
 
   <export>
     <build_type>ament_cmake</build_type>
