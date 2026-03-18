@@ -1,3 +1,7 @@
+:github_url: https://github.com/ros-controls/ros2_control_demos/blob/{REPOS_FILE_BRANCH}/example_18/doc/userdoc.rst
+
+.. _ros2_control_demos_example_18_userdoc:
+
 ros2_control_demo_example_18
 ================================
 
@@ -10,7 +14,13 @@ You need: mujoco_ros2_control, ONNX Runtime, a trained ONNX model, and ROS 2 (te
 Robot description
 ------------------
 
-The demo uses URDF, MuJoCo XML models, and ros2_control configuration from ``description/``. Meshes come from Open_Duck_Mini; the MuJoCo model (open_duck_mini_v2.xml, scene.xml) is adapted from Open_Duck_Playground with BAM-tuned actuator parameters. The custom hardware interface adds foot contact detection via ``mjData->contact[]``. See `description/README.md <../description/README.md>`_ for sources, structure, and modifications.
+The demo uses URDF, MuJoCo XML models, and ros2_control configuration from ``description/``.
+
+* The meshes come from `Open_Duck_Mini <https://github.com/apirrone/Open_Duck_Mini/tree/v2/mini_bdx/robots/open_duck_mini_v2>`__.
+* The MuJoCo model (open_duck_mini_v2.xml, scene.xml) is adapted from * Open_Duck_Playground with BAM-tuned actuator parameters.
+A custom hardware interface adds foot contact detection via ``mjData->contact[]``.
+
+See `description/README.md <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_18/description/README.md>`_ for sources, structure, and modifications.
 
 Prerequisites
 -------------
