@@ -50,11 +50,13 @@ If the library is not found after install:
 Model and workspace
 ~~~~~~~~~~~~~~~~~~~
 
-Place your ONNX model in ``onnx_model/`` or set ``model_path`` in ``bringup/config/open_duck_mini_controllers.yaml``. Default: ``onnx_model/open_duck_mini_policy.onnx``. Source your ROS 2 workspace before running.
+The ONNX model from ``model_path`` in ``bringup/config/open_duck_mini_controllers.yaml`` (Default: ``onnx_model/open_duck_mini_policy.onnx``) will be used. There are several options:
 
-You can use a baseline model from `Open_Duck_Mini <https://github.com/apirrone/Open_Duck_Mini>`_ (e.g. ``BEST_WALK_ONNX_2.onnx``). The bundled model was trained via `Open_Duck_Playground <https://github.com/apirrone/Open_Duck_Playground>`_ for MuJoCo-to-MuJoCo+ros2_control transfer. we have validated the model trained in MuJoCo via Python reference (direct ONNX inference in MuJoCo) walks forward successfully.
-
-If you want to create your own: clone `Open_Duck_Playground <https://github.com/apirrone/Open_Duck_Playground>`_, run ``uv run playground/open_duck_mini_v2/runner.py``. The ``policy_params_fn`` in ``playground/common/runner.py`` exports ONNX at each checkpoint.
+* ``onnx_model/open_duck_mini_policy.onnx``: The bundled model was trained via `Open_Duck_Playground <https://github.com/apirrone/Open_Duck_Playground>`_ for MuJoCo-to-MuJoCo+ros2_control transfer. we have validated the model trained in MuJoCo via Python reference (direct ONNX inference in MuJoCo) walks forward successfully.
+* A custom policy. Place your ONNX model in ``onnx_model/``, then build and source your ROS 2 workspace before running.
+ 
+   * You can use a baseline model from `Open_Duck_Mini <https://github.com/apirrone/Open_Duck_Mini>`_ (e.g. ``BEST_WALK_ONNX_2.onnx``).
+   * If you want to create your own: clone `Open_Duck_Playground <https://github.com/apirrone/Open_Duck_Playground>`_, run ``uv run playground/open_duck_mini_v2/runner.py``. The ``policy_params_fn`` in ``playground/common/runner.py`` exports ONNX at each checkpoint.
 
 Build
 -----
