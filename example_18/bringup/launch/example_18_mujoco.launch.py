@@ -32,8 +32,8 @@ def generate_launch_description():
             " ",
             PathJoinSubstitution(
                 [
-                    FindPackageShare("ros2_control_demo_example_18"),
-                    "description",
+                    FindPackageShare("ros2_control_demo_description"),
+                    "openduckmini",
                     "urdf",
                     "open_duck_mini.urdf.xacro",
                 ]

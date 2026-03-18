@@ -128,7 +128,7 @@ pluginlib_export_plugin_description_file(controller_interface ros2_control_demo_
 install(DIRECTORY controller/include/ DESTINATION include/motion_controller)
 install(DIRECTORY hardware/include/ DESTINATION include)
 install(DIRECTORY bringup/ DESTINATION share/ros2_control_demo_example_18)
-install(DIRECTORY description/ DESTINATION share/ros2_control_demo_example_18/description)
+install(DIRECTORY description/launch DESTINATION share/ros2_control_demo_example_18/description)
 install(DIRECTORY onnx_model/ DESTINATION share/ros2_control_demo_example_18/onnx_model)
 install(TARGETS observation_formatter action_processor motion_controller_parameters ${PROJECT_NAME}_lib
   EXPORT export_ros2_control_demo_example_18

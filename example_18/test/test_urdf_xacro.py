@@ -23,12 +23,12 @@ from ament_index_python.packages import get_package_share_directory
 
 
 def test_urdf_xacro():
-    description_package = "ros2_control_demo_example_18"
+    description_package = "ros2_control_demo_description"
     description_file = "open_duck_mini.urdf.xacro"
 
     description_file_path = os.path.join(
         get_package_share_directory(description_package),
-        "description",
+        "openduckmini",
         "urdf",
         description_file,
     )

@@ -12,10 +12,10 @@
       <xacro:unless value="${use_mock_hardware}">
         <hardware>
           <plugin>ros2_control_demo_example_18/DuckMiniMujocoSystemInterface</plugin>
-          <param name="mujoco_model">$(find ros2_control_demo_example_18)/description/mujoco/scene.xml</param>
-          <param name="meshdir">$(find ros2_control_demo_example_18)/description/assets</param>
+          <param name="mujoco_model">$(find ros2_control_demo_description)/openduckmini/mujoco/scene.xml</param>
+          <param name="meshdir">$(find ros2_control_demo_description)/openduckmini/assets</param>
           <!-- External PID disabled: MuJoCo built-in actuators used -->
-          <param name="override_start_position_file">$(find ros2_control_demo_example_18)/description/mujoco/start_positions.xml</param>
+          <param name="override_start_position_file">$(find ros2_control_demo_description)/openduckmini/mujoco/start_positions.xml</param>
           <param name="headless">${headless}</param>
         </hardware>
       </xacro:unless>

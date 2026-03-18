@@ -30,7 +30,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "description_package",
-            default_value="ros2_control_demo_example_18",
+            default_value="ros2_control_demo_description",
             description="Description package with robot URDF/xacro files. Usually the argument \
         is not set, it enables use of a custom description.",
         )
@@ -74,7 +74,7 @@ def generate_launch_description():
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
             PathJoinSubstitution(
-                [FindPackageShare(description_package), "description", "urdf", description_file]
+                [FindPackageShare(description_package), "openduckmini", "urdf", description_file]
             ),
             " ",
             "prefix:=",
@@ -99,8 +99,8 @@ def generate_launch_description():
     rviz_config_file = PathJoinSubstitution(
         [
             FindPackageShare(description_package),
-            "description",
-            "launch",
+            "openduckmini",
+            "rviz",
             "open_duck_mini.rviz",
         ]
     )

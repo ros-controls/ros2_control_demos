@@ -12,7 +12,7 @@
   <link name="trunk_assembly">
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/body_front.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/body_front.stl"/>
       </geometry>
       <origin xyz="-0.019000 0.000000 0.064891" rpy="0.000000 0.000000 0.000000"/>
       <material name="white">
@@ -21,7 +21,7 @@
     </visual>
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/body_back.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/body_back.stl"/>
       </geometry>
       <origin xyz="-0.019000 0.000000 0.064891" rpy="0.000000 0.000000 0.000000"/>
       <material name="white">
@@ -30,7 +30,7 @@
     </visual>
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/body_middle_bottom.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/body_middle_bottom.stl"/>
       </geometry>
       <origin xyz="-0.019000 -0.000000 0.064891" rpy="0.000000 0.000000 0.000000"/>
       <material name="white">
@@ -39,7 +39,7 @@
     </visual>
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/body_middle_top.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/body_middle_top.stl"/>
       </geometry>
       <origin xyz="-0.019000 0.000000 0.064891" rpy="0.000000 0.000000 0.000000"/>
       <material name="white">
@@ -48,7 +48,7 @@
     </visual>
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/trunk_bottom.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/trunk_bottom.stl"/>
       </geometry>
       <origin xyz="-0.019000 0.000000 0.064891" rpy="-0.000000 0.000000 0.000000"/>
       <material name="white">
@@ -57,7 +57,7 @@
     </visual>
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/trunk_top.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/trunk_top.stl"/>
       </geometry>
       <origin xyz="-0.019000 -0.000000 0.064891" rpy="-0.000000 -0.000000 0.000000"/>
       <material name="white">
@@ -74,7 +74,7 @@
   <link name="left_hip_yaw_link">
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/roll_motor_bottom.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/roll_motor_bottom.stl"/>
       </geometry>
       <origin xyz="-0.000000 -0.035000 0.019050" rpy="-0.000000 0.000000 -0.000000"/>
       <material name="white">
@@ -83,7 +83,7 @@
     </visual>
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/roll_motor_top.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/roll_motor_top.stl"/>
       </geometry>
       <origin xyz="0.000000 -0.035000 0.019050" rpy="0.000000 -0.000000 -0.000000"/>
       <material name="white">
@@ -108,7 +108,7 @@
   <link name="left_hip_roll_link">
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/left_roll_to_pitch.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/left_roll_to_pitch.stl"/>
       </geometry>
       <origin xyz="-0.035000 -0.065000 -0.017050" rpy="1.570796 1.570796 0.000000"/>
       <material name="duck_yellow">
@@ -133,7 +133,7 @@
   <link name="right_hip_roll_link">
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/right_roll_to_pitch.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/right_roll_to_pitch.stl"/>
       </geometry>
       <origin xyz="0.035000 -0.065000 0.017052" rpy="1.570796 1.570796 0.000000"/>
       <material name="duck_yellow">
@@ -159,7 +159,7 @@
   <link name="left_hip_pitch_link">
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/left_cache.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/left_cache.stl"/>
       </geometry>
       <origin xyz="0.046060 0.065000 0.109150" rpy="-1.570796 0.000000 0.000000"/>
       <material name="white">
@@ -168,7 +168,7 @@
     </visual>
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/leg_spacer.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/leg_spacer.stl"/>
       </geometry>
       <origin xyz="0.046060 0.143650 0.109250" rpy="-1.570796 0.000000 0.000000"/>
       <material name="white">
@@ -177,7 +177,7 @@
     </visual>
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/left_knee_to_ankle_right_sheet.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/left_knee_to_ankle_right_sheet.stl"/>
       </geometry>
       <origin xyz="0.046060 0.143650 0.109150" rpy="-1.570796 -0.000000 -0.000000"/>
       <material name="white">
@@ -186,7 +186,7 @@
     </visual>
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/left_knee_to_ankle_left_sheet.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/left_knee_to_ankle_left_sheet.stl"/>
       </geometry>
       <origin xyz="0.046060 0.143650 0.109150" rpy="-1.570796 0.000000 0.000000"/>
       <material name="white">
@@ -211,7 +211,7 @@
   <link name="left_knee_link">
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/leg_spacer.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/leg_spacer.stl"/>
       </geometry>
       <origin xyz="0.046060 0.143650 0.109250" rpy="-1.570796 0.000000 0.000000"/>
       <material name="white">
@@ -220,7 +220,7 @@
     </visual>
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/left_knee_to_ankle_right_sheet.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/left_knee_to_ankle_right_sheet.stl"/>
       </geometry>
       <origin xyz="0.046060 0.143650 0.109150" rpy="-1.570796 0.000000 0.000000"/>
       <material name="white">
@@ -229,7 +229,7 @@
     </visual>
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/left_knee_to_ankle_left_sheet.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/left_knee_to_ankle_left_sheet.stl"/>
       </geometry>
       <origin xyz="0.046060 0.143650 0.109150" rpy="-1.570796 -0.000000 -0.000000"/>
       <material name="white">
@@ -254,7 +254,7 @@
   <link name="left_ankle_link">
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/foot_side.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/foot_side.stl"/>
       </geometry>
       <origin xyz="0.046060 0.222300 0.109050" rpy="-1.570796 -0.000000 -0.000000"/>
       <material name="duck_feet_yellow">
@@ -263,7 +263,7 @@
     </visual>
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/foot_bottom_tpu.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/foot_bottom_tpu.stl"/>
       </geometry>
       <origin xyz="0.046060 0.222800 0.109550" rpy="-1.570796 0.000000 0.000000"/>
       <material name="duck_feet_yellow">
@@ -272,7 +272,7 @@
     </visual>
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/foot_bottom_pla.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/foot_bottom_pla.stl"/>
       </geometry>
       <origin xyz="0.046060 0.222800 0.109550" rpy="-1.570796 0.000000 0.000000"/>
       <material name="duck_feet_yellow">
@@ -281,7 +281,7 @@
     </visual>
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/foot_top.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/foot_top.stl"/>
       </geometry>
       <origin xyz="0.046060 0.222300 0.109050" rpy="-1.570796 -0.000000 -0.000000"/>
       <material name="duck_feet_yellow">
@@ -306,7 +306,7 @@
   <link name="neck_pitch_link">
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/neck_left_sheet.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/neck_left_sheet.stl"/>
       </geometry>
       <origin xyz="-0.020000 -0.025110 0.019050" rpy="-1.570796 -0.000000 -0.000000"/>
       <material name="white">
@@ -315,7 +315,7 @@
     </visual>
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/neck_right_sheet.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/neck_right_sheet.stl"/>
       </geometry>
       <origin xyz="-0.020000 -0.025110 0.019050" rpy="-1.570796 0.000000 0.000000"/>
       <material name="white">
@@ -340,7 +340,7 @@
   <link name="head_pitch_link">
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/head_pitch_to_yaw.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/head_pitch_to_yaw.stl"/>
       </geometry>
       <origin xyz="-0.020000 -0.091110 0.019050" rpy="-1.570796 0.000000 0.000000"/>
       <material name="white">
@@ -365,7 +365,7 @@
   <link name="head_yaw_link">
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/head_yaw_to_roll.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/head_yaw_to_roll.stl"/>
       </geometry>
       <origin xyz="-0.020000 0.000000 -0.148210" rpy="0.000000 -0.000000 0.000000"/>
       <material name="white">
@@ -390,7 +390,7 @@
   <link name="head_roll_link">
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/right_antenna_holder.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/right_antenna_holder.stl"/>
       </geometry>
       <origin xyz="-0.129060 -0.000000 0.060950" rpy="1.535196 1.570796 1.535196"/>
       <material name="white">
@@ -399,7 +399,7 @@
     </visual>
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/antenna.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/antenna.stl"/>
       </geometry>
       <origin xyz="-0.108080 0.142212 0.060950" rpy="0.000030 1.570796 -0.200000"/>
       <material name="white">
@@ -408,7 +408,7 @@
     </visual>
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/antenna.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/antenna.stl"/>
       </geometry>
       <origin xyz="-0.128080 0.000248 0.060950" rpy="0.000000 1.570796 0.000000"/>
       <material name="white">
@@ -417,7 +417,7 @@
     </visual>
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/left_antenna_holder.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/left_antenna_holder.stl"/>
       </geometry>
       <origin xyz="-0.129060 0.000000 0.060950" rpy="1.535196 1.570796 1.535196"/>
       <material name="white">
@@ -426,7 +426,7 @@
     </visual>
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/head_bot_sheet.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/head_bot_sheet.stl"/>
       </geometry>
       <origin xyz="-0.129060 0.000000 0.060950" rpy="1.371126 1.570796 1.371126"/>
       <material name="white">
@@ -435,7 +435,7 @@
     </visual>
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/head.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/head.stl"/>
       </geometry>
       <origin xyz="-0.129060 0.000000 0.060950" rpy="1.390891 1.570796 1.390891"/>
       <material name="white">
@@ -460,7 +460,7 @@
   <link name="right_hip_yaw_link">
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/roll_motor_bottom.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/roll_motor_bottom.stl"/>
       </geometry>
       <origin xyz="-0.000000 -0.035000 0.019050" rpy="0.000000 -0.000000 -0.000000"/>
       <material name="white">
@@ -469,7 +469,7 @@
     </visual>
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/roll_motor_top.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/roll_motor_top.stl"/>
       </geometry>
       <origin xyz="0.000000 -0.035000 0.019050" rpy="-0.000000 0.000000 -0.000000"/>
       <material name="white">
@@ -494,7 +494,7 @@
   <link name="right_hip_pitch_link">
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/right_cache.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/right_cache.stl"/>
       </geometry>
       <origin xyz="0.016060 -0.065000 0.109200" rpy="1.570796 0.000000 -0.000000"/>
       <material name="white">
@@ -503,7 +503,7 @@
     </visual>
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/leg_spacer.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/leg_spacer.stl"/>
       </geometry>
       <origin xyz="0.016060 -0.143650 -0.072150" rpy="1.570796 0.000000 -0.000000"/>
       <material name="white">
@@ -512,7 +512,7 @@
     </visual>
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/left_knee_to_ankle_right_sheet.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/left_knee_to_ankle_right_sheet.stl"/>
       </geometry>
       <origin xyz="0.016060 -0.143650 -0.072050" rpy="1.570796 0.000000 -0.000000"/>
       <material name="white">
@@ -521,7 +521,7 @@
     </visual>
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/left_knee_to_ankle_left_sheet.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/left_knee_to_ankle_left_sheet.stl"/>
       </geometry>
       <origin xyz="0.016060 -0.143650 -0.072050" rpy="1.570796 0.000000 -0.000000"/>
       <material name="white">
@@ -546,7 +546,7 @@
   <link name="right_knee_link">
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/leg_spacer.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/leg_spacer.stl"/>
       </geometry>
       <origin xyz="0.016060 0.143650 0.109250" rpy="-1.570796 0.000000 0.000000"/>
       <material name="white">
@@ -555,7 +555,7 @@
     </visual>
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/left_knee_to_ankle_right_sheet.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/left_knee_to_ankle_right_sheet.stl"/>
       </geometry>
       <origin xyz="0.016060 0.143650 0.109150" rpy="-1.570796 -0.000000 -0.000000"/>
       <material name="white">
@@ -564,7 +564,7 @@
     </visual>
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/left_knee_to_ankle_left_sheet.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/left_knee_to_ankle_left_sheet.stl"/>
       </geometry>
       <origin xyz="0.016060 0.143650 0.109150" rpy="-1.570796 0.000000 0.000000"/>
       <material name="white">
@@ -589,7 +589,7 @@
   <link name="right_ankle_link">
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/foot_side.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/foot_side.stl"/>
       </geometry>
       <origin xyz="0.016060 0.222300 0.109050" rpy="-1.570796 -0.000000 -0.000000"/>
       <material name="duck_feet_yellow">
@@ -598,7 +598,7 @@
     </visual>
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/foot_bottom_tpu.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/foot_bottom_tpu.stl"/>
       </geometry>
       <origin xyz="0.016560 0.222800 0.109550" rpy="-1.570796 -0.000000 -0.000000"/>
       <material name="duck_feet_yellow">
@@ -607,7 +607,7 @@
     </visual>
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/foot_bottom_pla.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/foot_bottom_pla.stl"/>
       </geometry>
       <origin xyz="0.016560 0.222800 0.109550" rpy="-1.570796 -0.000000 -0.000000"/>
       <material name="duck_feet_yellow">
@@ -616,7 +616,7 @@
     </visual>
     <visual>
       <geometry>
-        <mesh filename="package://ros2_control_demo_example_18/description/assets/foot_top.stl"/>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/foot_top.stl"/>
       </geometry>
       <origin xyz="0.016060 0.222300 0.109050" rpy="-1.570796 -0.000000 -0.000000"/>
       <material name="duck_feet_yellow">

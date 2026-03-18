@@ -33,9 +33,9 @@ The Playground model (`open_duck_mini_v2.xml`) includes:
 
 ### Mesh URI Updates
 
-All mesh URIs in `mujoco/robot.urdf` use ``package://ros2_control_demo_example_18/description/assets/filename.stl``.
+All mesh URIs in `mujoco/robot.urdf` use ``package://ros2_control_demo_description/openduckmini/assets/filename.stl``.
 
-The meshes are installed in ``description/assets/``. The URDF is included via ``open_duck_mini.urdf.xacro``, which pulls in ``mujoco/robot.urdf`` and the ros2_control xacro.
+The meshes are installed in ``openduckmini/assets/``. The URDF is included via ``open_duck_mini.urdf.xacro``, which pulls in ``mujoco/robot.urdf`` and the ros2_control xacro.
 
 ### ros2_control Sensor Configuration
 
