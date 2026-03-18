@@ -8,10 +8,9 @@ ros2_control_demo_example_18
 .. image:: open_duck_mini.png
    :align: center
    :alt: Open Duck Mini in MuJoCo
+   :width: 400
 
-This demo runs a policy-driven
-`Open Duck Mini v2 <https://github.com/apirrone/Open_Duck_Mini/tree/v2/mini_bdx/robots/open_duck_mini_v2>`_
-in MuJoCo, using ONNX inference for locomotion and streaming observations via ``state_interfaces_broadcaster``.
+This demo runs a policy-driven `Open Duck Mini v2 <https://github.com/apirrone/Open_Duck_Mini/tree/v2/mini_bdx/robots/open_duck_mini_v2>`_ in MuJoCo, using ONNX inference for locomotion and streaming observations via ``state_interfaces_broadcaster``.
 
 You need: mujoco_ros2_control, ONNX Runtime, a trained ONNX model, and ROS 2 (tested on Jazzy).
 
