@@ -101,6 +101,24 @@ The test script publishes ``VelocityCommandWithHead`` messages (base_velocity + 
 
 Timing: 0.002s sim timestep in ``scene.xml``, 50 Hz controller. Each control update spans 10 simulation steps, matching the reference training setup.
 
+Design overview
+---------------
+
+At a high level, the demo uses the following control structure.
+
+Control pipeline: (1) Observation formatter — sensor data (IMU, joint states, velocity commands, foot contacts) into the model's observation vector; (2) ONNX inference — policy outputs raw actions; (3) Action formatter — scale, clamp to joint limits, rate limit, then write to hardware.
+
+Data flow: MuJoCo → hardware interface (joint states, IMU, contact sensors) → state_interfaces_broadcaster → ``/state_interfaces_broadcaster/values`` → MotionController (subscribes and runs ONNX) → command interfaces → hardware → MuJoCo. User commands: ``/motion_controller/cmd_velocity_with_head`` (VelocityCommandWithHead: base_velocity + head_commands).
+
+Hardware: ``DuckMiniMujocoSystemInterface`` adds foot contact detection via ``mjData->contact[]``; sensors with ``mujoco_type="contact"`` expose ``contact_raw``. MuJoCo model uses BAM-tuned actuator parameters and built-in position actuators.
+
+Observation vector (matches training): gyro, accelerometer, velocity commands (7D), joint positions/velocities, last three actions, motor targets, feet contacts (2), imitation phase (cos/sin). Total size 17 + 6*N (N=14). Imitation phase must match training (e.g. period 27 steps).
+
+ONNX integration
+----------------
+
+MotionController uses ONNX Runtime to turn the observation vector into joint commands. The observation (floats) is wrapped into an ``Ort::Value`` tensor and passed to the ONNX session, which returns an output tensor. The model outputs relative joint positions as floats; these are converted to doubles, then ActionProcessor scales them by ``action_scale`` (default 0.25), adds default joint positions, and sends the resulting absolute positions to the hardware. Default positions are taken from the first sensor read, or from ``default_joint_positions`` in the controller configuration.
+
 Current Limitations
 -------------------
 Occasionally, the robot may fall over. Further model fine-tuning or domain randomization can help improve robustness.
