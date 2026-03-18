@@ -102,10 +102,27 @@ int main(int argc, char ** argv)
   auto & last_point_msg = trajectory_msg.points.back();
   std::fill(last_point_msg.velocities.begin(), last_point_msg.velocities.end(), 0.0);
 
-  pub->publish(trajectory_msg);
-  while (rclcpp::ok())
+  auto started = node->now();
+  while (pub->get_subscription_count() == 0)
   {
+    if (node->now() - started > rclcpp::Duration(10, 0))
+    {
+      RCLCPP_ERROR(
+        node->get_logger(), "No subscribers connected after waiting for 10 seconds. Exiting.");
+      return 1;
+    }
+    RCLCPP_INFO(
+      node->get_logger(), "Waiting for subscribers to connect to topic %s", pub->get_topic_name());
+    rclcpp::sleep_for(std::chrono::milliseconds(500));
   }
+
+  RCLCPP_INFO(
+    node->get_logger(), "Publishing trajectory with length %ld", trajectory_msg.points.size());
+
+  pub->publish(trajectory_msg);
+
+  rclcpp::spin(node);
+  rclcpp::shutdown();
 
   return 0;
 }
