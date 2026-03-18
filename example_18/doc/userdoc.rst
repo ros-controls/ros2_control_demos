@@ -5,6 +5,10 @@
 ros2_control_demo_example_18
 ================================
 
+.. image:: open_duck_mini.png
+   :align: center
+   :alt: Open Duck Mini in MuJoCo
+
 This demo runs a policy-driven
 `Open Duck Mini v2 <https://github.com/apirrone/Open_Duck_Mini/tree/v2/mini_bdx/robots/open_duck_mini_v2>`_
 in MuJoCo, using ONNX inference for locomotion and streaming observations via ``state_interfaces_broadcaster``.
@@ -18,6 +22,7 @@ The demo uses URDF, MuJoCo XML models, and ros2_control configuration from ``des
 
 * The meshes come from `Open_Duck_Mini <https://github.com/apirrone/Open_Duck_Mini/tree/v2/mini_bdx/robots/open_duck_mini_v2>`__.
 * The MuJoCo model (open_duck_mini_v2.xml, scene.xml) is adapted from * Open_Duck_Playground with BAM-tuned actuator parameters.
+
 A custom hardware interface adds foot contact detection via ``mjData->contact[]``.
 
 See `description/README.md <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_18/description/README.md>`_ for sources, structure, and modifications.
@@ -64,7 +69,7 @@ The ONNX model from ``model_path`` in ``bringup/config/open_duck_mini_controller
 
 * ``onnx_model/open_duck_mini_policy.onnx``: The bundled model was trained via `Open_Duck_Playground <https://github.com/apirrone/Open_Duck_Playground>`_ for MuJoCo-to-MuJoCo+ros2_control transfer. we have validated the model trained in MuJoCo via Python reference (direct ONNX inference in MuJoCo) walks forward successfully.
 * A custom policy. Place your ONNX model in ``onnx_model/``, then build and source your ROS 2 workspace before running.
- 
+
    * You can use a baseline model from `Open_Duck_Mini <https://github.com/apirrone/Open_Duck_Mini>`_ (e.g. ``BEST_WALK_ONNX_2.onnx``).
    * If you want to create your own: clone `Open_Duck_Playground <https://github.com/apirrone/Open_Duck_Playground>`_, run ``uv run playground/open_duck_mini_v2/runner.py``. The ``policy_params_fn`` in ``playground/common/runner.py`` exports ONNX at each checkpoint.
 
@@ -118,13 +123,13 @@ Design overview
 
 At a high level, the demo uses the following control structure.
 
-Control pipeline: (1) Observation formatter — sensor data (IMU, joint states, velocity commands, foot contacts) into the model's observation vector; (2) ONNX inference — policy outputs raw actions; (3) Action formatter — scale, clamp to joint limits, rate limit, then write to hardware.
+* Control pipeline: (1) Observation formatter — sensor data (IMU, joint states, velocity commands, foot contacts) into the model's observation vector; (2) ONNX inference — policy outputs raw actions; (3) Action formatter — scale, clamp to joint limits, rate limit, then write to hardware.
 
-Data flow: MuJoCo → hardware interface (joint states, IMU, contact sensors) → state_interfaces_broadcaster → ``/state_interfaces_broadcaster/values`` → MotionController (subscribes and runs ONNX) → command interfaces → hardware → MuJoCo. User commands: ``/motion_controller/cmd_velocity_with_head`` (VelocityCommandWithHead: base_velocity + head_commands).
+* Data flow: MuJoCo → hardware interface (joint states, IMU, contact sensors) → state_interfaces_broadcaster → ``/state_interfaces_broadcaster/values`` → MotionController (subscribes and runs ONNX) → command interfaces → hardware → MuJoCo. User commands: ``/motion_controller/cmd_velocity_with_head`` (VelocityCommandWithHead: base_velocity + head_commands).
 
-Hardware: ``DuckMiniMujocoSystemInterface`` adds foot contact detection via ``mjData->contact[]``; sensors with ``mujoco_type="contact"`` expose ``contact_raw``. MuJoCo model uses BAM-tuned actuator parameters and built-in position actuators.
+* Hardware: ``DuckMiniMujocoSystemInterface`` adds foot contact detection via ``mjData->contact[]``; sensors with ``mujoco_type="contact"`` expose ``contact_raw``. MuJoCo model uses BAM-tuned actuator parameters and built-in position actuators.
 
-Observation vector (matches training): gyro, accelerometer, velocity commands (7D), joint positions/velocities, last three actions, motor targets, feet contacts (2), imitation phase (cos/sin). Total size 17 + 6*N (N=14). Imitation phase must match training (e.g. period 27 steps).
+* Observation vector (matches training): gyro, accelerometer, velocity commands (7D), joint positions/velocities, last three actions, motor targets, feet contacts (2), imitation phase (cos/sin). Total size 17 + 6*N (N=14). Imitation phase must match training (e.g. period 27 steps).
 
 ONNX integration
 ----------------
