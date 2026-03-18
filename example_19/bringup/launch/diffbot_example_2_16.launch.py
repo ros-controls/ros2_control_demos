@@ -15,7 +15,7 @@
 # Based on ros-controls/ros2_control_demos/example16/bringup/launch/diffbot.launch.py
 
 # Launch-file for ros2_control_demos Example 2 and 16
-#   Provide optional PID controllers
+#   Provides optional PID controllers
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, SetLaunchConfiguration

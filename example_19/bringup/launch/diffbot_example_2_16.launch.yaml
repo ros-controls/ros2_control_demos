@@ -1,10 +1,5 @@
 # Launch-file for ros2_control_demos Example 2 and 16
-#   Provide optional PID controllers
-#   This example has the following requirements:
-#     - launch_yaml
-#     - ros-controls/ros2_control_demos (and it's requirements), specifically
-#       - ros2_control_demo_example_2
-#       - ros2_control_demo_example_16
+#   Provides optional PID controllers
 launch:
   - arg:
       name: gui
