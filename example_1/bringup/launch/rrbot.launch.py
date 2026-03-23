@@ -20,6 +20,7 @@ from launch.substitutions import Command, LaunchConfiguration, PathSubstitution
 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
+from launch_ros.parameter_descriptions import ParameterFile
 
 
 def generate_launch_description():
@@ -30,6 +31,11 @@ def generate_launch_description():
                 default_value="true",
                 description="Start RViz2 automatically with this launch file.",
             ),
+            DeclareLaunchArgument(
+                "joint_prefix",
+                default_value="joint",
+                description="Prefix for joint names (used with allow_substs in spawner).",
+            ),
             # Control node
             Node(
                 package="controller_manager",
@@ -37,7 +43,7 @@ def generate_launch_description():
                 parameters=[
                     PathSubstitution(FindPackageShare("ros2_control_demo_example_1"))
                     / "config"
-                    / "rrbot_controllers.yaml"
+                    / "controller_manager.yaml"
                 ],
                 output="both",
             ),
@@ -75,17 +81,28 @@ def generate_launch_description():
             Node(
                 package="controller_manager",
                 executable="spawner",
-                arguments=["joint_state_broadcaster"],
-            ),
-            Node(
-                package="controller_manager",
-                executable="spawner",
                 arguments=[
-                    "forward_position_controller",
+                    "joint_state_broadcaster",
                     "--param-file",
                     PathSubstitution(FindPackageShare("ros2_control_demo_example_1"))
                     / "config"
                     / "rrbot_controllers.yaml",
+                ],
+            ),
+            Node(
+                package="controller_manager",
+                executable="spawner",
+                parameters=[
+                    {"joint_prefix": LaunchConfiguration("joint_prefix")},
+                    ParameterFile(
+                        PathSubstitution(FindPackageShare("ros2_control_demo_example_1"))
+                        / "config"
+                        / "rrbot_controllers.yaml",
+                        allow_substs=True,
+                    ),
+                ],
+                arguments=[
+                    "forward_position_controller",
                 ],
             ),
         ]
