@@ -16,7 +16,7 @@
 
   <xacro:create_link
       link_name="link_1"
-      xyz_offset="0 0 0"
+      xyz_offset="0 0 -0.182"
       rpy_offset="0 0 0"
       mesh_package="ros2_control_demo_description/r6bot"
       mesh_name="link_1"
@@ -24,7 +24,7 @@
 
   <xacro:create_link
       link_name="link_2"
-      xyz_offset="0 0 0"
+      xyz_offset="0 0 -0.168"
       rpy_offset="0 0 0"
       mesh_package="ros2_control_demo_description/r6bot"
       mesh_name="link_2"
@@ -32,7 +32,7 @@
 
   <xacro:create_link
       link_name="link_3"
-      xyz_offset="0 0 0"
+      xyz_offset="0 0 -0.144"
       rpy_offset="0 0 0"
       mesh_package="ros2_control_demo_description/r6bot"
       mesh_name="link_3"
@@ -40,7 +40,7 @@
 
   <xacro:create_link
       link_name="link_4"
-      xyz_offset="0 0 0"
+      xyz_offset="0 0 0.077"
       rpy_offset="0 0 0"
       mesh_package="ros2_control_demo_description/r6bot"
       mesh_name="link_4"
@@ -48,7 +48,7 @@
 
   <xacro:create_link
       link_name="link_5"
-      xyz_offset="0 0 0"
+      xyz_offset="0 0 0.113"
       rpy_offset="0 0 0"
       mesh_package="ros2_control_demo_description/r6bot"
       mesh_name="link_5"
@@ -56,7 +56,7 @@
 
   <xacro:create_link
       link_name="link_6"
-      xyz_offset="0 0 0"
+      xyz_offset="0 0 0.086"
       rpy_offset="0 0 0"
       mesh_package="ros2_control_demo_description/r6bot"
       mesh_name="link_6"
@@ -77,7 +77,7 @@
   <joint name="joint_1" type="revolute">
     <parent link="base_link"/>
     <child link="link_1"/>
-    <origin xyz="0 0 0.061584" rpy="0 0 0"/>
+    <origin xyz="0 0 0.244" rpy="0 0 0"/>
     <axis xyz="0 0 1"/>
     <limit effort="1000.0" lower="${-pi}" upper="${pi}" velocity="2.5"/>
   </joint>
@@ -85,7 +85,7 @@
   <joint name="joint_2" type="revolute">
     <parent link="link_1"/>
     <child link="link_2"/>
-    <origin xyz="-0.101717 0 0.182284" rpy="${-pi/2} -${pi/3} ${pi/2}"/>
+    <origin xyz="-0.27 0 0.0" rpy="${-pi/2} -${pi/2} ${pi/2}"/>
     <axis xyz="0 0 1"/>
     <limit effort="1000.0" lower="${-pi}" upper="${pi}" velocity="2.5"/>
   </joint>
@@ -93,7 +93,7 @@
   <joint name="joint_3" type="revolute">
     <parent link="link_2"/>
     <child link="link_3"/>
-    <origin xyz="0.685682 0 0.041861" rpy="0 ${pi} ${pi+pi/2}"/>
+    <origin xyz="0.686 0 -0.27" rpy="0 ${pi} ${pi+pi/2}"/>
     <axis xyz="0 0 1"/>
     <limit effort="1000.0" lower="${-pi}" upper="${pi}" velocity="2.5"/>
   </joint>
@@ -101,7 +101,7 @@
   <joint name="joint_4" type="revolute">
     <parent link="link_3"/>
     <child link="link_4"/>
-    <origin xyz="0.518777 0 0.067458" rpy="0 ${pi} ${pi+pi/6}"/>
+    <origin xyz="0.519 0 0" rpy="0 ${pi} ${pi}"/>
     <axis xyz="0 0 1"/>
     <limit effort="1000.0" lower="${-pi}" upper="${pi}" velocity="2.5"/>
   </joint>
@@ -109,7 +109,7 @@
   <joint name="joint_5" type="revolute">
     <parent link="link_4"/>
     <child link="link_5"/>
-    <origin xyz="0.112654 0 0.110903" rpy="${pi/2} ${pi} ${pi/2}"/>
+    <origin xyz="0.0 0 0.188" rpy="${pi/2} ${pi} ${pi/2}"/>
     <axis xyz="0 0 1"/>
     <limit effort="1000.0" lower="${-pi}" upper="${pi}" velocity="2.5"/>
   </joint>
@@ -117,7 +117,7 @@
   <joint name="joint_6" type="revolute">
     <parent link="link_5"/>
     <child link="link_6"/>
-    <origin xyz="-0.085976 0 0.133436" rpy="0 ${-pi/2} 0"/>
+    <origin xyz="0.0 0 0.246" rpy="0 ${-pi/2} 0"/>
     <axis xyz="0 0 1"/>
     <limit effort="1000.0" lower="${-pi}" upper="${pi}" velocity="2.5"/>
   </joint>
@@ -125,13 +125,13 @@
   <joint name="joint-ft_frame" type="fixed">
     <parent link="link_6"/>
     <child link="ft_frame"/>
-    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <origin xyz="0 0 0.086" rpy="0 0 0"/>
   </joint>
 
   <joint name="joint-tool" type="fixed">
     <parent link="ft_frame"/>
     <child link="tool0"/>
-    <origin xyz="0 0 .185" rpy="0 0 0"/>
+    <origin xyz="0 0 0.185" rpy="0 0 0"/>
   </joint>
 
 </xacro:macro>
