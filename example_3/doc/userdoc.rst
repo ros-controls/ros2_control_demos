@@ -91,7 +91,7 @@ Tutorial steps
    .. code-block:: shell
 
     joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
-    forward_velocity_controller[velocity_controllers/JointGroupVelocityController] active
+    forward_velocity_controller[forward_command_controller/ForwardCommandController] active
 
    Check how this output changes if you use the different launch file arguments described above.
 
