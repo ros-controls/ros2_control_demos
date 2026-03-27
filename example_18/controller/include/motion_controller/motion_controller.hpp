@@ -132,6 +132,22 @@ private:
   size_t stabilization_steps_;
   size_t onnx_active_steps_;
   size_t update_count_;
+
+
+  // Frequency interpolation state
+  /* explanation:
+   * - when the control loop runs faster than the inference rate
+   * - we run ONNX inference only every N ticks and linearly interpolate
+   * - joint commands between consecutive outputs. 
+   * - This prevents the 0 velocity
+   * - waypoint problem where the robot stutters at each 50hz boundary
+   * */
+  std::vector<double> interp_from_commands_; // joint commands from prev inference
+  std::vector<double> interp_to_commands_; // joint commands from most recent inference
+  size_t steps_since_inference_; // ticks elapsed since inference last ran
+  size_t inference_every_n_steps_; // N = round(training_period / actual_control_period)
+  bool interp_initialized_; // computed once on first active update
+
 };
 
 }  // namespace motion_controller

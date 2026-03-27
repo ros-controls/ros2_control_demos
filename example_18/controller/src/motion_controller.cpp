@@ -211,6 +211,16 @@ CallbackReturn MotionController::on_configure(const rclcpp_lifecycle::State & /*
       { rt_velocity_command_.set(*msg); });
 
   RCLCPP_DEBUG(get_node()->get_logger(), "Configure complete");
+
+  // Initialize interpolation state, inference fires immediately on first active update
+  //inference_every_n_steps_ starts at 1 as we don't know the actual control period
+  // setting to 1 means run inference every tick until we compute real value on the first active update
+  steps_since_inference_ = 0;
+  inference_every_n_steps_ = 1;
+  interp_initialized_ = false;
+  interp_from_commands_.clear();
+  interp_to_commands_.clear();
+
   return CallbackReturn::SUCCESS;
 }
 
@@ -380,18 +390,82 @@ return_type MotionController::update(const rclcpp::Time & /*time*/, const rclcpp
     {
       RCLCPP_DEBUG(get_node()->get_logger(), "ONNX active (blend-in: %d steps)", blend_in_steps_);
       onnx_active_steps_ = 0;
+      // Reset interpolation state so we recompute the inference ratio at the
+      // actual measured control period rather than any stale value from a
+      // previous activation.
+      interp_initialized_ = false;
+      steps_since_inference_ = 0;
+      interp_from_commands_.clear();
+      interp_to_commands_.clear();
     }
 
-    if (!run_model_inference(model_inputs, model_outputs))
+    // On the first active update, compute how many control ticks fall between
+    // each inference call. inference_every_n_steps_ = round(T_training / T_control).
+    // Example: 200 Hz control loop, 50 Hz training -> N = 4.
+    // This adapts automatically to whatever rate the hardware runs at with no
+    // manual configuration required.
+    if (!interp_initialized_)
     {
-      return return_type::ERROR;
+      inference_every_n_steps_ = std::max(
+        size_t(1),
+        static_cast<size_t>(std::round(training_control_period_ / actual_control_period)));
+      interp_initialized_ = true;
+      if (inference_every_n_steps_ > 1)
+      {
+        RCLCPP_INFO(
+          get_node()->get_logger(),
+          "Control loop (%.0f Hz) faster than inference rate (%.0f Hz): "
+          "running inference every %zu steps and interpolating in between.",
+          1.0 / actual_control_period, 1.0 / training_control_period_,
+          inference_every_n_steps_);
+      }
     }
-    joint_commands = action_processor_->process(model_outputs, default_joint_positions_);
+
+    // Run ONNX inference only on schedule (every N ticks). For all other ticks
+    // we interpolate between the previous and current inference outputs instead
+    // of calling the model. This prevents the zero-velocity waypoint problem
+    // where the robot stutters at each inference boundary.
+    if (steps_since_inference_ >= inference_every_n_steps_)
+    {
+      // Shift the interpolation window: the previous target becomes the new start
+      interp_from_commands_ = interp_to_commands_;
+
+      if (!run_model_inference(model_inputs, model_outputs))
+      {
+        return return_type::ERROR;
+      }
+      interp_to_commands_ = action_processor_->process(model_outputs, default_joint_positions_);
+
+      // On the very first inference there is no previous output yet — seed both
+      // endpoints identically so the robot holds position rather than
+      // interpolating from an uninitialised vector.
+      if (interp_from_commands_.empty())
+      {
+        interp_from_commands_ = interp_to_commands_;
+      }
+
+      previous_action_ = model_outputs;
+      steps_since_inference_ = 0;
+    }
+
+    // Linear interpolation between the two most recent inference outputs.
+    // alpha = 0 at the start of the segment (just ran inference),
+    // alpha -> 1 as we approach the next inference tick.
+    const double alpha =
+      static_cast<double>(steps_since_inference_) / static_cast<double>(inference_every_n_steps_);
+    joint_commands.resize(interp_to_commands_.size());
+    for (size_t i = 0; i < joint_commands.size(); ++i)
+    {
+      joint_commands[i] =
+        (1.0 - alpha) * interp_from_commands_[i] + alpha * interp_to_commands_[i];
+    }
+
+    steps_since_inference_++;
     onnx_active_steps_++;
-    double blend_factor =
+
+    const double blend_factor =
       std::min(1.0, static_cast<double>(onnx_active_steps_) / static_cast<double>(blend_in_steps_));
     apply_blend_in(joint_commands, blend_factor);
-    previous_action_ = model_outputs;
   }
 
   std::vector<double> original_joint_commands = joint_commands;

@@ -1,0 +1,46 @@
+ARG ROS_DISTRO=rolling
+
+FROM ros:${ROS_DISTRO}-ros-base
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update \
+    && apt-get install -y \
+        python3-vcstool \
+        python3-colcon-common-extensions \
+        git \
+        libosmesa6 \
+        libgl1 \
+        libglu1-mesa \
+    && apt-get autoremove -y -qq \
+    && rm -rf /var/lib/apt/lists/*
+
+ENV MUJOCO_GL=osmesa
+
+WORKDIR /home/ros2_ws/src
+
+COPY . ros2_control_demos/
+
+RUN vcs import --input ros2_control_demos/ros2_control_demos.rolling.repos
+
+RUN rosdep update --rosdistro ${ROS_DISTRO} \
+    && apt-get update \
+    && rosdep install --from-paths ./ -i -y --rosdistro ${ROS_DISTRO} \
+        --skip-keys "ros-${ROS_DISTRO}-joint-state-publisher-gui" \
+        --skip-keys "ros-${ROS_DISTRO}-rviz2" \
+    && apt-get autoremove -y -qq \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /home/ros2_ws
+
+RUN . /opt/ros/${ROS_DISTRO}/setup.sh \
+    && colcon build \
+        --cmake-args -DBUILD_TESTING=OFF \
+        --symlink-install \
+        --packages-up-to ros2_control_demo_example_18
+
+COPY Dockerfile/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+
+CMD ros2 launch ros2_control_demo_example_18 example_18_mujoco.launch.py headless:=true
