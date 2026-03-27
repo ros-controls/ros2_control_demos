@@ -22,15 +22,25 @@ controller_manager:
 
 forward_position_controller:
   ros__parameters:
+<<<<<<< HEAD
+=======
+    type: forward_command_controller/ForwardCommandController
+>>>>>>> 26512f2 (Migrate example_3 controllers to ForwardCommandController (#1083))
     joints:
       - joint1
       - joint2
+    interface_name: position
 
 forward_velocity_controller:
   ros__parameters:
+<<<<<<< HEAD
+=======
+    type: forward_command_controller/ForwardCommandController
+>>>>>>> 26512f2 (Migrate example_3 controllers to ForwardCommandController (#1083))
     joints:
       - joint1
       - joint2
+    interface_name: velocity
 
 forward_acceleration_controller:
   ros__parameters:
