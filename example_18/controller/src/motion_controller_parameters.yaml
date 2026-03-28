@@ -1,0 +1,107 @@
+motion_controller:
+  joints: {
+    type: string_array,
+    description: "Names of the joints to control",
+    validation: {
+      not_empty<>: []
+    },
+    read_only: true
+  }
+  model_path: {
+    type: string,
+    description: "Path to the ML model file (e.g., ONNX model)",
+    validation: {
+      not_empty<>: []
+    },
+    read_only: true
+  }
+  model_input_size: {
+    type: int,
+    default_value: 0,
+    description: "Expected ONNX model input size (0 = infer from model)",
+  }
+  model_output_size: {
+    type: int,
+    default_value: 0,
+    description: "Expected ONNX model output size (0 = infer from model)",
+  }
+  interfaces_broadcaster_topic: {
+    type: string,
+    default_value: "state_interfaces_broadcaster/values",
+    description: "Topic name from state_interfaces_broadcaster"
+  }
+  interfaces_broadcaster_names_topic: {
+    type: string,
+    default_value: "state_interfaces_broadcaster/names",
+    description: "Topic for state interface names from state_interfaces_broadcaster"
+  }
+
+  velocity_command_topic: {
+    type: string,
+    default_value: "~/cmd_velocity_with_head",
+    description: "Topic for velocity commands (VelocityCommandWithHead: base_velocity + head joint commands)"
+  }
+
+  left_contact_sensor_name: {
+    type: string,
+    default_value: "left_foot_contact",
+    description: "Sensor name for left foot contact"
+  }
+  right_contact_sensor_name: {
+    type: string,
+    default_value: "right_foot_contact",
+    description: "Sensor name for right foot contact"
+  }
+
+  action_scale: {
+    type: double,
+    default_value: 0.25,
+    description: "Scale factor for model outputs applied to actions"
+  }
+  default_joint_positions: {
+    type: double_array,
+    default_value: [],
+    description: "Standing pose (keyframe home). If empty, initialized from sensor data."
+  }
+  imu_upside_down: {
+    type: bool,
+    default_value: false,
+    description: "Invert IMU z-acceleration (MuJoCo reports negative z when standing)"
+  }
+
+  phase_frequency_factor_offset: {
+    type: double,
+    default_value: 0.0,
+    description: "Offset to gait phase frequency (affects walking speed)"
+  }
+  num_steps_in_gait_period: {
+    type: double,
+    default_value: 27.0,
+    description: "Number of control steps in one gait cycle (left+right step). Must match training."
+  }
+
+  max_motor_velocity: {
+    type: double,
+    default_value: 5.24,
+    description: "Maximum motor velocity in rad/s"
+  }
+  training_control_period: {
+    type: double,
+    default_value: 0.02,
+    description: "Control period used during training (s)"
+  }
+  gyro_deadband: {
+    type: double,
+    default_value: 0.15,
+    description: "Gyro values below this (rad/s) are set to zero"
+  }
+  stabilization_delay: {
+    type: int,
+    default_value: 50,
+    description: "Steps to wait before applying ONNX actions"
+  }
+  blend_in_steps: {
+    type: int,
+    default_value: 200,
+    description: "Steps to gradually blend in ONNX actions after stabilization"
+  }
