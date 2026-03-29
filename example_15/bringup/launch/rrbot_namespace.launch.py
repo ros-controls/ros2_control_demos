@@ -101,6 +101,7 @@ def generate_launch_description():
                     / "config"
                     / "rrbot_namespace_controllers.yaml",
                     "--controller-ros-args",
+                    # we use the remapping from a relative name to FQN /position_commands
                     "-r forward_position_controller/commands:=/position_commands",
                 ],
             ),
