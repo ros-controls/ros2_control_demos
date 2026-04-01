@@ -1,0 +1,10 @@
+<library path="motion_controller">
+  <class name="motion_controller/MotionController"
+         type="motion_controller::MotionController"
+         base_class_type="controller_interface::ControllerInterface">
+    <description>
+      Controller for full-body motion (legs + head) using ML policy (e.g., ONNX model).
+      Subscribes to sensor data and velocity commands, runs inference, and writes joint positions.
+    </description>
+  </class>
+</library>
