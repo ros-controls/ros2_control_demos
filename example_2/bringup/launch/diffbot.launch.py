@@ -39,10 +39,18 @@ def generate_launch_description():
             description="Start robot with mock hardware mirroring command to its states.",
         )
     )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "disable_commands",
+            default_value="false",
+            description="Disable command mirroring in MockHardware, simulating a disconnected driver.",
+        )
+    )
 
     # Initialize Arguments
     gui = LaunchConfiguration("gui")
     use_mock_hardware = LaunchConfiguration("use_mock_hardware")
+    disable_commands = LaunchConfiguration("disable_commands")
 
     # Get URDF via xacro
     robot_description_content = Command(
@@ -55,6 +63,9 @@ def generate_launch_description():
             " ",
             "use_mock_hardware:=",
             use_mock_hardware,
+            " ",
+            "disable_commands:=",
+            disable_commands,
         ]
     )
     robot_description = {"robot_description": robot_description_content}
