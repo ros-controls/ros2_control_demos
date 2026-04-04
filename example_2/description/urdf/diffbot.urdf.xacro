@@ -3,6 +3,7 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="diffdrive_robot">
   <xacro:arg name="prefix" default="" />
   <xacro:arg name="use_mock_hardware" default="false" />
+  <xacro:arg name="disable_commands" default="false"/>
 
   <xacro:include filename="$(find ros2_control_demo_description)/diffbot/urdf/diffbot_description.urdf.xacro" />
 
@@ -15,6 +16,6 @@
   <xacro:diffbot prefix="$(arg prefix)" />
 
   <xacro:diffbot_ros2_control
-    name="DiffBot" prefix="$(arg prefix)" use_mock_hardware="$(arg use_mock_hardware)"/>
+    name="DiffBot" prefix="$(arg prefix)" use_mock_hardware="$(arg use_mock_hardware)" disable_commands="$(arg disable_commands)" />
 
 </robot>
