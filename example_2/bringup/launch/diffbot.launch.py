@@ -84,7 +84,8 @@ def generate_launch_description():
     control_node = Node(
         package="controller_manager",
         executable="ros2_control_node",
-        parameters=[robot_controllers],
+        name="controller_manager",
+        parameters=[{"update_rate": 10}],
         output="both",
     )
     robot_state_pub_node = Node(
@@ -105,7 +106,7 @@ def generate_launch_description():
     joint_state_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["joint_state_broadcaster"],
+        arguments=["joint_state_broadcaster", "-p", robot_controllers],
     )
 
     robot_controller_spawner = Node(
@@ -116,7 +117,7 @@ def generate_launch_description():
             "--param-file",
             robot_controllers,
             "--controller-ros-args",
-            "-r /diffbot_base_controller/cmd_vel:=/cmd_vel",
+            "-r ~/cmd_vel:=/cmd_vel",
         ],
     )
 
