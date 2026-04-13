@@ -170,6 +170,40 @@ Tutorial steps
   checked by means of ``ros2 topic echo /joint_states``: The position values are increasing over time if the robot is moving.
   You now can test the setup with the commands from above, it should work identically as the custom hardware component plugin.
 
+  Another parameter of ``mock_components/GenericSystem`` is ``disable_commands``.
+  When set to ``true``, the hardware plugin stops mirroring commanded values to the state interfaces.
+  This simulates a disconnected driver scenario — commands are sent to the hardware successfully,
+  but no feedback signal is received back, as would happen with a broken encoder cable or a dropped network connection.
+
+  Stop the launch file and restart with an additional parameter:
+
+  .. code-block:: shell
+
+    ros2 launch ros2_control_demo_example_2 diffbot.launch.py use_mock_hardware:=True disable_commands:=True
+
+  Send velocity commands as before. Then check joint states:
+
+  .. code-block:: shell
+
+    ros2 topic echo /joint_states
+
+  You will notice that the position and velocity values **do not change** over time, even though commands are actively being published.
+  This is confirmed by the warning in the controller manager terminal:
+
+  .. code-block:: shell
+
+    [ros2_control_node-1] [WARN] [...] [controller_manager.hardware_component.system.DiffBot]: Command propagation is disabled - no values will be returned!
+
+  The relevant configuration in `diffbot.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_2/description/ros2_control/diffbot.ros2_control.xacro>`__ is:
+
+  .. code-block:: xml
+
+    <hardware>
+      <plugin>mock_components/GenericSystem</plugin>
+      <param name="calculate_dynamics">true</param>
+      <param name="disable_commands">true</param>
+    </hardware>
+
   More information on mock_components can be found in the :ref:`ros2_control documentation <mock_components_userdoc>`.
 
 Files used for this demos
