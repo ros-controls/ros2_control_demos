@@ -39,10 +39,18 @@ def generate_launch_description():
             description="Start robot with mock hardware mirroring command to its states.",
         )
     )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "disable_commands",
+            default_value="false",
+            description="Disable command mirroring in MockHardware, simulating a disconnected driver.",
+        )
+    )
 
     # Initialize Arguments
     gui = LaunchConfiguration("gui")
     use_mock_hardware = LaunchConfiguration("use_mock_hardware")
+    disable_commands = LaunchConfiguration("disable_commands")
 
     # Get URDF via xacro
     robot_description_content = Command(
@@ -55,6 +63,9 @@ def generate_launch_description():
             " ",
             "use_mock_hardware:=",
             use_mock_hardware,
+            " ",
+            "disable_commands:=",
+            disable_commands,
         ]
     )
     robot_description = {"robot_description": robot_description_content}
@@ -73,7 +84,8 @@ def generate_launch_description():
     control_node = Node(
         package="controller_manager",
         executable="ros2_control_node",
-        parameters=[robot_controllers],
+        name="controller_manager",
+        parameters=[{"update_rate": 10}],
         output="both",
     )
     robot_state_pub_node = Node(
@@ -94,7 +106,7 @@ def generate_launch_description():
     joint_state_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["joint_state_broadcaster"],
+        arguments=["joint_state_broadcaster", "-p", robot_controllers],
     )
 
     robot_controller_spawner = Node(
@@ -105,7 +117,7 @@ def generate_launch_description():
             "--param-file",
             robot_controllers,
             "--controller-ros-args",
-            "-r /diffbot_base_controller/cmd_vel:=/cmd_vel",
+            "-r ~/cmd_vel:=/cmd_vel",
         ],
     )
 
