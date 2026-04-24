@@ -12,7 +12,7 @@ ros2_control_demo_example_18
 
 This demo runs a policy-driven `Open Duck Mini v2 <https://github.com/apirrone/Open_Duck_Mini/tree/v2/mini_bdx/robots/open_duck_mini_v2>`_ in MuJoCo, using ONNX inference for locomotion and streaming observations via ``state_interfaces_broadcaster``.
 
-You need: mujoco_ros2_control, ONNX Runtime, a trained ONNX model, and ROS 2 (tested on Jazzy).
+You need: ``mujoco_ros2_control``, the `onnxruntime_vendor <https://index.ros.org/p/onnxruntime_vendor/>`_ package (vendors ONNX Runtime for ROS 2), a trained ONNX model, and ROS 2 (tested on Jazzy).
 
 Robot description
 ------------------
@@ -34,32 +34,6 @@ Dependencies
 
 This demo requires `mujoco_ros2_control <https://github.com/ros-controls/mujoco_ros2_control>`_ and a custom hardware interface (``DuckMiniMujocoSystemInterface``) that adds foot contact detection. Follow the mujoco_ros2_control installation instructions for your ROS 2 distro.
 
-ONNX Runtime
-~~~~~~~~~~~~
-
-.. code-block:: bash
-
-   wget https://github.com/microsoft/onnxruntime/releases/download/v1.23.2/onnxruntime-linux-x64-1.23.2.tgz
-   tar -xzf onnxruntime-linux-x64-1.23.2.tgz
-   sudo cp -r onnxruntime-linux-x64-1.23.2/include/* /usr/local/include/
-   sudo cp -r onnxruntime-linux-x64-1.23.2/lib/* /usr/local/lib/
-   sudo ldconfig
-
-If the library is not found after install:
-
-.. code-block:: bash
-
-   # find where the library is extracted
-   find ~ -name "onnxruntime-linux-x64-*" -type d 2>/dev/null
-
-   # copy to the right location
-   sudo cp -r /pathto_extracted_library/onnxruntime-linux-x64-1.23.2/include/* /usr/local/include/
-   sudo cp -r /pathto_extracted_library/onnxruntime-linux-x64-1.23.2/lib/* /usr/local/lib/
-   sudo ldconfig
-
-   # Verify library and headers
-   ls -l /usr/local/lib/libonnxruntime.so*
-   ls -l /usr/local/include/onnxruntime_cxx_api.h
 
 Model and workspace
 ~~~~~~~~~~~~~~~~~~~
@@ -133,7 +107,7 @@ At a high level, the demo uses the following control structure.
 ONNX integration
 ----------------
 
-MotionController uses ONNX Runtime to turn the observation vector into joint commands. The observation (floats) is wrapped into an ``Ort::Value`` tensor and passed to the ONNX session, which returns an output tensor. The model outputs relative joint positions as floats; these are converted to doubles, then ActionProcessor scales them by ``action_scale`` (default 0.25), adds default joint positions, and sends the resulting absolute positions to the hardware. Default positions are taken from the first sensor read, or from ``default_joint_positions`` in the controller configuration.
+``MotionController`` uses ONNX Runtime (via the ``onnxruntime_vendor`` package) to turn the observation vector into joint commands. The observation (floats) is wrapped into an ``Ort::Value`` tensor and passed to the ONNX session, which returns an output tensor. The model outputs relative joint positions as floats; these are converted to doubles, then ActionProcessor scales them by ``action_scale`` (default 0.25), adds default joint positions, and sends the resulting absolute positions to the hardware. Default positions are taken from the first sensor read, or from ``default_joint_positions`` in the controller configuration.
 
 Current Limitations
 -------------------

@@ -46,12 +46,14 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   DEPENDENCIES geometry_msgs
 )
 
-# Example 18 requires ONNX Runtime; skip building if not found
+# Example 18 requires ONNX Runtime via the onnxruntime_vendor package
 find_package(onnxruntime_vendor QUIET)
 if(NOT onnxruntime_vendor_FOUND)
   message(FATAL_ERROR
-    "Example 18 cannot be built without ONNX Runtime. "
-    "Install or build onnxruntime_vendor to build this example.")
+    "Example 18 cannot be built without onnxruntime_vendor. "
+    "Install onnxruntime_vendor for your ROS 2 distribution (e.g. apt install "
+    "ros-$ENV{ROS_DISTRO}-onnxruntime_vendor when ROS_DISTRO is set) or colcon build "
+    "onnxruntime_vendor from source in your workspace.")
 endif()
 
 ## COMPILE
