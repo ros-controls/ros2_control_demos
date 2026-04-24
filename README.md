@@ -87,6 +87,10 @@ The following examples are part of this demo repository:
 
    This example shows how to publish diagnostics from a hardware component using the Executor passed from Controller Manager.
 
+* Example 19: ["DiffBot with Conditionally Chained Controllers"](example_19)
+
+   This example shows how to create conditionally chained controllers using diff_drive_controller and pid_controllers to control a differential drive robot by using `launch_ros2_control`.
+
 ## Structure
 
 The repository is structured into `example_XY` folders that fully contained packages with names `ros2_control_demos_example_XY`.
