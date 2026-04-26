@@ -35,7 +35,6 @@ add_library(
   SHARED
   hardware/rrbot_transmissions_system_position_only.cpp
 )
-target_compile_features(ros2_control_demo_example_8 PUBLIC cxx_std_17)
 target_include_directories(ros2_control_demo_example_8 PUBLIC
 $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/hardware/include>
 $<INSTALL_INTERFACE:include/ros2_control_demo_example_8>
