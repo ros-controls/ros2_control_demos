@@ -36,7 +36,6 @@ add_library(
   hardware/rrbot_actuator_without_feedback.cpp
   hardware/rrbot_sensor_for_position_feedback.cpp
 )
-target_compile_features(ros2_control_demo_example_14 PUBLIC cxx_std_17)
 target_include_directories(ros2_control_demo_example_14 PUBLIC
 $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/hardware/include>
 $<INSTALL_INTERFACE:include/ros2_control_demo_example_14>
