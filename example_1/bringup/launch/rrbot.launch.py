@@ -40,11 +40,7 @@ def generate_launch_description():
             Node(
                 package="controller_manager",
                 executable="ros2_control_node",
-                parameters=[
-                    PathSubstitution(FindPackageShare("ros2_control_demo_example_1"))
-                    / "config"
-                    / "controller_manager.yaml"
-                ],
+                parameters=[{"update_rate": 10}],
                 output="both",
             ),
             # robot_state_publisher with robot_description from xacro
