@@ -86,18 +86,16 @@ class TestFixture(unittest.TestCase):
     def test_node_start(self, proc_output):
         check_node_running(self.node, "robot_state_publisher")
 
-    def test_controller_running(self, proc_output):
-
-        cnames = ["r6bot_controller", "joint_state_broadcaster"]
-
-        check_controllers_running(self.node, cnames)
-
     def test_check_if_msgs_published(self):
         check_if_js_published(
             "/joint_states", ["joint_1", "joint_2", "joint_3", "joint_4", "joint_5", "joint_6"]
         )
 
-    def test_check_if_trajectory_published(self, proc_output):
+    def test_check_if_trajectory_processed(self, proc_output):
+
+        cnames = ["r6bot_controller", "joint_state_broadcaster"]
+
+        check_controllers_running(self.node, cnames)
 
         topic = "/r6bot_controller/joint_trajectory"
 
