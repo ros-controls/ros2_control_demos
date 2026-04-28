@@ -1,6 +1,6 @@
 ARG ROS_DISTRO=rolling
 
-FROM ros:${ROS_DISTRO}-ros-base
+FROM ghcr.io/ros-controls/ros:${ROS_DISTRO}-ubuntu
 
 ENV DEBIAN_FRONTEND noninteractive
 
