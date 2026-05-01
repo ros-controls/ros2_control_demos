@@ -126,7 +126,7 @@ hardware_interface::CallbackReturn CarlikeBotSystemHardware::on_init(
       {
         RCLCPP_FATAL(
           get_logger(), "Joint '%s' has %s state interface. '%s' expected.", joint.name.c_str(),
-          joint.state_interfaces[1].name.c_str(), hardware_interface::HW_IF_VELOCITY);
+          joint.state_interfaces[0].name.c_str(), hardware_interface::HW_IF_VELOCITY);
         return hardware_interface::CallbackReturn::ERROR;
       }
 
