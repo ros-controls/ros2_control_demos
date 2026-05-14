@@ -68,7 +68,7 @@ def generate_launch_description():
         package="controller_manager",
         executable="ros2_control_node",
         namespace="/rrbot",
-        parameters=[robot_description, robot_controllers],
+        parameters=[robot_controllers],
         output={
             "stdout": "screen",
             "stderr": "screen",
