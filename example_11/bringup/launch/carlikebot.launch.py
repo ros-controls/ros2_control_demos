@@ -13,134 +13,100 @@
 # limitations under the License.
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, RegisterEventHandler
+from launch.actions import DeclareLaunchArgument
 from launch.conditions import IfCondition, UnlessCondition
-from launch.event_handlers import OnProcessExit
-from launch.substitutions import Command, FindExecutable, PathJoinSubstitution, LaunchConfiguration
+from launch.substitutions import Command, LaunchConfiguration, PathSubstitution
 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
 
 def generate_launch_description():
-    # Declare arguments
-    declared_arguments = []
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "gui",
-            default_value="true",
-            description="Start RViz2 automatically with this launch file.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "remap_odometry_tf",
-            default_value="false",
-            description="Remap odometry TF from the steering controller to the TF tree.",
-        )
-    )
-
-    # Initialize Arguments
-    gui = LaunchConfiguration("gui")
-    remap_odometry_tf = LaunchConfiguration("remap_odometry_tf")
-
-    # Get URDF via xacro
-    robot_description_content = Command(
+    return LaunchDescription(
         [
-            PathJoinSubstitution([FindExecutable(name="xacro")]),
-            " ",
-            PathJoinSubstitution(
-                [FindPackageShare("ros2_control_demo_example_11"), "urdf", "carlikebot.urdf.xacro"]
+            DeclareLaunchArgument(
+                "gui",
+                default_value="true",
+                description="Start RViz2 automatically with this launch file.",
+            ),
+            DeclareLaunchArgument(
+                "remap_odometry_tf",
+                default_value="false",
+                description="Remap odometry TF from the steering controller to the TF tree.",
+            ),
+            # Control node
+            Node(
+                package="controller_manager",
+                executable="ros2_control_node",
+                parameters=[
+                    PathSubstitution(FindPackageShare("ros2_control_demo_example_11"))
+                    / "config"
+                    / "carlikebot_controllers.yaml"
+                ],
+                output="both",
+            ),
+            Node(
+                package="robot_state_publisher",
+                executable="robot_state_publisher",
+                output="both",
+                parameters=[
+                    {
+                        "robot_description": Command(
+                            [
+                                "xacro",
+                                " ",
+                                PathSubstitution(FindPackageShare("ros2_control_demo_example_11"))
+                                / "urdf"
+                                / "carlikebot.urdf.xacro",
+                            ]
+                        )
+                    }
+                ],
+            ),
+            Node(
+                package="rviz2",
+                executable="rviz2",
+                name="rviz2",
+                output="log",
+                arguments=[
+                    "-d",
+                    PathSubstitution(FindPackageShare("ros2_control_demo_description"))
+                    / "carlikebot/rviz"
+                    / "carlikebot.rviz",
+                ],
+                condition=IfCondition(LaunchConfiguration("gui")),
+            ),
+            Node(
+                package="controller_manager",
+                executable="spawner",
+                arguments=["joint_state_broadcaster"],
+            ),
+            # the steering controller libraries by default publish odometry on a separate topic than /tf
+            Node(
+                package="controller_manager",
+                executable="spawner",
+                arguments=[
+                    "bicycle_steering_controller",
+                    "--param-file",
+                    PathSubstitution(FindPackageShare("ros2_control_demo_example_11"))
+                    / "config"
+                    / "carlikebot_controllers.yaml",
+                    "--controller-ros-args",
+                    "-r /bicycle_steering_controller/tf_odometry:=/tf",
+                ],
+                condition=IfCondition(LaunchConfiguration("remap_odometry_tf")),
+            ),
+            Node(
+                package="controller_manager",
+                executable="spawner",
+                arguments=[
+                    "bicycle_steering_controller",
+                    "--param-file",
+                    PathSubstitution(FindPackageShare("ros2_control_demo_example_11"))
+                    / "config"
+                    / "carlikebot_controllers.yaml",
+                ],
+                condition=UnlessCondition(LaunchConfiguration("remap_odometry_tf")),
             ),
         ]
     )
-    robot_description = {"robot_description": robot_description_content}
-
-    robot_controllers = PathJoinSubstitution(
-        [
-            FindPackageShare("ros2_control_demo_example_11"),
-            "config",
-            "carlikebot_controllers.yaml",
-        ]
-    )
-    rviz_config_file = PathJoinSubstitution(
-        [
-            FindPackageShare("ros2_control_demo_description"),
-            "carlikebot/rviz",
-            "carlikebot.rviz",
-        ]
-    )
-
-    control_node = Node(
-        package="controller_manager",
-        executable="ros2_control_node",
-        parameters=[robot_controllers],
-        output="both",
-    )
-    robot_state_pub_bicycle_node = Node(
-        package="robot_state_publisher",
-        executable="robot_state_publisher",
-        output="both",
-        parameters=[robot_description],
-    )
-    rviz_node = Node(
-        package="rviz2",
-        executable="rviz2",
-        name="rviz2",
-        output="log",
-        arguments=["-d", rviz_config_file],
-        condition=IfCondition(gui),
-    )
-
-    joint_state_broadcaster_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["joint_state_broadcaster"],
-    )
-
-    # the steering controller libraries by default publish odometry on a separate topic than /tf
-    robot_bicycle_controller_spawner_remapped = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=[
-            "bicycle_steering_controller",
-            "--param-file",
-            robot_controllers,
-            "--controller-ros-args",
-            "-r /bicycle_steering_controller/tf_odometry:=/tf",
-        ],
-        condition=IfCondition(remap_odometry_tf),
-    )
-
-    robot_bicycle_controller_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["bicycle_steering_controller", "--param-file", robot_controllers],
-        condition=UnlessCondition(remap_odometry_tf),
-    )
-
-    # Delay rviz start after `joint_state_broadcaster`
-    delay_rviz_after_joint_state_broadcaster_spawner = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=joint_state_broadcaster_spawner,
-            on_exit=[rviz_node],
-        )
-    )
-
-    # Delay start of robot_controller after `joint_state_broadcaster`
-    delay_robot_controller_spawner_after_joint_state_broadcaster_spawner = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=joint_state_broadcaster_spawner,
-            on_exit=[robot_bicycle_controller_spawner_remapped, robot_bicycle_controller_spawner],
-        )
-    )
-
-    nodes = [
-        control_node,
-        robot_state_pub_bicycle_node,
-        joint_state_broadcaster_spawner,
-        delay_rviz_after_joint_state_broadcaster_spawner,
-        delay_robot_controller_spawner_after_joint_state_broadcaster_spawner,
-    ]
-
-    return LaunchDescription(declared_arguments + nodes)
