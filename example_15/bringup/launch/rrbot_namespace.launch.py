@@ -14,43 +14,113 @@
 
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, RegisterEventHandler
+from launch.actions import DeclareLaunchArgument
 from launch.conditions import IfCondition
-from launch.event_handlers import OnProcessExit
-from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
+from launch.substitutions import Command, LaunchConfiguration, PathSubstitution
 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
 
 def generate_launch_description():
-    # Declare arguments
-    declared_arguments = []
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "start_rviz",
-            default_value="true",
-            description="Start RViz2 automatically with this launch file.",
-        )
-    )
-
-    # Initialize Arguments
-    start_rviz = LaunchConfiguration("start_rviz")
-
-    # Get URDF via xacro
-    robot_description_content = Command(
+    return LaunchDescription(
         [
-            PathJoinSubstitution([FindExecutable(name="xacro")]),
-            " ",
-            PathJoinSubstitution(
-                [
-                    FindPackageShare("ros2_control_demo_example_1"),
-                    "urdf",
-                    "rrbot.urdf.xacro",
-                ]
+            DeclareLaunchArgument(
+                "start_rviz",
+                default_value="true",
+                description="Start RViz2 automatically with this launch file.",
+            ),
+            Node(
+                package="controller_manager",
+                executable="ros2_control_node",
+                namespace="/rrbot",
+                parameters=[
+                    {
+                        "robot_description": Command(
+                            [
+                                "xacro",
+                                " ",
+                                PathSubstitution(FindPackageShare("ros2_control_demo_example_1"))
+                                / "urdf"
+                                / "rrbot.urdf.xacro",
+                            ]
+                        )
+                    },
+                    PathSubstitution(FindPackageShare("ros2_control_demo_example_15"))
+                    / "config"
+                    / "rrbot_namespace_controllers.yaml",
+                ],
+                output={"stdout": "screen", "stderr": "screen"},
+            ),
+            Node(
+                package="robot_state_publisher",
+                executable="robot_state_publisher",
+                namespace="/rrbot",
+                output="both",
+                parameters=[
+                    {
+                        "robot_description": Command(
+                            [
+                                "xacro",
+                                " ",
+                                PathSubstitution(FindPackageShare("ros2_control_demo_example_1"))
+                                / "urdf"
+                                / "rrbot.urdf.xacro",
+                            ]
+                        )
+                    }
+                ],
+            ),
+            Node(
+                package="rviz2",
+                executable="rviz2",
+                name="rviz2",
+                output="log",
+                arguments=[
+                    "-d",
+                    PathSubstitution(FindPackageShare("ros2_control_demo_example_15"))
+                    / "rviz"
+                    / "rrbot_namespace.rviz",
+                ],
+                condition=IfCondition(LaunchConfiguration("start_rviz")),
+            ),
+            Node(
+                package="controller_manager",
+                executable="spawner",
+                namespace="rrbot",
+                arguments=["joint_state_broadcaster"],
+            ),
+            Node(
+                package="controller_manager",
+                executable="spawner",
+                namespace="rrbot",
+                arguments=[
+                    "forward_position_controller",
+                    "--param-file",
+                    PathSubstitution(FindPackageShare("ros2_control_demo_example_15"))
+                    / "config"
+                    / "rrbot_namespace_controllers.yaml",
+                    "--controller-ros-args",
+                    # we use the remapping from a relative name to FQN /position_commands
+                    "-r forward_position_controller/commands:=/position_commands",
+                ],
+            ),
+            Node(
+                package="controller_manager",
+                executable="spawner",
+                namespace="rrbot",
+                arguments=[
+                    "position_trajectory_controller",
+                    "--inactive",
+                    "--param-file",
+                    PathSubstitution(FindPackageShare("ros2_control_demo_example_15"))
+                    / "config"
+                    / "rrbot_namespace_controllers.yaml",
+                ],
             ),
         ]
     )
+<<<<<<< HEAD
     robot_description = {"robot_description": robot_description_content}
 
     robot_controllers = PathJoinSubstitution(
@@ -138,3 +208,5 @@ def generate_launch_description():
     ]
 
     return LaunchDescription(declared_arguments + nodes)
+=======
+>>>>>>> 1d4a17a ([Fix] Cleanup Launch Files (#982))

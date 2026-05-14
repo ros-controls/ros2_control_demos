@@ -13,73 +13,107 @@
 # limitations under the License.
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, RegisterEventHandler
+from launch.actions import DeclareLaunchArgument
 from launch.conditions import IfCondition
-from launch.event_handlers import OnProcessExit
-from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
+from launch.substitutions import Command, LaunchConfiguration, PathSubstitution
 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
 
 def generate_launch_description():
-    # Declare arguments
-    declared_arguments = []
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "prefix",
-            default_value='""',
-            description="Prefix of the joint names, useful for \
-        multi-robot setup. If changed than also joint names in the controllers' configuration \
-        have to be updated.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "slowdown", default_value="50.0", description="Slowdown factor of the RRbot."
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "robot_controller",
-            default_value="forward_position_controller",
-            description="Robot controller to start.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "gui",
-            default_value="true",
-            description="Start RViz2 automatically with this launch file.",
-        )
-    )
-
-    # Initialize Arguments
-    prefix = LaunchConfiguration("prefix")
-    slowdown = LaunchConfiguration("slowdown")
-    robot_controller = LaunchConfiguration("robot_controller")
-    gui = LaunchConfiguration("gui")
-
-    # Get URDF via xacro
-    robot_description_content = Command(
+    return LaunchDescription(
         [
-            PathJoinSubstitution([FindExecutable(name="xacro")]),
-            " ",
-            PathJoinSubstitution(
-                [
-                    FindPackageShare("ros2_control_demo_example_8"),
-                    "urdf",
-                    "rrbot_transmissions_system_position_only.urdf.xacro",
-                ]
+            DeclareLaunchArgument(
+                "prefix",
+                default_value='""',
+                description=(
+                    "Prefix of the joint names, useful for "
+                    "multi-robot setup. If changed than also joint names in the controllers' configuration "
+                    "have to be updated."
+                ),
             ),
-            " ",
-            "prefix:=",
-            prefix,
-            " ",
-            "slowdown:=",
-            slowdown,
+            DeclareLaunchArgument(
+                "slowdown",
+                default_value="50.0",
+                description="Slowdown factor of the RRbot.",
+            ),
+            DeclareLaunchArgument(
+                "robot_controller",
+                default_value="forward_position_controller",
+                description="Robot controller to start.",
+            ),
+            DeclareLaunchArgument(
+                "gui",
+                default_value="true",
+                description="Start RViz2 automatically with this launch file.",
+            ),
+            Node(
+                package="controller_manager",
+                executable="ros2_control_node",
+                parameters=[
+                    PathSubstitution(FindPackageShare("ros2_control_demo_example_8"))
+                    / "config"
+                    / "rrbot_controllers.yaml"
+                ],
+                output="both",
+            ),
+            Node(
+                package="robot_state_publisher",
+                executable="robot_state_publisher",
+                output="both",
+                parameters=[
+                    {
+                        "robot_description": Command(
+                            [
+                                "xacro",
+                                " ",
+                                PathSubstitution(FindPackageShare("ros2_control_demo_example_8"))
+                                / "urdf"
+                                / "rrbot_transmissions_system_position_only.urdf.xacro",
+                                " ",
+                                "prefix:=",
+                                LaunchConfiguration("prefix"),
+                                " ",
+                                "slowdown:=",
+                                LaunchConfiguration("slowdown"),
+                            ]
+                        )
+                    }
+                ],
+            ),
+            Node(
+                package="rviz2",
+                executable="rviz2",
+                name="rviz2",
+                output="log",
+                arguments=[
+                    "-d",
+                    PathSubstitution(FindPackageShare("ros2_control_demo_description"))
+                    / "rrbot/rviz"
+                    / "rrbot.rviz",
+                ],
+                condition=IfCondition(LaunchConfiguration("gui")),
+            ),
+            Node(
+                package="controller_manager",
+                executable="spawner",
+                arguments=["joint_state_broadcaster"],
+            ),
+            Node(
+                package="controller_manager",
+                executable="spawner",
+                arguments=[
+                    LaunchConfiguration("robot_controller"),
+                    "--param-file",
+                    PathSubstitution(FindPackageShare("ros2_control_demo_example_8"))
+                    / "config"
+                    / "rrbot_controllers.yaml",
+                ],
+            ),
         ]
     )
+<<<<<<< HEAD
     robot_description = {"robot_description": robot_description_content}
 
     robot_controllers = PathJoinSubstitution(
@@ -154,3 +188,5 @@ def generate_launch_description():
     ]
 
     return LaunchDescription(declared_arguments + nodes)
+=======
+>>>>>>> 1d4a17a ([Fix] Cleanup Launch Files (#982))

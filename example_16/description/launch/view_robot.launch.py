@@ -1,4 +1,4 @@
-# Copyright 2021 Stogl Robotics Consulting UG (haftungsbeschränkt)
+# Copyright 2025 ros2_control Development Team
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,6 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
@@ -26,7 +27,7 @@ def generate_launch_description():
         [
             DeclareLaunchArgument(
                 "description_package",
-                default_value="ros2_control_demo_example_4",
+                default_value="ros2_control_demo_description",
                 description=(
                     "Description package with robot URDF/xacro files. Usually the argument "
                     "is not set, it enables use of a custom description."
@@ -34,7 +35,7 @@ def generate_launch_description():
             ),
             DeclareLaunchArgument(
                 "description_file",
-                default_value="rrbot_system_with_sensor.urdf.xacro",
+                default_value="diffbot.urdf.xacro",
                 description="URDF/XACRO description file with the robot.",
             ),
             DeclareLaunchArgument(
@@ -69,9 +70,7 @@ def generate_launch_description():
                             [
                                 "xacro",
                                 " ",
-                                PathSubstitution(
-                                    FindPackageShare(LaunchConfiguration("description_package"))
-                                )
+                                PathSubstitution(FindPackageShare("ros2_control_demo_example_16"))
                                 / "urdf"
                                 / LaunchConfiguration("description_file"),
                                 " ",
@@ -90,8 +89,10 @@ def generate_launch_description():
                 arguments=[
                     "-d",
                     PathSubstitution(FindPackageShare(LaunchConfiguration("description_package")))
-                    / "rviz"
-                    / "rrbot.rviz",
+                    / "diffbot/rviz"
+                    / "diffbot_view.rviz",
+                    "-f",
+                    "base_link",
                 ],
                 condition=IfCondition(LaunchConfiguration("gui")),
             ),

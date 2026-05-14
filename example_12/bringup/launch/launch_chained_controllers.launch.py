@@ -14,12 +14,17 @@
 
 
 from launch import LaunchDescription
+<<<<<<< HEAD
 from launch.actions import RegisterEventHandler
 from launch.event_handlers import OnProcessExit
+=======
+from launch.substitutions import PathSubstitution
+>>>>>>> 1d4a17a ([Fix] Cleanup Launch Files (#982))
 from launch_ros.actions import Node
 
 
 def generate_launch_description():
+<<<<<<< HEAD
 
     position_controller_spawner = Node(
         package="controller_manager",
@@ -49,3 +54,22 @@ def generate_launch_description():
     ]
 
     return LaunchDescription(nodes)
+=======
+    return LaunchDescription(
+        [
+            Node(
+                package="controller_manager",
+                executable="spawner",
+                name="spawner_chained_controller",
+                arguments=[
+                    "position_controller",
+                    "forward_position_controller",
+                    "--param-file",
+                    PathSubstitution(FindPackageShare("ros2_control_demo_example_12"))
+                    / "config"
+                    / "rrbot_chained_controllers.yaml",
+                ],
+            ),
+        ]
+    )
+>>>>>>> 1d4a17a ([Fix] Cleanup Launch Files (#982))

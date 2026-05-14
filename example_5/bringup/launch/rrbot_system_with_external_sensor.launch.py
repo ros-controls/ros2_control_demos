@@ -22,6 +22,7 @@ from launch_ros.substitutions import FindPackageShare
 
 
 def generate_launch_description():
+<<<<<<< HEAD
     # Declare arguments
     declared_arguments = []
     declared_arguments.append(
@@ -168,15 +169,143 @@ def generate_launch_description():
         condition=IfCondition(use_wrench_transformer),
     )
 
+=======
+>>>>>>> 1d4a17a ([Fix] Cleanup Launch Files (#982))
     return LaunchDescription(
-        declared_arguments
-        + [
-            control_node,
-            robot_state_pub_node,
-            rviz_node,
-            joint_state_broadcaster_spawner,
-            robot_controller_spawner,
-            fts_broadcaster_spawner,
-            wrench_transformer_node,
+        [
+            DeclareLaunchArgument(
+                "prefix",
+                default_value='""',
+                description=(
+                    "Prefix of the joint names, useful for "
+                    "multi-robot setup. If changed than also joint names in the controllers' configuration "
+                    "have to be updated."
+                ),
+            ),
+            DeclareLaunchArgument(
+                "use_mock_hardware",
+                default_value="false",
+                description="Start robot with mock hardware mirroring command to its states.",
+            ),
+            DeclareLaunchArgument(
+                "mock_sensor_commands",
+                default_value="false",
+                description=(
+                    "Enable mocked command interfaces for sensors used for simple simulations. "
+                    "Used only if 'use_mock_hardware' parameter is true."
+                ),
+            ),
+            DeclareLaunchArgument(
+                "slowdown",
+                default_value="50.0",
+                description="Slowdown factor of the RRbot.",
+            ),
+            DeclareLaunchArgument(
+                "gui",
+                default_value="true",
+                description="Start RViz2 automatically with this launch file.",
+            ),
+            DeclareLaunchArgument(
+                "use_wrench_transformer",
+                default_value="false",
+                description="Enable the wrench transformer node to transform wrench messages to different frames.",
+            ),
+            # Control node
+            Node(
+                package="controller_manager",
+                executable="ros2_control_node",
+                parameters=[
+                    PathSubstitution(FindPackageShare("ros2_control_demo_example_5"))
+                    / "config"
+                    / "rrbot_with_external_sensor_controllers.yaml"
+                ],
+                output="both",
+            ),
+            # robot_state_publisher with robot_description from xacro
+            Node(
+                package="robot_state_publisher",
+                executable="robot_state_publisher",
+                output="both",
+                parameters=[
+                    {
+                        "robot_description": Command(
+                            [
+                                "xacro",
+                                " ",
+                                PathSubstitution(FindPackageShare("ros2_control_demo_example_5"))
+                                / "urdf"
+                                / "rrbot_system_with_external_sensor.urdf.xacro",
+                                " ",
+                                "prefix:=",
+                                LaunchConfiguration("prefix"),
+                                " ",
+                                "use_mock_hardware:=",
+                                LaunchConfiguration("use_mock_hardware"),
+                                " ",
+                                "mock_sensor_commands:=",
+                                LaunchConfiguration("mock_sensor_commands"),
+                                " ",
+                                "slowdown:=",
+                                LaunchConfiguration("slowdown"),
+                            ]
+                        )
+                    }
+                ],
+            ),
+            Node(
+                package="rviz2",
+                executable="rviz2",
+                name="rviz2",
+                output="log",
+                arguments=[
+                    "-d",
+                    PathSubstitution(FindPackageShare("ros2_control_demo_example_5"))
+                    / "rviz"
+                    / "rrbot.rviz",
+                ],
+                condition=IfCondition(LaunchConfiguration("gui")),
+            ),
+            Node(
+                package="controller_manager",
+                executable="spawner",
+                arguments=["joint_state_broadcaster"],
+            ),
+            Node(
+                package="controller_manager",
+                executable="spawner",
+                arguments=[
+                    "forward_position_controller",
+                    "--param-file",
+                    PathSubstitution(FindPackageShare("ros2_control_demo_example_5"))
+                    / "config"
+                    / "rrbot_with_external_sensor_controllers.yaml",
+                ],
+            ),
+            # add the spawner node for the fts_broadcaster
+            Node(
+                package="controller_manager",
+                executable="spawner",
+                arguments=[
+                    "fts_broadcaster",
+                    "--param-file",
+                    PathSubstitution(FindPackageShare("ros2_control_demo_example_5"))
+                    / "config"
+                    / "rrbot_with_external_sensor_controllers.yaml",
+                ],
+            ),
+            # Launch the wrench transformer node
+            Node(
+                package="force_torque_sensor_broadcaster",
+                executable="wrench_transformer_node",
+                name="fts_wrench_transformer",
+                parameters=[
+                    PathSubstitution(FindPackageShare("ros2_control_demo_example_5"))
+                    / "config"
+                    / "wrench_transformer_params.yaml"
+                ],
+                remappings=[("~/wrench", "/fts_broadcaster/wrench")],
+                output="both",
+                condition=IfCondition(LaunchConfiguration("use_wrench_transformer")),
+            ),
         ]
     )
