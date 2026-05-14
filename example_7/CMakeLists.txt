@@ -59,7 +59,6 @@ add_library(
   controller/r6bot_controller.cpp
 )
 
-target_compile_features(ros2_control_demo_example_7 PUBLIC cxx_std_17)
 target_include_directories(ros2_control_demo_example_7 PUBLIC
 $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/hardware/include>
 $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/controller/include>

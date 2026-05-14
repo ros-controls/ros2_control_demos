@@ -38,11 +38,8 @@ def generate_launch_description():
             Node(
                 package="controller_manager",
                 executable="ros2_control_node",
-                parameters=[
-                    PathSubstitution(FindPackageShare("ros2_control_demo_example_2"))
-                    / "config"
-                    / "diffbot_controllers.yaml"
-                ],
+                name="controller_manager",
+                parameters=[{"update_rate": 10}],
                 output="both",
             ),
             # robot_state_publisher with robot_description from xacro
@@ -83,7 +80,13 @@ def generate_launch_description():
             Node(
                 package="controller_manager",
                 executable="spawner",
-                arguments=["joint_state_broadcaster"],
+                arguments=[
+                    "joint_state_broadcaster",
+                    "-p",
+                    PathSubstitution(FindPackageShare("ros2_control_demo_example_2"))
+                    / "config"
+                    / "diffbot_controllers.yaml",
+                ],
             ),
             Node(
                 package="controller_manager",
@@ -95,7 +98,7 @@ def generate_launch_description():
                     / "config"
                     / "diffbot_controllers.yaml",
                     "--controller-ros-args",
-                    "-r /diffbot_base_controller/cmd_vel:=/cmd_vel",
+                    "-r ~/cmd_vel:=/cmd_vel",
                 ],
             ),
         ]

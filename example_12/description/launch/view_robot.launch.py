@@ -14,6 +14,7 @@
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
+from launch.conditions import IfCondition
 from launch.substitutions import Command, LaunchConfiguration, PathSubstitution
 
 from launch_ros.actions import Node
@@ -45,9 +46,16 @@ def generate_launch_description():
                     "have to be updated."
                 ),
             ),
+            DeclareLaunchArgument(
+                "gui",
+                default_value="true",
+                description="Start Rviz2 and Joint State Publisher gui automatically \
+            with this launch file.",
+            ),
             Node(
                 package="joint_state_publisher_gui",
                 executable="joint_state_publisher_gui",
+                condition=IfCondition(LaunchConfiguration("gui")),
             ),
             Node(
                 package="robot_state_publisher",
@@ -81,6 +89,7 @@ def generate_launch_description():
                     / "rrbot/rviz"
                     / "rrbot.rviz",
                 ],
+                condition=IfCondition(LaunchConfiguration("gui")),
             ),
         ]
     )

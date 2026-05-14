@@ -35,7 +35,6 @@ add_library(
   hardware/external_rrbot_force_torque_sensor.cpp
   hardware/rrbot.cpp
 )
-target_compile_features(ros2_control_demo_example_5 PUBLIC cxx_std_17)
 target_include_directories(ros2_control_demo_example_5 PUBLIC
 $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/hardware/include>
 $<INSTALL_INTERFACE:include/ros2_control_demo_example_5>

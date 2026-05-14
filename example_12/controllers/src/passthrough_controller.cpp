@@ -140,7 +140,11 @@ controller_interface::return_type PassthroughController::update_and_write_comman
   {
     if (!std::isnan(reference_interfaces_[i]))
     {
-      command_interfaces_[i].set_value(reference_interfaces_[i]);
+      // Log a warning message when sending a command fails
+      RCLCPP_WARN_EXPRESSION(
+        this->get_node()->get_logger(), !command_interfaces_[i].set_value(reference_interfaces_[i]),
+        "Unable to set the value %f for the command interface: %s", reference_interfaces_[i],
+        command_interfaces_[i].get_name().c_str());
     }
   }
 

@@ -48,7 +48,7 @@ def generate_test_description():
                 "launch/view_robot.launch.py",
             )
         ),
-        launch_arguments={"gui": "true"}.items(),
+        launch_arguments={"gui": "false"}.items(),
     )
 
     return LaunchDescription([launch_include, ReadyToTest()])
