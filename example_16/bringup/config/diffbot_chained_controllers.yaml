@@ -70,6 +70,7 @@ diffbot_base_controller:
 
     open_loop: true
     enable_odom_tf: true
+    tf_frame_prefix: "~"
 
     cmd_vel_timeout: 0.5
     # set publish_limited_velocity to true for visualization
