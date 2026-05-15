@@ -16,7 +16,7 @@
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.conditions import IfCondition
-from launch.substitutions import Command, LaunchConfiguration, PathSubstitution
+from launch.substitutions import Command, PathSubstitution
 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
@@ -35,17 +35,6 @@ def generate_launch_description():
                 executable="ros2_control_node",
                 namespace="/rrbot",
                 parameters=[
-                    {
-                        "robot_description": Command(
-                            [
-                                "xacro",
-                                " ",
-                                PathSubstitution(FindPackageShare("ros2_control_demo_example_1"))
-                                / "urdf"
-                                / "rrbot.urdf.xacro",
-                            ]
-                        )
-                    },
                     PathSubstitution(FindPackageShare("ros2_control_demo_example_15"))
                     / "config"
                     / "rrbot_namespace_controllers.yaml",
