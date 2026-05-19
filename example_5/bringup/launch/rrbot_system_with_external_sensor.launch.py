@@ -119,13 +119,9 @@ def generate_launch_description():
             Node(
                 package="controller_manager",
                 executable="spawner",
-                arguments=["joint_state_broadcaster"],
-            ),
-            Node(
-                package="controller_manager",
-                executable="spawner",
                 name="controller_spawner",
                 arguments=[
+                    "joint_state_broadcaster",
                     "forward_position_controller",
                     "fts_broadcaster",
                     "--param-file",

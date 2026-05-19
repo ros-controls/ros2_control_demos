@@ -181,18 +181,10 @@ def generate_launch_description():
             Node(
                 package="controller_manager",
                 executable="spawner",
+                name="controller_spawner",
                 namespace=LaunchConfiguration("namespace"),
                 arguments=[
                     "joint_state_broadcaster",
-                    "-c",
-                    LaunchConfiguration("controller_manager_name"),
-                ],
-            ),
-            Node(
-                package="controller_manager",
-                executable="spawner",
-                namespace=LaunchConfiguration("namespace"),
-                arguments=[
                     LaunchConfiguration("robot_controller"),
                     "-c",
                     LaunchConfiguration("controller_manager_name"),
