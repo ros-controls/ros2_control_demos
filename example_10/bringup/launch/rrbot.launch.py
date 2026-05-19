@@ -67,7 +67,8 @@ def generate_launch_description():
                 executable="spawner",
                 name="controller_spawner",
                 arguments=[
-                    "joint_state_broadcaster" "gpio_controller",
+                    "joint_state_broadcaster",
+                    "gpio_controller",
                     "forward_position_controller",
                     "--param-file",
                     PathSubstitution(FindPackageShare("ros2_control_demo_example_10"))
