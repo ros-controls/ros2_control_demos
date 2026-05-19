@@ -83,18 +83,9 @@ def generate_launch_description():
             Node(
                 package="controller_manager",
                 executable="spawner",
+                name="joint_position_controller_spawner",
                 arguments=[
                     "joint1_position_controller",
-                    "--param-file",
-                    PathSubstitution(FindPackageShare("ros2_control_demo_example_12"))
-                    / "config"
-                    / "rrbot_chained_controllers.yaml",
-                ],
-            ),
-            Node(
-                package="controller_manager",
-                executable="spawner",
-                arguments=[
                     "joint2_position_controller",
                     "--param-file",
                     PathSubstitution(FindPackageShare("ros2_control_demo_example_12"))

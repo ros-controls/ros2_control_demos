@@ -70,18 +70,9 @@ def generate_launch_description():
             Node(
                 package="controller_manager",
                 executable="spawner",
+                name="controller_spawner",
                 arguments=[
                     "gpio_controller",
-                    "--param-file",
-                    PathSubstitution(FindPackageShare("ros2_control_demo_example_10"))
-                    / "config"
-                    / "rrbot_controllers.yaml",
-                ],
-            ),
-            Node(
-                package="controller_manager",
-                executable="spawner",
-                arguments=[
                     "forward_position_controller",
                     "--param-file",
                     PathSubstitution(FindPackageShare("ros2_control_demo_example_10"))
