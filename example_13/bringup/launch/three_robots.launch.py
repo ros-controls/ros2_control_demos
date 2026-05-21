@@ -38,6 +38,11 @@ def generate_launch_description():
                 default_value="true",
                 description="Start RViz2 automatically with this launch file.",
             ),
+            DeclareLaunchArgument(
+                "rqt",
+                default_value="true",
+                description="Start rqt_controller_manager automatically with this launch file.",
+            ),
             # controller manager node
             Node(
                 package="controller_manager",
@@ -127,6 +132,14 @@ def generate_launch_description():
                 ],
                 extra_spawner_args=["--inactive"],
             ),
+            # rqt_controller_manager GUI
+            Node(
+                package="rqt_controller_manager",
+                executable="rqt_controller_manager",
+                name="rqt_controller_manager",
+                output="log",
+                condition=IfCondition(LaunchConfiguration("rqt")),
+            ),
             # Command publishers
             Node(
                 package="ros2_controllers_test_nodes",
@@ -158,5 +171,7 @@ def generate_launch_description():
                     / "three_robots_position_command_publishers.yaml",
                 ],
             ),
+            
+            
         ]
     )
