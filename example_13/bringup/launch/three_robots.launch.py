@@ -170,8 +170,6 @@ def generate_launch_description():
                     / "config"
                     / "three_robots_position_command_publishers.yaml",
                 ],
-            ),
-            
-            
+            ),        
         ]
     )
