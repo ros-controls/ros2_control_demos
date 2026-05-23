@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# Copyright (C) 2025 ros2_control Development Team
+# Copyright (C) 2026 ros2_control Development Team
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,114 +18,97 @@
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
-from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
+from launch.substitutions import Command, LaunchConfiguration, PathSubstitution
+
 from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterFile, ParameterValue
 from launch_ros.substitutions import FindPackageShare
 
 
 def generate_launch_description():
-    # URDF for TF only; MuJoCo loads scene.xml via ros2_control xacro
     robot_description_content = Command(
         [
-            PathJoinSubstitution([FindExecutable(name="xacro")]),
+            "xacro",
             " ",
-            PathJoinSubstitution(
-                [
-                    FindPackageShare("ros2_control_demo_description"),
-                    "openduckmini",
-                    "urdf",
-                    "open_duck_mini.urdf.xacro",
-                ]
-            ),
-            " headless:=",
+            PathSubstitution(FindPackageShare("ros2_control_demo_description"))
+            / "openduckmini"
+            / "urdf"
+            / "open_duck_mini.urdf.xacro",
+            " ",
+            "headless:=",
             LaunchConfiguration("headless"),
         ]
     )
-
     robot_description = {
-        "robot_description": ParameterValue(value=robot_description_content, value_type=str)
+        "robot_description": ParameterValue(robot_description_content, value_type=str),
+        "use_sim_time": True,
     }
-
-    controller_config_path = PathJoinSubstitution(
-        [
-            FindPackageShare("ros2_control_demo_example_18"),
-            "config",
-            "open_duck_mini_controllers.yaml",
-        ]
-    )
-    controller_parameters = ParameterFile(controller_config_path)
-
-    # Publishes TF from joint states; simulation model from MuJoCo
-    robot_state_publisher_node = Node(
-        package="robot_state_publisher",
-        executable="robot_state_publisher",
-        output="both",
-        parameters=[
-            robot_description,
-            {"use_sim_time": True},
-        ],
-    )
-
-    control_node = Node(
-        package="mujoco_ros2_control",
-        executable="ros2_control_node",
-        output="both",
-        parameters=[
-            {"use_sim_time": True},
-            controller_parameters,
-        ],
-    )
-
-    spawn_joint_state_broadcaster = Node(
-        package="controller_manager",
-        executable="spawner",
-        name="spawn_joint_state_broadcaster",
-        arguments=[
-            "joint_state_broadcaster",
-            "--param-file",
-            controller_config_path,
-        ],
-        output="both",
-    )
-
-    spawn_state_interfaces_broadcaster = Node(
-        package="controller_manager",
-        executable="spawner",
-        name="spawn_state_interfaces_broadcaster",
-        arguments=[
-            "state_interfaces_broadcaster",
-            "--param-file",
-            controller_config_path,
-        ],
-        output="both",
-    )
-
-    spawn_motion_controller = Node(
-        package="controller_manager",
-        executable="spawner",
-        name="spawn_motion_controller",
-        arguments=[
-            "motion_controller",
-            "--param-file",
-            controller_config_path,
-        ],
-        output="both",
-    )
-
-    headless_arg = DeclareLaunchArgument(
-        "headless",
-        default_value="false",
-        description="Run simulation without visualization window (use true for CI/headless)",
-    )
 
     return LaunchDescription(
         [
-            headless_arg,
-            robot_state_publisher_node,
-            control_node,
-            spawn_joint_state_broadcaster,
-            spawn_state_interfaces_broadcaster,
-            spawn_motion_controller,
+            DeclareLaunchArgument(
+                "headless",
+                default_value="false",
+                description="Run simulation without visualization window (use true for CI/headless)",
+            ),
+            # Publishes TF from joint states; simulation model from MuJoCo
+            Node(
+                package="robot_state_publisher",
+                executable="robot_state_publisher",
+                output="both",
+                parameters=[robot_description],
+            ),
+            Node(
+                package="mujoco_ros2_control",
+                executable="ros2_control_node",
+                output="both",
+                parameters=[
+                    {"use_sim_time": True},
+                    ParameterFile(
+                        PathSubstitution(FindPackageShare("ros2_control_demo_example_18"))
+                        / "config"
+                        / "open_duck_mini_controllers.yaml",
+                    ),
+                ],
+            ),
+            Node(
+                package="controller_manager",
+                executable="spawner",
+                name="spawn_joint_state_broadcaster",
+                arguments=[
+                    "joint_state_broadcaster",
+                    "--param-file",
+                    PathSubstitution(FindPackageShare("ros2_control_demo_example_18"))
+                    / "config"
+                    / "open_duck_mini_controllers.yaml",
+                ],
+                output="both",
+            ),
+            Node(
+                package="controller_manager",
+                executable="spawner",
+                name="spawn_state_interfaces_broadcaster",
+                arguments=[
+                    "state_interfaces_broadcaster",
+                    "--param-file",
+                    PathSubstitution(FindPackageShare("ros2_control_demo_example_18"))
+                    / "config"
+                    / "open_duck_mini_controllers.yaml",
+                ],
+                output="both",
+            ),
+            Node(
+                package="controller_manager",
+                executable="spawner",
+                name="spawn_motion_controller",
+                arguments=[
+                    "motion_controller",
+                    "--param-file",
+                    PathSubstitution(FindPackageShare("ros2_control_demo_example_18"))
+                    / "config"
+                    / "open_duck_mini_controllers.yaml",
+                ],
+                output="both",
+            ),
         ]
     )
