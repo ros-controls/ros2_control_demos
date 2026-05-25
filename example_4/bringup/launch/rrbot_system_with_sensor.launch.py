@@ -114,24 +114,10 @@ def generate_launch_description():
             Node(
                 package="controller_manager",
                 executable="spawner",
-                arguments=["joint_state_broadcaster"],
-            ),
-            Node(
-                package="controller_manager",
-                executable="spawner",
+                name="controller_spawner",
                 arguments=[
+                    "joint_state_broadcaster",
                     "forward_position_controller",
-                    "--param-file",
-                    PathSubstitution(FindPackageShare("ros2_control_demo_example_4"))
-                    / "config"
-                    / "rrbot_with_sensor_controllers.yaml",
-                ],
-            ),
-            # add the spawner node for the fts_broadcaster
-            Node(
-                package="controller_manager",
-                executable="spawner",
-                arguments=[
                     "fts_broadcaster",
                     "--param-file",
                     PathSubstitution(FindPackageShare("ros2_control_demo_example_4"))

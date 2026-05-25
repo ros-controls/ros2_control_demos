@@ -80,10 +80,10 @@ class TestFixture(unittest.TestCase):
     def tearDown(self):
         self.node.destroy_node()
 
-    def test_node_start(self, proc_output):
+    def test_node_start(self):
         check_node_running(self.node, "robot_state_publisher")
 
-    def test_controller_running(self, proc_output):
+    def test_controller_running(self, proc_info):
 
         cnames = [
             "forward_position_controller",
@@ -95,6 +95,45 @@ class TestFixture(unittest.TestCase):
         cnames = [
             "position_trajectory_controller",
         ]
+        check_controllers_running(self.node, cnames, "/rrbot_1", "inactive")
+        check_controllers_running(self.node, cnames, "/rrbot_2", "inactive")
+
+        # Wait for controller_spawner to finish and verify successful exit.
+        proc_info.assertWaitForShutdown(
+            process="spawner", cmd_args="__node:=controller_spawner_rrbot_1", timeout=30
+        )
+        launch_testing.asserts.assertExitCodes(
+            proc_info, process="spawner", cmd_args="__node:=controller_spawner_rrbot_1"
+        )
+        proc_info.assertWaitForShutdown(
+            process="spawner",
+            cmd_args=["position_trajectory_controller", "__ns:=/rrbot_1"],
+            timeout=30,
+        )
+        launch_testing.asserts.assertExitCodes(
+            proc_info,
+            process="spawner",
+            cmd_args=["position_trajectory_controller", "__ns:=/rrbot_1"],
+        )
+
+        proc_info.assertWaitForShutdown(
+            process="spawner", cmd_args="__node:=controller_spawner_rrbot_2", timeout=30
+        )
+        launch_testing.asserts.assertExitCodes(
+            proc_info, process="spawner", cmd_args="__node:=controller_spawner_rrbot_2"
+        )
+        proc_info.assertWaitForShutdown(
+            process="spawner",
+            cmd_args=["position_trajectory_controller", "__ns:=/rrbot_2"],
+            timeout=30,
+        )
+        launch_testing.asserts.assertExitCodes(
+            proc_info,
+            process="spawner",
+            cmd_args=["position_trajectory_controller", "__ns:=/rrbot_2"],
+        )
+
+        # Re-check controllers after spawner has exited.
         check_controllers_running(self.node, cnames, "/rrbot_1", "inactive")
         check_controllers_running(self.node, cnames, "/rrbot_2", "inactive")
 
