@@ -181,7 +181,7 @@ def generate_launch_description():
             Node(
                 package="controller_manager",
                 executable="spawner",
-                name="controller_spawner",
+                name=["controller_spawner_", LaunchConfiguration("namespace")],
                 namespace=LaunchConfiguration("namespace"),
                 arguments=[
                     "joint_state_broadcaster",
