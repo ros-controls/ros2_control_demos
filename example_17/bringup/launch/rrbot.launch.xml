@@ -61,30 +61,11 @@
     internal logic to wait for the controller_manager to be available.
   -->
   <node pkg="controller_manager" exec="spawner"
-        args="forward_position_controller --param-file $(var robot_controllers)"
+        args="joint_state_broadcaster forward_position_controller --param-file $(var robot_controllers)"
         name="robot_controller_spawner"/>
 
-  <!--
-    Joint State Broadcaster Spawner
-    This spawner is launched after a 1.5-second delay. This <timer> tag is a
-    workaround to approximate the sequential execution from the Python launch file's
-    OnProcessExit handler. It helps ensure the main controller is spawned first.
-  -->
-  <timer period="1.5">
-    <node pkg="controller_manager" exec="spawner"
-          args="joint_state_broadcaster"
-          name="joint_state_broadcaster_spawner"/>
-  </timer>
-
-  <!--
-    RViz2 Node
-    RViz is launched after a 3.0-second delay to give time for the robot state
-    to be published. It is also conditional on the 'gui' argument.
-  -->
-  <timer period="3.0">
-    <node pkg="rviz2" exec="rviz2" name="rviz2" output="log"
-          args="-d $(var rviz_config_file)"
-          if="$(var gui)"/>
-  </timer>
+  <node pkg="rviz2" exec="rviz2" name="rviz2" output="log"
+        args="-d $(var rviz_config_file)"
+        if="$(var gui)"/>
 
 </launch>
