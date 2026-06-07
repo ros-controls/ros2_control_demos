@@ -108,6 +108,30 @@ Caveats on hardware lifecycling
 - There is a possibility that hardware lifecycling (state changes) interfere with the ``update``-loop
   if you are trying to start/stop a controller at the same time.
 
+Introspecting controllers with ``rqt_controller_manager``
+----------------------------------------------------------
+
+``rqt_controller_manager`` is launched automatically alongside RViz when starting this example.
+It provides a graphical interface to view, activate, deactivate, and inspect all controllers
+and hardware components under a single controller manager — making it especially useful for
+this multi-robot example with 10 controllers across 4 hardware components.
+
+To open it manually:
+
+.. code-block:: shell
+
+  ros2 run rqt_controller_manager rqt_controller_manager
+
+Set the controller manager namespace to ``/controller_manager`` in the top-left drop-down.
+All operations in the Tutorial steps below (activating hardware, switching controllers) can
+also be performed directly from this GUI without using the CLI.
+
+To launch without the rqt GUI, pass ``rqt:=false``:
+
+.. code-block:: shell
+
+  ros2 launch ros2_control_demo_example_13 three_robots.launch.py rqt:=false
+
 
 Tutorial steps
 --------------------------
@@ -472,3 +496,4 @@ Controllers from this demo
 --------------------------
 - ``Joint State Broadcaster`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/{REPOS_FILE_BRANCH}/joint_state_broadcaster>`__): `doc <https://control.ros.org/{REPOS_FILE_BRANCH}/doc/ros2_controllers/joint_state_broadcaster/doc/userdoc.html>`__
 - ``Forward Command Controller`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/{REPOS_FILE_BRANCH}/forward_command_controller>`__): `doc <https://control.ros.org/{REPOS_FILE_BRANCH}/doc/ros2_controllers/forward_command_controller/doc/userdoc.html>`__
+- ``rqt Controller Manager`` (`ros2_control repository <https://github.com/ros-controls/ros2_control/tree/{REPOS_FILE_BRANCH}/rqt_controller_manager>`__): `doc <https://control.ros.org/{REPOS_FILE_BRANCH}/doc/ros2_control/rqt_controller_manager/userdoc.html>`__
