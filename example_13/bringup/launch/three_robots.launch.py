@@ -35,12 +35,18 @@ def generate_launch_description():
             description="Slowdown factor of the RRbot.",
         )
     )
-    # Declare arguments
     declared_arguments.append(
         DeclareLaunchArgument(
             "gui",
             default_value="true",
             description="Start RViz2 automatically with this launch file.",
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "rqt",
+            default_value="true",
+            description="Start rqt_controller_manager automatically with this launch file.",
         )
     )
 
@@ -51,7 +57,6 @@ def generate_launch_description():
     # Get URDF via xacro
     robot_description_content = Command(
         [
-<<<<<<< HEAD
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
             PathJoinSubstitution(
@@ -60,150 +65,6 @@ def generate_launch_description():
                     "urdf",
                     "three_robots.urdf.xacro",
                 ]
-=======
-            DeclareLaunchArgument(
-                "slowdown",
-                default_value="50.0",
-                description="Slowdown factor of the RRbot.",
-            ),
-            DeclareLaunchArgument(
-                "gui",
-                default_value="true",
-                description="Start RViz2 automatically with this launch file.",
-            ),
-            DeclareLaunchArgument(
-                "rqt",
-                default_value="true",
-                description="Start rqt_controller_manager automatically with this launch file.",
-            ),
-            # controller manager node
-            Node(
-                package="controller_manager",
-                executable="ros2_control_node",
-                parameters=[
-                    PathSubstitution(FindPackageShare("ros2_control_demo_example_13"))
-                    / "config"
-                    / "three_robots_controllers.yaml",
-                ],
-            ),
-            # robot_state_publisher with robot_description from xacro
-            Node(
-                package="robot_state_publisher",
-                executable="robot_state_publisher",
-                output="both",
-                parameters=[
-                    {
-                        "robot_description": Command(
-                            [
-                                "xacro",
-                                " ",
-                                PathSubstitution(FindPackageShare("ros2_control_demo_example_13"))
-                                / "urdf"
-                                / "three_robots.urdf.xacro",
-                                " slowdown:=",
-                                LaunchConfiguration("slowdown"),
-                            ]
-                        )
-                    }
-                ],
-            ),
-            # RViz (conditional)
-            Node(
-                package="rviz2",
-                executable="rviz2",
-                name="rviz2",
-                output="log",
-                arguments=[
-                    "-d",
-                    PathSubstitution(FindPackageShare("ros2_control_demo_example_13"))
-                    / "rviz"
-                    / "three_robots.rviz",
-                ],
-                condition=IfCondition(LaunchConfiguration("gui")),
-            ),
-            # spawners: use helper that generates spawner launch descriptions
-            generate_controllers_spawner_launch_description(
-                [
-                    "joint_state_broadcaster",
-                    "rrbot_joint_state_broadcaster",
-                    "rrbot_position_controller",
-                    "rrbot_external_fts_broadcaster",
-                ],
-                controller_params_files=[
-                    PathSubstitution(FindPackageShare("ros2_control_demo_example_13"))
-                    / "config"
-                    / "three_robots_controllers.yaml",
-                ],
-            ),
-            generate_controllers_spawner_launch_description(
-                ["rrbot_with_sensor_joint_state_broadcaster", "rrbot_with_sensor_fts_broadcaster"],
-                controller_params_files=[
-                    PathSubstitution(FindPackageShare("ros2_control_demo_example_13"))
-                    / "config"
-                    / "three_robots_controllers.yaml",
-                ],
-            ),
-            generate_controllers_spawner_launch_description(
-                ["rrbot_with_sensor_position_controller"],
-                controller_params_files=[
-                    PathSubstitution(FindPackageShare("ros2_control_demo_example_13"))
-                    / "config"
-                    / "three_robots_controllers.yaml",
-                ],
-                extra_spawner_args=["--inactive"],
-            ),
-            generate_controllers_spawner_launch_description(
-                [
-                    "threedofbot_joint_state_broadcaster",
-                    "threedofbot_position_controller",
-                    "threedofbot_pid_gain_controller",
-                ],
-                controller_params_files=[
-                    PathSubstitution(FindPackageShare("ros2_control_demo_example_13"))
-                    / "config"
-                    / "three_robots_controllers.yaml",
-                ],
-                extra_spawner_args=["--inactive"],
-            ),
-            # rqt_controller_manager GUI
-            Node(
-                package="rqt_controller_manager",
-                executable="rqt_controller_manager",
-                name="rqt_controller_manager",
-                output="log",
-                condition=IfCondition(LaunchConfiguration("rqt")),
-            ),
-            # Command publishers
-            Node(
-                package="ros2_controllers_test_nodes",
-                executable="publisher_forward_position_controller",
-                name="rrbot_position_command_publisher",
-                parameters=[
-                    PathSubstitution(FindPackageShare("ros2_control_demo_example_13"))
-                    / "config"
-                    / "three_robots_position_command_publishers.yaml",
-                ],
-            ),
-            Node(
-                package="ros2_controllers_test_nodes",
-                executable="publisher_forward_position_controller",
-                name="rrbot_with_sensor_position_command_publisher",
-                parameters=[
-                    PathSubstitution(FindPackageShare("ros2_control_demo_example_13"))
-                    / "config"
-                    / "three_robots_position_command_publishers.yaml",
-                ],
-            ),
-            Node(
-                package="ros2_controllers_test_nodes",
-                executable="publisher_forward_position_controller",
-                name="threedofbot_position_command_publisher",
-                parameters=[
-                    PathSubstitution(FindPackageShare("ros2_control_demo_example_13"))
-                    / "config"
-                    / "three_robots_position_command_publishers.yaml",
-                ],
->>>>>>> 33bbaf1 (Add rqt controller manager to example 13 (#1131))
             ),
             " slowdown:=",
             slowdown,
@@ -324,6 +185,14 @@ def generate_launch_description():
         rrbot_position_command_publisher,
         rrbot_with_sensor_position_command_publisher,
         threedofbot_position_command_publisher,
+        # rqt_controller_manager GUI
+        Node(
+            package="rqt_controller_manager",
+            executable="rqt_controller_manager",
+            name="rqt_controller_manager",
+            output="log",
+            condition=IfCondition(LaunchConfiguration("rqt")),
+        ),
     ]
 
     return LaunchDescription(declared_arguments + nodes)
