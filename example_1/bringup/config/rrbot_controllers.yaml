@@ -8,6 +8,6 @@ forward_position_controller:
   ros__parameters:
     type: forward_command_controller/ForwardCommandController
     joints:
-      - $(var joint_prefix)1
-      - $(var joint_prefix)2
+      - joint1
+      - joint2
     interface_name: position
