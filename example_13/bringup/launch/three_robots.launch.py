@@ -35,12 +35,18 @@ def generate_launch_description():
             description="Slowdown factor of the RRbot.",
         )
     )
-    # Declare arguments
     declared_arguments.append(
         DeclareLaunchArgument(
             "gui",
             default_value="true",
             description="Start RViz2 automatically with this launch file.",
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "rqt",
+            default_value="true",
+            description="Start rqt_controller_manager automatically with this launch file.",
         )
     )
 
@@ -179,6 +185,14 @@ def generate_launch_description():
         rrbot_position_command_publisher,
         rrbot_with_sensor_position_command_publisher,
         threedofbot_position_command_publisher,
+        # rqt_controller_manager GUI
+        Node(
+            package="rqt_controller_manager",
+            executable="rqt_controller_manager",
+            name="rqt_controller_manager",
+            output="log",
+            condition=IfCondition(LaunchConfiguration("rqt")),
+        ),
     ]
 
     return LaunchDescription(declared_arguments + nodes)
