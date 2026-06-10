@@ -16,158 +16,116 @@
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.conditions import IfCondition
-from launch.substitutions import (
-    Command,
-    FindExecutable,
-    PathJoinSubstitution,
-    LaunchConfiguration,
-)
+from launch.substitutions import Command, LaunchConfiguration, PathSubstitution
 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
 
 def generate_launch_description():
-    # Declare arguments
-    declared_arguments = []
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "gui",
-            default_value="true",
-            description="Start RViz2 automatically with this launch file.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "use_mock_hardware",
-            default_value="false",
-            description="Start robot with mock hardware mirroring command to its states.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "fixed_frame_id",
-            default_value="odom",
-            description="Fixed frame id of the robot.",
-        )
-    )
-
-    # Initialize Arguments
-    gui = LaunchConfiguration("gui")
-    use_mock_hardware = LaunchConfiguration("use_mock_hardware")
-    fixed_frame_id = LaunchConfiguration("fixed_frame_id")
-
-    # Get URDF via xacro
-    robot_description_content = Command(
+    return LaunchDescription(
         [
-            PathJoinSubstitution([FindExecutable(name="xacro")]),
-            " ",
-            PathJoinSubstitution(
-                [FindPackageShare("ros2_control_demo_example_16"), "urdf", "diffbot.urdf.xacro"]
+            DeclareLaunchArgument(
+                "gui",
+                default_value="true",
+                description="Start RViz2 automatically with this launch file.",
             ),
-            " ",
-            "use_mock_hardware:=",
-            use_mock_hardware,
+            DeclareLaunchArgument(
+                "use_mock_hardware",
+                default_value="false",
+                description="Start robot with mock hardware mirroring command to its states.",
+            ),
+            DeclareLaunchArgument(
+                "fixed_frame_id",
+                default_value="odom",
+                description="Fixed frame id of the robot.",
+            ),
+            Node(
+                package="controller_manager",
+                executable="ros2_control_node",
+                parameters=[
+                    PathSubstitution(FindPackageShare("ros2_control_demo_example_16"))
+                    / "config"
+                    / "diffbot_cm.yaml"
+                ],
+                output="both",
+            ),
+            Node(
+                package="robot_state_publisher",
+                executable="robot_state_publisher",
+                output="both",
+                parameters=[
+                    {
+                        "robot_description": Command(
+                            [
+                                "xacro",
+                                " ",
+                                PathSubstitution(FindPackageShare("ros2_control_demo_example_16"))
+                                / "urdf"
+                                / "diffbot.urdf.xacro",
+                                " ",
+                                "use_mock_hardware:=",
+                                LaunchConfiguration("use_mock_hardware"),
+                            ]
+                        )
+                    }
+                ],
+            ),
+            Node(
+                package="rviz2",
+                executable="rviz2",
+                name="rviz2",
+                output="log",
+                arguments=[
+                    "-d",
+                    PathSubstitution(FindPackageShare("ros2_control_demo_description"))
+                    / "diffbot/rviz"
+                    / "diffbot.rviz",
+                    "-f",
+                    LaunchConfiguration("fixed_frame_id"),
+                ],
+                condition=IfCondition(LaunchConfiguration("gui")),
+            ),
+            Node(
+                package="controller_manager",
+                executable="spawner",
+                name="controller_spawner",
+                arguments=[
+                    "--controller",
+                    "joint_state_broadcaster",
+                    "--param-file",
+                    [
+                        PathSubstitution(FindPackageShare("ros2_control_demo_example_16"))
+                        / "config"
+                        / "diffbot_cm.yaml"
+                    ],
+                    "--controller",
+                    "pid_controller_right_wheel_joint",
+                    "--param-file",
+                    [
+                        PathSubstitution(FindPackageShare("ros2_control_demo_example_16"))
+                        / "config"
+                        / "pid_controllers.yaml",
+                    ],
+                    "--controller",
+                    "pid_controller_left_wheel_joint",
+                    "--param-file",
+                    [
+                        PathSubstitution(FindPackageShare("ros2_control_demo_example_16"))
+                        / "config"
+                        / "pid_controllers.yaml",
+                    ],
+                    "--controller",
+                    "diffbot_base_controller",
+                    "--param-file",
+                    [
+                        PathSubstitution(FindPackageShare("ros2_control_demo_example_16"))
+                        / "config"
+                        / "diff_drive_controller.yaml",
+                    ],
+                    "--controller-ros-args",
+                    "-r /diffbot_base_controller/cmd_vel:=/cmd_vel",
+                ],
+            ),
         ]
     )
-    robot_description = {"robot_description": robot_description_content}
-
-    rviz_config_file = PathJoinSubstitution(
-        [FindPackageShare("ros2_control_demo_description"), "diffbot/rviz", "diffbot.rviz"]
-    )
-
-    control_node = Node(
-        package="controller_manager",
-        executable="ros2_control_node",
-        parameters=[
-            PathJoinSubstitution(
-                [
-                    FindPackageShare("ros2_control_demo_example_16"),
-                    "config",
-                    "diffbot_cm.yaml",
-                ]
-            )
-        ],
-        output="both",
-    )
-    robot_state_pub_node = Node(
-        package="robot_state_publisher",
-        executable="robot_state_publisher",
-        output="both",
-        parameters=[robot_description],
-    )
-
-    rviz_node = Node(
-        package="rviz2",
-        executable="rviz2",
-        name="rviz2",
-        output="log",
-        arguments=["-d", rviz_config_file, "-f", fixed_frame_id],
-        condition=IfCondition(gui),
-    )
-
-    controller_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=[
-            "--controller",
-            "joint_state_broadcaster",
-            "--param-file",
-            [
-                PathJoinSubstitution(
-                    [
-                        FindPackageShare("ros2_control_demo_example_16"),
-                        "config",
-                        "diffbot_cm.yaml",
-                    ]
-                )
-            ],
-            "--controller",
-            "pid_controller_right_wheel_joint",
-            "--param-file",
-            [
-                PathJoinSubstitution(
-                    [
-                        FindPackageShare("ros2_control_demo_example_16"),
-                        "config",
-                        "pid_controllers.yaml",
-                    ]
-                )
-            ],
-            "--controller",
-            "pid_controller_left_wheel_joint",
-            "--param-file",
-            [
-                PathJoinSubstitution(
-                    [
-                        FindPackageShare("ros2_control_demo_example_16"),
-                        "config",
-                        "pid_controllers.yaml",
-                    ]
-                )
-            ],
-            "--controller",
-            "diffbot_base_controller",
-            "--param-file",
-            [
-                PathJoinSubstitution(
-                    [
-                        FindPackageShare("ros2_control_demo_example_16"),
-                        "config",
-                        "diff_drive_controller.yaml",
-                    ]
-                )
-            ],
-            "--controller-ros-args",
-            "-r /diffbot_base_controller/cmd_vel:=/cmd_vel",
-        ],
-    )
-
-    nodes = [
-        control_node,
-        robot_state_pub_node,
-        controller_spawner,
-        rviz_node,
-    ]
-
-    return LaunchDescription(declared_arguments + nodes)
