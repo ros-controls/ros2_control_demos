@@ -15,6 +15,7 @@ on:
       - '**.py'
       - '**.yaml'
       - 'ros2_control_demos.rolling.repos'
+      - 'ros2_control_demos.lyrical.repos'
       - 'ros2_control_demos.kilted.repos'
       - '**.xml'
   push: *event
@@ -28,7 +29,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ROS_DISTRO: [rolling, kilted]
+        ROS_DISTRO: [rolling, lyrical, kilted]
     with:
       ros_distro: ${{ matrix.ROS_DISTRO }}
       ros_repo: testing
