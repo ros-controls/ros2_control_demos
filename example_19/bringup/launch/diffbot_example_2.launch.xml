@@ -1,0 +1,37 @@
+<!-- Launch-file for ros2_control_demos Example 2 -->
+<launch>
+  <arg name="gui" default="true"
+    description="Start RViz2 automatically with this launch file." />
+  <arg name="use_mock_hardware" default="false"
+    description="Start robot with mock hardware mirroring command to its states." />
+
+  <let name="robot_description_content"
+    value="
+    $(command '
+      xacro $(find-pkg-share ros2_control_demo_example_2)/urdf/diffbot.urdf.xacro
+      use_mock_hardware:=$(var use_mock_hardware)
+    ')" />
+
+  <let name="controller_config_file" value="$(find-pkg-share ros2_control_demo_example_2)/config/diffbot_controllers.yaml"/>
+
+  <node pkg="controller_manager" exec="ros2_control_node" output="both">
+    <param from="$(var controller_config_file)" />
+  </node>
+
+  <node pkg="robot_state_publisher" exec="robot_state_publisher" output="both">
+    <param name="robot_description" value="$(var robot_description_content)" />
+  </node>
+
+  <spawn_controller>
+    <controller name="diffbot_base_controller">
+      <!-- This file can technically be omitted, since it is loaded
+        by the controller manager at startup -->
+      <param from="$(var controller_config_file)" />
+      <remap from="~/cmd_vel" to="/cmd_vel" />
+    </controller>
+    <controller name="joint_state_broadcaster" />
+  </spawn_controller>
+
+  <node pkg="rviz2" exec="rviz2" name="rviz2" output="log" if="$(var gui)"
+    args="-d $(find-pkg-share ros2_control_demo_description)/diffbot/rviz/diffbot.rviz" />
+</launch>
