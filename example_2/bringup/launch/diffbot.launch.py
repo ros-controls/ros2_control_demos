@@ -80,18 +80,9 @@ def generate_launch_description():
             Node(
                 package="controller_manager",
                 executable="spawner",
+                name="controller_spawner",
                 arguments=[
                     "joint_state_broadcaster",
-                    "-p",
-                    PathSubstitution(FindPackageShare("ros2_control_demo_example_2"))
-                    / "config"
-                    / "diffbot_controllers.yaml",
-                ],
-            ),
-            Node(
-                package="controller_manager",
-                executable="spawner",
-                arguments=[
                     "diffbot_base_controller",
                     "--param-file",
                     PathSubstitution(FindPackageShare("ros2_control_demo_example_2"))
