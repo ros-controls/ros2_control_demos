@@ -496,4 +496,4 @@ Controllers from this demo
 --------------------------
 - ``Joint State Broadcaster`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/{REPOS_FILE_BRANCH}/joint_state_broadcaster>`__): `doc <https://control.ros.org/{REPOS_FILE_BRANCH}/doc/ros2_controllers/joint_state_broadcaster/doc/userdoc.html>`__
 - ``Forward Command Controller`` (`ros2_controllers repository <https://github.com/ros-controls/ros2_controllers/tree/{REPOS_FILE_BRANCH}/forward_command_controller>`__): `doc <https://control.ros.org/{REPOS_FILE_BRANCH}/doc/ros2_controllers/forward_command_controller/doc/userdoc.html>`__
-- ``rqt Controller Manager`` (`ros2_control repository <https://github.com/ros-controls/ros2_control/tree/{REPOS_FILE_BRANCH}/rqt_controller_manager>`__): `doc <https://control.ros.org/{REPOS_FILE_BRANCH}/doc/ros2_control/controller_manager/doc/userdoc.html>`__
+- ``rqt Controller Manager`` (`ros2_control repository <https://github.com/ros-controls/ros2_control/tree/{REPOS_FILE_BRANCH}/rqt_controller_manager>`__): `doc <https://control.ros.org/{REPOS_FILE_BRANCH}/doc/ros2_control/controller_manager/doc/userdoc.html#rqt-controller-manager>`__
