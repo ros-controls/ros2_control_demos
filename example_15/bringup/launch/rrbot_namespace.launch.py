@@ -35,17 +35,6 @@ def generate_launch_description():
                 executable="ros2_control_node",
                 namespace="/rrbot",
                 parameters=[
-                    {
-                        "robot_description": Command(
-                            [
-                                "xacro",
-                                " ",
-                                PathSubstitution(FindPackageShare("ros2_control_demo_example_1"))
-                                / "urdf"
-                                / "rrbot.urdf.xacro",
-                            ]
-                        )
-                    },
                     PathSubstitution(FindPackageShare("ros2_control_demo_example_15"))
                     / "config"
                     / "rrbot_namespace_controllers.yaml",
