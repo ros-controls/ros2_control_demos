@@ -81,10 +81,10 @@ class TestFixture(unittest.TestCase):
     def tearDown(self):
         self.node.destroy_node()
 
-    def test_node_start(self, proc_output):
+    def test_node_start(self):
         check_node_running(self.node, "robot_state_publisher")
 
-    def test_controller_running(self, proc_output):
+    def test_controller_running(self, proc_info):
 
         cnames = [
             "joint1_position_controller",
@@ -92,6 +92,13 @@ class TestFixture(unittest.TestCase):
             "joint_state_broadcaster",
         ]
 
+        check_controllers_running(self.node, cnames)
+
+        # Wait for controller_spawner to finish and verify successful exit.
+        proc_info.assertWaitForShutdown(process="spawner", timeout=30)
+        launch_testing.asserts.assertExitCodes(proc_info, process="spawner")
+
+        # Re-check controllers after spawner has exited.
         check_controllers_running(self.node, cnames)
 
     def test_check_if_msgs_published(self):
@@ -124,10 +131,10 @@ class TestFixtureChained(unittest.TestCase):
     def tearDown(self):
         self.node.destroy_node()
 
-    def test_node_start(self, proc_output):
+    def test_node_start(self):
         check_node_running(self.node, "robot_state_publisher")
 
-    def test_controller_running(self, proc_output):
+    def test_controller_running(self, proc_info):
 
         cnames = [
             "joint1_position_controller",
@@ -137,6 +144,13 @@ class TestFixtureChained(unittest.TestCase):
             "forward_position_controller",
         ]
 
+        check_controllers_running(self.node, cnames)
+
+        # Wait for controller_spawner to finish and verify successful exit.
+        proc_info.assertWaitForShutdown(process="spawner", timeout=30)
+        launch_testing.asserts.assertExitCodes(proc_info, process="spawner")
+
+        # Re-check controllers after spawner has exited.
         check_controllers_running(self.node, cnames)
 
     def test_check_if_msgs_published(self):
