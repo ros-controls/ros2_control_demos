@@ -22,6 +22,7 @@ def generate_launch_description():
     # Get URDF via xacro
     robot_description_content = Command(
         [
+<<<<<<< HEAD
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
             PathJoinSubstitution(
@@ -31,6 +32,30 @@ def generate_launch_description():
                     "r6bot.urdf.xacro",
                 ]
             ),
+=======
+            Node(
+                package="ros2_control_demo_example_7",
+                executable="send_trajectory",
+                name="send_trajectory_node",
+                parameters=[
+                    {
+                        "robot_description": Command(
+                            [
+                                FindExecutable(name="xacro"),
+                                " ",
+                                PathJoinSubstitution(
+                                    [
+                                        FindPackageShare("ros2_control_demo_example_7"),
+                                        "urdf",
+                                        "r6bot.urdf.xacro",
+                                    ]
+                                ),
+                            ]
+                        )
+                    }
+                ],
+            )
+>>>>>>> f445c29 (Remove the extra xacro path substitution (#1120))
         ]
     )
     robot_description = {"robot_description": robot_description_content}
