@@ -1,0 +1,641 @@
+<?xml version="1.0"?>
+<!-- URDF generated from MuJoCo XML with visual mesh geometry -->
+<robot name="open-duck-mini">
+  <link name="base"/>
+
+  <joint name="base_to_trunk" type="fixed">
+    <parent link="base"/>
+    <child link="trunk_assembly"/>
+    <origin xyz="0 0 0.22" rpy="0 0 0"/>
+  </joint>
+
+  <link name="trunk_assembly">
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/body_front.stl"/>
+      </geometry>
+      <origin xyz="-0.019000 0.000000 0.064891" rpy="0.000000 0.000000 0.000000"/>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/body_back.stl"/>
+      </geometry>
+      <origin xyz="-0.019000 0.000000 0.064891" rpy="0.000000 0.000000 0.000000"/>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/body_middle_bottom.stl"/>
+      </geometry>
+      <origin xyz="-0.019000 -0.000000 0.064891" rpy="0.000000 0.000000 0.000000"/>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/body_middle_top.stl"/>
+      </geometry>
+      <origin xyz="-0.019000 0.000000 0.064891" rpy="0.000000 0.000000 0.000000"/>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/trunk_bottom.stl"/>
+      </geometry>
+      <origin xyz="-0.019000 0.000000 0.064891" rpy="-0.000000 0.000000 0.000000"/>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/trunk_top.stl"/>
+      </geometry>
+      <origin xyz="-0.019000 -0.000000 0.064891" rpy="-0.000000 -0.000000 0.000000"/>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <inertial>
+      <mass value="0.698526"/>
+      <origin xyz="-0.048326 -0.000100 0.038497"/>
+      <inertia ixx="0.001677" ixy="-0.000013" ixz="-0.000032" iyy="0.003445" iyz="-0.000002" izz="0.002926"/>
+    </inertial>
+  </link>
+
+  <link name="left_hip_yaw_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/roll_motor_bottom.stl"/>
+      </geometry>
+      <origin xyz="-0.000000 -0.035000 0.019050" rpy="-0.000000 0.000000 -0.000000"/>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/roll_motor_top.stl"/>
+      </geometry>
+      <origin xyz="0.000000 -0.035000 0.019050" rpy="0.000000 -0.000000 -0.000000"/>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <inertial>
+      <mass value="0.066480"/>
+      <origin xyz="0.000795 -0.000005 -0.033060"/>
+      <inertia ixx="0.000024" ixy="0.000000" ixz="-0.000000" iyy="0.000028" iyz="-0.000000" izz="0.000014"/>
+    </inertial>
+  </link>
+
+  <joint name="left_hip_yaw" type="revolute">
+    <parent link="trunk_assembly"/>
+    <child link="left_hip_yaw_link"/>
+    <origin xyz="-0.019000 0.035000 0.045941" rpy="-0.000000 -0.000000 0.000000"/>
+    <axis xyz="0.000000 0.000000 1.000000"/>
+    <limit lower="-0.52359877559829704" upper="0.52359877559830059" effort="3.23" velocity="10.0"/>
+  </joint>
+
+  <link name="left_hip_roll_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/left_roll_to_pitch.stl"/>
+      </geometry>
+      <origin xyz="-0.035000 -0.065000 -0.017050" rpy="1.570796 1.570796 0.000000"/>
+      <material name="duck_yellow">
+        <color rgba="1.0 0.8 0.0 1.0"/>
+      </material>
+    </visual>
+    <inertial>
+      <mass value="0.075160"/>
+      <origin xyz="0.050804 -0.000411 0.020470"/>
+      <inertia ixx="0.000025" ixy="0.000000" ixz="-0.000001" iyy="0.000041" iyz="-0.000000" izz="0.000028"/>
+    </inertial>
+  </link>
+
+  <joint name="left_hip_roll" type="revolute">
+    <parent link="left_hip_yaw_link"/>
+    <child link="left_hip_roll_link"/>
+    <origin xyz="-0.019050 0.000000 -0.046015" rpy="-1.570796 0.000000 1.570796"/>
+    <axis xyz="0.000000 0.000000 1.000000"/>
+    <limit lower="-10.0" upper="10.0" effort="3.23" velocity="10.0"/>
+  </joint>
+
+  <link name="right_hip_roll_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/right_roll_to_pitch.stl"/>
+      </geometry>
+      <origin xyz="0.035000 -0.065000 0.017052" rpy="1.570796 1.570796 0.000000"/>
+      <material name="duck_yellow">
+        <color rgba="1.0 0.8 0.0 1.0"/>
+      </material>
+    </visual>
+    <inertial>
+      <mass value="0.075160"/>
+      <origin xyz="-0.050804 -0.000411 0.020470"/>
+      <inertia ixx="0.000025" ixy="-0.000000" ixz="0.000001" iyy="0.000041" iyz="-0.000000" izz="0.000028"/>
+    </inertial>
+  </link>
+
+  <joint name="right_hip_roll" type="revolute">
+    <parent link="right_hip_yaw_link"/>
+    <child link="right_hip_roll_link"/>
+    <!--origin xyz="0.019050 0.000000 -0.046015" rpy="-1.570796 0.000000 1.570796"/-->
+    <origin xyz="0.019050 0.000000 -0.046015" rpy="-1.570796 0.000000 1.570796"/>
+    <axis xyz="0.000000 0.000000 1.000000"/>
+    <limit lower="-0.43633231299857972" upper="0.43633231299858505" effort="3.23" velocity="10.0"/>
+  </joint>
+
+  <link name="left_hip_pitch_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/left_cache.stl"/>
+      </geometry>
+      <origin xyz="0.046060 0.065000 0.109150" rpy="-1.570796 0.000000 0.000000"/>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/leg_spacer.stl"/>
+      </geometry>
+      <origin xyz="0.046060 0.143650 0.109250" rpy="-1.570796 0.000000 0.000000"/>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/left_knee_to_ankle_right_sheet.stl"/>
+      </geometry>
+      <origin xyz="0.046060 0.143650 0.109150" rpy="-1.570796 -0.000000 -0.000000"/>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/left_knee_to_ankle_left_sheet.stl"/>
+      </geometry>
+      <origin xyz="0.046060 0.143650 0.109150" rpy="-1.570796 0.000000 0.000000"/>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <inertial>
+      <mass value="0.124070"/>
+      <origin xyz="0.002534 -0.039064 0.010278"/>
+      <inertia ixx="0.000211" ixy="-0.000027" ixz="0.000004" iyy="0.000078" iyz="0.000021" izz="0.000226"/>
+    </inertial>
+  </link>
+
+  <joint name="left_hip_pitch" type="revolute">
+    <parent link="left_hip_roll_link"/>
+    <child link="left_hip_pitch_link"/>
+    <origin xyz="0.074150 0.000000 0.035110" rpy="3.14159 1.570796 0.0"/>
+    <axis xyz="0.000000 0.000000 1.000000"/>
+    <limit lower="-10.0" upper="10.0" effort="3.23" velocity="10.0"/>
+  </joint>
+
+  <link name="left_knee_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/leg_spacer.stl"/>
+      </geometry>
+      <origin xyz="0.046060 0.143650 0.109250" rpy="-1.570796 0.000000 0.000000"/>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/left_knee_to_ankle_right_sheet.stl"/>
+      </geometry>
+      <origin xyz="0.046060 0.143650 0.109150" rpy="-1.570796 0.000000 0.000000"/>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/left_knee_to_ankle_left_sheet.stl"/>
+      </geometry>
+      <origin xyz="0.046060 0.143650 0.109150" rpy="-1.570796 -0.000000 -0.000000"/>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <inertial>
+      <mass value="0.072590"/>
+      <origin xyz="0.000005 -0.057746 0.018114"/>
+      <inertia ixx="0.000050" ixy="0.000000" ixz="0.000000" iyy="0.000019" iyz="0.000000" izz="0.000042"/>
+    </inertial>
+  </link>
+
+  <joint name="left_knee" type="revolute">
+    <parent link="left_hip_pitch_link"/>
+    <child link="left_knee_link"/>
+    <origin xyz="0.000000 -0.078650 0.000100" rpy="0.000000 0.000000 -0.000000"/>
+    <axis xyz="0.000000 0.000000 1.000000"/>
+    <limit lower="-10.0" upper="10.0" effort="3.23" velocity="10.0"/>
+  </joint>
+
+  <link name="left_ankle_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/foot_side.stl"/>
+      </geometry>
+      <origin xyz="0.046060 0.222300 0.109050" rpy="-1.570796 -0.000000 -0.000000"/>
+      <material name="duck_feet_yellow">
+        <color rgba="1.0 0.8 0.0 1.0"/>
+      </material>
+    </visual>
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/foot_bottom_tpu.stl"/>
+      </geometry>
+      <origin xyz="0.046060 0.222800 0.109550" rpy="-1.570796 0.000000 0.000000"/>
+      <material name="duck_feet_yellow">
+        <color rgba="1.0 0.8 0.0 1.0"/>
+      </material>
+    </visual>
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/foot_bottom_pla.stl"/>
+      </geometry>
+      <origin xyz="0.046060 0.222800 0.109550" rpy="-1.570796 0.000000 0.000000"/>
+      <material name="duck_feet_yellow">
+        <color rgba="1.0 0.8 0.0 1.0"/>
+      </material>
+    </visual>
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/foot_top.stl"/>
+      </geometry>
+      <origin xyz="0.046060 0.222300 0.109050" rpy="-1.570796 -0.000000 -0.000000"/>
+      <material name="duck_feet_yellow">
+        <color rgba="1.0 0.8 0.0 1.0"/>
+      </material>
+    </visual>
+    <inertial>
+      <mass value="0.075240"/>
+      <origin xyz="0.011072 -0.024661 0.019063"/>
+      <inertia ixx="0.000019" ixy="0.000002" ixz="-0.000000" iyy="0.000067" iyz="0.000000" izz="0.000061"/>
+    </inertial>
+  </link>
+
+  <joint name="left_ankle" type="revolute">
+    <parent link="left_knee_link"/>
+    <child link="left_ankle_link"/>
+    <origin xyz="0.000000 -0.078650 0.000100" rpy="0.000000 0.000000 0.000000"/>
+    <axis xyz="0.000000 0.000000 1.000000"/>
+    <limit lower="-10.0" upper="10.0" effort="3.23" velocity="10.0"/>
+  </joint>
+
+  <link name="neck_pitch_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/neck_left_sheet.stl"/>
+      </geometry>
+      <origin xyz="-0.020000 -0.025110 0.019050" rpy="-1.570796 -0.000000 -0.000000"/>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/neck_right_sheet.stl"/>
+      </geometry>
+      <origin xyz="-0.020000 -0.025110 0.019050" rpy="-1.570796 0.000000 0.000000"/>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <inertial>
+      <mass value="0.066180"/>
+      <origin xyz="-0.000006 0.049297 0.018179"/>
+      <inertia ixx="0.000035" ixy="0.000000" ixz="-0.000000" iyy="0.000017" iyz="-0.000000" izz="0.000028"/>
+    </inertial>
+  </link>
+
+  <joint name="neck_pitch" type="revolute">
+    <parent link="trunk_assembly"/>
+    <child link="neck_pitch_link"/>
+    <origin xyz="0.001000 0.019150 0.090001" rpy="1.570796 -0.000000 -0.000000"/>
+    <axis xyz="0.000000 0.000000 1.000000"/>
+    <limit lower="-10.0" upper="10.0" effort="3.23" velocity="10.0"/>
+  </joint>
+
+  <link name="head_pitch_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/head_pitch_to_yaw.stl"/>
+      </geometry>
+      <origin xyz="-0.020000 -0.091110 0.019050" rpy="-1.570796 0.000000 0.000000"/>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <inertial>
+      <mass value="0.016938"/>
+      <origin xyz="-0.007662 0.026015 0.018668"/>
+      <inertia ixx="0.000009" ixy="0.000001" ixz="0.000000" iyy="0.000005" iyz="-0.000000" izz="0.000008"/>
+    </inertial>
+  </link>
+
+  <joint name="head_pitch" type="revolute">
+    <parent link="neck_pitch_link"/>
+    <child link="head_pitch_link"/>
+    <origin xyz="-0.000000 0.066000 -0.000000" rpy="-0.000000 0.000000 0.000000"/>
+    <axis xyz="0.000000 0.000000 1.000000"/>
+    <limit lower="-10.0" upper="10.0" effort="3.23" velocity="10.0"/>
+  </joint>
+
+  <link name="head_yaw_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/head_yaw_to_roll.stl"/>
+      </geometry>
+      <origin xyz="-0.020000 0.000000 -0.148210" rpy="0.000000 -0.000000 0.000000"/>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <inertial>
+      <mass value="0.091810"/>
+      <origin xyz="0.004129 0.000004 -0.022283"/>
+      <inertia ixx="0.000031" ixy="0.000000" ixz="-0.000004" iyy="0.000069" iyz="-0.000000" izz="0.000070"/>
+    </inertial>
+  </link>
+
+  <joint name="head_yaw" type="revolute">
+    <parent link="head_pitch_link"/>
+    <child link="head_yaw_link"/>
+    <origin xyz="-0.000000 0.057000 0.019050" rpy="-1.570796 0.000000 -0.000000"/>
+    <axis xyz="0.000000 0.000000 1.000000"/>
+    <limit lower="-10.0" upper="10.0" effort="3.23" velocity="10.0"/>
+  </joint>
+
+  <link name="head_roll_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/right_antenna_holder.stl"/>
+      </geometry>
+      <origin xyz="-0.129060 -0.000000 0.060950" rpy="1.535196 1.570796 1.535196"/>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/antenna.stl"/>
+      </geometry>
+      <origin xyz="-0.108080 0.142212 0.060950" rpy="0.000030 1.570796 -0.200000"/>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/antenna.stl"/>
+      </geometry>
+      <origin xyz="-0.128080 0.000248 0.060950" rpy="0.000000 1.570796 0.000000"/>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/left_antenna_holder.stl"/>
+      </geometry>
+      <origin xyz="-0.129060 0.000000 0.060950" rpy="1.535196 1.570796 1.535196"/>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/head_bot_sheet.stl"/>
+      </geometry>
+      <origin xyz="-0.129060 0.000000 0.060950" rpy="1.371126 1.570796 1.371126"/>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/head.stl"/>
+      </geometry>
+      <origin xyz="-0.129060 0.000000 0.060950" rpy="1.390891 1.570796 1.390891"/>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <inertial>
+      <mass value="0.406607"/>
+      <origin xyz="0.008154 -0.003908 0.022773"/>
+      <inertia ixx="0.002446" ixy="-0.000002" ixz="0.000092" iyy="0.001686" iyz="-0.000018" izz="0.001080"/>
+    </inertial>
+  </link>
+
+  <joint name="head_roll" type="revolute">
+    <parent link="head_yaw_link"/>
+    <child link="head_roll_link"/>
+    <origin xyz="0.040950 0.000000 -0.019150" rpy="1.568068 -1.570796 -1.568068"/>
+    <axis xyz="0.000000 0.000000 1.000000"/>
+    <limit lower="-10.0" upper="10.0" effort="3.23" velocity="10.0"/>
+  </joint>
+
+  <link name="right_hip_yaw_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/roll_motor_bottom.stl"/>
+      </geometry>
+      <origin xyz="-0.000000 -0.035000 0.019050" rpy="0.000000 -0.000000 -0.000000"/>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/roll_motor_top.stl"/>
+      </geometry>
+      <origin xyz="0.000000 -0.035000 0.019050" rpy="-0.000000 0.000000 -0.000000"/>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <inertial>
+      <mass value="0.066480"/>
+      <origin xyz="0.000795 -0.000005 -0.033060"/>
+      <inertia ixx="0.000024" ixy="0.000000" ixz="-0.000000" iyy="0.000028" iyz="-0.000000" izz="0.000014"/>
+    </inertial>
+  </link>
+
+  <joint name="right_hip_yaw" type="revolute">
+    <parent link="trunk_assembly"/>
+    <child link="right_hip_yaw_link"/>
+    <origin xyz="-0.019000 -0.035000 0.045941" rpy="-0.000000 -0.000000 0.000000"/>
+    <axis xyz="0.000000 0.000000 1.000000"/>
+    <limit lower="-0.52359877559829704" upper="0.52359877559830059" effort="3.23" velocity="10.0"/>
+  </joint>
+
+  <link name="right_hip_pitch_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/right_cache.stl"/>
+      </geometry>
+      <origin xyz="0.016060 -0.065000 0.109200" rpy="1.570796 0.000000 -0.000000"/>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/leg_spacer.stl"/>
+      </geometry>
+      <origin xyz="0.016060 -0.143650 -0.072150" rpy="1.570796 0.000000 -0.000000"/>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/left_knee_to_ankle_right_sheet.stl"/>
+      </geometry>
+      <origin xyz="0.016060 -0.143650 -0.072050" rpy="1.570796 0.000000 -0.000000"/>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/left_knee_to_ankle_left_sheet.stl"/>
+      </geometry>
+      <origin xyz="0.016060 -0.143650 -0.072050" rpy="1.570796 0.000000 -0.000000"/>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <inertial>
+      <mass value="0.124070"/>
+      <origin xyz="0.002534 0.039064 0.010809"/>
+      <inertia ixx="0.000212" ixy="0.000027" ixz="0.000004" iyy="0.000079" iyz="-0.000022" izz="0.000226"/>
+    </inertial>
+  </link>
+
+  <joint name="right_hip_pitch" type="revolute">
+    <parent link="right_hip_roll_link"/>
+    <child link="right_hip_pitch_link"/>
+    <origin xyz="-0.074150 0.000000 0.035110" rpy="-0.955316 1.570796 -0.955316"/>
+    <axis xyz="0.000000 0.000000 1.000000"/>
+    <limit lower="-10.0" upper="10.0" effort="3.23" velocity="10.0"/>
+  </joint>
+
+  <link name="right_knee_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/leg_spacer.stl"/>
+      </geometry>
+      <origin xyz="0.016060 0.143650 0.109250" rpy="-1.570796 0.000000 0.000000"/>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/left_knee_to_ankle_right_sheet.stl"/>
+      </geometry>
+      <origin xyz="0.016060 0.143650 0.109150" rpy="-1.570796 -0.000000 -0.000000"/>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/left_knee_to_ankle_left_sheet.stl"/>
+      </geometry>
+      <origin xyz="0.016060 0.143650 0.109150" rpy="-1.570796 0.000000 0.000000"/>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <inertial>
+      <mass value="0.072590"/>
+      <origin xyz="0.000005 -0.057746 0.018114"/>
+      <inertia ixx="0.000050" ixy="0.000000" ixz="0.000000" iyy="0.000019" iyz="0.000000" izz="0.000042"/>
+    </inertial>
+  </link>
+
+  <joint name="right_knee" type="revolute">
+    <parent link="right_hip_pitch_link"/>
+    <child link="right_knee_link"/>
+    <origin xyz="0.000000 0.078650 0.037000" rpy="3.141593 -0.000000 -0.000000"/>
+    <axis xyz="0.000000 0.000000 1.000000"/>
+    <limit lower="-10.0" upper="10.0" effort="3.23" velocity="10.0"/>
+  </joint>
+
+  <link name="right_ankle_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/foot_side.stl"/>
+      </geometry>
+      <origin xyz="0.016060 0.222300 0.109050" rpy="-1.570796 -0.000000 -0.000000"/>
+      <material name="duck_feet_yellow">
+        <color rgba="1.0 0.8 0.0 1.0"/>
+      </material>
+    </visual>
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/foot_bottom_tpu.stl"/>
+      </geometry>
+      <origin xyz="0.016560 0.222800 0.109550" rpy="-1.570796 -0.000000 -0.000000"/>
+      <material name="duck_feet_yellow">
+        <color rgba="1.0 0.8 0.0 1.0"/>
+      </material>
+    </visual>
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/foot_bottom_pla.stl"/>
+      </geometry>
+      <origin xyz="0.016560 0.222800 0.109550" rpy="-1.570796 -0.000000 -0.000000"/>
+      <material name="duck_feet_yellow">
+        <color rgba="1.0 0.8 0.0 1.0"/>
+      </material>
+    </visual>
+    <visual>
+      <geometry>
+        <mesh filename="package://ros2_control_demo_description/openduckmini/assets/foot_top.stl"/>
+      </geometry>
+      <origin xyz="0.016060 0.222300 0.109050" rpy="-1.570796 -0.000000 -0.000000"/>
+      <material name="duck_feet_yellow">
+        <color rgba="1.0 0.8 0.0 1.0"/>
+      </material>
+    </visual>
+    <inertial>
+      <mass value="0.075240"/>
+      <origin xyz="0.011072 -0.024661 0.019063"/>
+      <inertia ixx="0.000019" ixy="0.000002" ixz="-0.000000" iyy="0.000067" iyz="0.000000" izz="0.000061"/>
+    </inertial>
+  </link>
+
+  <joint name="right_ankle" type="revolute">
+    <parent link="right_knee_link"/>
+    <child link="right_ankle_link"/>
+    <origin xyz="0.000000 -0.078650 0.000100" rpy="0.000000 -0.000000 0.000000"/>
+    <axis xyz="0.000000 0.000000 1.000000"/>
+    <limit lower="-10.0" upper="10.0" effort="3.23" velocity="10.0"/>
+  </joint>
+
+</robot>
