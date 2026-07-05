@@ -106,6 +106,11 @@ def fd_accel_peak(t, pos):
     return peak
 
 
+def window(samples, t_pub):
+    """Samples from ~50 ms before a chunk's publish (shared by analysis and plotting)."""
+    return [x for x in samples if x[0] >= t_pub - 0.05]
+
+
 def analyze_chunk(samples, t_pub, waypoints, label, expect_rest_end=True, skip_lead_s=0.0):
     print(f"\n  -- {label}: {len(waypoints)} waypoints --")
     ok = [True]
@@ -113,7 +118,7 @@ def analyze_chunk(samples, t_pub, waypoints, label, expect_rest_end=True, skip_l
     good = lambda m: print("    [ OK ]", m)
     info = lambda m: print("    [info]", m)
 
-    s = [x for x in samples if x[0] >= t_pub - 0.05]
+    s = window(samples, t_pub)
     if len(s) < 5:
         fail(f"too few samples ({len(s)})")
         return False
@@ -222,8 +227,6 @@ def show_plots(plot_data):
         "B": "TEST B - 3 sequential chunks (stop-and-go)",
         "C": "TEST C - overlapping chunks (cross-chunk seam)",
     }
-    rows = [("position [rad]", 1), ("velocity [rad/s]", 2),
-            ("accel [rad/s^2]", 3), ("jerk [rad/s^3]", 4)]
     shown = False
     for key in ("A", "B", "C"):
         s = plot_data.get(key) or []
@@ -231,22 +234,24 @@ def show_plots(plot_data):
             continue
         t = np.array([x[0] for x in s], dtype=float)
         t -= t[0]
-        cols = {1: np.array([x[1] for x in s]),   # pos
-                2: np.array([x[2] for x in s]),   # vel
-                3: np.array([x[3] for x in s])}   # acc
-        cols[4] = np.gradient(cols[3], t, axis=0)  # jerk = d(acc)/dt
+        pos = np.array([x[1] for x in s])
+        vel = np.array([x[2] for x in s])
+        acc = np.array([x[3] for x in s])
+        jerk = np.gradient(acc, t, axis=0)
+        series = [("position [rad]", pos), ("velocity [rad/s]", vel),
+                  ("accel [rad/s^2]", acc), ("jerk [rad/s^3]", jerk)]
 
         fig, ax = plt.subplots(4, 1, sharex=True, figsize=(8, 9))
         try:
             fig.canvas.manager.set_window_title(f"verify_smoothness [{key}]")
         except Exception:  # noqa: BLE001
             pass
-        for a, (ylbl, idx) in zip(ax, rows):
+        for i, (a, (ylbl, data)) in enumerate(zip(ax, series)):
             for j in range(N):
-                a.plot(t, cols[idx][:, j], lw=1.3, label=JOINTS[j])
+                a.plot(t, data[:, j], lw=1.3, label=JOINTS[j])
             a.set_ylabel(ylbl)
             a.grid(True, alpha=0.3)
-            if idx != 1:  # zero line only where 0 is meaningful (vel/acc/jerk)
+            if i:  # zero line only on vel/acc/jerk, not position (i == 0)
                 a.axhline(0.0, color="k", lw=0.5, alpha=0.3)
         ax[0].set_title(titles[key])
         ax[0].legend(fontsize=8, loc="upper right")
@@ -279,7 +284,7 @@ def main():
     t_pub = node.publish(a_wps)
     node.spin((CHUNK - 1) * DT + 1.0)
     results["A single 50-pt chunk"] = analyze_chunk(node.samples, t_pub, a_wps, "chunk")
-    plot_data["A"] = [x for x in node.samples if x[0] >= t_pub - 0.05]
+    plot_data["A"] = window(node.samples, t_pub)
 
     # ---- B: sequential streaming (each chunk after the last finishes) ----
     print("\n==== TEST B: 3 chunks streamed SEQUENTIALLY (stop-and-go) ====")
@@ -292,7 +297,7 @@ def main():
         t_pub = node.publish(wps)
         node.spin((CHUNK - 1) * DT + 0.6)
         seq_ok &= analyze_chunk(node.samples, t_pub, wps, f"chunk {c}")
-        b_all += [x for x in node.samples if x[0] >= t_pub - 0.05]
+        b_all += window(node.samples, t_pub)
     results["B sequential chunks"] = seq_ok
     plot_data["B"] = b_all
 

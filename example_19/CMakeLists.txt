@@ -1,9 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(ros2_control_demo_example_19 LANGUAGES CXX)
-
-find_package(ros2_control_cmake REQUIRED)
-set_compiler_options()
-export_windows_symbols()
+project(ros2_control_demo_example_19)
 
 find_package(ament_cmake REQUIRED)
 
@@ -29,5 +25,4 @@ if(BUILD_TESTING)
   add_ros_isolated_launch_test(test/test_bridge_demo_launch.py)
 endif()
 
-ament_export_dependencies(${THIS_PACKAGE_INCLUDE_DEPENDS})
 ament_package()
