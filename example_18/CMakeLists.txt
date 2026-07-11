@@ -123,6 +123,11 @@ target_link_libraries(${PROJECT_NAME}_lib
 )
 target_link_libraries(${PROJECT_NAME}_lib onnxruntime::onnxruntime)
 
+# Lyrical rosidl emits MessageTraits::member_names with single-brace std::array
+# initialization; ros2_control_cmake treats that as -Werror=missing-braces.
+# Workaround until ros2/rosidl fixes msg__traits.hpp.em upstream.
+target_compile_options(${PROJECT_NAME}_lib PRIVATE -Wno-error=missing-braces)
+
 pluginlib_export_plugin_description_file(hardware_interface ros2_control_demo_example_18.xml)
 pluginlib_export_plugin_description_file(controller_interface ros2_control_demo_example_18.xml)
 
