@@ -49,11 +49,8 @@ public:
   ~DuckMiniMujocoSystemInterface() override = default;
 
   hardware_interface::CallbackReturn
-#if ROS_DISTRO_HUMBLE
-  on_init(const hardware_interface::HardwareInfo & info) override;
-#else
+
   on_init(const hardware_interface::HardwareComponentInterfaceParams & params) override;
-#endif
 
   std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
 
