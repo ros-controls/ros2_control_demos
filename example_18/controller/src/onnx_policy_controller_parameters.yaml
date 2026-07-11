@@ -1,4 +1,4 @@
-motion_controller:
+onnx_policy_controller:
   joints: {
     type: string_array,
     description: "Names of the joints to control",

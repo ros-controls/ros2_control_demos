@@ -35,11 +35,11 @@ class DriveForward(Node):
     def __init__(self):
         super().__init__("drive_forward")
         self.publisher_ = self.create_publisher(
-            VelocityCommandWithHead, "/motion_controller/cmd_velocity_with_head", 10
+            VelocityCommandWithHead, "/onnx_policy_controller/cmd_velocity_with_head", 10
         )
         self.get_logger().info("Drive forward node started")
 
-        # Controller timing parameters (matching motion_controller)
+        # Controller timing parameters (matching onnx_policy_controller)
         self.controller_update_rate = 50.0  # Hz
         self.stabilization_delay_steps = 50  # Steps before ONNX starts
         self.blend_in_steps = 200  # Steps to blend in ONNX actions

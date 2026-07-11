@@ -100,9 +100,9 @@ def generate_launch_description():
             Node(
                 package="controller_manager",
                 executable="spawner",
-                name="spawn_motion_controller",
+                name="spawn_onnx_policy_controller",
                 arguments=[
-                    "motion_controller",
+                    "onnx_policy_controller",
                     "--param-file",
                     PathSubstitution(FindPackageShare("ros2_control_demo_example_18"))
                     / "config"

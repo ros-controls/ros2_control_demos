@@ -70,7 +70,7 @@ class TestFixture(unittest.TestCase):
         cnames = [
             "joint_state_broadcaster",
             "state_interfaces_broadcaster",
-            "motion_controller",
+            "onnx_policy_controller",
         ]
         check_controllers_running(self.node, cnames)
 

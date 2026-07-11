@@ -14,8 +14,8 @@
 //
 // Author: Julia Jia
 
-#ifndef MOTION_CONTROLLER__OBSERVATION_FORMATTER_HPP_
-#define MOTION_CONTROLLER__OBSERVATION_FORMATTER_HPP_
+#ifndef ONNX_POLICY_CONTROLLER__OBSERVATION_FORMATTER_HPP_
+#define ONNX_POLICY_CONTROLLER__OBSERVATION_FORMATTER_HPP_
 
 #include <string>
 #include <vector>
@@ -23,7 +23,7 @@
 #include "control_msgs/msg/float64_values.hpp"
 #include "geometry_msgs/msg/twist.hpp"
 
-namespace motion_controller
+namespace onnx_policy_controller
 {
 
 class ObservationFormatter
@@ -89,6 +89,6 @@ private:
   std::vector<double> velocity_commands_;
 };
 
-}  // namespace motion_controller
+}  // namespace onnx_policy_controller
 
-#endif  // MOTION_CONTROLLER__OBSERVATION_FORMATTER_HPP_
+#endif  // ONNX_POLICY_CONTROLLER__OBSERVATION_FORMATTER_HPP_

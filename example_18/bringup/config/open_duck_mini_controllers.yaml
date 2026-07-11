@@ -23,8 +23,8 @@ controller_manager:
       type: joint_state_broadcaster/JointStateBroadcaster
     state_interfaces_broadcaster:
       type: state_interfaces_broadcaster/StateInterfacesBroadcaster
-    motion_controller:
-      type: motion_controller/MotionController
+    onnx_policy_controller:
+      type: onnx_policy_controller/OnnxPolicyController
 
 joint_state_broadcaster:
   ros__parameters:
@@ -93,7 +93,7 @@ state_interfaces_broadcaster:
       - right_foot_contact/contact_raw  # 39
 
 
-motion_controller:
+onnx_policy_controller:
   ros__parameters:
     joints:
       - left_hip_yaw       # 0

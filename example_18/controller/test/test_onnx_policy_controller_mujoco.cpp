@@ -39,7 +39,7 @@
 // 5. Velocity command publishing
 //
 // Reference: validate_onnx_simulation.py shows the expected behavior
-class MotionControllerMuJoCoTest : public ::testing::Test
+class OnnxPolicyControllerMuJoCoTest : public ::testing::Test
 {
 protected:
   void SetUp() override
@@ -177,7 +177,7 @@ protected:
 };
 
 // Basic test: Controller can be configured
-TEST_F(MotionControllerMuJoCoTest, ControllerConfiguration)
+TEST_F(OnnxPolicyControllerMuJoCoTest, ControllerConfiguration)
 {
   // This is a placeholder test - full integration requires hardware interface setup
   // which is complex with MuJoCo. For now, we verify the model loads correctly.
@@ -191,7 +191,7 @@ TEST_F(MotionControllerMuJoCoTest, ControllerConfiguration)
 // This test verifies the MuJoCo model loads and simulates correctly
 // Note: Without active control, robot will fall under gravity (expected behavior)
 // Full controller integration test would require hardware interface setup and active control
-TEST_F(MotionControllerMuJoCoTest, SimulationStability)
+TEST_F(OnnxPolicyControllerMuJoCoTest, SimulationStability)
 {
   // Skip if model not loaded
   if (!model_ || !data_)
@@ -274,7 +274,7 @@ TEST_F(MotionControllerMuJoCoTest, SimulationStability)
 
 // Test: Model structure validation
 // Verifies the MuJoCo model has expected structure for Open Duck Mini
-TEST_F(MotionControllerMuJoCoTest, ModelStructure)
+TEST_F(OnnxPolicyControllerMuJoCoTest, ModelStructure)
 {
   if (!model_ || !data_)
   {
@@ -292,15 +292,15 @@ TEST_F(MotionControllerMuJoCoTest, ModelStructure)
 }
 
 // Test: Basic MuJoCo simulation sanity check with alternating control pattern
-// NOTE: This test does NOT use the actual motion_controller or ONNX model.
+// NOTE: This test does NOT use the actual onnx_policy_controller or ONNX model.
 // It's a simplified MuJoCo-only test that verifies:
 // 1. MuJoCo model loads and simulates correctly
 // 2. Robot maintains stability (doesn't fall) when given control inputs
 // 3. Control pattern has some effect (robot doesn't move significantly backward)
 // This is a basic sanity test, not a full walking controller test. Forward motion
 // is difficult to achieve with simple open-loop patterns and is not required here.
-// For full integration testing with the motion_controller and ONNX model, see integration tests.
-TEST_F(MotionControllerMuJoCoTest, WalkingForwardWithAlternatingControlPattern)
+// For full integration testing with the onnx_policy_controller and ONNX model, see integration tests.
+TEST_F(OnnxPolicyControllerMuJoCoTest, WalkingForwardWithAlternatingControlPattern)
 {
   if (!model_ || !data_)
   {

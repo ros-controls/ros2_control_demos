@@ -63,7 +63,7 @@ set_target_properties(observation_formatter PROPERTIES POSITION_INDEPENDENT_CODE
 target_compile_features(observation_formatter PUBLIC cxx_std_17)
 target_include_directories(observation_formatter PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/controller/include>
-  $<INSTALL_INTERFACE:include/motion_controller>
+  $<INSTALL_INTERFACE:include/onnx_policy_controller>
 )
 target_link_libraries(observation_formatter
   ${control_msgs_TARGETS}
@@ -76,17 +76,17 @@ set_target_properties(action_processor PROPERTIES POSITION_INDEPENDENT_CODE ON)
 target_compile_features(action_processor PUBLIC cxx_std_17)
 target_include_directories(action_processor PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/controller/include>
-  $<INSTALL_INTERFACE:include/motion_controller>
+  $<INSTALL_INTERFACE:include/onnx_policy_controller>
 )
 
-generate_parameter_library(motion_controller_parameters
-  controller/src/motion_controller_parameters.yaml
+generate_parameter_library(onnx_policy_controller_parameters
+  controller/src/onnx_policy_controller_parameters.yaml
 )
 
 # Main library (hardware + controller)
 add_library(${PROJECT_NAME}_lib SHARED
   hardware/duck_mini_mujoco_system_interface.cpp
-  controller/src/motion_controller.cpp
+  controller/src/onnx_policy_controller.cpp
 )
 set_target_properties(${PROJECT_NAME}_lib PROPERTIES OUTPUT_NAME ${PROJECT_NAME})
 target_compile_features(${PROJECT_NAME}_lib PUBLIC cxx_std_17)
@@ -99,7 +99,7 @@ rosidl_get_typesupport_target(cpp_typesupport_target ${PROJECT_NAME} "rosidl_typ
 
 target_link_libraries(${PROJECT_NAME}_lib
   ament_index_cpp::ament_index_cpp
-  motion_controller_parameters
+  onnx_policy_controller_parameters
   ${control_msgs_TARGETS}
   ${geometry_msgs_TARGETS}
   ${cpp_typesupport_target}
@@ -127,12 +127,12 @@ pluginlib_export_plugin_description_file(hardware_interface ros2_control_demo_ex
 pluginlib_export_plugin_description_file(controller_interface ros2_control_demo_example_18.xml)
 
 # INSTALL
-install(DIRECTORY controller/include/ DESTINATION include/motion_controller)
+install(DIRECTORY controller/include/ DESTINATION include/onnx_policy_controller)
 install(DIRECTORY hardware/include/ DESTINATION include)
 install(DIRECTORY bringup/ DESTINATION share/ros2_control_demo_example_18)
 install(DIRECTORY description/launch DESTINATION share/ros2_control_demo_example_18/description)
 install(DIRECTORY onnx_model/ DESTINATION share/ros2_control_demo_example_18/onnx_model)
-install(TARGETS observation_formatter action_processor motion_controller_parameters ${PROJECT_NAME}_lib
+install(TARGETS observation_formatter action_processor onnx_policy_controller_parameters ${PROJECT_NAME}_lib
   EXPORT export_ros2_control_demo_example_18
   RUNTIME DESTINATION bin
   ARCHIVE DESTINATION lib
@@ -168,14 +168,14 @@ if(BUILD_TESTING)
   target_include_directories(test_action_processor PRIVATE ${PROJECT_SOURCE_DIR}/controller/include)
   target_link_libraries(test_action_processor action_processor)
 
-  ament_add_gtest(test_motion_controller_initialization controller/test/test_motion_controller_initialization.cpp)
-  target_include_directories(test_motion_controller_initialization PRIVATE ${PROJECT_SOURCE_DIR}/controller/include)
+  ament_add_gtest(test_onnx_policy_controller_initialization controller/test/test_onnx_policy_controller_initialization.cpp)
+  target_include_directories(test_onnx_policy_controller_initialization PRIVATE ${PROJECT_SOURCE_DIR}/controller/include)
 
   ament_add_gtest(test_onnx_shape_handling controller/test/test_onnx_shape_handling.cpp)
 
-  ament_add_gtest(test_motion_controller_mujoco controller/test/test_motion_controller_mujoco.cpp)
-  target_include_directories(test_motion_controller_mujoco PRIVATE ${PROJECT_SOURCE_DIR}/controller/include)
-  target_link_libraries(test_motion_controller_mujoco mujoco::mujoco)
+  ament_add_gtest(test_onnx_policy_controller_mujoco controller/test/test_onnx_policy_controller_mujoco.cpp)
+  target_include_directories(test_onnx_policy_controller_mujoco PRIVATE ${PROJECT_SOURCE_DIR}/controller/include)
+  target_link_libraries(test_onnx_policy_controller_mujoco mujoco::mujoco)
 
   ament_add_gtest(test_contact_detection hardware/test/test_contact_detection.cpp)
   target_include_directories(test_contact_detection PRIVATE ${PROJECT_SOURCE_DIR}/hardware/include)
@@ -188,8 +188,8 @@ if(BUILD_TESTING)
     mujoco_ros2_control::mujoco_ros2_control
   )
 
-  ament_add_gtest(test_motion_controller_error_handling
-    controller/test/test_motion_controller_error_handling.cpp)
+  ament_add_gtest(test_onnx_policy_controller_error_handling
+    controller/test/test_onnx_policy_controller_error_handling.cpp)
 endif()
 
 ## EXPORTS

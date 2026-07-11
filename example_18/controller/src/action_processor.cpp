@@ -14,12 +14,12 @@
 //
 // Author: Julia Jia
 
-#include "motion_controller/action_processor.hpp"
+#include "onnx_policy_controller/action_processor.hpp"
 
 #include <algorithm>
 #include <stdexcept>
 
-namespace motion_controller
+namespace onnx_policy_controller
 {
 
 ActionProcessor::ActionProcessor(
@@ -69,4 +69,4 @@ std::vector<double> ActionProcessor::process(
   return processed_actions;
 }
 
-}  // namespace motion_controller
+}  // namespace onnx_policy_controller

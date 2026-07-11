@@ -18,7 +18,7 @@
 
 #include <vector>
 
-#include "motion_controller/action_processor.hpp"
+#include "onnx_policy_controller/action_processor.hpp"
 
 namespace
 {
@@ -50,7 +50,7 @@ protected:
 
 TEST_F(TestActionProcessor, ScaleAndOffset)
 {
-  motion_controller::ActionProcessor processor(joint_names_, 0.25, true);
+  onnx_policy_controller::ActionProcessor processor(joint_names_, 0.25, true);
   auto processed =
     processor.process(std::vector<double>(num_joints_, 0.4), std::vector<double>(num_joints_, 0.5));
   expect_all_equal(processed, 0.6);  // 0.4 * 0.25 + 0.5
@@ -58,7 +58,7 @@ TEST_F(TestActionProcessor, ScaleAndOffset)
 
 TEST_F(TestActionProcessor, ScaleOnly)
 {
-  motion_controller::ActionProcessor processor(joint_names_, 0.25, false);
+  onnx_policy_controller::ActionProcessor processor(joint_names_, 0.25, false);
   auto processed =
     processor.process(std::vector<double>(num_joints_, 0.4), std::vector<double>(num_joints_, 0.5));
   expect_all_equal(processed, 0.1);  // 0.4 * 0.25
@@ -66,7 +66,7 @@ TEST_F(TestActionProcessor, ScaleOnly)
 
 TEST_F(TestActionProcessor, ZeroScale)
 {
-  motion_controller::ActionProcessor processor(joint_names_, 1.0, true);
+  onnx_policy_controller::ActionProcessor processor(joint_names_, 1.0, true);
   auto processed =
     processor.process(std::vector<double>(num_joints_, 0.2), std::vector<double>(num_joints_, 0.3));
   expect_all_equal(processed, 0.5);  // 0.2 * 1.0 + 0.3
@@ -74,7 +74,7 @@ TEST_F(TestActionProcessor, ZeroScale)
 
 TEST_F(TestActionProcessor, NegativeValues)
 {
-  motion_controller::ActionProcessor processor(joint_names_, 0.25, true);
+  onnx_policy_controller::ActionProcessor processor(joint_names_, 0.25, true);
   auto processed = processor.process(
     std::vector<double>(num_joints_, -0.2), std::vector<double>(num_joints_, 0.5));
   expect_all_equal(processed, 0.45);  // -0.2 * 0.25 + 0.5
@@ -82,7 +82,7 @@ TEST_F(TestActionProcessor, NegativeValues)
 
 TEST_F(TestActionProcessor, SizeMismatch)
 {
-  motion_controller::ActionProcessor processor(joint_names_, 0.25, true);
+  onnx_policy_controller::ActionProcessor processor(joint_names_, 0.25, true);
 
   std::vector<double> wrong_size_outputs(num_joints_ + 1, 0.1);
   std::vector<double> default_positions(num_joints_, 0.5);

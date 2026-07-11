@@ -50,7 +50,7 @@ void expect_vectors_near(
  *   self.motor_targets = self.default_actuator
  *   self.prev_motor_targets = self.default_actuator
  */
-class MotionControllerInitializationTest : public ::testing::Test
+class OnnxPolicyControllerInitializationTest : public ::testing::Test
 {
 protected:
   void SetUp() override { num_joints_ = DEFAULT_ACTUATOR.size(); }
@@ -58,7 +58,7 @@ protected:
   size_t num_joints_;
 };
 
-TEST_F(MotionControllerInitializationTest, DefaultActuatorValuesMatchPython)
+TEST_F(OnnxPolicyControllerInitializationTest, DefaultActuatorValuesMatchPython)
 {
   ASSERT_EQ(num_joints_, 14u) << "Expected 14 joints";
 
@@ -78,26 +78,26 @@ TEST_F(MotionControllerInitializationTest, DefaultActuatorValuesMatchPython)
   EXPECT_DOUBLE_EQ(DEFAULT_ACTUATOR[13], -0.796) << "right_ankle";
 }
 
-TEST_F(MotionControllerInitializationTest, MotorTargetsInitializedToDefaultActuator)
+TEST_F(OnnxPolicyControllerInitializationTest, MotorTargetsInitializedToDefaultActuator)
 {
   std::vector<double> motor_targets = DEFAULT_ACTUATOR;
   expect_vectors_near(motor_targets, DEFAULT_ACTUATOR);
 }
 
-TEST_F(MotionControllerInitializationTest, PrevMotorTargetsInitializedToDefaultActuator)
+TEST_F(OnnxPolicyControllerInitializationTest, PrevMotorTargetsInitializedToDefaultActuator)
 {
   std::vector<double> prev_motor_targets = DEFAULT_ACTUATOR;
   expect_vectors_near(prev_motor_targets, DEFAULT_ACTUATOR);
 }
 
-TEST_F(MotionControllerInitializationTest, MotorTargetsEqualPrevMotorTargetsAtInit)
+TEST_F(OnnxPolicyControllerInitializationTest, MotorTargetsEqualPrevMotorTargetsAtInit)
 {
   std::vector<double> motor_targets = DEFAULT_ACTUATOR;
   std::vector<double> prev_motor_targets = DEFAULT_ACTUATOR;
   expect_vectors_near(motor_targets, prev_motor_targets);
 }
 
-TEST_F(MotionControllerInitializationTest, DefaultActuatorValuesMatchConfigFile)
+TEST_F(OnnxPolicyControllerInitializationTest, DefaultActuatorValuesMatchConfigFile)
 {
   // open_duck_mini_controllers.yaml default_joint_positions uses same values as home keyframe
   ASSERT_EQ(DEFAULT_ACTUATOR.size(), 14u);

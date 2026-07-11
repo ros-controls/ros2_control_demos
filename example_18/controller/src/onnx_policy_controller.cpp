@@ -20,9 +20,9 @@
 #include "ament_index_cpp/get_package_share_directory.hpp"
 #include "controller_interface/controller_interface.hpp"
 
-#include "motion_controller/motion_controller.hpp"
+#include "onnx_policy_controller/onnx_policy_controller.hpp"
 
-namespace motion_controller
+namespace onnx_policy_controller
 {
 
 using controller_interface::CallbackReturn;
@@ -37,7 +37,7 @@ constexpr int LOG_INTERVAL_CLIP = 25;        // Every 25 updates
 constexpr int LOG_INTERVAL_CMD_WRITE = 250;  // Less frequent
 }  // anonymous namespace
 
-CallbackReturn MotionController::on_init()
+CallbackReturn OnnxPolicyController::on_init()
 {
   try
   {
@@ -54,7 +54,7 @@ CallbackReturn MotionController::on_init()
   return CallbackReturn::SUCCESS;
 }
 
-InterfaceConfiguration MotionController::command_interface_configuration() const
+InterfaceConfiguration OnnxPolicyController::command_interface_configuration() const
 {
   InterfaceConfiguration command_interfaces_config;
   command_interfaces_config.type = controller_interface::interface_configuration_type::INDIVIDUAL;
@@ -63,13 +63,13 @@ InterfaceConfiguration MotionController::command_interface_configuration() const
   return command_interfaces_config;
 }
 
-InterfaceConfiguration MotionController::state_interface_configuration() const
+InterfaceConfiguration OnnxPolicyController::state_interface_configuration() const
 {
   // This controller doesn't need state interfaces - it subscribes to topics
   return InterfaceConfiguration{controller_interface::interface_configuration_type::NONE};
 }
 
-CallbackReturn MotionController::on_configure(const rclcpp_lifecycle::State & /*previous_state*/)
+CallbackReturn OnnxPolicyController::on_configure(const rclcpp_lifecycle::State & /*previous_state*/)
 {
   params_ = param_listener_->get_params();
 
@@ -214,7 +214,7 @@ CallbackReturn MotionController::on_configure(const rclcpp_lifecycle::State & /*
   return CallbackReturn::SUCCESS;
 }
 
-CallbackReturn MotionController::on_activate(const rclcpp_lifecycle::State & /*previous_state*/)
+CallbackReturn OnnxPolicyController::on_activate(const rclcpp_lifecycle::State & /*previous_state*/)
 {
   if (!model_loaded_)
   {
@@ -235,12 +235,12 @@ CallbackReturn MotionController::on_activate(const rclcpp_lifecycle::State & /*p
   return CallbackReturn::SUCCESS;
 }
 
-CallbackReturn MotionController::on_deactivate(const rclcpp_lifecycle::State & /*previous_state*/)
+CallbackReturn OnnxPolicyController::on_deactivate(const rclcpp_lifecycle::State & /*previous_state*/)
 {
   return CallbackReturn::SUCCESS;
 }
 
-return_type MotionController::update(const rclcpp::Time & /*time*/, const rclcpp::Duration & period)
+return_type OnnxPolicyController::update(const rclcpp::Time & /*time*/, const rclcpp::Duration & period)
 {
   auto interface_data_op = rt_interface_data_.try_get();
   if (!interface_data_op.has_value())
@@ -452,7 +452,7 @@ return_type MotionController::update(const rclcpp::Time & /*time*/, const rclcpp
   return return_type::OK;
 }
 
-void MotionController::initialize_motor_targets_from_defaults()
+void OnnxPolicyController::initialize_motor_targets_from_defaults()
 {
   if (!default_joint_positions_initialized_)
   {
@@ -465,7 +465,7 @@ void MotionController::initialize_motor_targets_from_defaults()
   observation_formatter_->set_motor_targets(motor_targets_);
 }
 
-size_t MotionController::write_commands_to_hardware(const std::vector<double> & joint_commands)
+size_t OnnxPolicyController::write_commands_to_hardware(const std::vector<double> & joint_commands)
 {
   size_t write_success_count = 0;
   for (size_t i = 0; i < command_interfaces_.size() && i < joint_commands.size(); ++i)
@@ -485,7 +485,7 @@ size_t MotionController::write_commands_to_hardware(const std::vector<double> & 
   return write_success_count;
 }
 
-void MotionController::apply_blend_in(std::vector<double> & joint_commands, double blend_factor)
+void OnnxPolicyController::apply_blend_in(std::vector<double> & joint_commands, double blend_factor)
 {
   blend_factor = std::clamp(blend_factor, 0.0, 1.0);
   for (size_t i = 0; i < joint_commands.size() && i < default_joint_positions_.size(); ++i)
@@ -495,7 +495,7 @@ void MotionController::apply_blend_in(std::vector<double> & joint_commands, doub
   }
 }
 
-std::vector<bool> MotionController::apply_rate_limiting(
+std::vector<bool> OnnxPolicyController::apply_rate_limiting(
   std::vector<double> & joint_commands, double control_period)
 {
   std::vector<bool> clipped_by_velocity(joint_commands.size(), false);
@@ -520,7 +520,7 @@ std::vector<bool> MotionController::apply_rate_limiting(
   return clipped_by_velocity;
 }
 
-bool MotionController::load_model(const std::string & model_path)
+bool OnnxPolicyController::load_model(const std::string & model_path)
 {
   try
   {
@@ -586,7 +586,7 @@ bool MotionController::load_model(const std::string & model_path)
   }
 }
 
-bool MotionController::run_model_inference(
+bool OnnxPolicyController::run_model_inference(
   const std::vector<float> & inputs, std::vector<double> & outputs)
 {
   outputs.clear();
@@ -653,7 +653,7 @@ bool MotionController::run_model_inference(
   }
 }
 
-std::string MotionController::format_shape_string(const std::vector<int64_t> & shape)
+std::string OnnxPolicyController::format_shape_string(const std::vector<int64_t> & shape)
 {
   std::string shape_str = "[";
   for (size_t i = 0; i < shape.size(); ++i)
@@ -672,7 +672,7 @@ std::string MotionController::format_shape_string(const std::vector<int64_t> & s
   return shape_str;
 }
 
-void MotionController::validate_model_structure(size_t num_inputs, size_t num_outputs)
+void OnnxPolicyController::validate_model_structure(size_t num_inputs, size_t num_outputs)
 {
   if (num_inputs != 1)
   {
@@ -830,9 +830,9 @@ void MotionController::validate_model_structure(size_t num_inputs, size_t num_ou
   }
 }
 
-}  // namespace motion_controller
+}  // namespace onnx_policy_controller
 
 #include "pluginlib/class_list_macros.hpp"
 
 PLUGINLIB_EXPORT_CLASS(
-  motion_controller::MotionController, controller_interface::ControllerInterface)
+  onnx_policy_controller::OnnxPolicyController, controller_interface::ControllerInterface)

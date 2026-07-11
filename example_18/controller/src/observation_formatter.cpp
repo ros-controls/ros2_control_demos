@@ -14,14 +14,14 @@
 //
 // Author: Julia Jia
 
-#include "motion_controller/observation_formatter.hpp"
+#include "onnx_policy_controller/observation_formatter.hpp"
 
 #include <algorithm>
 #include <cmath>
 #include <optional>
 #include <string>
 
-namespace motion_controller
+namespace onnx_policy_controller
 {
 
 ObservationFormatter::ObservationFormatter(const std::vector<std::string> & joint_names)
@@ -298,4 +298,4 @@ void ObservationFormatter::set_velocity_commands(const std::vector<double> & com
   }
 }
 
-}  // namespace motion_controller
+}  // namespace onnx_policy_controller

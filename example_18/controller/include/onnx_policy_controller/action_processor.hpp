@@ -14,13 +14,13 @@
 //
 // Author: Julia Jia
 
-#ifndef MOTION_CONTROLLER__ACTION_PROCESSOR_HPP_
-#define MOTION_CONTROLLER__ACTION_PROCESSOR_HPP_
+#ifndef ONNX_POLICY_CONTROLLER__ACTION_PROCESSOR_HPP_
+#define ONNX_POLICY_CONTROLLER__ACTION_PROCESSOR_HPP_
 
 #include <string>
 #include <vector>
 
-namespace motion_controller
+namespace onnx_policy_controller
 {
 
 class ActionProcessor
@@ -43,6 +43,6 @@ private:
   bool use_default_offset_;
 };
 
-}  // namespace motion_controller
+}  // namespace onnx_policy_controller
 
-#endif  // MOTION_CONTROLLER__ACTION_PROCESSOR_HPP_
+#endif  // ONNX_POLICY_CONTROLLER__ACTION_PROCESSOR_HPP_

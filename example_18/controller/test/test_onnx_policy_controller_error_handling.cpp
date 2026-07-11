@@ -16,7 +16,7 @@
 
 #include <gtest/gtest.h>
 
-// Tests mirror the error-handling conditions in motion_controller.cpp so that
+// Tests mirror the error-handling conditions in onnx_policy_controller.cpp so that
 // policy changes (e.g. when to return ERROR) are caught.
 
 namespace
@@ -37,7 +37,7 @@ bool should_return_error_after_write(size_t joint_commands_size, size_t write_su
 
 }  // namespace
 
-TEST(MotionControllerErrorHandling, InvalidTrainingPeriodUsesDefault)
+TEST(OnnxPolicyControllerErrorHandling, InvalidTrainingPeriodUsesDefault)
 {
   EXPECT_DOUBLE_EQ(effective_training_period(0.0), DEFAULT_TRAINING_CONTROL_PERIOD);
   EXPECT_DOUBLE_EQ(effective_training_period(-0.01), DEFAULT_TRAINING_CONTROL_PERIOD);
@@ -45,7 +45,7 @@ TEST(MotionControllerErrorHandling, InvalidTrainingPeriodUsesDefault)
   EXPECT_DOUBLE_EQ(effective_training_period(0.01), 0.01);
 }
 
-TEST(MotionControllerErrorHandling, WriteFailureWhenNoInterfaceAcceptsReturnsError)
+TEST(OnnxPolicyControllerErrorHandling, WriteFailureWhenNoInterfaceAcceptsReturnsError)
 {
   EXPECT_TRUE(should_return_error_after_write(1, 0));
   EXPECT_TRUE(should_return_error_after_write(14, 0));

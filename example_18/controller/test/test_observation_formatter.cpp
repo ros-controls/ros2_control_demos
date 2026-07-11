@@ -20,7 +20,7 @@
 
 #include "control_msgs/msg/float64_values.hpp"
 #include "geometry_msgs/msg/twist.hpp"
-#include "motion_controller/observation_formatter.hpp"
+#include "onnx_policy_controller/observation_formatter.hpp"
 
 namespace
 {
@@ -48,7 +48,7 @@ protected:
       "leg_right_hip_roll_joint",   "leg_right_hip_yaw_joint",     "leg_right_hip_pitch_joint",
       "leg_right_knee_pitch_joint", "leg_right_ankle_pitch_joint", "leg_right_ankle_roll_joint"};
     num_joints_ = joint_names_.size();
-    formatter_ = std::make_unique<motion_controller::ObservationFormatter>(joint_names_);
+    formatter_ = std::make_unique<onnx_policy_controller::ObservationFormatter>(joint_names_);
 
     // Build interface names list following broadcaster configuration (position/velocity per joint)
     interface_names_.clear();
@@ -63,7 +63,7 @@ protected:
   std::vector<std::string> joint_names_;
   size_t num_joints_;
   std::vector<std::string> interface_names_;
-  std::unique_ptr<motion_controller::ObservationFormatter> formatter_;
+  std::unique_ptr<onnx_policy_controller::ObservationFormatter> formatter_;
 };
 
 TEST_F(TestObservationFormatter, ObservationDimension)
