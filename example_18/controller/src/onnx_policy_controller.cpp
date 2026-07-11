@@ -69,7 +69,8 @@ InterfaceConfiguration OnnxPolicyController::state_interface_configuration() con
   return InterfaceConfiguration{controller_interface::interface_configuration_type::NONE};
 }
 
-CallbackReturn OnnxPolicyController::on_configure(const rclcpp_lifecycle::State & /*previous_state*/)
+CallbackReturn OnnxPolicyController::on_configure(
+  const rclcpp_lifecycle::State & /*previous_state*/)
 {
   params_ = param_listener_->get_params();
 
@@ -157,6 +158,26 @@ CallbackReturn OnnxPolicyController::on_configure(const rclcpp_lifecycle::State 
   }
 
   max_motor_velocity_ = params_.max_motor_velocity;
+  joint_position_limits_min_ = params_.joint_position_limits_min;
+  joint_position_limits_max_ = params_.joint_position_limits_max;
+  joint_position_limits_enabled_ = joint_position_limits_min_.size() == joint_names_.size() &&
+                                   joint_position_limits_max_.size() == joint_names_.size();
+  if (
+    !joint_position_limits_enabled_ &&
+    (!joint_position_limits_min_.empty() || !joint_position_limits_max_.empty()))
+  {
+    RCLCPP_WARN(
+      get_node()->get_logger(),
+      "joint_position_limits_min/max size mismatch (min=%zu, max=%zu, joints=%zu). "
+      "Position limiting disabled.",
+      joint_position_limits_min_.size(), joint_position_limits_max_.size(), joint_names_.size());
+  }
+  else if (joint_position_limits_enabled_)
+  {
+    RCLCPP_INFO(
+      get_node()->get_logger(), "Joint position limiting enabled for %zu joints",
+      joint_names_.size());
+  }
   training_control_period_ = params_.training_control_period;
   if (training_control_period_ <= 0.0)
   {
@@ -235,12 +256,14 @@ CallbackReturn OnnxPolicyController::on_activate(const rclcpp_lifecycle::State &
   return CallbackReturn::SUCCESS;
 }
 
-CallbackReturn OnnxPolicyController::on_deactivate(const rclcpp_lifecycle::State & /*previous_state*/)
+CallbackReturn OnnxPolicyController::on_deactivate(
+  const rclcpp_lifecycle::State & /*previous_state*/)
 {
   return CallbackReturn::SUCCESS;
 }
 
-return_type OnnxPolicyController::update(const rclcpp::Time & /*time*/, const rclcpp::Duration & period)
+return_type OnnxPolicyController::update(
+  const rclcpp::Time & /*time*/, const rclcpp::Duration & period)
 {
   auto interface_data_op = rt_interface_data_.try_get();
   if (!interface_data_op.has_value())
@@ -400,6 +423,8 @@ return_type OnnxPolicyController::update(const rclcpp::Time & /*time*/, const rc
   // Ref: mujoco_infer.py lines 221-226 (velocity limits only)
   std::vector<bool> clipped_by_velocity =
     apply_rate_limiting(joint_commands, actual_control_period);
+  const std::vector<double> pre_position_limit_commands = joint_commands;
+  std::vector<bool> clipped_by_position = apply_position_limiting(joint_commands);
 
   static int clip_log_counter = 0;
   if (++clip_log_counter % LOG_INTERVAL_CLIP == 0)
@@ -413,8 +438,22 @@ return_type OnnxPolicyController::update(const rclcpp::Time & /*time*/, const rc
           "[CLIP] Joint '%s' clipped by VELOCITY limit: requested=%.4f, clamped=%.4f, prev=%.4f, "
           "max_change=%.4f",
           i < joint_names_.size() ? joint_names_[i].c_str() : "unknown", original_joint_commands[i],
-          joint_commands[i], prev_motor_targets_initialized_ ? prev_motor_targets_[i] : 0.0,
-          max_change);
+          pre_position_limit_commands[i],
+          prev_motor_targets_initialized_ ? prev_motor_targets_[i] : 0.0, max_change);
+      }
+    }
+    for (size_t i = 0; i < clipped_by_position.size(); ++i)
+    {
+      if (clipped_by_position[i])
+      {
+        RCLCPP_WARN_THROTTLE(
+          get_node()->get_logger(), *get_node()->get_clock(), 1000,
+          "[CLIP] Joint '%s' clipped by POSITION limit: requested=%.4f, clamped=%.4f, "
+          "limits=[%.4f, %.4f]",
+          i < joint_names_.size() ? joint_names_[i].c_str() : "unknown",
+          pre_position_limit_commands[i], joint_commands[i],
+          i < joint_position_limits_min_.size() ? joint_position_limits_min_[i] : 0.0,
+          i < joint_position_limits_max_.size() ? joint_position_limits_max_[i] : 0.0);
       }
     }
   }
@@ -470,12 +509,20 @@ size_t OnnxPolicyController::write_commands_to_hardware(const std::vector<double
   size_t write_success_count = 0;
   for (size_t i = 0; i < command_interfaces_.size() && i < joint_commands.size(); ++i)
   {
-    const bool write_success = command_interfaces_[i].set_value(joint_commands[i]);
+    double command = joint_commands[i];
+    if (
+      joint_position_limits_enabled_ && i < joint_position_limits_min_.size() &&
+      i < joint_position_limits_max_.size())
+    {
+      command = std::clamp(command, joint_position_limits_min_[i], joint_position_limits_max_[i]);
+    }
+
+    const bool write_success = command_interfaces_[i].set_value(command);
     if (!write_success)
     {
       RCLCPP_WARN_THROTTLE(
         get_node()->get_logger(), *get_node()->get_clock(), 1000,
-        "Failed to set command for joint '%s' to %.6f", joint_names_[i].c_str(), joint_commands[i]);
+        "Failed to set command for joint '%s' to %.6f", joint_names_[i].c_str(), command);
     }
     else
     {
@@ -518,6 +565,30 @@ std::vector<bool> OnnxPolicyController::apply_rate_limiting(
   }
 
   return clipped_by_velocity;
+}
+
+std::vector<bool> OnnxPolicyController::apply_position_limiting(
+  std::vector<double> & joint_commands)
+{
+  std::vector<bool> clipped_by_position(joint_commands.size(), false);
+
+  if (!joint_position_limits_enabled_)
+  {
+    return clipped_by_position;
+  }
+
+  for (size_t i = 0; i < joint_commands.size(); ++i)
+  {
+    const double original = joint_commands[i];
+    joint_commands[i] =
+      std::clamp(joint_commands[i], joint_position_limits_min_[i], joint_position_limits_max_[i]);
+    if (joint_commands[i] != original)
+    {
+      clipped_by_position[i] = true;
+    }
+  }
+
+  return clipped_by_position;
 }
 
 bool OnnxPolicyController::load_model(const std::string & model_path)

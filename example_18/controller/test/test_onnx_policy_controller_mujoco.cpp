@@ -299,7 +299,8 @@ TEST_F(OnnxPolicyControllerMuJoCoTest, ModelStructure)
 // 3. Control pattern has some effect (robot doesn't move significantly backward)
 // This is a basic sanity test, not a full walking controller test. Forward motion
 // is difficult to achieve with simple open-loop patterns and is not required here.
-// For full integration testing with the onnx_policy_controller and ONNX model, see integration tests.
+// For full integration testing with the onnx_policy_controller and ONNX model, see integration
+// tests.
 TEST_F(OnnxPolicyControllerMuJoCoTest, WalkingForwardWithAlternatingControlPattern)
 {
   if (!model_ || !data_)

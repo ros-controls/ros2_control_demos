@@ -68,6 +68,7 @@ private:
   void apply_blend_in(std::vector<double> & joint_commands, double blend_factor);
   std::vector<bool> apply_rate_limiting(
     std::vector<double> & joint_commands, double control_period);
+  std::vector<bool> apply_position_limiting(std::vector<double> & joint_commands);
 
   static std::string format_shape_string(const std::vector<int64_t> & shape);
   void validate_model_structure(size_t num_inputs, size_t num_outputs);
@@ -117,6 +118,9 @@ private:
   std::vector<double> default_joint_positions_;
   bool default_joint_positions_initialized_;
   double max_motor_velocity_;
+  std::vector<double> joint_position_limits_min_;
+  std::vector<double> joint_position_limits_max_;
+  bool joint_position_limits_enabled_{false};
   std::vector<double> motor_targets_;
   std::vector<double> prev_motor_targets_;
   bool prev_motor_targets_initialized_;

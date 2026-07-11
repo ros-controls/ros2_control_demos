@@ -127,7 +127,7 @@
     <child link="left_hip_roll_link"/>
     <origin xyz="-0.019050 0.000000 -0.046015" rpy="-1.570796 0.000000 1.570796"/>
     <axis xyz="0.000000 0.000000 1.000000"/>
-    <limit lower="-10.0" upper="10.0" effort="3.23" velocity="10.0"/>
+    <limit lower="-0.4363323129985815" upper="0.43633231299858327" effort="3.23" velocity="10.0"/>
   </joint>
 
   <link name="right_hip_roll_link">
@@ -205,7 +205,7 @@
     <child link="left_hip_pitch_link"/>
     <origin xyz="0.074150 0.000000 0.035110" rpy="3.14159 1.570796 0.0"/>
     <axis xyz="0.000000 0.000000 1.000000"/>
-    <limit lower="-10.0" upper="10.0" effort="3.23" velocity="10.0"/>
+    <limit lower="-1.2217304763960306" upper="0.5235987755982988" effort="3.23" velocity="10.0"/>
   </joint>
 
   <link name="left_knee_link">
@@ -248,7 +248,7 @@
     <child link="left_knee_link"/>
     <origin xyz="0.000000 -0.078650 0.000100" rpy="0.000000 0.000000 -0.000000"/>
     <axis xyz="0.000000 0.000000 1.000000"/>
-    <limit lower="-10.0" upper="10.0" effort="3.23" velocity="10.0"/>
+    <limit lower="-1.5707963267948966" upper="1.5707963267948966" effort="3.23" velocity="10.0"/>
   </joint>
 
   <link name="left_ankle_link">
@@ -300,7 +300,7 @@
     <child link="left_ankle_link"/>
     <origin xyz="0.000000 -0.078650 0.000100" rpy="0.000000 0.000000 0.000000"/>
     <axis xyz="0.000000 0.000000 1.000000"/>
-    <limit lower="-10.0" upper="10.0" effort="3.23" velocity="10.0"/>
+    <limit lower="-1.5707963267948957" upper="1.5707963267948974" effort="3.23" velocity="10.0"/>
   </joint>
 
   <link name="neck_pitch_link">
@@ -334,7 +334,7 @@
     <child link="neck_pitch_link"/>
     <origin xyz="0.001000 0.019150 0.090001" rpy="1.570796 -0.000000 -0.000000"/>
     <axis xyz="0.000000 0.000000 1.000000"/>
-    <limit lower="-10.0" upper="10.0" effort="3.23" velocity="10.0"/>
+    <limit lower="-0.3490658503988437" upper="1.1344640137963364" effort="3.23" velocity="10.0"/>
   </joint>
 
   <link name="head_pitch_link">
@@ -359,7 +359,7 @@
     <child link="head_pitch_link"/>
     <origin xyz="-0.000000 0.066000 -0.000000" rpy="-0.000000 0.000000 0.000000"/>
     <axis xyz="0.000000 0.000000 1.000000"/>
-    <limit lower="-10.0" upper="10.0" effort="3.23" velocity="10.0"/>
+    <limit lower="-0.7853981633974483" upper="0.7853981633974483" effort="3.23" velocity="10.0"/>
   </joint>
 
   <link name="head_yaw_link">
@@ -384,7 +384,7 @@
     <child link="head_yaw_link"/>
     <origin xyz="-0.000000 0.057000 0.019050" rpy="-1.570796 0.000000 -0.000000"/>
     <axis xyz="0.000000 0.000000 1.000000"/>
-    <limit lower="-10.0" upper="10.0" effort="3.23" velocity="10.0"/>
+    <limit lower="-2.792526803190927" upper="2.792526803190927" effort="3.23" velocity="10.0"/>
   </joint>
 
   <link name="head_roll_link">
@@ -454,7 +454,7 @@
     <child link="head_roll_link"/>
     <origin xyz="0.040950 0.000000 -0.019150" rpy="1.568068 -1.570796 -1.568068"/>
     <axis xyz="0.000000 0.000000 1.000000"/>
-    <limit lower="-10.0" upper="10.0" effort="3.23" velocity="10.0"/>
+    <limit lower="-0.523598775598218" upper="0.5235987755983796" effort="3.23" velocity="10.0"/>
   </joint>
 
   <link name="right_hip_yaw_link">
@@ -540,7 +540,7 @@
     <child link="right_hip_pitch_link"/>
     <origin xyz="-0.074150 0.000000 0.035110" rpy="-0.955316 1.570796 -0.955316"/>
     <axis xyz="0.000000 0.000000 1.000000"/>
-    <limit lower="-10.0" upper="10.0" effort="3.23" velocity="10.0"/>
+    <limit lower="-0.5235987755982988" upper="1.2217304763960306" effort="3.23" velocity="10.0"/>
   </joint>
 
   <link name="right_knee_link">
@@ -583,7 +583,7 @@
     <child link="right_knee_link"/>
     <origin xyz="0.000000 0.078650 0.037000" rpy="3.141593 -0.000000 -0.000000"/>
     <axis xyz="0.000000 0.000000 1.000000"/>
-    <limit lower="-10.0" upper="10.0" effort="3.23" velocity="10.0"/>
+    <limit lower="-1.5707963267948966" upper="1.5707963267948966" effort="3.23" velocity="10.0"/>
   </joint>
 
   <link name="right_ankle_link">
@@ -635,7 +635,7 @@
     <child link="right_ankle_link"/>
     <origin xyz="0.000000 -0.078650 0.000100" rpy="0.000000 -0.000000 0.000000"/>
     <axis xyz="0.000000 0.000000 1.000000"/>
-    <limit lower="-10.0" upper="10.0" effort="3.23" velocity="10.0"/>
+    <limit lower="-1.5707963267948957" upper="1.5707963267948974" effort="3.23" velocity="10.0"/>
   </joint>
 
 </robot>

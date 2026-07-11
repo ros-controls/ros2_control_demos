@@ -190,6 +190,9 @@ if(BUILD_TESTING)
 
   ament_add_gtest(test_onnx_policy_controller_error_handling
     controller/test/test_onnx_policy_controller_error_handling.cpp)
+
+  ament_add_gtest(test_joint_position_limiting
+    controller/test/test_joint_position_limiting.cpp)
 endif()
 
 ## EXPORTS

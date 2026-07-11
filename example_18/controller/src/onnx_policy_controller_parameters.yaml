@@ -85,6 +85,16 @@ onnx_policy_controller:
     default_value: 5.24,
     description: "Maximum motor velocity in rad/s"
   }
+  joint_position_limits_min: {
+    type: double_array,
+    default_value: [],
+    description: "Minimum joint position limits in rad. Must match joints size when set."
+  }
+  joint_position_limits_max: {
+    type: double_array,
+    default_value: [],
+    description: "Maximum joint position limits in rad. Must match joints size when set."
+  }
   training_control_period: {
     type: double,
     default_value: 0.02,

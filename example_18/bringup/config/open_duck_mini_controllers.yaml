@@ -127,6 +127,10 @@ onnx_policy_controller:
     # Action processing parameters
     action_scale: 0.25
     max_motor_velocity: 5.24
+
+    # Joint position limits (rad), matching open_duck_mini_v2.xml / robot.urdf
+    joint_position_limits_min: [-0.523599, -0.436332, -1.221730, -1.570796, -1.570796, -0.349066, -0.785398, -2.792527, -0.523599, -0.523599, -0.436332, -0.523599, -1.570796, -1.570796]
+    joint_position_limits_max: [0.523599, 0.436332, 0.523599, 1.570796, 1.570796, 1.134464, 0.785398, 2.792527, 0.523599, 0.523599, 0.436332, 1.221730, 1.570796, 1.570796]
     dof_vel_scale: 0.05   # Joint velocity scaling in observation (joint_vel * dof_vel_scale)
 
     # Standing pose (keyframe "home"). Order: left leg (5), head (4), right leg (5)
