@@ -64,7 +64,7 @@ Build
 .. code-block:: bash
 
    cd ~/ros2_ws
-   colcon build --symlink-install --packages-select ros2_control_demo_example_18
+   colcon build --symlink-install --packages-select onnxruntime_vendor ros2_control_demo_description ros2_control_demo_example_18
    source install/setup.bash
 
 3. (Optional) Verify the URDF in RViz:
