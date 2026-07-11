@@ -51,9 +51,9 @@ find_package(onnxruntime_vendor QUIET)
 if(NOT onnxruntime_vendor_FOUND)
   message(FATAL_ERROR
     "Example 18 cannot be built without onnxruntime_vendor. "
-    "Install onnxruntime_vendor for your ROS 2 distribution (e.g. apt install "
-    "ros-$ENV{ROS_DISTRO}-onnxruntime_vendor when ROS_DISTRO is set) or colcon build "
-    "onnxruntime_vendor from source in your workspace.")
+    "Clone https://github.com/ros-controls/onnxruntime_vendor.git into your workspace "
+    "src directory and build it (colcon build --packages-select onnxruntime_vendor), "
+    "then source the workspace before building example_18.")
 endif()
 
 ## COMPILE

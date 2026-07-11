@@ -32,8 +32,17 @@ Prerequisites
 Dependencies
 ~~~~~~~~~~~~
 
-This demo requires `mujoco_ros2_control <https://github.com/ros-controls/mujoco_ros2_control>`_ and a custom hardware interface (``DuckMiniMujocoSystemInterface``) that adds foot contact detection. Follow the mujoco_ros2_control installation instructions for your ROS 2 distro.
+Install MuJoCo packages from apt, then build `onnxruntime_vendor <https://index.ros.org/p/onnxruntime_vendor/>`_ from source (not available via apt yet):
 
+.. code-block:: bash
+
+   sudo apt update
+   sudo apt install ros-$ROS_DISTRO-mujoco-ros2-control ros-$ROS_DISTRO-mujoco-ros2-control-msgs
+
+   # from your ROS 2 workspace root
+   git clone https://github.com/ros-controls/onnxruntime_vendor.git src/onnxruntime_vendor
+   colcon build --symlink-install --packages-select onnxruntime_vendor
+   source install/setup.bash
 
 Model and workspace
 ~~~~~~~~~~~~~~~~~~~
@@ -49,15 +58,7 @@ The ONNX model from ``model_path`` in ``bringup/config/open_duck_mini_controller
 Build
 -----
 
-1. Clone and build mujoco_ros2_control (TODO: update once mujoco_ros2_control is released, e.g. apt/rosdep install):
-
-.. code-block:: bash
-
-   cd ~/ros2_ws/src
-   git clone https://github.com/ros-controls/mujoco_ros2_control.git
-   cd ~/ros2_ws
-   colcon build --symlink-install --packages-select mujoco_ros2_control
-   source install/setup.bash
+1. Install the dependencies described above and source your ROS 2 underlay and workspace.
 
 2. Build example_18:
 
