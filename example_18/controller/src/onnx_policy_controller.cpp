@@ -1,10 +1,10 @@
-// Copyright 2025 ros2_control Development Team
+// Copyright (C) 2026 ros2_control Development Team
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+// http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -12,12 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-// Author: Julia Jia
+// Authors: Julia Jia
 
 #include <algorithm>
 #include <regex>
 
-#include "ament_index_cpp/get_package_share_directory.hpp"
+#include "ament_index_cpp/version.h"
+#if AMENT_INDEX_CPP_VERSION_MINOR >= 13
+#include <ament_index_cpp/get_package_share_path.hpp>
+#else
+#include <ament_index_cpp/get_package_share_directory.hpp>
+#endif
 #include "controller_interface/controller_interface.hpp"
 
 #include "onnx_policy_controller/onnx_policy_controller.hpp"
@@ -83,7 +88,11 @@ CallbackReturn OnnxPolicyController::on_configure(
   if (std::regex_search(raw_model_path, match, pkg_share_regex))
   {
     std::string package_name = match[1].str();
+#if AMENT_INDEX_CPP_VERSION_MINOR >= 13
+    std::string package_share = ament_index_cpp::get_package_share_path(package_name).string();
+#else
     std::string package_share = ament_index_cpp::get_package_share_directory(package_name);
+#endif
     model_path_ = std::regex_replace(raw_model_path, pkg_share_regex, package_share);
   }
   else

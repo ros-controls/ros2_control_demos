@@ -18,6 +18,7 @@
   <buildtool_depend>rosidl_default_generators</buildtool_depend>
   <build_depend>ros2_control_cmake</build_depend>
 
+  <depend>ament_index_cpp</depend>
   <depend>backward_ros</depend>
   <depend>control_msgs</depend>
   <depend>geometry_msgs</depend>
