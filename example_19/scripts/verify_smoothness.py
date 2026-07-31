@@ -117,9 +117,16 @@ def window(samples, t_pub):
 def analyze_chunk(samples, t_pub, waypoints, label, expect_rest_end=True, skip_lead_s=0.0):
     print(f"\n  -- {label}: {len(waypoints)} waypoints --")
     ok = [True]
-    fail = lambda m: (ok.__setitem__(0, False), print("    [FAIL]", m))
-    good = lambda m: print("    [ OK ]", m)
-    info = lambda m: print("    [info]", m)
+
+    def fail(m):
+        ok[0] = False
+        print("    [FAIL]", m)
+
+    def good(m):
+        print("    [ OK ]", m)
+
+    def info(m):
+        print("    [info]", m)
 
     s = window(samples, t_pub)
     if len(s) < 5:
@@ -200,8 +207,11 @@ def analyze_chunk(samples, t_pub, waypoints, label, expect_rest_end=True, skip_l
 
 def report_seam(samples, t_seam):
     print("\n  -- seam continuity (new chunk replaces a moving one) --")
-    vmag = lambda x: max(abs(v) for v in x[2])
-    veljump = lambda a, b: max(abs(b[2][j] - a[2][j]) for j in range(N))
+    def vmag(x):
+        return max(abs(v) for v in x[2])
+
+    def veljump(a, b):
+        return max(abs(b[2][j] - a[2][j]) for j in range(N))
     s = sorted((x for x in samples if t_seam - 0.20 <= x[0] <= t_seam + 0.25), key=lambda x: x[0])
     if len(s) < 6:
         print("    [warn] not enough samples around the seam")
