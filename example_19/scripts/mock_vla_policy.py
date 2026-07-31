@@ -18,6 +18,7 @@ Mock VLA-style action-policy node: streams positions-only action chunks
 at a configurable replan period. Matches JTC's spline_upsampling.policy_frequency
 for timing synthesis.
 """
+
 import math
 
 import rclpy
@@ -30,11 +31,13 @@ class MockVlaPolicy(Node):
         super().__init__("mock_vla_policy")
         self.declare_parameter("controller", "inference_bridge")
         self.declare_parameter("joints", ["joint1", "joint2"])
-        self.declare_parameter("policy_hz", 25.0)      # MUST match controller policy_frequency
-        self.declare_parameter("chunk_size", 30)        # waypoints per action chunk
-        self.declare_parameter("replan_period", 0.6)    # s between published chunks (overlap if < chunk span)
-        self.declare_parameter("amplitude", 0.3)        # rad, peak deviation from home (keep small!)
-        self.declare_parameter("home", [])              # home pose; defaults to zeros if empty
+        self.declare_parameter("policy_hz", 25.0)  # MUST match controller policy_frequency
+        self.declare_parameter("chunk_size", 30)  # waypoints per action chunk
+        self.declare_parameter(
+            "replan_period", 0.6
+        )  # s between published chunks (overlap if < chunk span)
+        self.declare_parameter("amplitude", 0.3)  # rad, peak deviation from home (keep small!)
+        self.declare_parameter("home", [])  # home pose; defaults to zeros if empty
 
         controller = self.get_parameter("controller").value
         self.joints = list(self.get_parameter("joints").value)
@@ -46,11 +49,14 @@ class MockVlaPolicy(Node):
 
         self.pub = self.create_publisher(JointTrajectory, f"/{controller}/joint_trajectory", 10)
         self.t0 = self.get_clock().now()
-        self.timer = self.create_timer(float(self.get_parameter("replan_period").value), self._replan)
+        self.timer = self.create_timer(
+            float(self.get_parameter("replan_period").value), self._replan
+        )
         self.get_logger().info(
             f"mock VLA policy -> /{controller}/joint_trajectory : {len(self.joints)} joints, "
             f"chunk={self.chunk_size} @ {self.policy_hz} Hz, replan every "
-            f"{self.get_parameter('replan_period').value}s")
+            f"{self.get_parameter('replan_period').value}s"
+        )
 
     def _ref(self, joint_idx, t):
         """Smooth bounded per-joint reference: each joint a sine with its own phase."""

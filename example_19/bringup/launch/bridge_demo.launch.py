@@ -14,6 +14,7 @@
 # limitations under the License.
 
 """Bring up the JTC spline_upsampling demo on a mock 2-DOF RRBot."""
+
 import os
 from pathlib import Path
 
@@ -46,14 +47,12 @@ def generate_launch_description():
                 description="Run the mock VLA policy. Set false to drive inference_bridge yourself "
                 "(e.g. verify_smoothness.py) without a competing publisher.",
             ),
-
             Node(
                 package="controller_manager",
                 executable="ros2_control_node",
                 parameters=[robot_description, controllers],
                 output="screen",
             ),
-
             Node(
                 package="robot_state_publisher",
                 executable="robot_state_publisher",
@@ -68,18 +67,22 @@ def generate_launch_description():
                 condition=IfCondition(gui),
                 output="screen",
             ),
-
             Node(
                 package="controller_manager",
                 executable="spawner",
                 arguments=["joint_state_broadcaster", "-c", "/controller_manager"],
                 output="screen",
             ),
-
             Node(
                 package="controller_manager",
                 executable="spawner",
-                arguments=["inference_bridge", "-c", "/controller_manager", "--param-file", controllers],
+                arguments=[
+                    "inference_bridge",
+                    "-c",
+                    "/controller_manager",
+                    "--param-file",
+                    controllers,
+                ],
                 output="screen",
             ),
             # policy_hz MUST equal inference_bridge's policy_frequency (25.0).

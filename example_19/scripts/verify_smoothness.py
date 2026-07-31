@@ -20,6 +20,7 @@ Runs three scenarios (single chunk, sequential, overlapping) against a live
 inference_bridge and reports C1/C2 continuity and cross-chunk seam metrics.
 Prereq: inference_bridge active with run_policy:=false.
 """
+
 import math
 import sys
 import time
@@ -85,10 +86,12 @@ def smooth_path(n, start):
     for i in range(n):
         s = i / (n - 1)
         w = math.sin(math.pi * s) ** 2  # 0 at s=0,1 with zero slope -> rest at ends
-        pts.append([
-            start[0] + 0.5 * w * math.sin(1.5 * math.pi * s),
-            start[1] - 0.3 * w * math.sin(1.0 * math.pi * s + 0.3),
-        ])
+        pts.append(
+            [
+                start[0] + 0.5 * w * math.sin(1.5 * math.pi * s),
+                start[1] - 0.3 * w * math.sin(1.0 * math.pi * s + 0.3),
+            ]
+        )
     return pts
 
 
@@ -129,8 +132,9 @@ def analyze_chunk(samples, t_pub, waypoints, label, expect_rest_end=True, skip_l
         fail("NaN/inf in commanded output")
 
     p0 = pos[0]
-    moved = next((i for i, p in enumerate(pos)
-                  if any(abs(p[j] - p0[j]) > 1e-4 for j in range(N))), None)
+    moved = next(
+        (i for i, p in enumerate(pos) if any(abs(p[j] - p0[j]) > 1e-4 for j in range(N))), None
+    )
     if moved is None:
         fail("controller never moved -> chunk not installed")
         return False
@@ -162,18 +166,23 @@ def analyze_chunk(samples, t_pub, waypoints, label, expect_rest_end=True, skip_l
     peak_vel = max(abs(v) for row in vw for v in row)
     peak_acc = max(abs(a) for row in aw for a in row)
     max_vel_jump = max(
-        (abs(vw[k][j] - vw[k - 1][j]) for k in range(1, len(vw)) for j in range(N)), default=0.0)
+        (abs(vw[k][j] - vw[k - 1][j]) for k in range(1, len(vw)) for j in range(N)), default=0.0
+    )
     fdacc = fd_accel_peak(tw, pw)
     # a CONTINUOUS cubic changes velocity by ~ accel*dt per sample; a real step
     # would jump far more than the acceleration can explain.
     dts = sorted(tw[k] - tw[k - 1] for k in range(1, len(tw)) if tw[k] - tw[k - 1] > 1e-6)
     dt_s = dts[len(dts) // 2] if dts else 0.01
     expected_jump = peak_acc * dt_s
-    info(f"peak|vel|={peak_vel:.3f}  peak|acc|={peak_acc:.3f}  fd|acc|={fdacc:.2f}  "
-         f"maxVelJump={max_vel_jump:.3f} (accel*dt~{expected_jump:.3f})")
+    info(
+        f"peak|vel|={peak_vel:.3f}  peak|acc|={peak_acc:.3f}  fd|acc|={fdacc:.2f}  "
+        f"maxVelJump={max_vel_jump:.3f} (accel*dt~{expected_jump:.3f})"
+    )
     if max_vel_jump > 3.0 * expected_jump + 0.05:
-        fail(f"velocity DISCONTINUITY: jump {max_vel_jump:.3f} >> accel*dt {expected_jump:.3f} "
-             "(not explained by acceleration -> C0/step)")
+        fail(
+            f"velocity DISCONTINUITY: jump {max_vel_jump:.3f} >> accel*dt {expected_jump:.3f} "
+            "(not explained by acceleration -> C0/step)"
+        )
     else:
         good("velocity continuous (C1) — jumps consistent with reported acceleration")
     if peak_acc >= 1e-3:
@@ -183,7 +192,9 @@ def analyze_chunk(samples, t_pub, waypoints, label, expect_rest_end=True, skip_l
 
     if expect_rest_end:
         v_end = max(abs(v) for v in vel[end_i])
-        (good if v_end < 0.05 else info)(f"end |v|={v_end:.3f} ({'at rest' if v_end < 0.05 else 'moving'})")
+        (good if v_end < 0.05 else info)(
+            f"end |v|={v_end:.3f} ({'at rest' if v_end < 0.05 else 'moving'})"
+        )
     return ok[0]
 
 
@@ -201,8 +212,10 @@ def report_seam(samples, t_seam):
     before = [x for x in s if x[0] < t_seam]
     v_before = sum(vmag(x) for x in before[-3:]) / max(1, min(3, len(before)))
     if seam_jump > 0.15:
-        print(f"    seam velocity jump {seam_jump:.2f} rad/s (was {v_before:.2f}) -> known "
-              "cross-chunk limitation (per-chunk rest BC); documented, expected.")
+        print(
+            f"    seam velocity jump {seam_jump:.2f} rad/s (was {v_before:.2f}) -> known "
+            "cross-chunk limitation (per-chunk rest BC); documented, expected."
+        )
     else:
         print(f"    [ OK ] velocity continuous across the seam (jump {seam_jump:.2f} rad/s)")
 
@@ -239,8 +252,12 @@ def show_plots(plot_data):
         vel = np.array([x[2] for x in s])
         acc = np.array([x[3] for x in s])
         jerk = np.gradient(acc, t, axis=0)
-        series = [("position [rad]", pos), ("velocity [rad/s]", vel),
-                  ("accel [rad/s^2]", acc), ("jerk [rad/s^3]", jerk)]
+        series = [
+            ("position [rad]", pos),
+            ("velocity [rad/s]", vel),
+            ("accel [rad/s^2]", acc),
+            ("jerk [rad/s^3]", jerk),
+        ]
 
         fig, ax = plt.subplots(4, 1, sharex=True, figsize=(8, 9))
         try:
@@ -308,12 +325,13 @@ def main():
     node.spin(0.2)
     a = smooth_path(CHUNK, node.latest_pos())
     node.publish(a)
-    node.spin(0.40 * (CHUNK - 1) * DT)          # let A run ~40%
-    b = smooth_path(CHUNK, node.latest_pos())   # B starts at current pose -> pos continuous
+    node.spin(0.40 * (CHUNK - 1) * DT)  # let A run ~40%
+    b = smooth_path(CHUNK, node.latest_pos())  # B starts at current pose -> pos continuous
     t_pub_b = node.publish(b)
     node.spin((CHUNK - 1) * DT + 0.6)
     results["C overlap installs"] = analyze_chunk(
-        node.samples, t_pub_b, b, "chunk B (after replace)", expect_rest_end=True, skip_lead_s=0.2)
+        node.samples, t_pub_b, b, "chunk B (after replace)", expect_rest_end=True, skip_lead_s=0.2
+    )
     report_seam(node.samples, t_pub_b)
     plot_data["C"] = list(node.samples)
 
