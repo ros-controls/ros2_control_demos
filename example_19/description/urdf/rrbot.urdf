@@ -3,8 +3,8 @@
   Minimal 2-DOF "RRBot" for ros2_control_demo_example_19.
 
   Hardware: mock_components/GenericSystem (no Gazebo, no real robot) with
-  position+velocity command and position+velocity state interfaces - exactly what the
-  InferenceBridgeController consumes. Based on jtc_ws/smoke_test/rrbot.urdf, with simple
+  position+velocity command and position+velocity state interfaces - exactly what JTC with
+  spline_upsampling consumes. Based on jtc_ws/smoke_test/rrbot.urdf, with simple
   box visuals added so the arm is visible in RViz.
 -->
 <robot name="rrbot">
@@ -76,13 +76,13 @@
       <command_interface name="position"/>
       <command_interface name="velocity"/>
       <state_interface name="position"><param name="initial_value">0.0</param></state_interface>
-      <state_interface name="velocity"/>
+      <state_interface name="velocity"><param name="initial_value">0.0</param></state_interface>
     </joint>
     <joint name="joint2">
       <command_interface name="position"/>
       <command_interface name="velocity"/>
       <state_interface name="position"><param name="initial_value">0.0</param></state_interface>
-      <state_interface name="velocity"/>
+      <state_interface name="velocity"><param name="initial_value">0.0</param></state_interface>
     </joint>
   </ros2_control>
 

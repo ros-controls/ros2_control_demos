@@ -2,17 +2,18 @@
 
 .. _ros2_control_demos_example_19_userdoc:
 
-Example 19: InferenceBridgeController (VLA action-chunk upsampling)
+Example 19: Positions-only action-chunk upsampling (JTC)
 =====================================================================
 
-This example demonstrates the ``InferenceBridgeController`` — a ``joint_trajectory_controller``
-variant that ingests positions-only action chunks and upsamples them into smooth C2 cubic-spline
-commands. A mock VLA policy streams chunks to a 2-DOF RRBot on mock hardware.
+This example demonstrates the ``joint_trajectory_controller``'s ``spline_upsampling`` feature, which
+ingests positions-only action chunks and upsamples them into smooth C2 cubic-spline commands. A mock
+VLA policy streams chunks to a 2-DOF RRBot on mock hardware.
 
 .. note::
 
-  The ``InferenceBridgeController`` is not in upstream ``ros2_controllers``.
-  Build with the ``feat/inference-bridge-controller`` branch.
+  ``spline_upsampling`` is a ``joint_trajectory_controller`` feature (off by default). It is not yet
+  in a released ``ros2_controllers``; build ``ros2_controllers`` from the branch carrying the
+  feature (`PR #2443 <https://github.com/ros-controls/ros2_controllers/pull/2443>`__).
 
 Hardware and interfaces
 -------------------------
@@ -37,7 +38,7 @@ Available controllers
 -------------------------
 
 - ``joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster]``
-- ``inference_bridge[joint_trajectory_controller/InferenceBridgeController]``
+- ``inference_bridge[joint_trajectory_controller/JointTrajectoryController]``
 
 Tutorial steps
 --------------------------
@@ -58,7 +59,7 @@ Tutorial steps
 
     $ ros2 control list_controllers
     joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active
-    inference_bridge[joint_trajectory_controller/InferenceBridgeController] active
+    inference_bridge[joint_trajectory_controller/JointTrajectoryController] active
 
 3. Run the smoothness verification (stop the policy first):
 

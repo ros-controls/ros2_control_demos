@@ -4,9 +4,9 @@
   <name>ros2_control_demo_example_19</name>
   <version>0.0.0</version>
   <description>
-    Example 19: InferenceBridgeController demo. A mock RRBot driven by positions-only
-    "VLA" action chunks that the InferenceBridgeController upsamples into smooth C2
-    cubic-spline motion. Recreates the inference-bridge demo entirely with mock hardware.
+    Example 19: joint_trajectory_controller spline-upsampling demo. A mock RRBot driven by
+    positions-only "VLA" action chunks that JTC's spline_upsampling feature upsamples into
+    smooth C2 cubic-spline motion, with mock hardware.
   </description>
 
   <maintainer email="denis.stogl@stoglrobotics.de">Dr.-Ing. Denis Štogl</maintainer>
@@ -19,6 +19,7 @@
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <exec_depend>ament_index_python</exec_depend>
+  <exec_depend>control_msgs</exec_depend>
   <exec_depend>controller_manager</exec_depend>
   <exec_depend>hardware_interface</exec_depend>
   <exec_depend>joint_state_broadcaster</exec_depend>
@@ -28,6 +29,7 @@
   <exec_depend>ros2controlcli</exec_depend>
   <exec_depend>ros2launch</exec_depend>
   <exec_depend>rviz2</exec_depend>
+  <exec_depend>trajectory_msgs</exec_depend>
 
   <test_depend>ament_cmake_ros</test_depend>
   <test_depend>launch_testing_ament_cmake</test_depend>

@@ -15,8 +15,8 @@
 
 """
 Mock VLA-style action-policy node: streams positions-only action chunks
-at a configurable replan period. Matches the InferenceBridgeController's
-policy_frequency for timing synthesis.
+at a configurable replan period. Matches JTC's spline_upsampling.policy_frequency
+for timing synthesis.
 """
 import math
 

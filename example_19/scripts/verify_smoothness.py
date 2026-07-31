@@ -14,7 +14,7 @@
 # limitations under the License.
 
 """
-End-to-end smoothness verification for inference_bridge_controller.
+End-to-end smoothness verification for JTC's spline_upsampling feature.
 
 Runs three scenarios (single chunk, sequential, overlapping) against a live
 inference_bridge and reports C1/C2 continuity and cross-chunk seam metrics.
@@ -161,7 +161,8 @@ def analyze_chunk(samples, t_pub, waypoints, label, expect_rest_end=True, skip_l
         info(f"(smoothness evaluated after the first {skip_lead_s:.2f}s, i.e. past the seam)")
     peak_vel = max(abs(v) for row in vw for v in row)
     peak_acc = max(abs(a) for row in aw for a in row)
-    max_vel_jump = max(abs(vw[k][j] - vw[k - 1][j]) for k in range(1, len(vw)) for j in range(N))
+    max_vel_jump = max(
+        (abs(vw[k][j] - vw[k - 1][j]) for k in range(1, len(vw)) for j in range(N)), default=0.0)
     fdacc = fd_accel_peak(tw, pw)
     # a CONTINUOUS cubic changes velocity by ~ accel*dt per sample; a real step
     # would jump far more than the acceleration can explain.

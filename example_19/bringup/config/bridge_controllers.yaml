@@ -1,12 +1,12 @@
 controller_manager:
   ros__parameters:
-    update_rate: 1000  # Hz
+    update_rate: 1000 # Hz
 
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
 
     inference_bridge:
-      type: joint_trajectory_controller/InferenceBridgeController
+      type: joint_trajectory_controller/JointTrajectoryController
 
 inference_bridge:
   ros__parameters:
@@ -19,6 +19,10 @@ inference_bridge:
     state_interfaces:
       - position
       - velocity
-    # Must match mock_vla_policy's policy_hz.
-    policy_frequency: 25.0
+
+    set_last_command_interface_value_as_state_on_activation: false
     interpolate_from_desired_state: true
+
+    spline_upsampling:
+      enable: true
+      policy_frequency: 25.0
