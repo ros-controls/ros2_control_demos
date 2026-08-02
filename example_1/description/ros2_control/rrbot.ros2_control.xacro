@@ -1,9 +1,19 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <xacro:macro name="rrbot_ros2_control" params="name prefix">
+  <xacro:macro name="rrbot_ros2_control"
+               params="name
+                       prefix
+                       is_async:=false
+                       rw_rate:=250
+                       scheduling_policy:='synchronized'
+                       cpu_affinity:='[2,3]'
+                       thread_priority:=30">
 
-    <ros2_control name="${name}" type="system">
+    <ros2_control name="${name}" type="system" is_async="${is_async}" rw_rate="${rw_rate}">
+      <properties>
+        <async scheduling_policy="${scheduling_policy}" affinity="${cpu_affinity}" thread_priority="${thread_priority}" print_warnings="true"/>
+      </properties>
       <hardware>
         <plugin>ros2_control_demo_example_1/RRBotSystemPositionOnlyHardware</plugin>
         <param name="example_param_hw_start_duration_sec">0</param>

@@ -1,0 +1,63 @@
+<!--
+  Copyright 2026 b»robotized group
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<launch>
+
+  <arg name="gui" default="true" description="Start RViz2 automatically with this launch file."/>
+  <arg name="prefix" default="" description="Prefix for robot and its joint names."/>
+  <arg name="is_async" default="true" description="Whether the hardware component's read/write should run asynchronously."/>
+  <arg name="rw_rate" default="250" description="Rate (Hz) at which the asynchronous read/write thread runs."/>
+  <arg name="scheduling_policy" default="synchronized" description="Scheduling policy for the asynchronous read/write thread (e.g. 'synchronized' or 'detached')."/>
+  <arg name="cpu_affinity" default="[2,3]" description="CPU affinity for the asynchronous read/write thread."/>
+  <arg name="thread_priority" default="30" description="Thread priority for the asynchronous read/write thread."/>
+
+  <!-- Get URDF via xacro, propagating the async arguments to the ros2_control macro -->
+  <let name="robot_description_content"
+       value="$(command '$(find-exec xacro) $(find-pkg-share ros2_control_demo_example_1)/urdf/rrbot_async.urdf.xacro
+              prefix:=$(var prefix)
+              is_async:=$(var is_async)
+              rw_rate:=$(var rw_rate)
+              scheduling_policy:=$(var scheduling_policy)
+              cpu_affinity:=$(var cpu_affinity)
+              thread_priority:=$(var thread_priority)')"/>
+
+  <!-- Path to controller configurations -->
+  <let name="robot_controllers"
+       value="$(find-pkg-share ros2_control_demo_example_1)/config/rrbot_controllers.yaml"/>
+
+  <!-- Control node -->
+  <node pkg="controller_manager" exec="ros2_control_node" output="both">
+    <param name="update_rate" value="10"/>
+  </node>
+
+  <!-- robot_state_publisher with robot_description from xacro -->
+  <node pkg="robot_state_publisher" exec="robot_state_publisher" output="both">
+    <param name="robot_description" value="$(var robot_description_content)"/>
+  </node>
+
+  <node pkg="rviz2" exec="rviz2" name="rviz2" output="log"
+        args="-d $(find-pkg-share ros2_control_demo_description)/rrbot/rviz/rrbot.rviz"
+        if="$(var gui)"/>
+
+  <node pkg="controller_manager" exec="spawner"
+        args="joint_state_broadcaster --param-file $(var robot_controllers)"/>
+
+  <let name="joint_prefix" value="$(var prefix)joint" />
+  <node pkg="controller_manager" exec="spawner" args="forward_position_controller">
+    <param name="joint_prefix" value="$(var joint_prefix)"/>
+    <param from="$(var robot_controllers)" allow_substs="true"/>
+  </node>
+
+</launch>
