@@ -18,7 +18,7 @@
   <arg name="gui" default="true" description="Start RViz2 automatically with this launch file."/>
   <arg name="prefix" default="" description="Prefix for robot and its joint names."/>
   <arg name="is_async" default="true" description="Whether the hardware component's read/write should run asynchronously."/>
-  <arg name="rw_rate" default="250" description="Rate (Hz) at which the asynchronous read/write thread runs."/>
+  <arg name="rw_rate" default="5" description="Rate (Hz) at which the asynchronous read/write thread runs."/>
   <arg name="scheduling_policy" default="synchronized" description="Scheduling policy for the asynchronous read/write thread (e.g. 'synchronized' or 'detached')."/>
   <arg name="cpu_affinity" default="[2,3]" description="CPU affinity for the asynchronous read/write thread."/>
   <arg name="thread_priority" default="30" description="Thread priority for the asynchronous read/write thread."/>

@@ -7,7 +7,7 @@ https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_desc
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="2dof_robot">
   <xacro:arg name="prefix" default="" />
   <xacro:arg name="is_async" default="true" />
-  <xacro:arg name="rw_rate" default="250" />
+  <xacro:arg name="rw_rate" default="5" />
   <xacro:arg name="scheduling_policy" default="synchronized" />
   <xacro:arg name="cpu_affinity" default="[2,3]" />
   <xacro:arg name="thread_priority" default="30" />

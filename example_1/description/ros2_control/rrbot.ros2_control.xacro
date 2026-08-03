@@ -5,7 +5,7 @@
                params="name
                        prefix
                        is_async:=false
-                       rw_rate:=250
+                       rw_rate:=5
                        scheduling_policy:='synchronized'
                        cpu_affinity:='[2,3]'
                        thread_priority:=30">
