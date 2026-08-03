@@ -19,6 +19,8 @@ For *example_1*, the hardware interface plugin is implemented having only one in
 
 The *RRBot* URDF files can be found in the ``description/urdf`` folder.
 
+Additionally, the examples is also containing launch and URDF files for asynchronous read/write of the hardware interface marked with suffix ``_async``. More about the async hardware interface can be found in the `ros2_control documentation <https://control.ros.org/rolling/doc/ros2_control/hardware_interface/doc/asynchronous_components.html>`__.
+
 .. include:: ../../doc/run_from_docker.rst
 
 Tutorial steps
@@ -83,6 +85,7 @@ Tutorial steps
           ros2 launch ros2_control_demo_example_1 rrbot.launch.py
 
         The launch file loads and starts the robot hardware, controllers and opens *RViz*.
+        For the async version start ``rrbot_async.launch.xml`` instead.
 
       .. group-tab:: Docker
 
@@ -135,6 +138,28 @@ Tutorial steps
           joint2/position
 
    Marker ``[claimed]`` by command interfaces means that a controller has access to command *RRBot*.
+
+   When running async you might want to check the hardware components:
+
+   .. code-block:: shell
+
+    ros2 control list_hardware_components
+
+   If everything started nominally, you should see the output
+
+   .. code-block:: shell
+
+    Hardware Component 1
+            name: RRBot
+            type: system
+            plugin name: ros2_control_demo_example_1/RRBotSystemPositionOnlyHardware
+            state: id=3 label=active
+            read/write rate: 5 Hz
+            is_async: True
+            command interfaces
+                    joint2/position [available] [claimed]
+                    joint1/position [available] [claimed]
+
 
 4. Check if controllers are running by
 
