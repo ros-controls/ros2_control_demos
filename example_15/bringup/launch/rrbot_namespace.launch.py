@@ -35,17 +35,6 @@ def generate_launch_description():
                 executable="ros2_control_node",
                 namespace="/rrbot",
                 parameters=[
-                    {
-                        "robot_description": Command(
-                            [
-                                "xacro",
-                                " ",
-                                PathSubstitution(FindPackageShare("ros2_control_demo_example_1"))
-                                / "urdf"
-                                / "rrbot.urdf.xacro",
-                            ]
-                        )
-                    },
                     PathSubstitution(FindPackageShare("ros2_control_demo_example_15"))
                     / "config"
                     / "rrbot_namespace_controllers.yaml",
@@ -88,13 +77,9 @@ def generate_launch_description():
                 package="controller_manager",
                 executable="spawner",
                 namespace="rrbot",
-                arguments=["joint_state_broadcaster"],
-            ),
-            Node(
-                package="controller_manager",
-                executable="spawner",
-                namespace="rrbot",
+                name="controller_active_spawner",
                 arguments=[
+                    "joint_state_broadcaster",
                     "forward_position_controller",
                     "--param-file",
                     PathSubstitution(FindPackageShare("ros2_control_demo_example_15"))
@@ -109,6 +94,7 @@ def generate_launch_description():
                 package="controller_manager",
                 executable="spawner",
                 namespace="rrbot",
+                name="controller_inactive_spawner",
                 arguments=[
                     "position_trajectory_controller",
                     "--inactive",

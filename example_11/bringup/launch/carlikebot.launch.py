@@ -76,16 +76,13 @@ def generate_launch_description():
                 ],
                 condition=IfCondition(LaunchConfiguration("gui")),
             ),
-            Node(
-                package="controller_manager",
-                executable="spawner",
-                arguments=["joint_state_broadcaster"],
-            ),
             # the steering controller libraries by default publish odometry on a separate topic than /tf
             Node(
                 package="controller_manager",
                 executable="spawner",
+                name="controller_spawner_remap",
                 arguments=[
+                    "joint_state_broadcaster",
                     "bicycle_steering_controller",
                     "--param-file",
                     PathSubstitution(FindPackageShare("ros2_control_demo_example_11"))
@@ -99,7 +96,9 @@ def generate_launch_description():
             Node(
                 package="controller_manager",
                 executable="spawner",
+                name="controller_spawner",
                 arguments=[
+                    "joint_state_broadcaster",
                     "bicycle_steering_controller",
                     "--param-file",
                     PathSubstitution(FindPackageShare("ros2_control_demo_example_11"))

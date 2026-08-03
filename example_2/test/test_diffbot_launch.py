@@ -83,10 +83,17 @@ class TestFixture(unittest.TestCase):
     def test_node_start(self, proc_output):
         check_node_running(self.node, "robot_state_publisher")
 
-    def test_controller_running(self, proc_output):
+    def test_controller_running(self, proc_info, proc_output):
 
         cnames = ["diffbot_base_controller", "joint_state_broadcaster"]
 
+        check_controllers_running(self.node, cnames)
+
+        # Wait for controller_spawner to finish and verify successful exit.
+        proc_info.assertWaitForShutdown(process="spawner", timeout=30)
+        launch_testing.asserts.assertExitCodes(proc_info, process="spawner")
+
+        # Re-check controllers after spawner has exited.
         check_controllers_running(self.node, cnames)
 
     def test_check_if_msgs_published(self):

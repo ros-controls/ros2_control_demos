@@ -95,12 +95,9 @@ def generate_launch_description():
             Node(
                 package="controller_manager",
                 executable="spawner",
-                arguments=["joint_state_broadcaster"],
-            ),
-            Node(
-                package="controller_manager",
-                executable="spawner",
+                name="controller_spawner",
                 arguments=[
+                    "joint_state_broadcaster",
                     LaunchConfiguration("robot_controller"),
                     "--param-file",
                     PathSubstitution(FindPackageShare("ros2_control_demo_example_14"))

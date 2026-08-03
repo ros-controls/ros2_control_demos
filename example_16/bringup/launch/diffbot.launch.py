@@ -89,12 +89,9 @@ def generate_launch_description():
             Node(
                 package="controller_manager",
                 executable="spawner",
-                arguments=["joint_state_broadcaster"],
-            ),
-            Node(
-                package="controller_manager",
-                executable="spawner",
+                name="controller_spawner",
                 arguments=[
+                    "joint_state_broadcaster",
                     "pid_controller_left_wheel_joint",
                     "pid_controller_right_wheel_joint",
                     "diffbot_base_controller",

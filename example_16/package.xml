@@ -22,8 +22,8 @@
   <depend>pluginlib</depend>
   <depend>rclcpp</depend>
   <depend>rclcpp_lifecycle</depend>
+  <depend>controller_manager</depend>
 
-  <exec_depend>controller_manager</exec_depend>
   <exec_depend>diff_drive_controller</exec_depend>
   <exec_depend>pid_controller</exec_depend>
   <exec_depend>joint_state_broadcaster</exec_depend>
