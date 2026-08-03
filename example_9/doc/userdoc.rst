@@ -92,13 +92,12 @@ Tutorial steps
 
    You should now see the robot moving in gazebo.
 
-   If you echo the ``/joint_states`` or ``/dynamic_joint_states`` topics you should see the changing values,
+   If you echo the ``/joint_states`` topic you should see the changing values,
    namely the simulated states of the robot
 
    .. code-block:: shell
 
     ros2 topic echo /joint_states
-    ros2 topic echo /dynamic_joint_states
 
 
 Files used for this demos
