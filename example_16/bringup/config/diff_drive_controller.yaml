@@ -1,52 +1,6 @@
-controller_manager:
-  ros__parameters:
-    update_rate: 10  # Hz
-
-    joint_state_broadcaster:
-      type: joint_state_broadcaster/JointStateBroadcaster
-
-    pid_controller_left_wheel_joint:
-      type: pid_controller/PidController
-
-    pid_controller_right_wheel_joint:
-      type: pid_controller/PidController
-
-    diffbot_base_controller:
-      type: diff_drive_controller/DiffDriveController
-
-
-pid_controller_left_wheel_joint:
-  ros__parameters:
-
-    dof_names:
-      - left_wheel_joint
-
-    command_interface: velocity
-
-    reference_and_state_interfaces:
-      - velocity
-
-    gains:
-      # control the velocity, no d term
-      left_wheel_joint: {"p": 0.5, "i": 2.5, "d": 0.0, "i_clamp_min": -20.0, "i_clamp_max": 20.0, "antiwindup": true, "feedforward_gain": 0.95}
-
-pid_controller_right_wheel_joint:
-  ros__parameters:
-
-    dof_names:
-      - right_wheel_joint
-
-    command_interface: velocity
-
-    reference_and_state_interfaces:
-      - velocity
-
-    gains:
-      # control the velocity, no d term
-      right_wheel_joint: {"p": 0.5, "i": 2.5, "d": 0.0, "i_clamp_min": -20.0, "i_clamp_max": 20.0, "antiwindup": true, "feedforward_gain": 0.95}
-
 diffbot_base_controller:
   ros__parameters:
+    type: diff_drive_controller/DiffDriveController
 
     left_wheel_names: ["pid_controller_left_wheel_joint/left_wheel_joint"]
     right_wheel_names: ["pid_controller_right_wheel_joint/right_wheel_joint"]

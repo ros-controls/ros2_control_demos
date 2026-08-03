@@ -46,7 +46,7 @@ def generate_launch_description():
                 parameters=[
                     PathSubstitution(FindPackageShare("ros2_control_demo_example_16"))
                     / "config"
-                    / "diffbot_chained_controllers.yaml"
+                    / "diffbot_cm.yaml"
                 ],
                 output="both",
             ),
@@ -91,14 +91,38 @@ def generate_launch_description():
                 executable="spawner",
                 name="controller_spawner",
                 arguments=[
+                    "--controller",
                     "joint_state_broadcaster",
-                    "pid_controller_left_wheel_joint",
+                    "--param-file",
+                    [
+                        PathSubstitution(FindPackageShare("ros2_control_demo_example_16"))
+                        / "config"
+                        / "diffbot_cm.yaml"
+                    ],
+                    "--controller",
                     "pid_controller_right_wheel_joint",
+                    "--param-file",
+                    [
+                        PathSubstitution(FindPackageShare("ros2_control_demo_example_16"))
+                        / "config"
+                        / "pid_controllers.yaml",
+                    ],
+                    "--controller",
+                    "pid_controller_left_wheel_joint",
+                    "--param-file",
+                    [
+                        PathSubstitution(FindPackageShare("ros2_control_demo_example_16"))
+                        / "config"
+                        / "pid_controllers.yaml",
+                    ],
+                    "--controller",
                     "diffbot_base_controller",
                     "--param-file",
-                    PathSubstitution(FindPackageShare("ros2_control_demo_example_16"))
-                    / "config"
-                    / "diffbot_chained_controllers.yaml",
+                    [
+                        PathSubstitution(FindPackageShare("ros2_control_demo_example_16"))
+                        / "config"
+                        / "diff_drive_controller.yaml",
+                    ],
                     "--controller-ros-args",
                     "-r /diffbot_base_controller/cmd_vel:=/cmd_vel",
                 ],
