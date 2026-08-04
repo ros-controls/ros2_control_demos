@@ -44,6 +44,7 @@
   <test_depend>launch</test_depend>
   <test_depend>liburdfdom-tools</test_depend>
   <test_depend>rclpy</test_depend>
+  <test_depend>ros2_control_demo_test_utils</test_depend>
 
   <export>
     <build_type>ament_cmake</build_type>
