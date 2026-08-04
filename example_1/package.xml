@@ -42,7 +42,12 @@
   <test_depend>launch_testing</test_depend>
   <test_depend>launch</test_depend>
   <test_depend>liburdfdom-tools</test_depend>
+<<<<<<< HEAD
   <test_depend>xacro</test_depend>
+=======
+  <test_depend>rclpy</test_depend>
+  <test_depend>ros2_control_demo_test_utils</test_depend>
+>>>>>>> b7d2a2d (Add shared ros2_control_demo_test_utils package (#1173))
 
   <export>
     <build_type>ament_cmake</build_type>
