@@ -32,6 +32,7 @@ setup(
     maintainer_email="denis.stogl@stoglrobotics.de",
     description="Shared utilities for testing movement in ros2_control demos.",
     license="Apache-2.0",
+    extras_require={"test": ["pytest"]},
     entry_points={
         "console_scripts": [
             "test_forward_command = ros2_control_demo_test_utils.test_forward_command:main",

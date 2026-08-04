@@ -24,7 +24,7 @@ WAIT_FOR_JOINT_STATES_TIMEOUT = 10.0
 COMMAND_VALUE = 0.5
 
 
-class TestForwardCommand(Node):
+class ForwardCommand(Node):
 
     def __init__(self):
         super().__init__("test_forward_command")
@@ -99,7 +99,7 @@ class TestForwardCommand(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    node = TestForwardCommand()
+    node = ForwardCommand()
     result = node.run()
     node.destroy_node()
     rclpy.shutdown()
