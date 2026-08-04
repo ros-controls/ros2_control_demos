@@ -35,5 +35,7 @@ class TestForwardCommandModule(unittest.TestCase):
             self.assertEqual(node.controller_name, "forward_position_controller")
             self.assertEqual(node.joints, ["joint1", "joint2"])
             self.assertEqual(node.publish_topic, "/forward_position_controller/commands")
+            self.assertEqual(node.command_value, 0.5)
+            self.assertEqual(node.position_tolerance, 0.01)
         finally:
             node.destroy_node()

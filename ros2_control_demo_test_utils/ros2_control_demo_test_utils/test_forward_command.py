@@ -18,10 +18,8 @@ from rclpy.node import Node
 from sensor_msgs.msg import JointState
 from std_msgs.msg import Float64MultiArray
 
-MIN_MOVEMENT = 0.1
 TIMEOUT = 15.0
 WAIT_FOR_JOINT_STATES_TIMEOUT = 10.0
-COMMAND_VALUE = 0.5
 
 
 class ForwardCommand(Node):
@@ -30,9 +28,17 @@ class ForwardCommand(Node):
         super().__init__("test_forward_command")
         self.declare_parameter("controller_name", "forward_position_controller")
         self.declare_parameter("joints", ["joint1", "joint2"])
+        self.declare_parameter("initial_position", 0.0)
+        self.declare_parameter("command_value", 0.5)
+        self.declare_parameter("position_tolerance", 0.01)
+        self.declare_parameter("min_movement", 0.1)
 
         self.controller_name = self.get_parameter("controller_name").value
         self.joints = self.get_parameter("joints").value
+        self.initial_position = self.get_parameter("initial_position").value
+        self.command_value = self.get_parameter("command_value").value
+        self.position_tolerance = self.get_parameter("position_tolerance").value
+        self.min_movement = self.get_parameter("min_movement").value
         self.publish_topic = f"/{self.controller_name}/commands"
 
         self.publisher_ = self.create_publisher(Float64MultiArray, self.publish_topic, 10)
@@ -65,13 +71,15 @@ class ForwardCommand(Node):
 
         self.get_logger().info(f"Initial positions: {dict(zip(self.joints, init_positions))}")
 
-        if any(abs(pos) > 0.01 for pos in init_positions):
-            self.get_logger().error("Joints not at initial position 0.0")
+        if any(
+            abs(pos - self.initial_position) > self.position_tolerance for pos in init_positions
+        ):
+            self.get_logger().error(f"Joints not at initial position {self.initial_position}")
             return 1
 
         # 3. Publish position command
         command = Float64MultiArray()
-        command.data = [COMMAND_VALUE] * len(self.joints)
+        command.data = [self.command_value] * len(self.joints)
         self.publisher_.publish(command)
         self.get_logger().info(f"Published command: {command.data}")
 
@@ -85,10 +93,10 @@ class ForwardCommand(Node):
 
         self.get_logger().info(f"Final positions: {dict(zip(self.joints, final_positions))}")
 
-        if any(pos < MIN_MOVEMENT for pos in final_positions):
+        if any(pos < self.min_movement for pos in final_positions):
             self.get_logger().error(
                 f"Joints did not move enough. "
-                f"Expected >{MIN_MOVEMENT}, got "
+                f"Expected >{self.min_movement}, got "
                 f"{dict(zip(self.joints, final_positions))}"
             )
             return 1

@@ -12,12 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
 import unittest
 
 import pytest
 
-from ament_index_python.packages import get_package_share_directory
 from controller_manager.test_utils import (
     check_controllers_running,
     check_if_js_published,
@@ -25,9 +23,10 @@ from controller_manager.test_utils import (
 )
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription
-from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
 from launch_testing.actions import ReadyToTest
+from launch.substitutions import PathJoinSubstitution
+from launch_ros.substitutions import FindPackageShare
 
 import launch_testing
 import launch_testing.markers
@@ -37,11 +36,12 @@ import rclpy
 @pytest.mark.rostest
 def generate_test_description():
     launch_include = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(
-                get_package_share_directory("ros2_control_demo_example_1"),
-                "launch/rrbot.launch.py",
-            )
+        PathJoinSubstitution(
+            [
+                FindPackageShare("ros2_control_demo_example_1"),
+                "launch",
+                "rrbot.launch.py",
+            ]
         ),
         launch_arguments={"gui": "False"}.items(),
     )
