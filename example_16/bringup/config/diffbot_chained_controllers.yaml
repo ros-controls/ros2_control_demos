@@ -65,6 +65,7 @@ diffbot_base_controller:
     publish_rate: 50.0
     odom_frame_id: odom
     base_frame_id: base_link
+    tf_frame_prefix: "~"
     pose_covariance_diagonal : [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
     twist_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
 
