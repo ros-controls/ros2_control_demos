@@ -59,51 +59,7 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
     gpio_controller             gpio_controllers/GpioCommandController               active
     forward_position_controller forward_command_controller/ForwardCommandController  active
 
-5. If you get output from above you can subscribe to the ``/dynamic_joint_states`` topic published by the *joint_state_broadcaster* using ROS 2 CLI interface:
-
-   .. code-block:: shell
-
-    ros2 topic echo /dynamic_joint_states --once
-
-
-   This includes not only the state interfaces of the joints but also the GPIO interfaces.
-
-   .. code-block:: shell
-
-      header:
-        stamp:
-          sec: 1730670203
-          nanosec: 875008879
-        frame_id: ''
-      joint_names:
-      - joint1
-      - joint2
-      - flange_vacuum
-      - flange_analog_IOs
-      interface_values:
-      - interface_names:
-        - position
-        values:
-        - 0.0
-      - interface_names:
-        - position
-        values:
-        - 0.0
-      - interface_names:
-        - vacuum
-        values:
-        - 0.0
-      - interface_names:
-        - analog_input2
-        - analog_input1
-        - analog_output1
-        values:
-        - 92747888.0
-        - 1764536320.0
-        - 0.0
-      ---
-
-   You can also subscribe to the ``/gpio_controller/gpio_states`` topic published by the *gpio_controller* using ROS 2 CLI interface:
+5. If you get output from above you can subscribe to the ``/gpio_controller/gpio_states`` topic published by the *gpio_controller* using ROS 2 CLI interface:
 
    .. code-block:: shell
 
