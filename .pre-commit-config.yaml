@@ -96,6 +96,16 @@ repos:
         language: system
         files: CMakeLists\.txt$
 
+  # XML hooks
+  - repo: local
+    hooks:
+      - id: ament_xmllint
+        name: ament_xmllint
+        description: Check format of XML files
+        entry: ament_xmllint
+        language: system
+        files: \.xml$
+
   # Copyright
   - repo: local
     hooks:
