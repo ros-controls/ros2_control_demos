@@ -66,7 +66,7 @@ The *RRBot* URDF files can be found in the ``description/urdf`` folder.
     ros2 topic echo /joint_states --once
 
 
-   This shows the movement-related state interfaces of the joints (``position``, ``velocity``, and ``effort``).
+   This shows the movement-related state interface of the joints (``position``).
 
    .. code-block:: shell
 
