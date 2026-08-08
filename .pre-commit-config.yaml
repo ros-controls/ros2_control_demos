@@ -66,6 +66,7 @@ repos:
     hooks:
       - id: clang-format
         args: ['-fallback-style=none', '-i']
+        files: \.(h\+\+|h|hh|hxx|hpp|cuh|c|cc|cpp|cu|c\+\+|cxx|tpp|txx)$
 
   - repo: local
     hooks:

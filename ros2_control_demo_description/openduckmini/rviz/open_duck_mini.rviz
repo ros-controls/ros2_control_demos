@@ -1,0 +1,298 @@
+Panels:
+  - Class: rviz_common/Displays
+    Help Height: 61
+    Name: Displays
+    Property Tree Widget:
+      Expanded:
+        - /RobotModel1
+        - /RobotModel1/Links1
+        - /RobotModel1/Links1/left_hip_yaw_link1
+        - /TF1
+        - /TF1/Frames1
+      Splitter Ratio: 0.6498516201972961
+    Tree Height: 598
+  - Class: rviz_common/Selection
+    Name: Selection
+  - Class: rviz_common/Tool Properties
+    Expanded: ~
+    Name: Tool Properties
+    Splitter Ratio: 0.5886790156364441
+  - Class: rviz_common/Views
+    Expanded:
+      - /Current View1
+    Name: Views
+    Splitter Ratio: 0.5
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Alpha: 0.5
+      Cell Size: 1
+      Class: rviz_default_plugins/Grid
+      Color: 160; 160; 164
+      Enabled: true
+      Line Style:
+        Line Width: 0.029999999329447746
+        Value: Lines
+      Name: Grid
+      Normal Cell Count: 0
+      Offset:
+        X: 0
+        Y: 0
+        Z: 0
+      Plane: XY
+      Plane Cell Count: 10
+      Reference Frame: <Fixed Frame>
+      Value: true
+    - Alpha: 1
+      Class: rviz_default_plugins/RobotModel
+      Collision Enabled: false
+      Description File: ""
+      Description Source: Topic
+      Description Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /robot_description
+      Enabled: true
+      Links:
+        All Links Enabled: false
+        Expand Joint Details: false
+        Expand Link Details: false
+        Expand Tree: false
+        Link Tree Style: Links in Alphabetic Order
+        base:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        head_pitch_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: false
+        head_roll_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: false
+        head_yaw_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: false
+        left_ankle_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: false
+        left_hip_pitch_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: false
+        left_hip_roll_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        left_hip_yaw_link:
+          Alpha: 1
+          Show Axes: true
+          Show Trail: false
+          Value: true
+        left_knee_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: false
+        neck_pitch_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: false
+        right_ankle_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: false
+        right_hip_pitch_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: false
+        right_hip_roll_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: false
+        right_hip_yaw_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: false
+        right_knee_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: false
+        trunk_assembly:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+      Mass Properties:
+        Inertia: false
+        Mass: false
+      Name: RobotModel
+      TF Prefix: ""
+      Update Interval: 0
+      Value: true
+      Visual Enabled: true
+    - Class: rviz_default_plugins/TF
+      Enabled: true
+      Filter (blacklist): ""
+      Filter (whitelist): ""
+      Frame Timeout: 15
+      Frames:
+        All Enabled: false
+        base:
+          Value: false
+        head_pitch_link:
+          Value: false
+        head_roll_link:
+          Value: false
+        head_yaw_link:
+          Value: false
+        left_ankle_link:
+          Value: false
+        left_hip_pitch_link:
+          Value: false
+        left_hip_roll_link:
+          Value: false
+        left_hip_yaw_link:
+          Value: false
+        left_knee_link:
+          Value: false
+        neck_pitch_link:
+          Value: false
+        right_ankle_link:
+          Value: false
+        right_hip_pitch_link:
+          Value: false
+        right_hip_roll_link:
+          Value: false
+        right_hip_yaw_link:
+          Value: false
+        right_knee_link:
+          Value: false
+        trunk_assembly:
+          Value: false
+      Marker Scale: 1
+      Name: TF
+      Show Arrows: true
+      Show Axes: true
+      Show Names: true
+      Tree:
+        base:
+          trunk_assembly:
+            left_hip_yaw_link:
+              left_hip_roll_link:
+                left_hip_pitch_link:
+                  left_knee_link:
+                    left_ankle_link:
+                      {}
+            neck_pitch_link:
+              head_pitch_link:
+                head_yaw_link:
+                  head_roll_link:
+                    {}
+            right_hip_yaw_link:
+              right_hip_roll_link:
+                right_hip_pitch_link:
+                  right_knee_link:
+                    right_ankle_link:
+                      {}
+      Update Interval: 0
+      Value: true
+  Enabled: true
+  Global Options:
+    Background Color: 48; 48; 48
+    Fixed Frame: trunk_assembly
+    Frame Rate: 30
+  Name: root
+  Tools:
+    - Class: rviz_default_plugins/Interact
+      Hide Inactive Objects: true
+    - Class: rviz_default_plugins/MoveCamera
+    - Class: rviz_default_plugins/Select
+    - Class: rviz_default_plugins/FocusCamera
+    - Class: rviz_default_plugins/Measure
+      Line color: 128; 128; 0
+    - Class: rviz_default_plugins/SetInitialPose
+      Covariance x: 0.25
+      Covariance y: 0.25
+      Covariance yaw: 0.06853891909122467
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /initialpose
+    - Class: rviz_default_plugins/SetGoal
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /goal_pose
+    - Class: rviz_default_plugins/PublishPoint
+      Single click: true
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /clicked_point
+  Transformation:
+    Current:
+      Class: rviz_default_plugins/TF
+  Value: true
+  Views:
+    Current:
+      Class: rviz_default_plugins/Orbit
+      Distance: 0.9911630749702454
+      Enable Stereo Rendering:
+        Stereo Eye Separation: 0.05999999865889549
+        Stereo Focal Distance: 1
+        Swap Stereo Eyes: false
+        Value: false
+      Focal Point:
+        X: 0
+        Y: 0
+        Z: 0
+      Focal Shape Fixed Size: true
+      Focal Shape Size: 0.05000000074505806
+      Invert Z Axis: false
+      Name: Current View
+      Near Clip Distance: 0.009999999776482582
+      Pitch: 0.08520248532295227
+      Target Frame: <Fixed Frame>
+      Value: Orbit (rviz)
+      Yaw: 6.013485431671143
+    Saved: ~
+Window Geometry:
+  Displays:
+    collapsed: false
+  Height: 800
+  Hide Left Dock: false
+  Hide Right Dock: false
+  QMainWindow State: 000000ff00000000fd000000010000000000000153000002cdfc0200000004fb000000100044006900730070006c0061007900730100000036000002cd000000b400fffffffb0000001200530065006c0065006300740069006f006e0000000147000000830000005300fffffffb0000001e0054006f006f006c002000500072006f00700065007200740069006500730000000187000000a10000005300fffffffb0000000a0056006900650077007300000001ec000001170000009800ffffff000003a8000002cd00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  Selection:
+    collapsed: false
+  Tool Properties:
+    collapsed: false
+  Views:
+    collapsed: false
+  Width: 1280
+  X: 2788
+  Y: 36

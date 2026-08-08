@@ -1,0 +1,86 @@
+<mujoco model="open_duck_mini_v2_scene">
+	<!-- Compiler settings - must be set before include for proper mesh path resolution -->
+	<compiler angle="radian" meshdir="../assets"/>
+
+	<!-- Include the robot model from Playground -->
+	<include file="open_duck_mini_v2.xml"/>
+
+	<!-- Simulation settings -->
+	<!-- CRITICAL: Timestep must match reference (0.002s = 2ms) for stability -->
+	<!-- Reference: Open_Duck_Playground/playground/open_duck_mini_v2/mujoco_infer_base.py line 15 -->
+	<!-- Note: Timestep is set programmatically in reference, but we set it here for mujoco_ros2_control -->
+	<option timestep="0.002"/>  <!-- 500 Hz simulation, 50 Hz control with decimation=10 -->
+
+	<!-- Contact buffer allocation for collision detection -->
+	<!-- Allocate space for 200 simultaneous contacts (typical biped needs ~20-50) -->
+	<size nconmax="200"/>
+
+	<default>
+		<!-- sliding friction, torsional friction, rolling friction -->
+		<geom friction="0.6 0.01 0.0006"/>
+	</default>
+
+	<!-- Visualization settings -->
+	<visual>
+		<headlight diffuse="0.6 0.6 0.6" ambient="0.3 0.3 0.3" specular="0 0 0" />
+		<rgba haze="0.15 0.25 0.35 1" />
+		<global azimuth="150" elevation="-20" />
+	</visual>
+
+	<!-- Scene assets -->
+	<asset>
+		<texture type="skybox" builtin="gradient" rgb1="0.3 0.5 0.7" rgb2="0 0 0" width="512" height="3072" />
+		<texture type="2d" name="groundplane" builtin="checker" mark="edge" rgb1="0.2 0.3 0.4" rgb2="0.1 0.2 0.3" markrgb="0.8 0.8 0.8" width="300" height="300" />
+		<material name="groundplane" texture="groundplane" texuniform="true" texrepeat="5 5" reflectance="0.2" />
+	</asset>
+
+	<!-- World with ground plane -->
+	<worldbody>
+		<light pos="0 0 3" dir="0 0 -1" directional="false" />
+		<body name="floor">
+			<!-- Match reference: scene_flat_terrain.xml line 35 -->
+			<!-- Reference uses size="0 0 0.01" but we keep .125 for visualization -->
+			<geom pos="0 0 0" name="floor" size="0 0 .125" type="plane" material="groundplane"
+				conaffinity="1" contype="1" friction="0.6" condim="3" />
+		</body>
+	</worldbody>
+
+	<!-- Home keyframe - CRITICAL for initial pose matching reference -->
+	<keyframe>
+		<key name="home"
+			qpos="
+			0 0 0.15
+			1 0 0 0
+			0.002
+			0.053
+			-0.63
+			1.368
+			-0.784
+			0
+			0
+			0
+			0
+			-0.003
+			-0.065
+			0.635
+			1.379
+			-0.796
+			"
+			ctrl="
+			0.002
+			0.053
+			-0.63
+			1.368
+			-0.784
+			0
+			0
+			0
+			0
+			-0.003
+			-0.065
+			0.635
+			1.379
+			-0.796
+			"/>
+	</keyframe>
+</mujoco>

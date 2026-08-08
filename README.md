@@ -87,6 +87,10 @@ The following examples are part of this demo repository:
 
    This example shows how to publish diagnostics from a hardware component using the Executor passed from Controller Manager.
 
+* Example 18: ["Open Duck Mini with MuJoCo simulation and ONNX policy"](example_18)
+
+   This example demonstrates ONNX policy-driven locomotion for the Open Duck Mini biped in MuJoCo simulation. It uses `mujoco_ros2_control` (with `mujoco_vendor`) and a custom hardware interface that extends the MuJoCo interface with foot contact detection for gait control.
+
 ## Structure
 
 The repository is structured into `example_XY` folders that fully contained packages with names `ros2_control_demos_example_XY`.
