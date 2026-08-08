@@ -4,7 +4,7 @@
 
   Hardware: mock_components/GenericSystem (no Gazebo, no real robot) with
   position+velocity command and position+velocity state interfaces - exactly what JTC with
-  spline_upsampling consumes. Based on jtc_ws/smoke_test/rrbot.urdf, with simple
+  positions_upsampling consumes. Based on jtc_ws/smoke_test/rrbot.urdf, with simple
   box visuals added so the arm is visible in RViz.
 -->
 <robot name="rrbot">

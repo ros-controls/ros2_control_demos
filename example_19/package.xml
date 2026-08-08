@@ -4,8 +4,8 @@
   <name>ros2_control_demo_example_19</name>
   <version>0.0.0</version>
   <description>
-    Example 19: joint_trajectory_controller spline-upsampling demo. A mock RRBot driven by
-    positions-only "VLA" action chunks that JTC's spline_upsampling feature upsamples into
+    Example 19: joint_trajectory_controller positions-upsampling demo. A mock RRBot driven by
+    positions-only "VLA" action chunks that JTC's positions_upsampling feature upsamples into
     smooth C2 cubic-spline motion, with mock hardware.
   </description>
 

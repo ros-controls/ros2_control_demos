@@ -23,6 +23,6 @@ inference_bridge:
     set_last_command_interface_value_as_state_on_activation: false
     interpolate_from_desired_state: true
 
-    spline_upsampling:
+    positions_upsampling:
       enable: true
       policy_frequency: 25.0

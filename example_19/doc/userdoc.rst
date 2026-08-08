@@ -5,13 +5,13 @@
 Example 19: Positions-only action-chunk upsampling (JTC)
 =====================================================================
 
-This example demonstrates the ``joint_trajectory_controller``'s ``spline_upsampling`` feature, which
+This example demonstrates the ``joint_trajectory_controller``'s ``positions_upsampling`` feature, which
 ingests positions-only action chunks and upsamples them into smooth C2 cubic-spline commands. A mock
 VLA policy streams chunks to a 2-DOF RRBot on mock hardware.
 
 .. note::
 
-  ``spline_upsampling`` is a ``joint_trajectory_controller`` feature (off by default). It is not yet
+  ``positions_upsampling`` is a ``joint_trajectory_controller`` feature (off by default). It is not yet
   in a released ``ros2_controllers``; build ``ros2_controllers`` from the branch carrying the
   feature (`PR #2443 <https://github.com/ros-controls/ros2_controllers/pull/2443>`__).
 

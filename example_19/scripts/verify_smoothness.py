@@ -14,7 +14,7 @@
 # limitations under the License.
 
 """
-End-to-end smoothness verification for JTC's spline_upsampling feature.
+End-to-end smoothness verification for JTC's positions_upsampling feature.
 
 Runs three scenarios (single chunk, sequential, overlapping) against a live
 inference_bridge and reports C1/C2 continuity and cross-chunk seam metrics.

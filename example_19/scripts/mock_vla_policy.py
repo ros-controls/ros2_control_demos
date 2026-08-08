@@ -15,7 +15,7 @@
 
 """
 Mock VLA-style action-policy node: streams positions-only action chunks
-at a configurable replan period. Matches JTC's spline_upsampling.policy_frequency
+at a configurable replan period. Matches JTC's positions_upsampling.policy_frequency
 for timing synthesis.
 """
 

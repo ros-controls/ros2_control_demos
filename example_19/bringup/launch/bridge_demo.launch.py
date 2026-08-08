@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Bring up the JTC spline_upsampling demo on a mock 2-DOF RRBot."""
+"""Bring up the JTC positions_upsampling demo on a mock 2-DOF RRBot."""
 
 import os
 from pathlib import Path
