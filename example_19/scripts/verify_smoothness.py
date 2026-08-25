@@ -16,7 +16,7 @@
 """
 End-to-end smoothness verification for JTC's positions_upsampling feature.
 
-Runs three scenarios (single chunk, sequential, overlapping) against a live
+Runs three scenarios (single chunk, sequential, streaming) against a live
 inference_bridge and reports C1/C2 continuity and cross-chunk seam metrics.
 Prereq: inference_bridge active with run_policy:=false.
 """
@@ -37,6 +37,8 @@ POLICY_HZ = 25.0  # MUST match controllers.yaml policy_frequency
 N = len(JOINTS)
 DT = 1.0 / POLICY_HZ
 CHUNK = 50  # waypoints per chunk
+STREAM_PERIOD = 4.0  # s, one cycle of the reference TEST C streams
+STREAM_AMP = [0.3, 0.2]  # rad, per-joint
 
 
 class Bridge(Node):
@@ -92,6 +94,19 @@ def smooth_path(n, start):
                 start[1] - 0.3 * w * math.sin(1.0 * math.pi * s + 0.3),
             ]
         )
+    return pts
+
+
+def streaming_path(n, origin, phase):
+    """n waypoints of one continuous reference, sampled from `phase` seconds on.
+
+    Sampled at phase > 0 the chunk starts mid-motion, the way a streaming policy replans.
+    """
+    w = 2.0 * math.pi / STREAM_PERIOD
+    pts = []
+    for k in range(n):
+        t = phase + (k + 1) * DT
+        pts.append([origin[j] + STREAM_AMP[j] * (1.0 - math.cos(w * t)) for j in range(N)])
     return pts
 
 
@@ -206,28 +221,27 @@ def analyze_chunk(samples, t_pub, waypoints, label, expect_rest_end=True, skip_l
 
 
 def report_seam(samples, t_seam):
-    print("\n  -- seam continuity (new chunk replaces a moving one) --")
-    def vmag(x):
+    """Does the command carry its velocity across the seam, or stop and restart?"""
+    print("\n  -- cross-chunk seam (chunk B continues chunk A mid-motion) --")
+
+    def speed(x):
         return max(abs(v) for v in x[2])
 
-    def veljump(a, b):
-        return max(abs(b[2][j] - a[2][j]) for j in range(N))
     s = sorted((x for x in samples if t_seam - 0.20 <= x[0] <= t_seam + 0.25), key=lambda x: x[0])
-    if len(s) < 6:
-        print("    [warn] not enough samples around the seam")
-        return
-    # Largest single-sample velocity change across the seam: an instantaneous jump
-    # shows here; a smooth handoff does not.
-    seam_jump = max(veljump(s[k - 1], s[k]) for k in range(1, len(s)))
     before = [x for x in s if x[0] < t_seam]
-    v_before = sum(vmag(x) for x in before[-3:]) / max(1, min(3, len(before)))
-    if seam_jump > 0.15:
-        print(
-            f"    seam velocity jump {seam_jump:.2f} rad/s (was {v_before:.2f}) -> known "
-            "cross-chunk limitation (per-chunk rest BC); documented, expected."
-        )
-    else:
-        print(f"    [ OK ] velocity continuous across the seam (jump {seam_jump:.2f} rad/s)")
+    after = [x for x in s if x[0] >= t_seam]
+    if not before or not after:
+        print("    [FAIL] not enough samples around the seam")
+        return False
+
+    v_before = max(speed(x) for x in before[-5:])
+    v_after = min(speed(x) for x in after)
+    print(f"    [info] |v| {v_before:.3f} rad/s before the seam, {v_after:.3f} rad/s after")
+    if v_after < 0.5 * v_before:
+        print("    [FAIL] the command stops at the seam instead of carrying the velocity through")
+        return False
+    print("    [ OK ] velocity carries across the seam")
+    return True
 
 
 def show_plots(plot_data):
@@ -249,7 +263,7 @@ def show_plots(plot_data):
     titles = {
         "A": "TEST A - single chunk (intra-chunk C2 smoothness)",
         "B": "TEST B - 3 sequential chunks (stop-and-go)",
-        "C": "TEST C - overlapping chunks (cross-chunk seam)",
+        "C": "TEST C - streaming chunks, B continues A (cross-chunk seam)",
     }
     shown = False
     for key in ("A", "B", "C"):
@@ -329,20 +343,22 @@ def main():
     results["B sequential chunks"] = seq_ok
     plot_data["B"] = b_all
 
-    # ---- C: overlapping streaming (replace mid-motion) + seam ----
-    print("\n==== TEST C: overlapping chunks (B replaces A mid-motion) + SEAM ====")
+    # ---- C: streaming replacement mid-motion + cross-chunk seam ----
+    print("\n==== TEST C: chunk B continues chunk A mid-motion (CROSS-CHUNK SEAM) ====")
     node.samples.clear()
     node.spin(0.2)
-    a = smooth_path(CHUNK, node.latest_pos())
+    origin = node.latest_pos()
+    a = streaming_path(CHUNK, origin, 0.0)
     node.publish(a)
-    node.spin(0.40 * (CHUNK - 1) * DT)  # let A run ~40%
-    b = smooth_path(CHUNK, node.latest_pos())  # B starts at current pose -> pos continuous
+    replace_after = 0.4 * (CHUNK - 1) * DT  # run 40% of A, so the arm is at speed when B lands
+    node.spin(replace_after)
+    b = streaming_path(CHUNK, origin, replace_after)
     t_pub_b = node.publish(b)
     node.spin((CHUNK - 1) * DT + 0.6)
     results["C overlap installs"] = analyze_chunk(
-        node.samples, t_pub_b, b, "chunk B (after replace)", expect_rest_end=True, skip_lead_s=0.2
+        node.samples, t_pub_b, b, "chunk B (continues A)", expect_rest_end=True, skip_lead_s=0.2
     )
-    report_seam(node.samples, t_pub_b)
+    results["C cross-chunk seam"] = report_seam(node.samples, t_pub_b)
     plot_data["C"] = list(node.samples)
 
     # ---- summary ----
@@ -351,7 +367,6 @@ def main():
     for name, r in results.items():
         overall &= r
         print(f"  {'PASS' if r else 'FAIL'}  {name}")
-    print("  (the seam velocity drop above is the known, documented cross-chunk limitation.)")
     print("\nOVERALL:", "PASS" if overall else "FAIL")
 
     if "--no-plot" not in sys.argv:
@@ -359,6 +374,7 @@ def main():
 
     node.destroy_node()
     rclpy.shutdown()
+    sys.exit(0 if overall else 1)
 
 
 if __name__ == "__main__":
