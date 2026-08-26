@@ -82,6 +82,15 @@ Tutorial steps
   bow the TCP off the straight line by several centimeters; the Cartesian controller keeps it on the
   line (that is the whole point of scenario A).
 
+4. Write the word "ROS" with the tool tip (stop the policy first):
+
+  .. code-block:: shell
+
+    ros2 launch ros2_control_demo_example_20 cartesian_demo.launch.py run_policy:=false
+    ros2 run ros2_control_demo_example_20 ros_writer.py
+
+  Each letter is a single continuous Cartesian stroke; the green markers show the intended path.
+
 Files used for this demo
 ------------------------
 
@@ -90,6 +99,7 @@ Files used for this demo
 - URDF (xacro): `r6bot_mock.urdf.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_20/description/urdf/r6bot_mock.urdf.xacro>`__ (+ `r6bot_mock.ros2_control.xacro <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_20/description/ros2_control/r6bot_mock.ros2_control.xacro>`__)
 - RViz configuration: `r6bot.rviz <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_20/description/rviz/r6bot.rviz>`__
 - Mock Cartesian policy: `mock_cartesian_policy.py <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_20/scripts/mock_cartesian_policy.py>`__
+- ROS writer: `ros_writer.py <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_20/scripts/ros_writer.py>`__
 - Cartesian tracking verification: `verify_cartesian_tracking.py <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_20/scripts/verify_cartesian_tracking.py>`__
 
 Controllers from this demo

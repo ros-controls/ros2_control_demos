@@ -11,6 +11,7 @@ install(
 install(
   PROGRAMS
     scripts/mock_cartesian_policy.py
+    scripts/ros_writer.py
     scripts/verify_cartesian_tracking.py
   DESTINATION lib/${PROJECT_NAME}
 )

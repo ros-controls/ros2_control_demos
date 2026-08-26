@@ -92,12 +92,13 @@ class Verifier(Node):
 
     def tcp(self):
         try:
-            tf = self.tf_buffer.lookup_transform(BASE, TIP, rclpy.time.Time()).transform
+            msg = self.tf_buffer.lookup_transform(BASE, TIP, rclpy.time.Time())
         except Exception:  # noqa: BLE001
             return None
+        tf = msg.transform
         p = np.array([tf.translation.x, tf.translation.y, tf.translation.z])
         q = np.array([tf.rotation.x, tf.rotation.y, tf.rotation.z, tf.rotation.w])
-        return p, q
+        return p, q, msg.header.stamp.sec + msg.header.stamp.nanosec * 1e-9
 
     def wait_for_tcp(self, timeout=10.0):
         end = time.time() + timeout
@@ -128,8 +129,8 @@ class Verifier(Node):
         while time.time() < end:
             rclpy.spin_once(self, timeout_sec=1.0 / rate)
             s = self.tcp()
-            if s is not None:
-                out.append((time.time(), s[0], s[1]))
+            if s is not None and (not out or s[2] > out[-1][0]):
+                out.append((s[2], s[0], s[1]))
         return out
 
 
@@ -181,7 +182,7 @@ def tcp_now(node, timeout=2.0):
     while time.time() < end:
         s = node.tcp()
         if s is not None:
-            return s
+            return s[0], s[1]
         rclpy.spin_once(node, timeout_sec=0.05)
     raise RuntimeError("base_link->tool0 transform unavailable")
 
