@@ -40,11 +40,20 @@ xacro_file_path = Path(
     "rrbot.urdf.xacro",
 )
 
-prefix_arg = DeclareLaunchArgument(
+# with no prefix set, the default case
+no_prefix_arg = DeclareLaunchArgument(
     "prefix",
     default_value="",
-    choices=["", "rrbot_"],
-    description="Prefix for RRBot joint and link names, useful for multi-robot setups",
+    choices=[""],
+    description="Prefix for RRBot joint and link names",
 )
+test_xacro_no_prefix = define_xacro_test(xacro_file_path, no_prefix_arg)
 
-test_xacro = define_xacro_test(xacro_file_path, prefix_arg)
+# with a prefix set, e.g. for running multiple rrbots side by side
+custom_prefix_arg = DeclareLaunchArgument(
+    "prefix",
+    default_value="rrbot_",
+    choices=["rrbot_"],
+    description="Prefix for RRBot joint and link names",
+)
+test_xacro_custom_prefix = define_xacro_test(xacro_file_path, custom_prefix_arg)
