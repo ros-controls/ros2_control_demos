@@ -32,6 +32,9 @@ jobs:
       matrix:
         ROS_DISTRO: [rolling, lyrical, kilted]
         ROS_REPO: [main, testing]
+        exclude:
+          - ROS_DISTRO: rolling
+            ROS_REPO: main
     with:
       ros_distro: ${{ matrix.ROS_DISTRO }}
       ros_repo: ${{ matrix.ROS_REPO }}

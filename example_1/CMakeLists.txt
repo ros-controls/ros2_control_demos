@@ -14,10 +14,10 @@ set(THIS_PACKAGE_INCLUDE_DEPENDS
 )
 
 # Specify the required version of ros2_control
-find_package(controller_manager 4.0.0)
+find_package(controller_manager 5.0.0)
 # Handle the case where the required version is not found
 if(NOT controller_manager_FOUND)
-  message(FATAL_ERROR "ros2_control version 4.0.0 or higher is required. "
+  message(FATAL_ERROR "ros2_control version 5.0.0 or higher is required. "
   "Are you using the correct branch of the ros2_control_demos repository?")
 endif()
 
@@ -82,6 +82,7 @@ if(BUILD_TESTING)
   add_ros_isolated_launch_test(test/test_view_robot_launch.py)
   add_ros_isolated_launch_test(test/test_rrbot_launch.py)
   add_ros_isolated_launch_test(test/test_rrbot_launch_cli_direct.py)
+  add_ros_isolated_launch_test(test/test_rrbot_movement.py)
 endif()
 
 

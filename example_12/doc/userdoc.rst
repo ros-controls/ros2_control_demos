@@ -150,12 +150,11 @@ Tutorial steps
     [ros2_control_node-1]   0.50 for joint 'joint1'
     [ros2_control_node-1]   0.50 for joint 'joint2'
 
-   If you echo the ``/joint_states`` or ``/dynamic_joint_states`` topics you should now get similar values, namely the simulated states of the robot
+   If you echo the ``/joint_states`` topic you should now get similar values, namely the simulated states of the robot
 
    .. code-block:: shell
 
     ros2 topic echo /joint_states
-    ros2 topic echo /dynamic_joint_states
 
    This clearly shows that the controller chaining is functional, as the commands sent to the ``forward_position_controller`` are passed through properly and then it is reflected in the hardware interfaces of the *RRBot*.
 

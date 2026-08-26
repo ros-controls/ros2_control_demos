@@ -27,8 +27,8 @@
   <depend>rclcpp</depend>
   <depend>realtime_tools</depend>
   <depend>trajectory_msgs</depend>
+  <depend>controller_manager</depend>
 
-  <exec_depend>controller_manager</exec_depend>
   <exec_depend>joint_state_broadcaster</exec_depend>
   <exec_depend>joint_state_publisher_gui</exec_depend>
   <exec_depend>launch_ros</exec_depend>

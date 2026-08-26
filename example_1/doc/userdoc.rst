@@ -212,7 +212,7 @@ Tutorial steps
     [ros2_control_node-1]   0.50 for joint 'joint2/position'
     [ros2_control_node-1]   0.50 for joint 'joint1/position'
 
-   If you echo the ``/joint_states`` or ``/dynamic_joint_states`` topics you should now get similar values, namely the simulated states of the robot
+   If you echo the ``/joint_states`` topic you should now get similar values, namely the simulated states of the robot
 
    .. tabs::
 
@@ -221,7 +221,6 @@ Tutorial steps
         .. code-block:: shell
 
           ros2 topic echo /joint_states
-          ros2 topic echo /dynamic_joint_states
 
       .. group-tab:: Docker
 
@@ -230,7 +229,6 @@ Tutorial steps
         .. code-block:: shell
 
           ros2 topic echo /joint_states
-          ros2 topic echo /dynamic_joint_states
 
 
 6. Let's switch to a different controller, the ``Joint Trajectory Controller``.

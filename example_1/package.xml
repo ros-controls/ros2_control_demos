@@ -22,8 +22,8 @@
   <depend>pluginlib</depend>
   <depend>rclcpp</depend>
   <depend>rclcpp_lifecycle</depend>
+  <depend>controller_manager</depend>
 
-  <exec_depend>controller_manager</exec_depend>
   <exec_depend>forward_command_controller</exec_depend>
   <exec_depend>joint_state_broadcaster</exec_depend>
   <exec_depend>joint_state_publisher_gui</exec_depend>
@@ -44,6 +44,7 @@
   <test_depend>launch</test_depend>
   <test_depend>liburdfdom-tools</test_depend>
   <test_depend>rclpy</test_depend>
+  <test_depend>ros2_control_demo_test_utils</test_depend>
 
   <export>
     <build_type>ament_cmake</build_type>
