@@ -297,7 +297,7 @@ hardware_interface::return_type CarlikeBotSystemHardware::read(
   return hardware_interface::return_type::OK;
 }
 
-hardware_interface::return_type ros2_control_demo_example_11 ::CarlikeBotSystemHardware::write(
+hardware_interface::return_type ros2_control_demo_example_11::CarlikeBotSystemHardware::write(
   const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
