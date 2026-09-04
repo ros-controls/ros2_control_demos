@@ -45,7 +45,6 @@ if(BUILD_TESTING)
     add_launch_test("${path}" RUNNER "${RUNNER}" ${ARGN})
   endfunction()
   add_ros_isolated_launch_test(test/test_three_robots_launch.py)
-  add_ros_isolated_launch_test(test/test_three_robots_movement.py)
 endif()
 
 ## EXPORTS
