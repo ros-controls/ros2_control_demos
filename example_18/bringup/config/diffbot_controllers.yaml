@@ -1,0 +1,14 @@
+joint_state_broadcaster:
+  ros__parameters: {type: joint_state_broadcaster/JointStateBroadcaster}
+diffbot_base_controller:
+  ros__parameters:
+    type: diff_drive_controller/DiffDriveController
+    left_wheel_names: [left_wheel_joint]
+    right_wheel_names: [right_wheel_joint]
+    wheel_separation: 0.10
+    wheel_radius: 0.015
+    publish_rate: 50.0
+    odom_frame_id: odom
+    base_frame_id: base_link
+    cmd_vel_timeout: 0.5
+    enable_odom_tf: true

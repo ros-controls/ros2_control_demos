@@ -1,0 +1,8 @@
+<launch>
+  <arg name="can_interface" default="can0"/><arg name="gui" default="false"/>
+  <let name="description" value="$(command '$(find-exec xacro) $(find-pkg-share ros2_control_demo_example_18)/urdf/diffbot.urdf.xacro can_interface:=$(var can_interface)')"/>
+  <let name="controllers" value="$(find-pkg-share ros2_control_demo_example_18)/config/diffbot_controllers.yaml"/>
+  <node pkg="controller_manager" exec="ros2_control_node" output="both"><param name="robot_description" value="$(var description)"/></node>
+  <node pkg="robot_state_publisher" exec="robot_state_publisher"><param name="robot_description" value="$(var description)"/></node>
+  <node pkg="controller_manager" exec="spawner" args="joint_state_broadcaster diffbot_base_controller --param-file $(var controllers)"/>
+</launch>

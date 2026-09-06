@@ -91,6 +91,9 @@ Example 16: "DiffBot with chained controllers"
 Example 17: "RRBot with Hardware Component that publishes diagnostics"
    This example shows how to publish diagnostics from a hardware component using the Executor passed from Controller Manager.
 
+Example 18: "Linux SocketCAN differential-drive hardware"
+   A non-blocking Linux SocketCAN transport connected to a differential-drive ``ros2_control`` system.
+
 .. _ros2_control_demos_install:
 
 =====================
@@ -300,3 +303,4 @@ Examples
    Example 15: Using multiple controller managers <../example_15/doc/userdoc.rst>
    Example 16: DiffBot with chained controllers <../example_16/doc/userdoc.rst>
    Example 17: RRBot with Hardware Component that publishes diagnostics <../example_17/doc/userdoc.rst>
+   Example 18: Linux SocketCAN differential-drive hardware <../example_18/doc/userdoc.rst>
