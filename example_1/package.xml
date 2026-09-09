@@ -43,6 +43,7 @@
   <test_depend>launch_testing</test_depend>
   <test_depend>launch</test_depend>
   <test_depend>liburdfdom-tools</test_depend>
+  <test_depend>urdf_test</test_depend>
   <test_depend>rclpy</test_depend>
   <test_depend>ros2_control_demo_test_utils</test_depend>
 
