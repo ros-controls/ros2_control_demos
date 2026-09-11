@@ -1,0 +1,56 @@
+<!-- Launch-file for ros2_control_demos Example 2 and 16 -->
+<!--   Provides optional PID controllers -->
+<launch>
+  <arg name="gui" default="true"
+    description="Start RViz2 automatically with this launch file." />
+  <arg name="use_mock_hardware" default="false"
+    description="Start robot with mock hardware mirroring command to its states." />
+  <arg name="fixed_frame_id" default="odom"
+    description="Fixed frame id of the robot." />
+  <arg name="use_pid" description="If true the PID controller for the wheels gets configured." />
+
+  <let name="robot_description_content"
+    value="
+    $(command '
+      xacro $(find-pkg-share ros2_control_demo_example_16)/urdf/diffbot.urdf.xacro
+      use_mock_hardware:=$(var use_mock_hardware)
+    ')" />
+
+  <node pkg="controller_manager" exec="ros2_control_node" output="both">
+    <!-- Load config from example 2 as a base -->
+    <param from="$(find-pkg-share ros2_control_demo_example_2)/config/diffbot_controllers.yaml" />
+  </node>
+
+  <node pkg="robot_state_publisher" exec="robot_state_publisher" output="both">
+    <param name="robot_description" value="$(var robot_description_content)" />
+  </node>
+
+  <!-- Use global parameters to ensure parameter overriding happens in the correct order -->
+  <set_parameters_from_file filename="$(find-pkg-share ros2_control_demo_example_2)/config/diffbot_controllers.yaml"/>
+
+  <spawn_controller>
+    <controller name="pid_controller_left_wheel_joint" if="$(var use_pid)">
+      <!-- Load the config for the PID controllers, and small changes for diffbot_base_controller -->
+      <param from="$(find-pkg-share ros2_control_demo_example_19)/config/diffbot_pid_controllers.yaml" />
+    </controller>
+    <controller name="pid_controller_right_wheel_joint" if="$(var use_pid)">
+      <!-- This file can technically be omitted, since it is loaded by the previous controller -->
+      <param from="$(find-pkg-share ros2_control_demo_example_19)/config/diffbot_pid_controllers.yaml" />
+    </controller>
+
+    <controller name="diffbot_base_controller">
+      <!-- Need to load controller type, since it is required if providing
+            controller configs at spawn time -->
+      <param name="type" value="diff_drive_controller/DiffDriveController" />
+      <param name="publish_limited_velocity" value="true" />
+
+      <remap from="~/cmd_vel" to="/cmd_vel" />
+    </controller>
+    <controller name="joint_state_broadcaster" />
+  </spawn_controller>
+
+  <node pkg="rviz2" exec="rviz2" name="rviz2" output="log" if="$(var gui)"
+    args="
+    -d $(find-pkg-share ros2_control_demo_description)/diffbot/rviz/diffbot.rviz
+    -f $(var fixed_frame_id)" />
+</launch>
