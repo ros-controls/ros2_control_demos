@@ -145,7 +145,7 @@ Tutorial steps
 
     ros2 control list_hardware_components
 
-   If everything started nominally, you should see the output
+   If everything started nominally, you should see the output:
 
    .. code-block:: shell
 
