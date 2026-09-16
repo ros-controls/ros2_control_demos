@@ -19,7 +19,7 @@ For *example_1*, the hardware interface plugin is implemented having only one in
 
 The *RRBot* URDF files can be found in the ``description/urdf`` folder.
 
-Additionally, the examples is also containing launch and URDF files for asynchronous read/write of the hardware interface marked with suffix ``_async``. More about the async hardware interface can be found in the `ros2_control documentation <https://control.ros.org/rolling/doc/ros2_control/hardware_interface/doc/asynchronous_components.html>`__.
+Additionally, this example also contains launch and URDF files for asynchronous read/write of the hardware interface, marked with the suffix ``_async``. More about the async hardware interface can be found in the `ros2_control documentation <https://control.ros.org/rolling/doc/ros2_control/hardware_interface/doc/asynchronous_components.html>`__.
 
 .. include:: ../../doc/run_from_docker.rst
 
