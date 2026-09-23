@@ -16,11 +16,19 @@ find_package(rclcpp REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
 
 add_library(${PROJECT_NAME} SHARED hardware/socketcan_transport.cpp hardware/socketcan_diff_drive.cpp)
-target_include_directories(${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/hardware/include> $<INSTALL_INTERFACE:include/${PROJECT_NAME}>)
-target_link_libraries(${PROJECT_NAME} PUBLIC hardware_interface::hardware_interface pluginlib::pluginlib rclcpp::rclcpp rclcpp_lifecycle::rclcpp_lifecycle)
+target_include_directories(${PROJECT_NAME} PUBLIC
+$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/hardware/include>
+$<INSTALL_INTERFACE:include/${PROJECT_NAME}>
+)
+target_link_libraries(${PROJECT_NAME} PUBLIC
+  hardware_interface::hardware_interface
+  pluginlib::pluginlib
+  rclcpp::rclcpp
+  rclcpp_lifecycle::rclcpp_lifecycle
+)
 pluginlib_export_plugin_description_file(hardware_interface ros2_control_demo_example_18.xml)
 install(DIRECTORY hardware/include/ DESTINATION include/${PROJECT_NAME})
-install(DIRECTORY description/launch description/ros2_control description/urdf DESTINATION share/${PROJECT_NAME})
+install(DIRECTORY description/ros2_control description/urdf DESTINATION share/${PROJECT_NAME})
 install(DIRECTORY bringup/launch bringup/config DESTINATION share/${PROJECT_NAME})
 install(FILES README.md DESTINATION share/${PROJECT_NAME})
 install(DIRECTORY doc DESTINATION share/${PROJECT_NAME})
