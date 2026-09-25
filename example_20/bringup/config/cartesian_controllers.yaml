@@ -1,0 +1,37 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 1000 # Hz
+    thread_priority: 80
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    cartesian_motion:
+      type: cartesian_trajectory_controller/CartesianTrajectoryController
+
+cartesian_motion:
+  ros__parameters:
+    joints:
+      - joint_1
+      - joint_2
+      - joint_3
+      - joint_4
+      - joint_5
+      - joint_6
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+
+    kinematics:
+      plugin_name: kinematics_interface_kdl/KinematicsInterfaceKDL
+      plugin_package: kinematics_interface
+      base: base_link
+      tip: tool0
+      alpha: 0.01
+
+    max_cartesian_speed: 0.1
+    max_angular_speed: 0.5
+    resample_dt: 0.01
+    allow_nonzero_velocity_at_trajectory_end: true
+    interpolate_from_desired_state: true
