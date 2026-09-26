@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!--
+  Initial robot pose matching "home" keyframe from scene_flat_terrain.xml
+  This ensures the robot starts in the same pose as the reference implementation
+
+  Format: qpos (all positions including floating base), qvel (all velocities), ctrl (actuator commands)
+  Source: Open_Duck_Playground/playground/open_duck_mini_v2/xmls/scene_flat_terrain.xml lines 40-74
+
+  qpos: 7 (floating base: x, y, z, quat w, x, y, z) + 14 (actuator joints) = 21 values
+  qvel: 6 (floating base: linear xyz + angular xyz) + 14 (actuator joints) = 20 values
+  ctrl: 14 (actuator commands matching default_joint_positions)
+-->
+<key
+  qpos="0 0 0.15 1 0 0 0 0.002 0.053 -0.63 1.368 -0.784 0 0 0 0 -0.003 -0.065 0.635 1.379 -0.796"
+  qvel="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0"
+  ctrl="0.002 0.053 -0.63 1.368 -0.784 0 0 0 0 -0.003 -0.065 0.635 1.379 -0.796"
+/>
