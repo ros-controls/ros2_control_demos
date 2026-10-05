@@ -43,6 +43,7 @@ def generate_test_description():
                 "rrbot.launch.py",
             ]
         ),
+        launch_arguments={}.items(),
     )
 
     return LaunchDescription([launch_include, ReadyToTest()])
