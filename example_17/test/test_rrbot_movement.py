@@ -38,11 +38,13 @@ import rclpy
 def generate_test_description():
     launch_include = IncludeLaunchDescription(
         AnyLaunchDescriptionSource(
-            PathJoinSubstitution([
-                FindPackageShare("ros2_control_demo_example_17"),
-                "launch",
-                "rrbot.launch.xml",
-            ])
+            PathJoinSubstitution(
+                [
+                    FindPackageShare("ros2_control_demo_example_17"),
+                    "launch",
+                    "rrbot.launch.xml",
+                ]
+            )
         ),
         launch_arguments={"gui": "False"}.items(),
     )
