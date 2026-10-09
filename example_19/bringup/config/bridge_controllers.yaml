@@ -1,0 +1,28 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 1000 # Hz
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    inference_bridge:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+inference_bridge:
+  ros__parameters:
+    joints:
+      - joint1
+      - joint2
+    command_interfaces:
+      - position
+      - velocity
+    state_interfaces:
+      - position
+      - velocity
+
+    set_last_command_interface_value_as_state_on_activation: false
+    interpolate_from_desired_state: true
+
+    positions_upsampling:
+      enable: true
+      policy_frequency: 25.0

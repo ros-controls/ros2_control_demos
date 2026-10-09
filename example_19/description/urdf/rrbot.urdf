@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<!--
+  Minimal 2-DOF "RRBot" for ros2_control_demo_example_19.
+
+  Hardware: mock_components/GenericSystem (no Gazebo, no real robot) with
+  position+velocity command and position+velocity state interfaces - exactly what JTC with
+  positions_upsampling consumes. Based on jtc_ws/smoke_test/rrbot.urdf, with simple
+  box visuals added so the arm is visible in RViz.
+-->
+<robot name="rrbot">
+
+  <material name="grey">   <color rgba="0.35 0.35 0.35 1.0"/></material>
+  <material name="orange"> <color rgba="1.0 0.55 0.0 1.0"/></material>
+  <material name="blue">   <color rgba="0.15 0.45 0.9 1.0"/></material>
+
+  <!-- fixed base pedestal -->
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 0.05"/>
+      <geometry><box size="0.12 0.12 0.1"/></geometry>
+      <material name="grey"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.05"/>
+      <geometry><box size="0.12 0.12 0.1"/></geometry>
+    </collision>
+  </link>
+
+  <!-- first arm link -->
+  <link name="link1">
+    <visual>
+      <origin xyz="0.25 0 0"/>
+      <geometry><box size="0.5 0.06 0.06"/></geometry>
+      <material name="orange"/>
+    </visual>
+    <collision>
+      <origin xyz="0.25 0 0"/>
+      <geometry><box size="0.5 0.06 0.06"/></geometry>
+    </collision>
+  </link>
+
+  <!-- second arm link -->
+  <link name="link2">
+    <visual>
+      <origin xyz="0.2 0 0"/>
+      <geometry><box size="0.4 0.05 0.05"/></geometry>
+      <material name="blue"/>
+    </visual>
+    <collision>
+      <origin xyz="0.2 0 0"/>
+      <geometry><box size="0.4 0.05 0.05"/></geometry>
+    </collision>
+  </link>
+
+  <joint name="joint1" type="revolute">
+    <parent link="base_link"/>
+    <child link="link1"/>
+    <origin xyz="0 0 0.1"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-3.14" upper="3.14" effort="100" velocity="10"/>
+  </joint>
+
+  <joint name="joint2" type="revolute">
+    <parent link="link1"/>
+    <child link="link2"/>
+    <origin xyz="0.5 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-3.14" upper="3.14" effort="100" velocity="10"/>
+  </joint>
+
+  <ros2_control name="MockSystem" type="system">
+    <hardware>
+      <plugin>mock_components/GenericSystem</plugin>
+    </hardware>
+    <joint name="joint1">
+      <command_interface name="position"/>
+      <command_interface name="velocity"/>
+      <state_interface name="position"><param name="initial_value">0.0</param></state_interface>
+      <state_interface name="velocity"><param name="initial_value">0.0</param></state_interface>
+    </joint>
+    <joint name="joint2">
+      <command_interface name="position"/>
+      <command_interface name="velocity"/>
+      <state_interface name="position"><param name="initial_value">0.0</param></state_interface>
+      <state_interface name="velocity"><param name="initial_value">0.0</param></state_interface>
+    </joint>
+  </ros2_control>
+
+</robot>
