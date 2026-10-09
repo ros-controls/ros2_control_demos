@@ -85,6 +85,8 @@ The following examples are part of this demo repository:
 
 * Example 17: ["RRBot with Hardware Component that publishes diagnostics"](example_17)
 
+* Example 18: ["Linux SocketCAN differential-drive hardware"](example_18)
+
    This example shows how to publish diagnostics from a hardware component using the Executor passed from Controller Manager.
 
 ## Structure

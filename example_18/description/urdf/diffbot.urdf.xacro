@@ -1,0 +1,6 @@
+<?xml version="1.0"?><robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="socketcan_diffbot">
+  <xacro:arg name="can_interface" default="can0"/>
+  <xacro:include filename="$(find ros2_control_demo_description)/diffbot/urdf/diffbot_description.urdf.xacro"/>
+  <xacro:include filename="$(find ros2_control_demo_example_18)/ros2_control/diffbot.ros2_control.xacro"/>
+  <xacro:diffbot prefix=""/><xacro:socketcan_diffbot_ros2_control name="SocketCanDiffBot" can_interface="$(arg can_interface)"/>
+</robot>
