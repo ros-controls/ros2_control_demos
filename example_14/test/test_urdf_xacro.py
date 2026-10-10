@@ -16,6 +16,7 @@ from ament_index_python.packages import get_package_share_directory
 from urdf_test.xacro_test import define_xacro_test
 
 test_xacro = define_xacro_test(
-    get_package_share_directory("ros2_control_demo_example_12") + "/urdf/rrbot.urdf.xacro",
+    get_package_share_directory("ros2_control_demo_example_14")
+    + "/urdf/rrbot_modular_actuators_without_feedback_sensors_for_position_feedback.urdf.xacro",
     {"prefix": ["", "rrbot_"]},
 )
