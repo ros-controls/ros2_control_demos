@@ -104,6 +104,11 @@ controller_interface::CallbackReturn PassthroughController::on_configure(
   // The names should be in the same order as for command interfaces for easier matching
   reference_interface_names_ = command_interface_names_;
 
+  for (size_t i = 0; i < reference_interface_names_.size(); i++)
+  {
+    REGISTER_ROS2_CONTROL_INTROSPECTION(reference_interface_names_[i], &reference_interfaces_[i]);
+  }
+
   return controller_interface::CallbackReturn::SUCCESS;
 }
 
