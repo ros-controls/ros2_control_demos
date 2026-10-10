@@ -91,6 +91,9 @@ Example 16: "DiffBot with chained controllers"
 Example 17: "RRBot with Hardware Component that publishes diagnostics"
    This example shows how to publish diagnostics from a hardware component using the Executor passed from Controller Manager.
 
+Example 19: "DiffBot with Conditionally Chained Controllers"
+   This example shows how to create conditionally chained controllers using diff_drive_controller and pid_controllers to control a differential drive robot by using ``launch_ros2_control``.
+
 .. _ros2_control_demos_install:
 
 =====================
@@ -300,3 +303,4 @@ Examples
    Example 15: Using multiple controller managers <../example_15/doc/userdoc.rst>
    Example 16: DiffBot with chained controllers <../example_16/doc/userdoc.rst>
    Example 17: RRBot with Hardware Component that publishes diagnostics <../example_17/doc/userdoc.rst>
+   Example 19: DiffBot with Conditionally Chained Controllers <../example_19/doc/userdoc.rst>
