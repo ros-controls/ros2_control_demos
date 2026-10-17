@@ -1,0 +1,9 @@
+<?xml version="1.0"?><robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:macro name="socketcan_diffbot_ros2_control" params="name can_interface:=can0">
+    <ros2_control name="${name}" type="system">
+      <hardware><plugin>ros2_control_demo_example_18/SocketCanDiffDriveHardware</plugin><param name="can_interface">${can_interface}</param><param name="feedback_timeout_sec">0.5</param></hardware>
+      <joint name="left_wheel_joint"><command_interface name="velocity"/><state_interface name="position"/><state_interface name="velocity"/></joint>
+      <joint name="right_wheel_joint"><command_interface name="velocity"/><state_interface name="position"/><state_interface name="velocity"/></joint>
+    </ros2_control>
+  </xacro:macro>
+</robot>
