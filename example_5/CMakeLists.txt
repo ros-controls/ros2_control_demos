@@ -82,6 +82,7 @@ if(BUILD_TESTING)
   endfunction()
   add_ros_isolated_launch_test(test/test_view_robot_launch.py)
   add_ros_isolated_launch_test(test/test_rrbot_system_with_external_sensor_launch.py)
+  add_ros_isolated_launch_test(test/test_rrbot_movement.py)
 endif()
 
 ## EXPORTS
