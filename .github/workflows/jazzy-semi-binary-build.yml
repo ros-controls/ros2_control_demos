@@ -28,4 +28,7 @@ jobs:
       ros_distro: jazzy
       ros_repo: testing
       upstream_workspace: ros2_control_demos.jazzy.repos
+      # mujoco_ros2_control is also pinned to build from source (see the .repos file above);
+      # without this, rosdep can pull in the stale binary package and shadow the from-source build.
+      rosdep_skip_keys: mujoco_ros2_control mujoco_ros2_control_msgs mujoco_ros2_control_plugins
       ref_for_scheduled_build: jazzy
