@@ -16,9 +16,10 @@
 
 #include "ros2_control_demo_example_18/duck_mini_mujoco_system_interface.hpp"
 
+#include <hardware_interface/version.h>
+
 #include <tuple>
 
-#include <hardware_interface/version.h>
 #include <rclcpp/rclcpp.hpp>
 
 #define ROS_DISTRO_HUMBLE (HARDWARE_INTERFACE_VERSION_MAJOR < 3)
