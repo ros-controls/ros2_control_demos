@@ -29,7 +29,6 @@
   <exec_depend>forward_command_controller</exec_depend>
   <exec_depend>joint_state_broadcaster</exec_depend>
   <exec_depend>joint_state_publisher_gui</exec_depend>
-  <exec_depend>joint_trajectory_controller</exec_depend>
   <exec_depend>robot_state_publisher</exec_depend>
   <exec_depend>ros2_control_demo_description</exec_depend>
   <exec_depend>ros2_controllers_test_nodes</exec_depend>
@@ -43,6 +42,7 @@
   <test_depend>launch_testing</test_depend>
   <test_depend>launch</test_depend>
   <test_depend>liburdfdom-tools</test_depend>
+  <test_depend>urdf_test</test_depend>
   <test_depend>rclpy</test_depend>
 
   <export>
