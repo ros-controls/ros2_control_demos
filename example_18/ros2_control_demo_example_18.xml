@@ -1,0 +1,17 @@
+<library path="ros2_control_demo_example_18">
+  <class name="ros2_control_demo_example_18/DuckMiniMujocoSystemInterface"
+         type="ros2_control_demo_example_18::DuckMiniMujocoSystemInterface"
+         base_class_type="hardware_interface::SystemInterface">
+    <description>
+      Hardware interface for Open Duck Mini robot using MuJoCo simulation with contact detection support.
+    </description>
+  </class>
+  <class name="onnx_policy_controller/OnnxPolicyController"
+         type="onnx_policy_controller::OnnxPolicyController"
+         base_class_type="controller_interface::ControllerInterface">
+    <description>
+      ONNX policy controller for learned locomotion. Subscribes to sensor data and velocity
+      commands, runs inference, and writes joint position commands.
+    </description>
+  </class>
+</library>
