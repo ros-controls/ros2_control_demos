@@ -87,6 +87,21 @@ void DuckMiniMujocoSystemInterface::register_contact_detection()
     sensor_data.body1_name = sensor.parameters.at("body1_name");
     sensor_data.body2_name = sensor.parameters.at("body2_name");
 
+    // Build the StateInterface handle once, here, rather than in on_export_state_interfaces():
+    // Jazzy+ handles own their value instead of aliasing a double*, so the same handle instance
+    // must be kept alive and reused for every export/read cycle, matching how the base class
+    // builds its own handles once in on_init() via build_interface_handles().
+    for (const auto & state_if : sensor.state_interfaces)
+    {
+      if (state_if.name == "contact_raw")
+      {
+        sensor_data.contact_raw_interface =
+          std::make_shared<hardware_interface::StateInterface>(sensor_name, state_if.name);
+        std::ignore =
+          sensor_data.contact_raw_interface->set_value(sensor_data.contact_raw_value, true);
+      }
+    }
+
     contact_detection_data_.push_back(sensor_data);
     RCLCPP_DEBUG_STREAM(
       get_logger(), "Contact '" << sensor_name << "' " << sensor_data.body1_name << "-"
@@ -98,27 +113,11 @@ std::vector<hardware_interface::StateInterface::ConstSharedPtr>
 DuckMiniMujocoSystemInterface::on_export_state_interfaces()
 {
   auto state_interfaces = mujoco_ros2_control::MujocoSystemInterface::on_export_state_interfaces();
-  const auto & hardware_info = get_hardware_info();
-  for (auto & sensor : contact_detection_data_)
+  for (const auto & sensor : contact_detection_data_)
   {
-    for (const auto & sensor_info : hardware_info.sensors)
+    if (sensor.contact_raw_interface)
     {
-      if (sensor_info.name != sensor.name)
-      {
-        continue;
-      }
-
-      for (const auto & state_if : sensor_info.state_interfaces)
-      {
-        if (state_if.name == "contact_raw")
-        {
-          sensor.contact_raw_interface =
-            std::make_shared<hardware_interface::StateInterface>(sensor.name, state_if.name);
-          std::ignore = sensor.contact_raw_interface->set_value(sensor.contact_raw_value, true);
-          state_interfaces.push_back(sensor.contact_raw_interface);
-        }
-      }
-      break;
+      state_interfaces.push_back(sensor.contact_raw_interface);
     }
   }
 
