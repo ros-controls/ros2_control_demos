@@ -48,26 +48,26 @@ hardware_interface::ComponentInfo make_contact_sensor(
 }
 
 bool get_interface_value(
-  std::vector<hardware_interface::StateInterface> & interfaces, const std::string & interface_name,
-  double & value)
+  const std::vector<hardware_interface::StateInterface::ConstSharedPtr> & interfaces,
+  const std::string & interface_name, double & value)
 {
-  for (auto & iface : interfaces)
+  for (const auto & iface : interfaces)
   {
-    if (iface.get_name() == interface_name)
+    if (iface->get_name() == interface_name)
     {
-      return iface.get_value(value, false);
+      return iface->get_value(value, false);
     }
   }
   return false;
 }
 
 bool has_interface(
-  const std::vector<hardware_interface::StateInterface> & interfaces,
+  const std::vector<hardware_interface::StateInterface::ConstSharedPtr> & interfaces,
   const std::string & interface_name)
 {
   for (const auto & iface : interfaces)
   {
-    if (iface.get_name() == interface_name)
+    if (iface->get_name() == interface_name)
     {
       return true;
     }
@@ -196,7 +196,7 @@ protected:
 TEST_F(ContactDetectionTest, ContactDetectionRegistration)
 {
   std::this_thread::sleep_for(std::chrono::milliseconds(100));
-  auto state_interfaces = interface_->export_state_interfaces();
+  auto state_interfaces = interface_->on_export_state_interfaces();
 
   const char * required[] = {"box1_contact/contact_raw", "box2_contact/contact_raw"};
   for (const auto & name : required)
@@ -214,7 +214,7 @@ TEST_F(ContactDetectionTest, ContactDetectionWhenInContact)
   std::this_thread::sleep_for(std::chrono::seconds(1));  // boxes fall and settle
 
   interface_->read(rclcpp::Time(), rclcpp::Duration::from_seconds(0.002));
-  auto state_interfaces = interface_->export_state_interfaces();
+  auto state_interfaces = interface_->on_export_state_interfaces();
 
   double box1_raw, box2_raw;
   ASSERT_TRUE(get_interface_value(state_interfaces, "box1_contact/contact_raw", box1_raw));
@@ -233,7 +233,7 @@ TEST_F(ContactDetectionTest, ContactValueRange)
   rclcpp_lifecycle::State active_state(0, "active");
   ASSERT_EQ(interface_->on_activate(active_state), hardware_interface::CallbackReturn::SUCCESS);
 
-  auto state_interfaces = interface_->export_state_interfaces();
+  auto state_interfaces = interface_->on_export_state_interfaces();
   double box1_raw;
   ASSERT_TRUE(get_interface_value(state_interfaces, "box1_contact/contact_raw", box1_raw));
 

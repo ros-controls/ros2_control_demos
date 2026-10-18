@@ -36,6 +36,10 @@ struct ContactDetectionData
   std::string name;
   double contact_raw_value{0.0};  // unfiltered 0/1 from mjData->contact[]
 
+  // Jazzy+ StateInterface handles own their value instead of aliasing a double*, so this handle is
+  // built once in on_export_state_interfaces() and synced from contact_raw_value every read().
+  hardware_interface::StateInterface::SharedPtr contact_raw_interface;
+
   std::string body1_name;
   std::string body2_name;
   int body1_id{-1};
@@ -52,7 +56,7 @@ public:
 
   on_init(const hardware_interface::HardwareComponentInterfaceParams & params) override;
 
-  std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
+  std::vector<hardware_interface::StateInterface::ConstSharedPtr> on_export_state_interfaces() override;
 
   hardware_interface::return_type read(
     const rclcpp::Time & time, const rclcpp::Duration & period) override;

@@ -89,14 +89,18 @@ protected:
     if (model_->nkey > 0 && keyframe_id < model_->nkey)
     {
       // Copy qpos from keyframe
-      mju_copy(data_->qpos, model_->key_qpos + keyframe_id * model_->nq, model_->nq);
+      mju_copy(
+        data_->qpos, model_->key_qpos + keyframe_id * model_->nq, static_cast<int>(model_->nq));
 
       // Copy ctrl from keyframe (default actuator positions)
       if (model_->nkey > 0 && model_->key_ctrl)
       {
-        mju_copy(data_->ctrl, model_->key_ctrl + keyframe_id * model_->nu, model_->nu);
+        mju_copy(
+          data_->ctrl, model_->key_ctrl + keyframe_id * model_->nu, static_cast<int>(model_->nu));
         // Store default actuator positions for continuous control
-        mju_copy(default_actuator_.data(), model_->key_ctrl + keyframe_id * model_->nu, model_->nu);
+        mju_copy(
+          default_actuator_.data(), model_->key_ctrl + keyframe_id * model_->nu,
+          static_cast<int>(model_->nu));
       }
 
       // Forward kinematics to update dependent quantities
@@ -107,7 +111,7 @@ protected:
     mj_step(model_, data_);
 
     // Get number of actuators (joints)
-    num_joints_ = model_->nu;
+    num_joints_ = static_cast<int>(model_->nu);
   }
 
   void TearDown() override
@@ -130,7 +134,7 @@ protected:
     // scale For stability test, we use default_actuator (action = 0)
     if (!default_actuator_.empty() && default_actuator_.size() == static_cast<size_t>(model_->nu))
     {
-      mju_copy(data_->ctrl, default_actuator_.data(), model_->nu);
+      mju_copy(data_->ctrl, default_actuator_.data(), static_cast<int>(model_->nu));
     }
 
     // Run MuJoCo simulation for decimation steps
@@ -339,7 +343,7 @@ TEST_F(OnnxPolicyControllerMuJoCoTest, WalkingForwardWithAlternatingControlPatte
     int pattern_phase = (step / pattern_period) % 2;
 
     // Copy default actuator positions
-    mju_copy(data_->ctrl, default_actuator_.data(), model_->nu);
+    mju_copy(data_->ctrl, default_actuator_.data(), static_cast<int>(model_->nu));
 
     // Create smooth transitions - swing leg lifts, stance leg pushes
     double swing_factor = std::sin(phase * M_PI);     // 0 to 1 to 0 (smooth lift and lower)

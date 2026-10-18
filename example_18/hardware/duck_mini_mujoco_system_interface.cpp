@@ -16,6 +16,8 @@
 
 #include "ros2_control_demo_example_18/duck_mini_mujoco_system_interface.hpp"
 
+#include <tuple>
+
 #include <hardware_interface/version.h>
 #include <rclcpp/rclcpp.hpp>
 
@@ -91,10 +93,10 @@ void DuckMiniMujocoSystemInterface::register_contact_detection()
   }
 }
 
-std::vector<hardware_interface::StateInterface>
-DuckMiniMujocoSystemInterface::export_state_interfaces()
+std::vector<hardware_interface::StateInterface::ConstSharedPtr>
+DuckMiniMujocoSystemInterface::on_export_state_interfaces()
 {
-  auto state_interfaces = mujoco_ros2_control::MujocoSystemInterface::export_state_interfaces();
+  auto state_interfaces = mujoco_ros2_control::MujocoSystemInterface::on_export_state_interfaces();
   const auto & hardware_info = get_hardware_info();
   for (auto & sensor : contact_detection_data_)
   {
@@ -109,7 +111,10 @@ DuckMiniMujocoSystemInterface::export_state_interfaces()
       {
         if (state_if.name == "contact_raw")
         {
-          state_interfaces.emplace_back(sensor.name, state_if.name, &sensor.contact_raw_value);
+          sensor.contact_raw_interface =
+            std::make_shared<hardware_interface::StateInterface>(sensor.name, state_if.name);
+          std::ignore = sensor.contact_raw_interface->set_value(sensor.contact_raw_value, true);
+          state_interfaces.push_back(sensor.contact_raw_interface);
         }
       }
       break;
@@ -263,6 +268,10 @@ void DuckMiniMujocoSystemInterface::update_contact_detection()
     bool in_contact =
       raw_contact_between_bodies(mj_data, sensor.body1_id, sensor.body2_id, nullptr);
     sensor.contact_raw_value = in_contact ? 1.0 : 0.0;
+    if (sensor.contact_raw_interface)
+    {
+      std::ignore = sensor.contact_raw_interface->set_value(sensor.contact_raw_value, false);
+    }
   }
 
   if (mj_model != nullptr)
