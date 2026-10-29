@@ -33,19 +33,19 @@ RRBot Architecture Overview
 This section provides an overview of how **ROS2 Control** components interact in *Example 1 (RRBot System Position Only)*. It summarizes the relationship between the hardware interface, controllers, and the robot’s URDF.
 
 A custom hardware interface ``RRBotSystemPositionOnlyHardware`` is implemented in:
-``ros2_control_demo_example_1/rrbot_hardware_interface.cpp``
+``example_1/hardware/rrbot.cpp``
 
 This hardware plugin:
 
 - Inherits from ``hardware_interface::SystemInterface``
 - Defines how to **read joint positions** (from hardware, simulated here)
 - Defines how to **write commands** (set joint positions)
-- Is registered in a ``plugin.xml`` file so the **ResourceManager** can load it
+- Is registered in ``example_1/ros2_control_demo_example_1.xml`` so the **ResourceManager** can load it
 
 From the UML:
 
 - ``hardware_interface::SystemInterface`` → implemented by the RRBot hardware plugin
-- ``hardware_interface::ResourceManager`` → manages your hardware plugin after loading it
+- ``hardware_interface::ResourceManager`` → loads and manages the hardware plugins
 
 The robot description is defined in:
 ``rrbot.urdf.xacro``
@@ -577,9 +577,7 @@ Controllers from this demo
 
 Additional Resources for this demo
 ----------------------------------
-* `UML Class Diagram of example_1 <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_1/doc/ros2_control_demo_example_1.svg>`__  a visual representation of the RRBot hardware interface architecture.
-
-* `Summary Explanation of example_1 <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_1/doc/summary_explanation_example_1.md>`__  a step-by-step explanation of the demo’s architecture and component interaction.
+* `UML Class Diagram of example_1 <https://github.com/ros-controls/ros2_control_demos/tree/{REPOS_FILE_BRANCH}/example_1/doc/ros2_control_demo_example_1.png>`__  a visual representation of the RRBot hardware interface architecture.
 
 
 
