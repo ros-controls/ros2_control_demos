@@ -30,7 +30,7 @@ def generate_launch_description():
                     {
                         "robot_description": Command(
                             [
-                                PathJoinSubstitution([FindExecutable(name="xacro")]),
+                                FindExecutable(name="xacro"),
                                 " ",
                                 PathJoinSubstitution(
                                     [

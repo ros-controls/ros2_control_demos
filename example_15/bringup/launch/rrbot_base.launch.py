@@ -86,40 +86,11 @@ def generate_launch_description():
                 default_value="true",
                 description="Start RViz2 automatically with this launch file.",
             ),
-            # robot description from xacro
             Node(
                 package="controller_manager",
                 executable="ros2_control_node",
                 namespace=LaunchConfiguration("namespace"),
                 parameters=[
-                    {
-                        "robot_description": Command(
-                            [
-                                "xacro",
-                                " ",
-                                PathSubstitution(
-                                    FindPackageShare(LaunchConfiguration("description_package"))
-                                )
-                                / "urdf"
-                                / LaunchConfiguration("description_file"),
-                                " ",
-                                "prefix:=",
-                                LaunchConfiguration("prefix"),
-                                " ",
-                                "use_gazebo:=",
-                                LaunchConfiguration("use_gazebo"),
-                                " ",
-                                "use_mock_hardware:=",
-                                LaunchConfiguration("use_mock_hardware"),
-                                " ",
-                                "mock_sensor_commands:=",
-                                LaunchConfiguration("mock_sensor_commands"),
-                                " ",
-                                "slowdown:=",
-                                LaunchConfiguration("slowdown"),
-                            ]
-                        )
-                    },
                     PathSubstitution(
                         FindPackageShare(LaunchConfiguration("runtime_config_package"))
                     )

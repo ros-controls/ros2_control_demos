@@ -209,7 +209,7 @@ There are more methods that can be implemented for lifecycle changes, but they a
 
   class RobotSystem : public hardware_interface::SystemInterface {
       public:
-      CallbackReturn on_init(const hardware_interface::HardwareInfo &info) override;
+      CallbackReturn on_init(hardware_interface::HardwareComponentInterfaceParams & params) override;
       CallbackReturn on_configure(const rclcpp_lifecycle::State & previous_state) override;
       return_type read(const rclcpp::Time &time, const rclcpp::Duration &period) override;
       return_type write(const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/) override;
@@ -221,8 +221,8 @@ The ``on_init`` method is called once during ros2_control initialization if the 
 
 .. code-block:: c++
 
-  CallbackReturn RobotSystem::on_init(const hardware_interface::HardwareInfo &info) {
-      if (hardware_interface::SystemInterface::on_init(info) != CallbackReturn::SUCCESS) {
+  CallbackReturn RobotSystem::on_init(hardware_interface::HardwareComponentInterfaceParams & params) {
+      if (hardware_interface::SystemInterface::on_init(params) != CallbackReturn::SUCCESS) {
           return CallbackReturn::ERROR;
       }
       // setup communication with robot hardware
