@@ -17,7 +17,6 @@ on:
       - '**.yaml'
       - 'ros2_control_demos.rolling.repos'
       - 'ros2_control_demos.lyrical.repos'
-      - 'ros2_control_demos.kilted.repos'
       - '**.xml'
   push: *event
   schedule:
@@ -31,7 +30,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ROS_DISTRO: [rolling, lyrical, kilted]
+        ROS_DISTRO: [rolling, lyrical]
     steps:
     - uses: actions/checkout@v7
       with:
