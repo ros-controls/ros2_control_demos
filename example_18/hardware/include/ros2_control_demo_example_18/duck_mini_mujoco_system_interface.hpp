@@ -50,7 +50,7 @@ class DuckMiniMujocoSystemInterface : public mujoco_ros2_control::MujocoSystemIn
 {
 public:
   DuckMiniMujocoSystemInterface();
-  ~DuckMiniMujocoSystemInterface() override = default;
+  ~DuckMiniMujocoSystemInterface() override;
 
   hardware_interface::CallbackReturn
 
@@ -66,6 +66,9 @@ private:
   void register_contact_detection();
   void update_contact_detection();
   std::vector<ContactDetectionData> contact_detection_data_;
+  // Cached copy of the (immutable) MuJoCo model and a reused scratch buffer for contact queries
+  mjModel * contact_model_{nullptr};
+  mjData * contact_data_{nullptr};
 };
 
 }  // namespace ros2_control_demo_example_18

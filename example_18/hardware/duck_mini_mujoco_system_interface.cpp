@@ -138,56 +138,48 @@ hardware_interface::return_type DuckMiniMujocoSystemInterface::read(
   return hardware_interface::return_type::OK;
 }
 
+DuckMiniMujocoSystemInterface::~DuckMiniMujocoSystemInterface()
+{
+  if (contact_data_ != nullptr)
+  {
+    mj_deleteData(contact_data_);
+  }
+  if (contact_model_ != nullptr)
+  {
+    mj_deleteModel(contact_model_);
+  }
+}
+
 void DuckMiniMujocoSystemInterface::update_contact_detection()
 {
-  mjModel * mj_model = nullptr;
-  mjData * mj_data = nullptr;
-
+  // The model is immutable, so copy it once; the data buffer is allocated on the first call and
+  // then overwritten in place, avoiding heap allocation in the control loop.
   try
   {
-    get_model(mj_model);
-    get_data(mj_data);
+    if (contact_model_ == nullptr)
+    {
+      get_model(contact_model_);
+    }
+    get_data(contact_data_);
   }
   catch (const std::exception & e)
   {
     RCLCPP_DEBUG(get_logger(), "Contact detection: %s", e.what());
-    if (mj_model != nullptr)
-    {
-      mj_deleteModel(mj_model);
-    }
-    if (mj_data != nullptr)
-    {
-      mj_deleteData(mj_data);
-    }
     return;
   }
   catch (...)
   {
     RCLCPP_DEBUG(get_logger(), "Contact detection: unknown exception");
-    if (mj_model != nullptr)
-    {
-      mj_deleteModel(mj_model);
-    }
-    if (mj_data != nullptr)
-    {
-      mj_deleteData(mj_data);
-    }
     return;
   }
 
-  if (mj_model == nullptr || mj_data == nullptr)
+  if (contact_model_ == nullptr || contact_data_ == nullptr)
   {
     RCLCPP_DEBUG(get_logger(), "MuJoCo model/data not ready for contact");
-    if (mj_model != nullptr)
-    {
-      mj_deleteModel(mj_model);
-    }
-    if (mj_data != nullptr)
-    {
-      mj_deleteData(mj_data);
-    }
     return;
   }
+  const mjModel * mj_model = contact_model_;
+  const mjData * mj_data = contact_data_;
 
   // Resolve body IDs lazily on first call
   for (auto & sensor : contact_detection_data_)
@@ -272,15 +264,6 @@ void DuckMiniMujocoSystemInterface::update_contact_detection()
     {
       std::ignore = sensor.contact_raw_interface->set_value(sensor.contact_raw_value, false);
     }
-  }
-
-  if (mj_model != nullptr)
-  {
-    mj_deleteModel(mj_model);
-  }
-  if (mj_data != nullptr)
-  {
-    mj_deleteData(mj_data);
   }
 }
 
