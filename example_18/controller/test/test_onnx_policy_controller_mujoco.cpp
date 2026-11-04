@@ -136,17 +136,10 @@ protected:
     }
   }
 
-  // Simulate one control step with control inputs
+  // Simulate one control step, keeping the caller's control inputs in data_->ctrl
+  // (initialized to the home keyframe ctrl in SetUp())
   void simulateStep()
   {
-    // Apply control inputs (default actuator positions) to maintain stability
-    // Reference: validate_onnx_simulation.py applies motor_targets = default_actuator + action *
-    // scale For stability test, we use default_actuator (action = 0)
-    if (!default_actuator_.empty() && default_actuator_.size() == static_cast<size_t>(model_->nu))
-    {
-      mju_copy(data_->ctrl, default_actuator_.data(), static_cast<int>(model_->nu));
-    }
-
     // Run MuJoCo simulation for decimation steps
     for (int i = 0; i < decimation_; ++i)
     {
@@ -324,9 +317,10 @@ TEST_F(OnnxPolicyControllerMuJoCoTest, WalkingForwardWithAlternatingControlPatte
   // Strategy: Shift weight forward and use leg extension to push body forward
   // Left leg joints: indices 0-4 (yaw, roll, pitch, knee, ankle)
   // Right leg joints: indices 9-13 (yaw, roll, pitch, knee, ankle)
-  const int num_steps = 1000;         // 20 seconds (1000 * 2ms * 10 decimation)
-  const double step_amplitude = 0.3;  // Amplitude for stepping motion
-  const int pattern_period = 30;      // Switch pattern every 30 control steps (0.6 seconds)
+  const int num_steps = 1000;  // 20 seconds (1000 * 2ms * 10 decimation)
+  // Open-loop pattern: larger amplitudes (>= 0.2 rad) tip the robot over within a few seconds
+  const double step_amplitude = 0.1;
+  const int pattern_period = 30;  // Switch pattern every 30 control steps (0.6 seconds)
 
   for (int step = 0; step < num_steps; ++step)
   {
