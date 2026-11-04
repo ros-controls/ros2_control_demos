@@ -18,6 +18,7 @@ import os
 import shutil
 import subprocess
 import tempfile
+import xml.etree.ElementTree as ET
 
 from ament_index_python.packages import get_package_share_directory
 
@@ -62,5 +63,32 @@ def test_urdf_xacro():
         os.remove(tmp_urdf_output_file)
 
 
+def test_urdf_joint_origins_match_mjcf():
+    """robot_state_publisher must show the same kinematics as the simulated MuJoCo model."""
+    mujoco_dir = os.path.join(
+        get_package_share_directory("ros2_control_demo_description"), "openduckmini", "mujoco"
+    )
+    urdf = ET.parse(os.path.join(mujoco_dir, "robot.urdf")).getroot()
+    mjcf = ET.parse(os.path.join(mujoco_dir, "open_duck_mini_v2.xml")).getroot()
+
+    # MJCF: the body that owns a hinge joint is placed relative to its parent like the URDF joint
+    mjcf_body_pos = {}
+    for body in mjcf.iter("body"):
+        for joint in body.findall("joint"):
+            mjcf_body_pos[joint.get("name")] = [float(v) for v in body.get("pos").split()]
+
+    checked = 0
+    for joint in urdf.iter("joint"):
+        name = joint.get("name")
+        if name not in mjcf_body_pos:
+            continue
+        xyz = [float(v) for v in joint.find("origin").get("xyz").split()]
+        for axis, (u, m) in enumerate(zip(xyz, mjcf_body_pos[name])):
+            assert abs(u - m) < 1e-4, f"{name} origin[{axis}]: urdf={u} mjcf={m}"
+        checked += 1
+    assert checked == 14, f"expected 14 actuated joints, compared {checked}"
+
+
 if __name__ == "__main__":
     test_urdf_xacro()
+    test_urdf_joint_origins_match_mjcf()
