@@ -60,6 +60,26 @@ public:
   controller_interface::return_type update(
     const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
+  /**
+   * @brief Format a tensor shape for logging, printing dynamic (-1) dimensions as "dynamic".
+   */
+  static std::string format_shape_string(const std::vector<int64_t> & shape);
+
+  /**
+   * @brief Resolve dynamic (-1) dimensions of an ONNX input shape for a flat input buffer.
+   *
+   * Leading dynamic dimensions (e.g. a batch dimension) are set to 1 and the last dynamic
+   * dimension takes the remaining elements, so that the product of the returned shape equals
+   * @p input_size. An empty shape resolves to {input_size}.
+   *
+   * @param model_shape Input shape reported by the ONNX model.
+   * @param input_size Number of elements in the input buffer.
+   * @return Fully static shape whose element count equals @p input_size.
+   * @throws std::invalid_argument if @p input_size is not compatible with the static dimensions.
+   */
+  static std::vector<int64_t> resolve_input_shape(
+    const std::vector<int64_t> & model_shape, size_t input_size);
+
 private:
   bool load_model(const std::string & model_path);
   bool run_model_inference(const std::vector<float> & inputs, std::vector<double> & outputs);
@@ -70,7 +90,6 @@ private:
     std::vector<double> & joint_commands, double control_period);
   std::vector<bool> apply_position_limiting(std::vector<double> & joint_commands);
 
-  static std::string format_shape_string(const std::vector<int64_t> & shape);
   void validate_model_structure(size_t num_inputs, size_t num_outputs);
 
   std::shared_ptr<ParamListener> param_listener_;

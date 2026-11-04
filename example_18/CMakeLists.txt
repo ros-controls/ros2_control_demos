@@ -177,6 +177,8 @@ if(BUILD_TESTING)
   target_include_directories(test_onnx_policy_controller_initialization PRIVATE ${PROJECT_SOURCE_DIR}/controller/include)
 
   ament_add_gtest(test_onnx_shape_handling controller/test/test_onnx_shape_handling.cpp)
+  target_link_libraries(test_onnx_shape_handling ${PROJECT_NAME}_lib)
+  target_compile_options(test_onnx_shape_handling PRIVATE -Wno-error=missing-braces)
 
   ament_add_gtest(test_onnx_policy_controller_mujoco controller/test/test_onnx_policy_controller_mujoco.cpp)
   target_include_directories(test_onnx_policy_controller_mujoco PRIVATE ${PROJECT_SOURCE_DIR}/controller/include)

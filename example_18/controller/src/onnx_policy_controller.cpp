@@ -693,23 +693,7 @@ bool OnnxPolicyController::run_model_inference(
     // Prepare input tensor
     size_t input_size = inputs.size();
 
-    // Use model's expected input shape if available, otherwise use [input_size]
-    std::vector<int64_t> input_shape;
-    if (!input_shape_.empty())
-    {
-      input_shape = input_shape_;
-      for (auto & dim : input_shape)
-      {
-        if (dim == -1)
-        {
-          dim = static_cast<int64_t>(input_size);
-        }
-      }
-    }
-    else
-    {
-      input_shape = {static_cast<int64_t>(input_size)};
-    }
+    const std::vector<int64_t> input_shape = resolve_input_shape(input_shape_, input_size);
 
     RCLCPP_DEBUG_THROTTLE(
       get_node()->get_logger(), *get_node()->get_clock(), 5000,
@@ -742,6 +726,51 @@ bool OnnxPolicyController::run_model_inference(
     outputs.clear();
     return false;
   }
+}
+
+std::vector<int64_t> OnnxPolicyController::resolve_input_shape(
+  const std::vector<int64_t> & model_shape, size_t input_size)
+{
+  if (model_shape.empty())
+  {
+    return {static_cast<int64_t>(input_size)};
+  }
+
+  std::vector<int64_t> resolved = model_shape;
+  int64_t static_elements = 1;
+  int last_dynamic = -1;
+  for (size_t i = 0; i < resolved.size(); ++i)
+  {
+    if (resolved[i] == -1)
+    {
+      // Leading dynamic dims (typically the batch dim) are 1; the last one gets the remainder.
+      resolved[i] = 1;
+      last_dynamic = static_cast<int>(i);
+    }
+    else
+    {
+      static_elements *= resolved[i];
+    }
+  }
+
+  const auto total = static_cast<int64_t>(input_size);
+  if (static_elements <= 0 || total % static_elements != 0)
+  {
+    throw std::invalid_argument(
+      "Input size " + std::to_string(input_size) + " is incompatible with model input shape " +
+      format_shape_string(model_shape));
+  }
+  if (last_dynamic >= 0)
+  {
+    resolved[static_cast<size_t>(last_dynamic)] = total / static_elements;
+  }
+  else if (static_elements != total)
+  {
+    throw std::invalid_argument(
+      "Input size " + std::to_string(input_size) + " does not match model input shape " +
+      format_shape_string(model_shape));
+  }
+  return resolved;
 }
 
 std::string OnnxPolicyController::format_shape_string(const std::vector<int64_t> & shape)

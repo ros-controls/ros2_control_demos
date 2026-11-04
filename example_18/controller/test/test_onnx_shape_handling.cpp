@@ -16,47 +16,13 @@
 
 #include <gtest/gtest.h>
 
+#include <stdexcept>
 #include <string>
 #include <vector>
 
-// Test helper functions for shape handling
-// These mirror the logic in LocomotionController for testing
+#include "onnx_policy_controller/onnx_policy_controller.hpp"
 
-std::string format_shape_string(const std::vector<int64_t> & shape)
-{
-  std::string shape_str = "[";
-  for (size_t i = 0; i < shape.size(); ++i)
-  {
-    if (i > 0) shape_str += ", ";
-    if (shape[i] == -1)
-    {
-      shape_str += "dynamic";
-    }
-    else
-    {
-      shape_str += std::to_string(shape[i]);
-    }
-  }
-  shape_str += "]";
-  return shape_str;
-}
-
-std::vector<int64_t> resolve_dynamic_shape(
-  const std::vector<int64_t> & model_shape, size_t actual_input_size)
-{
-  std::vector<int64_t> resolved_shape = model_shape;
-
-  // Replace -1 (dynamic dimension) with actual size
-  for (auto & dim : resolved_shape)
-  {
-    if (dim == -1)
-    {
-      dim = static_cast<int64_t>(actual_input_size);
-    }
-  }
-
-  return resolved_shape;
-}
+using onnx_policy_controller::OnnxPolicyController;
 
 class TestOnnxShapeHandling : public ::testing::Test
 {
@@ -67,6 +33,7 @@ protected:
 // Test format_shape_string with various shapes
 TEST_F(TestOnnxShapeHandling, FormatShapeString)
 {
+  const auto format_shape_string = &OnnxPolicyController::format_shape_string;
   EXPECT_EQ(format_shape_string({1, 46}), "[1, 46]");
   EXPECT_EQ(format_shape_string({-1, 46}), "[dynamic, 46]");
   EXPECT_EQ(format_shape_string({46}), "[46]");
@@ -77,6 +44,7 @@ TEST_F(TestOnnxShapeHandling, FormatShapeString)
 // Test resolve_dynamic_shape with various model shapes
 TEST_F(TestOnnxShapeHandling, ResolveDynamicShape)
 {
+  const auto resolve_dynamic_shape = &OnnxPolicyController::resolve_input_shape;
   size_t actual_size = 46;
 
   // Static shape (no changes)
@@ -91,8 +59,16 @@ TEST_F(TestOnnxShapeHandling, ResolveDynamicShape)
   result = resolve_dynamic_shape({1, -1}, actual_size);
   EXPECT_EQ(result, std::vector<int64_t>({1, 46}));
 
+  // Dynamic batch dimension must resolve to 1, not to the full input size
   result = resolve_dynamic_shape({-1, 46}, actual_size);
-  EXPECT_EQ(result, std::vector<int64_t>({46, 46}));
+  EXPECT_EQ(result, std::vector<int64_t>({1, 46}));
+
+  // Several dynamic dimensions: leading ones become 1, the last one takes the remainder
+  result = resolve_dynamic_shape({-1, -1}, actual_size);
+  EXPECT_EQ(result, std::vector<int64_t>({1, 46}));
+
+  // Input size not divisible by the static dimensions cannot be reshaped
+  EXPECT_THROW(resolve_dynamic_shape({-1, 45}, actual_size), std::invalid_argument);
 }
 
 // Test shape size calculation and dynamic dimension detection
