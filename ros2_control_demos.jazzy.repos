@@ -31,3 +31,7 @@ repositories:
     type: git
     url: https://github.com/ros-controls/kinematics_interface.git
     version: jazzy
+  mujoco_ros2_control:
+    type: git
+    url: https://github.com/ros-controls/mujoco_ros2_control.git
+    version: main
