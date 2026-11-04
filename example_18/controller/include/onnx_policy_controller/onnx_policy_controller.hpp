@@ -19,6 +19,7 @@
 
 #include <onnxruntime_cxx_api.h>
 
+#include <atomic>
 #include <memory>
 #include <string>
 #include <vector>
@@ -125,6 +126,11 @@ private:
   realtime_tools::RealtimeThreadSafeBox<std::vector<std::string>> rt_interface_names_;
   realtime_tools::RealtimeThreadSafeBox<ros2_control_demo_example_18::msg::VelocityCommandWithHead>
     rt_velocity_command_;
+  // The boxes start with default-constructed messages and try_get() only reports lock success,
+  // so these flags (set by the callbacks after storing) tell whether real data has arrived.
+  std::atomic<bool> interface_data_received_{false};
+  std::atomic<bool> velocity_command_received_{false};
+  ros2_control_demo_example_18::msg::VelocityCommandWithHead velocity_cmd_;
 
   // Model/observation/action state
   bool model_loaded_;
@@ -143,7 +149,6 @@ private:
   std::vector<double> motor_targets_;
   std::vector<double> prev_motor_targets_;
   bool prev_motor_targets_initialized_;
-  bool command_received_;
 
   // Gait/timing configuration and counters
   double phase_frequency_factor_offset_;

@@ -180,6 +180,13 @@ if(BUILD_TESTING)
   target_link_libraries(test_onnx_shape_handling ${PROJECT_NAME}_lib)
   target_compile_options(test_onnx_shape_handling PRIVATE -Wno-error=missing-braces)
 
+  ament_add_gtest(test_onnx_policy_controller_update
+    controller/test/test_onnx_policy_controller_update.cpp)
+  target_link_libraries(test_onnx_policy_controller_update ${PROJECT_NAME}_lib)
+  target_compile_options(test_onnx_policy_controller_update PRIVATE -Wno-error=missing-braces)
+  target_compile_definitions(test_onnx_policy_controller_update PRIVATE
+    ONNX_MODEL_PATH="${PROJECT_SOURCE_DIR}/onnx_model/open_duck_mini_policy.onnx")
+
   ament_add_gtest(test_onnx_policy_controller_mujoco controller/test/test_onnx_policy_controller_mujoco.cpp)
   target_include_directories(test_onnx_policy_controller_mujoco PRIVATE ${PROJECT_SOURCE_DIR}/controller/include)
   target_link_libraries(test_onnx_policy_controller_mujoco mujoco::mujoco)

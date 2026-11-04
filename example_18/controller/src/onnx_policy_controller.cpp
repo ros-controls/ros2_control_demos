@@ -216,7 +216,9 @@ CallbackReturn OnnxPolicyController::on_configure(
     prev_motor_targets_initialized_ = false;
   }
 
-  command_received_ = false;
+  interface_data_received_ = false;
+  velocity_command_received_ = false;
+  velocity_cmd_ = ros2_control_demo_example_18::msg::VelocityCommandWithHead();
 
   // Load model
   if (!load_model(model_path_))
@@ -229,7 +231,10 @@ CallbackReturn OnnxPolicyController::on_configure(
   interface_data_subscriber_ = get_node()->create_subscription<control_msgs::msg::Float64Values>(
     interfaces_broadcaster_topic_, rclcpp::SystemDefaultsQoS(),
     [this](const control_msgs::msg::Float64Values::SharedPtr msg)
-    { rt_interface_data_.set(*msg); });
+    {
+      rt_interface_data_.set(*msg);
+      interface_data_received_ = true;
+    });
 
   interfaces_names_subscriber_ = get_node()->create_subscription<control_msgs::msg::Keys>(
     interfaces_broadcaster_names_topic_, rclcpp::QoS(rclcpp::KeepLast(1)).transient_local(),
@@ -239,7 +244,10 @@ CallbackReturn OnnxPolicyController::on_configure(
     get_node()->create_subscription<ros2_control_demo_example_18::msg::VelocityCommandWithHead>(
       velocity_command_topic_, rclcpp::SystemDefaultsQoS(),
       [this](const ros2_control_demo_example_18::msg::VelocityCommandWithHead::SharedPtr msg)
-      { rt_velocity_command_.set(*msg); });
+      {
+        rt_velocity_command_.set(*msg);
+        velocity_command_received_ = true;
+      });
 
   RCLCPP_DEBUG(get_node()->get_logger(), "Configure complete");
   return CallbackReturn::SUCCESS;
@@ -275,6 +283,10 @@ CallbackReturn OnnxPolicyController::on_deactivate(
 return_type OnnxPolicyController::update(
   const rclcpp::Time & /*time*/, const rclcpp::Duration & period)
 {
+  if (!interface_data_received_)
+  {
+    return return_type::OK;
+  }
   auto interface_data_op = rt_interface_data_.try_get();
   if (!interface_data_op.has_value())
   {
@@ -282,12 +294,14 @@ return_type OnnxPolicyController::update(
   }
   control_msgs::msg::Float64Values interface_data = interface_data_op.value();
 
-  auto velocity_cmd_op = rt_velocity_command_.try_get();
-  ros2_control_demo_example_18::msg::VelocityCommandWithHead velocity_cmd;
-  if (velocity_cmd_op.has_value())
+  const bool command_received = velocity_command_received_;
+  if (command_received)
   {
-    velocity_cmd = velocity_cmd_op.value();
-    command_received_ = true;
+    // On lock contention keep the last command instead of falling back to zero velocity.
+    if (auto velocity_cmd_op = rt_velocity_command_.try_get(); velocity_cmd_op.has_value())
+    {
+      velocity_cmd_ = velocity_cmd_op.value();
+    }
   }
   else if (update_count_ % (LOG_INTERVAL_CMD_WRITE) == 0)  // Log missing command less frequently
   {
@@ -296,6 +310,7 @@ return_type OnnxPolicyController::update(
       "No velocity command received on topic '%s'. Robot will hold default pose.",
       velocity_command_topic_.c_str());
   }
+  const auto & velocity_cmd = velocity_cmd_;
 
   std::vector<double> velocity_commands_7d = {
     velocity_cmd.base_velocity.linear.x,   // lin_vel_x
@@ -339,7 +354,7 @@ return_type OnnxPolicyController::update(
       default_joint_positions_.size());
   }
 
-  if (!command_received_)
+  if (!command_received)
   {
     if (!prev_motor_targets_initialized_ && default_joint_positions_initialized_)
     {
