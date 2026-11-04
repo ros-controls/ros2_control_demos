@@ -50,21 +50,11 @@ def generate_launch_description():
         with this launch file.",
         )
     )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "prefix",
-            default_value='""',
-            description="Prefix of the joint names, useful for \
-        multi-robot setup. If changed than also joint names in the controllers' configuration \
-        have to be updated.",
-        )
-    )
 
     # Initialize Arguments
     description_package = LaunchConfiguration("description_package")
     description_file = LaunchConfiguration("description_file")
     gui = LaunchConfiguration("gui")
-    prefix = LaunchConfiguration("prefix")
 
     # Get URDF via xacro
     # For open_duck_mini.urdf.xacro, it extends the base URDF with ros2_control and MuJoCo
@@ -76,9 +66,6 @@ def generate_launch_description():
             PathJoinSubstitution(
                 [FindPackageShare(description_package), "openduckmini", "urdf", description_file]
             ),
-            " ",
-            "prefix:=",
-            prefix,
         ]
     )
     robot_description = {

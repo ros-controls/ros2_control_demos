@@ -63,6 +63,31 @@ def test_urdf_xacro():
         os.remove(tmp_urdf_output_file)
 
 
+def test_ros2_control_joints_exist_in_urdf():
+    """Joint names in the ros2_control tag must refer to URDF/MuJoCo joints, also when args are passed."""
+    description_file_path = os.path.join(
+        get_package_share_directory("ros2_control_demo_description"),
+        "openduckmini",
+        "urdf",
+        "open_duck_mini.urdf.xacro",
+    )
+    # prefix is not supported (the URDF and MuJoCo model have fixed names) and must be a no-op
+    xacro_process = subprocess.run(
+        [shutil.which("xacro"), description_file_path, "headless:=true", "prefix:=duck_"],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
+    assert xacro_process.returncode == 0, xacro_process.stderr
+
+    robot = ET.fromstring(xacro_process.stdout)
+    urdf_joints = {joint.get("name") for joint in robot.findall("joint")}
+    control_joints = [joint.get("name") for joint in robot.find("ros2_control").findall("joint")]
+    assert len(control_joints) == 14
+    missing = [name for name in control_joints if name not in urdf_joints]
+    assert not missing, f"ros2_control joints not in URDF: {missing}"
+
+
 def test_urdf_joint_origins_match_mjcf():
     """robot_state_publisher must show the same kinematics as the simulated MuJoCo model."""
     mujoco_dir = os.path.join(

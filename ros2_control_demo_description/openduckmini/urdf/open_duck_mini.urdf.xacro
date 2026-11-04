@@ -6,7 +6,6 @@ It includes the base robot description from robot.urdf
 and adds ros2_control plugin configuration (supports both MuJoCo and mock hardware).
 -->
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="open-duck-mini">
-  <xacro:arg name="prefix" default="" />
   <xacro:arg name="use_mock_hardware" default="false" />
   <xacro:arg name="headless" default="false" />
 
@@ -17,5 +16,5 @@ and adds ros2_control plugin configuration (supports both MuJoCo and mock hardwa
   <!-- Import Open Duck Mini ros2_control description -->
   <xacro:include filename="$(find ros2_control_demo_description)/openduckmini/ros2_control/open_duck_mini.ros2_control.xacro" />
   <xacro:open_duck_mini_ros2_control
-    name="OpenDuckMini" prefix="$(arg prefix)" use_mock_hardware="$(arg use_mock_hardware)" headless="$(arg headless)"/>
+    name="OpenDuckMini" use_mock_hardware="$(arg use_mock_hardware)" headless="$(arg headless)"/>
 </robot>
