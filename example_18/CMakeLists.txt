@@ -123,10 +123,12 @@ target_link_libraries(${PROJECT_NAME}_lib
 )
 target_link_libraries(${PROJECT_NAME}_lib onnxruntime::onnxruntime)
 
-# Lyrical rosidl emits MessageTraits::member_names with single-brace std::array
-# initialization; ros2_control_cmake treats that as -Werror=missing-braces.
-# Workaround until ros2/rosidl fixes msg__traits.hpp.em upstream.
-target_compile_options(${PROJECT_NAME}_lib PRIVATE -Wno-error=missing-braces)
+# rosidl emits MessageTraits::member_names with single-brace std::array initialization
+# (-Wmissing-braces). Headers of other message packages are included via -isystem, which hides
+# that; do the same for this package's own generated headers (PUBLIC, so tests inherit it).
+target_include_directories(${PROJECT_NAME}_lib SYSTEM PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/rosidl_generator_cpp>
+)
 
 pluginlib_export_plugin_description_file(hardware_interface ros2_control_demo_example_18.xml)
 pluginlib_export_plugin_description_file(controller_interface ros2_control_demo_example_18.xml)
@@ -178,12 +180,10 @@ if(BUILD_TESTING)
 
   ament_add_gtest(test_onnx_shape_handling controller/test/test_onnx_shape_handling.cpp)
   target_link_libraries(test_onnx_shape_handling ${PROJECT_NAME}_lib)
-  target_compile_options(test_onnx_shape_handling PRIVATE -Wno-error=missing-braces)
 
   ament_add_gtest(test_onnx_policy_controller_update
     controller/test/test_onnx_policy_controller_update.cpp)
   target_link_libraries(test_onnx_policy_controller_update ${PROJECT_NAME}_lib)
-  target_compile_options(test_onnx_policy_controller_update PRIVATE -Wno-error=missing-braces)
   target_compile_definitions(test_onnx_policy_controller_update PRIVATE
     ONNX_MODEL_PATH="${PROJECT_SOURCE_DIR}/onnx_model/open_duck_mini_policy.onnx")
 
