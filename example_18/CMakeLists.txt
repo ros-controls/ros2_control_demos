@@ -189,7 +189,10 @@ if(BUILD_TESTING)
 
   ament_add_gtest(test_onnx_policy_controller_mujoco controller/test/test_onnx_policy_controller_mujoco.cpp)
   target_include_directories(test_onnx_policy_controller_mujoco PRIVATE ${PROJECT_SOURCE_DIR}/controller/include)
-  target_link_libraries(test_onnx_policy_controller_mujoco mujoco::mujoco)
+  target_link_libraries(test_onnx_policy_controller_mujoco
+    ament_index_cpp::ament_index_cpp
+    mujoco::mujoco
+  )
 
   ament_add_gtest(test_contact_detection hardware/test/test_contact_detection.cpp)
   target_include_directories(test_contact_detection PRIVATE ${PROJECT_SOURCE_DIR}/hardware/include)

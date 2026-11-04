@@ -24,6 +24,13 @@
 #include <string>
 #include <vector>
 
+#include "ament_index_cpp/version.h"
+#if AMENT_INDEX_CPP_VERSION_MINOR >= 13
+#include <ament_index_cpp/get_package_share_path.hpp>
+#else
+#include <ament_index_cpp/get_package_share_directory.hpp>
+#endif
+
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
@@ -44,8 +51,7 @@ class OnnxPolicyControllerMuJoCoTest : public ::testing::Test
 protected:
   void SetUp() override
   {
-    // Initialize MuJoCo model
-    // Model path should point to the MuJoCo XML file
+    // Use the MuJoCo scene shipped with ros2_control_demo_description.
     // Can be overridden via MUJOCO_MODEL_PATH environment variable
     const char * env_path = getenv("MUJOCO_MODEL_PATH");
     std::string model_path;
@@ -55,18 +61,22 @@ protected:
     }
     else
     {
-      model_path =
-        std::string(getenv("HOME")) +
-        "/dev/Open_Duck_Playground/playground/open_duck_mini_v2/xmls/scene_flat_terrain.xml";
+#if AMENT_INDEX_CPP_VERSION_MINOR >= 13
+      const std::string share =
+        ament_index_cpp::get_package_share_path("ros2_control_demo_description").string();
+#else
+      const std::string share =
+        ament_index_cpp::get_package_share_directory("ros2_control_demo_description");
+#endif
+      model_path = share + "/openduckmini/mujoco/scene.xml";
     }
 
     char error[1000] = "Could not load binary model";
     model_ = mj_loadXML(model_path.c_str(), 0, error, 1000);
 
-    if (!model_)
-    {
-      GTEST_SKIP() << "Could not load MuJoCo model from: " << model_path << ". Error: " << error;
-    }
+    // The model is a required fixture: fail loudly instead of silently skipping every test
+    ASSERT_NE(model_, nullptr) << "Could not load MuJoCo model from: " << model_path
+                               << ". Error: " << error;
 
     data_ = mj_makeData(model_);
 
@@ -197,12 +207,6 @@ TEST_F(OnnxPolicyControllerMuJoCoTest, ControllerConfiguration)
 // Full controller integration test would require hardware interface setup and active control
 TEST_F(OnnxPolicyControllerMuJoCoTest, SimulationStability)
 {
-  // Skip if model not loaded
-  if (!model_ || !data_)
-  {
-    GTEST_SKIP() << "MuJoCo model not loaded";
-  }
-
   // Initial state - verify model loaded correctly
   double start_z = getBodyHeight();
   double start_x = getForwardPosition();
@@ -280,11 +284,6 @@ TEST_F(OnnxPolicyControllerMuJoCoTest, SimulationStability)
 // Verifies the MuJoCo model has expected structure for Open Duck Mini
 TEST_F(OnnxPolicyControllerMuJoCoTest, ModelStructure)
 {
-  if (!model_ || !data_)
-  {
-    GTEST_SKIP() << "MuJoCo model not loaded";
-  }
-
   // Verify expected number of actuators (14 joints: 10 leg + 4 head)
   EXPECT_EQ(num_joints_, 14) << "Expected 14 actuators (10 leg + 4 head joints)";
 
@@ -307,11 +306,6 @@ TEST_F(OnnxPolicyControllerMuJoCoTest, ModelStructure)
 // tests.
 TEST_F(OnnxPolicyControllerMuJoCoTest, WalkingForwardWithAlternatingControlPattern)
 {
-  if (!model_ || !data_)
-  {
-    GTEST_SKIP() << "MuJoCo model not loaded";
-  }
-
   // Skip if not enough actuators (need 14 for Open Duck Mini)
   if (num_joints_ < 14)
   {
