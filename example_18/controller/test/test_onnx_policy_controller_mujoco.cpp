@@ -381,8 +381,8 @@ TEST_F(OnnxPolicyControllerMuJoCoTest, WalkingForwardWithAlternatingControlPatte
     double current_z = getBodyHeight();
     if (current_z < 0.1)
     {
-      GTEST_SKIP() << "Robot fell during walking test (height: " << current_z << "m at step "
-                   << step << ")";
+      FAIL() << "Robot fell during walking test (height: " << current_z << "m at step " << step
+             << ")";
     }
   }
 
