@@ -77,7 +77,10 @@ onnx_policy_controller:
   num_steps_in_gait_period: {
     type: double,
     default_value: 27.0,
-    description: "Number of control steps in one gait cycle (left+right step). Must match training."
+    description: "Number of control steps in one gait cycle (left+right step). Must match training.",
+    validation: {
+      gt<>: [0.0]
+    }
   }
 
   max_motor_velocity: {

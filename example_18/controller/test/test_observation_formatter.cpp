@@ -16,6 +16,9 @@
 
 #include <gtest/gtest.h>
 
+#include <cmath>
+#include <limits>
+#include <stdexcept>
 #include <vector>
 
 #include "control_msgs/msg/float64_values.hpp"
@@ -258,6 +261,25 @@ TEST_F(TestObservationFormatter, ImuUpsideDownInversion)
   EXPECT_FLOAT_EQ(observation_no_invert[0], observation_invert[0]);
   EXPECT_FLOAT_EQ(observation_no_invert[1], observation_invert[1]);
   EXPECT_FLOAT_EQ(observation_no_invert[2], observation_invert[2]);
+}
+
+TEST_F(TestObservationFormatter, RejectsInvalidGaitPeriod)
+{
+  EXPECT_THROW(formatter_->set_num_steps_in_gait_period(0.0), std::invalid_argument);
+  EXPECT_THROW(formatter_->set_num_steps_in_gait_period(-1.0), std::invalid_argument);
+  EXPECT_THROW(
+    formatter_->set_num_steps_in_gait_period(std::numeric_limits<double>::quiet_NaN()),
+    std::invalid_argument);
+  EXPECT_THROW(
+    formatter_->set_num_steps_in_gait_period(std::numeric_limits<double>::infinity()),
+    std::invalid_argument);
+
+  // The previous valid period is kept, so the phase stays finite
+  formatter_->update_imitation_phase(1.0);
+  for (const auto value : formatter_->get_imitation_phase())
+  {
+    EXPECT_TRUE(std::isfinite(value));
+  }
 }
 
 int main(int argc, char ** argv)

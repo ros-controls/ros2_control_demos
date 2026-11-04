@@ -19,6 +19,7 @@
 #include <algorithm>
 #include <cmath>
 #include <optional>
+#include <stdexcept>
 #include <string>
 
 namespace onnx_policy_controller
@@ -287,6 +288,12 @@ void ObservationFormatter::update_imitation_phase(double phase_frequency_factor)
 
 void ObservationFormatter::set_num_steps_in_gait_period(double num_steps)
 {
+  // update_imitation_phase() takes fmod and divides by this value
+  if (!std::isfinite(num_steps) || num_steps <= 0.0)
+  {
+    throw std::invalid_argument(
+      "num_steps_in_gait_period must be positive and finite, got " + std::to_string(num_steps));
+  }
   num_steps_in_gait_period_ = num_steps;
 }
 

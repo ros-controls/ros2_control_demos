@@ -52,6 +52,11 @@ public:
   void set_motor_targets(const std::vector<double> & motor_targets);
   void set_velocity_commands(const std::vector<double> & commands);
   void update_action_history(const std::vector<double> & action);
+  /**
+   * @brief Set the number of control steps in one gait cycle used for the imitation phase.
+   * @throws std::invalid_argument if @p num_steps is not positive and finite; the previous value
+   * is kept in that case.
+   */
   void set_num_steps_in_gait_period(double num_steps);
   void set_imu_upside_down(bool upside_down) { imu_upside_down_ = upside_down; }
   void set_gyro_deadband(double deadband) { gyro_deadband_ = deadband; }
