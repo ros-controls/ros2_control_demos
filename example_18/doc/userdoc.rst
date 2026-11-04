@@ -92,7 +92,7 @@ In another terminal (source your workspace first):
    ros2 control list_controllers
    python3 $(ros2 pkg prefix ros2_control_demo_example_18)/share/ros2_control_demo_example_18/launch/test_motions.py
 
-The test script publishes ``VelocityCommandWithHead`` messages (base_velocity + head_commands) to ``/onnx_policy_controller/cmd_velocity_with_head`` at 50 Hz. You should see the duck walk forward.
+The test script publishes ``VelocityCommandWithHead`` messages (``base_velocity`` + ``neck_pitch``, ``head_pitch``, ``head_yaw``, ``head_roll``) to ``/onnx_policy_controller/cmd_velocity_with_head`` at 50 Hz. You should see the duck walk forward.
 
 Timing: 0.002s sim timestep in ``scene.xml``, 50 Hz controller. Each control update spans 10 simulation steps, matching the reference training setup.
 
@@ -103,7 +103,7 @@ At a high level, the demo uses the following control structure.
 
 * Control pipeline: (1) Observation formatter — sensor data (IMU, joint states, velocity commands, foot contacts) into the model's observation vector; (2) ONNX inference — policy outputs raw actions; (3) Action formatter — scale, clamp to joint limits, rate limit, then write to hardware.
 
-* Data flow: MuJoCo → hardware interface (joint states, IMU, contact sensors) → state_interfaces_broadcaster → ``/state_interfaces_broadcaster/values`` → OnnxPolicyController (subscribes and runs ONNX) → command interfaces → hardware → MuJoCo. User commands: ``/onnx_policy_controller/cmd_velocity_with_head`` (VelocityCommandWithHead: base_velocity + head_commands).
+* Data flow: MuJoCo → hardware interface (joint states, IMU, contact sensors) → state_interfaces_broadcaster → ``/state_interfaces_broadcaster/values`` → OnnxPolicyController (subscribes and runs ONNX) → command interfaces → hardware → MuJoCo. User commands: ``/onnx_policy_controller/cmd_velocity_with_head`` (VelocityCommandWithHead: ``base_velocity`` + head joint positions).
 
 * Hardware: ``DuckMiniMujocoSystemInterface`` adds foot contact detection via ``mjData->contact[]``; sensors with ``mujoco_type="contact"`` expose ``contact_raw``. MuJoCo model uses BAM-tuned actuator parameters and built-in position actuators.
 

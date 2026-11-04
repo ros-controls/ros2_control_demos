@@ -75,7 +75,8 @@ class DriveForward(Node):
         msg.base_velocity.linear.x = float(lin_x)
         msg.base_velocity.linear.y = float(lin_y)
         msg.base_velocity.angular.z = float(ang_z)
-        msg.head_commands = head_cmds if head_cmds is not None else [0.0, 0.0, 0.0, 0.0]
+        if head_cmds is not None:
+            msg.neck_pitch, msg.head_pitch, msg.head_yaw, msg.head_roll = map(float, head_cmds)
         return msg
 
     def _publish_for(

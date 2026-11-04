@@ -18,5 +18,7 @@
 geometry_msgs/Twist base_velocity
 
 # Head joint position commands (radians)
-# Order: [neck_pitch, head_pitch, head_yaw, head_roll]
-float64[4] head_commands
+float64 neck_pitch
+float64 head_pitch
+float64 head_yaw
+float64 head_roll

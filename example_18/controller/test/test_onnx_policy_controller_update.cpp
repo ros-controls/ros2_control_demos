@@ -142,6 +142,22 @@ TEST_F(OnnxPolicyControllerUpdateTest, NoVelocityCommandHoldsDefaultPose)
   }
 }
 
+TEST(OnnxPolicyControllerCommandMapping, VelocityCommandToPolicyInput)
+{
+  ros2_control_demo_example_18::msg::VelocityCommandWithHead msg;
+  msg.base_velocity.linear.x = 0.1;
+  msg.base_velocity.linear.y = 0.2;
+  msg.base_velocity.angular.z = 0.3;
+  msg.neck_pitch = 0.4;
+  msg.head_pitch = 0.5;
+  msg.head_yaw = 0.6;
+  msg.head_roll = 0.7;
+
+  EXPECT_EQ(
+    onnx_policy_controller::OnnxPolicyController::velocity_command_to_policy_input(msg),
+    std::vector<double>({0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7}));
+}
+
 int main(int argc, char ** argv)
 {
   ::testing::InitGoogleTest(&argc, argv);

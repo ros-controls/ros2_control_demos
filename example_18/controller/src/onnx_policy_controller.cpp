@@ -312,20 +312,7 @@ return_type OnnxPolicyController::update(
   }
   const auto & velocity_cmd = velocity_cmd_;
 
-  std::vector<double> velocity_commands_7d = {
-    velocity_cmd.base_velocity.linear.x,   // lin_vel_x
-    velocity_cmd.base_velocity.linear.y,   // lin_vel_y
-    velocity_cmd.base_velocity.angular.z,  // ang_vel_z
-    velocity_cmd.head_commands.size() > 0 ? velocity_cmd.head_commands[0]
-                                          : 0.0,  // head_pos_1 (neck_pitch)
-    velocity_cmd.head_commands.size() > 1 ? velocity_cmd.head_commands[1]
-                                          : 0.0,  // head_pos_2 (head_pitch)
-    velocity_cmd.head_commands.size() > 2 ? velocity_cmd.head_commands[2]
-                                          : 0.0,  // head_pos_3 (head_yaw)
-    velocity_cmd.head_commands.size() > 3 ? velocity_cmd.head_commands[3]
-                                          : 0.0  // head_pos_4 (head_roll)
-  };
-  observation_formatter_->set_velocity_commands(velocity_commands_7d);
+  observation_formatter_->set_velocity_commands(velocity_command_to_policy_input(velocity_cmd));
 
   if (auto names_op = rt_interface_names_.try_get(); names_op.has_value())
   {
@@ -741,6 +728,19 @@ bool OnnxPolicyController::run_model_inference(
     outputs.clear();
     return false;
   }
+}
+
+std::vector<double> OnnxPolicyController::velocity_command_to_policy_input(
+  const ros2_control_demo_example_18::msg::VelocityCommandWithHead & msg)
+{
+  return {
+    msg.base_velocity.linear.x,
+    msg.base_velocity.linear.y,
+    msg.base_velocity.angular.z,
+    msg.neck_pitch,
+    msg.head_pitch,
+    msg.head_yaw,
+    msg.head_roll};
 }
 
 std::vector<int64_t> OnnxPolicyController::resolve_input_shape(

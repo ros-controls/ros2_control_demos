@@ -62,6 +62,13 @@ public:
     const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
   /**
+   * @brief Convert a velocity command to the 7D command input of the policy.
+   * @return {lin_vel_x, lin_vel_y, ang_vel_z, neck_pitch, head_pitch, head_yaw, head_roll}
+   */
+  static std::vector<double> velocity_command_to_policy_input(
+    const ros2_control_demo_example_18::msg::VelocityCommandWithHead & msg);
+
+  /**
    * @brief Format a tensor shape for logging, printing dynamic (-1) dimensions as "dynamic".
    */
   static std::string format_shape_string(const std::vector<int64_t> & shape);
