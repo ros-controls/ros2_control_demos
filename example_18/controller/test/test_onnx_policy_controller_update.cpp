@@ -131,6 +131,13 @@ TEST_F(OnnxPolicyControllerUpdateTest, NoVelocityCommandHoldsDefaultPose)
   auto test_node = std::make_shared<rclcpp::Node>("test_publisher");
   auto publisher = test_node->create_publisher<control_msgs::msg::Float64Values>(
     "state_interfaces_broadcaster/values", rclcpp::SystemDefaultsQoS());
+  // The publisher is volatile: publishing before discovery matched the subscription drops the msg
+  const auto deadline = std::chrono::steady_clock::now() + std::chrono::seconds(5);
+  while (publisher->get_subscription_count() == 0 && std::chrono::steady_clock::now() < deadline)
+  {
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+  }
+  ASSERT_GT(publisher->get_subscription_count(), 0u) << "controller subscription never matched";
   publisher->publish(control_msgs::msg::Float64Values());
   spin_for(std::chrono::milliseconds(100));
 
