@@ -1,0 +1,7 @@
+<library path="ros2_control_demo_example_19">
+  <class name="ros2_control_demo_example_19/SocketCanDiffDriveHardware"
+         type="ros2_control_demo_example_19::SocketCanDiffDriveHardware"
+         base_class_type="hardware_interface::SystemInterface">
+    <description>Non-blocking Linux SocketCAN differential-drive hardware example.</description>
+  </class>
+</library>
