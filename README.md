@@ -91,6 +91,10 @@ The following examples are part of this demo repository:
 
    This example demonstrates ONNX policy-driven locomotion for the Open Duck Mini biped in MuJoCo simulation. It uses `mujoco_ros2_control` (with `mujoco_vendor`) and a custom hardware interface that extends the MuJoCo interface with foot contact detection for gait control.
 
+* Example 19: ["Linux SocketCAN differential-drive hardware"](example_19)
+
+   This example shows how to write a hardware component that talks to a real CAN bus through Linux SocketCAN, with a differential-drive robot and no simulator in the loop.
+
 ## Structure
 
 The repository is structured into `example_XY` folders that fully contained packages with names `ros2_control_demos_example_XY`.
