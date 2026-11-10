@@ -15,6 +15,11 @@
 #include "passthrough_controller/passthrough_controller.hpp"
 
 #include <algorithm>
+#include <limits>
+#include <memory>
+#include <string>
+#include <tuple>
+#include <vector>
 
 #include "controller_interface/helpers.hpp"
 #include "pluginlib/class_list_macros.hpp"
@@ -98,9 +103,6 @@ controller_interface::CallbackReturn PassthroughController::on_configure(
 
   // The names should be in the same order as for command interfaces for easier matching
   reference_interface_names_ = command_interface_names_;
-  // for any case make reference interfaces size of command interfaces
-  reference_interfaces_.resize(
-    reference_interface_names_.size(), std::numeric_limits<double>::quiet_NaN());
 
   return controller_interface::CallbackReturn::SUCCESS;
 }
@@ -114,9 +116,10 @@ controller_interface::CallbackReturn PassthroughController::on_activate(
 
   RCLCPP_INFO(this->get_node()->get_logger(), "activate successful");
 
-  std::fill(
-    reference_interfaces_.begin(), reference_interfaces_.end(),
-    std::numeric_limits<double>::quiet_NaN());
+  for (auto & interface : ordered_exported_reference_interfaces_)
+  {
+    std::ignore = interface->set_value(std::numeric_limits<double>::quiet_NaN());
+  }
 
   return controller_interface::CallbackReturn::SUCCESS;
 }
@@ -138,12 +141,13 @@ controller_interface::return_type PassthroughController::update_and_write_comman
 {
   for (size_t i = 0; i < command_interfaces_.size(); ++i)
   {
-    if (!std::isnan(reference_interfaces_[i]))
+    const auto reference = ordered_exported_reference_interfaces_[i]->get_optional();
+    if (reference.has_value() && !std::isnan(reference.value()))
     {
       // Log a warning message when sending a command fails
       RCLCPP_WARN_EXPRESSION(
-        this->get_node()->get_logger(), !command_interfaces_[i].set_value(reference_interfaces_[i]),
-        "Unable to set the value %f for the command interface: %s", reference_interfaces_[i],
+        this->get_node()->get_logger(), !command_interfaces_[i].set_value(reference.value()),
+        "Unable to set the value %f for the command interface: %s", reference.value(),
         command_interfaces_[i].get_name().c_str());
     }
   }
@@ -151,16 +155,18 @@ controller_interface::return_type PassthroughController::update_and_write_comman
   return controller_interface::return_type::OK;
 }
 
-std::vector<hardware_interface::CommandInterface>
-PassthroughController::on_export_reference_interfaces()
+std::vector<hardware_interface::CommandInterface::SharedPtr>
+PassthroughController::on_export_reference_interfaces_list()
 {
-  std::vector<hardware_interface::CommandInterface> reference_interfaces;
+  std::vector<hardware_interface::CommandInterface::SharedPtr> reference_interfaces;
+  reference_interfaces.reserve(reference_interface_names_.size());
 
-  for (size_t i = 0; i < reference_interface_names_.size(); ++i)
+  for (const auto & interface_name : reference_interface_names_)
   {
-    reference_interfaces.push_back(
-      hardware_interface::CommandInterface(
-        get_node()->get_name(), reference_interface_names_[i], &reference_interfaces_[i]));
+    auto reference_interface = std::make_shared<hardware_interface::CommandInterface>(
+      get_node()->get_name(), interface_name);
+    std::ignore = reference_interface->set_value(std::numeric_limits<double>::quiet_NaN());
+    reference_interfaces.push_back(reference_interface);
   }
 
   return reference_interfaces;
@@ -180,15 +186,18 @@ controller_interface::return_type PassthroughController::update_reference_from_s
                                 command_.data.cbegin(), command_.data.cend(),
                                 [](const auto & value) { return std::isfinite(value); }))
   {
-    if (reference_interfaces_.size() != command_.data.size())
+    if (ordered_exported_reference_interfaces_.size() != command_.data.size())
     {
       RCLCPP_ERROR_THROTTLE(
         get_node()->get_logger(), *(get_node()->get_clock()), 1000,
         "command size (%zu) does not match number of reference interfaces (%zu)",
-        command_.data.size(), reference_interfaces_.size());
+        command_.data.size(), ordered_exported_reference_interfaces_.size());
       return controller_interface::return_type::ERROR;
     }
-    reference_interfaces_ = command_.data;
+    for (size_t i = 0; i < command_.data.size(); ++i)
+    {
+      std::ignore = ordered_exported_reference_interfaces_[i]->set_value(command_.data[i]);
+    }
   }
 
   return controller_interface::return_type::OK;
