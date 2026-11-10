@@ -80,12 +80,19 @@ class ForwardCommand(Node):
         # 3. Publish position command
         command = Float64MultiArray()
         command.data = [self.command_value] * len(self.joints)
+        end_time = self.get_clock().now().nanoseconds + int(TIMEOUT * 1e9)
+        while (
+            self.publisher_.get_subscription_count() == 0
+            and self.get_clock().now().nanoseconds < end_time
+        ):
+            rclpy.spin_once(self, timeout_sec=0.1)
         self.publisher_.publish(command)
         self.get_logger().info(f"Published command: {command.data}")
 
         # 4. Wait for hardware simulation to respond
-        end_time = self.get_clock().now().nanoseconds + int(TIMEOUT * 1e9)
-        while self.get_clock().now().nanoseconds < end_time:
+        while self.get_clock().now().nanoseconds < end_time and any(
+            self.joint_state_msg.position[i] < self.min_movement for i in indices
+        ):
             rclpy.spin_once(self, timeout_sec=0.1)
 
         # 5. Check final positions
