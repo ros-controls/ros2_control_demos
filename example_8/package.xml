@@ -41,7 +41,13 @@
   <test_depend>launch_testing</test_depend>
   <test_depend>launch</test_depend>
   <test_depend>liburdfdom-tools</test_depend>
+<<<<<<< HEAD
   <test_depend>xacro</test_depend>
+=======
+  <test_depend>urdf_test</test_depend>
+  <test_depend>rclpy</test_depend>
+  <test_depend>ros2_control_demo_test_utils</test_depend>
+>>>>>>> c5d3f53 (Add shared movement tests to examples 3,4,5,6,8,9,10,13,17 (#1196))
 
   <export>
     <build_type>ament_cmake</build_type>

@@ -37,6 +37,7 @@ from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_testing.actions import ReadyToTest
+from launch_ros.actions import Node
 
 import launch_testing.markers
 import rclpy
@@ -93,6 +94,21 @@ class TestFixture(unittest.TestCase):
 
     def test_check_if_msgs_published(self):
         check_if_js_published("/joint_states", ["joint1", "joint2"])
+
+    def test_movement(self, launch_service, proc_info, proc_output):
+        proc_action = Node(
+            package="ros2_control_demo_test_utils",
+            executable="test_forward_command",
+            output="screen",
+        )
+
+        with launch_testing.tools.launch_process(
+            launch_service, proc_action, proc_info, proc_output
+        ):
+            proc_info.assertWaitForShutdown(process=proc_action, timeout=60)
+            launch_testing.asserts.assertExitCodes(
+                proc_info, process=proc_action, allowable_exit_codes=[0]
+            )
 
 
 @launch_testing.post_shutdown_test()
