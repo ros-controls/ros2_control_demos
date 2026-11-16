@@ -1,0 +1,10 @@
+<library path="ros2_control_demo_example_21">
+  <class name="executorch_policy_controller/ExecuTorchPolicyController"
+         type="executorch_policy_controller::ExecuTorchPolicyController"
+         base_class_type="controller_interface::ControllerInterface">
+    <description>
+      Policy controller for learned locomotion that runs the policy with ExecuTorch. Subscribes to
+      sensor data and velocity commands, runs the policy, and writes joint position commands.
+    </description>
+  </class>
+</library>
