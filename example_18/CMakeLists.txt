@@ -34,6 +34,14 @@ if(NOT controller_manager_FOUND)
     "Are you using the correct branch of the ros2_control_demos repository?")
 endif()
 
+# DuckMiniMujocoSystemInterface extends on_export_state_interfaces(), which the base class only
+# uses since mujoco_ros2_control 0.1.4; older versions build fine but export NaN contact handles.
+find_package(mujoco_ros2_control 0.1.4)
+if(NOT mujoco_ros2_control_FOUND)
+  message(FATAL_ERROR "mujoco_ros2_control version 0.1.4 or higher is required "
+    "(found: ${mujoco_ros2_control_CONSIDERED_VERSIONS}).")
+endif()
+
 find_package(backward_ros REQUIRED)
 find_package(ament_cmake REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
