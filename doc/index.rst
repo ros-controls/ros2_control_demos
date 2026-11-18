@@ -94,6 +94,9 @@ Example 17: "RRBot with Hardware Component that publishes diagnostics"
 Example 18: "Open Duck Mini in MuJoCo"
    This example runs a policy-driven Open Duck Mini in MuJoCo with ONNX inference and state_interfaces_broadcaster.
 
+Example 21: "Open Duck Mini with an ExecuTorch policy"
+   This example runs the policy of example 18 from a PyTorch model exported with ExecuTorch. The policy call inside ``update()`` does not allocate heap memory.
+
 .. _ros2_control_demos_install:
 
 =====================
@@ -304,3 +307,4 @@ Examples
    Example 16: DiffBot with chained controllers <../example_16/doc/userdoc.rst>
    Example 17: RRBot with Hardware Component that publishes diagnostics <../example_17/doc/userdoc.rst>
    Example 18: Open Duck Mini in MuJoCo <../example_18/doc/userdoc.rst>
+   Example 21: Open Duck Mini with an ExecuTorch policy <../example_21/doc/userdoc.rst>
