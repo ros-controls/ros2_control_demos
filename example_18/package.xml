@@ -34,7 +34,7 @@
   <depend>sensor_msgs</depend>
   <depend>transmission_interface</depend>
   <depend>mujoco_ros2_control_msgs</depend>
-  <depend>mujoco_ros2_control</depend>
+  <depend version_gte="0.1.4">mujoco_ros2_control</depend>
   <depend>onnxruntime_vendor</depend>
   <depend>mujoco_vendor</depend>
   <depend>controller_manager</depend>
