@@ -91,6 +91,9 @@ Example 16: "DiffBot with chained controllers"
 Example 17: "RRBot with Hardware Component that publishes diagnostics"
    This example shows how to publish diagnostics from a hardware component using the Executor passed from Controller Manager.
 
+Example 18: "Open Duck Mini in MuJoCo"
+   This example runs a policy-driven Open Duck Mini in MuJoCo with ONNX inference and state_interfaces_broadcaster.
+
 .. _ros2_control_demos_install:
 
 =====================
@@ -300,3 +303,4 @@ Examples
    Example 15: Using multiple controller managers <../example_15/doc/userdoc.rst>
    Example 16: DiffBot with chained controllers <../example_16/doc/userdoc.rst>
    Example 17: RRBot with Hardware Component that publishes diagnostics <../example_17/doc/userdoc.rst>
+   Example 18: Open Duck Mini in MuJoCo <../example_18/doc/userdoc.rst>

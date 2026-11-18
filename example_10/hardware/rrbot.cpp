@@ -38,6 +38,10 @@ hardware_interface::CallbackReturn RRBotSystemWithGPIOHardware::on_init(
     return hardware_interface::CallbackReturn::ERROR;
   }
 
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
+  hw_slowdown_ = stod(info_.hardware_parameters["example_param_hw_slowdown"]);
+  // END: This part here is for exemplary purposes - Please do not copy to your production code
+
   for (const hardware_interface::ComponentInfo & joint : info_.joints)
   {
     // RRBotSystemPositionOnly has exactly one state and command interface on each joint

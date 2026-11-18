@@ -28,4 +28,10 @@ install(
   DESTINATION share/${PROJECT_NAME}/r6bot
 )
 
+install(
+  DIRECTORY openduckmini/assets openduckmini/urdf openduckmini/ros2_control
+            openduckmini/mujoco openduckmini/rviz
+  DESTINATION share/${PROJECT_NAME}/openduckmini
+)
+
 ament_package()
