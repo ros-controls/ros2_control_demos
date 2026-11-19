@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro" name="r6bot">
+
+  <!-- r6bot geometry + meshes (shared description package) -->
+  <xacro:include filename="$(find ros2_control_demo_description)/r6bot/urdf/r6bot_description.urdf.xacro"/>
+  <link name="world"/>
+  <xacro:r6bot_description/>
+
+  <!-- mock hardware ros2_control -->
+  <xacro:include filename="$(find ros2_control_demo_example_20)/description/ros2_control/r6bot_mock.ros2_control.xacro"/>
+  <xacro:r6bot_mock_ros2_control name="r6bot"/>
+
+</robot>

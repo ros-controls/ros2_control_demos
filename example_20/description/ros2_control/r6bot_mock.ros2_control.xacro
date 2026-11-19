@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- r6bot on mock hardware: position command + position state, a folded non-singular start pose. -->
+  <xacro:macro name="r6bot_mock_ros2_control" params="name">
+
+    <ros2_control name="${name}" type="system">
+
+      <hardware>
+        <plugin>mock_components/GenericSystem</plugin>
+      </hardware>
+
+      <xacro:macro name="mock_joint" params="joint_name initial">
+        <joint name="${joint_name}">
+          <command_interface name="position">
+            <param name="min">${-pi}</param>
+            <param name="max">${pi}</param>
+          </command_interface>
+          <state_interface name="position">
+            <param name="initial_value">${initial}</param>
+          </state_interface>
+        </joint>
+      </xacro:macro>
+
+      <xacro:mock_joint joint_name="joint_1" initial="0.0"/>
+      <xacro:mock_joint joint_name="joint_2" initial="-0.9"/>
+      <xacro:mock_joint joint_name="joint_3" initial="1.1"/>
+      <xacro:mock_joint joint_name="joint_4" initial="0.4"/>
+      <xacro:mock_joint joint_name="joint_5" initial="0.9"/>
+      <xacro:mock_joint joint_name="joint_6" initial="0.3"/>
+
+    </ros2_control>
+
+  </xacro:macro>
+
+</robot>
